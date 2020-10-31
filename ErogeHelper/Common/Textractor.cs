@@ -89,18 +89,21 @@ namespace ErogeHelper.Common
 
         static public void OnConnectCallBackHandle(uint processId)
         {
-            try
+            if (File.Exists(gameInfo.ConfigPath))
             {
-                var isUserHook = EHConfig.GetValue(EHNode.IsUserHook);
-                if (bool.Parse(isUserHook))
+                try
                 {
-                    InsertHook(gameInfo.HookCode);
+                    var isUserHook = EHConfig.GetValue(EHNode.IsUserHook);
+                    if (bool.Parse(isUserHook))
+                    {
+                        InsertHook(gameInfo.HookCode);
+                    }
                 }
-            }
-            catch (NullReferenceException)
-            {
-                log.Info("find a nice way to deal xml in the future");
-                EHConfig.SetValue(EHNode.IsUserHook, "false");
+                catch (NullReferenceException)
+                {
+                    log.Info("find a nice way to deal xml in the future");
+                    EHConfig.SetValue(EHNode.IsUserHook, "false");
+                }
             }
         }
         #endregion
