@@ -128,8 +128,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Repository\BaiduApiTranslator.cs" />
-    <Compile Include="Repository\BaiduWebTranslator.cs" />
+    <Compile Include="Model\Repository\BaiduApiTranslator.cs" />
+    <Compile Include="Model\Repository\BaiduWebTranslator.cs" />
     <Compile Include="Common\Behavior\ScrollToEndBehavior.cs" />
     <Compile Include="Common\Behavior\ScrollViewerBehavior.cs" />
     <Compile Include="Common\Behavior\ValidationBehavior.cs" />
@@ -137,14 +137,14 @@
     <Compile Include="Common\Converter\BoolToVisibilityInverseConverter.cs" />
     <Compile Include="Common\Converter\InverseBooleanConverter.cs" />
     <Compile Include="Common\Converter\VisibilityInverseConverter.cs" />
-    <Compile Include="Common\EHConfig.cs" />
-    <Compile Include="Common\Hook.cs" />
-    <Compile Include="Repository\BaseTranslator.cs" />
-    <Compile Include="Repository\ITranslator.cs" />
+    <Compile Include="Model\Repository\EHConfig.cs" />
+    <Compile Include="Common\NativeMethods.cs" />
+    <Compile Include="Model\Repository\BaseTranslator.cs" />
+    <Compile Include="Model\Repository\ITranslator.cs" />
     <Compile Include="Common\MecabHelper.cs" />
-    <Compile Include="Common\MojiDictApi.cs" />
+    <Compile Include="Model\Repository\MojiDictApi.cs" />
     <Compile Include="Common\OutlinedTextBlock.cs" />
-    <Compile Include="Common\QueryHCodeApi.cs" />
+    <Compile Include="Model\Repository\QueryHCodeApi.cs" />
     <Compile Include="Common\Selector\TextTemplateSelector.cs" />
     <Compile Include="Common\Textractor.cs" />
     <Compile Include="Common\Utils.cs" />
@@ -152,7 +152,7 @@
     <Compile Include="Common\Validation\RegExpValidationRule.cs" />
     <Compile Include="Model\Singleton\AppSetting.cs" />
     <Compile Include="Model\Singleton\GameInfo.cs" />
-    <Compile Include="Model\HookBindingList.cs" />
+    <Compile Include="Common\HookBindingList.cs" />
     <Compile Include="Model\HookParam.cs" />
     <Compile Include="Model\SingleTextItem.cs" />
     <Compile Include="Model\WordCardInfo.cs" />
@@ -165,7 +165,7 @@
     <Compile Include="Common\Service\IWindowService.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
     <Compile Include="ViewModel\HookConfigViewModel.cs" />
-    <Compile Include="ViewModel\NotifyIconViewModel.cs" />
+    <Compile Include="ViewModel\TaskbarViewModel.cs" />
     <Compile Include="ViewModel\PreferenceViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Control\CardControl.xaml.cs">
@@ -183,10 +183,6 @@
     <Compile Include="View\TaskbarView.xaml.cs">
       <DependentUpon>TaskbarView.xaml</DependentUpon>
     </Compile>
-    <Page Include="NotifyIconResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\Control\CardControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

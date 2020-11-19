@@ -8,7 +8,6 @@ namespace ErogeHelper.Model
     public class HookParam : ViewModelBase
     {
         private string totalText;
-        private string text;
 
         public long Handle { get; set; }
         public long Pid { get; set; }
@@ -17,8 +16,8 @@ namespace ErogeHelper.Model
         public long Ctx2 { get; set; }
         public string Name { get; set; }
         public string Hookcode { get; set; }
-        public string Text { get => text; set { text = value; RaisePropertyChanged(() => Text); } }
-
+        public string Text { get; set; }
+        // Only used by HookConfigViewModel
         public string TotalText { get => totalText; set { totalText = value; RaisePropertyChanged(() => TotalText); } }
     }
 }

@@ -20,9 +20,9 @@ namespace ErogeHelper.Model
                         SubMarkColor = Utils.LoadBitmapFromResource("Resource/yellow.png");
                         break;
                     case "助詞":
+                        // 不需要点击的单词就不要上色了
                         //SubMarkColor = Utils.LoadBitmapFromResource("Resource/aqua_green.png");
                         SubMarkColor = Utils.LoadBitmapFromResource("Resource/transparent.png");
-                        // 不想点击的单词就不要上色了
                         break;
                     case "動詞":
                     case "感動詞":

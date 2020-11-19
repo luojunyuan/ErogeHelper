@@ -19,7 +19,6 @@ namespace ErogeHelper.Common
         public static void Init()
         {
             log.Info("initilize start.");
-            log.Info($"Work directory {Directory.GetCurrentDirectory()}");
 
             createthread = CreateThreadHandle;
             output = OutputHandle;
@@ -33,7 +32,6 @@ namespace ErogeHelper.Common
                 InjectProcess((uint)p.Id);
                 log.Info($"attach to PID {p.Id}.");
             }
-            log.Info("initilize over.");
         }
         static private OnOutputText output;
         static private ProcessCallback callback;
@@ -89,21 +87,9 @@ namespace ErogeHelper.Common
 
         static public void OnConnectCallBackHandle(uint processId)
         {
-            if (File.Exists(gameInfo.ConfigPath))
+            if (EHConfig.GetBool(EHNode.IsUserHook))
             {
-                try
-                {
-                    var isUserHook = EHConfig.GetValue(EHNode.IsUserHook);
-                    if (bool.Parse(isUserHook))
-                    {
-                        InsertHook(gameInfo.HookCode);
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    log.Info("find a nice way to deal xml in the future");
-                    EHConfig.SetValue(EHNode.IsUserHook, "false");
-                }
+                InsertHook(gameInfo.HookCode);
             }
         }
         #endregion
@@ -111,6 +97,19 @@ namespace ErogeHelper.Common
         public static void InsertHook(string hookcode)
         {
             // 重复插入相同的code(可能)会导致产生很高位的Context
+            foreach (var v in ThreadHandleDict)
+            {
+                if (hookcode == v.Value.Hookcode)
+                {
+                    DataEvent?.Invoke(typeof(Textractor), new HookParam 
+                    {
+                        Name = "控制台",
+                        Hookcode = "HB0@0",
+                        Text = "ErogeHelper: 该特殊码已插入"
+                    });
+                    return;
+                }
+            }
             foreach (Process p in gameInfo.ProcList)
             {
                 TextHostLib.InsertHook((uint)p.Id, hookcode);

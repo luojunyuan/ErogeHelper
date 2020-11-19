@@ -20,7 +20,7 @@ namespace ErogeHelper
     /// <summary>
     /// Win32 api for GameWindow.cs, leave it alone
     /// </summary>
-    public class Hook
+    public class NativeMethods
     {
         public const int WS_EX_NOACTIVATE = 0x08000000;
         public const int GWL_EXSTYLE = -20;
@@ -319,7 +319,7 @@ namespace ErogeHelper
         public static extern bool BringWindowToTop(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr GetWindow(IntPtr parentHWnd, Hook.GW uCmd);
+        public static extern IntPtr GetWindow(IntPtr parentHWnd, NativeMethods.GW uCmd);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
@@ -335,9 +335,9 @@ namespace ErogeHelper
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr voidProcessId);
 
         [DllImport("user32.dll", SetLastError = false)]
-        public static extern IntPtr SetWinEventHook(Hook.SWEH_Events eventMin, Hook.SWEH_Events eventMax,
-                                                    IntPtr hmodWinEventProc, Hook.WinEventDelegate lpfnWinEventProc,
-                                                    uint idProcess, uint idThread, Hook.SWEH_dwFlags dwFlags);
+        public static extern IntPtr SetWinEventHook(NativeMethods.SWEH_Events eventMin, NativeMethods.SWEH_Events eventMax,
+                                                    IntPtr hmodWinEventProc, NativeMethods.WinEventDelegate lpfnWinEventProc,
+                                                    uint idProcess, uint idThread, NativeMethods.SWEH_dwFlags dwFlags);
 
         [DllImport("user32.dll", SetLastError = false)]
         public static extern bool UnhookWinEvent(IntPtr hWinEventHook);

@@ -60,7 +60,7 @@ namespace ErogeHelper.ViewModel
                 // No, must also do it with GameView code behind OnSourceInitialized
                 try
                 {
-                    var ret = EHConfig.GetValue(EHNode.NoFocus);
+                    var ret = EHConfig.GetString(EHNode.NoFocus);
                     _noFocusToggel = bool.Parse(ret);
                 }
                 catch (NullReferenceException)
@@ -75,9 +75,9 @@ namespace ErogeHelper.ViewModel
             {
                 var window = Application.Current.Windows.OfType<GameView>().FirstOrDefault();
                 var interopHelper = new WindowInteropHelper(window);
-                int exStyle = Hook.GetWindowLong(interopHelper.Handle, Hook.GWL_EXSTYLE);
-                Hook.SetWindowLong(interopHelper.Handle, Hook.GWL_EXSTYLE, value ? exStyle | Hook.WS_EX_NOACTIVATE
-                                                                                 : exStyle & ~Hook.WS_EX_NOACTIVATE);
+                int exStyle = NativeMethods.GetWindowLong(interopHelper.Handle, NativeMethods.GWL_EXSTYLE);
+                NativeMethods.SetWindowLong(interopHelper.Handle, NativeMethods.GWL_EXSTYLE, value ? exStyle | NativeMethods.WS_EX_NOACTIVATE
+                                                                                 : exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
                 _noFocusToggel = value;
                 EHConfig.SetValue(EHNode.NoFocus, value.ToString());
                 RaisePropertyChanged(() => NoFocusToggel);

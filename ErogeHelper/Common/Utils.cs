@@ -16,7 +16,7 @@ namespace ErogeHelper.Common
     static class Utils
     {
         /// <summary>
-        /// Get MD5 hash by file
+        /// Get MD5 hash(upper case) by file
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -32,7 +32,7 @@ namespace ErogeHelper.Common
             {
                 sb.Append(retVal[i].ToString("x2"));
             }
-            return sb.ToString();
+            return sb.ToString().ToUpper();
         }
 
         /// <summary>

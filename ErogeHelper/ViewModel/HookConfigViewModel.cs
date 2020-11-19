@@ -44,7 +44,7 @@ namespace ErogeHelper.ViewModel
 
                 if (File.Exists(SimpleIoc.Default.GetInstance<GameInfo>().ConfigPath))
                 {
-                    Regexp = EHConfig.GetValue(EHNode.Regexp);
+                    Regexp = EHConfig.GetString(EHNode.Regexp);
                 }
 
                 Textractor.DataEvent += DataRecvEventHandler;

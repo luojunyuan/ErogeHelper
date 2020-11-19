@@ -1,7 +1,9 @@
 ﻿using ErogeHelper.Model;
+using GalaSoft.MvvmLight.Ioc;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Linq;
 
 namespace ErogeHelper.Common
@@ -10,13 +12,13 @@ namespace ErogeHelper.Common
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EHConfig));
 
-        private static readonly string Path = GalaSoft.MvvmLight.Ioc.SimpleIoc.Default.GetInstance<GameInfo>().ConfigPath;
+        private static readonly string Path = SimpleIoc.Default.GetInstance<GameInfo>().ConfigPath;
 
         public static void FirstTimeWriteConfig(EHProfile pro)
         {
             var baseNode = new XElement("Profile",
                 new XAttribute("Name", value: pro.Name),
-                new XElement("MD5", content: pro.MD5.ToUpper()),
+                new XElement("MD5", content: pro.MD5),
                 new XElement("IsUserHook", content: pro.IsUserHook),
                 new XElement("HookCode", content: pro.HookCode),
                 new XElement("ThreadContext", content: pro.ThreadContext),
@@ -51,7 +53,7 @@ namespace ErogeHelper.Common
             doc.Save(Path);
         }
 
-        public static string GetValue(EHNode node)
+        public static string GetString(EHNode node)
         {
             try
             {
@@ -65,6 +67,42 @@ namespace ErogeHelper.Common
             {
                 throw new NullReferenceException($"致命错误: 可能是配置文件中{node.Name}节点不存在");
             }
+        }
+
+        public static bool GetBool(EHNode node, 
+                      bool defValue = false)
+        {
+            if (File.Exists(Path))
+            {
+                var doc = XElement.Load(Path);
+                var profile = doc.Element("Profile");
+
+                var tar = profile.Element(node.Name);
+                if (tar != null && bool.TryParse(tar.Value, out bool ret))
+                {
+                    return ret;
+                }
+            }
+
+            return defValue;
+        }
+
+        public static long GetLong(EHNode node,
+                      long defValue = -1)
+        {
+            if (File.Exists(Path))
+            {
+                var doc = XElement.Load(Path);
+                var profile = doc.Element("Profile");
+
+                var tar = profile.Element(node.Name);
+                if (tar != null && long.TryParse(tar.Value, out long ret))
+                {
+                    return ret;
+                }
+            }
+
+            return defValue;
         }
     }
 

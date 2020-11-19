@@ -9,9 +9,9 @@ using System.Windows;
 
 namespace ErogeHelper.ViewModel
 {
-    public class NotifyIconViewModel : ViewModelBase
+    public class TaskbarViewModel : ViewModelBase
     {
-        public NotifyIconViewModel()
+        public TaskbarViewModel()
         {
             ShowPreferenceCommand = new RelayCommand(() =>
             {

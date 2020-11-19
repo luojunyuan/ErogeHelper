@@ -121,7 +121,13 @@ namespace ErogeHelper.ViewModel
 
                     if (hp.Text.Length > 80)
                     {
-                        hp.Text = "长度大于80的文本自动跳过";
+                        DisplayTextCollection.Add(new SingleTextItem
+                        {
+                            Text = "长度大于80的文本自动跳过",
+                            PartOfSpeed = "",
+                            TextTemplateType = TextTemplateConfig
+                        });
+                        return;
                     }
 
                     var mecabWordList = _mecabHelper.SentenceHandle(hp.Text);
@@ -153,6 +159,7 @@ namespace ErogeHelper.ViewModel
                 }
                 else
                 {
+                    // 机翻模式
                     TranslateTextList.Clear();
                     if (hp.Text.Length > 80)
                     {

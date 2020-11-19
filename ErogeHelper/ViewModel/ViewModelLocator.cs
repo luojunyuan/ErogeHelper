@@ -48,7 +48,7 @@ namespace ErogeHelper.ViewModel
 
             SimpleIoc.Default.Register<GameViewModel>();
             SimpleIoc.Default.Register<HookConfigViewModel>();
-            SimpleIoc.Default.Register<NotifyIconViewModel>();
+            SimpleIoc.Default.Register<TaskbarViewModel>();
             SimpleIoc.Default.Register<PreferenceViewModel>();
         }
 
@@ -66,11 +66,11 @@ namespace ErogeHelper.ViewModel
                 return ServiceLocator.Current.GetInstance<HookConfigViewModel>();
             }
         }
-        public NotifyIconViewModel NotifyIcon
+        public TaskbarViewModel Taskbar
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<NotifyIconViewModel>();
+                return ServiceLocator.Current.GetInstance<TaskbarViewModel>();
             }
         }
         public PreferenceViewModel Preference

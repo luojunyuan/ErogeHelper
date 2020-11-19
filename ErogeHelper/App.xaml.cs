@@ -15,8 +15,6 @@ using System.Windows;
 
 namespace ErogeHelper
 {
-
-
     /// <summary>
     /// App.xaml 的交互逻辑
     /// </summary>
@@ -24,32 +22,20 @@ namespace ErogeHelper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(App));
 
-        private TaskbarIcon notifyIcon;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
-            Directory.SetCurrentDirectory(currentDirectory);
-            Utils.AddEnvironmentPaths((currentDirectory + @"\libs").Split());
-            DispatcherHelper.Initialize();
-            SimpleIoc.Default.Register<GameInfo>();
-            SimpleIoc.Default.Register<AppSetting>();
-            //new TaskbarView();
-            notifyIcon = (TaskbarIcon)FindResource("NotifyIcon");
-            log4net.Config.XmlConfigurator.Configure();
-            // AppDomain.CurrentDomain.UnhandledException += GlobalErrorHandle 非ui线程
-            DispatcherUnhandledException += (s, eventArgs) => {
-                log.Error(eventArgs.Exception);
-                MessageBox.Show(eventArgs.Exception.ToString(), "Eroge Helper");
-                // TODO: 复制粘贴板转到github. Friendly error message
-            };
+            // TODO: Check singleton
+            InitEnviroment();
+
             log.Info("Started Logging");
             log.Info($"Enviroment directory: {Directory.GetCurrentDirectory()}");
 
+            // TODO: 改为view界面，增加选择进程注入功能
             if (e.Args.Length == 0)
             {
+                // FIXME: 显示不全
                 MessageBox.Show("请使用 EHInstaller 安装我> < \n\r" +
                                 "如果你已经安装了直接右键游戏选择Eroge Helper启动就好了~",
                                 "ErogeHelper");
@@ -70,28 +56,21 @@ namespace ErogeHelper
             if (e.Args.Contains("/le"))
             {
                 // Use Locate Emulator
-                try
+                Process.Start(new ProcessStartInfo
                 {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = Directory.GetCurrentDirectory() + @"\libs\x86\LEProc.exe",
-                        UseShellExecute = false,
+                    FileName = Directory.GetCurrentDirectory() + @"\libs\x86\LEProc.exe",
+                    UseShellExecute = false,
 
-                        Arguments = File.Exists(gameInfo.Path + ".le.config") 
-                                               ? $"-run \"{gameInfo.Path}\""
-                                               : $"\"{gameInfo.Path}\""
-                    });
-                }
-                // XXX: 捕获不到，7秒超时
-                catch(AccessViolationException)
-                {
-                    throw new AccessViolationException("LE执行出现内存错误，这可能是游戏进程还未退出，问题不大请重新尝试用LE启动游戏~");
-                }
+                    Arguments = File.Exists(gameInfo.Path + ".le.config")
+                                           ? $"-run \"{gameInfo.Path}\""
+                                           : $"\"{gameInfo.Path}\""
+                });
+                // XXX: LE may throw AccessViolationException which can not be catch
             }
             else
             {
                 // Direct start
-                Process.Start(new ProcessStartInfo 
+                Process.Start(new ProcessStartInfo
                 {
                     FileName = gameInfo.Path,
                     UseShellExecute = false,
@@ -148,7 +127,7 @@ namespace ErogeHelper
                 gameInfo.HWndProc = Utils.FindHWndProc(gameInfo.ProcList);
 
                 // timeout
-                if (totalTime.Elapsed.TotalSeconds > 7 && gameInfo.HWndProc == null)
+                if (totalTime.Elapsed.TotalSeconds > 20 && gameInfo.HWndProc == null)
                 {
                     log.Info("Timeout! Find MainWindowHandle Faied");
                     MessageBox.Show("(超时)没能找到游戏窗口！", "ErogeHelper");
@@ -158,15 +137,17 @@ namespace ErogeHelper
             } while (newProcFind || (gameInfo.HWndProc == null));
             totalTime.Stop();
 
-            log.Info($"{gameInfo.ProcList.Count} Process(es) and window handle 0x{Convert.ToString(gameInfo.HWndProc.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. Spend time {totalTime.Elapsed.TotalSeconds:0:00}s");
-                
+            log.Info($"{gameInfo.ProcList.Count} Process(es) and window handle " +
+                $"0x{Convert.ToString(gameInfo.HWndProc.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
+                $"Spend time {totalTime.Elapsed.TotalSeconds:0.00}s");
+
             // Cheak if there is eh.config file
             if (File.Exists(gameInfo.ConfigPath))
             {
-                gameInfo.HookCode = EHConfig.GetValue(EHNode.HookCode);
-                gameInfo.ThreadContext = long.Parse(EHConfig.GetValue(EHNode.ThreadContext));
-                gameInfo.SubThreadContext = long.Parse(EHConfig.GetValue(EHNode.SubThreadContext));
-                gameInfo.Regexp = EHConfig.GetValue(EHNode.Regexp);
+                gameInfo.HookCode = EHConfig.GetString(EHNode.HookCode);
+                gameInfo.ThreadContext = EHConfig.GetLong(EHNode.ThreadContext);
+                gameInfo.SubThreadContext = EHConfig.GetLong(EHNode.SubThreadContext);
+                gameInfo.Regexp = EHConfig.GetString(EHNode.Regexp);
 
                 log.Info($"Get HCode {gameInfo.HookCode} from file {gameInfo.ProcessName}.exe.eh.config");
                 // Display text window
@@ -179,6 +160,24 @@ namespace ErogeHelper
             }
 
             Textractor.Init();
+        }
+
+        private void InitEnviroment()
+        {
+            var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+            Directory.SetCurrentDirectory(currentDirectory);
+            Utils.AddEnvironmentPaths((currentDirectory + @"\libs").Split());
+            DispatcherHelper.Initialize();
+            SimpleIoc.Default.Register<GameInfo>();
+            SimpleIoc.Default.Register<AppSetting>();
+            log4net.Config.XmlConfigurator.Configure();
+            // AppDomain.CurrentDomain.UnhandledException += GlobalErrorHandle 非ui线程
+            DispatcherUnhandledException += (s, eventArgs) =>
+            {
+                log.Error(eventArgs.Exception);
+                MessageBox.Show(eventArgs.Exception.ToString(), "Eroge Helper");
+                // TODO: 复制粘贴板转到github. Friendly error message
+            };
         }
     }
 }

@@ -33,15 +33,17 @@ namespace ErogeHelper.View
             SetGameWindowHook();
             Messenger.Default.Register<NotificationMessage>(this, NotificationMessageReceived);
             Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+
+            new TaskbarView();
         }
 
         #region Window Follow Game Initialize
-        protected Hook.WinEventDelegate WinEventDelegate;
+        protected NativeMethods.WinEventDelegate WinEventDelegate;
         private static GCHandle GCSafetyHandle;
         private IntPtr hWinEventHook;
         private void SetGameWindowHook()
         {
-            WinEventDelegate = new Hook.WinEventDelegate(WinEventCallback);
+            WinEventDelegate = new NativeMethods.WinEventDelegate(WinEventCallback);
             GCSafetyHandle = GCHandle.Alloc(WinEventDelegate);
 
             var gameInfo = (GameInfo)SimpleIoc.Default.GetInstance(typeof(GameInfo));
@@ -57,27 +59,29 @@ namespace ErogeHelper.View
             // Then call WinEventDelegate send threadId of handle
             // 找窗口是否全屏还不太容易，不能使用handle的方法、最好查找有无什么事件。。
             //if MainWindowHandle has no window
-            IntPtr handle = targetProc.MainWindowHandle;
-            var defaultRect = Hook.GetClientRect(handle);
+            var defaultRect = NativeMethods.GetClientRect(gameHWnd);
             if (0 == defaultRect.Bottom && defaultRect.Bottom == defaultRect.Right)
             {
+                // FIXME: 如果MainWindowHandle所在窗口最小化了也会进入这里
+                var rect = NativeMethods.GetWindowRect(gameHWnd);
+                log.Debug($"{rect.Left} {rect.Top} {rect.Right} {rect.Bottom}");
                 log.Info($"Can't find window Rect in MainWindowHandle! Start search..");
                 log.Info($"Process {targetProc.Id} has {targetProc.HandleCount} handles");
 
                 int textLength = targetProc.MainWindowTitle.Length;
                 StringBuilder title = new StringBuilder(textLength + 1);
-                Hook.GetWindowText(handle, title, title.Capacity);
+                NativeMethods.GetWindowText(gameHWnd, title, title.Capacity);
 
-                IntPtr first = Hook.GetWindow(targetProc.MainWindowHandle, Hook.GW.HWNDFIRST);
-                IntPtr last = Hook.GetWindow(targetProc.MainWindowHandle, Hook.GW.HWNDLAST);
+                IntPtr first = NativeMethods.GetWindow(targetProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
+                IntPtr last = NativeMethods.GetWindow(targetProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
                 IntPtr realHandle = IntPtr.Zero;
-                for (IntPtr cur = first; cur != last; cur = Hook.GetWindow(cur, Hook.GW.HWNDNEXT))
+                for (IntPtr cur = first; cur != last; cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT))
                 {
                     StringBuilder outText = new StringBuilder(textLength + 1);
-                    Hook.GetWindowText(cur, outText, title.Capacity);
+                    NativeMethods.GetWindowText(cur, outText, title.Capacity);
                     if (outText.Equals(title))
                     {
-                        var rectClient = Hook.GetClientRect(cur);
+                        var rectClient = NativeMethods.GetClientRect(cur);
                         if (rectClient.Right != 0 && rectClient.Bottom != 0)
                         {
                             log.Info($"Find real handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
@@ -96,13 +100,13 @@ namespace ErogeHelper.View
             }
 
             log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} Title: {targetProc.MainWindowTitle}");
-            uint targetThreadId = Hook.GetWindowThread(gameHWnd);
+            uint targetThreadId = NativeMethods.GetWindowThread(gameHWnd);
             dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
 
             if (gameHWnd != IntPtr.Zero)
             {
                 // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数
-                hWinEventHook = Hook.WinEventHookOne(Hook.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE,
+                hWinEventHook = NativeMethods.WinEventHookOne(NativeMethods.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE,
                                                      WinEventDelegate,
                                                      (uint)targetProc.Id,
                                                      targetThreadId);
@@ -119,8 +123,8 @@ namespace ErogeHelper.View
 
         private void SetLocation()
         {
-            var rect = Hook.GetWindowRect(gameHWnd, dpi);
-            var rectClient = Hook.GetClientRect(gameHWnd, dpi);
+            var rect = NativeMethods.GetWindowRect(gameHWnd, dpi);
+            var rectClient = NativeMethods.GetClientRect(gameHWnd, dpi);
             // 再把字体除以dpi好了嘛 不解决窗口大小随着字体变化，两个事情
 
             Width = rect.Right - rect.Left;  // rectClient.Right + shadow*2
@@ -144,9 +148,9 @@ namespace ErogeHelper.View
         }
 
         protected void WinEventCallback(IntPtr hWinEventHook,
-                                    Hook.SWEH_Events eventType,
+                                    NativeMethods.SWEH_Events eventType,
                                     IntPtr hWnd,
-                                    Hook.SWEH_ObjectId idObject,
+                                    NativeMethods.SWEH_ObjectId idObject,
                                     long idChild,
                                     uint dwEventThread,
                                     uint dwmsEventTime)
@@ -159,8 +163,8 @@ namespace ErogeHelper.View
             //}
             // 更新窗口信息
             if (hWnd == gameHWnd &&
-                eventType == Hook.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE &&
-                idObject == (Hook.SWEH_ObjectId)Hook.SWEH_CHILDID_SELF)
+                eventType == NativeMethods.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE &&
+                idObject == (NativeMethods.SWEH_ObjectId)NativeMethods.SWEH_CHILDID_SELF)
             {
                 SetLocation();
             }
@@ -171,7 +175,7 @@ namespace ErogeHelper.View
         {
             log.Info("Detected quit event");
             GCSafetyHandle.Free();
-            Hook.WinEventUnhook(hWinEventHook);
+            NativeMethods.WinEventUnhook(hWinEventHook);
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 Closed -= Window_Closed;
@@ -189,7 +193,7 @@ namespace ErogeHelper.View
             var NoFocusFlag = false;
             try
             {
-                var ret = EHConfig.GetValue(EHNode.NoFocus);
+                var ret = EHConfig.GetString(EHNode.NoFocus);
                 NoFocusFlag = bool.Parse(ret);
             }
             catch (NullReferenceException)
@@ -208,8 +212,8 @@ namespace ErogeHelper.View
             if (NoFocusFlag)
             {
                 var interopHelper = new WindowInteropHelper(this);
-                int exStyle = Hook.GetWindowLong(interopHelper.Handle, Hook.GWL_EXSTYLE);
-                Hook.SetWindowLong(interopHelper.Handle, Hook.GWL_EXSTYLE, exStyle | Hook.WS_EX_NOACTIVATE);
+                int exStyle = NativeMethods.GetWindowLong(interopHelper.Handle, NativeMethods.GWL_EXSTYLE);
+                NativeMethods.SetWindowLong(interopHelper.Handle, NativeMethods.GWL_EXSTYLE, exStyle | NativeMethods.WS_EX_NOACTIVATE);
             }
 
             DispatcherTimer timer = new DispatcherTimer();
@@ -221,9 +225,9 @@ namespace ErogeHelper.View
                     timer.Stop();
                 }
                 // Still get a little bad exprience with right click taskbar icon
-                if (gameHWnd == Hook.GetForegroundWindow())
+                if (gameHWnd == NativeMethods.GetForegroundWindow())
                 {
-                    Hook.BringWindowToTop(pointer.Handle);
+                    NativeMethods.BringWindowToTop(pointer.Handle);
                 }
             };
 
