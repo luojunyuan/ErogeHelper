@@ -16,10 +16,10 @@ namespace ErogeHelper.Common
     static class Utils
     {
         /// <summary>
-        /// Get MD5 hash(upper case) by file
+        /// Get MD5 hash by file
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
+        /// <param name="filePath">Absolute file path</param>
+        /// <returns>Upper case string</returns>
         public static string GetMD5(string filePath)
         {
             FileStream file = File.OpenRead(filePath);
@@ -36,11 +36,10 @@ namespace ErogeHelper.Common
         }
 
         /// <summary>
-        /// <para>查看一个List&lt;Process&gt;集合中是否存在MainWindowHandle</para>
-        /// <para>若存在，返回其所在Process，否则返回null</para>
+        /// 查看一个List&lt;Process&gt;集合中是否存在MainWindowHandle
         /// </summary>
         /// <param name="procList"></param>
-        /// <returns></returns>
+        /// <returns>若存在，返回其所在Process，否则返回null</returns>
         public static Process FindHWndProc(List<Process> procList)
         {
             foreach (var p in procList)
@@ -113,10 +112,13 @@ namespace ErogeHelper.Common
             Environment.SetEnvironmentVariable("PATH", newPath);   // 这种方式只会修改当前进程的环境变量
         }
 
+        // should move to bll
         public static List<ITranslator> GetTranslatorList()
         {
-            var ret = new List<ITranslator>();
-            ret.Add(new BaiduWebTranslator());
+            var ret = new List<ITranslator>
+            {
+                new BaiduWebTranslator(),
+            };
             return ret;
         }
     }
