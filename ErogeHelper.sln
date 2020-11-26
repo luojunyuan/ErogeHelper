@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelperTests", "ErogeHe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHInstaller", "EHInstaller\EHInstaller.csproj", "{42EDF9D3-2144-44B2-97A2-BAF9F46B0085}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.Core", "ErogeHelper.Core\ErogeHelper.Core.csproj", "{059C8DEB-71F2-4DD1-B720-2EEC63F7D52A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{42EDF9D3-2144-44B2-97A2-BAF9F46B0085}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42EDF9D3-2144-44B2-97A2-BAF9F46B0085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42EDF9D3-2144-44B2-97A2-BAF9F46B0085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{059C8DEB-71F2-4DD1-B720-2EEC63F7D52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{059C8DEB-71F2-4DD1-B720-2EEC63F7D52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{059C8DEB-71F2-4DD1-B720-2EEC63F7D52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{059C8DEB-71F2-4DD1-B720-2EEC63F7D52A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
