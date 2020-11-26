@@ -73,10 +73,12 @@ namespace ErogeHelper.Common
 
             DataEvent?.Invoke(typeof(Textractor), hp);
 
-            if (gameInfo.HookCode != null
-                && gameInfo.HookCode == hp.Hookcode
+            if (gameInfo.HookCode == null) return;
+            if ((gameInfo.HookCode == hp.Hookcode
                 && (gameInfo.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                 && gameInfo.SubThreadContext == hp.Ctx2)
+                ||
+                (gameInfo.HookCode.StartsWith("RS") && hp.Name == "READ"))
             {
                 log.Info(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);

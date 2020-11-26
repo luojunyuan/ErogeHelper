@@ -128,8 +128,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Repository\BaiduApiTranslator.cs" />
-    <Compile Include="Model\Repository\BaiduWebTranslator.cs" />
+    <Compile Include="Repository\BaiduApiTranslator.cs" />
+    <Compile Include="Repository\BaiduWebTranslator.cs" />
     <Compile Include="Common\Behavior\ScrollToEndBehavior.cs" />
     <Compile Include="Common\Behavior\ScrollViewerBehavior.cs" />
     <Compile Include="Common\Behavior\ValidationBehavior.cs" />
@@ -137,14 +137,14 @@
     <Compile Include="Common\Converter\BoolToVisibilityInverseConverter.cs" />
     <Compile Include="Common\Converter\InverseBooleanConverter.cs" />
     <Compile Include="Common\Converter\VisibilityInverseConverter.cs" />
-    <Compile Include="Model\Repository\EHConfig.cs" />
+    <Compile Include="Repository\EHConfig.cs" />
     <Compile Include="Common\NativeMethods.cs" />
-    <Compile Include="Model\Repository\BaseTranslator.cs" />
-    <Compile Include="Model\Repository\ITranslator.cs" />
+    <Compile Include="Repository\BaseTranslator.cs" />
+    <Compile Include="Repository\ITranslator.cs" />
     <Compile Include="Common\MecabHelper.cs" />
-    <Compile Include="Model\Repository\MojiDictApi.cs" />
+    <Compile Include="Repository\MojiDictApi.cs" />
     <Compile Include="Common\OutlinedTextBlock.cs" />
-    <Compile Include="Model\Repository\QueryHCodeApi.cs" />
+    <Compile Include="Repository\QueryHCodeApi.cs" />
     <Compile Include="Common\Selector\TextTemplateSelector.cs" />
     <Compile Include="Common\Textractor.cs" />
     <Compile Include="Common\Utils.cs" />
