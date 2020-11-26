@@ -63,6 +63,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\checkbox.png" />
     <Content Include="Resources\E%40200.bmp" />
     <Content Include="Resources\E.bmp" />
   </ItemGroup>

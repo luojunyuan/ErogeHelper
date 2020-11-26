@@ -48,7 +48,7 @@ namespace EHShellMenuHandler
         {
             menu.Items.Clear();
 
-            bool is64bit = PEFileReader.GetPEType(SelectedItemPaths.First()) == PEType.X64 ? true : false;
+            bool is64bit = PEFileReader.GetPEType(SelectedItemPaths.First()) == PEType.X64;
             // check if the selected executable is 64 bit
             if (is64bit)
             {
@@ -108,17 +108,23 @@ namespace EHShellMenuHandler
             MainMenu.DropDownItems.Add(LEStartItem);
             var AdminItem = new ToolStripMenuItem
             {
-                Text = "使用管理员转区启动",
+                Text = "勾选管理员身份",
             };
-            // TODO: 点击后变化图片，改变变量。sharpshell的变量会一直保存？
-            AdminItem.Click += (sender, args) => MainProcess(true, true);
+            if (isAdmin) AdminItem.Image = Resource.Checkbox;
+            else AdminItem.Image = null;
+            AdminItem.Click += (sender, args) => 
+            {
+                isAdmin = !isAdmin;
+            };
             MainMenu.DropDownItems.Add(AdminItem);
 
             menu.Items.Clear();
             menu.Items.Add(MainMenu);
         }
 
-        private void MainProcess(bool useLE, bool admin = false)
+        static bool isAdmin = false;
+
+        private void MainProcess(bool useLE)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
@@ -142,7 +148,7 @@ namespace EHShellMenuHandler
                 startInfo.Arguments += " /le";
             }
 
-            if (admin)
+            if (isAdmin)
             {
                 //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.UseShellExecute = true;
