@@ -106,9 +106,7 @@ namespace ErogeHelper.ViewModel
         private string lastSentence = "";
         private void SelectedDataEventHandler(object sender, HookParam hp)
         {
-            _ = DoPreTranslateAsync();
-
-            DispatcherHelper.CheckBeginInvokeOnUI(async () =>
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 if (!Properties.Settings.Default.OnlyMachineTranslation)
                 {
@@ -156,14 +154,8 @@ namespace ErogeHelper.ViewModel
 
                     TransText = "";
                     TransTextVisible = Visibility.Collapsed;
-                    // only this work
-                    //_ = Task.Run(async () => await DoPreTranslateAsync());
-
-                    // these two are same
-                    //await DoPreTranslateAsync(); // this with async lambda won't work like CardQuery
-                    //_ = DoPreTranslateAsync(); // with a little delay 
-
-                    //await DoPreTranslateAsync().ConfigureAwait(false); 
+                    // XXX: learn Task first
+                    Task.Run(async () => await DoPreTranslateAsync());
                 }
                 else
                 {
@@ -175,7 +167,7 @@ namespace ErogeHelper.ViewModel
                         return;
                     }
 
-                    TrasnlateAll(hp.Text, Utils.GetTranslatorList());
+                    TrasnlateAllAsync(hp.Text, Utils.GetTranslatorList());
                 }
             });
         }
@@ -222,16 +214,6 @@ namespace ErogeHelper.ViewModel
             TransText = result == null ? _baiduHelper.GetLastError() : result;
             log.Info($"Get translate {TransText}");
         }
-        private void DoPreTranslate()
-        {
-            // Make language dynamic, set by user, use setting properties?
-            var result = _baiduHelper.Translate(currentSentence, Language.Japenese, Language.ChineseSimplified).GetAwaiter().GetResult();
-            // Task canceled
-            if (result == "") return;
-
-            TransText = result == null ? _baiduHelper.GetLastError() : result;
-            log.Info($"Get translate {TransText}");
-        }
         #endregion
 
         #region MojiCard Search
@@ -263,10 +245,7 @@ namespace ErogeHelper.ViewModel
 
             Messenger.Default.Send(new NotificationMessage("OpenCard"));
 
-            // No block UI
-            // they use magic, only make this 'await' another thread
-            // On the premise of "async" WordSearch 
-            var resp = await _mojiHelper.RequestAsync(item.Text); 
+            var resp = await _mojiHelper.RequestAsync(item.Text);
 
             var result = resp.result;
             if (result != null)
@@ -296,16 +275,18 @@ namespace ErogeHelper.ViewModel
 
         public ObservableCollection<string> TranslateTextList { get; set; }
 
-        private void TrasnlateAll(string text, List<ITranslator> list)
+        private async void TrasnlateAllAsync(string text, List<ITranslator> list)
         {
-            foreach (var translator in list)
-            {
-                //Task a = TranslateAsync(translator, text);
-                //Task.Run(TranslateAsync(translator, text));
-            }
+            await Task.Run(() => 
+            { 
+                foreach(var translator in list)
+                {
+                    TranslateAsync(translator, text);
+                }
+            });
         }
 
-        private async Task TranslateAsync(ITranslator translator, string text)// , Language src, Language des
+        private async void TranslateAsync(ITranslator translator, string text)// , Language src, Language des
         {
             // 语言也通过properties获取？直接在内部
             var sw = new Stopwatch();
@@ -322,16 +303,3 @@ namespace ErogeHelper.ViewModel
         }
     }
 }
-//sample
-//async List<TranslateResult> DoTranslation( )
-//{
-//    Task<TranslateResult> baidu = BaiduTranslateAsync();
-//    Task<TranslateResult> tencent = TencentTranslateAsync();
-//    Task<TranslateResult> caiyun = CaiYunTranslateAsync();
-//    List<TranslateResult> result = new List<TranslateResult>();
-//    result.Add(await baidu);
-//    result.Add(await tencent);
-//    result.Add(await caiyun);
-
-//    return result;
-//}
