@@ -10,7 +10,8 @@
         xmlns:cal="http://caliburnmicro.com"
         ui:WindowHelper.UseModernWindowStyle="True" 
         mc:Ignorable="d"
-        Title="{x:Static resx:Strings.SelectProcess_Title}" Height="450" Width="350" MinWidth="350">
+        Title="{x:Static resx:Strings.SelectProcess_Title}" Width="350" MinWidth="350"
+        SizeToContent="Height">
     
     <control:ScrollViewerEx PanningMode="Both">
         <StackPanel Margin="20,10">
@@ -22,8 +23,16 @@
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Lable}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ComboBox x:Name="ProcessList" cal:Message.Attach="[DropDownOpened] = [GetProcessAction]"
-                        SelectedItem="{Binding SelectedProc}" MinWidth="240">
+                    <ComboBox x:Name="ProcItems" cal:Message.Attach="[DropDownOpened] = [GetProcessAction]"
+                        MinWidth="240">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Icon}" />
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Button x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
                         Style="{DynamicResource AccentButtonStyle}" MinWidth="240"/>

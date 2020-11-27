@@ -4,19 +4,23 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <RootNamespace>ErogeHelper_Core</RootNamespace>
-    <AssemblyName>ErogeHelper_Core</AssemblyName>
 	<Nullable>enable</Nullable>
-	<ApplicationIcon>E_32.ico</ApplicationIcon>
+	<ApplicationIcon>.\Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\bin\Debug\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\app_icon_big.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.153-rc" />
@@ -29,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <Resource Include="Assets\app_icon_big.png" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,14 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper_Core.Common;
 using ErogeHelper_Core.Common.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ErogeHelper_Core.ViewModels
 {
@@ -12,27 +16,36 @@ namespace ErogeHelper_Core.ViewModels
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SelectProcessViewModel));
 
-        ISelectProcessService dataService;
+        readonly ISelectProcessService dataService;
+        readonly IWindowManager windowManager;
 
-        public SelectProcessViewModel()
+        public SelectProcessViewModel(ISelectProcessService dataService, IWindowManager windowManager)
         {
-            dataService = new SelectProcessService();
+            this.dataService = dataService;
+            this.windowManager = windowManager;
         }
 
-        public BindableCollection<string> ProcessList { get; private set; } = new BindableCollection<string>();
-        public string SelectedProc { get; set; } = "";
+        public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
+        public ProcComboboxItem SelectedProcItem { get; set; } = new ProcComboboxItem();
 
         // CanInject 被触发的条件
         // 首先Inject.Name被声明，然后小小咖喱棒会去看VM中该函数的参数名（也是xaml中的某一Name），一有变化就立即通知并把值发送进来
-        public bool CanInject() => !string.IsNullOrWhiteSpace(SelectedProc);
+        public bool CanInject() => SelectedProcItem is not null && !string.IsNullOrWhiteSpace(SelectedProcItem.Title);
 
-        public async void Inject(string processList)
+        public async void Inject(object procItems) // Suger by CM
         {
-            // this `processList` totally same as SelectedProc. 
-
-            log.Info($"{SelectedProc}");
+            await windowManager.ShowWindowAsync(new HookConfigViewModel());
+            Textractor.Init(new List<Process>() { SelectedProcItem.proc });
         }
 
-        public async void GetProcessAction() => await dataService.GetProcessListAsync(ProcessList);
+        public async void GetProcessAction() => await dataService.GetProcessListAsync(ProcItems);
+    }
+
+    class ProcComboboxItem
+    {
+        public Process proc = new Process();
+
+        public BitmapImage Icon { get; set; } = new BitmapImage();
+        public string Title { get; set; } = "";
     }
 }

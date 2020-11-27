@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper_Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace ErogeHelper_Core.Common.Service
 {
     interface ISelectProcessService
     {
-        Task GetProcessListAsync(BindableCollection<string> data);
+        Task GetProcessListAsync(BindableCollection<ProcComboboxItem> data);
     }
 }

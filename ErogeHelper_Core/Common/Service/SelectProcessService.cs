@@ -1,24 +1,45 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper_Core.Common.Extension;
+using ErogeHelper_Core.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ErogeHelper_Core.Common.Service
 {
     class SelectProcessService : ISelectProcessService
     {
-        public async Task GetProcessListAsync(BindableCollection<string> data)
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SelectProcessService));
+
+        public async Task GetProcessListAsync(BindableCollection<ProcComboboxItem> data)
         {
             data.Clear();
 
             await Task.Run(() =>
             {
-                foreach (var proc in ProcessEnumerable())
+                foreach (Process proc in ProcessEnumerable())
                 {
-                    data.Add(proc.MainWindowTitle);
+                    try
+                    {
+                        data.Add(new ProcComboboxItem()
+                        {
+                            proc = proc,
+                            Title = proc.MainWindowTitle,
+                            Icon = Utils.PEIcon2BitmapImage(proc.GetMainModuleFileName())
+                        });
+                    }
+                    catch(Win32Exception ex)
+                    {
+                        // Access Denied. it's doesn't matter?
+                        log.Error(ex.Message);
+                    }
                 }
             });
         }
