@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using ErogeHelper.Core.ViewModels;
+using ErogeHelper_Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ErogeHelper.Core
+namespace ErogeHelper_Core
 {
     class AppBootstrapper : BootstrapperBase
     {

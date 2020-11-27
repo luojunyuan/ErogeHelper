@@ -36,8 +36,7 @@ namespace ErogeHelper
             if (e.Args.Length == 0)
             {
                 // FIXME: 显示不全
-                MessageBox.Show("请使用 EHInstaller 安装我> < \n\r" +
-                                "如果你已经安装了直接右键游戏选择Eroge Helper启动就好了~",
+                MessageBox.Show("如果你已经安装了直接右键游戏选择Eroge Helper启动就好了~",
                                 "ErogeHelper");
                 Current.Shutdown();
                 return;

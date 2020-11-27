@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace ErogeHelper.Core.Common.Helper
+namespace ErogeHelper_Core.Common.Helper
 {
     internal static class ScrollViewerHelperEx
     {

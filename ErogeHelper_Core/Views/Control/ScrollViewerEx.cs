@@ -1,4 +1,4 @@
-﻿using ErogeHelper.Core.Common.Helper;
+﻿using ErogeHelper_Core.Common.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace ErogeHelper.Core.Views.Control
+namespace ErogeHelper_Core.Views.Control
 {
     class ScrollViewerEx : ScrollViewer
     {

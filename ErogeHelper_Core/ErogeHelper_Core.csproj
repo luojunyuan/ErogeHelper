@@ -4,6 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <RootNamespace>ErogeHelper_Core</RootNamespace>
+    <AssemblyName>ErogeHelper_Core</AssemblyName>
+	<Nullable>enable</Nullable>
+	<ApplicationIcon>E_32.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,6 +26,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EHLanguage\EHLanguage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
   </ItemGroup>
 
 </Project>
