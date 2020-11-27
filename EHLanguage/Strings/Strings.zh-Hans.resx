@@ -121,7 +121,7 @@
     <value>注入</value>
   </data>
   <data name="SelectProcess.Lable" xml:space="preserve">
-    <value>选择进程</value>
+    <value>选择应用</value>
   </data>
   <data name="SelectProcess.Tips" xml:space="preserve">
     <value>请使用EHInstaller.exe来安装我，安装后右键游戏程序选择Eroge Helper启动更方便哦~</value>

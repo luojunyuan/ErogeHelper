@@ -70,7 +70,7 @@ namespace EHLanguage {
         }
         
         /// <summary>
-        ///   查找类似 Select Process 的本地化字符串。
+        ///   查找类似 Select Application 的本地化字符串。
         /// </summary>
         public static string SelectProcess_Lable {
             get {

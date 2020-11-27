@@ -127,6 +127,6 @@
     <value>Inject</value>
   </data>
   <data name="SelectProcess.Lable" xml:space="preserve">
-    <value>Select Process</value>
+    <value>Select Application</value>
   </data>
 </root>
