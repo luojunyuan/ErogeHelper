@@ -99,6 +99,10 @@ namespace ErogeHelper
                 {
                     tmpProcList.Add(p);
                 }
+                foreach (Process p in Process.GetProcessesByName("main.bin"))
+                {
+                    tmpProcList.Add(p);
+                }
                 #endregion
                 foreach (Process p in tmpProcList)
                 {
