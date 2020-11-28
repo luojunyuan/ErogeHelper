@@ -23,6 +23,8 @@ namespace ErogeHelper_Core.ViewModels
         {
             this.dataService = dataService;
             this.windowManager = windowManager;
+
+            dataService.GetProcessListAsync(ProcItems);
         }
 
         public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
@@ -34,8 +36,16 @@ namespace ErogeHelper_Core.ViewModels
 
         public async void Inject(object procItems) // Suger by CM
         {
-            await windowManager.ShowWindowAsync(new HookConfigViewModel());
-            Textractor.Init(new List<Process>() { SelectedProcItem.proc });
+            if (SelectedProcItem.proc.HasExited)
+            {
+
+            }
+            else
+            {
+                await windowManager.ShowWindowAsync(IoC.Get<HookConfigViewModel>());
+
+                Textractor.Init(new List<Process>() { SelectedProcItem.proc });
+            }
         }
 
         public async void GetProcessAction() => await dataService.GetProcessListAsync(ProcItems);

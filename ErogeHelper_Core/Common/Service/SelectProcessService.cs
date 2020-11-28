@@ -20,25 +20,38 @@ namespace ErogeHelper_Core.Common.Service
 
         public async Task GetProcessListAsync(BindableCollection<ProcComboboxItem> data)
         {
-            data.Clear();
-
             await Task.Run(() =>
             {
+                BindableCollection<ProcComboboxItem> tmpCollection = new BindableCollection<ProcComboboxItem>();
+
                 foreach (Process proc in ProcessEnumerable())
                 {
                     try
                     {
-                        data.Add(new ProcComboboxItem()
+                        var item = new ProcComboboxItem()
                         {
                             proc = proc,
                             Title = proc.MainWindowTitle,
                             Icon = Utils.PEIcon2BitmapImage(proc.GetMainModuleFileName())
-                        });
+                        };
+                        tmpCollection.Add(item);
+                        if (data.Contain(item))
+                            continue;
+                        else
+                            data.Add(item);
                     }
                     catch(Win32Exception ex)
                     {
-                        // Access Denied. it's doesn't matter?
+                        // Casue by `GetMainModuleFileName()`
+                        // Access Denied. 32bit -> 64bit module
                         log.Error(ex.Message);
+                    }
+                }
+                foreach (var i in data.ToList())
+                {
+                    if (!tmpCollection.Contain(i))
+                    {
+                        data.Remove(i);
                     }
                 }
             });
@@ -58,9 +71,10 @@ namespace ErogeHelper_Core.Common.Service
             }
         }
 
-        private List<string> uselessProcess = new List<string> 
+        private readonly List<string> uselessProcess = new List<string> 
         { 
             "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
+            "PaintStudio.View"
         };
     }
 }

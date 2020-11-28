@@ -30,7 +30,7 @@ namespace ErogeHelper_Core
             else
             {
                 // 经过一番操作
-                // 拿到进程
+                // 拿到进程 (list and HwndProc)
             }
         }
 

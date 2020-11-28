@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ErogeHelper_Core.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
