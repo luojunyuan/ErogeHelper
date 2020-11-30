@@ -8,10 +8,10 @@
         xmlns:control="clr-namespace:ErogeHelper_Core.Views.Control"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:cal="http://caliburnmicro.com"
+        mc:Ignorable="d" 
         ui:WindowHelper.UseModernWindowStyle="True" 
-        mc:Ignorable="d"
         Title="{x:Static resx:Strings.SelectProcess_Title}" Width="350" MinWidth="350"
-        SizeToContent="Height">
+        SizeToContent="Height" Icon="pack://application:,,,/Assets/app.ico" >
     
     <control:ScrollViewerEx PanningMode="Both">
         <StackPanel Margin="20,10">

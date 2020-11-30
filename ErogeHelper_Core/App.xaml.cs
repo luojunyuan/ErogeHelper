@@ -22,11 +22,15 @@ namespace ErogeHelper_Core
             //var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
             //Directory.SetCurrentDirectory(currentDirectory);
             //Utils.AddEnvironmentPaths((currentDirectory + @"\libs").Split());
-            // 设置log4net
+
+            // 设置log4net 
+            // TODO: move config file to Assets
             XmlConfigurator.Configure();
+
             // 打开Caliburn.Micro.ViewModelBinder调试监控
             var baseGetLog = LogManager.GetLog;
             LogManager.GetLog = t => t == typeof(ViewModelBinder) ? new DebugLog(t) : baseGetLog(t);
+
             // 设置i18n
             SetLanguageDictionary();
         }

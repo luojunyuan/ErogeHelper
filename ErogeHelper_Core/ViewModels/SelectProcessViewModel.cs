@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace ErogeHelper_Core.ViewModels
 {
-    class SelectProcessViewModel : PropertyChangedBase
+    class SelectProcessViewModel : Screen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SelectProcessViewModel));
 
@@ -38,13 +38,18 @@ namespace ErogeHelper_Core.ViewModels
         {
             if (SelectedProcItem.proc.HasExited)
             {
-
+                log.Info("baka");
+                ProcItems.Remove(SelectedProcItem);
             }
             else
             {
+                // hide
+                // 先判断文件 再决定开哪个窗口
                 await windowManager.ShowWindowAsync(IoC.Get<HookConfigViewModel>());
+                await TryCloseAsync();
 
-                Textractor.Init(new List<Process>() { SelectedProcItem.proc });
+                // 对于多进程游戏，这里还不一定是出字的进程,最好再走一遍找所有进程的逻辑，不同的是这边肯定一遍找到
+                //Textractor.Init(new List<Process>() { SelectedProcItem.proc });
             }
         }
 
