@@ -6,12 +6,14 @@
         xmlns:local="clr-namespace:ErogeHelper_Core.Views"
         xmlns:resx="clr-namespace:EHLanguage;assembly=EHLanguage"
         xmlns:control="clr-namespace:ErogeHelper_Core.Views.Control"
+        xmlns:service="clr-namespace:ErogeHelper_Core.Common.Service"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:cal="http://caliburnmicro.com"
         mc:Ignorable="d" 
         ui:WindowHelper.UseModernWindowStyle="True" 
-        Title="{x:Static resx:Strings.SelectProcess_Title}" Width="350" MinWidth="350"
-        SizeToContent="Height" Icon="pack://application:,,,/Assets/app.ico" >
+        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Height="400"
+        Icon="pack://application:,,,/Assets/app.ico"
+        service:WindowPlacement.Save="True">
     
     <control:ScrollViewerEx PanningMode="Both">
         <StackPanel Margin="20,10">
@@ -19,6 +21,7 @@
                 <ui:SimpleStackPanel Spacing="10">
                     <TextBlock Text="{x:Static resx:Strings.SelectProcess_Tips}" 
                         Style="{DynamicResource TitleTextBlockStyle}" />
+                    <!-- TODO: Open program folder button -->
                 </ui:SimpleStackPanel>
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Lable}"  Margin="0 20 0 0">

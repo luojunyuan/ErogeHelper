@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ErogeHelper_Core.Common.Service;
 using ErogeHelper_Core.ViewModels;
+using ErogeHelper_Core.ViewModels.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace ErogeHelper_Core
         {
             var builder = new ContainerBuilder();
 
-            // Register basic tools
+            // Register Basic Tools
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -50,6 +51,9 @@ namespace ErogeHelper_Core
             // Register ViewModels
             builder.RegisterType<SelectProcessViewModel>();
             builder.RegisterType<HookConfigViewModel>();
+
+            builder.RegisterType<HookSettingPageViewModel>()
+                .SingleInstance();
 
             // Register Servieces
             builder.RegisterType<SelectProcessService>()

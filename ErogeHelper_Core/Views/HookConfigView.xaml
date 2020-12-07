@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErogeHelper_Core.Views"
+        xmlns:cal="http://caliburnmicro.com"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
-        Title="HookConfigView" Height="450" Width="800">
+        ui:WindowHelper.UseModernWindowStyle="True" 
+        Width="350" MinWidth="350" Icon="pack://application:,,,/Assets/app.ico"
+        Title="HookConfigView" Height="450">
     <Grid>
-        
+        <Frame x:Name="HookSettingPage" />
     </Grid>
 </Window>

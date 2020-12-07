@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ErogeHelper_Core.Views.Control
+namespace ErogeHelper_Core.Views.Pages
 {
     /// <summary>
-    /// HookSettingView.xaml 的交互逻辑
+    /// HookSettingPage.xaml 的交互逻辑
     /// </summary>
-    public partial class HookSettingView : Page
+    public partial class HookSettingPage : Page
     {
-        public HookSettingView()
+        public HookSettingPage()
         {
             InitializeComponent();
         }

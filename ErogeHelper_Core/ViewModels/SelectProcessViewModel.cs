@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper_Core.Common;
 using ErogeHelper_Core.Common.Service;
+using ErogeHelper_Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,11 +31,11 @@ namespace ErogeHelper_Core.ViewModels
         public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
         public ProcComboboxItem SelectedProcItem { get; set; } = new ProcComboboxItem();
 
-        // CanInject 被触发的条件
-        // 首先Inject.Name被声明，然后小小咖喱棒会去看VM中该函数的参数名（也是xaml中的某一Name），一有变化就立即通知并把值发送进来
-        public bool CanInject() => SelectedProcItem is not null && !string.IsNullOrWhiteSpace(SelectedProcItem.Title);
+        public bool CanInject() => SelectedProcItem != null && !string.IsNullOrWhiteSpace(SelectedProcItem.Title);
 
+#pragma warning disable IDE0060 // 删除未使用的参数
         public async void Inject(object procItems) // Suger by CM
+#pragma warning restore IDE0060 // 删除未使用的参数
         {
             if (SelectedProcItem.proc.HasExited)
             {
@@ -49,7 +50,15 @@ namespace ErogeHelper_Core.ViewModels
                 await TryCloseAsync();
 
                 // 对于多进程游戏，这里还不一定是出字的进程,最好再走一遍找所有进程的逻辑，不同的是这边肯定一遍找到
-                //Textractor.Init(new List<Process>() { SelectedProcItem.proc });
+                DataRepository.GameProcesses.Add(SelectedProcItem.proc);
+                try
+                {
+                    Textractor.Init();
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.Message + " check the texthost.dll file is delete by anti-virus soft");
+                }
             }
         }
 

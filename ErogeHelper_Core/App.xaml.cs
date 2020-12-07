@@ -1,9 +1,12 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper_Core.Model;
 using log4net.Config;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,24 +21,21 @@ namespace ErogeHelper_Core
     {
         App()
         {
-            // 为Textractor的texthost.dll添加环境变量
-            //var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
-            //Directory.SetCurrentDirectory(currentDirectory);
             //Utils.AddEnvironmentPaths((currentDirectory + @"\libs").Split());
 
-            // 设置log4net 
+            // Set log4net 
             // TODO: move config file to Assets
             XmlConfigurator.Configure();
 
-            // 打开Caliburn.Micro.ViewModelBinder调试监控
+            // Switch on Caliburn.Micro.ViewModelBinder debug monitor
             var baseGetLog = LogManager.GetLog;
             LogManager.GetLog = t => t == typeof(ViewModelBinder) ? new DebugLog(t) : baseGetLog(t);
 
-            // 设置i18n
+            // Set i18n
             SetLanguageDictionary();
         }
 
-        private void SetLanguageDictionary()
+        private static void SetLanguageDictionary()
         {
             EHLanguage.Strings.Culture = (Thread.CurrentThread.CurrentCulture.ToString()) switch
             {

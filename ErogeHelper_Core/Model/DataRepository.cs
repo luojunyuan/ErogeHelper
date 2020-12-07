@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using Windows.Storage;
 
-namespace ErogeHelper_Core.Common.Helper
+namespace ErogeHelper_Core.Model
 {
-    class AppDataHelper
+    class DataRepository
     {
         #region Methods
 
@@ -50,10 +51,6 @@ namespace ErogeHelper_Core.Common.Helper
                     {
                         return (T)Enum.Parse(typeof(T), value);
                     }
-                    else if (typeof(T) == typeof(Point))
-                    {
-                        return (T)(object)Point.Parse(value);
-                    }
                 }
             }
 
@@ -72,6 +69,12 @@ namespace ErogeHelper_Core.Common.Helper
         {
             await ApplicationData.Current.ClearAsync();
         }
+
+        #endregion
+
+        #region Runtime
+
+        public static List<Process> GameProcesses = new List<Process>();
 
         #endregion
 

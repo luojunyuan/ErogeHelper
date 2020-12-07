@@ -21,7 +21,7 @@ namespace ErogeHelper_Core.Common
             BitmapImage result = new BitmapImage();
             Stream stream = new MemoryStream();
 
-            var iconBitmap = Icon.ExtractAssociatedIcon(fullPath).ToBitmap();
+            var iconBitmap = Icon.ExtractAssociatedIcon(fullPath)!.ToBitmap();
             iconBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             iconBitmap.Dispose();   
             result.BeginInit();
@@ -38,7 +38,7 @@ namespace ErogeHelper_Core.Common
         /// <param name="pathInApplication">Path without starting slash</param>
         /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
         /// <returns></returns>
-        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly assembly = null)
+        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly? assembly = null)
         {
             if (assembly == null)
             {
@@ -47,7 +47,7 @@ namespace ErogeHelper_Core.Common
 
             if (pathInApplication[0] == '/')
             {
-                pathInApplication = pathInApplication.Substring(1);
+                pathInApplication = pathInApplication[1..];
             }
             return new BitmapImage(new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute));
         }

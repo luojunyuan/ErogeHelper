@@ -1,8 +1,11 @@
-﻿using log4net;
+﻿using ErogeHelper_Core.Model;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,24 +16,23 @@ namespace ErogeHelper_Core.Common
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Textractor));
 
-        private static List<Process> ProcList = new List<Process>();
-
-        public static void Init(List<Process> procList)
+        public static void Init()
         {
-            ProcList = procList;
-
             log.Info("initilize start.");
+            string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
+            if (!File.Exists(textractorPath))
+                throw new FileNotFoundException(textractorPath);
 
             createthread = CreateThreadHandle;
             output = OutputHandle;
             removethread = RemoveThreadHandle;
             callback = OnConnectCallBackHandle;
 
-            TextHostLib.TextHostInit(callback, (_) => { }, createthread, removethread, output);
+            _ = TextHostLib.TextHostInit(callback, (_) => { }, createthread, removethread, output);
 
-            foreach (Process p in procList)
+            foreach (Process p in DataRepository.GameProcesses)
             {
-                TextHostLib.InjectProcess((uint)p.Id);
+                _ = TextHostLib.InjectProcess((uint)p.Id);
                 log.Info($"attach to PID {p.Id}.");
             }
         }
@@ -44,7 +46,7 @@ namespace ErogeHelper_Core.Common
         public static event DataRecvEventHandler? SelectedDataEvent;
         public static event DataRecvEventHandler? DataEvent;
 
-        static Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
+        static readonly Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
 
         #region TextHostInit Callback Implement
         static public void CreateThreadHandle(
@@ -112,9 +114,9 @@ namespace ErogeHelper_Core.Common
                     return;
                 }
             }
-            foreach (Process p in ProcList)
+            foreach (Process p in DataRepository.GameProcesses)
             {
-                TextHostLib.InsertHook((uint)p.Id, hookcode);
+                _ = TextHostLib.InsertHook((uint)p.Id, hookcode);
                 log.Info($"Try insert code {hookcode} to PID {p.Id}");
             }
         }

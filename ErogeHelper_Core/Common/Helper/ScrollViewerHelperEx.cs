@@ -91,7 +91,7 @@ namespace ErogeHelper_Core.Common.Helper
 
         internal static void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var scrollViewer = sender as ScrollViewer;
+            ScrollViewer scrollViewer = (ScrollViewer)sender;
 
             bool isHorizontal = Keyboard.Modifiers == ModifierKeys.Shift;
 
@@ -117,7 +117,7 @@ namespace ErogeHelper_Core.Common.Helper
             }
         }
 
-        public static void ScrollToOffset(ScrollViewer scrollViewer, Orientation orientation, double offset, double duration = 500, IEasingFunction easingFunction = null)
+        public static void ScrollToOffset(ScrollViewer scrollViewer, Orientation orientation, double offset, double duration = 500, IEasingFunction? easingFunction = null)
         {
             var animation = new DoubleAnimation(offset, TimeSpan.FromMilliseconds(duration));
             easingFunction ??= new CubicEase
@@ -143,12 +143,12 @@ namespace ErogeHelper_Core.Common.Helper
             scrollViewer.BeginAnimation(orientation == Orientation.Vertical ? CurrentVerticalOffsetProperty : CurrentHorizontalOffsetProperty, animation, HandoffBehavior.Compose);
         }
 
-        public static void ScrollToVerticalOffset(ScrollViewer scrollViewer, double offset, double duration = 500, IEasingFunction easingFunction = null)
+        public static void ScrollToVerticalOffset(ScrollViewer scrollViewer, double offset, double duration = 500, IEasingFunction? easingFunction = null)
         {
             ScrollToOffset(scrollViewer, Orientation.Vertical, offset, duration, easingFunction);
         }
 
-        public static void ScrollToHorizontalOffset(ScrollViewer scrollViewer, double offset, double duration = 500, IEasingFunction easingFunction = null)
+        public static void ScrollToHorizontalOffset(ScrollViewer scrollViewer, double offset, double duration = 500, IEasingFunction? easingFunction = null)
         {
             ScrollToOffset(scrollViewer, Orientation.Horizontal, offset, duration, easingFunction);
         }
