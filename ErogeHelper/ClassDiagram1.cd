@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ErogeHelper.App" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.AppBootstrapper" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAQAAAAAAAAAAABACAIABAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>AppBootstrapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.HookParam" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAgAAAAAAAACAAQAAAAgAAIAAAAACAAAgAA=</HashCode>
+      <FileName>Common\Textractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.NativeMethods" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="ErogeHelper.Common.NativeMethods.GW" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ErogeHelper.Common.NativeMethods.SWEH_dwFlags" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ErogeHelper.Common.NativeMethods.SWEH_Events" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="ErogeHelper.Common.NativeMethods.SWEH_ObjectId" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Delegate Name="ErogeHelper.Common.NativeMethods.WinEventDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Enum Name="ErogeHelper.Common.NativeMethods.WM" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\NativeMethods.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>FAAAAAAQAABJAAAKIAABAEAABoJAAEAAEQQIIACwMII=</HashCode>
+      <FileName>Common\NativeMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.SafeNativeMethods" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAABBAAAKIAAAAEAAAAAAACAAAAEAAACgAIo=</HashCode>
+      <FileName>Common\NativeMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.Textractor" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="ErogeHelper.Common.Textractor.DataRecvEventHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Class Name="ErogeHelper.Common.Textractor.TextHostLib">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Delegate Name="ErogeHelper.Common.Textractor.TextHostLib.OnCreateThread" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Delegate>
+          <Delegate Name="ErogeHelper.Common.Textractor.TextHostLib.OnOutputText" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Delegate>
+          <Delegate Name="ErogeHelper.Common.Textractor.TextHostLib.OnRemoveThread" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Delegate>
+          <Delegate Name="ErogeHelper.Common.Textractor.TextHostLib.ProcessCallback" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Delegate>
+          <Struct Name="ErogeHelper.Common.Textractor.TextHostLib.SearchParam" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Struct>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>Common\Textractor.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CABAAAAAAAAAAAJEAAAACAAACAEQAACAAAADAQAAAQA=</HashCode>
+      <FileName>Common\Textractor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.UnsafeNativeMethods" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQCACAAAAAAAAAAA=</HashCode>
+      <FileName>Common\NativeMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.Utils" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAgAAAAAAQAAgAAAAAAAAAA=</HashCode>
+      <FileName>Common\Utils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.ViewModels.GameViewModel" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAIAAAAACAAABCgAAAAowACCAAAAAgAAAAAA=</HashCode>
+      <FileName>ViewModels\GameViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.ViewModels.HookConfigViewModel" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\HookConfigViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.ViewModels.PreferenceViewModel" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAACAAQAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>ViewModels\PreferenceViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.ViewModels.ProcComboboxItem" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAECAAA=</HashCode>
+      <FileName>ViewModels\SelectProcessViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.ViewModels.SelectProcessViewModel" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAIAAAAAAABACCAAAAAAgAAAAAAIAAABAAAA=</HashCode>
+      <FileName>ViewModels\SelectProcessViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Model.Translator.BaiduApiTranslator" BaseTypeListCollapsed="true">
+    <Position X="5" Y="2.75" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ErogeHelper.Model.Translator.BaiduApiTranslator.BaiduApiResponse" Collapsed="true">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Class Name="ErogeHelper.Model.Translator.BaiduApiTranslator.BaiduApiResponse.BaiduTransResult" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>Model\Translator\BaiduApiTranslator.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Class>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Translator\BaiduApiTranslator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAEAAAAAAIAEACAQAAAAAAAAAAAAAAAAQAQA=</HashCode>
+      <FileName>Model\Translator\BaiduApiTranslator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ErogeHelper.Model.Translator.TranslatorCollector">
+    <Position X="9.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Model\Translator\TranslatorCollector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Model.Translator.YeekitTranslator" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="2.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ErogeHelper.Model.Translator.YeekitTranslator.YeekitResponse" Collapsed="true">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Class Name="ErogeHelper.Model.Translator.YeekitTranslator.YeekitResponse.Translation">
+            <Compartments>
+              <Compartment Name="Nested Types" Collapsed="false" />
+            </Compartments>
+            <NestedTypes>
+              <Class Name="ErogeHelper.Model.Translator.YeekitTranslator.YeekitResponse.Translation.Translated" Collapsed="true">
+                <TypeIdentifier>
+                  <NewMemberFileName>Model\Translator\YeekitTranslator.cs</NewMemberFileName>
+                </TypeIdentifier>
+              </Class>
+            </NestedTypes>
+            <TypeIdentifier>
+              <NewMemberFileName>Model\Translator\YeekitTranslator.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Class>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Translator\YeekitTranslator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAEAAAQAAAAEACAQAAAAAAAAAAAAAAAAQAQA=</HashCode>
+      <FileName>Model\Translator\YeekitTranslator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ErogeHelper.Common.Helper.SetClipboardHelper">
+    <Position X="0.5" Y="8" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Common\Helper\SetClipboardHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErogeHelper.Common.Helper.StaHelper">
+    <Position X="0.5" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAQAAAAAAAAACAAAECAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Common\Helper\StaHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ErogeHelper.Common.RECT" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAACACAAAAAAAA=</HashCode>
+      <FileName>Common\NativeMethods.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="ErogeHelper.Model.Translator.ITranslator">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAEAAAAAAAAEAAAQAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Model\Translator\ITranslator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="ErogeHelper.Model.Translator.Language">
+    <Position X="3.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Model\Translator\ITranslator.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ErogeHelper.Model.Translator.TranslatorName" Collapsed="true">
+    <Position X="6.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Translator\TranslatorCollector.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

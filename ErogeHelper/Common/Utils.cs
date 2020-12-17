@@ -1,20 +1,71 @@
-﻿using ErogeHelper.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace ErogeHelper.Common
 {
     static class Utils
     {
+        public static BitmapImage PEIcon2BitmapImage(string fullPath)
+        {
+            BitmapImage result = new BitmapImage();
+            Stream stream = new MemoryStream();
+
+            var iconBitmap = Icon.ExtractAssociatedIcon(fullPath)!.ToBitmap();
+            iconBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            iconBitmap.Dispose();   
+            result.BeginInit();
+            result.StreamSource = stream;
+            result.EndInit();
+            result.Freeze();
+
+            return result;
+        }
+
+        internal static ImageSource Hinshi2Color(string value)
+        {
+            return (value.ToString()) switch
+            {
+                "名詞" => LoadBitmapFromResource("Assets/yellow.png"),
+                "助詞" => LoadBitmapFromResource("Assets/transparent.png"),
+                "動詞" or "感動詞" => LoadBitmapFromResource("Assets/green.png"),
+                "副詞" => LoadBitmapFromResource("Assets/purple.png"),
+                "形容詞" => LoadBitmapFromResource("Assets/pink.png"),
+                _ => LoadBitmapFromResource("Assets/transparent.png"),
+            };
+        }
+
+        /// <summary>
+        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 'Embedded resource'.
+        /// </summary>
+        /// <param name="pathInApplication">Path without starting slash</param>
+        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
+        /// <returns></returns>
+        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly? assembly = null)
+        {
+            if (assembly == null)
+            {
+                assembly = Assembly.GetCallingAssembly();
+            }
+
+            if (pathInApplication[0] == '/')
+            {
+                pathInApplication = pathInApplication[1..];
+            }
+            return new BitmapImage(new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute));
+        }
+
         /// <summary>
         /// Get MD5 hash by file
         /// </summary>
@@ -35,91 +86,5 @@ namespace ErogeHelper.Common
             return sb.ToString().ToUpper();
         }
 
-        /// <summary>
-        /// 查看一个List&lt;Process&gt;集合中是否存在MainWindowHandle
-        /// </summary>
-        /// <param name="procList"></param>
-        /// <returns>若存在，返回其所在Process，否则返回null</returns>
-        public static Process FindHWndProc(List<Process> procList)
-        {
-            foreach (var p in procList)
-            {
-                if (p.MainWindowHandle != IntPtr.Zero)
-                    return p;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 'Embedded resource'.
-        /// </summary>
-        /// <param name="pathInApplication">Path without starting slash</param>
-        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
-        /// <returns></returns>
-        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly assembly = null)
-        {
-            if (assembly == null)
-            {
-                assembly = Assembly.GetCallingAssembly();
-            }
-
-            if (pathInApplication[0] == '/')
-            {
-                pathInApplication = pathInApplication.Substring(1);
-            }
-            return new BitmapImage(new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute));
-        }
-
-        static HttpClient HC;
-        static public CookieContainer cookieContainer;
-        /// <summary>
-        /// 获得HttpClinet单例，第一次调用自动初始化
-        /// </summary>
-        public static HttpClient GetHttpClient()
-        {
-            if (HC == null)
-            {
-                lock (typeof(Utils))
-                {
-                    if (HC == null)
-                    {
-                        cookieContainer = new CookieContainer();
-                        var handel = new HttpClientHandler()
-                        {
-                            AutomaticDecompression = DecompressionMethods.GZip,
-                            CookieContainer = cookieContainer
-                        };
-                        HC = new HttpClient(handel)
-                        { 
-                            Timeout = TimeSpan.FromSeconds(6)
-                        };
-                        var headers = HC.DefaultRequestHeaders;
-                        headers.UserAgent.ParseAdd("Eroge-Helper");
-                        headers.Add("ContentType", "text/html;charset=UTF-8");
-                        headers.AcceptEncoding.ParseAdd("gzip");
-                        headers.Connection.ParseAdd("keep-alive");
-                        ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-                    }
-                }
-            }
-            return HC;
-        }
-
-        public static void AddEnvironmentPaths(IEnumerable<string> paths)
-        {
-            var path = new[] { Environment.GetEnvironmentVariable("PATH") ?? string.Empty };
-            string newPath = string.Join(Path.PathSeparator.ToString(), path.Concat(paths));
-            Environment.SetEnvironmentVariable("PATH", newPath);   // 这种方式只会修改当前进程的环境变量
-        }
-
-        // should move to bll
-        public static List<ITranslator> GetTranslatorList()
-        {
-            var ret = new List<ITranslator>
-            {
-                new BaiduWebTranslator(),
-            };
-            return ret;
-        }
     }
 }

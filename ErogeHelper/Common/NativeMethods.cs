@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
 using System.Text;
-using System.Windows.Documents;
+using System.Threading.Tasks;
 
-namespace ErogeHelper
+namespace ErogeHelper.Common
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
+    class NativeMethods
     {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-    }
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        public static extern uint QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
 
-    /// <summary>
-    /// Win32 api for GameWindow.cs, leave it alone
-    /// </summary>
-    public class NativeMethods
-    {
+        #region Enums
+        public const int KEYEVENTF_KEYDOWN = 0x0000; // New definition
+        public const int KEYEVENTF_KEYUP = 0x0002; //Key up flag
+        public const int VK_LCONTROL = 0xA2; //Left Control key code
+        public const byte vbKeyV = 86;
+        public const byte vbKeyC = 67;
+        public const byte vbKeyControl = 0x11;   // CTRL 键
+        public const byte vbKeyShift = 0x10;     // SHIFT 键
         public const int WS_EX_NOACTIVATE = 0x08000000;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
         public const int GWL_EXSTYLE = -20;
 
         public static long SWEH_CHILDID_SELF = 0;
@@ -163,6 +164,7 @@ namespace ErogeHelper
             OBJID_QUERYCLASSNAMEIDX = 0xFFFFFFF4,
             OBJID_NATIVEOM = 0xFFFFFFF0
         }
+        #endregion
 
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
                                                                 SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS |
@@ -181,16 +183,20 @@ namespace ErogeHelper
                                                WinEventDelegate _delegate,
                                                uint idProcess, uint idThread)
         {
+#pragma warning disable SYSLIB0003 // 类型或成员已过时
             new UIPermission(UIPermissionWindow.AllWindows).Demand();
+#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.SetWinEventHook(eventFrom, eventTo,
                                                        IntPtr.Zero, _delegate,
                                                        idProcess, idThread,
                                                        WinEventHookInternalFlags);
         }
-
+        
         public static IntPtr WinEventHookOne(SWEH_Events _event, WinEventDelegate _delegate, uint idProcess, uint idThread)
         {
+#pragma warning disable SYSLIB0003 // 类型或成员已过时
             new UIPermission(UIPermissionWindow.AllWindows).Demand();
+#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.SetWinEventHook(_event, _event,
                                                        IntPtr.Zero, _delegate,
                                                        idProcess, idThread,
@@ -209,7 +215,9 @@ namespace ErogeHelper
         /// <returns></returns>
         public static uint GetWindowThread(IntPtr hWnd)
         {
+#pragma warning disable SYSLIB0003 // 类型或成员已过时
             new UIPermission(UIPermissionWindow.AllWindows).Demand();
+#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.GetWindowThreadProcessId(hWnd, IntPtr.Zero);
         }
 
@@ -279,6 +287,43 @@ namespace ErogeHelper
         {
             return SafeNativeMethods.GetWindowText(hWnd, title, length);
         }
+        public static void SwitchToThisWindow(IntPtr hWnd, bool fAltTab = true)
+        {
+            SafeNativeMethods.SwitchToThisWindow(hWnd, fAltTab);
+        }
+        public static void PressKey(byte Keys)
+        {
+            SafeNativeMethods.keybd_event(Keys, 0, 0, 0);
+            SafeNativeMethods.keybd_event(Keys, 0, 2, 0);
+        }
+        public static void PressCtrlC()
+        {
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+        }
+        public static void PressCtrlV()
+        {
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyV, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.keybd_event(vbKeyV, 0, 2, 0);
+        }
+        public static void ActiveDeepL()
+        {
+            // Ctrl+C Shift+C
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+
+            SafeNativeMethods.keybd_event(vbKeyShift, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.keybd_event(vbKeyShift, 0, 2, 0);
+            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+        }
+
     }
 
     [SuppressUnmanagedCodeSecurity]
@@ -305,7 +350,6 @@ namespace ErogeHelper
         [DllImport("user32.dll", EntryPoint = "DestroyWindow", CharSet = CharSet.Unicode)]
         internal static extern bool DestroyWindow(IntPtr hWnd);
 
-        // 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hwnd, int index);
 
@@ -323,6 +367,12 @@ namespace ErogeHelper
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        public static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
+
+        [DllImport("user32.dll", EntryPoint = "keybd_event", SetLastError = true)]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
     }
 
     [SuppressUnmanagedCodeSecurity]
@@ -341,5 +391,14 @@ namespace ErogeHelper
 
         [DllImport("user32.dll", SetLastError = false)]
         public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
     }
 }

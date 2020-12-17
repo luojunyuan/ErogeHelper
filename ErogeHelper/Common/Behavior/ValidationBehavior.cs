@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace ErogeHelper.Common.Behavior
 {
-    public static class ValidationBehavior
+    class ValidationBehavior
     {
         #region Attached Properties
 
@@ -27,7 +31,7 @@ namespace ErogeHelper.Common.Behavior
             return (DependencyPropertyDescriptor)d.GetValue(HasErrorDescriptorProperty);
         }
 
-        private static void SetHasErrorDescriptor(DependencyObject d, DependencyPropertyDescriptor value)
+        private static void SetHasErrorDescriptor(DependencyObject d, DependencyPropertyDescriptor? value)
         {
             d.SetValue(HasErrorDescriptorProperty, value);
         }
@@ -72,7 +76,7 @@ namespace ErogeHelper.Common.Behavior
             }
             return result;
         }
-        private static void OnHasErrorChanged(object sender, EventArgs e)
+        private static void OnHasErrorChanged(object? sender, EventArgs e)
         {
             var d = sender as DependencyObject;
             if (d != null)

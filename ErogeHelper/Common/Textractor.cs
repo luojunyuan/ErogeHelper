@@ -1,12 +1,14 @@
 ﻿using ErogeHelper.Model;
-using GalaSoft.MvvmLight.Ioc;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using static ErogeHelper.Common.Textractor.TextHostLib;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Common
 {
@@ -14,35 +16,37 @@ namespace ErogeHelper.Common
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Textractor));
 
-        private static readonly GameInfo gameInfo = (GameInfo)SimpleIoc.Default.GetInstance(typeof(GameInfo));
-
         public static void Init()
         {
             log.Info("initilize start.");
+            string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
+            if (!File.Exists(textractorPath))
+                throw new FileNotFoundException(textractorPath);
 
             createthread = CreateThreadHandle;
             output = OutputHandle;
             removethread = RemoveThreadHandle;
             callback = OnConnectCallBackHandle;
 
-            TextHostInit(callback, (_) => { }, createthread, removethread, output);
+            TextHostLib.TextHostInit(callback, _ => { }, createthread, removethread, output);
 
-            foreach (Process p in gameInfo.ProcList)
+            foreach (Process p in DataRepository.GameProcesses)
             {
-                InjectProcess((uint)p.Id);
+                TextHostLib.InjectProcess((uint)p.Id);
                 log.Info($"attach to PID {p.Id}.");
             }
         }
-        static private OnOutputText output;
-        static private ProcessCallback callback;
-        static private OnCreateThread createthread;
-        static private OnRemoveThread removethread;
+
+        static private TextHostLib.OnOutputText? output;
+        static private TextHostLib.ProcessCallback? callback;
+        static private TextHostLib.OnCreateThread? createthread;
+        static private TextHostLib.OnRemoveThread? removethread;
 
         public delegate void DataRecvEventHandler(object sender, HookParam e);
-        public static event DataRecvEventHandler SelectedDataEvent;
-        public static event DataRecvEventHandler DataEvent;
+        public static event DataRecvEventHandler? SelectedDataEvent;
+        public static event DataRecvEventHandler? DataEvent;
 
-        static Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
+        static readonly Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
 
         #region TextHostInit Callback Implement
         static public void CreateThreadHandle(
@@ -72,11 +76,10 @@ namespace ErogeHelper.Common
             hp.Text = opdata;
 
             DataEvent?.Invoke(typeof(Textractor), hp);
-
-            if (gameInfo.HookCode != null
-                && gameInfo.HookCode == hp.Hookcode
-                && (gameInfo.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
-                && gameInfo.SubThreadContext == hp.Ctx2)
+            if (!string.IsNullOrWhiteSpace(GameConfig.HookCode)
+                && GameConfig.HookCode == hp.Hookcode
+                && (GameConfig.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
+                && GameConfig.SubThreadContext == hp.Ctx2)
             {
                 log.Info(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);
@@ -87,9 +90,9 @@ namespace ErogeHelper.Common
 
         static public void OnConnectCallBackHandle(uint processId)
         {
-            if (EHConfig.GetBool(EHNode.IsUserHook))
+            if (!string.IsNullOrWhiteSpace(GameConfig.Path) && GameConfig.IsUserHook)
             {
-                InsertHook(gameInfo.HookCode);
+                InsertHook(GameConfig.HookCode);
             }
         }
         #endregion
@@ -101,7 +104,7 @@ namespace ErogeHelper.Common
             {
                 if (hookcode == v.Value.Hookcode)
                 {
-                    DataEvent?.Invoke(typeof(Textractor), new HookParam 
+                    DataEvent?.Invoke(typeof(Textractor), new HookParam
                     {
                         Name = "控制台",
                         Hookcode = "HB0@0",
@@ -110,7 +113,7 @@ namespace ErogeHelper.Common
                     return;
                 }
             }
-            foreach (Process p in gameInfo.ProcList)
+            foreach (Process p in DataRepository.GameProcesses)
             {
                 TextHostLib.InsertHook((uint)p.Id, hookcode);
                 log.Info($"Try insert code {hookcode} to PID {p.Id}");
@@ -198,5 +201,19 @@ namespace ErogeHelper.Common
                 public IntPtr HookPostProcessor;
             };
         }
+    }
+
+    //[Handle:ProcessId:Address :Context:Context2:Name(Engine):HookCode                 ]
+    //[19    :272C     :769550C0:2C78938:0       :TextOutA    :HS10@0:gdi32.dll:TextOutA] 俺は…………。
+    class HookParam
+    {
+        public long Handle { get; set; }
+        public long Pid { get; set; }
+        public long Addr { get; set; }
+        public long Ctx { get; set; }
+        public long Ctx2 { get; set; }
+        public string Name { get; set; } = "";
+        public string Hookcode { get; set; } = "";
+        public string Text { get; set; } = "";
     }
 }

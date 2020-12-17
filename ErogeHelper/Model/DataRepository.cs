@@ -1,0 +1,184 @@
+﻿using ErogeHelper.Common.Selector;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+
+namespace ErogeHelper.Model
+{
+    class DataRepository
+    {
+        #region Methods
+
+        internal static T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
+        {
+            if (LocalSetting.ContainsKey(propertyName))
+            {
+                string value = LocalSetting[propertyName].ToString() ?? string.Empty;
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (typeof(T) == typeof(string))
+                    {
+                        return (T)(object)value;
+                    }
+                    else if (typeof(T) == typeof(bool))
+                    {
+                        if (bool.TryParse(value, out bool result))
+                        {
+                            return (T)(object)result;
+                        }
+                    }
+                    else if (typeof(T) == typeof(int))
+                    {
+                        if (int.TryParse(value, out int result))
+                        {
+                            return (T)(object)result;
+                        }
+                    }
+                    else if (typeof(T) == typeof(double))
+                    {
+                        if (double.TryParse(value, out double result))
+                        {
+                            return (T)(object)result;
+                        }
+                    }
+                    else if (typeof(T).IsEnum)
+                    {
+                        return (T)Enum.Parse(typeof(T), value);
+                    }
+                }
+            }
+
+            return defaultValue;
+        }
+
+        internal static void SetValue<T>(T value, [CallerMemberName] string propertyName = "")
+        {
+            if (value is null)
+                throw new NullReferenceException();
+
+            var SettingFromFile = LocalSetting;
+            SettingFromFile[propertyName] = value.ToString()!;
+
+            File.WriteAllText(Path, JsonSerializer.Serialize(SettingFromFile));
+        }
+
+        internal static void ClearAppData()
+        {
+            var SettingFromFile = LocalSetting;
+            SettingFromFile.Clear();
+
+            File.WriteAllText(Path, JsonSerializer.Serialize(SettingFromFile));
+        }
+
+        private static readonly string Path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\EHSettings.dict";
+        private static Dictionary<string, string> LocalSetting
+        {
+            get
+            {
+                if (!File.Exists(Path))
+                {
+                    File.WriteAllText(Path, JsonSerializer.Serialize(new Dictionary<string, string>()));
+                }
+
+                var tmp = File.ReadAllText(Path);
+                return JsonSerializer.Deserialize<Dictionary<string, string>>(tmp)!;
+            }
+        }
+
+        #endregion
+
+        #region Runtime Variables
+
+        public static List<Process> GameProcesses = new List<Process>();
+
+        public static Process? MainProcess;
+
+        public static double dpi = 1;
+
+        public static string AppVersion
+        {
+            get => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
+        }
+
+        public static IntPtr GameViewHandle = IntPtr.Zero;
+        #endregion
+
+        #region Properties
+
+        public static double FontSize
+        {
+            get => GetValue(DefaultValuesStore.FontSize);
+            set => SetValue(value);
+        }
+
+        public static bool ShowSourceText
+        {
+            get => GetValue(DefaultValuesStore.ShowSourceText);
+            set => SetValue(value);
+        }
+
+        public static bool ShowAppendText
+        {
+            get => GetValue(DefaultValuesStore.ShowAppendText);
+            set => SetValue(value);
+        }
+
+        public static bool PasteToDeepL
+        {
+            get => GetValue(DefaultValuesStore.PasteToDeepL);
+            set => SetValue(value);
+        }
+
+        public static TextTemplateType TextTemplateConfig
+        {
+            get => GetValue(DefaultValuesStore.TextTemplate);
+            set => SetValue(value);
+        }
+
+        public static bool MecabEnable
+        {
+            get => GetValue(DefaultValuesStore.MecabEnable);
+            set => SetValue(value);
+        }
+
+        public static bool KanaTop
+        {
+            get => GetValue(DefaultValuesStore.KanaTop);
+            set => SetValue(value);
+        }
+
+        public static bool KanaBottom
+        {
+            get => GetValue(DefaultValuesStore.KanaBottom);
+            set => SetValue(value);
+        }
+
+        public static bool BaiduApiEnable
+        {
+            get => GetValue(DefaultValuesStore.BaiduApiEnable);
+            set => SetValue(value);
+        }
+        public static string BaiduApiAppid
+        {
+            get => GetValue(DefaultValuesStore.BaiduApiAppid);
+            set => SetValue(value);
+        }
+        public static string BaiduApiSecretKey
+        {
+            get => GetValue(DefaultValuesStore.BaiduApiSecretKey);
+            set => SetValue(value);
+        }
+
+        public static bool YeekitEnable
+        {
+            get => GetValue(DefaultValuesStore.YeekitEnable);
+            set => SetValue(value);
+        }
+        #endregion
+    }
+}

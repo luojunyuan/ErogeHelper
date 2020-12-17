@@ -1,5 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ErogeHelper.Common.Validation
@@ -10,7 +15,7 @@ namespace ErogeHelper.Common.Validation
         {
             string patten = @"\S+@[A-Fa-f0-9]+:\S+";
 
-            return string.IsNullOrWhiteSpace((value ?? "").ToString()) || Regex.IsMatch(value.ToString(), patten)
+            return string.IsNullOrWhiteSpace((value ?? "").ToString()) || Regex.IsMatch((value ?? "").ToString() ?? "", patten)
                 ? ValidationResult.ValidResult
                 : new ValidationResult(false, "Invalid HCode.");
         }
