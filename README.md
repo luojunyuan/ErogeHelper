@@ -3,11 +3,15 @@
 
 `git clone https://github.com/luojunyuan/Eroge-Helper` 
 
-Use VS2019 open `Eroge-Helper.sln`
+Use VS2019 open `ErogeHelper.sln`
 
-Open project "ErogeHelper"'s properties
+Right click the project "ErogeHelper" and select "set as startup project".
 
-Fill the command paragrams in Debug
+Then Press F5
+
+...or open project ErogeHelper's properties
+
+Fill the command parameters in Debug
 
 `"C:\Users\ljy77\Downloads\游戏\syugaten\syugaten.exe" /le`
 
@@ -15,10 +19,7 @@ Fill the command paragrams in Debug
 
 one is full path of game, '/le' to use Locate Emulator
 
-Right click the project "ErogeHelper" and select "set as startup project".
-
-Then Press F5
 
 ### Install
 
-Run EHinstaller.exe
+Run ErogeHelper.Installer.exe
