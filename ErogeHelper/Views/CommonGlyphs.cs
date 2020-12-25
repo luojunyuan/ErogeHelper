@@ -15,5 +15,11 @@ namespace ErogeHelper.Views
         public const string GroupList = "\uF168";
 
         public const string FastForward = "\uEB9D";
+
+        public const string Volume1 = "\uE993";
+
+        public const string LowerBrightness = "\uEC8A";
+
+        public const string Brightness = "\uE706";
     }
 }

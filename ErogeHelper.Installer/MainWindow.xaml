@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="MainWindow" SizeToContent="Height" Width="380">
-    <ui:ScrollViewerEx>
+    <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20, 10">
             <GroupBox Header="ErogeHelper Installer">
                 <ui:SimpleStackPanel Spacing="10">
@@ -19,5 +19,5 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>
-    </ui:ScrollViewerEx>
+    </ScrollViewer>
 </Window>

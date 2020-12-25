@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:ErogeHelper.Views"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:service="clr-namespace:ErogeHelper.Common.Service"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True" 
         Width="350" MinWidth="350" Height="450" Icon="pack://application:,,,/Assets/app.ico"
-        Title="HookConfigView" service:WindowPlacement.Save="True" Topmost="True">
+        Title="{x:Static resx:Strings.HookConfig_Title}" service:WindowPlacement.Save="True" Topmost="True">
     <Grid>
         <ui:Frame Content="{Binding ContentFrame}" />
     </Grid>

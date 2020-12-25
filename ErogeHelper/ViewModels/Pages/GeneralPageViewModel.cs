@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace ErogeHelper.ViewModels.Pages
 {
-    class GeneralSettingPageViewModel : PropertyChangedBase
+    class GeneralPageViewModel : PropertyChangedBase
     {
         private bool _kanaTop = DataRepository.KanaTop;
         private bool _kanaBottom = DataRepository.KanaBottom;
@@ -32,8 +32,6 @@ namespace ErogeHelper.ViewModels.Pages
         public bool ShowAppend { get => DataRepository.ShowAppendText; set => DataRepository.ShowAppendText = value; }
 
         public bool DeepLExtention { get => DataRepository.PasteToDeepL; set => DataRepository.PasteToDeepL = value; }
-
-        public bool MecabSwitch { get => DataRepository.MecabEnable; set => DataRepository.MecabEnable = value; }
 
         public bool KanaTop 
         { 
@@ -75,7 +73,7 @@ namespace ErogeHelper.ViewModels.Pages
                 tmp.Add(item);
             }
             IoC.Get<TextViewModel>().SourceTextCollection = tmp;
-            // FIXME: bug here can't use IoC, not hackable
+            // cause `static` and not sington can't use IoC
             GameViewDataService.SourceTextTemplate = type;
             DataRepository.TextTemplateConfig = type;
         }

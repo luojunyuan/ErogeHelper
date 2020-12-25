@@ -8,45 +8,12 @@
              xmlns:cal="http://caliburnmicro.com"
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:convert="clr-namespace:ErogeHelper.Common.Converter"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-
-        <DataTemplate x:Key="TextDefaultTemplate">
-            <TextBlock LineHeight="24" 
-                       TextAlignment="Center">
-                <Border>
-                    <Border.Background>
-                        <ImageBrush x:Name="DummyBug" ImageSource="{Binding SubMarkColor}" />
-                    </Border.Background>
-                    <TextBlock Text="{Binding Text}"/>               
-                </Border>
-            </TextBlock>
-        </DataTemplate>
-
-        <DataTemplate x:Key="TextKanaBottomTemplate">
-            <StackPanel >
-                <TextBlock LineHeight="24" 
-                           TextAlignment="Center"
-                           Margin="0,0,0,-10">
-                    <Border>
-                        <Border.Background>
-                            <ImageBrush x:Name="DummyBug" ImageSource="{Binding SubMarkColor}" />
-                        </Border.Background>
-                        <TextBlock Text="{Binding Text}">
-                            <!--WordSearchCommand-->
-                        </TextBlock>
-                    </Border>
-                    <LineBreak/>
-                    <Run FontSize="12" 
-                         Typography.Variants="Ruby"
-                         Text="{Binding RubyText}">
-                    </Run>
-                </TextBlock>
-            </StackPanel>
-        </DataTemplate>
-
+        
         <DataTemplate x:Key="OutLineDefaultTemplate">
             <Border>
                 <Border.Background>
@@ -68,7 +35,10 @@
                     Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding RubyText}">
                 </control:OutlinedTextBlock>
                 <!-- 文字部分 -->
-                <Border>
+                <Border
+                    cal:Message.Attach="[PreviewMouseUp] = [SearchWord(TextItem)]"
+                    cal:Action.TargetWithoutContext="{Binding DataContext, 
+                                                      RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
                     <Border.Background>
                         <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
                     </Border.Background>
@@ -77,7 +47,6 @@
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
-                    <!--WordSearchCommand-->
                 </Border>
             </StackPanel>
         </DataTemplate>
@@ -119,4 +88,5 @@
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
+   
 </UserControl>

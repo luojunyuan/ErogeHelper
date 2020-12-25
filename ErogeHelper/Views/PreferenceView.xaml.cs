@@ -32,9 +32,9 @@ namespace ErogeHelper.Views
 
         private readonly List<(string Tag, Type PageType)> pages = new()
         {
-            ("hook_setting", typeof(HookSettingPage)),
+            ("hook_setting", typeof(HookPage)),
             ("about", typeof(AboutPage)),
-            ("general_setting", typeof(GeneralSettingPage)),
+            ("general_setting", typeof(GeneralPage)),
         };
 
         private void NavView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SelectProcess.Title" xml:space="preserve">
-    <value>SelectProcess.ViewTitle</value>
+    <value>Eroge Helper - Select Process</value>
   </data>
   <data name="SelectProcess.Tips" xml:space="preserve">
-    <value>SelectProcess.ViewTips</value>
+    <value>You can use ErogeHelper.Installer.exe to install me~</value>
   </data>
   <data name="SelectProcess.Lable" xml:space="preserve">
     <value>Select Application</value>
@@ -130,28 +130,28 @@
     <value>Inject</value>
   </data>
   <data name="MessageBox.TimeoutInfo" xml:space="preserve">
-    <value>MessageBox.TimeoutInfo</value>
+    <value>Timeout! Game window not found</value>
   </data>
   <data name="About.AppName" xml:space="preserve">
     <value>Eroge Helper</value>
   </data>
   <data name="About.FileABug" xml:space="preserve">
-    <value>About.FileABug</value>
+    <value>If you find any bugs, please open a new issue in the github repository.</value>
   </data>
   <data name="About.Version" xml:space="preserve">
-    <value>About.Version</value>
+    <value>Version : </value>
   </data>
   <data name="About.GitHub" xml:space="preserve">
-    <value>About.GitHub</value>
+    <value>GitHub repository</value>
   </data>
   <data name="About.Contributors" xml:space="preserve">
-    <value>About.Contributors</value>
+    <value>Contributors</value>
   </data>
   <data name="About.Dependencies" xml:space="preserve">
-    <value>About.Dependencies</value>
+    <value>Dependencies</value>
   </data>
   <data name="About.OpenNewIssue" xml:space="preserve">
-    <value>About.OpenNewIssue</value>
+    <value>Open a new issue</value>
   </data>
   <data name="ShellMenu.DirectStart" xml:space="preserve">
     <value>Start Game</value>
@@ -163,12 +163,42 @@
     <value>Set Run as Administrator</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>Installer.Info</value>
+    <value>This will register Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before Move or delete</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>Register</value>
   </data>
   <data name="Installer.Unload" xml:space="preserve">
     <value>Unload</value>
+  </data>
+  <data name="HookConfig.Title" xml:space="preserve">
+    <value>Eroge Helper - Hook Config</value>
+  </data>
+  <data name="HookPage.HookCode" xml:space="preserve">
+    <value>Hook Code</value>
+  </data>
+  <data name="HookPage.Insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="HookPage.SelectedText" xml:space="preserve">
+    <value>Selected Text</value>
+  </data>
+  <data name="HookPage.Regexp" xml:space="preserve">
+    <value>RegExp</value>
+  </data>
+  <data name="HookPage.Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="HookPage.Console" xml:space="preserve">
+    <value>Console Output</value>
+  </data>
+  <data name="HookPage.SelectText" xml:space="preserve">
+    <value>Select Text</value>
+  </data>
+  <data name="HookPage.Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="GameView.MaxLenthTip" xml:space="preserve">
+    <value>Skip too long text</value>
   </data>
 </root>

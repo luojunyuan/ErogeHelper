@@ -11,7 +11,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AboutPage">
 
-    <ui:ScrollViewerEx PanningMode="Both" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Spacing="10" Margin="20">
             <TextBlock FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}"
                        Text="{x:Static resx:Strings.About_AppName}" />
@@ -29,5 +29,5 @@
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Dependencies}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_OpenNewIssue}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
         </ui:SimpleStackPanel>
-    </ui:ScrollViewerEx>
+    </ScrollViewer>
 </Page>

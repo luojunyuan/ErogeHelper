@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ErogeHelper.Views.Pages
 {
     /// <summary>
-    /// GeneralSettingPage.xaml 的交互逻辑
+    /// TranslationPage.xaml 的交互逻辑
     /// </summary>
-    public partial class GeneralSettingPage : Page
+    public partial class TranslationPage : Page
     {
-        public GeneralSettingPage()
+        public TranslationPage()
         {
             InitializeComponent();
         }

@@ -70,7 +70,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.Contributors 的本地化字符串。
+        ///   查找类似 Contributors 的本地化字符串。
         /// </summary>
         public static string About_Contributors {
             get {
@@ -79,7 +79,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.Dependencies 的本地化字符串。
+        ///   查找类似 Dependencies 的本地化字符串。
         /// </summary>
         public static string About_Dependencies {
             get {
@@ -88,7 +88,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.FileABug 的本地化字符串。
+        ///   查找类似 If you find any bugs, please open a new issue in the github repository. 的本地化字符串。
         /// </summary>
         public static string About_FileABug {
             get {
@@ -97,7 +97,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.GitHub 的本地化字符串。
+        ///   查找类似 GitHub repository 的本地化字符串。
         /// </summary>
         public static string About_GitHub {
             get {
@@ -106,7 +106,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.OpenNewIssue 的本地化字符串。
+        ///   查找类似 Open a new issue 的本地化字符串。
         /// </summary>
         public static string About_OpenNewIssue {
             get {
@@ -115,7 +115,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 About.Version 的本地化字符串。
+        ///   查找类似 Version :  的本地化字符串。
         /// </summary>
         public static string About_Version {
             get {
@@ -124,7 +124,97 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Installer.Info 的本地化字符串。
+        ///   查找类似 Skip too long text 的本地化字符串。
+        /// </summary>
+        public static string GameView_MaxLenthTip {
+            get {
+                return ResourceManager.GetString("GameView.MaxLenthTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Eroge Helper - Hook Config 的本地化字符串。
+        /// </summary>
+        public static string HookConfig_Title {
+            get {
+                return ResourceManager.GetString("HookConfig.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Console Output 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Console {
+            get {
+                return ResourceManager.GetString("HookPage.Console", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Hook Code 的本地化字符串。
+        /// </summary>
+        public static string HookPage_HookCode {
+            get {
+                return ResourceManager.GetString("HookPage.HookCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Insert 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Insert {
+            get {
+                return ResourceManager.GetString("HookPage.Insert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 RegExp 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Regexp {
+            get {
+                return ResourceManager.GetString("HookPage.Regexp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Selected Text 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SelectedText {
+            get {
+                return ResourceManager.GetString("HookPage.SelectedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select Text 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SelectText {
+            get {
+                return ResourceManager.GetString("HookPage.SelectText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Submit 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Submit {
+            get {
+                return ResourceManager.GetString("HookPage.Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Text {
+            get {
+                return ResourceManager.GetString("HookPage.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This will register Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before Move or delete 的本地化字符串。
         /// </summary>
         public static string Installer_Info {
             get {
@@ -151,7 +241,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 MessageBox.TimeoutInfo 的本地化字符串。
+        ///   查找类似 Timeout! Game window not found 的本地化字符串。
         /// </summary>
         public static string MessageBox_TimeoutInfo {
             get {
@@ -178,7 +268,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 SelectProcess.ViewTips 的本地化字符串。
+        ///   查找类似 You can use ErogeHelper.Installer.exe to install me~ 的本地化字符串。
         /// </summary>
         public static string SelectProcess_Tips {
             get {
@@ -187,7 +277,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 SelectProcess.ViewTitle 的本地化字符串。
+        ///   查找类似 Eroge Helper - Select Process 的本地化字符串。
         /// </summary>
         public static string SelectProcess_Title {
             get {

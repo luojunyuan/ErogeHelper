@@ -13,9 +13,9 @@ using System.Windows;
 
 namespace ErogeHelper.ViewModels.Pages
 {
-    class HookSettingPageViewModel : PropertyChangedBase
+    class HookPageViewModel : PropertyChangedBase
     {
-        private readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HookSettingPageViewModel));
+        private readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HookPageViewModel));
 
         // InputCode 只在值有效时xaml才会传值过来
         public string InputCode { get; set; } = string.Empty;
@@ -34,7 +34,7 @@ namespace ErogeHelper.ViewModels.Pages
         private IHookSettingPageService dataService;
         private IWindowManager windowManager;
 
-        public HookSettingPageViewModel(IHookSettingPageService dataService, IWindowManager windowManager)
+        public HookPageViewModel(IHookSettingPageService dataService, IWindowManager windowManager)
         {
             this.dataService = dataService;
             this.windowManager = windowManager;
@@ -50,6 +50,8 @@ namespace ErogeHelper.ViewModels.Pages
         {
             if (hp.Name == "控制台") // it means console
             {
+                // 初始化完成
+                // 无效特殊码
                 ConsoleOutput += "\n" + hp.Text;
                 return;
             }

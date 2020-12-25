@@ -9,7 +9,7 @@ using System.Xml.XPath;
 
 namespace ErogeHelper.Common.Helper
 {
-    class SakuraNoUtaHelper
+    public class SakuraNoUtaHelper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SakuraNoUtaHelper));
 
@@ -18,10 +18,20 @@ namespace ErogeHelper.Common.Helper
         static public string QueryText(string source)
         {
             string trans = string.Empty;
-            source = source.Replace("\u0005", string.Empty);
 
             doc.XPathSelectElements("//comment[@type='subtitle']")
-                .Where(p => p.Element("context")!.Value.Contains(source))
+                //.Where(p => p.Element("context")!.Value.Equals(source))
+                .Where(p => 
+                { 
+                    if (p.Element("context")!.Value.IndexOf(source) != -1)
+                    {
+                        var pos = p.Element("context")!.Value.IndexOf(source) + source.Length;
+                        if (pos == p.Element("context")!.Value.Length)
+                            return true;
+                    }
+                    // （ 「」
+                    return false;
+                })
                 .Select(p => trans = p.Element("text")!.Value)
                 .FirstOrDefault();
 

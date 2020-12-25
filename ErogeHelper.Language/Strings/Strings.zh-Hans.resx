@@ -113,7 +113,7 @@
     <value>(超时)未找到游戏窗口</value>
   </data>
   <data name="About.Version" xml:space="preserve">
-    <value>版本</value>
+    <value>版本： </value>
   </data>
   <data name="About.AppName" xml:space="preserve">
     <value>Eroge Helper</value>
@@ -125,7 +125,7 @@
     <value>依赖项</value>
   </data>
   <data name="About.FileABug" xml:space="preserve">
-    <value>如果发现任何 bug，请在 Github 仓库中创建一个新 Issue</value>
+    <value>如果发现任何 bug，请在 Github 仓库中创建一个新 Issue。</value>
   </data>
   <data name="About.GitHub" xml:space="preserve">
     <value>Github 仓库</value>
@@ -143,12 +143,42 @@
     <value>设置管理员身份运行</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，移动或删除该文件夹会出现“被其他程序占用的错误”，若要移动或删除请先运行 Installer 注销掉EH。强制删除文件夹后window上下文菜单也不再会出现Eroge Helper图标，Installer不依赖系统注册表</value>
+    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，移动或删除该文件夹会出现“被其他程序占用的错误”，若要移动或删除请先运行 Installer 注销掉EH。Installer不依赖系统注册表</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>注册</value>
   </data>
   <data name="Installer.Unload" xml:space="preserve">
     <value>卸载</value>
+  </data>
+  <data name="HookConfig.Title" xml:space="preserve">
+    <value>Eroge Helper - 钩子设置</value>
+  </data>
+  <data name="HookPage.HookCode" xml:space="preserve">
+    <value>特殊码</value>
+  </data>
+  <data name="HookPage.Insert" xml:space="preserve">
+    <value>插入</value>
+  </data>
+  <data name="HookPage.SelectedText" xml:space="preserve">
+    <value>选择的文本</value>
+  </data>
+  <data name="HookPage.Regexp" xml:space="preserve">
+    <value>正则表达式</value>
+  </data>
+  <data name="HookPage.Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="HookPage.Console" xml:space="preserve">
+    <value>控制台输出</value>
+  </data>
+  <data name="HookPage.SelectText" xml:space="preserve">
+    <value>文本选择</value>
+  </data>
+  <data name="HookPage.Submit" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="GameView.MaxLenthTip" xml:space="preserve">
+    <value>跳过过长文本</value>
   </data>
 </root>

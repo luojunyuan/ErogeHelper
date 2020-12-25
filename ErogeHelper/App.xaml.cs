@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -17,8 +18,8 @@ namespace ErogeHelper
             Directory.SetCurrentDirectory(currentDirectory);
 
             // Switch on Caliburn.Micro.ViewModelBinder debug monitor
-            //var baseGetLog = LogManager.GetLog;
-            //LogManager.GetLog = t => t == typeof(ViewModelBinder) ? new DebugLog(t) : baseGetLog(t);
+            var baseGetLog = LogManager.GetLog;
+            LogManager.GetLog = t => t == typeof(ViewModelBinder) ? new DebugLog(t) : baseGetLog(t);
 
             // Set i18n
             SetLanguageDictionary();

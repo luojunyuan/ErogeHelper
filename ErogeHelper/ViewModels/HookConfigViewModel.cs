@@ -11,13 +11,13 @@ namespace ErogeHelper.ViewModels
 {
     class HookConfigViewModel : Screen
     {
-        public HookSettingPageViewModel HookSettingPage { get; set; } = IoC.Get<HookSettingPageViewModel>();
+        public HookPageViewModel HookSettingPage { get; set; } = IoC.Get<HookPageViewModel>();
 
         public Frame ContentFrame { get; set; } = new Frame();
 
         public HookConfigViewModel()
         {
-            ContentFrame.Navigate(typeof(Views.Pages.HookSettingPage), null);
+            ContentFrame.Navigate(typeof(Views.Pages.HookPage), null);
         }
 
         public async Task TryClose()

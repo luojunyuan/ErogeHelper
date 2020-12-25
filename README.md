@@ -11,7 +11,7 @@ Then Press F5
 
 ...or open project ErogeHelper's properties
 
-Fill the command parameters in Debug
+Fill the command parameters in Debug like
 
 `"C:\Users\ljy77\Downloads\游戏\syugaten\syugaten.exe" /le`
 

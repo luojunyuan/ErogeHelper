@@ -18,9 +18,9 @@ namespace ErogeHelper.Views.Pages
     /// <summary>
     /// HookSettingPage.xaml 的交互逻辑
     /// </summary>
-    public partial class HookSettingPage : Page
+    public partial class HookPage : Page
     {
-        public HookSettingPage()
+        public HookPage()
         {
             InitializeComponent();
         }

@@ -23,6 +23,9 @@
   <ItemGroup>
     <None Remove="Assets\app.ico" />
     <None Remove="Assets\app_icon_big.png" />
+    <None Remove="Assets\aqua_green.png" />
+    <None Remove="Assets\green.png" />
+    <None Remove="Assets\pink.png" />
     <None Remove="Assets\transparent.png" />
   </ItemGroup>
 
@@ -46,6 +49,9 @@
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
     <Resource Include="Assets\app_icon_big.png" />
+    <Resource Include="Assets\aqua_green.png" />
+    <Resource Include="Assets\green.png" />
+    <Resource Include="Assets\pink.png" />
     <Resource Include="Assets\transparent.png" />
   </ItemGroup>
 

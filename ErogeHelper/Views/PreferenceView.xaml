@@ -11,8 +11,8 @@
         mc:Ignorable="d" 
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Title="PreferenceView" Height="450" Width="800" service:WindowPlacement.Save="True"
-        Icon="pack://application:,,,/Assets/app.ico" MinWidth="400"
-        >
+        Icon="pack://application:,,,/Assets/app.ico" MinWidth="400">
+    
     <ui:NavigationView 
         x:Name="NavView" IsSettingsVisible="False" IsTabStop="False" PaneDisplayMode="Auto"
         SelectionChanged="NavView_SelectionChanged"

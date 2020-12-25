@@ -120,7 +120,7 @@ namespace ErogeHelper.Model
             }
         }
 
-        private static void SetValue(EHNode node, string value)
+        public static void SetValue(EHNode node, string value)
         {
             var doc = XDocument.Load(Path);
             var profile = doc.Element(EHNode.EHConfig.Name)!.Element(EHNode.Profile.Name);

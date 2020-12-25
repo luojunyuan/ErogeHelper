@@ -33,7 +33,7 @@ namespace ErogeHelper
         {
             log.Info("Started Logging");
             // TODO 1: Check if the texthost.dll file is delete by anti-virus soft
-            // TODO 2: Check singleton
+            // TODO 2: Check singleton application
             if (e.Args.Length == 0)
             {
                 DisplayRootViewFor<SelectProcessViewModel>();
@@ -122,9 +122,9 @@ namespace ErogeHelper
 
             builder.RegisterType<TextViewModel>()
                 .SingleInstance();
-            builder.RegisterType<HookSettingPageViewModel>()
+            builder.RegisterType<HookPageViewModel>()
                 .SingleInstance();
-            builder.RegisterType<GeneralSettingPageViewModel>()
+            builder.RegisterType<GeneralPageViewModel>()
                 .SingleInstance();
             builder.RegisterType<AboutPageViewModel>()
                 .SingleInstance();

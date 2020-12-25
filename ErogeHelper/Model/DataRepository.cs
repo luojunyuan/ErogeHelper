@@ -82,7 +82,9 @@ namespace ErogeHelper.Model
             {
                 if (!File.Exists(Path))
                 {
-                    File.WriteAllText(Path, JsonSerializer.Serialize(new Dictionary<string, string>()));
+                    FileInfo file = new FileInfo(Path);
+                    file.Directory!.Create(); // If the directory already exists, this method does nothing.
+                    File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
                 }
 
                 var tmp = File.ReadAllText(Path);
@@ -100,10 +102,7 @@ namespace ErogeHelper.Model
 
         public static double dpi = 1;
 
-        public static string AppVersion
-        {
-            get => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
-        }
+        public static string AppVersion { get => Assembly.GetExecutingAssembly().GetName().Version!.ToString(); }
 
         public static IntPtr GameViewHandle = IntPtr.Zero;
         #endregion
@@ -137,12 +136,6 @@ namespace ErogeHelper.Model
         public static TextTemplateType TextTemplateConfig
         {
             get => GetValue(DefaultValuesStore.TextTemplate);
-            set => SetValue(value);
-        }
-
-        public static bool MecabEnable
-        {
-            get => GetValue(DefaultValuesStore.MecabEnable);
             set => SetValue(value);
         }
 

@@ -2,6 +2,7 @@
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
+using ErogeHelper.Model.Translator;
 using ErogeHelper.ViewModels;
 using ErogeHelper.ViewModels.Control;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,19 +36,24 @@ namespace ErogeHelper.Common.Service
             // Refresh
             IoC.Get<GameViewModel>().AppendTextList.Clear(); // Clear or give new value? is that same
 
-            // Regexp
-            //var pattern = SimpleIoc.Default.GetInstance<GameInfo>().Regexp;
-            //if (!string.IsNullOrEmpty(pattern))
-            //{
-            //    var list = Regex.Split(hp.Text, pattern);
-            //    hp.Text = string.Join("", list);
-            //}
+            // Regexp 
+            var pattern = GameConfig.Regexp;
+            if (!string.IsNullOrEmpty(pattern))
+            {
+                var list = Regex.Split(hp.Text, pattern);
+                hp.Text = string.Join("", list);
+            }
 
-            // Todo 4: Add some notify to user, make The max lenth user define able
-            //if (hp.Text.Length > 80)
-            //{
-            //    return;
-            //}
+            // Clear
+            hp.Text = new string(hp.Text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
+            hp.Text = hp.Text.Replace("　", string.Empty);
+
+            if (hp.Text.Length > 120)
+            {
+                IoC.Get<TextViewModel>().SourceTextCollection.Clear();
+                AppendDataEvent?.Invoke(typeof(GameViewDataService), Language.Strings.GameView_MaxLenthTip);
+                return;
+            }
 
             // DeepL Extension
             if (DataRepository.PasteToDeepL)
@@ -62,43 +69,30 @@ namespace ErogeHelper.Common.Service
                 }
             }
 
-            if (DataRepository.MecabEnable)
+            var collect = new BindableCollection<SingleTextItem>();
+
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                var collect = new BindableCollection<SingleTextItem>();
-
-                Application.Current.Dispatcher.BeginInvoke(() =>
+                // DependencySource on same Thread as the DependencyObject
+                var mecabWordList = mecabHelper.SentenceHandle(hp.Text);
+                foreach (MecabWordInfo mecabWord in mecabWordList)
                 {
-                    // DependencySource on same Thread as the DependencyObject
-
-                    // Todo 5:
-                    // if (DataRepository.MecabEnable) or X TextTemplateType.Default or kana none(same as default)
-                    var mecabWordList = mecabHelper.SentenceHandle(hp.Text);
-                    foreach (MecabWordInfo mecabWord in mecabWordList)
+                    collect.Add(new SingleTextItem
                     {
-                        collect.Add(new SingleTextItem
-                        {
-                            Text = mecabWord.Word,
-                            RubyText = mecabWord.Kana,
-                            PartOfSpeed = mecabWord.PartOfSpeech,
-                            TextTemplateType = SourceTextTemplate
-                        });
-                    }
-                });
+                        Text = mecabWord.Word,
+                        RubyText = mecabWord.Kana,
+                        PartOfSpeed = mecabWord.PartOfSpeech,
+                        TextTemplateType = SourceTextTemplate,
+                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
+                    });
+                }
+            });
 
-                SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
-            }
+            SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
 
-            //string result = SakuraNoUtaHelper.QueryText(hp.Text.Trim());
-            //if (!string.IsNullOrWhiteSpace(result))
-            //    AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
-        }
-
-        private void ClipboardPasteSTA(string text)
-        {
-            Thread thread = new Thread(() => Clipboard.SetText(text));
-            thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
-            thread.Start();
-            thread.Join(); //Wait for the thread to end
+            string result = SakuraNoUtaHelper.QueryText(hp.Text);
+            if (!string.IsNullOrWhiteSpace(result))
+                AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
         }
     }
 }

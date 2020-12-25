@@ -37,10 +37,9 @@ namespace ErogeHelper.Common
         {
             return (value.ToString()) switch
             {
-                "名詞" => LoadBitmapFromResource("Assets/yellow.png"),
+                "名詞" => LoadBitmapFromResource("Assets/aqua_green.png"),
                 "助詞" => LoadBitmapFromResource("Assets/transparent.png"),
-                "動詞" or "感動詞" => LoadBitmapFromResource("Assets/green.png"),
-                "副詞" => LoadBitmapFromResource("Assets/purple.png"),
+                "動詞" or "感動詞" or "副詞" => LoadBitmapFromResource("Assets/green.png"),
                 "形容詞" => LoadBitmapFromResource("Assets/pink.png"),
                 _ => LoadBitmapFromResource("Assets/transparent.png"),
             };
