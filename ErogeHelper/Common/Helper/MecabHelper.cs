@@ -19,16 +19,8 @@ namespace ErogeHelper.Common.Helper
             tagger = MeCabTagger.Create(parameter);
         }
 
-        /// <summary>
-        /// Progress sentence
-        /// </summary>
-        /// <param name="sentence"></param>
-        /// <returns></returns>
-        public List<MecabWordInfo> SentenceHandle(string sentence)
+        public IEnumerable<MecabWordInfo> MecabWordEnumerable(string sentence)
         {
-
-            List<MecabWordInfo> WordInfoList = new List<MecabWordInfo>();
-
             foreach (var node in tagger.ParseToNodes(sentence))
             {
                 if (node.CharType > 0)
@@ -58,11 +50,9 @@ namespace ErogeHelper.Common.Helper
                     }
                     #endregion
 
-                    WordInfoList.Add(word);
+                    yield return word;
                 }
             }
-
-            return WordInfoList;
         }
     }
 

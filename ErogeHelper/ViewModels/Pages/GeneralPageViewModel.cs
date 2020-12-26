@@ -19,17 +19,22 @@ namespace ErogeHelper.ViewModels.Pages
 
         public bool ShowSource
         {
-            get
-            {
-                return DataRepository.ShowSourceText;
-            }
+            get => DataRepository.ShowSourceText;
             set
             {
                 DataRepository.ShowSourceText = value;
                 IoC.Get<TextViewModel>().TextVisible = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-        public bool ShowAppend { get => DataRepository.ShowAppendText; set => DataRepository.ShowAppendText = value; }
+        public bool ShowAppend 
+        {
+            get => DataRepository.ShowAppendText; 
+            set 
+            {
+                DataRepository.ShowAppendText = value;
+                // IoC.Get<TextViewModel>().TextVisible = value ? Visibility.Visible : Visibility.Collapsed;
+            } 
+        }
 
         public bool DeepLExtention { get => DataRepository.PasteToDeepL; set => DataRepository.PasteToDeepL = value; }
 

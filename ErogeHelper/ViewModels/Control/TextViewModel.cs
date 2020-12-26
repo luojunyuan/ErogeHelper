@@ -70,6 +70,6 @@ namespace ErogeHelper.ViewModels.Control
         public string Text { get; set; } = string.Empty;
         public string PartOfSpeed { get; set; } = string.Empty;
         public TextTemplateType TextTemplateType { get; set; }
-        public ImageSource SubMarkColor { get; set; } = Utils.LoadBitmapFromResource("Assets/transparent.png");
+        public ImageSource SubMarkColor { get; set; } = DataRepository.transparentImage;
     }
 }

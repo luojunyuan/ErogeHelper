@@ -71,22 +71,17 @@ namespace ErogeHelper.Common.Service
 
             var collect = new BindableCollection<SingleTextItem>();
 
-            Application.Current.Dispatcher.InvokeAsync(() =>
+            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordEnumerable(hp.Text))
             {
-                // DependencySource on same Thread as the DependencyObject
-                var mecabWordList = mecabHelper.SentenceHandle(hp.Text);
-                foreach (MecabWordInfo mecabWord in mecabWordList)
+                collect.Add(new SingleTextItem
                 {
-                    collect.Add(new SingleTextItem
-                    {
-                        Text = mecabWord.Word,
-                        RubyText = mecabWord.Kana,
-                        PartOfSpeed = mecabWord.PartOfSpeech,
-                        TextTemplateType = SourceTextTemplate,
-                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
-                    });
-                }
-            });
+                    Text = mecabWord.Word,
+                    RubyText = mecabWord.Kana,
+                    PartOfSpeed = mecabWord.PartOfSpeech,
+                    TextTemplateType = SourceTextTemplate,
+                    SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
+                });
+            }
 
             SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
 

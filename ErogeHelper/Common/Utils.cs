@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ErogeHelper.Model;
 
 namespace ErogeHelper.Common
 {
@@ -33,15 +34,15 @@ namespace ErogeHelper.Common
             return result;
         }
 
-        internal static ImageSource Hinshi2Color(string value)
+        public static ImageSource Hinshi2Color(string value)
         {
             return (value.ToString()) switch
             {
-                "名詞" => LoadBitmapFromResource("Assets/aqua_green.png"),
-                "助詞" => LoadBitmapFromResource("Assets/transparent.png"),
-                "動詞" or "感動詞" or "副詞" => LoadBitmapFromResource("Assets/green.png"),
-                "形容詞" => LoadBitmapFromResource("Assets/pink.png"),
-                _ => LoadBitmapFromResource("Assets/transparent.png"),
+                "名詞" => DataRepository.aquagreenImage,
+                "助詞" => DataRepository.transparentImage,
+                "動詞" or "感動詞" or "副詞" => DataRepository.greenImage,
+                "形容詞" => DataRepository.pinkImage,
+                _ => DataRepository.transparentImage,
             };
         }
 

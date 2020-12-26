@@ -37,7 +37,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     
-                    <Button Width="40" Height="40" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
+                    <Button Width="50" Height="50" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                         <ui:FlyoutService.Flyout>
                             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Transient" >
                                 <ui:AppBarButton Icon="FontIncrease" cal:Message.Attach="[Click] = [ZoomIn]" />

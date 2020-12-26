@@ -6,6 +6,8 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Windows.Media.Imaging;
+using ErogeHelper.Common;
 
 namespace ErogeHelper.Model
 {
@@ -61,10 +63,8 @@ namespace ErogeHelper.Model
             if (value is null)
                 throw new NullReferenceException();
 
-            var SettingFromFile = LocalSetting;
-            SettingFromFile[propertyName] = value.ToString()!;
-
-            File.WriteAllText(Path, JsonSerializer.Serialize(SettingFromFile));
+            LocalSetting[propertyName] = value.ToString()!;
+            File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 
         internal static void ClearAppData()
@@ -76,20 +76,17 @@ namespace ErogeHelper.Model
         }
 
         private static readonly string Path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\EHSettings.dict";
-        private static Dictionary<string, string> LocalSetting
+        private static Dictionary<string, string> LocalSetting { get; } = LocalSettingInit();
+        private static Dictionary<string, string> LocalSettingInit()
         {
-            get
+            if (!File.Exists(Path))
             {
-                if (!File.Exists(Path))
-                {
-                    FileInfo file = new FileInfo(Path);
-                    file.Directory!.Create(); // If the directory already exists, this method does nothing.
-                    File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
-                }
-
-                var tmp = File.ReadAllText(Path);
-                return JsonSerializer.Deserialize<Dictionary<string, string>>(tmp)!;
+                FileInfo file = new FileInfo(Path);
+                file.Directory!.Create(); // If the directory already exists, this method does nothing.
+                File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
             }
+            var tmp = File.ReadAllText(Path);
+            return JsonSerializer.Deserialize<Dictionary<string, string>>(tmp)!;
         }
 
         #endregion
@@ -103,6 +100,11 @@ namespace ErogeHelper.Model
         public static string AppVersion { get => Assembly.GetExecutingAssembly().GetName().Version!.ToString(); }
 
         public static IntPtr GameViewHandle = IntPtr.Zero;
+
+        public static readonly BitmapImage transparentImage = Utils.LoadBitmapFromResource("Assets/transparent.png");
+        public static readonly BitmapImage aquagreenImage = Utils.LoadBitmapFromResource("Assets/aqua_green.png");
+        public static readonly BitmapImage greenImage = Utils.LoadBitmapFromResource("Assets/green.png");
+        public static readonly BitmapImage pinkImage = Utils.LoadBitmapFromResource("Assets/pink.png");
         #endregion
 
         #region Properties
