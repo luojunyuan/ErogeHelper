@@ -100,8 +100,6 @@ namespace ErogeHelper.Model
 
         public static Process? MainProcess;
 
-        public static double dpi = 1;
-
         public static string AppVersion { get => Assembly.GetExecutingAssembly().GetName().Version!.ToString(); }
 
         public static IntPtr GameViewHandle = IntPtr.Zero;

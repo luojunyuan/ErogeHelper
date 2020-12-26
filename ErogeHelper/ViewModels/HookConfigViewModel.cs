@@ -22,7 +22,7 @@ namespace ErogeHelper.ViewModels
 
         public async Task TryClose()
         {
-            await TryCloseAsync();
+            await TryCloseAsync().ConfigureAwait(false);
         }
     }
 }

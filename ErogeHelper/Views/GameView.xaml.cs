@@ -28,11 +28,13 @@ namespace ErogeHelper.Views
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(GameView));
 
+        private double dpi;
+
         public GameView()
         {
             InitializeComponent();
 
-            DataRepository.dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             GameHooker.GameViewPosChangedEvent += PositionChanged;
             Loaded += GameView_Loaded;
         }
@@ -52,19 +54,26 @@ namespace ErogeHelper.Views
 
         private void PositionChanged(object sender, GameViewPlacement pos)
         {
-            Height = pos.Height;
-            Width = pos.Width;
-            Left = pos.Left;
-            Top = pos.Top;
-            ClientArea.Margin = pos.ClientArea;
+            Application.Current.Dispatcher.InvokeAsync(() => 
+            {
+                Height = pos.Height / dpi;
+                Width = pos.Width / dpi;
+                Left = pos.Left / dpi;
+                Top = pos.Top / dpi;
+                ClientArea.Margin = new Thickness(
+                    pos.ClientArea.Left / dpi,
+                    pos.ClientArea.Top / dpi,
+                    pos.ClientArea.Right / dpi,
+                    pos.ClientArea.Bottom / dpi);
+            });
         }
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             base.OnDpiChanged(oldDpi, newDpi);
 
-            DataRepository.dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            log.Info($"Current screen dpi {DataRepository.dpi * 100}%");
+            dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            log.Info($"Current screen dpi {dpi * 100}%");
         }
 
         protected override void OnSourceInitialized(EventArgs e)

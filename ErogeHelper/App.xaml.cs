@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace ErogeHelper
 {
@@ -27,14 +28,21 @@ namespace ErogeHelper
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (s, eventArgs) =>
             {
-                log4net.LogManager.GetLogger(typeof(App)).Error(eventArgs.ExceptionObject);
-                ModernWpf.MessageBox.Show(eventArgs.ExceptionObject.ToString() ?? "blank", "Eroge Helper - Fatal Error");
-                // TODO 10: 复制粘贴板转到github. Friendly error message
+                Dispatcher dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
+                if (dispatcher != null)
+                {
+                    if(System.Windows.Threading.Dispatcher.CurrentDispatcher.Thread != Thread.CurrentThread)
+                    {
+                        Exception ex = (Exception) eventArgs.ExceptionObject;
+                        log4net.LogManager.GetLogger(typeof(App)).Error(ex);
+                        ModernWpf.MessageBox.Show(ex + $"{(eventArgs.IsTerminating ? "\nApplication will Exit.." : "")}" ?? "", "Eroge Helper - Fatal Error");
+                    }
+                }
             };
             DispatcherUnhandledException += (s, eventArgs) =>
             {
                 log4net.LogManager.GetLogger(typeof(App)).Error(eventArgs.Exception);
-                ModernWpf.MessageBox.Show(eventArgs.Exception.ToString(), "Eroge Helper");
+                ModernWpf.MessageBox.Show(eventArgs.Exception.ToString(), "Eroge Helper - Fatal Error");
                 // TODO 10: 复制粘贴板转到github. Friendly error message
             };
         }

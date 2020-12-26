@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace ErogeHelper.ViewModels.Pages
 {
@@ -62,7 +63,7 @@ namespace ErogeHelper.ViewModels.Pages
             //    return;
             //}
 
-            Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 // Error Info: 在“ItemAdded”事件后具有意外的长度。\n如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这种情况。
                 var targetItem = HookMapData.FastFind(hp.Handle);
@@ -95,7 +96,7 @@ namespace ErogeHelper.ViewModels.Pages
                     targetItem.TotalText = tmp;
                     targetItem.Text = hp.Text;
                 }
-            }));
+            });
         }
 
         public bool CanSubmitSetting() => true;
@@ -117,8 +118,8 @@ namespace ErogeHelper.ViewModels.Pages
             else
             {
                 GameConfig.CreateConfig(configPath);
-                await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>());
-                await IoC.Get<HookConfigViewModel>().TryClose();
+                await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
+                await IoC.Get<HookConfigViewModel>().TryClose().ConfigureAwait(false);
             }    
         }
     }

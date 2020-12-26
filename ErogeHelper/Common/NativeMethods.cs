@@ -226,14 +226,10 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static RECT GetWindowRect(IntPtr hWnd, double dpi = 1)
+        public static RECT GetWindowRect(IntPtr hWnd)
         {
             RECT rect = new RECT();
             _ = SafeNativeMethods.GetWindowRect(hWnd, ref rect);
-            rect.Left = (int)(rect.Left / dpi);
-            rect.Top = (int)(rect.Top / dpi);
-            rect.Right = (int)(rect.Right / dpi);
-            rect.Bottom = (int)(rect.Bottom / dpi);
             return rect;
         }
 
@@ -242,14 +238,10 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static RECT GetClientRect(IntPtr hWnd, double dpi = 1)
+        public static RECT GetClientRect(IntPtr hWnd)
         {
             RECT rect = new RECT();
             _ = SafeNativeMethods.GetClientRect(hWnd, ref rect);
-            rect.Left = (int)(rect.Left / dpi);
-            rect.Top = (int)(rect.Top / dpi);
-            rect.Right = (int)(rect.Right / dpi);
-            rect.Bottom = (int)(rect.Bottom / dpi);
             return rect;
         }
 

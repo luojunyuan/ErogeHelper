@@ -65,7 +65,7 @@ namespace ErogeHelper.Model.Translator
             var result = string.Empty;
             try
             {
-                response = await client.PostAsync<BaiduApiResponse>(request);
+                response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
                 result =  string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
             }
             catch (Exception ex)

@@ -34,7 +34,7 @@ namespace ErogeHelper.Model.Dictionary
             var request = new RestRequest(searchApi, Method.POST)
                 .AddJsonBody(searchPayload);
 
-            var searchResp = await client.PostAsync<MojiSearchResponse>(request);
+            var searchResp = await client.PostAsync<MojiSearchResponse>(request).ConfigureAwait(false);
 
             //if(searchResp.result.words.Count != 0)
             //{
@@ -46,7 +46,7 @@ namespace ErogeHelper.Model.Dictionary
 
                 var requestFetch = new RestRequest(fetchApi, Method.POST)
                     .AddJsonBody(fetchPayload);
-                var fetchResp = await client.PostAsync<MojiFetchResponse>(requestFetch);
+                var fetchResp = await client.PostAsync<MojiFetchResponse>(requestFetch).ConfigureAwait(false);
             //}
 
             return fetchResp.result.word.spell;

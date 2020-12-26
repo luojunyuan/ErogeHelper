@@ -55,7 +55,7 @@ namespace ErogeHelper.Model.Translator
             string result;
             try
             {
-                var resp = await client.ExecuteAsync(request);
+                var resp = await client.ExecuteAsync(request).ConfigureAwait(false);
                 dynamic raw = JsonSerializer.Deserialize<dynamic>(resp.Content)!;
                 string jsonString = raw[0].ToString();
                 YeekitResponse obj = JsonSerializer.Deserialize<YeekitResponse>(jsonString)!;

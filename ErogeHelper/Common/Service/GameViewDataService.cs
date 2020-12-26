@@ -71,7 +71,7 @@ namespace ErogeHelper.Common.Service
 
             var collect = new BindableCollection<SingleTextItem>();
 
-            Application.Current.Dispatcher.BeginInvoke(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 // DependencySource on same Thread as the DependencyObject
                 var mecabWordList = mecabHelper.SentenceHandle(hp.Text);
@@ -90,9 +90,9 @@ namespace ErogeHelper.Common.Service
 
             SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
 
-            string result = SakuraNoUtaHelper.QueryText(hp.Text);
-            if (!string.IsNullOrWhiteSpace(result))
-                AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
+            // string result = SakuraNoUtaHelper.QueryText(hp.Text);
+            // if (!string.IsNullOrWhiteSpace(result))
+            //     AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
         }
     }
 }

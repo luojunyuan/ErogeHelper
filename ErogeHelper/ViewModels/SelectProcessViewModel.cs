@@ -44,7 +44,7 @@ namespace ErogeHelper.ViewModels
                     Title = "Eroge Helper",
                     Content = "Process has gone.",
                     CloseButtonText = "OK"
-                }.ShowAsync();
+                }.ShowAsync().ConfigureAwait(false);
                 ProcItems.Remove(SelectedProcItem);
             }
             else
@@ -59,22 +59,22 @@ namespace ErogeHelper.ViewModels
 
                     log.Info($"Get HCode {GameConfig.HookCode} from file {SelectedProcItem.proc.ProcessName}.exe.eh.config");
                     // Display text window
-                    await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>());
+                    await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
                 }
                 else
                 {
                     log.Info("Not find xml config file, open hook panel.");
-                    await windowManager.ShowWindowAsync(IoC.Get<HookConfigViewModel>());
+                    await windowManager.ShowWindowAsync(IoC.Get<HookConfigViewModel>()).ConfigureAwait(false);
                 }
 
-                await TryCloseAsync();
+                await TryCloseAsync().ConfigureAwait(false);
 
                 Textractor.Init();
                 GameHooker.Init();
             }
         }
 
-        public async void GetProcessAction() => await dataService.GetProcessListAsync(ProcItems);
+        public async void GetProcessAction() => await dataService.GetProcessListAsync(ProcItems).ConfigureAwait(false);
     }
 
     class ProcComboboxItem

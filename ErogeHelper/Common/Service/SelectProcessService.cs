@@ -54,7 +54,7 @@ namespace ErogeHelper.Common.Service
                         data.Remove(i);
                     }
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         private IEnumerable<Process> ProcessEnumerable()

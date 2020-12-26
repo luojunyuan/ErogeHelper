@@ -18,7 +18,7 @@ namespace ErogeHelper.Model.Dictionary.Tests
 
             string word = "君の名前";
 
-            var result = await apiInstance.RequestAsync(word);
+            var result = await apiInstance.RequestAsync(word).ConfigureAwait(false);
 
             Assert.AreEqual(result, "君");
         }

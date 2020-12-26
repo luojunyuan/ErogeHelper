@@ -66,11 +66,12 @@ namespace ErogeHelper.ViewModels
         {
             await WindowsInput.Simulate.Events()
                 .ClickChord(KeyCode.LWin, KeyCode.A)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
         }
 
         public bool CanTaskView() => true;
-        public async void TaskView() => await WindowsInput.Simulate.Events().ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke();
+        public async void TaskView() => await WindowsInput.Simulate.Events().ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
 
         public bool CanScreenShot() => true;
         public async void ScreenShot()
@@ -79,20 +80,23 @@ namespace ErogeHelper.ViewModels
 
             await WindowsInput.Simulate.Events()
                 .Click(KeyCode.Escape)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
 
             await WindowsInput.Simulate.Events()
                 .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
 
-            await Task.Delay(3000);
+            await Task.Delay(3000).ConfigureAwait(false);
+            // XXX
             AssistiveTouchIsVisible = true;
         }
 
         public bool CanVolumeUp() => true;
-        public async void VolumeUp() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeUp).Invoke();
+        public async void VolumeUp() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
         public bool CanVolumeDown() => true;
-        public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke();
+        public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
         public bool CanBrightnessDown() => false;
         public void BrightnessDown() { }
@@ -106,7 +110,8 @@ namespace ErogeHelper.ViewModels
             NativeMethods.BringWindowToTop(handle);
             await WindowsInput.Simulate.Events()
                 .ClickChord(KeyCode.Alt, KeyCode.Enter)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
         }
 
         private bool isLostFocus = GameConfig.NoFocus;
@@ -135,13 +140,15 @@ namespace ErogeHelper.ViewModels
         {
             await WindowsInput.Simulate.Events()
                 .Hold(KeyCode.Control)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
         }
         public async void PressSkipRelease()
         {
             await WindowsInput.Simulate.Events()
                 .Release(KeyCode.Control)
-                .Invoke();
+                .Invoke()
+                .ConfigureAwait(false);
         }
 
         public void OpenPreference()

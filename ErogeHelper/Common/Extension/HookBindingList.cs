@@ -40,7 +40,7 @@ namespace ErogeHelper.Common.Extension
         /// <returns>TVal</returns>
         public TVal? FastFind(TKey key)
         {
-            _dict.TryGetValue(key, out TVal val);
+            _dict.TryGetValue(key, out TVal? val);
             return val;
         }
         // --  --

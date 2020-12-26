@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ErogeHelper.Common.Helper
 {
@@ -45,18 +46,16 @@ namespace ErogeHelper.Common.Helper
             log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} Title: {gameProc.MainWindowTitle}");
             uint targetThreadId = NativeMethods.GetWindowThread(gameHWnd);
 
-            if (gameHWnd != IntPtr.Zero)
-            {
-                // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数
-                hWinEventHook = NativeMethods.WinEventHookOne(NativeMethods.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE,
-                                                     WinEventDelegate,
-                                                     (uint)gameProc.Id,
-                                                     targetThreadId);
-                // Send game position first time
-                UpdateLocation();
-                return;
-            }
-
+            // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
+            Application.Current.Dispatcher.InvokeAsync(
+                () => hWinEventHook = NativeMethods.WinEventHookOne(
+                    NativeMethods.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE,
+                    WinEventDelegate,
+                    (uint)gameProc.Id,
+                    targetThreadId)
+            );
+            // Send game position first time
+            UpdateLocation();
         }
 
         protected static void WinEventCallback(IntPtr hWinEventHook,
@@ -88,11 +87,11 @@ namespace ErogeHelper.Common.Helper
 
         private static void UpdateLocation()
         {
-            var rect = NativeMethods.GetWindowRect(gameHWnd, DataRepository.dpi);
-            var rectClient = NativeMethods.GetClientRect(gameHWnd, DataRepository.dpi);
+            var rect = NativeMethods.GetWindowRect(gameHWnd);
+            var rectClient = NativeMethods.GetClientRect(gameHWnd);
 
-            var width = rect.Right - rect.Left;  // rectClient.Right + shadow*2
-            var height = rect.Bottom - rect.Top; // rectClient.Bottom + shadow + title
+            var width = rect.Right - rect.Left;  // equal rectClient.Right + shadow*2
+            var height = rect.Bottom - rect.Top; // equal rectClient.Bottom + shadow + title
 
             var winShadow = (width - rectClient.Right) / 2;
 
@@ -117,7 +116,7 @@ namespace ErogeHelper.Common.Helper
             GCSafetyHandle.Free();
             NativeMethods.WinEventUnhook(hWinEventHook);
 
-            Application.Current.Dispatcher.BeginInvoke(new System.Action(() => Application.Current.Shutdown()));
+            Application.Current.Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
         }
     }
 
