@@ -15,6 +15,7 @@ namespace ErogeHelper.Model
 
         public static string Path = "";
 
+        public static string MD5 = "";
         public static bool IsUserHook = false;
         public static string HookCode = "";
         public static long ThreadContext;
@@ -26,6 +27,7 @@ namespace ErogeHelper.Model
         {
             Path = path;
 
+            MD5 = GetString(EHNode.MD5);
             IsUserHook = GetBool(EHNode.IsUserHook);
             HookCode = GetString(EHNode.HookCode);
             ThreadContext = GetLong(EHNode.ThreadContext);
@@ -151,6 +153,7 @@ namespace ErogeHelper.Model
         public static EHNode EHConfig { get { return new EHNode("EHConfig"); } }
         public static EHNode Profile { get { return new EHNode("Profile"); } }
 
+        public static EHNode MD5 { get { return new EHNode("MD5"); } }
         public static EHNode IsUserHook { get { return new EHNode("IsUserHook"); } }
         public static EHNode HookCode { get { return new EHNode("HookCode"); } }
         public static EHNode ThreadContext { get { return new EHNode("ThreadContext"); } }

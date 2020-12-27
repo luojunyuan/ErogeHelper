@@ -24,6 +24,8 @@ namespace ErogeHelper.Common.Service
         public event IGameViewDataService.AppendDataEventHandler? AppendDataEvent;
 
         private readonly MecabHelper mecabHelper = new MecabHelper();
+        private readonly SakuraNoUtaHelper sakuraNoUtaHelper = new SakuraNoUtaHelper();
+
         public static TextTemplateType SourceTextTemplate = DataRepository.TextTemplateConfig;
 
         public void Start()
@@ -44,9 +46,12 @@ namespace ErogeHelper.Common.Service
                 hp.Text = string.Join("", list);
             }
 
-            // Clear
+            // Clear ascii control characters
             hp.Text = new string(hp.Text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
+            // Linebreak 
+            // Full-width space
             hp.Text = hp.Text.Replace("　", string.Empty);
+            // Ruby
 
             if (hp.Text.Length > 120)
             {
@@ -85,9 +90,13 @@ namespace ErogeHelper.Common.Service
 
             SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
 
-            // string result = SakuraNoUtaHelper.QueryText(hp.Text);
-            // if (!string.IsNullOrWhiteSpace(result))
-            //     AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
+            // hard code for sakura no uta
+            if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
+            {
+                string result = sakuraNoUtaHelper.QueryText(hp.Text);
+                if (!string.IsNullOrWhiteSpace(result))
+                    AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
+            }
         }
     }
 }
