@@ -95,8 +95,6 @@ namespace ErogeHelper
 
                 Textractor.Init();
                 GameHooker.Init();
-
-                DataRepository.GameId = Utils.GetGameIdByMD5(Utils.GetMD5(gamePath));
             }
         }
 

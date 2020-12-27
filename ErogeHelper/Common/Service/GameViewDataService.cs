@@ -24,8 +24,6 @@ namespace ErogeHelper.Common.Service
         public event IGameViewDataService.AppendDataEventHandler? AppendDataEvent;
 
         private readonly MecabHelper mecabHelper = new MecabHelper();
-        private readonly Dictionary<int, string> gameItems = NetManager.GetGameFiles();
-
         public static TextTemplateType SourceTextTemplate = DataRepository.TextTemplateConfig;
 
         public void Start()
@@ -50,7 +48,6 @@ namespace ErogeHelper.Common.Service
             hp.Text = new string(hp.Text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
             hp.Text = hp.Text.Replace("　", string.Empty);
 
-            // Skip long text
             if (hp.Text.Length > 120)
             {
                 IoC.Get<TextViewModel>().SourceTextCollection.Clear();
@@ -58,7 +55,7 @@ namespace ErogeHelper.Common.Service
                 return;
             }
 
-            // DeepL extension
+            // DeepL Extension
             if (DataRepository.PasteToDeepL)
             {
                 Process[] temp = Process.GetProcessesByName("DeepL");
@@ -88,12 +85,9 @@ namespace ErogeHelper.Common.Service
 
             SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
 
-            if (gameItems.ContainsKey(DataRepository.GameId))
-            {
-                string result = SakuraNoUtaHelper.QueryText(hp.Text);
-                if (!string.IsNullOrWhiteSpace(result))
-                    AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
-            }
+            // string result = SakuraNoUtaHelper.QueryText(hp.Text);
+            // if (!string.IsNullOrWhiteSpace(result))
+            //     AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
         }
     }
 }

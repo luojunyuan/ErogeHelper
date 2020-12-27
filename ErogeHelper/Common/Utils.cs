@@ -86,19 +86,5 @@ namespace ErogeHelper.Common
             return sb.ToString().ToUpper();
         }
 
-        public static int GetGameIdByMD5(string MD5)
-        {
-            var tmp = new Dictionary<string, int>();
-            tmp.Add("BAB61FB3BD98EF1F1538EE47A8A46A26", 42119);
-            
-            if (tmp.ContainsKey(MD5))
-            {
-                return tmp[MD5];
-            }
-            else
-            {
-                return -1;
-            }
-        }
     }
 }

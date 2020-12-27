@@ -101,8 +101,6 @@ namespace ErogeHelper.Model
 
         public static IntPtr GameViewHandle = IntPtr.Zero;
 
-        public static int GameId;
-
         public static readonly BitmapImage transparentImage = Utils.LoadBitmapFromResource("Assets/transparent.png");
         public static readonly BitmapImage aquagreenImage = Utils.LoadBitmapFromResource("Assets/aqua_green.png");
         public static readonly BitmapImage greenImage = Utils.LoadBitmapFromResource("Assets/green.png");
