@@ -107,7 +107,7 @@ namespace ErogeHelper.Common.Helper
                 @"
                     SELECT Text 
                     FROM Comment 
-                    WHERE Context_Context = $context AND Type = ""subtitle""
+                    WHERE Context_Context = $context
                 ";
                 command.Parameters.AddWithValue("$context", context);
 
@@ -131,7 +131,7 @@ namespace ErogeHelper.Common.Helper
             @"
                 SELECT Text 
                 FROM Comment 
-                WHERE Context_Hash = $hash AND Type = ""subtitle""
+                WHERE Context_Hash = $hash
             ";
             command.Parameters.AddWithValue("$hash", hash);
 
