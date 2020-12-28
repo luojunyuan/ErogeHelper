@@ -74,7 +74,7 @@ namespace ErogeHelper.Common.Service
         private readonly List<string> uselessProcess = new List<string> 
         { 
             "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
-            "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI"
+            "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps"
         };
     }
 }
