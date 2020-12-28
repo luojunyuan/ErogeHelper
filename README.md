@@ -22,4 +22,4 @@ one is full path of game, '/le' to use Locate Emulator
 
 ### Install
 
-PLease run ErogeHelper.Installer.exe
+Please run ErogeHelper.Installer.exe
