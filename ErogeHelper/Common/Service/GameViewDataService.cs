@@ -3,8 +3,8 @@ using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Translator;
-using ErogeHelper.ViewModels;
-using ErogeHelper.ViewModels.Control;
+using ErogeHelper.ViewModel;
+using ErogeHelper.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,7 +38,7 @@ namespace ErogeHelper.Common.Service
             // Refresh
             IoC.Get<GameViewModel>().AppendTextList.Clear(); // Clear or give new value? is that same
 
-            // Regexp 
+            // User define regexp 
             var pattern = GameConfig.Regexp;
             if (!string.IsNullOrEmpty(pattern))
             {
@@ -52,6 +52,7 @@ namespace ErogeHelper.Common.Service
             // Full-width space
             hp.Text = hp.Text.Replace("　", string.Empty);
             // Ruby
+            // <.*?>
 
             if (hp.Text.Length > 120)
             {

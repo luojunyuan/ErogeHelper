@@ -1,4 +1,4 @@
-﻿using ErogeHelper.ViewModels.Control;
+﻿using ErogeHelper.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.Linq;

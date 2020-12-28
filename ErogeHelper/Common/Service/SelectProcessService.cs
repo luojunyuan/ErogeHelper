@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Extension;
-using ErogeHelper.ViewModels;
+using ErogeHelper.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

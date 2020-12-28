@@ -31,7 +31,7 @@ namespace ErogeHelper
                 Dispatcher dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
                 if (dispatcher != null)
                 {
-                    if(System.Windows.Threading.Dispatcher.CurrentDispatcher.Thread != Thread.CurrentThread)
+                    if(Dispatcher.CurrentDispatcher.Thread != Thread.CurrentThread)
                     {
                         Exception ex = (Exception) eventArgs.ExceptionObject;
                         log4net.LogManager.GetLogger(typeof(App)).Error(ex);

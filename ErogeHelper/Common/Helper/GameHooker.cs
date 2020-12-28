@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Model;
-using ErogeHelper.ViewModels;
-using ErogeHelper.Views;
+using ErogeHelper.ViewModel;
+using ErogeHelper.View;
 using log4net;
 using System;
 using System.Collections.Generic;

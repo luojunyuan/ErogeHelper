@@ -4,9 +4,9 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
-using ErogeHelper.ViewModels;
-using ErogeHelper.ViewModels.Control;
-using ErogeHelper.ViewModels.Pages;
+using ErogeHelper.ViewModel;
+using ErogeHelper.ViewModel.Control;
+using ErogeHelper.ViewModel.Pages;
 using ModernWpf;
 using System;
 using System.Collections.Generic;
@@ -100,6 +100,15 @@ namespace ErogeHelper
 
         protected override void Configure()
         {
+            var config = new TypeMappingConfiguration
+            {
+                IncludeViewSuffixInViewModelNames = false,
+                DefaultSubNamespaceForViewModels = "ViewModel",
+                DefaultSubNamespaceForViews = "View",
+            };
+            ViewLocator.ConfigureTypeMappings(config);
+            ViewModelLocator.ConfigureTypeMappings(config);
+
             var builder = new ContainerBuilder();
 
             // Register Basic Tools
@@ -122,7 +131,7 @@ namespace ErogeHelper
 
             builder.RegisterType<TextViewModel>()
                 .SingleInstance();
-            builder.RegisterType<HookPageViewModel>()
+            builder.RegisterType<HookViewModel>()
                 .SingleInstance();
             builder.RegisterType<GeneralPageViewModel>()
                 .SingleInstance();

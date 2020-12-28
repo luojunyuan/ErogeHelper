@@ -1,0 +1,111 @@
+﻿<Page x:Class="ErogeHelper.View.Pages.HookPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:control="clr-namespace:ErogeHelper.View.Control"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
+      xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
+      xmlns:cal="http://caliburnmicro.com"
+      mc:Ignorable="d"         
+      xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+      d:DesignHeight="850" d:DesignWidth="800"
+      Title="HookSettingPage">
+
+    <Page.Resources>
+        <DataTemplate x:Key="HpItemTemplate">
+            <GroupBox Header="{Binding HookCode}"
+                  Width="300" Height="240">
+                <!-- 1 line 22 char * 10 line-->
+                <TextBlock Text="{Binding TotalText}" TextWrapping="Wrap"/>
+            </GroupBox>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Main Panel -->
+            <RowDefinition Height="*" />
+            <!-- Submit Button -->
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" PanningMode="Both">
+            <StackPanel Margin="20,10">
+                <GroupBox Header="{x:Static resx:Strings.HookPage_HookCode}">
+                    <ui:SimpleStackPanel Spacing="10">
+                        <TextBox x:Name="CodeTextBox"
+                            behavior:ValidationBehavior.HasError="{Binding HookSettingPage.HasError}"
+                            HorizontalAlignment="Left" Width="240">
+                            <TextBox.Text>
+                                <Binding Path="HookSettingPage.InputCode" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validation:InvalidCodeFormatValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <!-- Add a vnr code search button-->
+                        <Button 
+                            Content="{x:Static resx:Strings.HookPage_Insert}" Width="240" 
+                            cal:Message.Attach="[Click] = [InsertCode(CodeTextBox.Text)]"
+                            cal:Action.TargetWithoutContext="{Binding HookSettingPage}"/>
+                    </ui:SimpleStackPanel>
+                </GroupBox>
+
+                <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
+                    <ui:SimpleStackPanel Spacing="10">
+                        <Label Content="{x:Static resx:Strings.HookPage_Regexp}" />
+                        <TextBox x:Name="RegExpTextBox" Text="{Binding HookSettingPage.RegExp}" HorizontalAlignment="Left" Width="240"/>
+                        <!-- Add a friendly Popup for regexp-->
+                        <Label Content="{x:Static resx:Strings.HookPage_Text}" />
+                        <TextBlock 
+                            Text="{Binding ElementName=DataField, Path=SelectedItem.Text}" 
+                            TextWrapping="Wrap" Height="80"/>
+                    </ui:SimpleStackPanel>
+                </GroupBox>
+
+                <GroupBox Header="{x:Static resx:Strings.HookPage_Console}">
+                    <TextBox 
+                        MinWidth="240" HorizontalAlignment="Left"
+                        behavior:ScrollToEndBehavior.OnTextChanged="True" 
+                        VerticalAlignment="Top" MaxHeight="150" AcceptsReturn="True"
+                        TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden"
+                        IsReadOnly="True" FontSize="16" Text="{Binding HookSettingPage.ConsoleOutput}"/>
+                </GroupBox>
+                <!-- Add a clear all command-->
+                <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
+                    <!--FIXME: bug here when nagative to other page-->
+                    <ListView 
+                        x:Name="DataField" ScrollViewer.PanningMode="None"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding HookSettingPage.HookMapData}" 
+                        SelectedItem="{Binding HookSettingPage.SelectedHook}" SelectionMode="Single"
+                        ItemTemplate="{StaticResource HpItemTemplate}">
+                        <!--SelectionChanged-->
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <!-- This avoid binding error-->
+                        <!--<ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="VerticalContentAlignment" Value="Top"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>-->
+                    </ListView>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button
+            Grid.Row="1" Width="240" Margin="20,10"
+            Content="{x:Static resx:Strings.HookPage_Submit}" 
+            cal:Message.Attach="[Click] = [SubmitSetting(CodeTextBox.Text, RegExpTextBox.Text)]"
+            cal:Action.TargetWithoutContext="{Binding HookSettingPage}"/>
+    </Grid>
+</Page>

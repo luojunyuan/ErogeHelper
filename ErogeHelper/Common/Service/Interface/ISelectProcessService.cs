@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using ErogeHelper.ViewModels;
+using ErogeHelper.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
