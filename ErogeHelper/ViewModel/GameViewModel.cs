@@ -19,7 +19,7 @@ using WindowsInput.Events;
 
 namespace ErogeHelper.ViewModel
 {
-    class GameViewModel : PropertyChangedBase
+    class GameViewModel : Screen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GameViewModel));
 
@@ -98,10 +98,22 @@ namespace ErogeHelper.ViewModel
         public bool CanVolumeDown() => true;
         public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
-        public bool CanBrightnessDown() => false;
-        public void BrightnessDown() { }
-        public bool CanBrightnessUp() => false;
-        public void BrightnessUp() { }
+        // TODO: Improve these
+        short minBrightness = 0;
+        short curBrightness = 0;
+        short maxBrightness = 0;
+        public bool CanBrightnessDown() => true;
+        public void BrightnessDown() 
+        {
+            bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, --curBrightness);
+            log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
+        }
+        public bool CanBrightnessUp() => true;
+        public void BrightnessUp() 
+        {
+            bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, ++curBrightness);
+            log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
+        }
 
         public bool CanSwitchGameScreen() => true;
         public async void SwitchGameScreen()
@@ -176,6 +188,29 @@ namespace ErogeHelper.ViewModel
             dataService.Start();
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
             dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
+        }
+
+        IAdjustScreen? brightnessHelper;
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            brightnessHelper = AdjustScreenBuilder.CreateAdjustScreen((Window)view);
+            if (brightnessHelper == null)
+            {
+                log.Info("Not support brightness adjust");
+            }
+            else
+            {
+                // use game's handle or EH GameView's new windowsInterrupter(GetView()).handle
+                IntPtr handle = DataRepository.MainProcess!.MainWindowHandle;
+                
+                brightnessHelper.GetBrightness(handle,
+                    ref minBrightness,
+                    ref curBrightness,
+                    ref maxBrightness);
+                log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
+            }
         }
     }
 }
