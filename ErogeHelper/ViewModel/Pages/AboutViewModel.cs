@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.ViewModel.Pages
 {
-    class AboutPageViewModel : PropertyChangedBase
+    class AboutViewModel : PropertyChangedBase
     {
     }
 }

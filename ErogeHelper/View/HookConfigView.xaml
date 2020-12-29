@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ErogeHelper.View"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:service="clr-namespace:ErogeHelper.Common.Service"
+        xmlns:helper="clr-namespace:ErogeHelper.Common.Helper"
         xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True" 
         Width="350" MinWidth="350" Height="450" Icon="pack://application:,,,/Assets/app.ico"
-        Title="{x:Static resx:Strings.HookConfig_Title}" service:WindowPlacement.Save="True" Topmost="True">
+        Title="{x:Static resx:Strings.HookConfig_Title}" helper:WindowPlacement.Save="True" Topmost="True">
     <Grid>
         <Frame x:Name="HookPage"/>
     </Grid>

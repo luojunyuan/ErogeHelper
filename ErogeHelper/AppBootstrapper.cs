@@ -105,6 +105,7 @@ namespace ErogeHelper
                 IncludeViewSuffixInViewModelNames = false,
                 DefaultSubNamespaceForViewModels = "ViewModel",
                 DefaultSubNamespaceForViews = "View",
+                ViewSuffixList = new List<string> { "View", "Page", "Control"}
             };
             ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
@@ -133,9 +134,9 @@ namespace ErogeHelper
                 .SingleInstance();
             builder.RegisterType<HookViewModel>()
                 .SingleInstance();
-            builder.RegisterType<GeneralPageViewModel>()
+            builder.RegisterType<GeneralViewModel>()
                 .SingleInstance();
-            builder.RegisterType<AboutPageViewModel>()
+            builder.RegisterType<AboutViewModel>()
                 .SingleInstance();
 
             // Register Servieces

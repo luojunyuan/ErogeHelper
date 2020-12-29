@@ -19,9 +19,9 @@ namespace ErogeHelper.View.Control
     /// <summary>
     /// TextView.xaml 的交互逻辑
     /// </summary>
-    public partial class TextView : UserControl
+    public partial class TextControl : UserControl
     {
-        public TextView()
+        public TextControl()
         {
             InitializeComponent();
         }

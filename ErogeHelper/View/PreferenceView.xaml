@@ -3,14 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ErogeHelper.View"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:service="clr-namespace:ErogeHelper.Common.Service"
-        xmlns:view="clr-namespace:ErogeHelper.View"
-        xmlns:cal="http://caliburnmicro.com"
+        xmlns:helper="clr-namespace:ErogeHelper.Common.Helper"
+        xmlns:model="clr-namespace:ErogeHelper.Model"
         mc:Ignorable="d" 
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
-        Title="PreferenceView" Height="450" Width="800" service:WindowPlacement.Save="True"
+        Title="PreferenceView" Height="450" Width="800" helper:WindowPlacement.Save="True"
         Icon="pack://application:,,,/Assets/app.ico" MinWidth="400">
     
     <ui:NavigationView 
@@ -22,12 +20,12 @@
             <ui:NavigationViewItemSeparator Margin="0 30 0 0"/>
             <ui:NavigationViewItem Content="HookConfig" Tag="hook_setting">
                 <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.GroupList}" />
+                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
             <ui:NavigationViewItem Content="GeneralSetting" Tag="general_setting">
                 <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.GroupList}" />
+                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
         </ui:NavigationView.MenuItems>
@@ -35,7 +33,7 @@
         <ui:NavigationView.FooterMenuItems>
             <ui:NavigationViewItem Content="About" Tag="about">
                 <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.Info}" />
+                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Info}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
         </ui:NavigationView.FooterMenuItems>

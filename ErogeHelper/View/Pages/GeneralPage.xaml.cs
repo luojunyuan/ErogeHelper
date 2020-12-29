@@ -23,7 +23,7 @@ namespace ErogeHelper.View.Pages
         public GeneralPage()
         {
             InitializeComponent();
-            DataContext = Caliburn.Micro.IoC.Get<ViewModel.Pages.GeneralPageViewModel>();
+            DataContext = Caliburn.Micro.IoC.Get<ViewModel.Pages.GeneralViewModel>();
         }
     }
 }

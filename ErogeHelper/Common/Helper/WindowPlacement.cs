@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ErogeHelper.Common.Service
+namespace ErogeHelper.Common.Helper
 {
     /// <summary>
     ///   Persists a Window's Size, Location and WindowState to UserScopeSettings

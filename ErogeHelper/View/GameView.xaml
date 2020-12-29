@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:view="clr-namespace:ErogeHelper.View"
+        xmlns:model="clr-namespace:ErogeHelper.Model"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
-        xmlns:cal="http://caliburnmicro.com"
+        xmlns:cm="http://caliburnmicro.com"
         mc:Ignorable="d"
         Title="GameView" ShowInTaskbar="False"
         AllowsTransparency="True" WindowStyle="None" Topmost="True">
@@ -39,43 +39,43 @@
                     <Button Width="50" Height="50" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                         <ui:FlyoutService.Flyout>
                             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
-                                <ui:AppBarButton Icon="FontDecrease" cal:Message.Attach="[Click] = [ZoomOut]"/>
-                                <ui:AppBarButton Icon="FontIncrease" cal:Message.Attach="[Click] = [ZoomIn]" />
-                                <ui:AppBarButton cal:Message.Attach="[Click] = [VolumeDown]">
+                                <ui:AppBarButton Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]"/>
+                                <ui:AppBarButton Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" />
+                                <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]">
                                     <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.Volume1}" />
+                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
-                                <ui:AppBarButton Icon="Volume" cal:Message.Attach="[Click] = [VolumeUp]"/>
-                                <ui:AppBarButton cal:Message.Attach="[Click] = [BrightnessDown]">
+                                <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
+                                <ui:AppBarButton cm:Message.Attach="[Click] = [BrightnessDown]">
                                     <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.LowerBrightness}" />
+                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.LowerBrightness}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
-                                <ui:AppBarButton cal:Message.Attach="[Click] = [BrightnessUp]">
+                                <ui:AppBarButton cm:Message.Attach="[Click] = [BrightnessUp]">
                                     <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.Brightness}" />
+                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Brightness}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
                                 <ui:AppBarButton 
-                                    Icon="FullScreen" cal:Message.Attach="[Click] = [SwitchGameScreen]"
+                                    Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                     ToolTip="Full Screen (Alt+Enter)"/>
                                 <ui:AppBarToggleButton 
                                     Icon="Trim" IsChecked="{Binding IsLostFocus}" 
                                     ToolTip="Lost Focus (If you can't see text when play game full screen. Turn on this)" 
-                                    cal:Message.Attach="[Click] = [FocusToggle]"/>
+                                    cm:Message.Attach="[Click] = [FocusToggle]"/>
 
                                 <ui:CommandBarFlyout.SecondaryCommands>
-                                    <ui:AppBarButton Icon="DockRight" Label="Action Center" cal:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
-                                    <ui:AppBarButton Icon="DockLeft" Label="Task View" cal:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
-                                    <ui:AppBarButton Icon="Pictures" Label="Screenshot" cal:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S"/>
+                                    <ui:AppBarButton Icon="DockRight" Label="Action Center" cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
+                                    <ui:AppBarButton Icon="DockLeft" Label="Task View" cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
+                                    <ui:AppBarButton Icon="Pictures" Label="Screenshot" cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S"/>
                                     <ui:AppBarSeparator/>
-                                    <ui:AppBarButton Icon="Setting" Label="Preference" cal:Message.Attach="[Click] = [OpenPreference]"/>
+                                    <ui:AppBarButton Icon="Setting" Label="Preference" cm:Message.Attach="[Click] = [OpenPreference]"/>
                                     <ui:AppBarElementContainer>
                                         <Button
                                             Visibility="{Binding IsLostFocus, Converter={StaticResource VisibleConverter}}"
                                             Width="80" Height="40" Margin="10 0 0 0" Content="Skip" ToolTip="Ctrl+C"
-                                            cal:Message.Attach="[PreviewMouseDown] = [PressSkip]; [PreviewMouseUp] = [PressSkipRelease]"/>
+                                            cm:Message.Attach="[PreviewMouseDown] = [PressSkip]; [PreviewMouseUp] = [PressSkipRelease]"/>
                                     </ui:AppBarElementContainer>
                                 </ui:CommandBarFlyout.SecondaryCommands>
                             </ui:CommandBarFlyout>

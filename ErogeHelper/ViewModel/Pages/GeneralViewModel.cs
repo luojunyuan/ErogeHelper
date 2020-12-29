@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace ErogeHelper.ViewModel.Pages
 {
-    class GeneralPageViewModel : PropertyChangedBase
+    class GeneralViewModel : PropertyChangedBase
     {
         private bool _kanaTop = DataRepository.KanaTop;
         private bool _kanaBottom = DataRepository.KanaBottom;
