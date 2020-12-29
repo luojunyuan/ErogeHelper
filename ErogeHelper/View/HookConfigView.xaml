@@ -12,6 +12,6 @@
         Width="350" MinWidth="350" Height="450" Icon="pack://application:,,,/Assets/app.ico"
         Title="{x:Static resx:Strings.HookConfig_Title}" service:WindowPlacement.Save="True" Topmost="True">
     <Grid>
-        <Frame x:Name="HookPage" />
+        <ui:Frame Content="{Binding ContentFrame}" />
     </Grid>
 </Window>

@@ -155,7 +155,7 @@ namespace ErogeHelper.ViewModel
         {
             var window = Application.Current.Windows.OfType<PreferenceView>().FirstOrDefault();
             if (window == null)
-                windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>()); // 240ms?
+                windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>());
             else
                 window.Activate();
         }
