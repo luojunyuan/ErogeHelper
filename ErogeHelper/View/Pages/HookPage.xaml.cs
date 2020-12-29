@@ -23,6 +23,7 @@ namespace ErogeHelper.View.Pages
         public HookPage()
         {
             InitializeComponent();
+            DataContext = Caliburn.Micro.IoC.Get<ViewModel.Pages.HookViewModel>();
         }
     }
 }

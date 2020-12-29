@@ -36,10 +36,10 @@
                 <GroupBox Header="{x:Static resx:Strings.HookPage_HookCode}">
                     <ui:SimpleStackPanel Spacing="10">
                         <TextBox x:Name="CodeTextBox"
-                            behavior:ValidationBehavior.HasError="{Binding HookSettingPage.HasError}"
+                            behavior:ValidationBehavior.HasError="{Binding HasError}"
                             HorizontalAlignment="Left" Width="240">
                             <TextBox.Text>
-                                <Binding Path="HookSettingPage.InputCode" UpdateSourceTrigger="PropertyChanged">
+                                <Binding Path="InputCode" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
                                         <validation:InvalidCodeFormatValidationRule ValidatesOnTargetUpdated="True"/>
                                     </Binding.ValidationRules>
@@ -49,15 +49,14 @@
                         <!-- Add a vnr code search button-->
                         <Button 
                             Content="{x:Static resx:Strings.HookPage_Insert}" Width="240" 
-                            cal:Message.Attach="[Click] = [InsertCode(CodeTextBox.Text)]"
-                            cal:Action.TargetWithoutContext="{Binding HookSettingPage}"/>
+                            cal:Message.Attach="[Click] = [InsertCode(CodeTextBox.Text)]"/>
                     </ui:SimpleStackPanel>
                 </GroupBox>
 
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                     <ui:SimpleStackPanel Spacing="10">
                         <Label Content="{x:Static resx:Strings.HookPage_Regexp}" />
-                        <TextBox x:Name="RegExpTextBox" Text="{Binding HookSettingPage.RegExp}" HorizontalAlignment="Left" Width="240"/>
+                        <TextBox x:Name="RegExpTextBox" Text="{Binding RegExp}" HorizontalAlignment="Left" Width="240"/>
                         <!-- Add a friendly Popup for regexp-->
                         <Label Content="{x:Static resx:Strings.HookPage_Text}" />
                         <TextBlock 
@@ -72,7 +71,7 @@
                         behavior:ScrollToEndBehavior.OnTextChanged="True" 
                         VerticalAlignment="Top" MaxHeight="150" AcceptsReturn="True"
                         TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden"
-                        IsReadOnly="True" FontSize="16" Text="{Binding HookSettingPage.ConsoleOutput}"/>
+                        IsReadOnly="True" FontSize="16" Text="{Binding ConsoleOutput}"/>
                 </GroupBox>
                 <!-- Add a clear all command-->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
@@ -81,8 +80,8 @@
                         x:Name="DataField" ScrollViewer.PanningMode="None"
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        ItemsSource="{Binding HookSettingPage.HookMapData}" 
-                        SelectedItem="{Binding HookSettingPage.SelectedHook}" SelectionMode="Single"
+                        ItemsSource="{Binding HookMapData}" 
+                        SelectedItem="{Binding SelectedHook}" SelectionMode="Single"
                         ItemTemplate="{StaticResource HpItemTemplate}">
                         <!--SelectionChanged-->
                         <ListBox.ItemsPanel>
@@ -105,7 +104,6 @@
         <Button
             Grid.Row="1" Width="240" Margin="20,10"
             Content="{x:Static resx:Strings.HookPage_Submit}" 
-            cal:Message.Attach="[Click] = [SubmitSetting(CodeTextBox.Text, RegExpTextBox.Text)]"
-            cal:Action.TargetWithoutContext="{Binding HookSettingPage}"/>
+            cal:Message.Attach="[Click] = [SubmitSetting(CodeTextBox.Text, RegExpTextBox.Text)]"/>
     </Grid>
 </Page>

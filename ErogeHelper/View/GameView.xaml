@@ -36,12 +36,11 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    
                     <Button Width="50" Height="50" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                         <ui:FlyoutService.Flyout>
-                            <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Transient" >
-                                <ui:AppBarButton Icon="FontIncrease" cal:Message.Attach="[Click] = [ZoomIn]" />
+                            <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
                                 <ui:AppBarButton Icon="FontDecrease" cal:Message.Attach="[Click] = [ZoomOut]"/>
+                                <ui:AppBarButton Icon="FontIncrease" cal:Message.Attach="[Click] = [ZoomIn]" />
                                 <ui:AppBarButton cal:Message.Attach="[Click] = [VolumeDown]">
                                     <ui:AppBarButton.Icon>
                                         <ui:FontIcon Glyph="{x:Static view:CommonGlyphs.Volume1}" />

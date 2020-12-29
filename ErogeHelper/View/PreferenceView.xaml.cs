@@ -51,9 +51,11 @@ namespace ErogeHelper.View
             var item = pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
             Type pageType = item.PageType;
 
+            // if not same page
             if (pageType != null && ContentFrame!.CurrentSourcePageType != pageType)
             {
                 ContentFrame.Navigate(pageType, null, info);
+                //ContentFrame.DataContext = item.DataContext;
             }
         }
 

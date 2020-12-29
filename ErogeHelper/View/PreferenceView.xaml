@@ -48,7 +48,7 @@
                 <TextBlock x:Name="HeaderBlock" VerticalAlignment="Center"
                     Margin="12,15,0,11" Style="{DynamicResource TitleTextBlockStyle}" />
             </Grid>
-            <ui:Frame x:Name="ContentFrame" Grid.Row="1" IsTabStop="True" />
+            <ui:Frame x:Name="ContentFrame" Grid.Row="1" IsTabStop="True" DataContext="{x:Null}"/>
         </Grid>
     </ui:NavigationView>
 </Window>

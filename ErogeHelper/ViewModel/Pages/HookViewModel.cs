@@ -56,12 +56,11 @@ namespace ErogeHelper.ViewModel.Pages
                 ConsoleOutput += "\n" + hp.Text;
                 return;
             }
-            // Had turn off textractor clipboard monitor
-            //else if (hp.Name == "剪贴板")
-            //{
-            //    // ClipboardOutput += "\n" + hp.Text;
-            //    return;
-            //}
+            else if (hp.Name == "剪贴板") // Clipboard
+            {
+                // ClipboardOutput += "\n" + hp.Text;
+                return;
+            }
 
             Application.Current.Dispatcher.InvokeAsync(() =>
             {

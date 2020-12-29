@@ -151,11 +151,11 @@ namespace ErogeHelper.ViewModel
                 .ConfigureAwait(false);
         }
 
-        public void OpenPreference()
+        public async void OpenPreference()
         {
             var window = Application.Current.Windows.OfType<PreferenceView>().FirstOrDefault();
             if (window == null)
-                windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>());
+                await windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>()).ConfigureAwait(false);
             else
                 window.Activate();
         }
