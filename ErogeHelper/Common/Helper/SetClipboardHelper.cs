@@ -74,6 +74,9 @@ namespace ErogeHelper.Common.Helper
             {
                 _complete.Set();
                 WindowsInput.Simulate.Events()
+                    .ClickChord(KeyCode.Control, KeyCode.A)
+                    .Invoke();
+                WindowsInput.Simulate.Events()
                     .ClickChord(KeyCode.Control, KeyCode.V)
                     .Invoke();
             }
