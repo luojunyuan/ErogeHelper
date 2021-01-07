@@ -14,4 +14,4 @@ one is full path of game, '/le' to use Locate Emulator
 
 ### Install
 
-For users please run ErogeHelper.Installer.exe to register EH in windows context menu (right context menu).
+For users please run ErogeHelper.Installer.exe to register EH in windows context menu (right click menu).
