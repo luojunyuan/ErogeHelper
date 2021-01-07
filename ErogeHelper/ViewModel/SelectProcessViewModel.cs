@@ -1,4 +1,4 @@
-﻿using Caliburn.Micro;
+using Caliburn.Micro;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Common;
@@ -21,6 +21,7 @@ namespace ErogeHelper.ViewModel
 
         readonly ISelectProcessService dataService;
         readonly IWindowManager windowManager;
+        private ProcComboboxItem? _selectedProcItem;
 
         public SelectProcessViewModel(ISelectProcessService dataService, IWindowManager windowManager)
         {
@@ -31,13 +32,20 @@ namespace ErogeHelper.ViewModel
         }
 
         public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
-        public ProcComboboxItem SelectedProcItem { get; set; } = new ProcComboboxItem();
+        public ProcComboboxItem? SelectedProcItem 
+        { 
+            get => _selectedProcItem;
+            set
+            {
+                _selectedProcItem = value;
+                NotifyOfPropertyChange(() => CanInject);
+            }
+        }
 
-        public bool CanInject() => SelectedProcItem != null && !string.IsNullOrWhiteSpace(SelectedProcItem.Title);
-
-        public async void Inject(object procItems) // Suger by CM
+        public bool CanInject { get => SelectedProcItem is not null; }
+        public async void Inject()
         {
-            if (SelectedProcItem.proc.HasExited)
+            if (SelectedProcItem!.proc.HasExited)
             {
                 await new ContentDialog
                 {
@@ -45,7 +53,7 @@ namespace ErogeHelper.ViewModel
                     Content = "Process has gone.",
                     CloseButtonText = "OK"
                 }.ShowAsync().ConfigureAwait(false);
-                ProcItems.Remove(SelectedProcItem);
+                ProcItems.Remove(SelectedProcItem); // Cause this turn SelectedProcItem to null
             }
             else
             {
@@ -82,6 +90,7 @@ namespace ErogeHelper.ViewModel
         public Process proc = new Process();
 
         public BitmapImage Icon { get; set; } = new BitmapImage();
+
         public string Title { get; set; } = "";
     }
 }
