@@ -1,7 +1,7 @@
 
 ### How to build
 
-Recommand VS2019 to clone `https://github.com/luojunyuan/Eroge-Helpe` down.
+Recommand VS2019 to clone `https://github.com/luojunyuan/Eroge-Helper` down.
 
 Use Package Manager Console in VS, type `Install-Package Caliburn.Micro -Version 4.0.136-rc -Source https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json `
 
