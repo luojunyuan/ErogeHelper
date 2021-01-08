@@ -18,7 +18,7 @@
             <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
                     <TextBlock Text="{x:Static resx:Strings.SelectProcess_Tips}" 
-                        Style="{StaticResource TitleTextBlockStyle}" />
+                        Style="{StaticResource SubtitleTextBlockStyle}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Lable}"  Margin="0 20 0 0">
