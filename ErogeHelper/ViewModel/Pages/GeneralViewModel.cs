@@ -35,7 +35,7 @@ namespace ErogeHelper.ViewModel.Pages
 
         public bool DeepLExtention { get => DataRepository.PasteToDeepL; set => DataRepository.PasteToDeepL = value; }
 
-        //// TODO: Improve these
+        //// TENDO: Improve these
         //short minBrightness = 0; //22
         //short curBrightness = 0;
         //short maxBrightness = 0; //85

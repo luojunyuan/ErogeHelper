@@ -5,6 +5,7 @@ using ErogeHelper.Model;
 using ErogeHelper.Model.Translator;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Control;
+using ErogeHelper.ViewModel.Pages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,8 +26,6 @@ namespace ErogeHelper.Common.Service
 
         private readonly MecabHelper mecabHelper = new MecabHelper();
         private readonly SakuraNoUtaHelper sakuraNoUtaHelper = new SakuraNoUtaHelper();
-
-        public static TextTemplateType SourceTextTemplate = DataRepository.TextTemplateConfig;
 
         public void Start()
         {
@@ -69,35 +68,48 @@ namespace ErogeHelper.Common.Service
                 {
                     IntPtr handle = temp[0].MainWindowHandle;
                     NativeMethods.SwitchToThisWindow(handle);
-                    // TODO 6: check the front window is handle, else toast user得注意这些操作时间开销
+                    
                     // Do SetText and Paste both
-                    new SetClipboardHelper(DataFormats.Text, hp.Text).Go(); 
+                    new DeepLHelper(DataFormats.Text, hp.Text).Go();
+
+                    if (NativeMethods.GetForegroundWindow() != handle)
+                    {
+                        // Better use Toast in win10
+                        Application.Current.Dispatcher.InvokeAsync(() => ModernWpf.MessageBox.Show(
+                            "Didn't find DeepL client in front, will turn off DeepL extension..", "Eroge Helper"));
+                        
+                        DataRepository.PasteToDeepL = false;
+                    }
                 }
             }
 
-            var collect = new BindableCollection<SingleTextItem>();
-
-            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordEnumerable(hp.Text))
+            // Process source japanese text
+            if (IoC.Get<GeneralViewModel>().ShowSource)
             {
-                collect.Add(new SingleTextItem
-                {
-                    Text = mecabWord.Word,
-                    RubyText = mecabWord.Kana,
-                    PartOfSpeed = mecabWord.PartOfSpeech,
-                    TextTemplateType = SourceTextTemplate,
-                    SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
-                });
-            }
+                var collect = new BindableCollection<SingleTextItem>();
 
-            SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
+                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordEnumerable(hp.Text))
+                {
+                    collect.Add(new SingleTextItem
+                    {
+                        Text = mecabWord.Word,
+                        RubyText = mecabWord.Kana,
+                        PartOfSpeed = mecabWord.PartOfSpeech,
+                        TextTemplateType = DataRepository.TextTemplateConfig,
+                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
+                    });
+                }
+
+                SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
+            }
 
             // hard code for sakura no uta
-            if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
-            {
-                string result = sakuraNoUtaHelper.QueryText(hp.Text);
-                if (!string.IsNullOrWhiteSpace(result))
-                    AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
-            }
+            //if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
+            //{
+            //    string result = sakuraNoUtaHelper.QueryText(hp.Text);
+            //    if (!string.IsNullOrWhiteSpace(result))
+            //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
+            //}
         }
     }
 }

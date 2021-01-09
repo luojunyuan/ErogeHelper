@@ -35,7 +35,8 @@ namespace ErogeHelper
                     {
                         Exception ex = (Exception) eventArgs.ExceptionObject;
                         log4net.LogManager.GetLogger(typeof(App)).Error(ex);
-                        ModernWpf.MessageBox.Show(ex + $"{(eventArgs.IsTerminating ? "\nApplication will Exit.." : "")}" ?? "", "Eroge Helper - Fatal Error");
+                        ModernWpf.MessageBox.Show(ex + $"{(eventArgs.IsTerminating ? "\nApplication will Exit.." : string.Empty)}" ?? string.Empty, 
+                            "Eroge Helper - Fatal Error");
                     }
                 }
             };

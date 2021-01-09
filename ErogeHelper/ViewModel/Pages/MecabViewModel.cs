@@ -50,8 +50,7 @@ namespace ErogeHelper.ViewModel.Pages
                 tmp.Add(item);
             }
             IoC.Get<TextViewModel>().SourceTextCollection = tmp;
-            // cause `static` and not sington can't use IoC
-            GameViewDataService.SourceTextTemplate = type;
+            DataRepository.TextTemplateConfig = type;
             DataRepository.TextTemplateConfig = type;
         }
     }

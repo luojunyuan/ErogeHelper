@@ -4,6 +4,7 @@ using ErogeHelper.Common.Selector;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Dictionary;
+using ErogeHelper.ViewModel.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace ErogeHelper.ViewModel.Control
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TextViewModel));
 
         private BindableCollection<SingleTextItem> _sourceTextCollection = new BindableCollection<SingleTextItem>();
-        private Visibility _textVisible;
+        private Visibility _textVisible = IoC.Get<GeneralViewModel>().ShowSource ? Visibility.Visible : Visibility.Collapsed;
 
         public BindableCollection<SingleTextItem> SourceTextCollection
         {
@@ -43,14 +44,6 @@ namespace ErogeHelper.ViewModel.Control
                 _textVisible = value;
                 NotifyOfPropertyChange(() => TextVisible);
             }
-        }
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        public TextViewModel()
-        {
-            TextVisible = DataRepository.ShowSourceText ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // make a card vm in the future

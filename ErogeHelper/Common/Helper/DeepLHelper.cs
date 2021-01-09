@@ -5,12 +5,12 @@ using WindowsInput.Events;
 
 namespace ErogeHelper.Common.Helper
 {
-    class SetClipboardHelper : StaHelper
+    class DeepLHelper : StaHelper
     {
         readonly string _format;
         readonly object _data;
 
-        public SetClipboardHelper(string format, object data)
+        public DeepLHelper(string format, object data)
         {
             _format = format;
             _data = data;
