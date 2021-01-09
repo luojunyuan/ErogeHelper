@@ -73,6 +73,16 @@ namespace ErogeHelper.ShellMenuHandler.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Checkbox_200 {
+            get {
+                object obj = ResourceManager.GetObject("Checkbox_200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap CheckboxComposite {
             get {
                 object obj = ResourceManager.GetObject("CheckboxComposite", resourceCulture);
@@ -83,9 +93,29 @@ namespace ErogeHelper.ShellMenuHandler.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap CheckboxComposite_200 {
+            get {
+                object obj = ResourceManager.GetObject("CheckboxComposite_200", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap E {
             get {
                 object obj = ResourceManager.GetObject("E", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap E_200 {
+            get {
+                object obj = ResourceManager.GetObject("E_200", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

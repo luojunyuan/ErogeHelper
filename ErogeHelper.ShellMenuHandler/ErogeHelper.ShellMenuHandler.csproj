@@ -54,6 +54,7 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="ShellMenuExtension.cs" />
+    <Compile Include="SystemHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -78,6 +79,15 @@
       <Project>{4c6ae52d-34f3-4375-8abb-cf937cfd6316}</Project>
       <Name>ErogeHelper.Language</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\E%40200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CheckboxComposite%40200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox%40200.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

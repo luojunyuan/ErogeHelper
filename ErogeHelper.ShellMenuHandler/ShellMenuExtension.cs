@@ -64,13 +64,19 @@ namespace ErogeHelper.ShellMenuHandler
             return menu;
         }
 
+        private static readonly bool is4K = SystemHelper.Is4KDisplay();
+
+        private static readonly System.Drawing.Image E = is4K ? Resource.E_200 : Resource.E;
+        private static readonly System.Drawing.Image CheckboxComposite = is4K ? Resource.CheckboxComposite_200 : Resource.CheckboxComposite;
+        private static readonly System.Drawing.Image Checkbox = is4K ? Resource.Checkbox_200 : Resource.Checkbox;
+
         private void MenuX64()
         {
             ToolStripMenuItem MainMenu;
             MainMenu = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_DirectStart,
-                Image = Resource.E
+                Image = E
             };
             MainMenu.Click += (sender, args) => MainProcess(false);
 
@@ -87,19 +93,19 @@ namespace ErogeHelper.ShellMenuHandler
             MainMenu = new ToolStripMenuItem
             {
                 Text = "Eroge Helper",
-                Image = Resource.E
+                Image = E
             };
 
             var DirectStartItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_DirectStart,
-                Image = Resource.E
+                Image = E
             };
 
             var LEStartItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_LEStart,
-                Image = Resource.E
+                Image = E
             };
 
             DirectStartItem.Click += (sender, args) => MainProcess(false);
@@ -113,9 +119,9 @@ namespace ErogeHelper.ShellMenuHandler
             };
 
             if (isAdmin) 
-                AdminItem.Image = Resource.CheckboxComposite;
+                AdminItem.Image = CheckboxComposite;
             else 
-                AdminItem.Image = Resource.Checkbox;
+                AdminItem.Image = Checkbox;
             AdminItem.Click += (sender, args) =>
             {
                 isAdmin = !isAdmin;
