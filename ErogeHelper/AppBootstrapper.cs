@@ -151,7 +151,7 @@ namespace ErogeHelper
         }
 
         #region Autofac Init
-        private static IContainer Container { get; set; } = new ContainerBuilder().Build();
+        private static IContainer Container { get; set; } = null!;
 
         protected override object GetInstance(Type service, string key)
         {

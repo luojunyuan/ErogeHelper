@@ -99,9 +99,9 @@ namespace ErogeHelper.ViewModel
         public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
         // TODO: Improve these
-        short minBrightness = 0;
+        short minBrightness = 0; //22
         short curBrightness = 0;
-        short maxBrightness = 0;
+        short maxBrightness = 0; //85
         public bool CanBrightnessDown() => true;
         public void BrightnessDown() 
         {

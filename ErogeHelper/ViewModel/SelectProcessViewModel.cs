@@ -1,17 +1,13 @@
 using Caliburn.Micro;
-using ErogeHelper.Common.Service;
-using ErogeHelper.Common.Helper;
 using ErogeHelper.Common;
+using ErogeHelper.Common.Helper;
+using ErogeHelper.Common.Service;
+using ErogeHelper.Model;
 using ModernWpf.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using ErogeHelper.Model;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace ErogeHelper.ViewModel
 {
@@ -27,13 +23,13 @@ namespace ErogeHelper.ViewModel
         {
             this.dataService = dataService;
             this.windowManager = windowManager;
-
+            
             dataService.GetProcessListAsync(ProcItems);
         }
 
         public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
-        public ProcComboboxItem? SelectedProcItem 
-        { 
+        public ProcComboboxItem? SelectedProcItem
+        {
             get => _selectedProcItem;
             set
             {
@@ -87,10 +83,10 @@ namespace ErogeHelper.ViewModel
 
     class ProcComboboxItem
     {
-        public Process proc = new Process();
+        public Process proc = null!;
 
-        public BitmapImage Icon { get; set; } = new BitmapImage();
+        public BitmapImage Icon { get; set; } = null!;
 
-        public string Title { get; set; } = "";
+        public string Title { get; set; } = null!;
     }
 }

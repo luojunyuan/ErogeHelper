@@ -56,7 +56,7 @@
     <Resource Include="Assets\transparent.png" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
   	<Page Remove="Properties\DesignTimeResources.xaml" />
   </ItemGroup>
 
@@ -66,7 +66,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if not exist $(ProjectDir)$(OutDir)libs\ xcopy $(ProjectDir)libs\ $(ProjectDir)$(OutDir)\libs\ /e&#xD;&#xA;if not exist $(ProjectDir)$(OutDir)Log.config xcopy $(ProjectDir)\Assets\Log.config $(ProjectDir)$(OutDir)" />

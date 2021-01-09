@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Windows.Media.Imaging;
 using ErogeHelper.Common;
 
-namespace ErogeHelper.Model
+namespace ErogeHelper.Model 
 {
     class DataRepository
     {

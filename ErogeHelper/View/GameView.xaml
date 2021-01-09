@@ -46,17 +46,6 @@
                                         <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
-                                <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
-                                <ui:AppBarButton cm:Message.Attach="[Click] = [BrightnessDown]">
-                                    <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.LowerBrightness}" />
-                                    </ui:AppBarButton.Icon>
-                                </ui:AppBarButton>
-                                <ui:AppBarButton cm:Message.Attach="[Click] = [BrightnessUp]">
-                                    <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Brightness}" />
-                                    </ui:AppBarButton.Icon>
-                                </ui:AppBarButton>
                                 <ui:AppBarButton 
                                     Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                     ToolTip="Full Screen (Alt+Enter)"/>
