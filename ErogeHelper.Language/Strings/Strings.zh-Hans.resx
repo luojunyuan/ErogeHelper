@@ -181,4 +181,40 @@
   <data name="GameView.MaxLenthTip" xml:space="preserve">
     <value>跳过过长文本</value>
   </data>
+  <data name="GeneralPage.JapaneseText" xml:space="preserve">
+    <value>显示日文文本</value>
+  </data>
+  <data name="GeneralPage.AppendText" xml:space="preserve">
+    <value>显示其他文本</value>
+  </data>
+  <data name="GeneralPage.Title" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="MecabPage.Title" xml:space="preserve">
+    <value>日文分词</value>
+  </data>
+  <data name="MecabPage.PositionFormat" xml:space="preserve">
+    <value>文本显示布局</value>
+  </data>
+  <data name="MecabPage.FuriganaTop" xml:space="preserve">
+    <value>假名在上</value>
+  </data>
+  <data name="MecabPage.FuriganaBottom" xml:space="preserve">
+    <value>假名在下</value>
+  </data>
+  <data name="MecabPage.TextVertical" xml:space="preserve">
+    <value>文本竖排</value>
+  </data>
+  <data name="MecabPage.FuriganaType" xml:space="preserve">
+    <value>假名显示方式</value>
+  </data>
+  <data name="MecabPage.Hiragana" xml:space="preserve">
+    <value>平假名</value>
+  </data>
+  <data name="MecabPage.Katakana" xml:space="preserve">
+    <value>片假名</value>
+  </data>
+  <data name="MecabPage.Romaji" xml:space="preserve">
+    <value>罗马音</value>
+  </data>
 </root>

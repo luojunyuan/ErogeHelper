@@ -4,16 +4,8 @@ using ModernWpf.Media.Animation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ErogeHelper.View
 {
@@ -27,17 +19,18 @@ namespace ErogeHelper.View
             InitializeComponent();
 
             ContentFrame.Navigated += OnNavigated;
-            PageNavigate("hook_setting", new EntranceNavigationTransitionInfo());
+            PageNavigate("general_setting", new EntranceNavigationTransitionInfo());
         }
 
         private readonly List<(string Tag, Type PageType)> pages = new()
         {
+            ("general_setting", typeof(GeneralPage)),
+            ("mecab_setting", typeof(MecabPage)),
             ("hook_setting", typeof(HookPage)),
             ("about", typeof(AboutPage)),
-            ("general_setting", typeof(GeneralPage)),
         };
 
-        private void NavView_SelectionChanged(ModernWpf.Controls.NavigationView sender, ModernWpf.Controls.NavigationViewSelectionChangedEventArgs args)
+        private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.SelectedItem != null)
             {

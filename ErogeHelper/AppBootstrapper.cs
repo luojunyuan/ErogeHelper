@@ -132,9 +132,12 @@ namespace ErogeHelper
 
             builder.RegisterType<TextViewModel>()
                 .SingleInstance();
-            builder.RegisterType<HookViewModel>()
-                .SingleInstance();
+
             builder.RegisterType<GeneralViewModel>()
+                .SingleInstance();
+            builder.RegisterType<MecabViewModel>()
+                .SingleInstance();
+            builder.RegisterType<HookViewModel>()
                 .SingleInstance();
             builder.RegisterType<AboutViewModel>()
                 .SingleInstance();

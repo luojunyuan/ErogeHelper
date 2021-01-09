@@ -133,6 +133,33 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Show other texts 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_AppendText {
+            get {
+                return ResourceManager.GetString("GeneralPage.AppendText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Show japanese text 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_JapaneseText {
+            get {
+                return ResourceManager.GetString("GeneralPage.JapaneseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 General 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_Title {
+            get {
+                return ResourceManager.GetString("GeneralPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Eroge Helper - Hook Config 的本地化字符串。
         /// </summary>
         public static string HookConfig_Title {
@@ -237,6 +264,87 @@ namespace ErogeHelper.Language {
         public static string Installer_Unload {
             get {
                 return ResourceManager.GetString("Installer.Unload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 FuriganaBottom 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_FuriganaBottom {
+            get {
+                return ResourceManager.GetString("MecabPage.FuriganaBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 MacabPage.FuriganaTop 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_FuriganaTop {
+            get {
+                return ResourceManager.GetString("MecabPage.FuriganaTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Furigana display type 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_FuriganaType {
+            get {
+                return ResourceManager.GetString("MecabPage.FuriganaType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Hiragana 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_Hiragana {
+            get {
+                return ResourceManager.GetString("MecabPage.Hiragana", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Katakana 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_Katakana {
+            get {
+                return ResourceManager.GetString("MecabPage.Katakana", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text dispaly position 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_PositionFormat {
+            get {
+                return ResourceManager.GetString("MecabPage.PositionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Romaji 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_Romaji {
+            get {
+                return ResourceManager.GetString("MecabPage.Romaji", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 MecabPage.TextVertical 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_TextVertical {
+            get {
+                return ResourceManager.GetString("MecabPage.TextVertical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Mecab 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_Title {
+            get {
+                return ResourceManager.GetString("MecabPage.Title", resourceCulture);
             }
         }
         

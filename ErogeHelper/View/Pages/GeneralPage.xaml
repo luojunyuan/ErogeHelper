@@ -8,32 +8,15 @@
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="400"
-      Title="GeneralSettingPage">
+      Title="{x:Static resx:Strings.GeneralPage_Title}">
 
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">
-            <GroupBox Header="常规">
+            <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
-                    <ui:ToggleSwitch Header="源文本显示" IsOn="{Binding ShowSource}" />
-                    <ui:ToggleSwitch Header="翻译显示" IsOn="{Binding ShowAppend}" />
+                    <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_JapaneseText}" IsOn="{Binding ShowSource}" />
+                    <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_AppendText}" IsOn="{Binding ShowAppend}" />
                     <ui:ToggleSwitch Header="DeepL Client Extention" IsOn="{Binding DeepLExtention}" />
-                </ui:SimpleStackPanel>
-            </GroupBox>
-            <GroupBox Header="Meacb与源文本更新">
-                <ui:SimpleStackPanel Spacing="10">
-                    <ui:RadioButtons Header="假名显示布局">
-                        <!-- TODO 7: use icon to show these -->
-                        <RadioButton Content="假名在上" IsChecked="{Binding KanaTop}"></RadioButton>
-                        <RadioButton Content="假名在下" IsChecked="{Binding KanaBottom}"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="文字竖排"></RadioButton>
-                    </ui:RadioButtons>
-                    <ui:RadioButtons 
-                        Header="假名显示类型"
-                        MaxColumns="3">
-                        <RadioButton IsEnabled="False" Content="罗马字"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="平假名"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="片甲名"></RadioButton>
-                    </ui:RadioButtons>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

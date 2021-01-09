@@ -46,6 +46,7 @@
                                         <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
+                                <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
                                 <ui:AppBarButton 
                                     Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                     ToolTip="Full Screen (Alt+Enter)"/>

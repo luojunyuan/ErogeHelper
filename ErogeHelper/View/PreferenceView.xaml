@@ -6,6 +6,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:helper="clr-namespace:ErogeHelper.Common.Helper"
         xmlns:model="clr-namespace:ErogeHelper.Model"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d" 
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
         Title="PreferenceView" Height="450" Width="800" helper:WindowPlacement.Save="True"
@@ -19,12 +20,17 @@
         IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False">
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItemSeparator Margin="0 30 0 0"/>
-            <ui:NavigationViewItem Content="HookConfig" Tag="hook_setting">
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.GeneralPage_Title}" Tag="general_setting">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
-            <ui:NavigationViewItem Content="GeneralSetting" Tag="general_setting">
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab_setting">
+                <ui:NavigationViewItem.Icon>
+                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
+                </ui:NavigationViewItem.Icon>
+            </ui:NavigationViewItem>
+            <ui:NavigationViewItem Content="HookSetting" Tag="hook_setting">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
@@ -45,7 +51,7 @@
             </Grid.RowDefinitions>
             <Grid>
                 <TextBlock x:Name="HeaderBlock" VerticalAlignment="Center"
-                    Margin="12,15,0,11" Style="{DynamicResource TitleTextBlockStyle}" />
+                    Margin="12,15,0,11" Style="{StaticResource TitleTextBlockStyle}" />
             </Grid>
             <ui:Frame x:Name="ContentFrame" Grid.Row="1" IsTabStop="True" DataContext="{x:Null}"/>
         </Grid>
