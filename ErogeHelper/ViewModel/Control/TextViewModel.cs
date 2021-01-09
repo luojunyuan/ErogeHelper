@@ -20,15 +20,15 @@ namespace ErogeHelper.ViewModel.Control
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TextViewModel));
 
-        private BindableCollection<SingleTextItem> sourceTextCollection = new BindableCollection<SingleTextItem>();
-        private Visibility textVisible;
+        private BindableCollection<SingleTextItem> _sourceTextCollection = new BindableCollection<SingleTextItem>();
+        private Visibility _textVisible;
 
         public BindableCollection<SingleTextItem> SourceTextCollection
         {
-            get => sourceTextCollection;
+            get => _sourceTextCollection;
             set
             {
-                sourceTextCollection = value;
+                _sourceTextCollection = value;
                 NotifyOfPropertyChange(() => SourceTextCollection);
             }
         }
@@ -36,11 +36,11 @@ namespace ErogeHelper.ViewModel.Control
         {
             get
             {
-                return textVisible;
+                return _textVisible;
             }
             set
             {
-                textVisible = value;
+                _textVisible = value;
                 NotifyOfPropertyChange(() => TextVisible);
             }
         }

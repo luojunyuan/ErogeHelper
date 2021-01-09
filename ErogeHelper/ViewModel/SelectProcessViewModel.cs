@@ -46,7 +46,7 @@ namespace ErogeHelper.ViewModel
                 await new ContentDialog
                 {
                     Title = "Eroge Helper",
-                    Content = "Process has gone.",
+                    Content = Language.Strings.SelectProcess_ProcessExit,
                     CloseButtonText = "OK"
                 }.ShowAsync().ConfigureAwait(false);
                 ProcItems.Remove(SelectedProcItem); // Cause this turn SelectedProcItem to null
@@ -87,6 +87,6 @@ namespace ErogeHelper.ViewModel
 
         public BitmapImage Icon { get; set; } = null!;
 
-        public string Title { get; set; } = null!;
+        public string Title { get; set; } = string.Empty;
     }
 }

@@ -7,6 +7,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
         xmlns:cm="http://caliburnmicro.com"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
         Title="GameView" ShowInTaskbar="False"
         AllowsTransparency="True" WindowStyle="None" Topmost="True">
@@ -36,6 +37,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    
                     <Button Width="50" Height="50" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                         <ui:FlyoutService.Flyout>
                             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
@@ -49,18 +51,32 @@
                                 <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
                                 <ui:AppBarButton 
                                     Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
-                                    ToolTip="Full Screen (Alt+Enter)"/>
+                                    ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
                                 <ui:AppBarToggleButton 
                                     Icon="Trim" IsChecked="{Binding IsLostFocus}" 
-                                    ToolTip="Lost Focus (If you can't see text when play game full screen. Turn on this)" 
+                                    ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
                                     cm:Message.Attach="[Click] = [FocusToggle]"/>
 
                                 <ui:CommandBarFlyout.SecondaryCommands>
-                                    <ui:AppBarButton Icon="DockRight" Label="Action Center" cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
-                                    <ui:AppBarButton Icon="DockLeft" Label="Task View" cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
-                                    <ui:AppBarButton Icon="Pictures" Label="Screenshot" cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S"/>
+                                    <ui:AppBarButton 
+                                        Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" 
+                                        cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
+                                    <ui:AppBarButton 
+                                        Icon="DockLeft" Label="{x:Static resx:Strings.GameView_TaskView}" 
+                                        cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
+                                    <ui:AppBarButton 
+                                        Icon="Pictures" Label="{x:Static resx:Strings.GameView_Screenshot}" 
+                                        cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S">
+                                        <!--<ui:AppBarButton.Flyout>
+                                            <ui:MenuFlyout Placement="RightEdgeAlignedTop">
+                                                
+                                            </ui:MenuFlyout>
+                                        </ui:AppBarButton.Flyout>-->
+                                    </ui:AppBarButton>
                                     <ui:AppBarSeparator/>
-                                    <ui:AppBarButton Icon="Setting" Label="Preference" cm:Message.Attach="[Click] = [OpenPreference]"/>
+                                    <ui:AppBarButton 
+                                        Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}"
+                                        cm:Message.Attach="[Click] = [OpenPreference]"/>
                                     <ui:AppBarElementContainer>
                                         <Button
                                             Visibility="{Binding IsLostFocus, Converter={StaticResource VisibleConverter}}"

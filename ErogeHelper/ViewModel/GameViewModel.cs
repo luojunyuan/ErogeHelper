@@ -19,101 +19,56 @@ using WindowsInput.Events;
 
 namespace ErogeHelper.ViewModel
 {
-    class GameViewModel : Screen
+    class GameViewModel : PropertyChangedBase
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GameViewModel));
 
-        private double fontSize = DataRepository.FontSize;
-        private bool assistiveTouchIsVisible = true;
+        #region Properties
+        private double _fontSize = DataRepository.FontSize;
+        private bool _assistiveTouchIsVisible = true;
+        #endregion
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
         public bool AssistiveTouchIsVisible
         {
-            get => assistiveTouchIsVisible;
+            get => _assistiveTouchIsVisible;
             set
             {
-                assistiveTouchIsVisible = value;
+                _assistiveTouchIsVisible = value;
                 NotifyOfPropertyChange(() => AssistiveTouchIsVisible);
             }
         }
 
         public double FontSize
         {
-            get => fontSize;
+            get => _fontSize;
             set
             {
-                fontSize = value;
+                _fontSize = value;
                 DataRepository.FontSize = value;
                 NotifyOfPropertyChange(() => FontSize);
             }
         }
 
-        public bool CanZoomIn() => true;
+        public bool CanZoomIn { get => true; }
         public void ZoomIn()
         {
             FontSize += 2;
+            NotifyOfPropertyChange(() => CanZoomOut);
         }
 
-        public bool CanZoomOut() => true;
+        public bool CanZoomOut { get => FontSize > 3; }
         public void ZoomOut()
         {
             FontSize -= 2;
-        }
-
-        public bool CanTaskbarNotifyArea() => true;
-        public async void TaskbarNotifyArea()
-        {
-            await WindowsInput.Simulate.Events()
-                .ClickChord(KeyCode.LWin, KeyCode.A)
-                .Invoke()
-                .ConfigureAwait(false);
-        }
-
-        public bool CanTaskView() => true;
-        public async void TaskView() => await WindowsInput.Simulate.Events().ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
-
-        public bool CanScreenShot() => true;
-        public async void ScreenShot()
-        {
-            AssistiveTouchIsVisible = false;
-
-            await WindowsInput.Simulate.Events()
-                .Click(KeyCode.Escape)
-                .Invoke()
-                .ConfigureAwait(false);
-
-            await WindowsInput.Simulate.Events()
-                .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
-                .Invoke()
-                .ConfigureAwait(false);
-
-            await Task.Delay(3000).ConfigureAwait(false);
-            // XXX
-            AssistiveTouchIsVisible = true;
+            NotifyOfPropertyChange(() => CanZoomOut);
         }
 
         public bool CanVolumeUp() => true;
         public async void VolumeUp() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
         public bool CanVolumeDown() => true;
         public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
-
-        // TODO: Improve these
-        short minBrightness = 0; //22
-        short curBrightness = 0;
-        short maxBrightness = 0; //85
-        public bool CanBrightnessDown() => true;
-        public void BrightnessDown() 
-        {
-            bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, --curBrightness);
-            log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-        }
-        public bool CanBrightnessUp() => true;
-        public void BrightnessUp() 
-        {
-            bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, ++curBrightness);
-            log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-        }
 
         public bool CanSwitchGameScreen() => true;
         public async void SwitchGameScreen()
@@ -148,6 +103,51 @@ namespace ErogeHelper.ViewModel
             }
         }
 
+        public bool CanTaskbarNotifyArea() => true;
+        public async void TaskbarNotifyArea()
+        {
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.LWin, KeyCode.A)
+                .Invoke()
+                .ConfigureAwait(false);
+        }
+
+        public bool CanTaskView() => true;
+        public async void TaskView() => await WindowsInput.Simulate.Events()
+            .ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
+
+        public bool CanScreenShot() => true;
+        public async void ScreenShot()
+        {
+            AssistiveTouchIsVisible = false;
+
+            await WindowsInput.Simulate.Events()
+                .Click(KeyCode.Escape)
+                .Invoke()
+                .ConfigureAwait(false);
+
+            // Wait for CommandBarFlyout hide
+            await Task.Delay(500).ConfigureAwait(false);
+
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
+                .Invoke()
+                .ConfigureAwait(false);
+
+            await Task.Delay(3000).ConfigureAwait(false);
+
+            AssistiveTouchIsVisible = true;
+        }
+
+        public async void OpenPreference()
+        {
+            var window = Application.Current.Windows.OfType<PreferenceView>().FirstOrDefault();
+            if (window == null)
+                await windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>()).ConfigureAwait(false);
+            else
+                window.Activate();
+        }
+
         public async void PressSkip()
         {
             await WindowsInput.Simulate.Events()
@@ -163,18 +163,9 @@ namespace ErogeHelper.ViewModel
                 .ConfigureAwait(false);
         }
 
-        public async void OpenPreference()
-        {
-            var window = Application.Current.Windows.OfType<PreferenceView>().FirstOrDefault();
-            if (window == null)
-                await windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>()).ConfigureAwait(false);
-            else
-                window.Activate();
-        }
-
         public TextViewModel TextControl { get; set; }
         readonly IWindowManager windowManager;
-        private IGameViewDataService dataService;
+        private readonly IGameViewDataService dataService;
 
         public GameViewModel(
             IWindowManager windowManager,
@@ -188,29 +179,6 @@ namespace ErogeHelper.ViewModel
             dataService.Start();
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
             dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
-        }
-
-        IAdjustScreen? brightnessHelper;
-        protected override void OnViewLoaded(object view)
-        {
-            base.OnViewLoaded(view);
-
-            brightnessHelper = AdjustScreenBuilder.CreateAdjustScreen((Window)view);
-            if (brightnessHelper == null)
-            {
-                log.Info("Not support brightness adjust");
-            }
-            else
-            {
-                // use game's handle or EH GameView's new windowsInterrupter(GetView()).handle
-                IntPtr handle = DataRepository.MainProcess!.MainWindowHandle;
-                
-                brightnessHelper.GetBrightness(handle,
-                    ref minBrightness,
-                    ref curBrightness,
-                    ref maxBrightness);
-                log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-            }
         }
     }
 }

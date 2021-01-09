@@ -32,15 +32,14 @@ namespace ErogeHelper
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             log.Info("Started Logging");
-            // TODO 1: Check if the texthost.dll file is delete by anti-virus soft
-            // TODO 2: Check singleton application
+
             if (e.Args.Length == 0)
             {
                 DisplayRootViewFor<SelectProcessViewModel>();
             }
-            // Startup by shell menu
             else
             {
+                // Startup by shell menu
                 var gamePath = e.Args[0];
                 var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
                 log.Info($"Game's path: {e.Args[0]}");

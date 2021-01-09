@@ -237,4 +237,26 @@
   <data name="MecabPage.Katakana" xml:space="preserve">
     <value>Katakana</value>
   </data>
+  <data name="GameView.SwitchFullScreen" xml:space="preserve">
+    <value>Full Screen (Alt+Enter)</value>
+  </data>
+  <data name="GameView.FocusTip" xml:space="preserve">
+    <value>Lost Focus
+(If you can't click when play game full screen. Turn on this)</value>
+  </data>
+  <data name="GameView.ActionCenter" xml:space="preserve">
+    <value>Action Center</value>
+  </data>
+  <data name="GameView.TaskView" xml:space="preserve">
+    <value>Task View</value>
+  </data>
+  <data name="GameView.Screenshot" xml:space="preserve">
+    <value>Screenshot</value>
+  </data>
+  <data name="GameView.Preference" xml:space="preserve">
+    <value>Preference</value>
+  </data>
+  <data name="SelectProcess.ProcessExit" xml:space="preserve">
+    <value>Process has gone</value>
+  </data>
 </root>

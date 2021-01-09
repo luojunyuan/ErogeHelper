@@ -124,11 +124,66 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Action Center 的本地化字符串。
+        /// </summary>
+        public static string GameView_ActionCenter {
+            get {
+                return ResourceManager.GetString("GameView.ActionCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Lost Focus
+        ///(If you can&apos;t click when play game full screen. Turn on this) 的本地化字符串。
+        /// </summary>
+        public static string GameView_FocusTip {
+            get {
+                return ResourceManager.GetString("GameView.FocusTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Skip too long text 的本地化字符串。
         /// </summary>
         public static string GameView_MaxLenthTip {
             get {
                 return ResourceManager.GetString("GameView.MaxLenthTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Preference 的本地化字符串。
+        /// </summary>
+        public static string GameView_Preference {
+            get {
+                return ResourceManager.GetString("GameView.Preference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Screenshot 的本地化字符串。
+        /// </summary>
+        public static string GameView_Screenshot {
+            get {
+                return ResourceManager.GetString("GameView.Screenshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Full Screen (Alt+Enter) 的本地化字符串。
+        /// </summary>
+        public static string GameView_SwitchFullScreen {
+            get {
+                return ResourceManager.GetString("GameView.SwitchFullScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Task View 的本地化字符串。
+        /// </summary>
+        public static string GameView_TaskView {
+            get {
+                return ResourceManager.GetString("GameView.TaskView", resourceCulture);
             }
         }
         
@@ -372,6 +427,15 @@ namespace ErogeHelper.Language {
         public static string SelectProcess_Lable {
             get {
                 return ResourceManager.GetString("SelectProcess.Lable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Process has gone 的本地化字符串。
+        /// </summary>
+        public static string SelectProcess_ProcessExit {
+            get {
+                return ResourceManager.GetString("SelectProcess.ProcessExit", resourceCulture);
             }
         }
         
