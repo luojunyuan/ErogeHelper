@@ -143,7 +143,7 @@
     <value>设置管理员身份运行</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，移动或删除该文件夹会出现“被其他程序占用的错误”，若要移动或删除请先运行 Installer 注销掉EH。Installer不依赖系统注册表</value>
+    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要移动或删除文件夹请先运行 Installer 注销掉EH。</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>注册</value>

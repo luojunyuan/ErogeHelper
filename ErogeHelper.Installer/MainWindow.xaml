@@ -14,8 +14,10 @@
             <GroupBox Header="ErogeHelper Installer">
                 <ui:SimpleStackPanel Spacing="10">
                     <TextBlock TextWrapping="Wrap" Text="{x:Static resx:Strings.Installer_Info}"/>
-                    <Button Content="{x:Static resx:Strings.Installer_Register}" Click="Register"/>
-                    <Button Content="{x:Static resx:Strings.Installer_Unload}" Click="Unload"/>
+                    <Button x:Name="InstallButton" Content="{x:Static resx:Strings.Installer_Register}" 
+                            Click="Register" Width="90"/>
+                    <Button x:Name="UninstallButton" Content="{x:Static resx:Strings.Installer_Unload}" 
+                            Click="Unload" Width="90"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

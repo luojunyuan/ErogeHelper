@@ -24,6 +24,9 @@ namespace ErogeHelper.Installer
         public MainWindow()
         {
             InitializeComponent();
+
+            InstallButton.IsEnabled = !ShellExtensionManager.IsInstalled();
+            UninstallButton.IsEnabled = ShellExtensionManager.IsInstalled();
         }
 
         private readonly string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
@@ -35,6 +38,9 @@ namespace ErogeHelper.Installer
                 FileName = "ServerRegistrationManager.exe",
                 Arguments = $"install {shellMenuDllName} -codebase"
             });
+
+            InstallButton.IsEnabled = false;
+            UninstallButton.IsEnabled = true;
         }
 
         private void Unload(object sender, RoutedEventArgs e)
@@ -50,6 +56,9 @@ namespace ErogeHelper.Installer
             helper.CollectDir();
             helper.KillExplorer();
             helper.ReOpenDirs();
+
+            InstallButton.IsEnabled = true;
+            UninstallButton.IsEnabled = false;
         }
 
         #region Disable White Point by Touch
