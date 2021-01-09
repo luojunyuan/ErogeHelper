@@ -67,7 +67,7 @@ namespace ErogeHelper.Model
             File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 
-        internal static void ClearAppData()
+        private static void ClearAppData()
         {
             var SettingFromFile = LocalSetting;
             SettingFromFile.Clear();
