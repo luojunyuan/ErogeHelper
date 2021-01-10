@@ -259,4 +259,13 @@
   <data name="SelectProcess.ProcessExit" xml:space="preserve">
     <value>Process has gone</value>
   </data>
+  <data name="HookPage.SelectedTextInitTip" xml:space="preserve">
+    <value>Slide down to select a text thread</value>
+  </data>
+  <data name="HookPage.Title" xml:space="preserve">
+    <value>Hook Config</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>

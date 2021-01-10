@@ -16,9 +16,10 @@ namespace ErogeHelper.Model.Dictionary.Tests
         {
             var apiInstance = new MojiDictApi();
 
-            string word = "君の名前";
+            string queryWord = "君の名前";
 
-            var result = await apiInstance.RequestAsync(word).ConfigureAwait(false);
+            // result fetchResp.result.word.spell
+            var result = await apiInstance.RequestAsync(queryWord).ConfigureAwait(false);
 
             Assert.AreEqual(result, "君");
         }

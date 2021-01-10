@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -16,7 +17,7 @@ using ErogeHelper.Model;
 
 namespace ErogeHelper.Common
 {
-    static class Utils
+    public static class Utils
     {
         public static BitmapImage PEIcon2BitmapImage(string fullPath)
         {
@@ -86,5 +87,29 @@ namespace ErogeHelper.Common
             return sb.ToString().ToUpper();
         }
 
+        // FIXME: Bugs with RegExp pattern char like '|'
+        public static string TextEvaluateWithRegExp(string sourceInput, string expr)
+        {
+            const string begin = "|~S~|";
+            const string end = "|~E~|";
+
+            if (!string.IsNullOrEmpty(expr))
+            {
+                string wapperText = sourceInput;
+
+                var instant = new Regex(expr);
+                var collect = instant.Matches(sourceInput);
+                foreach (Match match in collect)
+                {
+                    var beginPos = wapperText.LastIndexOf(end);
+                    wapperText = instant.Replace(wapperText, begin + match + end, 1, beginPos == -1 ? 0 : beginPos);
+                }
+                return wapperText;
+            }
+            else
+            {
+                return sourceInput;
+            }    
+        }
     }
 }

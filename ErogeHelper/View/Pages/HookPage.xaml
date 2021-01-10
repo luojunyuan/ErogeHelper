@@ -7,11 +7,12 @@
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
+      xmlns:convert="clr-namespace:ErogeHelper.Common.Converter"
       xmlns:cm="http://caliburnmicro.com"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       mc:Ignorable="d"         
       d:DesignHeight="850" d:DesignWidth="800" 
-      Title="HookSettingPage">
+      Title="{x:Static resx:Strings.HookPage_Title}">
 
     <Page.Resources>
         <DataTemplate x:Key="HpItemTemplate">
@@ -74,8 +75,10 @@
 
                         <!-- TODO: Add a friendly Popup for RegExp-->
                         <Label Content="{x:Static resx:Strings.HookPage_Text}" />
-                        <!-- TODO: RegExp match highlight with text -->
-                        <TextBlock x:Name="SelectedText" TextWrapping="Wrap" Height="80"/>
+                        <ContentControl
+                            Height="80" HorizontalAlignment="Left" FontSize="16"
+                            Content="{Binding SelectedText, Converter={StaticResource TextEvaluateConverter}, Mode=OneWay}">
+                        </ContentControl>
                     </ui:SimpleStackPanel>
                 </GroupBox>
 

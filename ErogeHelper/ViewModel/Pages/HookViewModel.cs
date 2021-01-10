@@ -30,13 +30,29 @@ namespace ErogeHelper.ViewModel.Pages
         #endregion
 
         #region RegExp
-        public string RegExp { get; set; }
+        private string? _regExp;
+        public string? RegExp // if user click 'x', it will turn to null
+        { 
+            get => _regExp ?? string.Empty;
+            set
+            {
+                _regExp = value;
+                if (value is null)
+                {
+                    SelectedText = SelectedHook?.Text ?? string.Empty;
+                }
+                else if (!InvalidRegExp && value is not null)
+                {
+                    SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook?.Text ?? string.Empty, value);
+                }
+            }
+        } 
 
         private bool _invalidRegExp;
-        public bool InvalidRegExp 
-        { 
+        public bool InvalidRegExp // trans: 无效的RegExp
+        {
             get => _invalidRegExp;
-            set 
+            set
             {
                 _invalidRegExp = value;
                 NotifyOfPropertyChange(() => CanSubmitSetting);
@@ -44,7 +60,7 @@ namespace ErogeHelper.ViewModel.Pages
         }
 
         private long selectedTextHandle;
-        private string _selectedText = "Slide down to select a text thread";
+        private string _selectedText = string.Empty;
         public string SelectedText
         {
             get => _selectedText;
@@ -78,6 +94,7 @@ namespace ErogeHelper.ViewModel.Pages
 
             RegExp = dataService.GetRegExp();
             Textractor.DataEvent += DataProcess;
+            SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
         #endregion
 
@@ -92,7 +109,7 @@ namespace ErogeHelper.ViewModel.Pages
                 _selectedHook = value;
                 // When this setter happend, SelectedHook suddenly not null
                 selectedTextHandle = SelectedHook!.Handle;
-                SelectedText = SelectedHook.Text;
+                SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook.Text, RegExp ?? string.Empty);
                 NotifyOfPropertyChange(() => CanSubmitSetting);
             }
         }
@@ -101,8 +118,18 @@ namespace ErogeHelper.ViewModel.Pages
         {
             if (hp.Name == "控制台") // it means console
             {
-                // 初始化完成
-                // 无效特殊码
+                // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
+                if (Language.Strings.Culture.Name != "zh-Hans")
+                {
+                    hp.Text = hp.Text switch
+                    {
+                        "Textractor: 已经注入" => "Textractor: already injected",
+                        "Textractor: 无效特殊码" => "Textractor: invalid code",
+                        "Textractor: 初始化完成" => "Textractor: initialization completed",
+                        "Textractor: 无法注入" => "Textractor: couldn't inject",
+                        _ => hp.Text
+                    };
+                }
                 ConsoleOutput += "\n" + hp.Text;
                 return;
             }
@@ -148,7 +175,7 @@ namespace ErogeHelper.ViewModel.Pages
 
             if (selectedTextHandle == hp.Handle)
             {
-                SelectedText = hp.Text;
+                SelectedText = Utils.TextEvaluateWithRegExp(hp.Text, RegExp ?? string.Empty);
             }
         }
 
@@ -161,7 +188,7 @@ namespace ErogeHelper.ViewModel.Pages
             GameConfig.HookCode = SelectedHook.HookCode;
             GameConfig.ThreadContext = SelectedHook.ThreadContext;
             GameConfig.SubThreadContext = SelectedHook.SubThreadContext;
-            GameConfig.RegExp = RegExp;
+            GameConfig.RegExp = RegExp ?? string.Empty;
 
             if (File.Exists(configPath))
             {

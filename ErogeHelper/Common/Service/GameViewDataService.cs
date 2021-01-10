@@ -1,21 +1,14 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Helper;
-using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
-using ErogeHelper.Model.Translator;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Control;
 using ErogeHelper.ViewModel.Pages;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace ErogeHelper.Common.Service
 {
@@ -68,7 +61,7 @@ namespace ErogeHelper.Common.Service
                 {
                     IntPtr handle = temp[0].MainWindowHandle;
                     NativeMethods.SwitchToThisWindow(handle);
-                    
+
                     // Do SetText and Paste both
                     new DeepLHelper(DataFormats.Text, hp.Text).Go();
 
@@ -77,7 +70,7 @@ namespace ErogeHelper.Common.Service
                         // Better use Toast in win10
                         Application.Current.Dispatcher.InvokeAsync(() => ModernWpf.MessageBox.Show(
                             "Didn't find DeepL client in front, will turn off DeepL extension..", "Eroge Helper"));
-                        
+
                         DataRepository.PasteToDeepL = false;
                     }
                 }

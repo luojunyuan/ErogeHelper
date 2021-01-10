@@ -9,6 +9,7 @@ using System.Windows.Markup;
 
 namespace ErogeHelper.Common.Converter
 {
+    // 实现MarkupExtension可以在xaml中直接引用convert，否则需要定义StaticResource
     public class FontSizeHalfConverter : MarkupExtension, IValueConverter 
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -115,6 +115,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 About 的本地化字符串。
+        /// </summary>
+        public static string About_Title {
+            get {
+                return ResourceManager.GetString("About.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Version :  的本地化字符串。
         /// </summary>
         public static string About_Version {
@@ -269,6 +278,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Slide down to select a text thread 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SelectedTextInitTip {
+            get {
+                return ResourceManager.GetString("HookPage.SelectedTextInitTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Select Text 的本地化字符串。
         /// </summary>
         public static string HookPage_SelectText {
@@ -292,6 +310,15 @@ namespace ErogeHelper.Language {
         public static string HookPage_Text {
             get {
                 return ResourceManager.GetString("HookPage.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Hook Config 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Title {
+            get {
+                return ResourceManager.GetString("HookPage.Title", resourceCulture);
             }
         }
         

@@ -239,4 +239,13 @@
   <data name="SelectProcess.ProcessExit" xml:space="preserve">
     <value>进程消失了</value>
   </data>
+  <data name="HookPage.SelectedTextInitTip" xml:space="preserve">
+    <value>往下滑动以选择一个文本线程</value>
+  </data>
+  <data name="HookPage.Title" xml:space="preserve">
+    <value>钩子设置</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>关于</value>
+  </data>
 </root>

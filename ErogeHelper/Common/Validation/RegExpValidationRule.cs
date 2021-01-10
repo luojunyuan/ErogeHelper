@@ -16,7 +16,7 @@ namespace ErogeHelper.Common.Validation
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            string? pattern = value.ToString();
+            string? pattern = value as string;
             if (string.IsNullOrWhiteSpace(pattern))
             {
                 return ValidationResult.ValidResult;

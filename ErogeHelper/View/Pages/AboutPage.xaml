@@ -9,7 +9,7 @@
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AboutPage">
+      Title="{x:Static resx:Strings.About_Title}">
 
     <ScrollViewer PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Spacing="10" Margin="20">

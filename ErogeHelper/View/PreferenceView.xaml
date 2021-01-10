@@ -30,7 +30,7 @@
                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
-            <ui:NavigationViewItem Content="HookSetting" Tag="hook_setting">
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook_setting">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
                 </ui:NavigationViewItem.Icon>
@@ -38,7 +38,7 @@
         </ui:NavigationView.MenuItems>
         
         <ui:NavigationView.FooterMenuItems>
-            <ui:NavigationViewItem Content="About" Tag="about">
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.About_Title}" Tag="about">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Info}" />
                 </ui:NavigationViewItem.Icon>

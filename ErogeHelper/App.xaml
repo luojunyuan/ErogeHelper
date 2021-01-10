@@ -17,6 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
             <convert:BooleanToVisibilityConverter x:Key="VisibleConverter" />
+            <convert:StringToXamlConverter x:Key="TextEvaluateConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
