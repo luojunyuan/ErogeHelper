@@ -13,7 +13,6 @@ namespace ErogeHelper.Common.Selector
     class TextTemplateSelector : DataTemplateSelector
     {
         public DataTemplate? OutLineBottomTemplate { get; set; }
-        // Todo 8: 待实现
         public DataTemplate? OutLineTopTemplate { get; set; }
         public DataTemplate? OutLineVerticalTemplate { get; set; }
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)

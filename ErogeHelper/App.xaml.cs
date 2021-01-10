@@ -12,6 +12,8 @@ namespace ErogeHelper
     /// </summary>
     public partial class App : Application
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(App));
+
         App()
         {
             // Set environment to App directory
@@ -34,17 +36,15 @@ namespace ErogeHelper
                     if(Dispatcher.CurrentDispatcher.Thread != Thread.CurrentThread)
                     {
                         Exception ex = (Exception) eventArgs.ExceptionObject;
-                        log4net.LogManager.GetLogger(typeof(App)).Error(ex);
-                        ModernWpf.MessageBox.Show(ex + $"{(eventArgs.IsTerminating ? "\nApplication will Exit.." : string.Empty)}" ?? string.Empty, 
-                            "Eroge Helper - Fatal Error");
+                        log.Error(ex);
+                        ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Fatal Error");
                     }
                 }
             };
             DispatcherUnhandledException += (s, eventArgs) =>
             {
-                log4net.LogManager.GetLogger(typeof(App)).Error(eventArgs.Exception);
-                ModernWpf.MessageBox.Show(eventArgs.Exception.ToString(), "Eroge Helper - Fatal Error");
-                // TODO 10: 复制粘贴板转到github. Friendly error message
+                log.Error(eventArgs.Exception);
+                ModernWpf.MessageBox.Show(eventArgs.Exception.Message, "Eroge Helper - Fatal Error");
             };
         }
 

@@ -118,7 +118,6 @@ namespace ErogeHelper
             //builder.RegisterType<EventAggregator>()
             //    .AsImplementedInterfaces()
             //    .SingleInstance();
-            //builder.RegisterType<FrameAdapter>
 
             // Register ViewModels
             builder.RegisterType<SelectProcessViewModel>();
@@ -129,9 +128,11 @@ namespace ErogeHelper
             builder.RegisterType<PreferenceViewModel>()
                 .SingleInstance();
 
+            // Control
             builder.RegisterType<TextViewModel>()
                 .SingleInstance();
 
+            // Pages
             builder.RegisterType<GeneralViewModel>()
                 .SingleInstance();
             builder.RegisterType<MecabViewModel>()

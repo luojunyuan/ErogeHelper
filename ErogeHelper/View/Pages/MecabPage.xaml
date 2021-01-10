@@ -15,7 +15,6 @@
             <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
-                        <!-- TODO 7: use icon to show these -->
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaTop}" IsChecked="{Binding KanaTop}"></RadioButton>
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaBottom}" IsChecked="{Binding KanaBottom}"></RadioButton>
                         <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_TextVertical}"></RadioButton>

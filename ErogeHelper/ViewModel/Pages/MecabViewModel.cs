@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Selector;
-using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
 
@@ -50,7 +49,6 @@ namespace ErogeHelper.ViewModel.Pages
                 tmp.Add(item);
             }
             IoC.Get<TextViewModel>().SourceTextCollection = tmp;
-            DataRepository.TextTemplateConfig = type;
             DataRepository.TextTemplateConfig = type;
         }
     }
