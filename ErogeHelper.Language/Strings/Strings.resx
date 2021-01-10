@@ -183,7 +183,7 @@
   <data name="HookPage.SelectedText" xml:space="preserve">
     <value>Selected Text</value>
   </data>
-  <data name="HookPage.Regexp" xml:space="preserve">
+  <data name="HookPage.RegExp" xml:space="preserve">
     <value>RegExp</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">

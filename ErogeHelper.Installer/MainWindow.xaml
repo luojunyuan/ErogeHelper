@@ -8,7 +8,7 @@
         xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="MainWindow" SizeToContent="Height" Width="380">
+        Title="Installer" SizeToContent="Height" Width="380">
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20, 10">
             <GroupBox Header="ErogeHelper Installer">

@@ -20,7 +20,7 @@ namespace ErogeHelper.Model
         public static string HookCode = "";
         public static long ThreadContext;
         public static long SubThreadContext;
-        public static string Regexp = "";
+        public static string RegExp = "";
         public static bool NoFocus;
 
         public static void Load(string path)
@@ -32,7 +32,7 @@ namespace ErogeHelper.Model
             HookCode = GetString(EHNode.HookCode);
             ThreadContext = GetLong(EHNode.ThreadContext);
             SubThreadContext = GetLong(EHNode.SubThreadContext);
-            Regexp = GetString(EHNode.Regexp);
+            RegExp = GetString(EHNode.RegExp);
             NoFocus = GetBool(EHNode.NoFocus);
         }
 
@@ -47,7 +47,7 @@ namespace ErogeHelper.Model
                 new XElement("HookCode", content: HookCode),
                 new XElement("ThreadContext", content: ThreadContext),
                 new XElement("SubThreadContext", content: SubThreadContext),
-                new XElement("Regexp", content: Regexp),
+                new XElement("RegExp", content: RegExp),
                 new XElement("NoFocus", content: NoFocus)
             );
 
@@ -158,7 +158,7 @@ namespace ErogeHelper.Model
         public static EHNode HookCode { get { return new EHNode("HookCode"); } }
         public static EHNode ThreadContext { get { return new EHNode("ThreadContext"); } }
         public static EHNode SubThreadContext { get { return new EHNode("SubThreadContext"); } }
-        public static EHNode Regexp { get { return new EHNode("Regexp"); } }
+        public static EHNode RegExp { get { return new EHNode("RegExp"); } }
         public static EHNode NoFocus { get { return new EHNode("NoFocus"); } }
     }
 }

@@ -253,9 +253,9 @@ namespace ErogeHelper.Language {
         /// <summary>
         ///   查找类似 RegExp 的本地化字符串。
         /// </summary>
-        public static string HookPage_Regexp {
+        public static string HookPage_RegExp {
             get {
-                return ResourceManager.GetString("HookPage.Regexp", resourceCulture);
+                return ResourceManager.GetString("HookPage.RegExp", resourceCulture);
             }
         }
         

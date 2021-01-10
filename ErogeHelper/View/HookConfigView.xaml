@@ -8,7 +8,7 @@
         xmlns:helper="clr-namespace:ErogeHelper.Common.Helper"
         xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
-        ui:WindowHelper.UseModernWindowStyle="True" 
+        ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="CanResizeWithGrip"
         Width="350" MinWidth="350" Height="450" Icon="pack://application:,,,/Assets/app.ico"
         Title="{x:Static resx:Strings.HookConfig_Title}" helper:WindowPlacement.Save="True" Topmost="True">
     <Grid>

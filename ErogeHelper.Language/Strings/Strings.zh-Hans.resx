@@ -163,7 +163,7 @@
   <data name="HookPage.SelectedText" xml:space="preserve">
     <value>选择的文本</value>
   </data>
-  <data name="HookPage.Regexp" xml:space="preserve">
+  <data name="HookPage.RegExp" xml:space="preserve">
     <value>正则表达式</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">

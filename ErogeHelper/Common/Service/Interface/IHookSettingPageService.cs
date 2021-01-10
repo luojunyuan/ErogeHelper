@@ -8,6 +8,6 @@ namespace ErogeHelper.Common.Service
 {
     interface IHookSettingPageService
     {
-        public string GetRegexp();
+        public string GetRegExp();
     }
 }

@@ -10,6 +10,6 @@ namespace ErogeHelper.Common.Service
 {
     class HookSettingPageService : IHookSettingPageService
     {
-        public string GetRegexp() => File.Exists(GameConfig.Path) ? GameConfig.Regexp : string.Empty;
+        public string GetRegExp() => File.Exists(GameConfig.Path) ? GameConfig.RegExp : string.Empty;
     }
 }

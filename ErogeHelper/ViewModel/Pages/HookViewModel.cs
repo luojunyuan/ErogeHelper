@@ -18,20 +18,56 @@ namespace ErogeHelper.ViewModel.Pages
     {
         private readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HookViewModel));
 
+        #region HookCode
         // InputCode 只在值有效时xaml才会传值过来
         public string InputCode { get; set; } = string.Empty;
 
-        public bool HasError { get; set; }
+        public bool InvalidHookCode { get; set; }
 
-        public bool CanInsertCode() => !string.IsNullOrWhiteSpace(InputCode) && !HasError;
+        public bool CanInsertCode() => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
 
         public void InsertCode(object inputCode) => Textractor.InsertHook(InputCode);
+        #endregion
 
+        #region RegExp
         public string RegExp { get; set; }
 
-        private string consoleOutput = string.Empty;
-        public string ConsoleOutput { get => consoleOutput; set { consoleOutput = value; NotifyOfPropertyChange(() => ConsoleOutput); } }
+        private bool _invalidRegExp;
+        public bool InvalidRegExp 
+        { 
+            get => _invalidRegExp;
+            set 
+            {
+                _invalidRegExp = value;
+                NotifyOfPropertyChange(() => CanSubmitSetting);
+            }
+        }
 
+        private long selectedTextHandle;
+        private string _selectedText = "Slide down to select a text thread";
+        public string SelectedText
+        {
+            get => _selectedText;
+            set
+            {
+                _selectedText = value;
+                NotifyOfPropertyChange(() => SelectedText);
+            }
+        }
+        #endregion
+
+        private string _consoleOutput = string.Empty;
+        public string ConsoleOutput
+        {
+            get => _consoleOutput;
+            set
+            {
+                _consoleOutput = value;
+                NotifyOfPropertyChange(() => ConsoleOutput);
+            }
+        }
+
+        #region Constructor
         private IHookSettingPageService dataService;
         private IWindowManager windowManager;
 
@@ -40,12 +76,26 @@ namespace ErogeHelper.ViewModel.Pages
             this.dataService = dataService;
             this.windowManager = windowManager;
 
-            RegExp = dataService.GetRegexp();
+            RegExp = dataService.GetRegExp();
             Textractor.DataEvent += DataProcess;
         }
+        #endregion
+
         public HookBindingList<long, HookMapItem> HookMapData { get; set; } = new HookBindingList<long, HookMapItem>(p => p.Handle);
 
-        public HookMapItem SelectedHook { set; get; } = new HookMapItem();
+        private HookMapItem? _selectedHook;
+        public HookMapItem? SelectedHook
+        {
+            get => _selectedHook;
+            set
+            {
+                _selectedHook = value;
+                // When this setter happend, SelectedHook suddenly not null
+                selectedTextHandle = SelectedHook!.Handle;
+                SelectedText = SelectedHook.Text;
+                NotifyOfPropertyChange(() => CanSubmitSetting);
+            }
+        }
 
         private void DataProcess(object sender, HookParam hp)
         {
@@ -58,7 +108,6 @@ namespace ErogeHelper.ViewModel.Pages
             }
             else if (hp.Name == "剪贴板") // Clipboard
             {
-                // ClipboardOutput += "\n" + hp.Text;
                 return;
             }
 
@@ -72,7 +121,7 @@ namespace ErogeHelper.ViewModel.Pages
                     {
                         Handle = hp.Handle,
                         HookCode = hp.Hookcode,
-                        ThreadContext= hp.Ctx,
+                        ThreadContext = hp.Ctx,
                         SubThreadContext = hp.Ctx2,
                         TotalText = hp.Text,
                         Text = hp.Text,
@@ -84,7 +133,7 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     string tmp = targetItem.TotalText + "\n\n" + hp.Text;
 
-                    // dummy way with my TextBlock item
+                    // dummy way to do my TextBlock item
                     var count = tmp.Count(f => f == '\n');
                     if (count > 5)
                     {
@@ -96,18 +145,23 @@ namespace ErogeHelper.ViewModel.Pages
                     targetItem.Text = hp.Text;
                 }
             });
+
+            if (selectedTextHandle == hp.Handle)
+            {
+                SelectedText = hp.Text;
+            }
         }
 
-        public bool CanSubmitSetting() => true;
-        public async void SubmitSetting(object _, object __)
+        public bool CanSubmitSetting { get => SelectedHook is not null && !InvalidRegExp; }
+        public async void SubmitSetting()
         {
             var configPath = DataRepository.MainProcess!.MainModule!.FileName + ".eh.config";
 
-            GameConfig.IsUserHook = SelectedHook.EngineName.Contains("UserHook") ? true : false;
+            GameConfig.IsUserHook = SelectedHook!.EngineName.Contains("UserHook");
             GameConfig.HookCode = SelectedHook.HookCode;
             GameConfig.ThreadContext = SelectedHook.ThreadContext;
             GameConfig.SubThreadContext = SelectedHook.SubThreadContext;
-            GameConfig.Regexp = RegExp;
+            GameConfig.RegExp = RegExp;
 
             if (File.Exists(configPath))
             {
@@ -119,7 +173,7 @@ namespace ErogeHelper.ViewModel.Pages
                 GameConfig.CreateConfig(configPath);
                 await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
                 await IoC.Get<HookConfigViewModel>().TryClose().ConfigureAwait(false);
-            }    
+            }
         }
     }
 

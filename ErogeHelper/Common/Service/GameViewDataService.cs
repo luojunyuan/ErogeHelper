@@ -37,8 +37,8 @@ namespace ErogeHelper.Common.Service
             // Refresh
             IoC.Get<GameViewModel>().AppendTextList.Clear(); // Clear or give new value? is that same
 
-            // User define regexp 
-            var pattern = GameConfig.Regexp;
+            // User define RegExp 
+            var pattern = GameConfig.RegExp;
             if (!string.IsNullOrEmpty(pattern))
             {
                 var list = Regex.Split(hp.Text, pattern);
