@@ -84,6 +84,10 @@ namespace ErogeHelper.Common.Helper
             log.Info($"{DataRepository.GameProcesses.Count} Process(es) and window handle " +
                 $"0x{Convert.ToString(DataRepository.MainProcess.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
                 $"Spend time {totalTime.Elapsed.TotalSeconds:0.00}s");
+
+            // Set MD5
+            GameConfig.MD5 = Utils.GetMD5(DataRepository.MainProcess.MainModule!.FileName!);
+
             return true;
         }
 

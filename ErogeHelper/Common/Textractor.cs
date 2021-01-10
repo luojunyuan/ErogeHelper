@@ -75,6 +75,8 @@ namespace ErogeHelper.Common
             HookParam hp = ThreadHandleDict[threadid];
             hp.Text = opdata;
 
+            // TODO: 记录所有控制台的InsertMessage
+
             DataEvent?.Invoke(typeof(Textractor), hp);
             if (!string.IsNullOrWhiteSpace(GameConfig.HookCode)
                 && GameConfig.HookCode == hp.Hookcode
@@ -99,24 +101,30 @@ namespace ErogeHelper.Common
 
         public static void InsertHook(string hookcode)
         {
+            if (hookcode.StartsWith('/'))
+                hookcode = hookcode[1..];
+            var engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
+
             // 重复插入相同的code(可能)会导致产生很高位的Context
-            foreach (var v in ThreadHandleDict)
+            foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动文本后或程序产生的钩子
             {
-                if (hookcode == v.Value.Hookcode)
+                if (engineName == hcodeItem.Value.Name || hookcode == hcodeItem.Value.Hookcode)
                 {
                     DataEvent?.Invoke(typeof(Textractor), new HookParam
                     {
                         Name = "控制台",
                         Hookcode = "HB0@0",
-                        Text = "ErogeHelper: 该特殊码已插入"
+                        Text = "ErogeHelper: The hcode has already insert" // 该特殊码已插入
                     });
                     return;
                 }
             }
+            // foreach FromInsertMessage 可以保证ThreadHandleDict还没有的钩子不被乱覆盖
+
             foreach (Process p in DataRepository.GameProcesses)
             {
                 TextHostLib.InsertHook((uint)p.Id, hookcode);
-                log.Info($"Try insert code {hookcode} to PID {p.Id}");
+                log.Info($"Try insert hcode {hookcode} to PID {p.Id}");
             }
         }
 

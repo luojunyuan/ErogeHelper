@@ -10,6 +10,7 @@ using Microsoft.Data.Sqlite;
 
 namespace ErogeHelper.Common.Helper
 {
+    // move to model
     public class SakuraNoUtaHelper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SakuraNoUtaHelper));

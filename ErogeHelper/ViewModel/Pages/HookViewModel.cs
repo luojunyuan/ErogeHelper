@@ -3,6 +3,8 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
+using ErogeHelper.Model.Api;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace ErogeHelper.ViewModel.Pages
@@ -20,19 +23,60 @@ namespace ErogeHelper.ViewModel.Pages
 
         #region HookCode
         // InputCode 只在值有效时xaml才会传值过来
-        public string InputCode { get; set; } = string.Empty;
-
+        private string _inputCode = string.Empty;
+        public string InputCode { get => _inputCode; set { _inputCode = value; NotifyOfPropertyChange(() => InputCode); } }
         public bool InvalidHookCode { get; set; }
 
-        public bool CanInsertCode() => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
+        public bool CanSearchCode { get => true; }
+        public async void SearchCode()
+        {
+            var progress = new ProgressRing
+            {
+                IsActive = true,
+                Width = 80,
+                Height = 80,
+            };
 
+            var dialog = new ContentDialog
+            {
+                Content = progress,
+            };
+            dialog.Closing += (sender, args) => 
+            {
+                // This mean user does click on Primary or Secondary button
+                if (args.Result == ContentDialogResult.None)
+                {
+                    args.Cancel = true;
+                }
+            };
+
+            
+            var progressTask = dialog.ShowAsync();
+
+            var hcode = await QueryHCode.QueryCode(GameConfig.MD5);//.ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(hcode))
+            {
+                InputCode = hcode;
+                log.Info(hcode);
+                dialog.Hide();
+            }
+            else
+            {
+                progress.IsActive = false;
+                dialog.Content = "Didn't find hcode for game";
+                dialog.PrimaryButtonText = "Close";
+                await progressTask;
+            }
+        }
+
+        public bool CanInsertCode() => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
         public void InsertCode(object inputCode) => Textractor.InsertHook(InputCode);
         #endregion
 
         #region RegExp
         private string? _regExp;
         public string? RegExp // if user click 'x', it will turn to null
-        { 
+        {
             get => _regExp ?? string.Empty;
             set
             {
@@ -46,7 +90,7 @@ namespace ErogeHelper.ViewModel.Pages
                     SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook?.Text ?? string.Empty, value);
                 }
             }
-        } 
+        }
 
         private bool _invalidRegExp;
         public bool InvalidRegExp // trans: 无效的RegExp

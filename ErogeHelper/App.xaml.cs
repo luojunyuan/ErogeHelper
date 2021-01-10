@@ -43,6 +43,7 @@ namespace ErogeHelper
             };
             DispatcherUnhandledException += (s, eventArgs) =>
             {
+                eventArgs.Handled = true;
                 log.Error(eventArgs.Exception);
                 ModernWpf.MessageBox.Show(eventArgs.Exception.Message, "Eroge Helper - Fatal Error");
             };

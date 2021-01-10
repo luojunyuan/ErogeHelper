@@ -18,7 +18,7 @@ namespace ErogeHelper.Common.Service
         public event IGameViewDataService.AppendDataEventHandler? AppendDataEvent;
 
         private readonly MecabHelper mecabHelper = new MecabHelper();
-        private readonly SakuraNoUtaHelper sakuraNoUtaHelper = new SakuraNoUtaHelper();
+        //private readonly SakuraNoUtaHelper sakuraNoUtaHelper = new SakuraNoUtaHelper();
 
         public void Start()
         {

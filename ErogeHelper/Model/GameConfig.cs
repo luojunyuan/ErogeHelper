@@ -42,7 +42,7 @@ namespace ErogeHelper.Model
 
             var baseNode = new XElement("Profile",
                 new XAttribute("Name", value: DataRepository.MainProcess!.ProcessName + ".eh.config"),
-                new XElement("MD5", content: Utils.GetMD5(DataRepository.MainProcess.MainModule!.FileName!)),
+                new XElement("MD5", content: MD5),
                 new XElement("IsUserHook", content: IsUserHook),
                 new XElement("HookCode", content: HookCode),
                 new XElement("ThreadContext", content: ThreadContext),

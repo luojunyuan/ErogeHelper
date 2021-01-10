@@ -54,7 +54,8 @@
                             </TextBox>
                             
                             <ui:AppBarButton 
-                                Height="32" Width="32" ToolTip="Search code on Aniclan">
+                                Height="32" Width="32" ToolTip="Search code on Aniclan"
+                                cm:Message.Attach="[Click] = [SearchCode]">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
                                 </ui:AppBarButton.Icon>
