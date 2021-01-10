@@ -20,21 +20,9 @@
         IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False">
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItemSeparator Margin="0 30 0 0"/>
-            <ui:NavigationViewItem Content="{x:Static resx:Strings.GeneralPage_Title}" Tag="general_setting">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-            <ui:NavigationViewItem Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab_setting">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-            <ui:NavigationViewItem Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook_setting">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.GroupList}" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
+            <ui:NavigationViewItem Icon="AllApps" Content="{x:Static resx:Strings.GeneralPage_Title}" Tag="general_setting"/>
+            <ui:NavigationViewItem Icon="Character" Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab_setting"/>
+            <ui:NavigationViewItem Icon="Attach" Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook_setting"/>
         </ui:NavigationView.MenuItems>
         
         <ui:NavigationView.FooterMenuItems>
