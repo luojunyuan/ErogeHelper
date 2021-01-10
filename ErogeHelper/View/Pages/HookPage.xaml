@@ -9,9 +9,10 @@
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
       xmlns:convert="clr-namespace:ErogeHelper.Common.Converter"
       xmlns:cm="http://caliburnmicro.com"
+      xmlns:model="clr-namespace:ErogeHelper.Model"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       mc:Ignorable="d"         
-      d:DesignHeight="850" d:DesignWidth="800" 
+      d:DesignHeight="850" d:DesignWidth="500" 
       Title="{x:Static resx:Strings.HookPage_Title}">
 
     <Page.Resources>
@@ -38,19 +39,28 @@
                 <!-- Hook Code -->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_HookCode}">
                     <ui:SimpleStackPanel Spacing="10">
-                        <!--CodeTextBox just suger-->
-                        <TextBox x:Name="CodeTextBox"
-                            behavior:ValidationBehavior.HasError="{Binding InvalidHookCode}"
-                            HorizontalAlignment="Left" Width="240">
-                            <TextBox.Text>
-                                <Binding Path="InputCode" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <validation:InvalidCodeFormatValidationRule ValidatesOnTargetUpdated="True"/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                        <!-- TODO: Add a vnr code search button-->
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                            <!--CodeTextBox just suger-->
+                            <TextBox x:Name="CodeTextBox"
+                                behavior:ValidationBehavior.HasError="{Binding InvalidHookCode}"
+                                HorizontalAlignment="Left" Width="240">
+                                <TextBox.Text>
+                                    <Binding Path="InputCode" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:InvalidCodeFormatValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            
+                            <ui:AppBarButton 
+                                Height="32" Width="32" ToolTip="Search code on Aniclan">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                        </ui:SimpleStackPanel>
+                        
                         <Button 
                             Content="{x:Static resx:Strings.HookPage_Insert}" Width="240" 
                             cm:Message.Attach="[Click] = [InsertCode(CodeTextBox.Text)]"/>
@@ -61,17 +71,25 @@
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                     <ui:SimpleStackPanel Spacing="10">
                         <Label Content="{x:Static resx:Strings.HookPage_RegExp}" />
-                        <TextBox 
-                            HorizontalAlignment="Left" Width="240"
-                            behavior:ValidationBehavior.HasError="{Binding InvalidRegExp}">
-                            <TextBox.Text>
-                                <Binding Path="RegExp" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <validation:RegExpValidationRule ValidatesOnTargetUpdated="True"/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                            <TextBox 
+                                HorizontalAlignment="Left" Width="240"
+                                behavior:ValidationBehavior.HasError="{Binding InvalidRegExp}">
+                                <TextBox.Text>
+                                    <Binding Path="RegExp" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validation:RegExpValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <ui:AppBarButton Height="32" Width="32" ToolTip="Pick up a RegExp" IsEnabled="False">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="&#xE16E;" Margin="0 -6.5 0 0"/>
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                        </ui:SimpleStackPanel>
 
                         <!-- TODO: Add a friendly Popup for RegExp-->
                         <Label Content="{x:Static resx:Strings.HookPage_Text}" />
@@ -93,21 +111,25 @@
                 </GroupBox>
                 
                 <!-- Hook Data List -->
-                <!-- TODO: Add a clear all command-->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
-                    <ListView 
-                        ScrollViewer.PanningMode="None"
-                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        ItemsSource="{Binding HookMapData}" 
-                        SelectedItem="{Binding SelectedHook}" SelectionMode="Single"
-                        ItemTemplate="{StaticResource HpItemTemplate}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListView>
+                    <ui:SimpleStackPanel Spacing="10">
+                        <ui:AppBarButton 
+                            Label="Clear" Icon="Refresh" ToolTip="Refresh all thread" 
+                            cm:Message.Attach="[Click] = [ClearHookMapData]"/>
+                        <ListView 
+                            ScrollViewer.PanningMode="None"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ItemsSource="{Binding HookMapData}" 
+                            SelectedItem="{Binding SelectedHook}" SelectionMode="Single"
+                            ItemTemplate="{StaticResource HpItemTemplate}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListView>
+                    </ui:SimpleStackPanel>
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>

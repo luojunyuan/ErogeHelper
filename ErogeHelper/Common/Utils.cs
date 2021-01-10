@@ -95,6 +95,9 @@ namespace ErogeHelper.Common
 
             if (!string.IsNullOrEmpty(expr))
             {
+                if (expr[expr.Length - 1] == '|')
+                    return sourceInput;
+
                 string wapperText = sourceInput;
 
                 var instant = new Regex(expr);
@@ -102,7 +105,7 @@ namespace ErogeHelper.Common
                 foreach (Match match in collect)
                 {
                     var beginPos = wapperText.LastIndexOf(end);
-                    wapperText = instant.Replace(wapperText, begin + match + end, 1, beginPos == -1 ? 0 : beginPos);
+                    wapperText = instant.Replace(wapperText, begin + match + end, 1, beginPos == -1 ? 0 : beginPos+5);
                 }
                 return wapperText;
             }

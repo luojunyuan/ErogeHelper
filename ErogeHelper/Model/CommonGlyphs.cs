@@ -21,5 +21,7 @@ namespace ErogeHelper.Model
         public const string LowerBrightness = "\uEC8A";
 
         public const string Brightness = "\uE706";
+
+        public const string Search = "\uE721";
     }
 }

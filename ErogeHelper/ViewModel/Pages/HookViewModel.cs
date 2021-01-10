@@ -107,11 +107,25 @@ namespace ErogeHelper.ViewModel.Pages
             set
             {
                 _selectedHook = value;
-                // When this setter happend, SelectedHook suddenly not null
-                selectedTextHandle = SelectedHook!.Handle;
-                SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook.Text, RegExp ?? string.Empty);
+
+                if (value is not null)
+                {
+                    selectedTextHandle = value.Handle;
+                    SelectedText = Utils.TextEvaluateWithRegExp(value.Text, RegExp ?? string.Empty);
+                }
+                else
+                {
+                    selectedTextHandle = -1;
+                    SelectedText = string.Empty;
+                }
                 NotifyOfPropertyChange(() => CanSubmitSetting);
             }
+        }
+
+        public void ClearHookMapData()
+        {
+            SelectedHook = null;
+            HookMapData.Clear();
         }
 
         private void DataProcess(object sender, HookParam hp)
