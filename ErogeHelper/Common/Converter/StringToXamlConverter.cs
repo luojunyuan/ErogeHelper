@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace ErogeHelper.Common.Converter
 {
@@ -32,7 +29,7 @@ namespace ErogeHelper.Common.Converter
                     //between |~S~| and |~E~| is highlighted
                     textBlock.Inlines.Add(new Run(escapedXml?.Substring(escapedXml.IndexOf("|~S~|") + 5,
                                               escapedXml.IndexOf("|~E~|") - (escapedXml.IndexOf("|~S~|") + 5)))
-                    { TextDecorations = TextDecorations.Strikethrough });
+                    { TextDecorations = TextDecorations.Strikethrough, Background = Brushes.Red });
                     //the rest of the string (after the |~E~|)
                     escapedXml = escapedXml?.Substring(escapedXml.IndexOf("|~E~|") + 5);
                 }

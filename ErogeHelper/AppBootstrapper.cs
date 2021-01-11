@@ -18,7 +18,7 @@ namespace ErogeHelper
 {
     class AppBootstrapper : BootstrapperBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AppBootstrapper));
+         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AppBootstrapper));
 
         public AppBootstrapper()
         {

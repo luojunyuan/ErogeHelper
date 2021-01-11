@@ -49,7 +49,6 @@ namespace ErogeHelper.ViewModel.Pages
                     args.Cancel = true;
                 }
             };
-
             
             var progressTask = dialog.ShowAsync();
 
@@ -64,7 +63,7 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 progress.IsActive = false;
                 dialog.Content = "Didn't find hcode for game";
-                dialog.PrimaryButtonText = "Close";
+                dialog.SecondaryButtonText = "Close";
                 await progressTask;
             }
         }
@@ -252,6 +251,11 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 // Cover override
                 GameConfig.CreateConfig(configPath);
+                await new ContentDialog 
+                {
+                    Content = $"Update {DataRepository.MainProcess.ProcessName}.exe.eh.config succeed",
+                    CloseButtonText = "OK"
+                }.ShowAsync().ConfigureAwait(false);
             }
             else
             {

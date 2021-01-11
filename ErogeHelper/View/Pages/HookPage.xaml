@@ -18,8 +18,7 @@
     <Page.Resources>
         <DataTemplate x:Key="HpItemTemplate">
             <!-- TODO: UserHook highlight -->
-            <GroupBox Header="{Binding EngineName}"
-                  Width="300" Height="240">
+            <GroupBox Header="{Binding EngineName}" Width="300" Height="240" ToolTip="{Binding HookCode}">
                 <!-- 1 line 22 char * 10 line-->
                 <TextBlock Text="{Binding TotalText}" TextWrapping="Wrap"/>
             </GroupBox>

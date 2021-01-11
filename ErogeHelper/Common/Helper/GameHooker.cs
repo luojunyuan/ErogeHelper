@@ -85,6 +85,11 @@ namespace ErogeHelper.Common.Helper
         public delegate void GameViewPosEventHandler(object sender, GameViewPlacement e);
         public static event GameViewPosEventHandler? GameViewPosChangedEvent;
 
+        public delegate void UpdateButtonPosEventHandler(object sender);
+        public static event UpdateButtonPosEventHandler? UpdateButtonPosEvent;
+        static int oldWidth = -1;
+        static int oldHeight = -1;
+
         private static void UpdateLocation()
         {
             var rect = NativeMethods.GetWindowRect(gameHWnd);
@@ -92,6 +97,17 @@ namespace ErogeHelper.Common.Helper
 
             var width = rect.Right - rect.Left;  // equal rectClient.Right + shadow*2
             var height = rect.Bottom - rect.Top; // equal rectClient.Bottom + shadow + title
+            if (oldWidth == -1 && oldHeight == -1)
+            {
+                oldWidth = width;
+                oldHeight = height;
+            }
+            else if(oldHeight != height || oldWidth != width)
+            {
+                UpdateButtonPosEvent?.Invoke(typeof(GameHooker));
+                oldHeight = height;
+                oldWidth = width;
+            }
 
             var winShadow = (width - rectClient.Right) / 2;
 

@@ -51,9 +51,19 @@ namespace ErogeHelper.Model
                 new XElement("NoFocus", content: NoFocus)
             );
 
-            var tree = new XElement("EHConfig", baseNode);
-            tree.Save(Path);
-            log.Info("Write config file succeed");
+            try
+            {
+                var tree = new XElement("EHConfig", baseNode);
+                tree.Save(Path);
+                log.Info("Write config file succeed");
+
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                log.Warn(ex.Message);
+                ModernWpf.MessageBox.Show($"{ex.Message}\nEroge Helper has no permission to access the path, " +
+                    $"will save text temporally...", "Eroge Helper");
+            }
         }
 
         private static string GetString(EHNode node, string defValue = "")

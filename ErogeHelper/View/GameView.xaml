@@ -11,6 +11,7 @@
         mc:Ignorable="d"
         Title="GameView" ShowInTaskbar="False"
         AllowsTransparency="True" WindowStyle="None" Topmost="True">
+    
     <Window.Background>
         <SolidColorBrush />
     </Window.Background>
@@ -18,77 +19,83 @@
     <Border>
         <!-- Client area -->
         <Border x:Name="ClientArea">
-            <DockPanel LastChildFill="False">
-                <!-- Main top activity area -->
-                <StackPanel DockPanel.Dock="Top">
-                    <!-- Source Text -->
-                    <ContentControl x:Name="TextControl" />
-                    <!-- Extra Text-->
-                    <ItemsControl x:Name="AppendTextList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Vertical">
-                                    <control:OutlinedTextBlock Margin="0 0 0 -5" Stroke="Black" Fill="white"
-                                        ClipToBounds="False" StrokePosition="Outside" 
-                                        StrokeThickness="1" TextWrapping="Wrap" Text="{Binding}"
-                                        FontSize="{Binding DataContext.FontSize,
+            <Grid>
+                <DockPanel LastChildFill="False">
+                    <!-- Main top activity area -->
+                    <StackPanel DockPanel.Dock="Top">
+                        <!-- Source Text -->
+                        <ContentControl x:Name="TextControl" />
+                        <!-- Extra Text-->
+                        <ItemsControl x:Name="AppendTextList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <control:OutlinedTextBlock Margin="0 0 0 -5" Stroke="Black" Fill="white"
+                                            ClipToBounds="False" StrokePosition="Outside" 
+                                            StrokeThickness="1" TextWrapping="Wrap" Text="{Binding}"
+                                            FontSize="{Binding DataContext.FontSize,
                                             RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    
-                    <Button Width="50" Height="50" Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
-                        <ui:FlyoutService.Flyout>
-                            <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
-                                <ui:AppBarButton Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]"/>
-                                <ui:AppBarButton Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" />
-                                <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]">
-                                    <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
-                                    </ui:AppBarButton.Icon>
-                                </ui:AppBarButton>
-                                <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
-                                <ui:AppBarButton 
-                                    Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
-                                    ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
-                                <ui:AppBarToggleButton 
-                                    Icon="Trim" IsChecked="{Binding IsLostFocus}" 
-                                    ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
-                                    cm:Message.Attach="[Click] = [FocusToggle]"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DockPanel>
 
-                                <ui:CommandBarFlyout.SecondaryCommands>
-                                    <ui:AppBarButton 
-                                        Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" 
-                                        cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
-                                    <ui:AppBarButton 
-                                        Icon="DockLeft" Label="{x:Static resx:Strings.GameView_TaskView}" 
-                                        cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
-                                    <ui:AppBarButton 
-                                        Icon="Pictures" Label="{x:Static resx:Strings.GameView_Screenshot}" 
-                                        cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S">
-                                        <!--<ui:AppBarButton.Flyout>
-                                            <ui:MenuFlyout Placement="RightEdgeAlignedTop">
+                <!-- Interaction Button -->
+                <control:AssistiveTouch 
+                    Width="50" Height="50" DockPanel.Dock="Bottom"
+                    Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
+                    <ui:FlyoutService.Flyout>
+                        <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
+                            <ui:AppBarButton Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]"/>
+                            <ui:AppBarButton Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" />
+                            <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                            <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
+                            <ui:AppBarButton 
+                                Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
+                                ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
+                            <ui:AppBarToggleButton 
+                                Icon="Trim" IsChecked="{Binding IsLostFocus}" 
+                                ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
+                                cm:Message.Attach="[Click] = [FocusToggle]"/>
+
+                            <ui:CommandBarFlyout.SecondaryCommands>
+                                <ui:AppBarButton 
+                                    Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" 
+                                    cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
+                                <ui:AppBarButton 
+                                    Icon="DockLeft" Label="{x:Static resx:Strings.GameView_TaskView}" 
+                                    cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
+                                <ui:AppBarButton 
+                                    Icon="Pictures" Label="{x:Static resx:Strings.GameView_Screenshot}" 
+                                    cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S">
+                                    <!--<ui:AppBarButton.Flyout>
+                                                <ui:MenuFlyout Placement="RightEdgeAlignedTop">
                                                 
-                                            </ui:MenuFlyout>
-                                        </ui:AppBarButton.Flyout>-->
-                                    </ui:AppBarButton>
-                                    <ui:AppBarSeparator/>
-                                    <ui:AppBarButton 
-                                        Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}"
-                                        cm:Message.Attach="[Click] = [OpenPreference]"/>
-                                    <ui:AppBarElementContainer>
-                                        <Button
-                                            Visibility="{Binding IsLostFocus, Converter={StaticResource VisibleConverter}}"
-                                            Width="80" Height="40" Margin="10 0 0 0" Content="Skip" ToolTip="Ctrl+C"
-                                            cm:Message.Attach="[PreviewMouseDown] = [PressSkip]; [PreviewMouseUp] = [PressSkipRelease]"/>
-                                    </ui:AppBarElementContainer>
-                                </ui:CommandBarFlyout.SecondaryCommands>
-                            </ui:CommandBarFlyout>
-                        </ui:FlyoutService.Flyout>
-                    </Button>
-                </StackPanel>
-            </DockPanel>
+                                                </ui:MenuFlyout>
+                                            </ui:AppBarButton.Flyout>-->
+                                </ui:AppBarButton>
+                                <ui:AppBarSeparator/>
+                                <ui:AppBarButton 
+                                    Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}"
+                                    cm:Message.Attach="[Click] = [OpenPreference]"/>
+                                <ui:AppBarElementContainer>
+                                    <Button
+                                        Visibility="{Binding IsLostFocus, Converter={StaticResource VisibleConverter}}"
+                                        Width="80" Height="40" Margin="10 0 0 0" Content="Skip" ToolTip="Ctrl+C"
+                                        cm:Message.Attach="[PreviewMouseDown] = [PressSkip]; [PreviewMouseUp] = [PressSkipRelease]"/>
+                                </ui:AppBarElementContainer>
+                            </ui:CommandBarFlyout.SecondaryCommands>
+                        </ui:CommandBarFlyout>
+                    </ui:FlyoutService.Flyout>
+                </control:AssistiveTouch>
+            </Grid>
+            
         </Border>
     </Border>
 </Window>
