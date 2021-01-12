@@ -10,8 +10,8 @@
         xmlns:service="clr-namespace:ErogeHelper.Common.Service"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Height="400"
-        Icon="pack://application:,,,/Assets/app.ico">
+        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350"
+        Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height">
 
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">

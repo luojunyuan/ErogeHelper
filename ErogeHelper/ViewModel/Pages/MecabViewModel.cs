@@ -40,7 +40,7 @@ namespace ErogeHelper.ViewModel.Pages
         public bool Furikana { get; set; }
         public bool Katakana { get; set; }
 
-        private void ChangeSourceTextTemplate(TextTemplateType type)
+        private static void ChangeSourceTextTemplate(TextTemplateType type)
         {
             var tmp = new BindableCollection<SingleTextItem>();
             foreach (var item in IoC.Get<TextViewModel>().SourceTextCollection)

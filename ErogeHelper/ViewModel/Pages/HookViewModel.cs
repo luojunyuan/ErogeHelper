@@ -37,24 +37,32 @@ namespace ErogeHelper.ViewModel.Pages
                 Height = 80,
             };
 
+            var dialogCanClose = false;
             var dialog = new ContentDialog
             {
                 Content = progress,
             };
-            dialog.Closing += (sender, args) => 
+            dialog.Closing += (sender, args) =>
             {
-                // This mean user does click on Primary or Secondary button
-                if (args.Result == ContentDialogResult.None)
+                // Block Enter key and PrimaryButton, SecondaryButton, Escape key
+                if (args.Result == ContentDialogResult.Primary ||
+                    args.Result == ContentDialogResult.Secondary ||
+                    args.Result == ContentDialogResult.None && !dialogCanClose)
                 {
                     args.Cancel = true;
                 }
+                // Only let CloseButton and dialog.Hide() method go
+                //if (args.Result == ContentDialogResult.None)
             };
-            
+
             var progressTask = dialog.ShowAsync();
 
             var hcode = await QueryHCode.QueryCode(GameConfig.MD5);//.ConfigureAwait(false);
+
+            dialogCanClose = true;
             if (!string.IsNullOrWhiteSpace(hcode))
             {
+                progress.IsActive = false;
                 InputCode = hcode;
                 log.Info(hcode);
                 dialog.Hide();
@@ -63,7 +71,7 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 progress.IsActive = false;
                 dialog.Content = "Didn't find hcode for game";
-                dialog.SecondaryButtonText = "Close";
+                dialog.CloseButtonText = "Close";
                 await progressTask;
             }
         }

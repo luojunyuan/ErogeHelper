@@ -1,20 +1,11 @@
 ﻿using ErogeHelper.Common.Helper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ErogeHelper.View.Control
 {
@@ -47,7 +38,7 @@ namespace ErogeHelper.View.Control
         public AssistiveTouch()
         {
             InitializeComponent();
-            
+
             GameHooker.UpdateButtonPosEvent += (_) =>
             {
                 SmoothMoveAnimation(buttonSpace, buttonSpace);
@@ -82,7 +73,7 @@ namespace ErogeHelper.View.Control
                     Margin = new Thickness(left, top, 0, 0);
 
                     lastPos = pos;
-                    if (left < -oneThirdDistance || top < -oneThirdDistance || 
+                    if (left < -oneThirdDistance || top < -oneThirdDistance ||
                     left > parent.ActualWidth - twoThirdDistance || top > parent.ActualHeight - twoThirdDistance)
                     {
                         RaiseMouseUpEventInCode();
@@ -167,8 +158,10 @@ namespace ErogeHelper.View.Control
                 Duration = TimeSpan.FromMilliseconds(300)
             };
 
-            Storyboard story = new Storyboard();
-            story.FillBehavior = FillBehavior.Stop;
+            Storyboard story = new Storyboard
+            {
+                FillBehavior = FillBehavior.Stop
+            };
             story.Children.Add(marginAnimation);
             Storyboard.SetTargetName(marginAnimation, nameof(FloatButton));
             Storyboard.SetTargetProperty(marginAnimation, new PropertyPath("(0)", Border.MarginProperty));
@@ -230,7 +223,7 @@ namespace ErogeHelper.View.Control
                 // Disable flyout popup
                 e.Handled = true;
             }
-            
+
             Task.Run(async () =>
             {
                 await Task.Delay(5000).ConfigureAwait(false);
@@ -244,7 +237,7 @@ namespace ErogeHelper.View.Control
                 });
             }, cancelToken);
         }
-        
+
         // XXX: Seems didn't work in this Controls, maybe only work with window
         #region Disable White Point by Touch
         protected override void OnPreviewTouchDown(TouchEventArgs e)
