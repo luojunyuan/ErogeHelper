@@ -44,7 +44,7 @@
 
                 <!-- Interaction Button -->
                 <control:AssistiveTouch 
-                    Width="50" Height="50" DockPanel.Dock="Bottom"
+                    Width="55" Height="55" DockPanel.Dock="Bottom"
                     Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                     <ui:FlyoutService.Flyout>
                         <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >

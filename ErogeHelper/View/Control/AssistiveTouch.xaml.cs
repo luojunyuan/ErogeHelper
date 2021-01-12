@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,9 +30,14 @@ namespace ErogeHelper.View.Control
 
         private bool move = false;
 
-        const double distance = 50; // aka button width
-        const double halfDistance = distance / 2;
-        const double buttonSpace = 2;
+        private const double opacityValue = 0.4;
+        private const double opacityNormal = 1;
+        private const double buttonSpace = 2;
+        // positioning button absorb field
+        private double distance;
+        private double halfDistance;
+        private double oneThirdDistance;
+        private double twoThirdDistance;
 
         private Point lastPos;
 
@@ -41,11 +47,24 @@ namespace ErogeHelper.View.Control
         public AssistiveTouch()
         {
             InitializeComponent();
-
+            
             GameHooker.UpdateButtonPosEvent += (_) =>
             {
-                Margin = new Thickness(buttonSpace, buttonSpace, 0, 0);
+                SmoothMoveAnimation(buttonSpace, buttonSpace);
             };
+        }
+        private void RaiseMouseUpEventInCode()
+        {
+            int timestamp = new TimeSpan(DateTime.Now.Ticks).Milliseconds;
+            MouseButton mouseButton = MouseButton.Left;
+
+            var mouseUpEvent = new MouseButtonEventArgs(Mouse.PrimaryDevice, timestamp, mouseButton)
+            {
+                RoutedEvent = PreviewMouseUpEvent,
+                Source = this
+            };
+
+            RaiseEvent(mouseUpEvent);
         }
 
         private void RegisterParentPreviewEvent()
@@ -63,6 +82,11 @@ namespace ErogeHelper.View.Control
                     Margin = new Thickness(left, top, 0, 0);
 
                     lastPos = pos;
+                    if (left < -oneThirdDistance || top < -oneThirdDistance || 
+                    left > parent.ActualWidth - twoThirdDistance || top > parent.ActualHeight - twoThirdDistance)
+                    {
+                        RaiseMouseUpEventInCode();
+                    }
                 }
             };
 
@@ -70,8 +94,6 @@ namespace ErogeHelper.View.Control
             {
                 if (move)
                 {
-                    move = false;
-
                     Point pos = mouseEvent.GetPosition(parent);
                     newPos = pos;
                     double left = Margin.Left + pos.X - lastPos.X;
@@ -83,7 +105,7 @@ namespace ErogeHelper.View.Control
 
                     double vertcalMiddelLine = parent.ActualHeight - ActualHeight - buttonSpace;
                     // 根据button所处屏幕位置来确定button之后应该动画移动到的位置
-                    // FIXME: bug when button 中间卡在左窗口边缘
+                    // FIXME: still bug in four corners, when button 中间卡在左窗口边缘
                     if (left < halfDistance && top < halfDistance) // button 距离左上角边距同时小于 distance
                     {
                         left = buttonSpace;
@@ -104,14 +126,12 @@ namespace ErogeHelper.View.Control
                         left = parent.ActualWidth - ActualWidth - buttonSpace;
                         top = parent.ActualHeight - ActualHeight - buttonSpace;
                     }
-                    //else if (top < distance && left > distance && right > distance) // 上
-                    else if (top < distance) // 上
+                    else if (top < twoThirdDistance) // 上
                     {
                         left = Margin.Left;
                         top = buttonSpace;
                     }
-                    //else if (bottom < distance && left > distance && right > distance) // 下
-                    else if (bottom < distance) // 下
+                    else if (bottom < twoThirdDistance) // 下
                     {
                         left = Margin.Left;
                         top = parent.ActualHeight - ActualHeight - buttonSpace;
@@ -132,26 +152,30 @@ namespace ErogeHelper.View.Control
                     }
 
                     // 元素的某个属性，在开始值和结束值之间逐步增加，是一种线性插值的过程
-                    ThicknessAnimation marginAnimation = new ThicknessAnimation
-                    {
-                        From = Margin,
-                        To = new Thickness(left, top, 0, 0),
-                        Duration = TimeSpan.FromMilliseconds(300)
-                    };
-
-                    Storyboard story = new Storyboard();
-                    story.FillBehavior = FillBehavior.Stop;
-                    story.Children.Add(marginAnimation);
-                    Storyboard.SetTargetName(marginAnimation, nameof(FloatButton));
-                    Storyboard.SetTargetProperty(marginAnimation, new PropertyPath("(0)", Border.MarginProperty));
-
-                    story.Begin(this);
-
-                    Margin = new Thickness(left, top, 0, 0);
-
-                    // TODO: After 5 seconds, Transform to opacity
+                    SmoothMoveAnimation(left, top);
+                    move = false;
                 }
             };
+        }
+
+        private void SmoothMoveAnimation(double left, double top)
+        {
+            ThicknessAnimation marginAnimation = new ThicknessAnimation
+            {
+                From = Margin,
+                To = new Thickness(left, top, 0, 0),
+                Duration = TimeSpan.FromMilliseconds(300)
+            };
+
+            Storyboard story = new Storyboard();
+            story.FillBehavior = FillBehavior.Stop;
+            story.Children.Add(marginAnimation);
+            Storyboard.SetTargetName(marginAnimation, nameof(FloatButton));
+            Storyboard.SetTargetProperty(marginAnimation, new PropertyPath("(0)", Border.MarginProperty));
+
+            story.Begin(this);
+
+            Margin = new Thickness(left, top, 0, 0);
         }
 
         private void FloatButton_Loaded(object sender, RoutedEventArgs e)
@@ -162,24 +186,37 @@ namespace ErogeHelper.View.Control
             }
             parent = (Parent as FrameworkElement)!;
 
+            distance = Width;
+            halfDistance = distance / 2;
+            oneThirdDistance = distance / 3;
+            twoThirdDistance = oneThirdDistance * 2;
+
             RegisterParentPreviewEvent();
 
             //double left = parent.ActualWidth - ActualWidth - distanceNew;
             //double top = parent.ActualHeight - ActualHeight - distanceNew;
             Margin = new Thickness(buttonSpace, buttonSpace, 0, 0);
+
+            // for opacity the button
+            FloatButton_Click(FloatButton, new RoutedEventArgs());
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // TODO: Transform template to deep
+            FloatButton.Opacity = opacityNormal;
             move = true;
             lastPos = e.GetPosition(parent);
             oldPos = lastPos;
         }
 
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
+        // After mouse released
         private void FloatButton_Click(object sender, RoutedEventArgs e)
         {
-            // After mouse released
+            tokenSource.Cancel();
+            tokenSource = new CancellationTokenSource();
+            CancellationToken cancelToken = tokenSource.Token;
+
             if (newPos.Equals(oldPos))
             {
                 if (ClickEvent != null)
@@ -193,6 +230,19 @@ namespace ErogeHelper.View.Control
                 // Disable flyout popup
                 e.Handled = true;
             }
+            
+            Task.Run(async () =>
+            {
+                await Task.Delay(5000).ConfigureAwait(false);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (move == false && !cancelToken.IsCancellationRequested)
+                    {
+                        FloatButton.Opacity = opacityValue;
+                    }
+                });
+            }, cancelToken);
         }
         
         // XXX: Seems didn't work in this Controls, maybe only work with window
