@@ -99,6 +99,7 @@ namespace ErogeHelper
 
         protected override void Configure()
         {
+            // Set Caliburn.Micro Conventions naming rule
             var config = new TypeMappingConfiguration
             {
                 IncludeViewSuffixInViewModelNames = false,
@@ -152,7 +153,7 @@ namespace ErogeHelper
 
             Container = builder.Build();
 
-            // Active HookViewModel for saving hole console output info
+            // Active HookViewModel preview for saving hole console output info
             Container.Resolve<HookViewModel>();
         }
 

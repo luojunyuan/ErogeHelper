@@ -17,6 +17,7 @@
                     <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_JapaneseText}" IsOn="{Binding ShowSource}" />
                     <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_AppendText}" IsOn="{Binding ShowAppend}" />
                     <ui:ToggleSwitch Header="DeepL Client Extention" IsOn="{Binding DeepLExtention}" />
+                    <ui:HyperlinkButton Content="Download DeepL" NavigateUri="https://www.deepl.com/app"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>
