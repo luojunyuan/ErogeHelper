@@ -87,7 +87,12 @@ namespace ErogeHelper.Common
             return sb.ToString().ToUpper();
         }
 
-        // FIXME: Bugs with RegExp pattern char like '|'
+        /// <summary>
+        /// Warpper no need characters with |~S~| |~E~|
+        /// </summary>
+        /// <param name="sourceInput"></param>
+        /// <param name="expr"></param>
+        /// <returns></returns>
         public static string TextEvaluateWithRegExp(string sourceInput, string expr)
         {
             const string begin = "|~S~|";

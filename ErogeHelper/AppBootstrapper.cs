@@ -151,6 +151,9 @@ namespace ErogeHelper
                 .AsImplementedInterfaces();
 
             Container = builder.Build();
+
+            // Active HookViewModel for saving hole console output info
+            Container.Resolve<HookViewModel>();
         }
 
         #region Autofac Init
