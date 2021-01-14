@@ -14,17 +14,30 @@
 
     <UserControl.Resources>
         
+        <Style x:Key="SingleTextButtonStyle" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <!-- XXX: Any value same here -->
+                    <Setter Property="Background" Value="Black" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
         <DataTemplate x:Key="OutLineDefaultTemplate">
-            <Border>
-                <Border.Background>
+            <Button>
+                <Button.Background>
                     <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
-                </Border.Background>
+                </Button.Background>
+                <!-- More Clear Display -->
                 <control:OutlinedTextBlock Stroke="Black" ClipToBounds="False" 
                              FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"   
                              Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
                 </control:OutlinedTextBlock>
                 <!--WordSearchCommand-->
-            </Border>
+            </Button>
         </DataTemplate>
 
         <DataTemplate x:Key="OutLineTopTemplate">
@@ -35,14 +48,33 @@
                     Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding RubyText}">
                 </control:OutlinedTextBlock>
                 <!-- 文字部分 -->
-                <Border
-                    cm:Message.Attach="[PreviewMouseUp] = [SearchWord(TextItem)]"
+                <Button
+                    cm:Message.Attach="[Click] = [SearchWord(TextItem)]"
                     cm:Action.TargetWithoutContext="{Binding DataContext, 
-                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
-                    <Border.Background>
-                        <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
-                    </Border.Background>
+                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverter}}"
+                    HorizontalAlignment="Center" Padding="0" Style="{StaticResource SingleTextButtonStyle}"
+                    BorderThickness="0">
+                    <Button.Background>
+                        <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" Opacity="1"/>
+                    </Button.Background>
+
                     <control:OutlinedTextBlock x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック"
+                        HorizontalAlignment="Center" ClipToBounds="False"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
+
+                    <ui:FlyoutService.Flyout>
+                        <ui:Flyout Placement="Bottom">
+                            
+                        </ui:Flyout>
+                    </ui:FlyoutService.Flyout>
+                </Button>
+                <Border 
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
+                    Background="Transparent">
+                    <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック"
                         HorizontalAlignment="Center" ClipToBounds="False"
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">

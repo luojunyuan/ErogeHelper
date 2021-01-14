@@ -16,7 +16,9 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <!-- True to Visible / False to Collapsed -->
             <convert:BooleanToVisibilityConverter x:Key="VisibleConverter" />
+            <convert:BooleanToVisibilityConverterReverse x:Key="VisibleConverterReverse" />
             <convert:StringToXamlConverter x:Key="TextEvaluateConverter" />
         </ResourceDictionary>
     </Application.Resources>

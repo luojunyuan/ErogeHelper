@@ -43,8 +43,7 @@ namespace ErogeHelper.Common.Service
             // Linebreak 
             // Full-width space
             hp.Text = hp.Text.Replace("　", string.Empty);
-            // Ruby
-            // <.*?>
+            // Ruby like <.*?>
 
             if (hp.Text.Length > 120)
             {

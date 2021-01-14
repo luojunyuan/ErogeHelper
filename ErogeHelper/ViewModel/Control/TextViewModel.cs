@@ -48,7 +48,6 @@ namespace ErogeHelper.ViewModel.Control
 
         // make a card vm in the future
         private bool wordCardOpen = false;
-
         public bool WordCardOpen { get => wordCardOpen; set { wordCardOpen = value; NotifyOfPropertyChange(() => WordCardOpen); } }
         public void SearchWord(SingleTextItem clickItem)
         {
@@ -59,10 +58,22 @@ namespace ErogeHelper.ViewModel.Control
 
     public class SingleTextItem
     {
+        private ImageSource _subMarkColor = DataRepository.transparentImage;
+
         public string RubyText { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public string PartOfSpeed { get; set; } = string.Empty;
         public TextTemplateType TextTemplateType { get; set; }
-        public ImageSource SubMarkColor { get; set; } = DataRepository.transparentImage;
+        public ImageSource SubMarkColor 
+        { 
+            get => _subMarkColor;
+            set 
+            { 
+                _subMarkColor = value;
+                Application.Current.Dispatcher.InvokeAsync(
+                    () => CanBeSearch = (value.ToString() == DataRepository.transparentImage.ToString()) ? false : true);
+            }
+        }
+        public bool CanBeSearch { get; set; }
     }
 }
