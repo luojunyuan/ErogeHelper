@@ -8,11 +8,14 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows.Media.Imaging;
 using ErogeHelper.Common;
+using log4net;
 
 namespace ErogeHelper.Model 
 {
     public class DataRepository
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataRepository));
+
         #region Methods
 
         internal static T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
@@ -64,6 +67,7 @@ namespace ErogeHelper.Model
                 throw new NullReferenceException();
 
             LocalSetting[propertyName] = value.ToString()!;
+            log.Info($"{propertyName} changed to {value}");
             File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 
@@ -154,6 +158,24 @@ namespace ErogeHelper.Model
         public static bool KanaBottom
         {
             get => GetValue(DefaultValuesStore.KanaBottom);
+            set => SetValue(value);
+        }
+
+        public static bool Romaji
+        {
+            get => GetValue(DefaultValuesStore.Romaji);
+            set => SetValue(value);
+        }
+
+        public static bool Hiragana
+        {
+            get => GetValue(DefaultValuesStore.Hiragana);
+            set => SetValue(value);
+        }
+
+        public static bool Katakana
+        {
+            get => GetValue(DefaultValuesStore.Katakana);
             set => SetValue(value);
         }
 

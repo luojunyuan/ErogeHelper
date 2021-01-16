@@ -15,15 +15,15 @@
             <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaDefault}" IsChecked="{Binding KanaDefault}"></RadioButton>
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaTop}" IsChecked="{Binding KanaTop}"></RadioButton>
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaBottom}" IsChecked="{Binding KanaBottom}"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_TextVertical}"></RadioButton>
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaDefault}" IsChecked="{Binding KanaDefault}" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaTop}" IsChecked="{Binding KanaTop}" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaBottom}" IsChecked="{Binding KanaBottom}" />
+                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_TextVertical}" />
                     </ui:RadioButtons>
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_FuriganaType}">
-                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_Romaji}"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_Hiragana}"></RadioButton>
-                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_Katakana}"></RadioButton>
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Romaji}" IsChecked="{Binding Romaji}" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Hiragana}" IsChecked="{Binding Hiragana}" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Katakana}" IsChecked="{Binding Katakana}" ToolTip="under devolop"/>
                     </ui:RadioButtons>
                 </ui:SimpleStackPanel>
             </GroupBox>

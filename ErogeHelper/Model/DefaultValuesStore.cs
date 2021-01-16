@@ -23,6 +23,10 @@ namespace ErogeHelper.Model
         public const bool KanaTop = true;
         public const bool KanaBottom = false;
 
+        public const bool Romaji = false;
+        public const bool Hiragana = false;
+        public const bool Katakana = true;
+
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";
         public const string BaiduApiSecretKey = "";

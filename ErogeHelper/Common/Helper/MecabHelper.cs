@@ -1,4 +1,5 @@
-﻿using MeCab;
+﻿using ErogeHelper.Model;
+using MeCab;
 using MeCab.Extension.IpaDic;
 using MeCab.Extension.UniDic;
 using System;
@@ -35,19 +36,29 @@ namespace ErogeHelper.Common.Helper
                     {
                         Word = node.Surface,
                         PartOfSpeech = node.GetPartsOfSpeech(),
-                        Kana = " "
+                        Kana = node.GetReading()
                     };
-                    // 加这一步是为了防止乱码进入分词导致无法读取假名
-                    if (features.Length >= 8)
-                    {
-                        word.Kana = node.GetReading();
-                    }
 
-                    if (word.PartOfSpeech == "記号" ||
+                    if (string.IsNullOrWhiteSpace(word.Kana) || 
+                        word.PartOfSpeech == "記号" ||
                         WanaKana.IsHiragana(node.Surface) ||
                         WanaKana.IsKatakana(node.Surface))
                     {
                         word.Kana = " ";
+                    }
+                    else
+                    {
+                        if (DataRepository.Romaji == true)
+                        {
+                            word.Kana = WanaKana.ToRomaji(word.Kana);
+                        }
+                        else if (DataRepository.Hiragana == true)
+                        {
+                            // Not Implament yet
+                            //word.Kana = WanaKana.ToHiragana(word.Kana);
+                            word.Kana = WanaKana.ToRomaji(word.Kana);
+                            word.Kana = WanaKana.ToKana(word.Kana);
+                        }
                     }
                     #endregion
 
