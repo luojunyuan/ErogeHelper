@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Translator
 {
-    class BaiduApiTranslator : ITranslator
+    public class BaiduApiTranslator : ITranslator
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(BaiduApiTranslator));
 
@@ -27,14 +27,9 @@ namespace ErogeHelper.Model.Translator
 
         private static readonly RestClient client = new RestClient("http://api.fanyi.baidu.com");
 
-        public async Task<string> TranslatorAsync(string sourceText, Language srcLang, Language desLang)
+        public async Task<string> TranslateAsyncImpl(string sourceText, Language srcLang, Language desLang)
         {
-            #region SetCancelToken
-            cancelToken.Cancel();
-            cancelToken = new CancellationTokenSource();
-            #endregion
-
-            #region Define Support Language
+            // Define Support Language
             string from = srcLang switch
             {
                 Language.Japenese => "jp",
@@ -45,7 +40,6 @@ namespace ErogeHelper.Model.Translator
                 Language.ChineseSimplified => "zh",
                 _ => throw new Exception("Language not supported"),
             };
-            #endregion
 
             string appId = DataRepository.BaiduApiAppid;
             string secretKey = DataRepository.BaiduApiSecretKey;
@@ -62,7 +56,7 @@ namespace ErogeHelper.Model.Translator
                 .AddParameter("sign", sign);
 
             BaiduApiResponse response;
-            var result = string.Empty;
+            string result;
             try
             {
                 response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
@@ -74,12 +68,6 @@ namespace ErogeHelper.Model.Translator
                 result = ex.Message;
             }
 
-            #region Insert CancelAssert Before Return
-            if (cancelToken.Token.IsCancellationRequested)
-            {
-                return string.Empty;
-            }
-            #endregion
             return result;
         }
 

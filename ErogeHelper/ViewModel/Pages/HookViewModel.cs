@@ -244,7 +244,7 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
 
-        public bool CanSubmitSetting { get => SelectedHook is not null && !InvalidRegExp; }
+        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp; 
         public async void SubmitSetting()
         {
             var configPath = DataRepository.MainProcess!.MainModule!.FileName + ".eh.config";
@@ -276,19 +276,19 @@ namespace ErogeHelper.ViewModel.Pages
 
     class HookMapItem : PropertyChangedBase
     {
-        private string totalText = string.Empty;
-        private string text = string.Empty;
+        private string _totalText = string.Empty;
+        private string _text = string.Empty;
 
         public long Handle { get; set; }
 
-        public string Text { get => text; set { text = value; NotifyOfPropertyChange(() => Text); } }
+        public string Text { get => _text; set { _text = value; NotifyOfPropertyChange(() => Text); } }
 
         public string TotalText
         {
-            get => totalText;
+            get => _totalText;
             set
             {
-                totalText = value;
+                _totalText = value;
                 NotifyOfPropertyChange(() => TotalText);
             }
         }

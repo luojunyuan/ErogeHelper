@@ -30,13 +30,13 @@ namespace ErogeHelper.Model.Translator
         }
     }
 
-    enum TranslatorName
+    public enum TranslatorName
     { 
         BaiduApi,
         Yeekit,
     }
 
-    enum Language
+    public enum Language
     {
         Auto,
         ChineseSimplified,

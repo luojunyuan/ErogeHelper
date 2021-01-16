@@ -30,16 +30,12 @@ namespace ErogeHelper
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (s, eventArgs) =>
             {
-                Dispatcher dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
-                if (dispatcher != null)
-                {
-                    if(Dispatcher.CurrentDispatcher.Thread != Thread.CurrentThread)
-                    {
-                        Exception ex = (Exception) eventArgs.ExceptionObject;
-                        log.Error(ex);
-                        ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Fatal Error");
-                    }
-                }
+                var dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
+                if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread) return;
+                
+                Exception ex = (Exception) eventArgs.ExceptionObject;
+                log.Error(ex);
+                ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Fatal Error");
             };
             DispatcherUnhandledException += (s, eventArgs) =>
             {

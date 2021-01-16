@@ -11,7 +11,7 @@ using ErogeHelper.Common;
 
 namespace ErogeHelper.Model 
 {
-    class DataRepository
+    public class DataRepository
     {
         #region Methods
 

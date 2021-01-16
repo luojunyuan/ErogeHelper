@@ -97,6 +97,8 @@ namespace ErogeHelper.Common.Helper
 
             var width = rect.Right - rect.Left;  // equal rectClient.Right + shadow*2
             var height = rect.Bottom - rect.Top; // equal rectClient.Bottom + shadow + title
+
+            #region Change FloatButton Position
             if (oldWidth == -1 && oldHeight == -1)
             {
                 oldWidth = width;
@@ -108,6 +110,7 @@ namespace ErogeHelper.Common.Helper
                 oldHeight = height;
                 oldWidth = width;
             }
+            #endregion
 
             var winShadow = (width - rectClient.Right) / 2;
 

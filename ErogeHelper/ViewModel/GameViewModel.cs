@@ -51,26 +51,26 @@ namespace ErogeHelper.ViewModel
             }
         }
 
-        public bool CanZoomIn { get => true; }
+        public bool CanZoomIn => true;
         public void ZoomIn()
         {
             FontSize += 2;
             NotifyOfPropertyChange(() => CanZoomOut);
         }
 
-        public bool CanZoomOut { get => FontSize > 3; }
+        public bool CanZoomOut => FontSize > 3;
         public void ZoomOut()
         {
             FontSize -= 2;
             NotifyOfPropertyChange(() => CanZoomOut);
         }
 
-        public bool CanVolumeUp() => true;
+        public bool CanVolumeUp => true;
         public async void VolumeUp() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
-        public bool CanVolumeDown() => true;
+        public bool CanVolumeDown => true;
         public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
-        public bool CanSwitchGameScreen() => true;
+        public bool CanSwitchGameScreen => true;
         public async void SwitchGameScreen()
         {
             var handle = DataRepository.MainProcess!.MainWindowHandle;
@@ -103,7 +103,7 @@ namespace ErogeHelper.ViewModel
             }
         }
 
-        public bool CanTaskbarNotifyArea() => true;
+        public bool CanTaskbarNotifyArea => true;
         public async void TaskbarNotifyArea()
         {
             await WindowsInput.Simulate.Events()
@@ -112,11 +112,11 @@ namespace ErogeHelper.ViewModel
                 .ConfigureAwait(false);
         }
 
-        public bool CanTaskView() => true;
+        public bool CanTaskView => true;
         public async void TaskView() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
 
-        public bool CanScreenShot() => true;
+        public bool CanScreenShot => true;
         public async void ScreenShot()
         {
             AssistiveTouchIsVisible = false;

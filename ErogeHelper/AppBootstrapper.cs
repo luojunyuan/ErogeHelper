@@ -18,7 +18,7 @@ namespace ErogeHelper
 {
     class AppBootstrapper : BootstrapperBase
     {
-         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AppBootstrapper));
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AppBootstrapper));
 
         public AppBootstrapper()
         {
@@ -43,7 +43,7 @@ namespace ErogeHelper
                 var gamePath = e.Args[0];
                 var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
                 log.Info($"Game's path: {e.Args[0]}");
-                log.Info($"Locate Emulator statu: {e.Args.Contains("/le")}");
+                log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
 
                 if (e.Args.Contains("/le"))
                 {
@@ -143,7 +143,7 @@ namespace ErogeHelper
             builder.RegisterType<AboutViewModel>()
                 .SingleInstance();
 
-            // Register Servieces
+            // Register Services
             builder.RegisterType<SelectProcessService>()
                 .AsImplementedInterfaces();
             builder.RegisterType<GameViewDataService>()

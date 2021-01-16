@@ -64,7 +64,18 @@ namespace ErogeHelper.Common
             {
                 pathInApplication = pathInApplication[1..];
             }
-            return new BitmapImage(new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute));
+
+            try
+            {
+                var uri = new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute);
+                return new BitmapImage(uri);
+            }
+            catch (UriFormatException ex)
+            {
+                // Running in unit test
+                System.Diagnostics.Trace.WriteLine(ex.Message);
+                return new BitmapImage();
+            }
         }
 
         /// <summary>
