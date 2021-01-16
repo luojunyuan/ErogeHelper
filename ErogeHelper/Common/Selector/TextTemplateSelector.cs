@@ -12,6 +12,7 @@ namespace ErogeHelper.Common.Selector
 {
     class TextTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate? OutLineDefaultTemplate { get; set; }
         public DataTemplate? OutLineBottomTemplate { get; set; }
         public DataTemplate? OutLineTopTemplate { get; set; }
         public DataTemplate? OutLineVerticalTemplate { get; set; }
@@ -24,6 +25,8 @@ namespace ErogeHelper.Common.Selector
 
                 switch (textItem.TextTemplateType)
                 {
+                    case TextTemplateType.OutLineDefault:
+                        return OutLineDefaultTemplate;
                     case TextTemplateType.OutLineKanaTop:
                         return OutLineTopTemplate;
                     case TextTemplateType.OutLineKanaBottom:
@@ -38,7 +41,7 @@ namespace ErogeHelper.Common.Selector
 
     public enum TextTemplateType
     {
-        //OutLine, Can't be use right now T T
+        OutLineDefault,
         OutLineKanaTop,
         OutLineKanaBottom,
         OutLineVertical

@@ -7,8 +7,22 @@ namespace ErogeHelper.ViewModel.Pages
 {
     class MecabViewModel : PropertyChangedBase
     {
+        private bool _kanaDefault = DataRepository.KanaDefault;
         private bool _kanaTop = DataRepository.KanaTop;
         private bool _kanaBottom = DataRepository.KanaBottom;
+        public bool KanaDefault
+        {
+            get => _kanaDefault;
+            set
+            {
+                if (value.Equals(KanaDefault))
+                    return;
+                _kanaDefault = value;
+                NotifyOfPropertyChange(() => KanaDefault);
+                if (value)
+                    ChangeSourceTextTemplate(TextTemplateType.OutLineDefault);
+            }
+        }
         public bool KanaTop
         {
             get => _kanaTop;

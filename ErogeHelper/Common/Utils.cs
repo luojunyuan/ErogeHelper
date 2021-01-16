@@ -40,10 +40,9 @@ namespace ErogeHelper.Common
             return (value.ToString()) switch
             {
                 "名詞" => DataRepository.aquagreenImage,
-                "助詞" => DataRepository.transparentImage,
                 "動詞" or "感動詞" or "副詞" => DataRepository.greenImage,
-                "形容詞" => DataRepository.pinkImage,
-                _ => DataRepository.transparentImage,
+                "形容詞" or "形状詞" or "連体詞" => DataRepository.pinkImage,
+                _ => DataRepository.transparentImage, // "助詞" "接続詞"
             };
         }
 

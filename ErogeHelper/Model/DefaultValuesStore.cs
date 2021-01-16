@@ -19,6 +19,7 @@ namespace ErogeHelper.Model
 
         public const TextTemplateType TextTemplate = TextTemplateType.OutLineKanaTop;
 
+        public const bool KanaDefault = false;
         public const bool KanaTop = true;
         public const bool KanaBottom = false;
 

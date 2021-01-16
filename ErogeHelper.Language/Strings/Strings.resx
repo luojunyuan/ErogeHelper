@@ -268,4 +268,7 @@
   <data name="About.Title" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="MecabPage.FuriganaDefault" xml:space="preserve">
+    <value>MecabPage.FuriganaDefault</value>
+  </data>
 </root>

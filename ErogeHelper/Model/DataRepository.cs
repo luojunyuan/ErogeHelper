@@ -139,6 +139,12 @@ namespace ErogeHelper.Model
             set => SetValue(value);
         }
 
+        public static bool KanaDefault
+        {
+            get => GetValue(DefaultValuesStore.KanaDefault);
+            set => SetValue(value);
+        }
+
         public static bool KanaTop
         {
             get => GetValue(DefaultValuesStore.KanaTop);

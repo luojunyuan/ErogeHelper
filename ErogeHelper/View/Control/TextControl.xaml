@@ -27,16 +27,27 @@
         </Style>
         
         <DataTemplate x:Key="OutLineDefaultTemplate">
-            <Button>
+            <Button
+                cm:Message.Attach="[Click] = [SearchWord(TextItem)]"
+                cm:Action.TargetWithoutContext="{Binding DataContext, 
+                    RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                HorizontalAlignment="Center" Padding="0" Style="{StaticResource SingleTextButtonStyle}"
+                BorderThickness="0">
                 <Button.Background>
                     <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
                 </Button.Background>
                 <!-- More Clear Display -->
-                <control:OutlinedTextBlock Stroke="Black" ClipToBounds="False" 
-                             FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"   
-                             Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
+                <control:OutlinedTextBlock 
+                    x:Name="TextItem" Stroke="Black" ClipToBounds="False" 
+                    FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"   
+                    Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
                 </control:OutlinedTextBlock>
                 <!--WordSearchCommand-->
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout Placement="Bottom">
+
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
             </Button>
         </DataTemplate>
 
@@ -86,19 +97,31 @@
         <DataTemplate x:Key="OutLineBottomTemplate">
             <StackPanel>
                 <!-- 文字部分 -->
-                <Border
+                <Button
                     cm:Message.Attach="[PreviewMouseUp] = [SearchWord(TextItem)]"
                     cm:Action.TargetWithoutContext="{Binding DataContext, 
-                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
-                    <Border.Background>
+                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverter}}"
+                    HorizontalAlignment="Center" Padding="0" Style="{StaticResource SingleTextButtonStyle}"
+                    BorderThickness="0">
+                    <Button.Background>
                         <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
-                    </Border.Background>
+                    </Button.Background>
                     <control:OutlinedTextBlock x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック"
                         HorizontalAlignment="Center" ClipToBounds="False"
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
                     <!--WordSearchCommand-->
+                </Button>
+                <Border 
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
+                    Background="Transparent">
+                    <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック"
+                        HorizontalAlignment="Center" ClipToBounds="False"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
                 </Border>
                 <!-- 假名部分 -->
                 <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック" HorizontalAlignment="Center"
@@ -109,6 +132,7 @@
         </DataTemplate>
 
         <selector:TextTemplateSelector x:Key="KanaTemplateSelector"
+                                       OutLineDefaultTemplate="{StaticResource OutLineDefaultTemplate}"
                                        OutLineTopTemplate="{StaticResource OutLineTopTemplate}"
                                        OutLineBottomTemplate="{StaticResource OutLineBottomTemplate}"/>
     </UserControl.Resources>

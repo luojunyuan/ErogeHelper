@@ -1,4 +1,6 @@
 ﻿using MeCab;
+using MeCab.Extension.IpaDic;
+using MeCab.Extension.UniDic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +18,11 @@ namespace ErogeHelper.Common.Helper
         public MecabHelper()
         {
             parameter = new MeCabParam();
+            //parameter.DicDir = @"C:\Users\k1mlka\source\repos\luojunyuan\Eroge-Helper-pakage\mecab-UniDic";
             tagger = MeCabTagger.Create(parameter);
         }
 
-        public IEnumerable<MecabWordInfo> MecabWordEnumerable(string sentence)
+        public IEnumerable<MecabWordInfo> MecabWordIpaEnumerable(string sentence)
         {
             foreach (var node in tagger.ParseToNodes(sentence))
             {
@@ -31,15 +34,13 @@ namespace ErogeHelper.Common.Helper
                     MecabWordInfo word = new MecabWordInfo
                     {
                         Word = node.Surface,
-                        PartOfSpeech = features[0],
-                        Description = features[1],
-                        Feature = node.Feature,
+                        PartOfSpeech = node.GetPartsOfSpeech(),
                         Kana = " "
                     };
                     // 加这一步是为了防止乱码进入分词导致无法读取假名
                     if (features.Length >= 8)
                     {
-                        word.Kana = features[7];
+                        word.Kana = node.GetReading();
                     }
 
                     if (word.PartOfSpeech == "記号" ||
@@ -54,11 +55,52 @@ namespace ErogeHelper.Common.Helper
                 }
             }
         }
+
+        public IEnumerable<MecabWordInfo> MecabWordUniEnumerable(string sentence)
+        {
+            foreach (var node in tagger.ParseToNodes(sentence))
+            {
+                if (node.CharType > 0)
+                {
+                    var features = node.Feature.Split(',');
+
+                    #region 填充 MecabWordInfo 各项 Property
+                    MecabWordInfo word = new MecabWordInfo
+                    {
+                        Word = node.Surface,
+                        PartOfSpeech = node.GetPos1(),
+                        Kana = " "
+                    };
+                    // 加这一步是为了防止乱码进入分词导致无法读取假名
+                    if (features.Length >= 8)
+                    {
+                        word.Kana = node.GetPron();
+                    }
+
+                    if (word.PartOfSpeech == "補助記号" ||
+                        WanaKana.IsHiragana(node.Surface) ||
+                        WanaKana.IsKatakana(node.Surface) ||
+                        node.GetGoshu() == "記号")
+                    {
+                        word.Kana = " ";
+                    }
+
+                    if (node.GetGoshu() == "外")
+                    {
+                        var lemma = node.GetLemma().Split('-');
+                        if (lemma.Length == 2)
+                            word.Kana = lemma[1];
+                    }
+                    #endregion
+
+                    yield return word;
+                }
+            }
+        }
     }
 
     public struct MecabWordInfo
     {
-
         /// <summary>
         /// 单词
         /// </summary>
@@ -70,19 +112,9 @@ namespace ErogeHelper.Common.Helper
         public string PartOfSpeech;
 
         /// <summary>
-        /// 词性说明
-        /// </summary>
-        public string Description;
-
-        /// <summary>
-        /// 假名 null 在这里也不会报错
+        /// 假名，null 在这里也不会报错
         /// </summary>
         public string Kana;
-
-        /// <summary>
-        /// 全ての素性文字列
-        /// </summary>
-        public string Feature;
     }
 
     enum Hinshi

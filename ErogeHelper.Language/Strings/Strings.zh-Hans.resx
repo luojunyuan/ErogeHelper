@@ -248,4 +248,7 @@
   <data name="About.Title" xml:space="preserve">
     <value>关于</value>
   </data>
+  <data name="MecabPage.FuriganaDefault" xml:space="preserve">
+    <value>不显示假名</value>
+  </data>
 </root>

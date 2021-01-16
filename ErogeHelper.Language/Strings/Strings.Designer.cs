@@ -359,6 +359,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 MecabPage.FuriganaDefault 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_FuriganaDefault {
+            get {
+                return ResourceManager.GetString("MecabPage.FuriganaDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 MacabPage.FuriganaTop 的本地化字符串。
         /// </summary>
         public static string MecabPage_FuriganaTop {
