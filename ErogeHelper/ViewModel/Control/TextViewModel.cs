@@ -46,13 +46,20 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        // make a card vm in the future
-        private bool wordCardOpen = false;
-        public bool WordCardOpen { get => wordCardOpen; set { wordCardOpen = value; NotifyOfPropertyChange(() => WordCardOpen); } }
+        public CardViewModel CardFlyout { get; set; }
+
         public void SearchWord(SingleTextItem clickItem)
         {
-            WordCardOpen = true;
+            if (clickItem.SubMarkColor.ToString() == DataRepository.transparentImage.ToString())
+                return;
+
             log.Info(clickItem.Text);
+            CardFlyout.Word = clickItem.Text;
+        }
+
+        public TextViewModel(CardViewModel cardViewModel)
+        {
+            CardFlyout = cardViewModel;
         }
     }
 

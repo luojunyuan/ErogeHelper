@@ -25,36 +25,75 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
-        <DataTemplate x:Key="OutLineDefaultTemplate">
-            <Button
-                cm:Message.Attach="[Click] = [SearchWord(TextItem)]"
-                cm:Action.TargetWithoutContext="{Binding DataContext, 
-                    RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                HorizontalAlignment="Center" Padding="0" Style="{StaticResource SingleTextButtonStyle}"
-                BorderThickness="0">
-                <Button.Background>
-                    <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
-                </Button.Background>
-                <control:OutlinedTextBlock 
-                    x:Name="TextItem" Stroke="Black" ClipToBounds="False" 
-                    FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"   
-                    Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
-                </control:OutlinedTextBlock>
-                <!--WordSearchCommand-->
-                <ui:FlyoutService.Flyout>
-                    <ui:Flyout Placement="Bottom">
 
-                    </ui:Flyout>
-                </ui:FlyoutService.Flyout>
-            </Button>
+        <DataTemplate x:Key="OutLineDefaultTemplate">
+            <StackPanel>
+                <Border
+                    cm:Message.Attach="[PreviewMouseUp] = [SearchWord(TextItem)]"
+                    cm:Action.TargetWithoutContext="{Binding DataContext, 
+                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverter}}"
+                    MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" 
+                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp">
+                    <Border.Background>
+                        <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
+                    </Border.Background>
+                    <control:OutlinedTextBlock 
+                        x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
+                </Border>
+                <!-- Moji which can not be click(search) -->
+                <Border 
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
+                    Background="Transparent">
+                    <control:OutlinedTextBlock 
+                        Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
+                </Border>
+                <!--<Button
+                    cm:Message.Attach="[Click] = [SearchWord(TextItem)]"
+                    cm:Action.TargetWithoutContext="{Binding DataContext, 
+                        RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverter}}"
+                    HorizontalAlignment="Center" Padding="0" Style="{StaticResource SingleTextButtonStyle}"
+                    BorderThickness="0">
+                    <Button.Background>
+                        <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
+                    </Button.Background>
+                    <control:OutlinedTextBlock 
+                        x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"   
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
+                    --><!--WordSearchCommand--><!--
+                    <ui:FlyoutService.Flyout>
+                        <ui:Flyout Placement="Bottom">
+                            <control:CardControl />
+                        </ui:Flyout>
+                    </ui:FlyoutService.Flyout>
+                </Button>
+                <Border 
+                    Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
+                    Background="Transparent">
+                    <control:OutlinedTextBlock 
+                        Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False"
+                        FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                        Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
+                    </control:OutlinedTextBlock>
+                </Border>-->
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="OutLineTopTemplate">
             <StackPanel>
                 <!-- 假名部分 -->
-                <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック" HorizontalAlignment="Center"
-                    ClipToBounds="False" FontSize="{Binding FontSize, ElementName=TextItem, Converter={convert:FontSizeHalfConverter}}"
+                <control:OutlinedTextBlock 
+                    Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center"
+                    FontSize="{Binding FontSize, ElementName=TextItem, Converter={convert:FontSizeHalfConverter}}"
                     Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding RubyText}">
                 </control:OutlinedTextBlock>
                 <!-- 文字部分 -->
@@ -69,23 +108,23 @@
                         <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" Opacity="1"/>
                     </Button.Background>
 
-                    <control:OutlinedTextBlock x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック"
-                        HorizontalAlignment="Center" ClipToBounds="False"
+                    <control:OutlinedTextBlock 
+                        x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center" 
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
 
                     <ui:FlyoutService.Flyout>
                         <ui:Flyout Placement="Bottom">
-                            
+                            <control:CardControl />
                         </ui:Flyout>
                     </ui:FlyoutService.Flyout>
                 </Button>
                 <Border 
                     Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
                     Background="Transparent">
-                    <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック"
-                        HorizontalAlignment="Center" ClipToBounds="False"
+                    <control:OutlinedTextBlock 
+                        Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center" 
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
@@ -106,25 +145,32 @@
                     <Button.Background>
                         <ImageBrush x:Name="Dummybug" ImageSource="{Binding SubMarkColor}" />
                     </Button.Background>
-                    <control:OutlinedTextBlock x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック"
-                        HorizontalAlignment="Center" ClipToBounds="False"
+                    
+                    <control:OutlinedTextBlock 
+                        x:Name="TextItem" Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center"
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
-                    <!--WordSearchCommand-->
+                    
+                    <ui:FlyoutService.Flyout>
+                        <ui:Flyout Placement="Bottom">
+                            <control:CardControl />
+                        </ui:Flyout>
+                    </ui:FlyoutService.Flyout>
                 </Button>
                 <Border 
                     Visibility="{Binding CanBeSearch, Converter={StaticResource VisibleConverterReverse}}"
                     Background="Transparent">
-                    <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック"
-                        HorizontalAlignment="Center" ClipToBounds="False"
+                    <control:OutlinedTextBlock 
+                        Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center"
                         FontSize="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                         Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding Text}">
                     </control:OutlinedTextBlock>
                 </Border>
                 <!-- 假名部分 -->
-                <control:OutlinedTextBlock Stroke="Black" FontFamily="ＭＳ ゴシック" HorizontalAlignment="Center"
-                    ClipToBounds="False" FontSize="{Binding FontSize, ElementName=TextItem, Converter={convert:FontSizeHalfConverter}}"
+                <control:OutlinedTextBlock 
+                    Stroke="Black" FontFamily="ＭＳ ゴシック" ClipToBounds="False" HorizontalAlignment="Center"
+                    FontSize="{Binding FontSize, ElementName=TextItem, Converter={convert:FontSizeHalfConverter}}"
                     Fill="white" StrokePosition="Outside" StrokeThickness="1.3" Text="{Binding RubyText}">
                 </control:OutlinedTextBlock>
             </StackPanel>

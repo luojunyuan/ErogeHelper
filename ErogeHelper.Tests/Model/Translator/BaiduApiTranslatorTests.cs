@@ -12,12 +12,18 @@ namespace ErogeHelper.Model.Translator.Tests
     [TestClass()]
     public class BaiduApiTranslatorTests
     {
-        string AppId = "";
-        string Key = "";
+        string AppId = DataRepository.BaiduApiAppid;
+        string Key = DataRepository.BaiduApiSecretKey;
 
         [TestMethod()]
         public async Task TranslateImplAsyncTest()
         {
+            if (string.IsNullOrWhiteSpace(AppId) || string.IsNullOrWhiteSpace(Key))
+            {
+                // if there is no key just let it pass
+                return;
+            }
+
             var queryText = "わたし";
             var redict = "我";
 
@@ -29,6 +35,11 @@ namespace ErogeHelper.Model.Translator.Tests
         [TestMethod()]
         public async Task TranslatorInterfaceCallerTest()
         {
+            if (string.IsNullOrWhiteSpace(AppId) || string.IsNullOrWhiteSpace(Key))
+            {
+                return;
+            }
+
             var queryText = "皇帝の新しい心";
             var redict = "皇帝的新心";
 
@@ -40,6 +51,11 @@ namespace ErogeHelper.Model.Translator.Tests
         [TestMethod()]
         public void MultiRequestSpendTimeTest()
         {
+            if (string.IsNullOrWhiteSpace(AppId) || string.IsNullOrWhiteSpace(Key))
+            {
+                return;
+            }
+
             var queryText = "皇帝の新しい心";
             var redict = "皇帝的新心";
             string result = string.Empty;

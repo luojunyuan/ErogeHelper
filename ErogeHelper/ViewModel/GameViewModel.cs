@@ -28,6 +28,8 @@ namespace ErogeHelper.ViewModel
         private bool _assistiveTouchIsVisible = true;
         #endregion
 
+        public TextViewModel TextControl { get; set; }
+
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
         public bool AssistiveTouchIsVisible
@@ -163,7 +165,6 @@ namespace ErogeHelper.ViewModel
                 .ConfigureAwait(false);
         }
 
-        public TextViewModel TextControl { get; set; }
         readonly IWindowManager windowManager;
         private readonly IGameViewDataService dataService;
 

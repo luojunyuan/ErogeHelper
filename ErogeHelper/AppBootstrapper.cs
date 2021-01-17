@@ -132,6 +132,8 @@ namespace ErogeHelper
             // Control
             builder.RegisterType<TextViewModel>()
                 .SingleInstance();
+            builder.RegisterType<CardViewModel>()
+                .SingleInstance();
 
             // Pages
             builder.RegisterType<GeneralViewModel>()
