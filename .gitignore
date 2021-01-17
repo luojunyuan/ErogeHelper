@@ -339,3 +339,6 @@ healthchecksdb
 
 # Visual Studio Code local config folder
 .vscode/
+
+# Remove launchSettings.json
+launchSettings.json
