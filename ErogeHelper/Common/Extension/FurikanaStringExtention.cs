@@ -10,6 +10,9 @@ namespace ErogeHelper.Common.Extension
     {
         public static string Katakana2Hiragana(this string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return " ";
+
             string transform = string.Empty;
             foreach(var character in input)
             {

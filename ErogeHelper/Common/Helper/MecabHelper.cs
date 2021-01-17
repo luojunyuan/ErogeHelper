@@ -58,10 +58,9 @@ namespace ErogeHelper.Common.Helper
                             // Not Implament yet
                             //word.Kana = WanaKana.ToHiragana(word.Kana);
 
-                            //word.Kana = WanaKana.ToRomaji(word.Kana);
-                            //word.Kana = WanaKana.ToKana(word.Kana);
                             word.Kana = word.Kana.Katakana2Hiragana();
                         }
+                        // Katakana by default
                     }
                     #endregion
 

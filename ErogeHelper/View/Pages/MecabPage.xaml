@@ -22,8 +22,8 @@
                     </ui:RadioButtons>
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_FuriganaType}">
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_Romaji}" IsChecked="{Binding Romaji}" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Hiragana}" IsChecked="{Binding Hiragana}" ToolTip="under devolop" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Katakana}" IsChecked="{Binding Katakana}" ToolTip="under devolop" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Hiragana}" IsChecked="{Binding Hiragana}" />
+                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Katakana}" IsChecked="{Binding Katakana}" />
                     </ui:RadioButtons>
                 </ui:SimpleStackPanel>
             </GroupBox>

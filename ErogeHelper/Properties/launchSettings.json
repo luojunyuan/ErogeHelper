@@ -1,7 +1,8 @@
 {
   "profiles": {
     "ErogeHelper": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\~msic\\恋ニ_甘味ヲソエテ２\\cs2_open.exe\" /le"
     }
   }
 }

@@ -1,8 +1,11 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper.Common;
 using ErogeHelper.Common.Extension;
+using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
+using System.Diagnostics;
 using WanaKanaSharp;
 
 namespace ErogeHelper.ViewModel.Pages
@@ -94,10 +97,10 @@ namespace ErogeHelper.ViewModel.Pages
                 _romaji = value;
                 if (value)
                 {
-                    ChangeKanaType(nameof(Romaji));
                     DataRepository.Romaji = true;
                     DataRepository.Hiragana = false;
                     DataRepository.Katakana = false;
+                    ChangeKanaType();
                 }
             }
         }
@@ -111,10 +114,10 @@ namespace ErogeHelper.ViewModel.Pages
                 _hiragana = value;
                 if (value)
                 {
-                    ChangeKanaType(nameof(Hiragana));
                     DataRepository.Romaji = false;
                     DataRepository.Hiragana = true;
                     DataRepository.Katakana = false;
+                    ChangeKanaType();
                 }
             }
         }
@@ -128,59 +131,35 @@ namespace ErogeHelper.ViewModel.Pages
                 _katakana = value;
                 if (value)
                 {
-                    ChangeKanaType(nameof(Katakana));
                     DataRepository.Romaji = false;
                     DataRepository.Hiragana = false;
                     DataRepository.Katakana = true;
+                    ChangeKanaType();
                 }
             }
         }
 
-        private void ChangeKanaType(string type)
+        private readonly MecabHelper mecabHelper = new MecabHelper();
+        private void ChangeKanaType()
         {
             var tmp = new BindableCollection<SingleTextItem>();
-            if (type == nameof(Romaji))
+            
+            // This work around only takes 3~5ms it's fine! much better than WanaKana ones...
+            var sentence = string.Empty;
+            foreach (var sourceText in IoC.Get<TextViewModel>().SourceTextCollection)
             {
-                foreach (var item in IoC.Get<TextViewModel>().SourceTextCollection)
-                {
-                    item.RubyText = WanaKana.ToRomaji(item.RubyText);
-                    tmp.Add(item);
-                }
+                sentence += sourceText.Text;
             }
-            else if (type == nameof(Hiragana))
+            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpaEnumerable(sentence))
             {
-                foreach (var item in IoC.Get<TextViewModel>().SourceTextCollection)
+                tmp.Add(new SingleTextItem
                 {
-                    // Not Implament yet
-                    //item.RubyText = WanaKana.ToHiragana(item.RubyText);
-                    if (WanaKana.IsKatakana(item.RubyText))
-                    {
-                        item.RubyText = item.RubyText.Katakana2Hiragana();
-                    }
-                    else if (WanaKana.IsRomaji(item.RubyText))
-                    {
-                        // Romaji to hiragana
-                    }
-                    tmp.Add(item);
-                }
-            }
-            else if (type == nameof(Katakana))
-            {
-                //foreach (var item in IoC.Get<TextViewModel>().SourceTextCollection)
-                //{
-                //    // Not Implament yet
-                //    item.RubyText = WanaKana.ToKatakana(item.RubyText);
-                //    if (WanaKana.IsHiragana(item.RubyText))
-                //    {
-                //        item.RubyText = item.RubyText.Hiragana2Katakana();
-                //    }
-                //    else if (WanaKana.IsRomaji(item.RubyText))
-                //    {
-                //        // Romaji to katakana
-                //    }
-                //    tmp.Add(item);
-                //}
-                return;
+                    Text = mecabWord.Word,
+                    RubyText = mecabWord.Kana,
+                    PartOfSpeed = mecabWord.PartOfSpeech,
+                    TextTemplateType = DataRepository.TextTemplateConfig,
+                    SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
+                });
             }
             IoC.Get<TextViewModel>().SourceTextCollection = tmp;
         }

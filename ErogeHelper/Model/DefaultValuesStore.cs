@@ -24,8 +24,8 @@ namespace ErogeHelper.Model
         public const bool KanaBottom = false;
 
         public const bool Romaji = false;
-        public const bool Hiragana = false;
-        public const bool Katakana = true;
+        public const bool Hiragana = true;
+        public const bool Katakana = false;
 
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";
