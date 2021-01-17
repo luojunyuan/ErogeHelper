@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
@@ -25,7 +26,6 @@ namespace ErogeHelper.ViewModel.Pages
                     return;
                 // Set memory value
                 _kanaDefault = value;
-                // Notify all Button ? needed?
                 // React change in view and save to local
                 if (value)
                 {
@@ -153,7 +153,14 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     // Not Implament yet
                     //item.RubyText = WanaKana.ToHiragana(item.RubyText);
-                    item.RubyText = WanaKana.ToKana(WanaKana.ToRomaji(item.RubyText));
+                    if (WanaKana.IsKatakana(item.RubyText))
+                    {
+                        item.RubyText = item.RubyText.Katakana2Hiragana();
+                    }
+                    else if (WanaKana.IsRomaji(item.RubyText))
+                    {
+                        // Romaji to hiragana
+                    }
                     tmp.Add(item);
                 }
             }
@@ -163,6 +170,14 @@ namespace ErogeHelper.ViewModel.Pages
                 //{
                 //    // Not Implament yet
                 //    item.RubyText = WanaKana.ToKatakana(item.RubyText);
+                //    if (WanaKana.IsHiragana(item.RubyText))
+                //    {
+                //        item.RubyText = item.RubyText.Hiragana2Katakana();
+                //    }
+                //    else if (WanaKana.IsRomaji(item.RubyText))
+                //    {
+                //        // Romaji to katakana
+                //    }
                 //    tmp.Add(item);
                 //}
                 return;

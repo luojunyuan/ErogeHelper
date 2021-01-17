@@ -12,6 +12,9 @@ namespace ErogeHelper.Model.Translator.Tests
     [TestClass()]
     public class BaiduApiTranslatorTests
     {
+        string AppId = "";
+        string Key = "";
+
         [TestMethod()]
         public async Task TranslateImplAsyncTest()
         {

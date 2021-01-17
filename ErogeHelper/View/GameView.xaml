@@ -87,7 +87,7 @@
                                 <ui:AppBarElementContainer>
                                     <Button
                                         Visibility="{Binding IsLostFocus, Converter={StaticResource VisibleConverter}}"
-                                        Width="80" Height="40" Margin="10 0 0 0" Content="Skip" ToolTip="Ctrl+C"
+                                        Width="80" Height="40" Margin="10 5 0 5" Content="Skip" ToolTip="Ctrl"
                                         cm:Message.Attach="[PreviewMouseDown] = [PressSkip]; [PreviewMouseUp] = [PressSkipRelease]"/>
                                 </ui:AppBarElementContainer>
                             </ui:CommandBarFlyout.SecondaryCommands>
