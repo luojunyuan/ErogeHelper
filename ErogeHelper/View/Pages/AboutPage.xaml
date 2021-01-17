@@ -18,12 +18,26 @@
             <Image Source="pack://application:,,,/Assets/app_icon_big.png" HorizontalAlignment="Left" Height="128" />
             <TextBlock TextWrapping="Wrap" Text="it's eroge helper!" />
             <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic" Text="{x:Static resx:Strings.About_FileABug}" />
-            <TextBlock>
-                <Run Text="{x:Static resx:Strings.About_Version}" />
-                <Bold>
-                    <Run Text="{x:Static model:DataRepository.AppVersion}" />
-                </Bold>
-            </TextBlock>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>
+                    <Run Text="{x:Static resx:Strings.About_Version}" />
+                    <Bold>
+                        <Run Text="{x:Static model:DataRepository.AppVersion}" />
+                    </Bold>
+                </TextBlock>
+                <Border 
+                    BorderThickness="1" BorderBrush="{Binding BrushColor}" IsEnabled="{Binding CanJumpRelease}"
+                    Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10">
+                    <ui:HyperlinkButton 
+                        Padding="0" Margin="5 0 5 0" Foreground="{Binding BrushColor}" ToolTip="Click me jump to release page"
+                        NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases">
+                        <TextBlock Text="{Binding CheckUpdateStatus}" />
+                    </ui:HyperlinkButton>
+                </Border>
+            </StackPanel>
+            
+            
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_GitHub}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Contributors}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Dependencies}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" />
