@@ -12,7 +12,7 @@
 
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">
-            <GroupBox>
+            <GroupBox Header="Text Flyout">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaDefault}" IsChecked="{Binding KanaDefault}" />
@@ -25,6 +25,13 @@
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_Hiragana}" IsChecked="{Binding Hiragana}" />
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_Katakana}" IsChecked="{Binding Katakana}" />
                     </ui:RadioButtons>
+                </ui:SimpleStackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Moji辞書">
+                <ui:SimpleStackPanel Spacing="10">
+                    <Label Content="Token"/>
+                    <TextBox Text="{Binding MojiToken, UpdateSourceTrigger=PropertyChanged}" Width="240" HorizontalAlignment="Left"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

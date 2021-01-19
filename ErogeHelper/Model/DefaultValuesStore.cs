@@ -27,6 +27,8 @@ namespace ErogeHelper.Model
         public const bool Hiragana = true;
         public const bool Katakana = false;
 
+        public const string MojiSessionToken = "";
+
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";
         public const string BaiduApiSecretKey = "";

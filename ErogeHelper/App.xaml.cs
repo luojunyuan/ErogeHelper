@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -28,20 +29,29 @@ namespace ErogeHelper
             SetLanguageDictionary();
 
             // Set thread error handle
-            AppDomain.CurrentDomain.UnhandledException += (s, eventArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += (s, unhandledExceptionArgs) =>
             {
                 var dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
-                if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread) return;
+                if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread) 
+                    return;
                 
-                Exception ex = (Exception) eventArgs.ExceptionObject;
+                Exception ex = (Exception) unhandledExceptionArgs.ExceptionObject;
                 log.Error(ex);
                 ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Fatal Error");
             };
-            DispatcherUnhandledException += (s, eventArgs) =>
+            DispatcherUnhandledException += (s, dispatcherUnhandledExceptionEventArgs) =>
             {
-                eventArgs.Handled = true;
-                log.Error(eventArgs.Exception);
-                ModernWpf.MessageBox.Show(eventArgs.Exception.Message, "Eroge Helper - Fatal Error");
+                dispatcherUnhandledExceptionEventArgs.Handled = true; // More friendly
+
+                log.Error(dispatcherUnhandledExceptionEventArgs.Exception);
+                ModernWpf.MessageBox.Show(dispatcherUnhandledExceptionEventArgs.Exception.Message, "Eroge Helper - UI Error");
+            };
+            // Not sure is this useful
+            TaskScheduler.UnobservedTaskException += (s, unobservedTaskExceptionEventArgs) =>
+            {
+                // unobservedTaskExceptionEventArgs.SetObserved();
+                log.Error(unobservedTaskExceptionEventArgs.Exception);
+                ModernWpf.MessageBox.Show(unobservedTaskExceptionEventArgs.Exception.Message, "Eroge Helper - Task Error");
             };
         }
 

@@ -4,20 +4,23 @@ using ErogeHelper.Common.Selector;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Dictionary;
+using ErogeHelper.View.Control;
 using ErogeHelper.ViewModel.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ErogeHelper.ViewModel.Control
 {
-    class TextViewModel : PropertyChangedBase
+    class TextViewModel : Screen
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TextViewModel));
 
@@ -46,20 +49,30 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        public CardViewModel CardFlyout { get; set; }
+        public CardViewModel CardControl { get; set; }
 
-        public void SearchWord(SingleTextItem clickItem)
+        public async void SearchWord(SingleTextItem clickItem)
         {
             if (clickItem.SubMarkColor.ToString() == DataRepository.transparentImage.ToString())
                 return;
 
-            log.Info(clickItem.Text);
-            CardFlyout.Word = clickItem.Text;
+            log.Info($"Click {clickItem.Text}");
+            // Clear data first
+            CardControl.Word = clickItem.Text;
+            CardControl.ClearData();
+            await CardControl.MojiSearchAsync().ConfigureAwait(false);
+        }
+
+        public void CloseCardControl()
+        {
+            var view = GetView() as TextControl;
+            var popup = view!.Resources["CardPopup"] as Popup;
+            popup!.IsOpen = false;
         }
 
         public TextViewModel(CardViewModel cardViewModel)
         {
-            CardFlyout = cardViewModel;
+            CardControl = cardViewModel;
         }
     }
 

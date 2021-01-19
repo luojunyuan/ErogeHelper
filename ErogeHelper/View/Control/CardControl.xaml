@@ -6,29 +6,92 @@
              xmlns:local="clr-namespace:ErogeHelper.View.Control"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:cm="http://caliburnmicro.com"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
+             mc:Ignorable="d" >
     <!--cm:View.Model="ErogeHelper.ViewModel.Control.CardViewModel"-->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <DataTemplate x:Key="MojiContentTemplate">
+            <ScrollViewer PanningMode="Both">
+                <!--<ProgressBar IsIndeterminate="{Binding CardInfo.IsProcess}" />-->
+                <ui:SimpleStackPanel Spacing="10" Margin="10 20">
+                    <!--Word-->
+                    <TextBlock Text="{Binding Header}" Style="{DynamicResource TitleTextBlockStyle}"/>
+                    <!--Pron-->
+                    <TextBlock Text="{Binding Pron}" Margin="0 -10 0 0" Foreground="Gray" Style="{DynamicResource SubtitleTextBlockStyle}"/>
+                    <!--Hinshi-->
+                    <Border BorderThickness="1" BorderBrush="red" HorizontalAlignment="Left">
+                        <TextBlock Text="{Binding Title}" Foreground="red"/>
+                    </Border>
+                    <!--Expanders-->
+                    <ItemsControl ItemsSource="{Binding ExpanderCollection}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander IsExpanded="True">
+                                    <Expander.Header>
+                                        <TextBlock Text="{Binding Header}" TextWrapping="Wrap"/>
+                                    </Expander.Header>
+                                    <ItemsControl ItemsSource="{Binding ExampleCollection}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Margin="10 0 0 0">
+                                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" />
+                                                    <TextBlock Text="{Binding Trans}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <ui:SimpleStackPanel Spacing="10" Margin="20 10"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ui:SimpleStackPanel>
+            </ScrollViewer>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <ui:FlyoutPresenter ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <!-- And Close Button-->
+            <DockPanel>
+                <TextBox Text="{Binding Word}" Width="240" />
+                <Button HorizontalAlignment="Right" ToolTip="Close Card" cm:Message.Attach="[Click] = [CloseCard]">
+                    <Viewbox Stretch="None">
+                        <ui:SymbolIcon Symbol="Cancel" />
+                    </Viewbox>
+                </Button>
+            </DockPanel>
 
-        <Label Grid.Row="0" Content="{Binding Word}"/>
+            <TabControl SelectedIndex="0" Margin="0 10 0 0">
+                <TabControl.Items>
+                    <TabItem Header="Moji辞書">
+                        <!-- 控制这个Content宽度 -->
+                        <TabControl 
+                            ItemsSource="{Binding MojiCollection}"
+                            ContentTemplate="{StaticResource MojiContentTemplate}"
+                            TabStripPlacement="Left" Width="400" Height="300" SelectedIndex="{Binding MojiSelectedIndex}">
+                            <TabControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Header}" ToolTip="{Binding Header}" Width="50"/>
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                        </TabControl>
+                    </TabItem>
+                    
+                    <TabItem Header="Jisho">
+                    </TabItem>
+                    <TabItem Header="EBWin">
+                    </TabItem>
+                </TabControl.Items>
+            </TabControl>
 
-        <TabControl Grid.Row="1" SelectedIndex="0" Margin="0 10 0 0">
-            <TabControl.Items>
-                <TabItem Header="Moji辞書">
-                </TabItem>
-                <TabItem Header="Jisho">
-                </TabItem>
-                <TabItem Header="EBWin">
-                </TabItem>
-            </TabControl.Items>
-        </TabControl>
-
-        <!--<ui:AppBarButton Grid.Row="2"/>-->
-    </Grid>
+            <StackPanel Orientation="Horizontal">
+                <ui:AppBarButton Content="Weblic"/>
+                <ui:AppBarButton Content="kotobank"/>
+            </StackPanel>
+        </StackPanel>
+    </ui:FlyoutPresenter>
 </UserControl>

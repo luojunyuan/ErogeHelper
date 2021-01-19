@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -31,7 +32,6 @@ namespace ErogeHelper.View.Control
         private void Border_MouseEnter(object sender, MouseEventArgs e)
         {
             var border = sender as Border;
-            var a = border.Background;
             border!.Effect = new DropShadowEffect
             {
                 Color = new Color { A = 255, R = 255, G = 255, B = 0 },
@@ -39,7 +39,6 @@ namespace ErogeHelper.View.Control
                 ShadowDepth = 0,
                 Opacity = 1
             };
-
         }
 
         private void Border_MouseLeave(object sender, MouseEventArgs e)
@@ -58,6 +57,34 @@ namespace ErogeHelper.View.Control
         {
             var border = sender as Border;
             border!.Opacity = 1;
+
+            Popup? popup = Resources["CardPopup"] as Popup;
+            popup!.PlacementTarget = border;
+            popup!.IsOpen = true;
         }
+
+        #region Disable White Point by Touch
+        protected override void OnPreviewTouchDown(TouchEventArgs e)
+        {
+            base.OnPreviewTouchDown(e);
+            Cursor = Cursors.None;
+        }
+        protected override void OnPreviewTouchMove(TouchEventArgs e)
+        {
+            base.OnPreviewTouchMove(e);
+            Cursor = Cursors.None;
+        }
+        protected override void OnGotMouseCapture(MouseEventArgs e)
+        {
+            base.OnGotMouseCapture(e);
+            Cursor = Cursors.Arrow;
+        }
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        {
+            base.OnPreviewMouseMove(e);
+            if (e.StylusDevice == null)
+                Cursor = Cursors.Arrow;
+        }
+        #endregion
     }
 }

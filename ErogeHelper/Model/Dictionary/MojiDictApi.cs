@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Dictionary
@@ -12,12 +14,77 @@ namespace ErogeHelper.Model.Dictionary
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MojiDictApi));
 
-        string searchApi = "/parse/functions/search_v3";
-        string fetchApi = "/parse/functions/fetchWord_v2";
+        static string searchApi = "/parse/functions/search_v3";
+        static string fetchApi = "/parse/functions/fetchWord_v2";
 
         private static RestClient client = new RestClient("https://api.mojidict.com");
 
-        // Todo 5: return custom Type
+        /* 错误的SessionToken引发，且不会弹错，为啥？有一个task线程错误监听来着。。。
+         引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
+         引发的异常:“System.Net.WebException”(位于 System.Private.CoreLib.dll 中)
+         引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
+         */
+        public static async Task<MojiSearchResponse> SearchAsync(string query, CancellationToken token = default)
+        {
+            MojiSearchPayload searchPayload = new MojiSearchPayload
+            {
+                //langEnv = "zh-CN_ja",
+                needWords = "true",
+                searchText = query,
+                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
+                //_ClientVersion = "",
+                //_InstallationId = "",
+                _SessionToken = DataRepository.MojiSessionToken
+            };
+
+            var request = new RestRequest(searchApi, Method.POST)
+                .AddJsonBody(searchPayload);
+
+            MojiSearchResponse resp = new();
+
+            try
+            {
+                resp = await client.PostAsync<MojiSearchResponse>(request, token).ConfigureAwait(false);
+            }
+            /* Error like these can not be catch
+             * 引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
+             * 引发的异常:“System.Net.WebException”(位于 System.Private.CoreLib.dll 中)
+             * 引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
+             */
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+
+            return resp;
+        }
+
+        public static async Task<MojiFetchResponse> FetchAsync(string tarId, CancellationToken token = default)
+        {
+            MojiFetchPayload fetchPayload = new MojiFetchPayload
+            {
+                wordId = tarId, // searchResp.result.searchResults[0].tarId
+                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
+            };
+
+            var requestFetch = new RestRequest(fetchApi, Method.POST)
+                .AddJsonBody(fetchPayload);
+
+            MojiFetchResponse resp = new();
+
+            try
+            {
+                resp = await client.PostAsync<MojiFetchResponse>(requestFetch, token).ConfigureAwait(false);
+            }
+            catch(Exception ex)
+            {
+                log.Error(ex.Message);
+            }
+
+            return resp;
+        }
+
+        [Obsolete]
         public async Task<string> RequestAsync(string query)
         {
             MojiSearchPayload searchPayload = new MojiSearchPayload
@@ -40,7 +107,7 @@ namespace ErogeHelper.Model.Dictionary
             //{
                 MojiFetchPayload fetchPayload = new MojiFetchPayload
                 {
-                    wordId = searchResp.result.searchResults[0].tarId,
+                    wordId = searchResp.Result.Words[0].ObjectId,
                     _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
                 };
 
@@ -49,7 +116,7 @@ namespace ErogeHelper.Model.Dictionary
                 var fetchResp = await client.PostAsync<MojiFetchResponse>(requestFetch).ConfigureAwait(false);
             //}
 
-            return fetchResp.result.word.spell;
+            return fetchResp.result.Word.Spell;
         }
 
 
@@ -86,50 +153,58 @@ namespace ErogeHelper.Model.Dictionary
          * searchResults: [{searchText: "ドバサ", count: 1,…}] 包含一个其他网站的索引
          * words: []
          */
-        private class MojiSearchResponse
+        public class MojiSearchResponse
         {
-            public Result result { get; set; } = new Result();
+            // Property
+            [JsonPropertyName("result")]
+            public ResultClass Result { get; set; } = new ResultClass();
 
-            public class Result
+            // Class
+            public class ResultClass
             {
-                // same as query
-                public string originalSearchText { get; set; } = string.Empty; 
-                // 与query最相近的索引列表，以及别个网站的跳转
-                public List<Searchresult> searchResults { get; set; } = new List<Searchresult>(); 
-                // 与 searchResults 索引对应，不一定完全一致，所以只使用index[0]号
-                public List<Word> words { get; set; } = new List<Word>(); 
-            }
+                // Properties
+                [JsonPropertyName("originalSearchText")]
+                public string OriginalSearchText { get; set; } = string.Empty;
 
-            public class Searchresult
-            {
-                public string searchText { get; set; } = string.Empty;
-                // 对应单词url后缀
-                public string tarId { get; set; } = string.Empty;
-                public int type { get; set; }
-                public int count { get; set; }
-                public string title { get; set; } = string.Empty;
-                public DateTime createdAt { get; set; }
-                public DateTime updatedAt { get; set; }
-                // BoVutOlaPR
-                public string objectId { get; set; } = string.Empty;
-            }
+                [JsonPropertyName("searchResults")]
+                public List<Searchresult> SearchResults { get; set; } = new();
 
-            public class Word
-            {
-                // [惯用语] 主动承担。（自分からすすんで引き受ける。） 
-                public string excerpt { get; set; } = string.Empty;
-                // 買う
-                public string spell { get; set; } = string.Empty;
-                // ?
-                public string accent { get; set; } = string.Empty;
-                // かう 
-                public string pron { get; set; } = string.Empty;
-                public string romaji { get; set; } = string.Empty;
-                public DateTime createdAt { get; set; }
-                public DateTime updatedAt { get; set; }
-                public string updatedBy { get; set; } = string.Empty;
-                // 对应tarId
-                public string objectId { get; set; } = string.Empty;
+                [JsonPropertyName("words")]
+                public List<Word> Words { get; set; } = new();
+
+                // Class
+                public class Searchresult
+                {
+                    public string searchText { get; set; } = string.Empty;
+                    public string tarId { get; set; } = string.Empty; // 可能是网址？
+                    public int type { get; set; }
+                    public int count { get; set; }
+                    public string title { get; set; } = string.Empty;
+                    public DateTime createdAt { get; set; }
+                    public DateTime updatedAt { get; set; }
+                    public string objectId { get; set; } = string.Empty; // BoVutOlaPR
+                }
+
+                public class Word
+                {
+                    [JsonPropertyName("objectId")]
+                    public string ObjectId { get; set; } = string.Empty; // 198991321
+
+                    public string excerpt { get; set; } = string.Empty; // [惯用语] 主动承担。（自分からすすんで引き受ける。） 
+
+                    [JsonPropertyName("spell")]
+                    public string Spell { get; set; } = string.Empty; // 買う
+                    // ?
+                    [JsonPropertyName("accent")]
+                    public string Accent { get; set; } = string.Empty;
+
+                    [JsonPropertyName("pron")]
+                    public string Pron { get; set; } = string.Empty; // かう
+                    public string romaji { get; set; } = string.Empty;
+                    public DateTime createdAt { get; set; }
+                    public DateTime updatedAt { get; set; }
+                    public string updatedBy { get; set; } = string.Empty;
+                }
             }
         }
         #endregion
@@ -141,44 +216,53 @@ namespace ErogeHelper.Model.Dictionary
 
             public class Result
             {
-                public Word word { get; set; } = new Word();
+                [JsonPropertyName("word")]
+                public Word Word { get; set; } = new Word();
 
-                // details[0].title aka Shinhi
-                public List<Detail> details { get; set; } = new List<Detail>();
+                // details[0].title aka Shinhi，可能有多组词性
+                [JsonPropertyName("details")]
+                public List<Detail> Details { get; set; } = new List<Detail>();
 
-                public List<Subdetail> subdetails { get; set; } = new List<Subdetail>();
+                [JsonPropertyName("subdetails")]
+                public List<Subdetail> Subdetails { get; set; } = new List<Subdetail>();
 
                 // 与subdetails相对应，可能null
-                public List<Example> examples { get; set; } = new List<Example>();
+                [JsonPropertyName("examples")]
+                public List<Example> Examples { get; set; } = new List<Example>();
             }
 
             public class Word
             {
+                public string objectId { get; set; } = string.Empty;
+
                 // details[0].title + subdetails[0]
                 public string excerpt { get; set; } = string.Empty;
                 /// <summary>
                 /// Surface
                 /// </summary>
-                public string spell { get; set; } = string.Empty;
+                [JsonPropertyName("spell")]
+                public string Spell { get; set; } = string.Empty;
                 public string accent { get; set; } = string.Empty;
                 /// <summary>
                 /// Hirakana
                 /// </summary>
-                public string pron { get; set; } = string.Empty;
+                [JsonPropertyName("pron")]
+                public string Pron { get; set; } = string.Empty;
                 public string romaji { get; set; } = string.Empty;
                 public DateTime createdAt { get; set; }
                 public DateTime updatedAt { get; set; }
                 public string updatedBy { get; set; } = string.Empty;
-                public string objectId { get; set; } = string.Empty;
             }
 
             public class Detail
             {
-                public string title { get; set; } = string.Empty;
+                public string wordId { get; set; } = string.Empty;
+
+                [JsonPropertyName("title")]
+                public string Title { get; set; } = string.Empty; // 自动#一类#感
                 public int index { get; set; }
                 public DateTime createdAt { get; set; }
                 public DateTime updatedAt { get; set; }
-                public string wordId { get; set; } = string.Empty;
                 public string updatedBy { get; set; } = string.Empty;
                 public bool converted { get; set; }
                 public string objectId { get; set; } = string.Empty;
@@ -186,7 +270,12 @@ namespace ErogeHelper.Model.Dictionary
 
             public class Subdetail
             {
-                public string title { get; set; } = string.Empty;
+
+                [JsonPropertyName("objectId")]
+                public string ObjectId { get; set; } = string.Empty; // 536 通过这个来找，对应 examples-subdetailsId
+
+                [JsonPropertyName("title")]
+                public string Title { get; set; } = string.Empty;
                 public int index { get; set; }
                 public DateTime createdAt { get; set; }
                 public DateTime updatedAt { get; set; }
@@ -194,18 +283,21 @@ namespace ErogeHelper.Model.Dictionary
                 public string detailsId { get; set; } = string.Empty;
                 public string updatedBy { get; set; } = string.Empty;
                 public bool converted { get; set; }
-                public string objectId { get; set; } = string.Empty;
             }
 
             public class Example
             {
-                public string title { get; set; } = string.Empty;
+                [JsonPropertyName("subdetailsId")]
+                public string SubdetailsId { get; set; } = string.Empty;
+
+                [JsonPropertyName("title")]
+                public string Title { get; set; } = string.Empty;
                 public int index { get; set; }
-                public string trans { get; set; } = string.Empty;
+                [JsonPropertyName("trans")]
+                public string Trans { get; set; } = string.Empty;
                 public DateTime createdAt { get; set; }
                 public DateTime updatedAt { get; set; }
                 public string wordId { get; set; } = string.Empty;
-                public string subdetailsId { get; set; } = string.Empty;
                 public string updatedBy { get; set; } = string.Empty;
                 public bool converted { get; set; }
                 public string objectId { get; set; } = string.Empty;

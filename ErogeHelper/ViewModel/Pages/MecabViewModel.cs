@@ -18,6 +18,7 @@ namespace ErogeHelper.ViewModel.Pages
         private bool _romaji = DataRepository.Romaji;
         private bool _hiragana = DataRepository.Hiragana;
         private bool _katakana = DataRepository.Katakana;
+        private string _mojiToken = DataRepository.MojiSessionToken;
 
         public bool KanaDefault
         {
@@ -47,8 +48,8 @@ namespace ErogeHelper.ViewModel.Pages
                 if (value.Equals(KanaTop))
                     return;
                 _kanaTop = value;
-                if (value) 
-                { 
+                if (value)
+                {
                     ChangeSourceTextTemplate(TextTemplateType.OutLineKanaTop);
                     DataRepository.KanaDefault = false;
                     DataRepository.KanaTop = true;
@@ -105,7 +106,7 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
         public bool Hiragana
-        { 
+        {
             get => _hiragana;
             set
             {
@@ -121,8 +122,8 @@ namespace ErogeHelper.ViewModel.Pages
                 }
             }
         }
-        public bool Katakana 
-        { 
+        public bool Katakana
+        {
             get => _katakana;
             set
             {
@@ -143,7 +144,7 @@ namespace ErogeHelper.ViewModel.Pages
         private void ChangeKanaType()
         {
             var tmp = new BindableCollection<SingleTextItem>();
-            
+
             // This work around only takes 3~5ms it's fine! much better than WanaKana ones...
             var sentence = string.Empty;
             foreach (var sourceText in IoC.Get<TextViewModel>().SourceTextCollection)
@@ -162,6 +163,17 @@ namespace ErogeHelper.ViewModel.Pages
                 });
             }
             IoC.Get<TextViewModel>().SourceTextCollection = tmp;
+        }
+
+        public string MojiToken 
+        { 
+            get => _mojiToken;
+            set 
+            { 
+                _mojiToken = value;
+                NotifyOfPropertyChange(() => MojiToken);
+                DataRepository.MojiSessionToken = value;
+            } 
         }
     }
 }

@@ -112,7 +112,7 @@ namespace ErogeHelper
 
             var builder = new ContainerBuilder();
 
-            // Register Basic Tools
+            // Registe Basic Tools
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
