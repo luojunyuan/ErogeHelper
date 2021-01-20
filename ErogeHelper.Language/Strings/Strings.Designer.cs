@@ -323,7 +323,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 This will register Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before Move or delete. 的本地化字符串。
+        ///   查找类似 This will registe Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before move or delete. 的本地化字符串。
         /// </summary>
         public static string Installer_Info {
             get {

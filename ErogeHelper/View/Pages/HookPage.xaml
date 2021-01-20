@@ -46,7 +46,8 @@
                                 <TextBox.Text>
                                     <Binding Path="InputCode" UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
-                                            <validation:InvalidCodeFormatValidationRule ValidatesOnTargetUpdated="True"/>
+                                            <validation:InvalidCodeFormatValidationRule 
+                                                ValidatesOnTargetUpdated="True"/>
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>

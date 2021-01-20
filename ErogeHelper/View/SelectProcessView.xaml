@@ -17,14 +17,16 @@
         <StackPanel Margin="20,10">
             <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock Text="{x:Static resx:Strings.SelectProcess_Tips}" 
+                    <TextBlock 
+                        Text="{x:Static resx:Strings.SelectProcess_Tips}" 
                         Style="{StaticResource SubtitleTextBlockStyle}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Lable}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ComboBox x:Name="ProcItems" cm:Message.Attach="[DropDownOpened] = [GetProcessAction]"
-                        MinWidth="240">
+                    <ComboBox 
+                        x:Name="ProcItems" MinWidth="240"
+                        cm:Message.Attach="[DropDownOpened] = [GetProcessAction]">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -34,7 +36,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
+                    <Button 
+                        x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
                         Style="{StaticResource AccentButtonStyle}" MinWidth="240"/>
                 </ui:SimpleStackPanel>
             </GroupBox>

@@ -163,7 +163,7 @@
     <value>Set Run as Administrator</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>This will register Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before Move or delete.</value>
+    <value>This will registe Eroge Helper to the window context menu of all `exe` programs. Please uninstall me before move or delete.</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>Register</value>

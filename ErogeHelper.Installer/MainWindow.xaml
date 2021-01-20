@@ -9,15 +9,18 @@
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="Installer" SizeToContent="Height" Width="380">
+    
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20, 10">
             <GroupBox Header="ErogeHelper Installer">
                 <ui:SimpleStackPanel Spacing="10">
                     <TextBlock TextWrapping="Wrap" Text="{x:Static resx:Strings.Installer_Info}"/>
-                    <Button x:Name="InstallButton" Content="{x:Static resx:Strings.Installer_Register}" 
-                            Click="Register" Width="90"/>
-                    <Button x:Name="UninstallButton" Content="{x:Static resx:Strings.Installer_Unload}" 
-                            Click="Unload" Width="90"/>
+                    <Button 
+                        x:Name="InstallButton" Content="{x:Static resx:Strings.Installer_Register}" 
+                        Click="Register" Width="90"/>
+                    <Button 
+                        x:Name="UninstallButton" Content="{x:Static resx:Strings.Installer_Unload}" 
+                        Click="Unload" Width="90"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

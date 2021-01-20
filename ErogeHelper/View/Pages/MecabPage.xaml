@@ -15,15 +15,25 @@
             <GroupBox Header="Text Flyout">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaDefault}" IsChecked="{Binding KanaDefault}" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaTop}" IsChecked="{Binding KanaTop}" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_FuriganaBottom}" IsChecked="{Binding KanaBottom}" />
+                        <RadioButton 
+                            Content="{x:Static resx:Strings.MecabPage_FuriganaDefault}" 
+                            IsChecked="{Binding KanaDefault}" />
+                        <RadioButton 
+                            Content="{x:Static resx:Strings.MecabPage_FuriganaTop}" 
+                            IsChecked="{Binding KanaTop}" />
+                        <RadioButton 
+                            Content="{x:Static resx:Strings.MecabPage_FuriganaBottom}" 
+                            IsChecked="{Binding KanaBottom}" />
                         <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MecabPage_TextVertical}" />
                     </ui:RadioButtons>
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_FuriganaType}">
                         <RadioButton Content="{x:Static resx:Strings.MecabPage_Romaji}" IsChecked="{Binding Romaji}" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Hiragana}" IsChecked="{Binding Hiragana}" />
-                        <RadioButton Content="{x:Static resx:Strings.MecabPage_Katakana}" IsChecked="{Binding Katakana}" />
+                        <RadioButton 
+                            Content="{x:Static resx:Strings.MecabPage_Hiragana}" 
+                            IsChecked="{Binding Hiragana}" />
+                        <RadioButton 
+                            Content="{x:Static resx:Strings.MecabPage_Katakana}" 
+                            IsChecked="{Binding Katakana}" />
                     </ui:RadioButtons>
                 </ui:SimpleStackPanel>
             </GroupBox>
@@ -31,7 +41,9 @@
             <GroupBox Header="Moji辞書">
                 <ui:SimpleStackPanel Spacing="10">
                     <Label Content="Token"/>
-                    <TextBox Text="{Binding MojiToken, UpdateSourceTrigger=PropertyChanged}" Width="240" HorizontalAlignment="Left"/>
+                    <TextBox 
+                        Text="{Binding MojiToken, UpdateSourceTrigger=PropertyChanged}" Width="240" 
+                        HorizontalAlignment="Left"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

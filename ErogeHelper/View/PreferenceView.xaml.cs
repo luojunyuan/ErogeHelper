@@ -19,14 +19,15 @@ namespace ErogeHelper.View
             InitializeComponent();
 
             ContentFrame.Navigated += OnNavigated;
-            PageNavigate("general_setting", new EntranceNavigationTransitionInfo());
+            PageNavigate("general", new EntranceNavigationTransitionInfo());
         }
 
         private readonly List<(string Tag, Type PageType)> pages = new()
         {
-            ("general_setting", typeof(GeneralPage)),
-            ("mecab_setting", typeof(MecabPage)),
-            ("hook_setting", typeof(HookPage)),
+            ("general", typeof(GeneralPage)),
+            ("mecab", typeof(MecabPage)),
+            ("hook", typeof(HookPage)),
+
             ("about", typeof(AboutPage)),
         };
 

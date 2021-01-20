@@ -13,9 +13,7 @@
             <Border Background="#1D1A1D" CornerRadius="10" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                 <Grid>
                     <Border CornerRadius="18" Width="36" Height="36" Background="#4F4C4F" />
-
                     <Border CornerRadius="15" Width="30" Height="30" Background="#9A979A" />
-
                     <Border CornerRadius="13" Width="24" Height="24" Background="#FFFFFF"/>
                 </Grid>
             </Border>

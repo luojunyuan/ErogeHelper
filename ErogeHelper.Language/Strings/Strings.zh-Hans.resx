@@ -98,7 +98,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SelectProcess.Tips" xml:space="preserve">
-    <value>请使用EHInstaller.exe来安装我，安装后右键游戏程序选择Eroge Helper启动更方便哦~</value>
+    <value>请使用ErogeHelper.Installer.exe来安装我，安装后右键游戏程序选择Eroge Helper启动更方便哦~</value>
   </data>
   <data name="SelectProcess.InjectButton" xml:space="preserve">
     <value>注入</value>
@@ -143,7 +143,7 @@
     <value>设置管理员身份运行</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要移动或删除文件夹请先运行 Installer 注销掉EH。</value>
+    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要移动或删除EH文件夹请先注销掉我。</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>注册</value>
