@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace ErogeHelper.Common.Extension
 {
     static class FurikanaStringExtention
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(FurikanaStringExtention));
+
         public static string Katakana2Hiragana(this string input)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -16,7 +19,15 @@ namespace ErogeHelper.Common.Extension
             string transform = string.Empty;
             foreach(var character in input)
             {
-                transform += Katakana2HiraganaMap[character];
+                char testValue;
+                if (Katakana2HiraganaMap.TryGetValue(character, out testValue))
+                {
+                    transform += Katakana2HiraganaMap[character];
+                }
+                else
+                {
+                    log.Warn($"No {testValue} in Katakana2HiraganaMap");
+                }
             }
             return transform;
         }
@@ -48,6 +59,9 @@ namespace ErogeHelper.Common.Extension
                                           { 'ッ', 'っ' },
             { 'ャ', 'ゃ' },                { 'ュ', 'ゅ' },                { 'ョ', 'ょ' },
             { 'ヮ', 'ゎ' },
+
+            // Specific
+            { 'ー', 'い' },
         };
     }
 }

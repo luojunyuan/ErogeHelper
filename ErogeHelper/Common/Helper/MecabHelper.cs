@@ -12,7 +12,7 @@ using WanaKanaSharp;
 
 namespace ErogeHelper.Common.Helper
 {
-    class MecabHelper
+    public class MecabHelper
     {
         private readonly MeCabParam parameter;
         private readonly MeCabTagger tagger;
