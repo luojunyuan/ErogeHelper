@@ -19,8 +19,7 @@ namespace ErogeHelper.Common.Extension
             string transform = string.Empty;
             foreach(var character in input)
             {
-                char testValue;
-                if (Katakana2HiraganaMap.TryGetValue(character, out testValue))
+                if (Katakana2HiraganaMap.TryGetValue(character, out char testValue))
                 {
                     transform += Katakana2HiraganaMap[character];
                 }
@@ -32,7 +31,7 @@ namespace ErogeHelper.Common.Extension
             return transform;
         }
 
-        static Dictionary<char, char> Katakana2HiraganaMap = new Dictionary<char, char>()
+        static readonly Dictionary<char, char> Katakana2HiraganaMap = new Dictionary<char, char>()
         {
             { 'ア', 'あ' }, { 'イ', 'い' }, { 'ウ', 'う' }, { 'エ', 'え' }, { 'オ', 'お' },
             { 'カ', 'か' }, { 'キ', 'き' }, { 'ク', 'く' }, { 'ケ', 'け' }, { 'コ', 'こ' },

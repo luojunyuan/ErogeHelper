@@ -22,10 +22,10 @@ namespace ErogeHelper.Common.Service
 
         public void Start()
         {
-            Textractor.SelectedDataEvent += DataProgress;
+            Textractor.SelectedDataEvent += DataProcess;
         }
 
-        private void DataProgress(object sender, HookParam hp)
+        private void DataProcess(object sender, HookParam hp)
         {
             // Refresh
             IoC.Get<GameViewModel>().AppendTextList.Clear(); // Clear or give new value? is that same

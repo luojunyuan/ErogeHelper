@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ErogeHelper.ViewModel.Control
 {
@@ -67,7 +68,9 @@ namespace ErogeHelper.ViewModel.Control
             else if (string.IsNullOrWhiteSpace(searchResponse.Result.OriginalSearchText)) 
             {
                 // Exception happend
-                MessageBox.Show("An Error Occurred, it may be bad token, or bad net request", "Eroge Helper");
+                await Application.Current.Dispatcher.InvokeAsync(() 
+                    => ModernWpf.MessageBox.Show("An Error Occurred, it may be bad token, or bad net request", "Eroge Helper"));
+                
                 return;
             }
             else if (searchResponse.Result.Words.Count == 0)

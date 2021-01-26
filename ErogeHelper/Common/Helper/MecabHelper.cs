@@ -30,8 +30,6 @@ namespace ErogeHelper.Common.Helper
             {
                 if (node.CharType > 0)
                 {
-                    var features = node.Feature.Split(',');
-
                     #region 填充 MecabWordInfo 各项 Property
                     MecabWordInfo word = new MecabWordInfo
                     {
