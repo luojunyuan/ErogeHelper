@@ -46,13 +46,6 @@ namespace ErogeHelper
                 log.Error(dispatcherUnhandledExceptionEventArgs.Exception);
                 ModernWpf.MessageBox.Show(dispatcherUnhandledExceptionEventArgs.Exception.Message, "Eroge Helper - UI Error");
             };
-            // Not sure is this useful
-            TaskScheduler.UnobservedTaskException += (s, unobservedTaskExceptionEventArgs) =>
-            {
-                // unobservedTaskExceptionEventArgs.SetObserved();
-                log.Error(unobservedTaskExceptionEventArgs.Exception);
-                ModernWpf.MessageBox.Show(unobservedTaskExceptionEventArgs.Exception.Message, "Eroge Helper - Task Error");
-            };
         }
 
         private static void SetLanguageDictionary()
