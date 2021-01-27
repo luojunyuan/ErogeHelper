@@ -59,7 +59,7 @@ namespace ErogeHelper.Common.Helper
                         {
                             // skip no effect exception
                             // This occurrent because process has no window event
-                            Log.Warn(ex.Message);
+                            Log.Info(ex.Message);
                         }
 
                         newProcFind = true;

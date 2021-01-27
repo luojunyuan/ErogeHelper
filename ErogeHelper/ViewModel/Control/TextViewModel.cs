@@ -54,7 +54,6 @@ namespace ErogeHelper.ViewModel.Control
             if (clickItem.SubMarkColor.ToString() == DataRepository.transparentImage.ToString())
                 return;
 
-            Log.Info($"Click {clickItem.Text}");
             // Clear data first
             CardControl.Word = clickItem.Text;
             CardControl.ClearData();

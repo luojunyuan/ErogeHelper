@@ -42,34 +42,42 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        private static CancellationTokenSource cts = new();
-
         internal async Task MojiSearchAsync()
         {
-            cts.Cancel();
-            cts = new CancellationTokenSource();
-            var token = cts.Token;
-
             var searchResponse = await MojiDictApi.SearchAsync(Word).ConfigureAwait(false);
 
-            if (token.IsCancellationRequested)
-            {
-                Log.Info("Moji search task was canceled");
-                return;
-            }
-
-            else if (string.IsNullOrWhiteSpace(searchResponse.Result.OriginalSearchText))
-            {
-                // Exception happend
-                await Application.Current.Dispatcher.InvokeAsync(()
-                    => ModernWpf.MessageBox.Show("An Error Occurred, it may be bad token, or bad net request", "Eroge Helper"));
-
-                return;
-            }
-            else if (searchResponse.Result.Words.Count == 0)
+            if (searchResponse.StatusCode == RestSharp.ResponseStatus.None)
             {
                 // Moji no result
                 // 如果没有结果，Words.Count == 0，MojiCollection[0].TarId 指向雅虎搜索网址
+                MojiCollection.Add(new MojiItem
+                {
+                    Header = "None",
+                    TarId = string.Empty
+                });
+                MojiCollection[0].ExpanderCollection.Add(
+                    new MojiExpanderItem { Header = "No Search Result", ExampleCollection = new() });
+                MojiSelectedIndex = 0;
+
+                return;
+            }
+            else if (searchResponse.StatusCode == RestSharp.ResponseStatus.Error)
+            {
+                // Exception happend
+                MojiCollection.Add(new MojiItem
+                {
+                    Header = "Error",
+                    TarId = string.Empty
+                });
+                MojiCollection[0].ExpanderCollection.Add(
+                    new MojiExpanderItem 
+                    { 
+                        Header = "An error occurred, it may be bad token, or bad net request", 
+                        ExampleCollection = new() 
+                    }
+                );
+                MojiSelectedIndex = 0;
+
                 return;
             }
 

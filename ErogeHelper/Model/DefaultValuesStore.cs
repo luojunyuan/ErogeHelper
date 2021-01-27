@@ -27,7 +27,9 @@ namespace ErogeHelper.Model
         public const bool Hiragana = true;
         public const bool Katakana = false;
 
-        public const string MojiSessionToken = "";
+        // Account: erogehelper@github.com
+        // Password: erogehelper
+        public const string MojiSessionToken = "r:256b6ae1bca1087937025a5dcc73294f";
 
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";

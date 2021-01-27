@@ -25,9 +25,9 @@ namespace ErogeHelper
             var methodName = memberName;
 
             // Textractor.Init() [line 68]
-            var format = $"{fileName}.{methodName}() [line {sourceLineNumber}]".PadRight(45, ' ');
+            var format = $"{fileName}.{methodName}() [line {sourceLineNumber}]".PadRight(45, '-');
 
-            return format + message;
+            return format + "🍖" + message;
         }
 
         public static void Verbose(

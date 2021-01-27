@@ -18,13 +18,14 @@ namespace ErogeHelper.Model.Dictionary
 
         private static readonly RestClient client = new RestClient("https://api.mojidict.com");
 
-        /* 错误的SessionToken引发，且不会弹错，为啥？有一个task线程错误监听来着。。。
-         引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
-         引发的异常:“System.Net.WebException”(位于 System.Private.CoreLib.dll 中)
-         引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
-         */
-        public static async Task<MojiSearchResponse> SearchAsync(string query, CancellationToken token = default)
+        private static CancellationTokenSource cts = new();
+
+        public static async Task<MojiSearchResponse> SearchAsync(string query)
         {
+            cts.Cancel();
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
+
             MojiSearchPayload searchPayload = new MojiSearchPayload
             {
                 //langEnv = "zh-CN_ja",
@@ -43,16 +44,30 @@ namespace ErogeHelper.Model.Dictionary
 
             try
             {
-                resp = await client.PostAsync<MojiSearchResponse>(request, token).ConfigureAwait(false);
+                resp = await client.PostAsync<MojiSearchResponse>(request).ConfigureAwait(false);
+
+                if (token.IsCancellationRequested)
+                {
+                    resp.StatusCode = ResponseStatus.Aborted;
+                    Log.Info("Moji search task was canceled");
+                }
+                else if (resp.Result.Words.Count == 0)
+                {
+                    // None means no content, like string.Empty
+                    resp.StatusCode = ResponseStatus.None; // There is no ResponseStatus.NotFound
+                }
+                else
+                {
+                    resp.StatusCode = ResponseStatus.Completed;
+                }
             }
-            /* Error like these can not be catch
-             * 引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
-             * 引发的异常:“System.Net.WebException”(位于 System.Private.CoreLib.dll 中)
-             * 引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
-             */
             catch (Exception ex)
             {
+                // Same as `resp.Result.OriginalSearchText == string.Empty`
                 Log.Error(ex.Message);
+                // Any network transport error (network is down, failed DNS lookup, etc), or any kind of server error 
+                // (except 404), `resp.StatusCode` will be set to `ResponseStatus.Error`.
+                resp.StatusCode = ResponseStatus.Error;
             }
 
             return resp;
@@ -83,7 +98,7 @@ namespace ErogeHelper.Model.Dictionary
             return resp;
         }
 
-        [Obsolete]
+        [Obsolete("Do not use this")]
         public async Task<string> RequestAsync(string query)
         {
             MojiSearchPayload searchPayload = new MojiSearchPayload
@@ -154,6 +169,13 @@ namespace ErogeHelper.Model.Dictionary
          */
         public class MojiSearchResponse
         {
+            /// <summary>
+            /// <para>Statu code</para>
+            /// <para>different with `RestResponse.StatusCode`</para>
+            /// <para>`typeof(RestResponse.StatusCode) == HttpStatusCode`</para>
+            /// </summary>
+            public ResponseStatus StatusCode { get; set; }
+
             // Property
             [JsonPropertyName("result")]
             public ResultClass Result { get; set; } = new ResultClass();

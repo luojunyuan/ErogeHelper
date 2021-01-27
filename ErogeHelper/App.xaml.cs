@@ -39,14 +39,14 @@ namespace ErogeHelper
 
                 Exception ex = (Exception)unhandledExceptionArgs.ExceptionObject;
                 Log.Error(ex);
-                ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Fatal Error");
+                ModernWpf.MessageBox.Show(ex.Message, "Eroge Helper - Unhandled Fatal Error");
             };
             DispatcherUnhandledException += (s, dispatcherUnhandledExceptionEventArgs) =>
             {
                 dispatcherUnhandledExceptionEventArgs.Handled = true; // More friendly
 
                 Log.Error(dispatcherUnhandledExceptionEventArgs.Exception);
-                ModernWpf.MessageBox.Show(dispatcherUnhandledExceptionEventArgs.Exception.Message, "Eroge Helper - UI Error");
+                ModernWpf.MessageBox.Show(dispatcherUnhandledExceptionEventArgs.Exception.Message, "Eroge Helper - Unhandled UI Error");
             };
         }
 
