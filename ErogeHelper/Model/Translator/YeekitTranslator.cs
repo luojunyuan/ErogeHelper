@@ -1,5 +1,6 @@
-﻿using log4net;
+﻿using Caliburn.Micro;
 using RestSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace ErogeHelper.Model.Translator
 {
     class YeekitTranslator : ITranslator
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(YeekitTranslator));
-
         public bool IsEnable { get; set; } = DataRepository.YeekitEnable;
 
         public TranslatorName Name => TranslatorName.Yeekit;
@@ -57,7 +56,7 @@ namespace ErogeHelper.Model.Translator
             }
             catch (Exception ex)
             {
-                log.Info(ex.Message);
+                Log.Info(ex.Message);
                 result = ex.Message;
             }
 

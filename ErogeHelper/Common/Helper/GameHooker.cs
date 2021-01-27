@@ -1,25 +1,15 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Model;
-using ErogeHelper.ViewModel;
-using ErogeHelper.View;
-using log4net;
+using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace ErogeHelper.Common.Helper
 {
     class GameHooker
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GameHooker));
-
         private static readonly Process gameProc = DataRepository.MainProcess!;
 
         public static void Init()
@@ -43,7 +33,7 @@ namespace ErogeHelper.Common.Helper
 
             gameHWnd = gameProc.MainWindowHandle;
 
-            log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} Title: {gameProc.MainWindowTitle}");
+            Log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} Title: {gameProc.MainWindowTitle}");
             uint targetThreadId = NativeMethods.GetWindowThread(gameHWnd);
 
             // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
@@ -104,7 +94,7 @@ namespace ErogeHelper.Common.Helper
                 oldWidth = width;
                 oldHeight = height;
             }
-            else if(oldHeight != height || oldWidth != width)
+            else if (oldHeight != height || oldWidth != width)
             {
                 UpdateButtonPosEvent?.Invoke(typeof(GameHooker));
                 oldHeight = height;
@@ -131,7 +121,7 @@ namespace ErogeHelper.Common.Helper
 
         private static void ApplicationExit(object? sender, EventArgs e)
         {
-            log.Info("Detected game quit event");
+            Log.Info("Detected game quit event");
             GCSafetyHandle.Free();
             NativeMethods.WinEventUnhook(hWinEventHook);
 

@@ -14,8 +14,6 @@ namespace ErogeHelper.View.Control
     /// </summary>
     public partial class AssistiveTouch : Button
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AssistiveTouch));
-
         public new event EventHandler? ClickEvent;
         private FrameworkElement parent = null!;
 
@@ -139,7 +137,7 @@ namespace ErogeHelper.View.Control
                     }
                     else
                     {
-                        log.Error("Should never happend!");
+                        throw new InvalidOperationException("Should never happend!");
                     }
 
                     // 元素的某个属性，在开始值和结束值之间逐步增加，是一种线性插值的过程
@@ -212,11 +210,8 @@ namespace ErogeHelper.View.Control
 
             if (newPos.Equals(oldPos))
             {
-                if (ClickEvent != null)
-                {
-                    log.Info("Click event fire!");
-                    ClickEvent(sender, e);
-                }
+                // Fire MouseClickEvent, no use for me
+                ClickEvent?.Invoke(sender, e);
             }
             else
             {

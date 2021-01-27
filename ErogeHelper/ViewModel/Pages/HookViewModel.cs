@@ -5,22 +5,15 @@ using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Api;
 using ModernWpf.Controls;
-using System;
-using System.Collections.Generic;
+using Serilog;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace ErogeHelper.ViewModel.Pages
 {
     class HookViewModel : PropertyChangedBase
     {
-        private readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HookViewModel));
-
         #region HookCode
         // InputCode 只在值有效时xaml才会传值过来
         private string _inputCode = string.Empty;
@@ -60,11 +53,11 @@ namespace ErogeHelper.ViewModel.Pages
             var hcode = await QueryHCode.QueryCode(GameConfig.MD5);//.ConfigureAwait(false);
 
             dialogCanClose = true;
-            if (!string.IsNullOrWhiteSpace(hcode))
+            if (hcode != string.Empty)
             {
                 progress.IsActive = false;
                 InputCode = hcode;
-                log.Info(hcode);
+                Log.Info(hcode);
                 dialog.Hide();
             }
             else
@@ -244,7 +237,7 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
 
-        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp; 
+        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp;
         public async void SubmitSetting()
         {
             var configPath = DataRepository.MainProcess!.MainModule!.FileName + ".eh.config";
@@ -259,7 +252,7 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 // Cover override
                 GameConfig.CreateConfig(configPath);
-                await new ContentDialog 
+                await new ContentDialog
                 {
                     Content = $"Update {DataRepository.MainProcess.ProcessName}.exe.eh.config succeed",
                     CloseButtonText = "OK"

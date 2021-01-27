@@ -1,5 +1,4 @@
 ﻿using ErogeHelper.Model;
-using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,11 +13,8 @@ namespace ErogeHelper.Common
 {
     static class Textractor
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Textractor));
-
         public static void Init()
         {
-            log.Info("initilize start.");
             string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
             if (!File.Exists(textractorPath))
                 throw new FileNotFoundException(textractorPath);
@@ -28,12 +24,12 @@ namespace ErogeHelper.Common
             removethread = RemoveThreadHandle;
             callback = OnConnectCallBackHandle;
 
-            TextHostLib.TextHostInit(callback, _ => { }, createthread, removethread, output);
+            _ = TextHostLib.TextHostInit(callback, _ => { }, createthread, removethread, output);
 
             foreach (Process p in DataRepository.GameProcesses)
             {
-                TextHostLib.InjectProcess((uint)p.Id);
-                log.Info($"attach to PID {p.Id}.");
+                _ = TextHostLib.InjectProcess((uint)p.Id);
+                Log.Info($"attach to PID {p.Id}.");
             }
         }
 
@@ -83,7 +79,7 @@ namespace ErogeHelper.Common
                 && (GameConfig.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                 && GameConfig.SubThreadContext == hp.Ctx2)
             {
-                log.Info(hp.Text);
+                Log.Info(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);
             }
         }
@@ -123,8 +119,8 @@ namespace ErogeHelper.Common
 
             foreach (Process p in DataRepository.GameProcesses)
             {
-                TextHostLib.InsertHook((uint)p.Id, hookcode);
-                log.Info($"Try insert hcode {hookcode} to PID {p.Id}");
+                _ = TextHostLib.InsertHook((uint)p.Id, hookcode);
+                Log.Info($"Try insert hcode {hookcode} to PID {p.Id}");
             }
         }
 
@@ -220,8 +216,8 @@ namespace ErogeHelper.Common
         public long Addr { get; set; }
         public long Ctx { get; set; }
         public long Ctx2 { get; set; }
-        public string Name { get; set; } = "";
-        public string Hookcode { get; set; } = "";
-        public string Text { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
+        public string Hookcode { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Model;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace ErogeHelper.ViewModel.Pages
 {
     class AboutViewModel : PropertyChangedBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AboutViewModel));
         private string _checkUpdateStatus = "Check update ...";
         private Brush _brushColor = Brushes.Gray;
         private bool _canJumpRelease = false;
@@ -48,7 +48,7 @@ namespace ErogeHelper.ViewModel.Pages
                     var latestVersion = updateChecker.LatestVersion;
                     var latestVersionUrl = updateChecker.LatestVersionUrl;
                     var assetsUrl = updateChecker.LatestRelease?.assets?.Select(asset => asset.browser_download_url);
-                    log.Info($"Found new {latestVersion}");
+                    Log.Info($"Found new {latestVersion}");
 
                     CheckUpdateStatus = $"Found new version {latestVersion}";
                     BrushColor = Brushes.Orange;
@@ -58,7 +58,7 @@ namespace ErogeHelper.ViewModel.Pages
                 else
                 {
                     // No newer version was found
-                    log.Info("Current version is latest");
+                    Log.Info("Current version is latest");
 
                     CheckUpdateStatus = "Latest version";
                     BrushColor = Brushes.Green;
@@ -67,7 +67,7 @@ namespace ErogeHelper.ViewModel.Pages
             catch (Exception ex)
             {
                 // Network exception or cannot find any correct tag.
-                log.Error(ex);
+                Log.Error(ex);
             }
         }
     }

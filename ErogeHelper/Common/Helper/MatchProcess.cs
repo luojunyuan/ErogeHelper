@@ -1,18 +1,14 @@
-﻿using ErogeHelper.Model;
-using log4net;
+﻿using Caliburn.Micro;
+using ErogeHelper.Model;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ErogeHelper.Common.Helper
 {
     static class MatchProcess
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(MatchProcess));
-
         /// <summary>
         /// Get all processes of the game (timeout 20s)
         /// </summary>
@@ -56,14 +52,14 @@ namespace ErogeHelper.Common.Helper
                         {
                             if (p.WaitForInputIdle(500) == false) // 500 延迟随意写的，正常启动一般在100~200范围
                             {
-                                log.Info($"Procces {p.Id} maybe stuck");
+                                Log.Info($"Procces {p.Id} maybe stuck");
                             }
                         }
                         catch (InvalidOperationException ex)
                         {
                             // skip no effect exception
                             // This occurrent because process has no window event
-                            log.Warn(ex.Message);
+                            Log.Warn(ex.Message);
                         }
 
                         newProcFind = true;
@@ -75,13 +71,13 @@ namespace ErogeHelper.Common.Helper
                 // timeout
                 if (totalTime.Elapsed.TotalSeconds > 20 && DataRepository.MainProcess == null)
                 {
-                    log.Info("Timeout! Find MainWindowHandle Faied");
+                    Log.Info("Timeout! Find MainWindowHandle Faied");
                     return false;
                 }
             } while (newProcFind || (DataRepository.MainProcess == null));
             totalTime.Stop();
 
-            log.Info($"{DataRepository.GameProcesses.Count} Process(es) and window handle " +
+            Log.Info($"{DataRepository.GameProcesses.Count} Process(es) and window handle " +
                 $"0x{Convert.ToString(DataRepository.MainProcess.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
                 $"Spend time {totalTime.Elapsed.TotalSeconds:0.00}s");
 

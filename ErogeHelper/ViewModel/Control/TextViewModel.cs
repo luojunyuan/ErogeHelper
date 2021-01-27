@@ -22,8 +22,6 @@ namespace ErogeHelper.ViewModel.Control
 {
     class TextViewModel : Screen
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(TextViewModel));
-
         private BindableCollection<SingleTextItem> _sourceTextCollection = new BindableCollection<SingleTextItem>();
         private Visibility _textVisible = IoC.Get<GeneralViewModel>().ShowSource ? Visibility.Visible : Visibility.Collapsed;
 
@@ -56,7 +54,7 @@ namespace ErogeHelper.ViewModel.Control
             if (clickItem.SubMarkColor.ToString() == DataRepository.transparentImage.ToString())
                 return;
 
-            log.Info($"Click {clickItem.Text}");
+            Log.Info($"Click {clickItem.Text}");
             // Clear data first
             CardControl.Word = clickItem.Text;
             CardControl.ClearData();
@@ -91,7 +89,7 @@ namespace ErogeHelper.ViewModel.Control
             { 
                 _subMarkColor = value;
                 Application.Current.Dispatcher.InvokeAsync(
-                    () => CanBeSearch = (value.ToString() == DataRepository.transparentImage.ToString()) ? false : true);
+                    () => CanBeSearch = !value.ToString().Equals(DataRepository.transparentImage.ToString()));
             }
         }
         public bool CanBeSearch { get; set; }

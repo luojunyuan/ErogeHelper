@@ -1,26 +1,20 @@
-﻿using ErogeHelper.Common;
+﻿using Caliburn.Micro;
+using Serilog;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ErogeHelper.Model
 {
     class GameConfig
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GameConfig));
+        public static string Path = string.Empty;
 
-        public static string Path = "";
-
-        public static string MD5 = "";
+        public static string MD5 = string.Empty;
         public static bool IsUserHook = false;
-        public static string HookCode = "";
+        public static string HookCode = string.Empty;
         public static long ThreadContext;
         public static long SubThreadContext;
-        public static string RegExp = "";
+        public static string RegExp = string.Empty;
         public static bool NoFocus;
 
         public static void Load(string path)
@@ -55,12 +49,11 @@ namespace ErogeHelper.Model
             {
                 var tree = new XElement("EHConfig", baseNode);
                 tree.Save(Path);
-                log.Info("Write config file succeed");
-
+                Log.Info("Write config file succeed");
             }
             catch (UnauthorizedAccessException ex)
             {
-                log.Warn(ex.Message);
+                Log.Warn(ex.Message);
                 ModernWpf.MessageBox.Show($"{ex.Message}\nEroge Helper has no permission to access the path, " +
                     $"will save text temporally...", "Eroge Helper");
             }

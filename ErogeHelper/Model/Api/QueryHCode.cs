@@ -1,8 +1,4 @@
-﻿using log4net;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +8,6 @@ namespace ErogeHelper.Model.Api
 {
     static class QueryHCode
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(QueryHCode));
-
         static readonly string GameQuery = "http://vnr.aniclan.com/connection.php?go=game_query";
 
         // try use RestSharp instead
@@ -41,7 +35,7 @@ namespace ErogeHelper.Model.Api
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
     }

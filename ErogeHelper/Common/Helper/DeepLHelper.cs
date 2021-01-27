@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using Serilog;
+using System;
 using System.Threading;
 using System.Windows;
 using WindowsInput.Events;
@@ -29,8 +31,6 @@ namespace ErogeHelper.Common.Helper
 
     abstract class StaHelper
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(StaHelper));
-
         readonly ManualResetEvent _complete = new ManualResetEvent(false);
 
         public void Go()
@@ -53,7 +53,7 @@ namespace ErogeHelper.Common.Helper
             }
             catch (Exception ex)
             {
-                log.Warn(ex.Message);
+                Log.Warn(ex.Message);
                 if (DontRetryWorkOnFailed)
                     throw;
                 else
@@ -66,7 +66,7 @@ namespace ErogeHelper.Common.Helper
                     catch
                     {
                         // ex from first exception
-                        log.Warn(ex.Message);
+                        Log.Warn(ex.Message);
                     }
                 }
             }

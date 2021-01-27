@@ -1,22 +1,11 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
-using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace ErogeHelper.View
@@ -26,8 +15,6 @@ namespace ErogeHelper.View
     /// </summary>
     public partial class GameView : Window
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(GameView));
-
         private double dpi;
 
         public GameView()
@@ -54,7 +41,7 @@ namespace ErogeHelper.View
 
         private void PositionChanged(object sender, GameViewPlacement pos)
         {
-            Application.Current.Dispatcher.InvokeAsync(() => 
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Height = pos.Height / dpi;
                 Width = pos.Width / dpi;
@@ -73,7 +60,7 @@ namespace ErogeHelper.View
             base.OnDpiChanged(oldDpi, newDpi);
 
             dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            log.Info($"Current screen dpi {dpi * 100}%");
+            Log.Info($"Current screen dpi {dpi * 100}%");
         }
 
         protected override void OnSourceInitialized(EventArgs e)

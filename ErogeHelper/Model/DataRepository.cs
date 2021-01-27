@@ -1,4 +1,7 @@
-﻿using ErogeHelper.Common.Selector;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Selector;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,15 +10,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows.Media.Imaging;
-using ErogeHelper.Common;
-using log4net;
 
-namespace ErogeHelper.Model 
+namespace ErogeHelper.Model
 {
     public class DataRepository
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(DataRepository));
-
         #region Methods
 
         internal static T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
@@ -67,7 +66,7 @@ namespace ErogeHelper.Model
                 throw new NullReferenceException();
 
             LocalSetting[propertyName] = value.ToString()!;
-            log.Info($"{propertyName} changed to {value}");
+            Log.Info($"{propertyName} changed to {value}");
             File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 

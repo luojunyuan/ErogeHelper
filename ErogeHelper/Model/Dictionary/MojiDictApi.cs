@@ -1,5 +1,6 @@
-﻿using log4net;
+﻿using Caliburn.Micro;
 using RestSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,10 @@ namespace ErogeHelper.Model.Dictionary
 {
     public class MojiDictApi
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(MojiDictApi));
+        static readonly string searchApi = "/parse/functions/search_v3";
+        static readonly string fetchApi = "/parse/functions/fetchWord_v2";
 
-        static string searchApi = "/parse/functions/search_v3";
-        static string fetchApi = "/parse/functions/fetchWord_v2";
-
-        private static RestClient client = new RestClient("https://api.mojidict.com");
+        private static readonly RestClient client = new RestClient("https://api.mojidict.com");
 
         /* 错误的SessionToken引发，且不会弹错，为啥？有一个task线程错误监听来着。。。
          引发的异常:“System.Net.WebException”(位于 System.Net.Requests.dll 中)
@@ -53,7 +52,7 @@ namespace ErogeHelper.Model.Dictionary
              */
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                Log.Error(ex.Message);
             }
 
             return resp;
@@ -78,7 +77,7 @@ namespace ErogeHelper.Model.Dictionary
             }
             catch(Exception ex)
             {
-                log.Error(ex.Message);
+                Log.Error(ex.Message);
             }
 
             return resp;

@@ -4,6 +4,7 @@ using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ModernWpf.Controls;
+using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -13,8 +14,6 @@ namespace ErogeHelper.ViewModel
 {
     class SelectProcessViewModel : Screen
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SelectProcessViewModel));
-
         readonly ISelectProcessService dataService;
         readonly IWindowManager windowManager;
         private ProcComboboxItem? _selectedProcItem;
@@ -61,13 +60,13 @@ namespace ErogeHelper.ViewModel
                 {
                     GameConfig.Load(configPath);
 
-                    log.Info($"Get HCode {GameConfig.HookCode} from file {SelectedProcItem.proc.ProcessName}.exe.eh.config");
+                    Log.Info($"Get HCode {GameConfig.HookCode} from file {SelectedProcItem.proc.ProcessName}.exe.eh.config");
                     // Display text window
                     await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
                 }
                 else
                 {
-                    log.Info("Not find xml config file, open hook panel.");
+                    Log.Info("Not find xml config file, open hook panel.");
                     await windowManager.ShowWindowAsync(IoC.Get<HookConfigViewModel>()).ConfigureAwait(false);
                 }
 

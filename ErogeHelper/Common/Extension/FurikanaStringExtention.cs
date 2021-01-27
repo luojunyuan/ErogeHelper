@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Caliburn.Micro;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,9 @@ namespace ErogeHelper.Common.Extension
 {
     static class FurikanaStringExtention
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(FurikanaStringExtention));
-
         public static string Katakana2Hiragana(this string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (input == string.Empty)
                 return " ";
 
             string transform = string.Empty;
@@ -25,7 +24,7 @@ namespace ErogeHelper.Common.Extension
                 }
                 else
                 {
-                    log.Warn($"No {testValue} in Katakana2HiraganaMap");
+                    Log.Warn($"No {testValue} in Katakana2HiraganaMap");
                 }
             }
             return transform;

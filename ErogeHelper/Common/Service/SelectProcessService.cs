@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Extension;
 using ErogeHelper.ViewModel;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,8 +17,6 @@ namespace ErogeHelper.Common.Service
 {
     class SelectProcessService : ISelectProcessService
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SelectProcessService));
-
         public async Task GetProcessListAsync(BindableCollection<ProcComboboxItem> data)
         {
             await Task.Run(() =>
@@ -44,7 +43,7 @@ namespace ErogeHelper.Common.Service
                     {
                         // Casue by `GetMainModuleFileName()`
                         // Access Denied. 32bit -> 64bit module
-                        log.Warn(ex.Message);
+                        Log.Warn(ex.Message);
                     }
                 }
                 foreach (var i in data.ToList())

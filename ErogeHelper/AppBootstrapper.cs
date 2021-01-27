@@ -18,8 +18,6 @@ namespace ErogeHelper
 {
     class AppBootstrapper : BootstrapperBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AppBootstrapper));
-
         public AppBootstrapper()
         {
             // initialize Bootstrapper, include EventAggregator, AssemblySource, IOC, Application event
@@ -31,10 +29,11 @@ namespace ErogeHelper
         /// </summary>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            log.Info("Started Logging");
+            Log.Info("Started Logging");
 
             if (e.Args.Length == 0)
             {
+                // Display select processes window
                 DisplayRootViewFor<SelectProcessViewModel>();
             }
             else
@@ -42,8 +41,8 @@ namespace ErogeHelper
                 // Startup by shell menu
                 var gamePath = e.Args[0];
                 var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
-                log.Info($"Game's path: {e.Args[0]}");
-                log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
+                Log.Info($"Game's path: {e.Args[0]}");
+                Log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
 
                 if (e.Args.Contains("/le"))
                 {
@@ -81,14 +80,14 @@ namespace ErogeHelper
                 {
                     GameConfig.Load(gamePath + ".eh.config");
 
-                    log.Info($"Get HCode {GameConfig.HookCode} from file " +
+                    Log.Info($"Get HCode {GameConfig.HookCode} from file " +
                         $"{Path.GetFileNameWithoutExtension(gamePath)}.exe.eh.config");
                     // Display text window
                     DisplayRootViewForAsync(typeof(GameViewModel));
                 }
                 else
                 {
-                    log.Info("Not find xml config file, open hook panel.");
+                    Log.Info("Not find xml config file, open hook panel.");
                     DisplayRootViewFor<HookConfigViewModel>();
                 }
 
@@ -105,14 +104,17 @@ namespace ErogeHelper
                 IncludeViewSuffixInViewModelNames = false,
                 DefaultSubNamespaceForViewModels = "ViewModel",
                 DefaultSubNamespaceForViews = "View",
-                ViewSuffixList = new List<string> { "View", "Page", "Control"}
+                ViewSuffixList = new List<string> { "View", "Page", "Control" }
             };
             ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
 
             var builder = new ContainerBuilder();
 
-            // Registe Basic Tools
+            // Register Serilog logger
+            //builder.RegisterLogger();
+
+            // Register Basic Tools
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -160,7 +162,7 @@ namespace ErogeHelper
         }
 
         #region Autofac Init
-        private static IContainer Container { get; set; } = null!;
+        private static IContainer Container { get; set; } = null!; // Actually this is null by default
 
         protected override object GetInstance(Type service, string key)
         {

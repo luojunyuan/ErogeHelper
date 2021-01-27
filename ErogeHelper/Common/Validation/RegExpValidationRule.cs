@@ -1,19 +1,12 @@
-﻿using log4net;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ErogeHelper.Common.Validation
 {
-    class RegExpValidationRule: ValidationRule
+    class RegExpValidationRule : ValidationRule
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(RegExpValidationRule));
-
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             string? pattern = value as string;
@@ -30,7 +23,7 @@ namespace ErogeHelper.Common.Validation
             }
             catch (ArgumentException ex)
             {
-                log.Info("Check RegExp format, it's fine exception");
+                Log.Info("Check RegExp format, it's fine exception");
                 return new ValidationResult(false, $"Invalid RegExp. {ex.Message}");
             }
 

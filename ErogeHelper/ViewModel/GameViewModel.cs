@@ -1,28 +1,19 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Helper;
-using ErogeHelper.Common.Selector;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
-using ErogeHelper.ViewModel.Control;
 using ErogeHelper.View;
-using ModernWpf.Controls;
+using ErogeHelper.ViewModel.Control;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
 using WindowsInput.Events;
 
 namespace ErogeHelper.ViewModel
 {
     class GameViewModel : PropertyChangedBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GameViewModel));
-
         #region Properties
         private double _fontSize = DataRepository.FontSize;
         private bool _assistiveTouchIsVisible = true;

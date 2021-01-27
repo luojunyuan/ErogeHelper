@@ -1,10 +1,5 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Model.Dictionary;
-using ModernWpf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,8 +8,6 @@ namespace ErogeHelper.ViewModel.Control
 {
     class CardViewModel : Screen
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(CardViewModel));
-
         private string _word = string.Empty;
         private int _mojiSelectedIndex;
 
@@ -35,18 +28,18 @@ namespace ErogeHelper.ViewModel.Control
             MojiCollection.Clear();
         }
 
-        public int MojiSelectedIndex 
-        { 
-            get => _mojiSelectedIndex; 
-            set 
-            {   
-                _mojiSelectedIndex = value; 
+        public int MojiSelectedIndex
+        {
+            get => _mojiSelectedIndex;
+            set
+            {
+                _mojiSelectedIndex = value;
                 NotifyOfPropertyChange(() => MojiSelectedIndex);
                 if (value != -1 && value != 0 && MojiCollection[value].ExpanderCollection.Count == 0)
                 {
                     _ = MojiFetchWord(MojiCollection[value].TarId);
                 }
-            } 
+            }
         }
 
         private static CancellationTokenSource cts = new();
@@ -61,16 +54,16 @@ namespace ErogeHelper.ViewModel.Control
 
             if (token.IsCancellationRequested)
             {
-                log.Info("Moji search task was canceled");
+                Log.Info("Moji search task was canceled");
                 return;
             }
-            
-            else if (string.IsNullOrWhiteSpace(searchResponse.Result.OriginalSearchText)) 
+
+            else if (string.IsNullOrWhiteSpace(searchResponse.Result.OriginalSearchText))
             {
                 // Exception happend
-                await Application.Current.Dispatcher.InvokeAsync(() 
+                await Application.Current.Dispatcher.InvokeAsync(()
                     => ModernWpf.MessageBox.Show("An Error Occurred, it may be bad token, or bad net request", "Eroge Helper"));
-                
+
                 return;
             }
             else if (searchResponse.Result.Words.Count == 0)
@@ -113,7 +106,7 @@ namespace ErogeHelper.ViewModel.Control
                     MojiCollection[i].Pron = wordDetail.result.Word.Pron;
                     MojiCollection[i].Title = wordDetail.result.Details[0].Title;
 
-                    foreach(var subDetail in wordDetail.result.Subdetails)
+                    foreach (var subDetail in wordDetail.result.Subdetails)
                     {
                         var header = subDetail.Title;
                         BindableCollection<MojiExpanderItem.Example> examples = new();

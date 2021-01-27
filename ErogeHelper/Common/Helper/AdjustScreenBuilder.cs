@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Caliburn.Micro;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,7 +14,6 @@ namespace ErogeHelper.Common.Helper
 {
     class AdjustScreenBuilder
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AdjustScreenBuilder));
         /// <summary>
         /// 创建一个调整屏幕亮度的对象
         /// </summary>
@@ -33,7 +33,7 @@ namespace ErogeHelper.Common.Helper
             //如果不满足，则尝试使用Gdi32方式
             else
             {
-                log.Info("Current Screen does not support Dxva2, try gdi32..");
+                Log.Info("Current Screen does not support Dxva2, try gdi32..");
                 var adjustScreenByGdi32 = new AdjustScreenByGdi32();
                 var adjustScreenByGdi32Value = adjustScreenByGdi32.GetBrightness(handle, ref min, ref current, ref max);
                 if (adjustScreenByGdi32Value)

@@ -1,8 +1,6 @@
-﻿using log4net;
-using RestSharp;
+﻿using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -13,11 +11,9 @@ namespace ErogeHelper.Model.Translator
 {
     public class BaiduApiTranslator : ITranslator
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(BaiduApiTranslator));
-
         public bool IsEnable { get; set; } = DataRepository.BaiduApiEnable;
 
-        public TranslatorName Name => TranslatorName.BaiduApi; 
+        public TranslatorName Name => TranslatorName.BaiduApi;
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
@@ -60,11 +56,11 @@ namespace ErogeHelper.Model.Translator
             try
             {
                 response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
-                result =  string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
+                result = string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                Log.Error(ex.Message);
                 result = ex.Message;
             }
 

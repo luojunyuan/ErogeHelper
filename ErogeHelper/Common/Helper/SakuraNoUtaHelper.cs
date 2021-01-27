@@ -1,20 +1,19 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Caliburn.Micro;
 using Microsoft.Data.Sqlite;
+using Serilog;
 
 namespace ErogeHelper.Common.Helper
 {
     // move to model
     public class SakuraNoUtaHelper
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(SakuraNoUtaHelper));
-
         // static readonly XDocument doc = XDocument.Load(@"C:\Users\k1mlka\Downloads\gamedicexport\sakura_no_uta.xml");
 
         static readonly string DbPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\sakura_no_uta.db";
@@ -79,7 +78,7 @@ namespace ErogeHelper.Common.Helper
 
             // 似乎直接查字符串hash和文本速度是一样的样子
             (string hashText, string size) = HashProgress(source);
-            log.Info($"hash: {hashText}, size: {size}");
+            Log.Info($"hash: {hashText}, size: {size}");
             var result = QueryTextByHash(hashText);
             if (!string.IsNullOrWhiteSpace(result))
             {
@@ -102,7 +101,7 @@ namespace ErogeHelper.Common.Helper
                     context = savedText[savedText.Count -3] + "||" + savedText[savedText.Count -2] + "||" + savedText[savedText.Count -1];
                 }
 
-                log.Info($"source {context}");
+                Log.Info($"source {context}");
                 var command = connection!.CreateCommand();
                 command.CommandText =
                 @"
@@ -116,11 +115,11 @@ namespace ErogeHelper.Common.Helper
 
                 while(query.Read())
                 {
-                    log.Info($"final query result: {query.GetString(0)}");
+                    Log.Info($"final query result: {query.GetString(0)}");
                     return query.GetString(0);
                 }
 
-                log.Info("no result");
+                Log.Info("no result");
                 return string.Empty;
             }
         }
@@ -136,16 +135,16 @@ namespace ErogeHelper.Common.Helper
             ";
             command.Parameters.AddWithValue("$hash", hash);
 
-            log.Info("execute command");
+            Log.Info("execute command");
             using var query = command.ExecuteReader();
 
             while (query.Read())
             {
-                log.Info(query.GetString(0));
+                Log.Info(query.GetString(0));
                 return query.GetString(0);
             }
 
-            log.Info("hash not found");
+            Log.Info("hash not found");
             return string.Empty;
         }
 
