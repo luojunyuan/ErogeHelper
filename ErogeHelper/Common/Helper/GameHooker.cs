@@ -35,16 +35,28 @@ namespace ErogeHelper.Common.Helper
             gameHWnd = gameProc.MainWindowHandle;
 
             CheckWindowHandler();
-            SetWindowHandler();
+            // For the first time
+            if (gameHWnd == gameProc.MainWindowHandle)
+            {
+                SetWindowHandler();
+            }
         }
 
         public static void CheckWindowHandler()
         {
-            var defaultRect = NativeMethods.GetClientRect(gameHWnd);
-            if (400 > defaultRect.Bottom && 400 > defaultRect.Right)
+            var clientRect = NativeMethods.GetClientRect(gameHWnd);
+            IntPtr realHandle = IntPtr.Zero;
+
+            if (400 > clientRect.Bottom && 400 > clientRect.Right)
             {
-                // Tip: 如果MainWindowHandle所在窗口最小化了也会进入这里
-                IntPtr realHandle = IntPtr.Zero;
+                // Tip: This would active even when game window get minimize
+                var windowRect = NativeMethods.GetWindowRect(gameHWnd);
+                if ($"{windowRect.Left} {windowRect.Top} {windowRect.Right} {windowRect.Bottom}"
+                    .Equals("-32000 -32000 -31840 -31972"))
+                {
+                    // Ignore minimize window situation
+                    return ;
+                }
 
                 int textLength = gameProc.MainWindowTitle.Length;
                 StringBuilder title = new StringBuilder(textLength + 1);
@@ -57,6 +69,7 @@ namespace ErogeHelper.Common.Helper
                 IntPtr last = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
 
                 IntPtr cur = first;
+                // 遍历所有窗口标题(TODO: limit in gameProc only)
                 while (cur != last)
                 {
                     StringBuilder outText = new StringBuilder(textLength + 1);
@@ -66,6 +79,7 @@ namespace ErogeHelper.Common.Helper
                         var rectClient = NativeMethods.GetClientRect(cur);
                         if (rectClient.Right != 0 && rectClient.Bottom != 0)
                         {
+                            // check pid
                             Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
                             realHandle = cur;
                             // Search over, believe handle is found
@@ -75,19 +89,17 @@ namespace ErogeHelper.Common.Helper
 
                     cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
                 }
-
-                if (realHandle != IntPtr.Zero)
-                {
-                    gameHWnd = realHandle;
-                    SetWindowHandler();
-                }
-                else
-                {
-                    // gameHwnd still be gameProc.MainWindowHandle at first time
-                    Log.Info("No realHandle found. Still use last handle");
-                }
             }
-            
+
+            if (realHandle != IntPtr.Zero)
+            {
+                gameHWnd = realHandle;
+                SetWindowHandler();
+            }
+            else
+            {
+                // gameHwnd still be last handle
+            }
         }
 
         private static void SetWindowHandler()
