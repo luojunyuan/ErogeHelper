@@ -33,7 +33,8 @@ namespace ErogeHelper.Common.Helper
 
             gameHWnd = gameProc.MainWindowHandle;
 
-            Log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} Title: {gameProc.MainWindowTitle}");
+            Log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} " +
+                $"Title: {gameProc.MainWindowTitle}");
             uint targetThreadId = NativeMethods.GetWindowThread(gameHWnd);
 
             // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
@@ -75,7 +76,7 @@ namespace ErogeHelper.Common.Helper
         public delegate void GameViewPosEventHandler(object sender, GameViewPlacement e);
         public static event GameViewPosEventHandler? GameViewPosChangedEvent;
 
-        public delegate void UpdateButtonPosEventHandler(object sender);
+        public delegate void UpdateButtonPosEventHandler(object sender, int height, int width);
         public static event UpdateButtonPosEventHandler? UpdateButtonPosEvent;
         static int oldWidth = -1;
         static int oldHeight = -1;
@@ -87,20 +88,6 @@ namespace ErogeHelper.Common.Helper
 
             var width = rect.Right - rect.Left;  // equal rectClient.Right + shadow*2
             var height = rect.Bottom - rect.Top; // equal rectClient.Bottom + shadow + title
-
-            #region Change FloatButton Position
-            if (oldWidth == -1 && oldHeight == -1)
-            {
-                oldWidth = width;
-                oldHeight = height;
-            }
-            else if (oldHeight != height || oldWidth != width)
-            {
-                UpdateButtonPosEvent?.Invoke(typeof(GameHooker));
-                oldHeight = height;
-                oldWidth = width;
-            }
-            #endregion
 
             var winShadow = (width - rectClient.Right) / 2;
 
@@ -117,6 +104,20 @@ namespace ErogeHelper.Common.Helper
                 Top = rect.Top,
                 ClientArea = clientArea
             });
+
+            #region Change FloatButton Position
+            if (oldWidth == -1 && oldHeight == -1)
+            {
+                oldWidth = width;
+                oldHeight = height;
+            }
+            else if (oldHeight != height || oldWidth != width)
+            {
+                UpdateButtonPosEvent?.Invoke(typeof(GameHooker), rectClient.Bottom, rectClient.Right);
+                oldHeight = height;
+                oldWidth = width;
+            }
+            #endregion
         }
 
         private static void ApplicationExit(object? sender, EventArgs e)

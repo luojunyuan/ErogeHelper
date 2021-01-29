@@ -24,8 +24,9 @@ namespace ErogeHelper.Common.Helper
             tagger = MeCabTagger.Create(parameter);
         }
 
-        public IEnumerable<MecabWordInfo> MecabWordIpaEnumerable(string sentence)
+        public IEnumerable<MecabWordInfo> MecabWordIpadicEnumerable(string sentence)
         {
+            // Add Ve paser
             foreach (var node in tagger.ParseToNodes(sentence))
             {
                 if (node.CharType > 0)
@@ -67,7 +68,7 @@ namespace ErogeHelper.Common.Helper
             }
         }
 
-        public IEnumerable<MecabWordInfo> MecabWordUniEnumerable(string sentence)
+        public IEnumerable<MecabWordInfo> MecabWordUnidicEnumerable(string sentence)
         {
             foreach (var node in tagger.ParseToNodes(sentence))
             {

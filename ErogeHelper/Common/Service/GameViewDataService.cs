@@ -80,7 +80,7 @@ namespace ErogeHelper.Common.Service
             {
                 var collect = new BindableCollection<SingleTextItem>();
 
-                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpaEnumerable(hp.Text))
+                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(hp.Text))
                 {
                     collect.Add(new SingleTextItem
                     {

@@ -33,13 +33,22 @@ namespace ErogeHelper.View.Control
         private Point newPos;
         private Point oldPos;
 
+        private bool isFromUpdateButtonPosEvent = false;
+        private int newGameViewHeight = -1;
+        private int newGameViewWidth = -1;
+
         public AssistiveTouch()
         {
             InitializeComponent();
 
-            GameHooker.UpdateButtonPosEvent += (_) =>
+            GameHooker.UpdateButtonPosEvent += (_, height, width) =>
             {
-                SmoothMoveAnimation(buttonSpace, buttonSpace);
+                //SmoothMoveAnimation(buttonSpace, buttonSpace);
+                move = true;
+                isFromUpdateButtonPosEvent = true;
+                newGameViewHeight = height;
+                newGameViewWidth = width;
+                RaiseMouseUpEventInCode();
             };
         }
         private void RaiseMouseUpEventInCode()
@@ -50,7 +59,7 @@ namespace ErogeHelper.View.Control
             var mouseUpEvent = new MouseButtonEventArgs(Mouse.PrimaryDevice, timestamp, mouseButton)
             {
                 RoutedEvent = PreviewMouseUpEvent,
-                Source = this
+                Source = this,
             };
 
             RaiseEvent(mouseUpEvent);
@@ -72,7 +81,7 @@ namespace ErogeHelper.View.Control
 
                     lastPos = pos;
                     if (left < -oneThirdDistance || top < -oneThirdDistance ||
-                    left > parent.ActualWidth - twoThirdDistance || top > parent.ActualHeight - twoThirdDistance)
+                        left > parent.ActualWidth - twoThirdDistance || top > parent.ActualHeight - twoThirdDistance)
                     {
                         RaiseMouseUpEventInCode();
                     }
@@ -83,37 +92,56 @@ namespace ErogeHelper.View.Control
             {
                 if (move)
                 {
-                    Point pos = mouseEvent.GetPosition(parent);
-                    newPos = pos;
-                    double left = Margin.Left + pos.X - lastPos.X;
-                    double top = Margin.Top + pos.Y - lastPos.Y;
-                    // button 距离右边缘距离
-                    double right = parent.ActualWidth - left - ActualWidth;
-                    // button 距离下边缘距离
-                    double bottom = parent.ActualHeight - top - ActualHeight;
+                    double left, top, right, bottom, vertcalMiddelLine,
+                        parentActualHeight, parentActualWidth;
 
-                    double vertcalMiddelLine = parent.ActualHeight - ActualHeight - buttonSpace;
+                    if (isFromUpdateButtonPosEvent)
+                    {
+                        parentActualWidth = newGameViewWidth;
+                        parentActualHeight = newGameViewHeight;
+
+                        isFromUpdateButtonPosEvent = false;
+                    }
+                    else
+                    {
+                        Point pos = mouseEvent.GetPosition(parent);
+                        newPos = pos;
+                        parentActualHeight = parent.ActualHeight;
+                        parentActualWidth = parent.ActualWidth;
+                    }
+
+                    left = Margin.Left + newPos.X - lastPos.X;
+                    top = Margin.Top + newPos.Y - lastPos.Y;
+                    // button 距离右边缘距离
+                    right = parentActualWidth - left - ActualWidth;
+                    // button 距离下边缘距离
+                    bottom = parentActualHeight - top - ActualHeight;
+                    vertcalMiddelLine = parentActualHeight - ActualHeight - buttonSpace;
+
+                    //Log.Info($"鼠标位置 {newPos.X} {newPos.Y}");
+                    //Log.Info($"释放点与四边距离 {left} {top} {right} {bottom}");
+
                     // 根据button所处屏幕位置来确定button之后应该动画移动到的位置
                     // FIXME: still bug in four corners, when button 中间卡在左窗口边缘
-                    if (left < halfDistance && top < halfDistance) // button 距离左上角边距同时小于 distance
+                    if (left < halfDistance && top < twoThirdDistance) // button 距离左上角边距同时小于 distance
                     {
                         left = buttonSpace;
                         top = buttonSpace;
                     }
-                    else if (left < halfDistance && bottom < halfDistance) // 左下
+                    else if (left < halfDistance && bottom < twoThirdDistance) // 左下
                     {
                         left = buttonSpace;
-                        top = parent.ActualHeight - ActualHeight - buttonSpace;
+                        top = parentActualHeight - ActualHeight - buttonSpace;
                     }
-                    else if (right < halfDistance && top < halfDistance) // 右上
+                    else if (right < halfDistance && top < twoThirdDistance) // 右上
                     {
-                        left = parent.ActualWidth - ActualWidth - buttonSpace;
+                        left = parentActualWidth - ActualWidth - buttonSpace;
                         top = buttonSpace;
                     }
-                    else if (right < halfDistance && bottom < halfDistance) // 右下
+                    else if (right < halfDistance && bottom < twoThirdDistance) // 右下
                     {
-                        left = parent.ActualWidth - ActualWidth - buttonSpace;
-                        top = parent.ActualHeight - ActualHeight - buttonSpace;
+                        left = parentActualWidth - ActualWidth - buttonSpace;
+                        top = parentActualHeight - ActualHeight - buttonSpace;
                     }
                     else if (top < twoThirdDistance) // 上
                     {
@@ -123,7 +151,7 @@ namespace ErogeHelper.View.Control
                     else if (bottom < twoThirdDistance) // 下
                     {
                         left = Margin.Left;
-                        top = parent.ActualHeight - ActualHeight - buttonSpace;
+                        top = parentActualHeight - ActualHeight - buttonSpace;
                     }
                     else if (left < vertcalMiddelLine) // 左
                     {
@@ -132,7 +160,7 @@ namespace ErogeHelper.View.Control
                     }
                     else if (right < vertcalMiddelLine) // 右
                     {
-                        left = parent.ActualWidth - ActualWidth - buttonSpace;
+                        left = parentActualWidth - ActualWidth - buttonSpace;
                         top = Margin.Top;
                     }
                     else
@@ -141,6 +169,7 @@ namespace ErogeHelper.View.Control
                     }
 
                     // 元素的某个属性，在开始值和结束值之间逐步增加，是一种线性插值的过程
+                    //Log.Info($"最终button移动位置 {left} {top}");
                     SmoothMoveAnimation(left, top);
                     move = false;
                 }
@@ -198,6 +227,7 @@ namespace ErogeHelper.View.Control
             move = true;
             lastPos = e.GetPosition(parent);
             oldPos = lastPos;
+            //Log.Info($"lastPos and oldPos {lastPos.X} {lastPos.Y}");
         }
 
         private CancellationTokenSource tokenSource = new CancellationTokenSource();

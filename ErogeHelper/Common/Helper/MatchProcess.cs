@@ -82,7 +82,7 @@ namespace ErogeHelper.Common.Helper
                 $"Spend time {totalTime.Elapsed.TotalSeconds:0.00}s");
 
             // Set MD5
-            GameConfig.MD5 = Utils.GetMD5(DataRepository.MainProcess.MainModule!.FileName!);
+            GameConfig.MD5 = Utils.GetFileMD5(DataRepository.MainProcess.MainModule!.FileName!);
 
             return true;
         }

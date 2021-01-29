@@ -47,10 +47,12 @@ namespace ErogeHelper.Common
         }
 
         /// <summary>
-        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 'Embedded resource'.
+        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 
+        /// 'Embedded resource'.
         /// </summary>
         /// <param name="pathInApplication">Path without starting slash</param>
-        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling assembly</param>
+        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentionned, I will use the calling
+        /// assembly</param>
         /// <returns></returns>
         public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly? assembly = null)
         {
@@ -66,7 +68,10 @@ namespace ErogeHelper.Common
 
             try
             {
-                var uri = new Uri(@"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, UriKind.Absolute);
+                var uri = new Uri(
+                            @"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication, 
+                            UriKind.Absolute);
+
                 return new BitmapImage(uri);
             }
             catch (UriFormatException ex)
@@ -82,7 +87,7 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="filePath">Absolute file path</param>
         /// <returns>Upper case string</returns>
-        public static string GetMD5(string filePath)
+        public static string GetFileMD5(string filePath)
         {
             FileStream file = File.OpenRead(filePath);
             var md5 = new MD5CryptoServiceProvider();

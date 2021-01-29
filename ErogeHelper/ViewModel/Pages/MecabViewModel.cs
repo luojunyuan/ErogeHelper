@@ -151,7 +151,7 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 sentence += sourceText.Text;
             }
-            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpaEnumerable(sentence))
+            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(sentence))
             {
                 tmp.Add(new SingleTextItem
                 {

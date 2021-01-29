@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Model.Dictionary;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
