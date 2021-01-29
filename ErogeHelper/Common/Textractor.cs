@@ -86,6 +86,12 @@ namespace ErogeHelper.Common
                 Log.Info(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);
             }
+            else if (GameConfig.HookCode.StartsWith('R')
+                && hp.Name.Equals("READ"))
+            {
+                Log.Info(hp.Text);
+                SelectedDataEvent?.Invoke(typeof(Textractor), hp);
+            }
         }
 
         static public void RemoveThreadHandle(long threadId) { }
@@ -103,41 +109,64 @@ namespace ErogeHelper.Common
         {
             if (hookcode.StartsWith('/'))
                 hookcode = hookcode[1..];
-            var engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
 
-            // 重复插入相同的code(可能)会导致产生很高位的Context
-            foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动游戏文本或程序后产生的钩子
+            string engineName;
+            if (hookcode.StartsWith('R'))
             {
-                if (engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode))
+                engineName = "READ";
+                foreach (var hcodeItem in ThreadHandleDict)
                 {
-                    DataEvent?.Invoke(typeof(Textractor), new HookParam
+                    if (hookcode.Equals(hcodeItem.Value.Hookcode))
                     {
-                        Name = "控制台",
-                        Hookcode = "HB0@0",
-                        Text = "ErogeHelper: The hcode has already insert" // 该特殊码已插入
-                    });
-                    return;
+                        DataEvent?.Invoke(typeof(Textractor), new HookParam
+                        {
+                            Name = "控制台",
+                            Hookcode = "HB0@0",
+                            Text = "ErogeHelper: The Read-Code has already insert"
+                        });
+                        return;
+                    }
                 }
             }
-
-            foreach (var exsitEngine in InsertMessageEngineName)
+            else
             {
-                if (engineName.Equals(exsitEngine))
+                // HCode
+                engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
+
+                // 重复插入相同的code(可能)会导致产生很高位的Context
+                foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动游戏文本或程序后产生的钩子
                 {
-                    DataEvent?.Invoke(typeof(Textractor), new HookParam
+                    if (engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode))
                     {
-                        Name = "控制台",
-                        Hookcode = "HB0@0",
-                        Text = $"ErogeHelper: The engine {engineName} has already insert"
-                    });
-                    return;
+                        DataEvent?.Invoke(typeof(Textractor), new HookParam
+                        {
+                            Name = "控制台",
+                            Hookcode = "HB0@0",
+                            Text = "ErogeHelper: The Hook-Code has already insert" // 该特殊码已插入
+                        });
+                        return;
+                    }
+                }
+
+                foreach (var exsitEngine in InsertMessageEngineName)
+                {
+                    if (engineName.Equals(exsitEngine))
+                    {
+                        DataEvent?.Invoke(typeof(Textractor), new HookParam
+                        {
+                            Name = "控制台",
+                            Hookcode = "HB0@0",
+                            Text = $"ErogeHelper: The engine {engineName} has already insert"
+                        });
+                        return;
+                    }
                 }
             }
 
             foreach (Process p in DataRepository.GameProcesses)
             {
                 _ = TextHostLib.InsertHook((uint)p.Id, hookcode);
-                Log.Info($"Try insert hcode {hookcode} to PID {p.Id}");
+                Log.Info($"Try insert code {hookcode} to PID {p.Id}");
             }
         }
 

@@ -141,7 +141,7 @@ namespace ErogeHelper.View
                         }
                         else
                         {
-                            Log.Info("The window is being normalize");
+                            Log.Info("The window is being normalize or minimize");
                         }
                         GameHooker.CheckWindowHandler();
                         break;

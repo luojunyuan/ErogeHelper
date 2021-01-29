@@ -11,6 +11,10 @@ namespace ErogeHelper.Common.Converter
             {
                 return "UserHook";
             }
+            else if (value.ToString()!.Equals("READ"))
+            {
+                return "READ";
+            }
             else
             {
                 return value;
