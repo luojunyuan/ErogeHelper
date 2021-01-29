@@ -20,7 +20,7 @@ namespace ErogeHelper.Common.Helper.Tests
 
             var sentence = "スキル使用者と隣にパートナーがいれば技が発動します。また、発動にはパートナーのＳＰも必要です。";
 
-            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpaEnumerable(sentence))
+            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(sentence))
             {
                 Trace.WriteLine($"{mecabWord.Word} {mecabWord.Kana}");
             }
