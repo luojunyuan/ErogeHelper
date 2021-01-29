@@ -55,40 +55,11 @@ namespace ErogeHelper.Common.Helper
                     .Equals("-32000 -32000 -31840 -31972"))
                 {
                     // Ignore minimize window situation
-                    return ;
+                    return;
                 }
 
-                int textLength = gameProc.MainWindowTitle.Length;
-                StringBuilder title = new StringBuilder(textLength + 1);
-                NativeMethods.GetWindowText(gameProc.MainWindowHandle, title, title.Capacity);
-
-                Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
-
-                // Must use original gameProc.MainWindowHandle
-                IntPtr first = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
-                IntPtr last = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
-
-                IntPtr cur = first;
-                // 遍历所有窗口标题(TODO: limit in gameProc only)
-                while (cur != last)
-                {
-                    StringBuilder outText = new StringBuilder(textLength + 1);
-                    NativeMethods.GetWindowText(cur, outText, title.Capacity);
-                    if (outText.Equals(title))
-                    {
-                        var rectClient = NativeMethods.GetClientRect(cur);
-                        if (rectClient.Right != 0 && rectClient.Bottom != 0)
-                        {
-                            // check pid
-                            Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
-                            realHandle = cur;
-                            // Search over, believe handle is found
-                            break;
-                        }
-                    }
-
-                    cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
-                }
+                // Start search handle
+                realHandle = FindRealHandle();
             }
 
             if (realHandle != IntPtr.Zero)
@@ -100,6 +71,50 @@ namespace ErogeHelper.Common.Helper
             {
                 // gameHwnd still be last handle
             }
+        }
+
+        private static IntPtr FindRealHandle()
+        {
+            int textLength = gameProc.MainWindowTitle.Length;
+            StringBuilder title = new StringBuilder(textLength + 1);
+            NativeMethods.GetWindowText(gameProc.MainWindowHandle, title, title.Capacity);
+
+            Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
+
+            // Must use original gameProc.MainWindowHandle
+            IntPtr first = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
+            IntPtr last = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
+
+            IntPtr cur = first;
+            // 遍历所有窗口标题(TODO: limit in gameProc only)
+            while (cur != last)
+            {
+                StringBuilder outText = new StringBuilder(textLength + 1);
+                NativeMethods.GetWindowText(cur, outText, title.Capacity);
+                if (outText.Equals(title))
+                {
+                    var rectClient = NativeMethods.GetClientRect(cur);
+                    if (rectClient.Right != 0 && rectClient.Bottom != 0)
+                    {
+                        // check pid
+                        _ = NativeMethods.GetWindowThread(cur, out uint pid);
+                        foreach (var proc in DataRepository.GameProcesses)
+                        {
+                            if (proc.Id == pid)
+                            {
+                                Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
+                                // Search over, believe handle is found
+                                return cur;
+                            }
+                        }
+                    }
+                }
+
+                cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
+            }
+
+            Log.Info("Find failed");
+            return IntPtr.Zero;
         }
 
         private static void SetWindowHandler()

@@ -262,6 +262,17 @@ namespace ErogeHelper.Common
         }
 
         /// <summary>
+        /// 传入 out 参数，通过 hWnd 获取 PID
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="processId"></param>
+        /// <returns></returns>
+        public static uint GetWindowThread(IntPtr hWnd, out uint processId)
+        {
+            return UnsafeNativeMethods.GetWindowThreadProcessId(hWnd, out processId);
+        }
+
+        /// <summary>
         /// 返回窗口左上和右下的坐标(left, top, right, bottom)
         /// </summary>
         /// <param name="hWnd"></param>

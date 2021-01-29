@@ -41,9 +41,9 @@ namespace ErogeHelper.Common.Service
                     }
                     catch(Win32Exception ex)
                     {
-                        // Casue by `GetMainModuleFileName()`
+                        // Casued by `GetMainModuleFileName()`
                         // Access Denied. 32bit -> 64bit module
-                        Log.Warn(ex.Message);
+                        Log.Info(ex.Message);
                     }
                 }
                 foreach (var i in data.ToList())
