@@ -185,10 +185,15 @@ namespace ErogeHelper.ViewModel.Pages
                         "Textractor: 无效特殊码" => "Textractor: invalid code",
                         "Textractor: 初始化完成" => "Textractor: initialization completed",
                         "Textractor: 无法注入" => "Textractor: couldn't inject",
+                        "Textractor: 无效进程ID" => "Textractor: invalid process",
                         _ => hp.Text
                     };
                 }
                 ConsoleOutput += "\n" + hp.Text;
+                return;
+            }
+            else if (hp.Handle == 1) // Clipboard
+            {
                 return;
             }
 

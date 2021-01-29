@@ -17,8 +17,20 @@
 
     <Page.Resources>
         <DataTemplate x:Key="HpItemTemplate">
-            <!-- TODO: UserHook highlight -->
-            <GroupBox Header="{Binding EngineName}" Width="300" Height="240" ToolTip="{Binding HookCode}">
+            <GroupBox Width="300" Height="240" ToolTip="{Binding HookCode}">
+                <GroupBox.Header>
+                    <TextBlock x:Name="textBlock" Text="{Binding EngineName}">
+                        <TextBlock.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=textBlock, Path=Text, Converter={StaticResource ResourceKey=HookEngineHighlightConverter}}" Value="UserHook">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Resources>
+                    </TextBlock>
+                </GroupBox.Header>
                 <!-- 1 line 22 char * 10 line-->
                 <TextBlock Text="{Binding TotalText}" TextWrapping="Wrap"/>
             </GroupBox>
