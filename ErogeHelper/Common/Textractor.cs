@@ -43,6 +43,7 @@ namespace ErogeHelper.Common
         public static event DataRecvEventHandler? DataEvent;
 
         static readonly Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
+        private static readonly List<string> InsertMessageEngineName = new();
 
         #region TextHostInit Callback Implement
         static public void CreateThreadHandle(
@@ -71,7 +72,10 @@ namespace ErogeHelper.Common
             HookParam hp = ThreadHandleDict[threadid];
             hp.Text = opdata;
 
-            // TODO: 记录所有控制台的InsertMessage
+            if (hp.Handle == 0 && hp.Text.Contains("Textractor: inserting hook: ")) // Console
+            {
+                InsertMessageEngineName.Add(hp.Text[28..]);
+            }
 
             DataEvent?.Invoke(typeof(Textractor), hp);
             if (!string.IsNullOrWhiteSpace(GameConfig.HookCode)
@@ -102,9 +106,9 @@ namespace ErogeHelper.Common
             var engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
 
             // 重复插入相同的code(可能)会导致产生很高位的Context
-            foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动文本后或程序产生的钩子
+            foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动游戏文本或程序后产生的钩子
             {
-                if (engineName == hcodeItem.Value.Name || hookcode == hcodeItem.Value.Hookcode)
+                if (engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode))
                 {
                     DataEvent?.Invoke(typeof(Textractor), new HookParam
                     {
@@ -115,7 +119,20 @@ namespace ErogeHelper.Common
                     return;
                 }
             }
-            // foreach FromInsertMessage 可以保证ThreadHandleDict还没有的钩子不被乱覆盖
+
+            foreach (var exsitEngine in InsertMessageEngineName)
+            {
+                if (engineName.Equals(exsitEngine))
+                {
+                    DataEvent?.Invoke(typeof(Textractor), new HookParam
+                    {
+                        Name = "控制台",
+                        Hookcode = "HB0@0",
+                        Text = $"ErogeHelper: The engine {engineName} has already insert"
+                    });
+                    return;
+                }
+            }
 
             foreach (Process p in DataRepository.GameProcesses)
             {

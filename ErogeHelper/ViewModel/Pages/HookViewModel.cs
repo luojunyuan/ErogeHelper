@@ -128,8 +128,8 @@ namespace ErogeHelper.ViewModel.Pages
         }
 
         #region Constructor
-        private IHookSettingPageService dataService;
-        private IWindowManager windowManager;
+        private readonly IHookSettingPageService dataService;
+        private readonly IWindowManager windowManager;
 
         public HookViewModel(IHookSettingPageService dataService, IWindowManager windowManager)
         {
@@ -174,10 +174,10 @@ namespace ErogeHelper.ViewModel.Pages
 
         private void DataProcess(object sender, HookParam hp)
         {
-            if (hp.Name == "控制台") // it means console
+            if (hp.Handle == 0) // Console
             {
                 // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
-                if (Language.Strings.Culture.Name != "zh-Hans")
+                if (!Language.Strings.Culture.Name.Equals("zh-Hans"))
                 {
                     hp.Text = hp.Text switch
                     {
@@ -189,10 +189,6 @@ namespace ErogeHelper.ViewModel.Pages
                     };
                 }
                 ConsoleOutput += "\n" + hp.Text;
-                return;
-            }
-            else if (hp.Name == "剪贴板") // Clipboard
-            {
                 return;
             }
 
@@ -219,12 +215,12 @@ namespace ErogeHelper.ViewModel.Pages
                     string tmp = targetItem.TotalText + "\n\n" + hp.Text;
 
                     // dummy way to do my TextBlock item
-                    var count = tmp.Count(f => f == '\n');
+                    var count = tmp.Count(f => f.Equals('\n'));
                     if (count > 5)
                     {
                         var index = tmp.IndexOf('\n') + 2;
                         index = tmp.IndexOf('\n', index);
-                        tmp = tmp.Substring(index);
+                        tmp = tmp[index..];
                     }
                     targetItem.TotalText = tmp;
                     targetItem.Text = hp.Text;
