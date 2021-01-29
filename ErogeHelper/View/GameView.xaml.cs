@@ -2,6 +2,7 @@
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -67,9 +68,14 @@ namespace ErogeHelper.View
         {
             base.OnSourceInitialized(e);
 
+            HwndSource? source = PresentationSource.FromVisual(this) as HwndSource;
+            source?.AddHook(WndProc);
+
             // Get GameView window handle
             var interopHelper = new WindowInteropHelper(this);
             DataRepository.GameViewHandle = interopHelper.Handle;
+
+            RegisterAppBar(false);
 
             // Alaways make window front
             DispatcherTimer timer = new DispatcherTimer();
@@ -88,6 +94,63 @@ namespace ErogeHelper.View
 
             timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Start();
+        }
+
+        private IntPtr desktopHandle;
+        private IntPtr shellHandle;
+        int uCallBackMsg;
+
+        private void RegisterAppBar(bool registered)
+        {
+            APPBARDATA abd = new APPBARDATA();
+            abd.cbSize = Marshal.SizeOf(abd);
+            abd.hWnd = DataRepository.GameViewHandle;
+
+            desktopHandle = NativeMethods.GetDesktopWindow();
+            shellHandle = NativeMethods.GetShellWindow();
+            if (!registered)
+            {
+                //register
+                uCallBackMsg = NativeMethods.RegisterWindowMessage("APPBARMSG_CSDN_HELPER");
+                abd.uCallbackMessage = uCallBackMsg;
+                _ = NativeMethods.SHAppBarMessage((int)NativeMethods.ABMsg.ABM_NEW, ref abd);
+            }
+            else
+            {
+                _ = NativeMethods.SHAppBarMessage((int)NativeMethods.ABMsg.ABM_REMOVE, ref abd);
+            }
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == uCallBackMsg)
+            {
+                switch (wParam.ToInt32())
+                {
+                    case (int)NativeMethods.ABNotify.ABN_FULLSCREENAPP:
+                        IntPtr hWnd = NativeMethods.GetForegroundWindow();
+                        //判断当前全屏的应用是否是桌面
+                        if (hWnd.Equals(desktopHandle) || hWnd.Equals(shellHandle))
+                        {
+                            break;
+                        }
+                        //判断是否全屏
+                        if ((int)lParam == 1)
+                        {
+                            Log.Info("The window is being maxsize");
+                        }
+                        else
+                        {
+                            Log.Info("The window is being normalize");
+                        }
+                        GameHooker.CheckWindowHandler();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            return IntPtr.Zero;
         }
 
         #region Disable White Point by Touch

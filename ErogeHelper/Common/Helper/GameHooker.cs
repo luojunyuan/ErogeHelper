@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 
 namespace ErogeHelper.Common.Helper
@@ -29,19 +30,77 @@ namespace ErogeHelper.Common.Helper
 
             // Register game exit event
             gameProc.EnableRaisingEvents = true;
-            gameProc.Exited += new EventHandler(ApplicationExit); // is there has 
+            gameProc.Exited += new EventHandler(ApplicationExit);
 
             gameHWnd = gameProc.MainWindowHandle;
 
+            CheckWindowHandler();
+            SetWindowHandler();
+        }
+
+        public static void CheckWindowHandler()
+        {
+            var defaultRect = NativeMethods.GetClientRect(gameHWnd);
+            if (400 > defaultRect.Bottom && 400 > defaultRect.Right)
+            {
+                // Tip: 如果MainWindowHandle所在窗口最小化了也会进入这里
+                IntPtr realHandle = IntPtr.Zero;
+
+                int textLength = gameProc.MainWindowTitle.Length;
+                StringBuilder title = new StringBuilder(textLength + 1);
+                NativeMethods.GetWindowText(gameProc.MainWindowHandle, title, title.Capacity);
+
+                Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
+
+                // Must use original gameProc.MainWindowHandle
+                IntPtr first = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
+                IntPtr last = NativeMethods.GetWindow(gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
+
+                IntPtr cur = first;
+                while (cur != last)
+                {
+                    StringBuilder outText = new StringBuilder(textLength + 1);
+                    NativeMethods.GetWindowText(cur, outText, title.Capacity);
+                    if (outText.Equals(title))
+                    {
+                        var rectClient = NativeMethods.GetClientRect(cur);
+                        if (rectClient.Right != 0 && rectClient.Bottom != 0)
+                        {
+                            Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
+                            realHandle = cur;
+                            // Search over, believe handle is found
+                            break;
+                        }
+                    }
+
+                    cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
+                }
+
+                if (realHandle != IntPtr.Zero)
+                {
+                    gameHWnd = realHandle;
+                    SetWindowHandler();
+                }
+                else
+                {
+                    // gameHwnd still be gameProc.MainWindowHandle at first time
+                    Log.Info("No realHandle found. Still use last handle");
+                }
+            }
+            
+        }
+
+        private static void SetWindowHandler()
+        {
             Log.Info($"Set handle to 0x{Convert.ToString(gameHWnd.ToInt64(), 16).ToUpper()} " +
-                $"Title: {gameProc.MainWindowTitle}");
+                            $"Title: {gameProc.MainWindowTitle}");
             uint targetThreadId = NativeMethods.GetWindowThread(gameHWnd);
 
             // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
             Application.Current.Dispatcher.InvokeAsync(
                 () => hWinEventHook = NativeMethods.WinEventHookOne(
                     NativeMethods.SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE,
-                    WinEventDelegate,
+                    WinEventDelegate!,
                     (uint)gameProc.Id,
                     targetThreadId)
             );

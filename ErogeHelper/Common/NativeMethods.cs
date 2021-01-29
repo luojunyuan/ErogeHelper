@@ -63,6 +63,15 @@ namespace ErogeHelper.Common
             SETFOCUS = 0x0007,
             KILLFOCUS = 0x0008,
             ACTIVATE = 0x0006,
+
+            SYSCOMMAND = 0x0112,
+        }
+
+        public enum SC : uint
+        { 
+            MAXIMIZE = 0xF030,
+            MINIMIZE = 0xF020,
+            RESTORE = 0xF120,
         }
 
         //SetWinEventHook() flags
@@ -164,6 +173,37 @@ namespace ErogeHelper.Common
             OBJID_QUERYCLASSNAMEIDX = 0xFFFFFFF4,
             OBJID_NATIVEOM = 0xFFFFFFF0
         }
+
+        public enum ABMsg : int
+        {
+            ABM_NEW = 0,
+            ABM_REMOVE,
+            ABM_QUERYPOS,
+            ABM_SETPOS,
+            ABM_GETSTATE,
+            ABM_GETTASKBARPOS,
+            ABM_ACTIVATE,
+            ABM_GETAUTOHIDEBAR,
+            ABM_SETAUTOHIDEBAR,
+            ABM_WINDOWPOSCHANGED,
+            ABM_SETSTATE
+        }
+
+        public enum ABNotify : int
+        {
+            ABN_STATECHANGE = 0,
+            ABN_POSCHANGED,
+            ABN_FULLSCREENAPP,
+            ABN_WINDOWARRANGE
+        }
+
+        public enum ABEdge : int
+        {
+            ABE_LEFT = 0,
+            ABE_TOP,
+            ABE_RIGHT,
+            ABE_BOTTOM
+        }
         #endregion
 
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
@@ -245,6 +285,10 @@ namespace ErogeHelper.Common
             return rect;
         }
 
+        /// <summary>
+        /// 取得前台窗口句柄函数
+        /// </summary>
+        /// <returns></returns>
         public static IntPtr GetForegroundWindow()
         {
             return SafeNativeMethods.GetForegroundWindow();
@@ -316,6 +360,35 @@ namespace ErogeHelper.Common
             SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
         }
 
+        // ---
+
+        public static uint SHAppBarMessage(int dwMessage, ref APPBARDATA pData)
+        {
+            return SafeNativeMethods.SHAppBarMessage(dwMessage, ref pData);
+        }
+
+        public static int RegisterWindowMessage(string msg)
+        {
+            return SafeNativeMethods.RegisterWindowMessage(msg);
+        }
+
+        /// <summary>
+        /// 取得Shell窗口句柄函数
+        /// </summary>
+        /// <returns></returns>
+        public static IntPtr GetShellWindow()
+        {
+            return SafeNativeMethods.GetShellWindow();
+        }
+
+        /// <summary>
+        /// 取得桌面窗口句柄函数
+        /// </summary>
+        /// <returns></returns>
+        public static IntPtr GetDesktopWindow()
+        {
+            return SafeNativeMethods.GetDesktopWindow();
+        }
     }
 
     [SuppressUnmanagedCodeSecurity]
@@ -365,6 +438,20 @@ namespace ErogeHelper.Common
 
         [DllImport("user32.dll", EntryPoint = "keybd_event", SetLastError = true)]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
+        // ---
+
+        [DllImport("SHELL32", CallingConvention = CallingConvention.StdCall)]
+        public static extern uint SHAppBarMessage(int dwMessage, ref APPBARDATA pData);
+
+        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        public static extern int RegisterWindowMessage(string msg);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetShellWindow();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDesktopWindow();
     }
 
     [SuppressUnmanagedCodeSecurity]
@@ -392,5 +479,16 @@ namespace ErogeHelper.Common
         public int Top;
         public int Right;
         public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct APPBARDATA
+    {
+        public int cbSize;
+        public IntPtr hWnd;
+        public int uCallbackMessage;
+        public int uEdge;
+        public RECT rc;
+        public IntPtr lParam;
     }
 }

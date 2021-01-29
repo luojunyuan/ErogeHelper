@@ -34,8 +34,8 @@ namespace ErogeHelper.View.Control
         private Point oldPos;
 
         private bool isFromUpdateButtonPosEvent = false;
-        private int newGameViewHeight = -1;
-        private int newGameViewWidth = -1;
+        private int newGameViewHeight;
+        private int newGameViewWidth;
 
         public AssistiveTouch()
         {
@@ -43,7 +43,6 @@ namespace ErogeHelper.View.Control
 
             GameHooker.UpdateButtonPosEvent += (_, height, width) =>
             {
-                //SmoothMoveAnimation(buttonSpace, buttonSpace);
                 move = true;
                 isFromUpdateButtonPosEvent = true;
                 newGameViewHeight = height;
