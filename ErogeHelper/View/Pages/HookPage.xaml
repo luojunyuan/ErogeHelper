@@ -23,8 +23,17 @@
                         <TextBlock.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=textBlock, Path=Text, Converter={StaticResource ResourceKey=HookEngineHighlightConverter}}" Value="UserHook">
+                                    <DataTrigger 
+                                        Binding="{Binding ElementName=textBlock, Path=Text, 
+                                            Converter={StaticResource ResourceKey=HookEngineHighlightConverter}}" 
+                                        Value="UserHook">
                                         <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger 
+                                        Binding="{Binding ElementName=textBlock, Path=Text, 
+                                            Converter={StaticResource ResourceKey=HookEngineHighlightConverter}}" 
+                                        Value="READ">
+                                        <Setter Property="Foreground" Value="Yellow"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
