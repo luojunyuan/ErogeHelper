@@ -184,7 +184,7 @@ namespace ErogeHelper.Common.Helper
             if (index < 0)
                 return savedText[savedText.Count + index];
             else 
-                throw new Exception("never happend");
+                throw new Exception("never happened");
         }
 
         private int SuggestedContextSize()

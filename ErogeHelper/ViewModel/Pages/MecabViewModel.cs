@@ -4,6 +4,7 @@ using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
+using System.Text;
 
 namespace ErogeHelper.ViewModel.Pages
 {
@@ -33,7 +34,7 @@ namespace ErogeHelper.ViewModel.Pages
             set
             {
                 DataRepository.EnableMecab = value;
-                // Control ViewModel
+
                 if (value is true)
                 {
                     gameViewModel.IsSourceTextPined = true;
@@ -176,12 +177,12 @@ namespace ErogeHelper.ViewModel.Pages
             var tmp = new BindableCollection<SingleTextItem>();
 
             // This work around only takes 3~5ms it's fine! much better than WanaKana ones...
-            var sentence = string.Empty;
+            var sentence = new StringBuilder();
             foreach (var sourceText in gameViewModel.TextControl.SourceTextCollection)
             {
-                sentence += sourceText.Text;
+                sentence.Append(sourceText.Text);
             }
-            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(sentence))
+            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(sentence.ToString()))
             {
                 tmp.Add(new SingleTextItem
                 {

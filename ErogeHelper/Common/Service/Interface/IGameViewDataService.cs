@@ -22,5 +22,7 @@ namespace ErogeHelper.Common.Service
         public void Start();
 
         public Visibility GetPinToggleVisubility();
+
+        public void RefreshCurentMecabText(string text = "");
     }
 }

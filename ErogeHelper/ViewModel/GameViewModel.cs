@@ -7,6 +7,7 @@ using ErogeHelper.ViewModel.Control;
 using ErogeHelper.ViewModel.Pages;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +27,7 @@ namespace ErogeHelper.ViewModel
         #endregion
 
         readonly IWindowManager windowManager;
-        private readonly IGameViewDataService dataService;
+        public readonly IGameViewDataService dataService;
         public TextViewModel TextControl { get; set; }
 
         public GameViewModel(
@@ -47,7 +48,7 @@ namespace ErogeHelper.ViewModel
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
-        public Queue SourceTextQueue = new();
+        public List<string> SourceTextArchiver = new List<string>(32);
 
         public bool AssistiveTouchIsVisible
         {

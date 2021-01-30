@@ -64,7 +64,7 @@ namespace ErogeHelper.ViewModel.Control
             }
             else if (searchResponse.StatusCode == RestSharp.ResponseStatus.Error)
             {
-                // Exception happend
+                // Exception happened
                 MojiCollection.Add(new MojiItem
                 {
                     Header = "Error",

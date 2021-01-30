@@ -249,6 +249,8 @@ namespace ErogeHelper.ViewModel.Pages
             GameConfig.SubThreadContext = SelectedHook.SubThreadContext;
             GameConfig.RegExp = RegExp ?? string.Empty;
 
+            IoC.Get<GameViewModel>().dataService.RefreshCurentMecabText(SelectedText);
+
             if (File.Exists(configPath))
             {
                 // Cover override

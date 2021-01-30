@@ -91,8 +91,8 @@ namespace ErogeHelper.View.Control
             {
                 if (move)
                 {
-                    double left, top, right, bottom, vertcalMiddelLine,
-                        parentActualHeight, parentActualWidth;
+                    double parentActualWidth;
+                    double parentActualHeight;
 
                     if (isFromUpdateButtonPosEvent)
                     {
@@ -109,13 +109,13 @@ namespace ErogeHelper.View.Control
                         parentActualWidth = parent.ActualWidth;
                     }
 
-                    left = Margin.Left + newPos.X - lastPos.X;
-                    top = Margin.Top + newPos.Y - lastPos.Y;
+                    double left = Margin.Left + newPos.X - lastPos.X;
+                    double top = Margin.Top + newPos.Y - lastPos.Y;
                     // button 距离右边缘距离
-                    right = parentActualWidth - left - ActualWidth;
+                    double right = parentActualWidth - left - ActualWidth;
                     // button 距离下边缘距离
-                    bottom = parentActualHeight - top - ActualHeight;
-                    vertcalMiddelLine = parentActualHeight - ActualHeight - buttonSpace;
+                    double bottom = parentActualHeight - top - ActualHeight;
+                    double vertcalMiddelLine = parentActualHeight - ActualHeight - buttonSpace;
 
                     //Log.Info($"鼠标位置 {newPos.X} {newPos.Y}");
                     //Log.Info($"释放点与四边距离 {left} {top} {right} {bottom}");
@@ -164,7 +164,7 @@ namespace ErogeHelper.View.Control
                     }
                     else
                     {
-                        throw new InvalidOperationException("Should never happend!");
+                        throw new InvalidOperationException("Should never happen!");
                     }
 
                     // 元素的某个属性，在开始值和结束值之间逐步增加，是一种线性插值的过程

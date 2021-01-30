@@ -81,7 +81,7 @@ namespace ErogeHelper.Common.Service
                 }
             }
 
-            gameViewModel.SourceTextQueue.Enqueue(hp.Text);
+            gameViewModel.SourceTextArchiver.Add(hp.Text);
 
             // Process source japanese text
             if (mecabViewModel.MecabSwitch)
@@ -113,5 +113,33 @@ namespace ErogeHelper.Common.Service
         }
 
         public Visibility GetPinToggleVisubility() => DataRepository.EnableMecab ? Visibility.Visible : Visibility.Collapsed;
+
+        public void RefreshCurentMecabText(string text = "")
+        {
+            if (text.Equals(string.Empty))
+            {
+                // maybe should never happen
+                text = gameViewModel.SourceTextArchiver.Last();
+            }
+
+            if (mecabViewModel.MecabSwitch)
+            {
+                var collect = new BindableCollection<SingleTextItem>();
+
+                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(text))
+                {
+                    collect.Add(new SingleTextItem
+                    {
+                        Text = mecabWord.Word,
+                        RubyText = mecabWord.Kana,
+                        PartOfSpeed = mecabWord.PartOfSpeech,
+                        TextTemplateType = DataRepository.TextTemplateConfig,
+                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
+                    });
+                }
+
+                SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
+            }
+        }
     }
 }
