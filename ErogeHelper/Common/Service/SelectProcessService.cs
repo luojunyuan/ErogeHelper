@@ -1,17 +1,12 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Extension;
 using ErogeHelper.ViewModel;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace ErogeHelper.Common.Service
 {
@@ -39,7 +34,7 @@ namespace ErogeHelper.Common.Service
                         else
                             data.Add(item);
                     }
-                    catch(Win32Exception ex)
+                    catch (Win32Exception ex)
                     {
                         // Casued by `GetMainModuleFileName()`
                         // Access Denied. 32bit -> 64bit module
@@ -62,7 +57,7 @@ namespace ErogeHelper.Common.Service
             {
                 if (proc.MainWindowHandle != IntPtr.Zero && !string.IsNullOrWhiteSpace(proc.MainWindowTitle))
                 {
-                    if (uselessProcess.Contains(proc.ProcessName)) 
+                    if (uselessProcess.Contains(proc.ProcessName))
                         continue;
 
                     yield return proc;
@@ -70,8 +65,8 @@ namespace ErogeHelper.Common.Service
             }
         }
 
-        private readonly List<string> uselessProcess = new List<string> 
-        { 
+        private readonly List<string> uselessProcess = new List<string>
+        {
             "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
             "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps"
         };

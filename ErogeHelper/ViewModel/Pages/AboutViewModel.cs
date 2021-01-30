@@ -13,7 +13,7 @@ using UpdateChecker.VersionComparers;
 
 namespace ErogeHelper.ViewModel.Pages
 {
-    class AboutViewModel : PropertyChangedBase
+    public class AboutViewModel : PropertyChangedBase
     {
         private string _checkUpdateStatus = "Check update ...";
         private Brush _brushColor = Brushes.Gray;

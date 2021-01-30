@@ -1,13 +1,9 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
-using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
-using System.Diagnostics;
-using WanaKanaSharp;
 
 namespace ErogeHelper.ViewModel.Pages
 {
@@ -22,6 +18,14 @@ namespace ErogeHelper.ViewModel.Pages
         private string _mojiToken = DataRepository.MojiSessionToken;
 
         // https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip
+        private readonly GameViewModel gameViewModel;
+        private readonly MecabHelper mecabHelper;
+
+        public MecabViewModel(GameViewModel gameViewModel, MecabHelper mecabHelper)
+        {
+            this.gameViewModel = gameViewModel;
+            this.mecabHelper = mecabHelper;
+        }
 
         public bool MecabSwitch
         {
@@ -32,16 +36,16 @@ namespace ErogeHelper.ViewModel.Pages
                 // Control ViewModel
                 if (value is true)
                 {
-                    IoC.Get<GameViewModel>().IsSourceTextPined = true;
-                    IoC.Get<GameViewModel>().PinSourceTextToggle();
-                    IoC.Get<GameViewModel>().PinSourceTextToggleVisubility = System.Windows.Visibility.Visible;
+                    gameViewModel.IsSourceTextPined = true;
+                    gameViewModel.PinSourceTextToggle();
+                    gameViewModel.PinSourceTextToggleVisubility = System.Windows.Visibility.Visible;
                 }
                 else
                 {
-                    IoC.Get<GameViewModel>().TextControlVisibility = System.Windows.Visibility.Collapsed;
-                    IoC.Get<GameViewModel>().PinSourceTextToggleVisubility = System.Windows.Visibility.Collapsed;
+                    gameViewModel.TextControlVisibility = System.Windows.Visibility.Collapsed;
+                    gameViewModel.PinSourceTextToggleVisubility = System.Windows.Visibility.Collapsed;
                 }
-                
+
                 NotifyOfPropertyChange(() => MecabSwitch);
             }
         }
@@ -103,15 +107,15 @@ namespace ErogeHelper.ViewModel.Pages
         }
         public bool MojiVertical { get; set; }
 
-        private static void ChangeSourceTextTemplate(TextTemplateType type)
+        private void ChangeSourceTextTemplate(TextTemplateType type)
         {
             var tmp = new BindableCollection<SingleTextItem>();
-            foreach (var item in IoC.Get<TextViewModel>().SourceTextCollection)
+            foreach (var item in gameViewModel.TextControl.SourceTextCollection)
             {
                 item.TextTemplateType = type;
                 tmp.Add(item);
             }
-            IoC.Get<TextViewModel>().SourceTextCollection = tmp;
+            gameViewModel.TextControl.SourceTextCollection = tmp;
             DataRepository.TextTemplateConfig = type;
         }
 
@@ -167,14 +171,13 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
 
-        private readonly MecabHelper mecabHelper = new MecabHelper();
         private void ChangeKanaType()
         {
             var tmp = new BindableCollection<SingleTextItem>();
 
             // This work around only takes 3~5ms it's fine! much better than WanaKana ones...
             var sentence = string.Empty;
-            foreach (var sourceText in IoC.Get<TextViewModel>().SourceTextCollection)
+            foreach (var sourceText in gameViewModel.TextControl.SourceTextCollection)
             {
                 sentence += sourceText.Text;
             }
@@ -189,18 +192,18 @@ namespace ErogeHelper.ViewModel.Pages
                     SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
                 });
             }
-            IoC.Get<TextViewModel>().SourceTextCollection = tmp;
+            gameViewModel.TextControl.SourceTextCollection = tmp;
         }
 
-        public string MojiToken 
-        { 
+        public string MojiToken
+        {
             get => _mojiToken;
-            set 
-            { 
+            set
+            {
                 _mojiToken = value;
                 NotifyOfPropertyChange(() => MojiToken);
                 DataRepository.MojiSessionToken = value;
-            } 
+            }
         }
     }
 }

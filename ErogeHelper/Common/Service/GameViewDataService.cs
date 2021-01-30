@@ -17,8 +17,14 @@ namespace ErogeHelper.Common.Service
         public event IGameViewDataService.SourceDataEventHandler? SourceDataEvent;
         public event IGameViewDataService.AppendDataEventHandler? AppendDataEvent;
 
-        private readonly MecabHelper mecabHelper = new MecabHelper();
-        //private readonly SakuraNoUtaHelper sakuraNoUtaHelper = new SakuraNoUtaHelper();
+        public GameViewModel gameViewModel { get; set; } = null!;
+        public MecabViewModel mecabViewModel { get; set; } = null!;
+        private readonly MecabHelper mecabHelper;
+
+        public GameViewDataService(MecabHelper mecabHelper)
+        {
+            this.mecabHelper = mecabHelper;
+        }
 
         public void Start()
         {
@@ -28,7 +34,7 @@ namespace ErogeHelper.Common.Service
         private void DataProcess(object sender, HookParam hp)
         {
             // Refresh
-            IoC.Get<GameViewModel>().AppendTextList.Clear();
+            gameViewModel.AppendTextList.Clear();
 
             // User define RegExp 
             var pattern = GameConfig.RegExp;
@@ -47,7 +53,7 @@ namespace ErogeHelper.Common.Service
 
             if (hp.Text.Length > 120)
             {
-                IoC.Get<TextViewModel>().SourceTextCollection.Clear();
+                gameViewModel.TextControl.SourceTextCollection.Clear();
                 AppendDataEvent?.Invoke(typeof(GameViewDataService), Language.Strings.GameView_MaxLenthTip);
                 return;
             }
@@ -75,10 +81,10 @@ namespace ErogeHelper.Common.Service
                 }
             }
 
-            IoC.Get<GameViewModel>().SourceTextQueue.Enqueue(hp.Text);
+            gameViewModel.SourceTextQueue.Enqueue(hp.Text);
 
             // Process source japanese text
-            if (IoC.Get<MecabViewModel>().MecabSwitch)
+            if (mecabViewModel.MecabSwitch)
             {
                 var collect = new BindableCollection<SingleTextItem>();
 
@@ -105,5 +111,7 @@ namespace ErogeHelper.Common.Service
             //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
             //}
         }
+
+        public Visibility GetPinToggleVisubility() => DataRepository.EnableMecab ? Visibility.Visible : Visibility.Collapsed;
     }
 }

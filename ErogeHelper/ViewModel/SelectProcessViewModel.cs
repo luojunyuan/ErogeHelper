@@ -4,7 +4,6 @@ using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ModernWpf.Controls;
-using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;

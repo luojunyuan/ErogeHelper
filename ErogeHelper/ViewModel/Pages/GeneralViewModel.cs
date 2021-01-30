@@ -20,7 +20,6 @@ namespace ErogeHelper.ViewModel.Pages
             set 
             {
                 DataRepository.ShowAppendText = value;
-                // IoC.Get<TextViewModel>().TextVisible = value ? Visibility.Visible : Visibility.Collapsed;
             } 
         }
 

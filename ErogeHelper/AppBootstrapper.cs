@@ -151,9 +151,16 @@ namespace ErogeHelper
             builder.RegisterType<SelectProcessService>()
                 .AsImplementedInterfaces();
             builder.RegisterType<GameViewDataService>()
-                .AsImplementedInterfaces();
+                .AsImplementedInterfaces()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             builder.RegisterType<HookSettingPageService>()
                 .AsImplementedInterfaces();
+
+            // Register others
+            builder.RegisterType<MecabHelper>()
+                .SingleInstance();
+            builder.RegisterType<DeepLHelper>()
+                .SingleInstance();
 
             Container = builder.Build();
 

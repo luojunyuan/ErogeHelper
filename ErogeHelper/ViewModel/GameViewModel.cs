@@ -22,9 +22,28 @@ namespace ErogeHelper.ViewModel
         private bool _assistiveTouchIsVisible = true;
         private Visibility _textControlVisibility = Visibility.Visible;
         private Visibility _triggerBarVisibility = Visibility.Collapsed;
+        private Visibility _pinSourceTextToggleVisubility;
         #endregion
 
+        readonly IWindowManager windowManager;
+        private readonly IGameViewDataService dataService;
         public TextViewModel TextControl { get; set; }
+
+        public GameViewModel(
+            IWindowManager windowManager,
+            IGameViewDataService dataService,
+            TextViewModel textControl)
+        {
+            this.dataService = dataService;
+            this.windowManager = windowManager;
+            TextControl = textControl;
+
+            dataService.Start();
+            dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
+            dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
+
+            PinSourceTextToggleVisubility = dataService.GetPinToggleVisubility();
+        }
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
@@ -66,9 +85,11 @@ namespace ErogeHelper.ViewModel
         }
 
         public bool CanVolumeUp => true;
-        public async void VolumeUp() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
+        public async void VolumeUp() => await WindowsInput.Simulate.Events()
+            .Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
         public bool CanVolumeDown => true;
-        public async void VolumeDown() => await WindowsInput.Simulate.Events().Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
+        public async void VolumeDown() => await WindowsInput.Simulate.Events()
+            .Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
         public bool CanSwitchGameScreen => true;
         public async void SwitchGameScreen()
@@ -82,7 +103,6 @@ namespace ErogeHelper.ViewModel
         }
 
         #region TextControl Pin
-        private Visibility _pinSourceTextToggleVisubility = IoC.Get<MecabViewModel>().MecabSwitch ? Visibility.Visible : Visibility.Collapsed;
         public Visibility PinSourceTextToggleVisubility
         {
             get => _pinSourceTextToggleVisubility;
@@ -156,13 +176,20 @@ namespace ErogeHelper.ViewModel
         #endregion
 
         private bool _isLostFocus = GameConfig.NoFocus;
-        public bool IsLostFocus { get => _isLostFocus; set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); } }
+        public bool IsLostFocus 
+        { 
+            get => _isLostFocus; 
+            set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); } 
+        }
         public void FocusToggle()
         {
             if (IsLostFocus)
             {
                 int exStyle = NativeMethods.GetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE);
-                NativeMethods.SetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE, exStyle | NativeMethods.WS_EX_NOACTIVATE);
+                NativeMethods.SetWindowLong(
+                                            DataRepository.GameViewHandle, 
+                                            NativeMethods.GWL_EXSTYLE, 
+                                            exStyle | NativeMethods.WS_EX_NOACTIVATE);
 
                 GameConfig.NoFocus = true;
                 GameConfig.SetValue(EHNode.NoFocus, true.ToString());
@@ -170,7 +197,10 @@ namespace ErogeHelper.ViewModel
             else
             {
                 int exStyle = NativeMethods.GetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE);
-                NativeMethods.SetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE, exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
+                NativeMethods.SetWindowLong(
+                                            DataRepository.GameViewHandle, 
+                                            NativeMethods.GWL_EXSTYLE, 
+                                            exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
 
                 GameConfig.NoFocus = false;
                 GameConfig.SetValue(EHNode.NoFocus, false.ToString());
@@ -178,13 +208,8 @@ namespace ErogeHelper.ViewModel
         }
 
         public bool CanTaskbarNotifyArea => true;
-        public async void TaskbarNotifyArea()
-        {
-            await WindowsInput.Simulate.Events()
-                .ClickChord(KeyCode.LWin, KeyCode.A)
-                .Invoke()
-                .ConfigureAwait(false);
-        }
+        public async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()
+            .ClickChord(KeyCode.LWin, KeyCode.A).Invoke().ConfigureAwait(false);
 
         public bool CanTaskView => true;
         public async void TaskView() => await WindowsInput.Simulate.Events()
@@ -196,17 +221,13 @@ namespace ErogeHelper.ViewModel
             AssistiveTouchIsVisible = false;
 
             await WindowsInput.Simulate.Events()
-                .Click(KeyCode.Escape)
-                .Invoke()
-                .ConfigureAwait(false);
+                .Click(KeyCode.Escape).Invoke().ConfigureAwait(false);
 
             // Wait for CommandBarFlyout hide
             await Task.Delay(500).ConfigureAwait(false);
 
             await WindowsInput.Simulate.Events()
-                .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
-                .Invoke()
-                .ConfigureAwait(false);
+                .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S).Invoke().ConfigureAwait(false);
 
             await Task.Delay(3000).ConfigureAwait(false);
 
@@ -217,41 +238,18 @@ namespace ErogeHelper.ViewModel
         {
             var window = Application.Current.Windows.OfType<PreferenceView>().FirstOrDefault();
             if (window == null)
+            {
                 await windowManager.ShowWindowAsync(IoC.Get<PreferenceViewModel>()).ConfigureAwait(false);
+            }
             else
+            {
                 window.Activate();
+            }
         }
 
-        public async void PressSkip()
-        {
-            await WindowsInput.Simulate.Events()
-                .Hold(KeyCode.Control)
-                .Invoke()
-                .ConfigureAwait(false);
-        }
-        public async void PressSkipRelease()
-        {
-            await WindowsInput.Simulate.Events()
-                .Release(KeyCode.Control)
-                .Invoke()
-                .ConfigureAwait(false);
-        }
-
-        readonly IWindowManager windowManager;
-        private readonly IGameViewDataService dataService;
-
-        public GameViewModel(
-            IWindowManager windowManager,
-            IGameViewDataService dataService,
-            TextViewModel textControl)
-        {
-            this.dataService = dataService;
-            this.windowManager = windowManager;
-            TextControl = textControl;
-
-            dataService.Start();
-            dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
-            dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
-        }
+        public async void PressSkip() => await WindowsInput.Simulate.Events()
+            .Hold(KeyCode.Control).Invoke().ConfigureAwait(false);
+        public async void PressSkipRelease() => await WindowsInput.Simulate.Events()
+            .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
     }
 }
