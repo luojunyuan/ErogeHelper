@@ -47,7 +47,11 @@ namespace ErogeHelper.ViewModel.Control
         {
             var searchResponse = await MojiDictApi.SearchAsync(Word).ConfigureAwait(false);
 
-            if (searchResponse.StatusCode == RestSharp.ResponseStatus.None)
+            if (searchResponse.StatusCode == RestSharp.ResponseStatus.Aborted)
+            {
+                return;
+            }
+            else if (searchResponse.StatusCode == RestSharp.ResponseStatus.None)
             {
                 // Moji no result
                 // 如果没有结果，Words.Count == 0，MojiCollection[0].TarId 指向雅虎搜索网址
@@ -102,17 +106,26 @@ namespace ErogeHelper.ViewModel.Control
             if (string.IsNullOrWhiteSpace(wordId))
             {
                 wordId = MojiCollection[0].TarId;
+                Log.Info($"查询单词 {MojiCollection[0].Header}");
             }
 
             var wordDetail = await MojiDictApi.FetchAsync(wordId).ConfigureAwait(false);
 
             // 遍历 找wordDetail对应Word所在序列
-            for (int i = 0; i < MojiCollection.Count; i++)
+            for (var i = 0; i < MojiCollection.Count; i++)
             {
                 if (MojiCollection[i].TarId == wordDetail.result.Word.objectId)
                 {
                     // process infomation
                     MojiCollection[i].Pron = wordDetail.result.Word.Pron;
+                    // FIXME: 当以比快速慢一点的速度来均速点击查询单词时，MojiSearch的异步任务不会被取消，此时最后一次查询的操作把
+                    // MojiCollection清理了。前一次查询所在的另一线程执行此处出错，增加MojiFetch CancellToken可能可以解决这个问题
+                    // 因不影响最后一次查询，故结果不会表现异常，不知为什么不会出现在上一句只会出现在这之后
+                    if (MojiCollection.Count == 0)
+                    {
+                        Log.Error("This can't be true but it happend");
+                        return;
+                    }
                     MojiCollection[i].Title = wordDetail.result.Details[0].Title;
 
                     foreach (var subDetail in wordDetail.result.Subdetails)

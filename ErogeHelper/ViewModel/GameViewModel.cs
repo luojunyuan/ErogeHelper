@@ -5,6 +5,7 @@ using ErogeHelper.Model;
 using ErogeHelper.View;
 using ErogeHelper.ViewModel.Control;
 using ErogeHelper.ViewModel.Pages;
+using ModernWpf.Controls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace ErogeHelper.ViewModel
         private Visibility _textControlVisibility = Visibility.Visible;
         private Visibility _triggerBarVisibility = Visibility.Collapsed;
         private Visibility _pinSourceTextToggleVisubility;
+        private bool _isLostFocus = GameConfig.NoFocus;
+        private FontIcon _gameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.FullScreen };
         #endregion
 
         readonly IWindowManager windowManager;
@@ -92,6 +95,15 @@ namespace ErogeHelper.ViewModel
         public async void VolumeDown() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
+        public FontIcon GameScreenSwitchIcon 
+        { 
+            get => _gameScreenSwitchIcon;
+            set
+            {
+                _gameScreenSwitchIcon = value;
+                NotifyOfPropertyChange(() => GameScreenSwitchIcon);
+            }
+        }
         public bool CanSwitchGameScreen => true;
         public async void SwitchGameScreen()
         {
@@ -115,10 +127,10 @@ namespace ErogeHelper.ViewModel
         }
 
         private bool _isSourceTextPined = true;
-        public bool IsSourceTextPined 
-        { 
-            get => _isSourceTextPined; 
-            set { _isSourceTextPined = value; NotifyOfPropertyChange(() => IsSourceTextPined); } 
+        public bool IsSourceTextPined
+        {
+            get => _isSourceTextPined;
+            set { _isSourceTextPined = value; NotifyOfPropertyChange(() => IsSourceTextPined); }
         }
 
         public bool CanPinSourceTextToggle => true;
@@ -134,7 +146,7 @@ namespace ErogeHelper.ViewModel
             {
                 TriggerBarVisibility = Visibility.Visible;
                 TextControlVisibility = Visibility.Collapsed;
-                TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5};
+                TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
             }
         }
 
@@ -176,11 +188,10 @@ namespace ErogeHelper.ViewModel
         }
         #endregion
 
-        private bool _isLostFocus = GameConfig.NoFocus;
-        public bool IsLostFocus 
-        { 
-            get => _isLostFocus; 
-            set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); } 
+        public bool IsLostFocus
+        {
+            get => _isLostFocus;
+            set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); }
         }
         public void FocusToggle()
         {
@@ -188,8 +199,8 @@ namespace ErogeHelper.ViewModel
             {
                 int exStyle = NativeMethods.GetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE);
                 NativeMethods.SetWindowLong(
-                                            DataRepository.GameViewHandle, 
-                                            NativeMethods.GWL_EXSTYLE, 
+                                            DataRepository.GameViewHandle,
+                                            NativeMethods.GWL_EXSTYLE,
                                             exStyle | NativeMethods.WS_EX_NOACTIVATE);
 
                 GameConfig.NoFocus = true;
@@ -199,8 +210,8 @@ namespace ErogeHelper.ViewModel
             {
                 int exStyle = NativeMethods.GetWindowLong(DataRepository.GameViewHandle, NativeMethods.GWL_EXSTYLE);
                 NativeMethods.SetWindowLong(
-                                            DataRepository.GameViewHandle, 
-                                            NativeMethods.GWL_EXSTYLE, 
+                                            DataRepository.GameViewHandle,
+                                            NativeMethods.GWL_EXSTYLE,
                                             exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
 
                 GameConfig.NoFocus = false;

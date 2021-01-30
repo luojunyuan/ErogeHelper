@@ -1,6 +1,9 @@
-﻿using ErogeHelper.Common;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
+using ErogeHelper.ViewModel;
+using ModernWpf.Controls;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -121,6 +124,8 @@ namespace ErogeHelper.View
             }
         }
 
+        // XXX: ...
+        private GameViewModel? gameViewModel = null;
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == uCallBackMsg)
@@ -134,14 +139,20 @@ namespace ErogeHelper.View
                         {
                             break;
                         }
+                        if (gameViewModel == null)
+                        {
+                            gameViewModel = IoC.Get<GameViewModel>();
+                        }
                         //判断是否全屏
                         if ((int)lParam == 1)
                         {
                             Log.Info("The window is being maxsize");
+                            gameViewModel.GameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.BackToWindow };
                         }
                         else
                         {
                             Log.Info("The window is being normalize or minimize");
+                            gameViewModel.GameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.FullScreen };
                         }
                         GameHooker.CheckWindowHandler();
                         break;

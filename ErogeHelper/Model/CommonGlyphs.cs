@@ -23,5 +23,11 @@ namespace ErogeHelper.Model
         public const string Brightness = "\uE706";
 
         public const string Search = "\uE721";
+
+        public const string Unpin = "\uE77A";
+
+        public const string BackToWindow = "\uE1D8";
+
+        public const string FullScreen = "\uE1D9";
     }
 }

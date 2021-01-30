@@ -53,21 +53,43 @@
                     Visibility="{Binding AssistiveTouchIsVisible, Converter={StaticResource VisibleConverter}}">
                     <ui:FlyoutService.Flyout>
                         <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
-                            <ui:AppBarButton Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]"/>
-                            <ui:AppBarButton Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" />
-                            <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]">
+                            <ui:AppBarButton 
+                                Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]" ToolTip="Decrease font"/>
+                            <ui:AppBarButton 
+                                Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" ToolTip="Increase font"/>
+                            <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]" ToolTip="Volume down">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
-                            <ui:AppBarButton Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]"/>
                             <ui:AppBarButton 
-                                Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
+                                Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" ToolTip="Volume Up"/>
+                            <ui:AppBarButton 
+                                Icon="{Binding GameScreenSwitchIcon}" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                 ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
                             <ui:AppBarToggleButton 
-                                Icon="Pin" IsChecked="{Binding IsSourceTextPined}" ToolTip="Pin japanese text"
+                                IsChecked="{Binding IsSourceTextPined}" Width="40"
                                 Visibility="{Binding PinSourceTextToggleVisubility}"
-                                cm:Message.Attach="[Click] = [PinSourceTextToggle]" />
+                                cm:Message.Attach="[Click] = [PinSourceTextToggle]" >
+                                <ui:AppBarToggleButton.Resources>
+                                    <Style TargetType="ui:AppBarToggleButton">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Icon" Value="Pin"/>
+                                                <Setter Property="ToolTip" Value="Unpin japanese text" />
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Icon">
+                                                    <Setter.Value>
+                                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Unpin}"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="ToolTip" Value="Pin japanese text" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ui:AppBarToggleButton.Resources>
+                            </ui:AppBarToggleButton>
                             <ui:AppBarToggleButton 
                                 Icon="Trim" IsChecked="{Binding IsLostFocus}" 
                                 ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
