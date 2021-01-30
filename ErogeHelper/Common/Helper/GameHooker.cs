@@ -113,7 +113,7 @@ namespace ErogeHelper.Common.Helper
                 cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
             }
 
-            Log.Info("Find failed");
+            Log.Info("Find failed, use last handle");
             return IntPtr.Zero;
         }
 

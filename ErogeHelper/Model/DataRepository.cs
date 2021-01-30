@@ -118,9 +118,9 @@ namespace ErogeHelper.Model
             set => SetValue(value);
         }
 
-        public static bool ShowSourceText
+        public static bool EnableMecab
         {
-            get => GetValue(DefaultValuesStore.ShowSourceText);
+            get => GetValue(DefaultValuesStore.EnableMecab);
             set => SetValue(value);
         }
 

@@ -24,7 +24,12 @@
                     <!-- Main top activity area -->
                     <StackPanel DockPanel.Dock="Top">
                         <!-- Source Text -->
-                        <ContentControl x:Name="TextControl" />
+                        <Border 
+                            Width="auto" Height="12" Visibility="{Binding TriggerBarVisibility}"
+                            Background="Black" Opacity="0.002" cm:Message.Attach="[MouseEnter] = [TriggerBarEnter]"/>
+                        <ContentControl 
+                            x:Name="TextControl" Visibility="{Binding TextControlVisibility}" 
+                            cm:Message.Attach="[MouseLeave] = [TextControlLeave]"/>
                         <!-- Extra Text-->
                         <ItemsControl x:Name="AppendTextList">
                             <ItemsControl.ItemTemplate>
@@ -59,6 +64,10 @@
                             <ui:AppBarButton 
                                 Icon="FullScreen" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                 ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
+                            <ui:AppBarToggleButton 
+                                Icon="Pin" IsChecked="{Binding IsSourceTextPined}" ToolTip="Pin japanese text"
+                                Visibility="{Binding PinSourceTextToggleVisubility}"
+                                cm:Message.Attach="[Click] = [PinSourceTextToggle]" />
                             <ui:AppBarToggleButton 
                                 Icon="Trim" IsChecked="{Binding IsLostFocus}" 
                                 ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 

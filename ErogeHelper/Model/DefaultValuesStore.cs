@@ -11,7 +11,7 @@ namespace ErogeHelper.Model
     {
         public const double FontSize = 28;
 
-        public const bool ShowSourceText = true;
+        public const bool EnableMecab = false;
 
         public const bool ShowAppendText = true;
 

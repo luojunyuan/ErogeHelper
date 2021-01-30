@@ -206,15 +206,6 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Show japanese text 的本地化字符串。
-        /// </summary>
-        public static string GeneralPage_JapaneseText {
-            get {
-                return ResourceManager.GetString("GeneralPage.JapaneseText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 General 的本地化字符串。
         /// </summary>
         public static string GeneralPage_Title {
@@ -391,6 +382,15 @@ namespace ErogeHelper.Language {
         public static string MecabPage_Hiragana {
             get {
                 return ResourceManager.GetString("MecabPage.Hiragana", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Show japanese text 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_JapaneseText {
+            get {
+                return ResourceManager.GetString("MecabPage.JapaneseText", resourceCulture);
             }
         }
         

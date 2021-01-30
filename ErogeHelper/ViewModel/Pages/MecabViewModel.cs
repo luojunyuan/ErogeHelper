@@ -3,6 +3,7 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
+using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
 using System.Diagnostics;
@@ -19,6 +20,32 @@ namespace ErogeHelper.ViewModel.Pages
         private bool _hiragana = DataRepository.Hiragana;
         private bool _katakana = DataRepository.Katakana;
         private string _mojiToken = DataRepository.MojiSessionToken;
+
+        // https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip
+
+        public bool MecabSwitch
+        {
+            get => DataRepository.EnableMecab;
+            set
+            {
+                DataRepository.EnableMecab = value;
+                // Control ViewModel
+                if (value is true)
+                {
+                    IoC.Get<GameViewModel>().IsSourceTextPined = true;
+                    IoC.Get<GameViewModel>().PinSourceTextToggle();
+                    IoC.Get<GameViewModel>().PinSourceTextToggleVisubility = System.Windows.Visibility.Visible;
+                }
+                else
+                {
+                    IoC.Get<GameViewModel>().TextControlVisibility = System.Windows.Visibility.Collapsed;
+                    IoC.Get<GameViewModel>().PinSourceTextToggleVisubility = System.Windows.Visibility.Collapsed;
+                }
+                
+                NotifyOfPropertyChange(() => MecabSwitch);
+            }
+        }
+
 
         public bool KanaDefault
         {

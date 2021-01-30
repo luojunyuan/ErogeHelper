@@ -14,15 +14,6 @@ namespace ErogeHelper.ViewModel.Pages
 {
     class GeneralViewModel : PropertyChangedBase
     {
-        public bool ShowSource
-        {
-            get => DataRepository.ShowSourceText;
-            set
-            {
-                DataRepository.ShowSourceText = value;
-                IoC.Get<TextViewModel>().TextVisible = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
         public bool ShowAppend 
         {
             get => DataRepository.ShowAppendText; 

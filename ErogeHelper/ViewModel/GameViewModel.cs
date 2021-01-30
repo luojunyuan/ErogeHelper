@@ -4,10 +4,13 @@ using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.View;
 using ErogeHelper.ViewModel.Control;
+using ErogeHelper.ViewModel.Pages;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using WindowsInput.Events;
 
 namespace ErogeHelper.ViewModel
@@ -17,11 +20,15 @@ namespace ErogeHelper.ViewModel
         #region Properties
         private double _fontSize = DataRepository.FontSize;
         private bool _assistiveTouchIsVisible = true;
+        private Visibility _textControlVisibility = Visibility.Visible;
+        private Visibility _triggerBarVisibility = Visibility.Collapsed;
         #endregion
 
         public TextViewModel TextControl { get; set; }
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
+
+        public Queue SourceTextQueue = new();
 
         public bool AssistiveTouchIsVisible
         {
@@ -74,8 +81,82 @@ namespace ErogeHelper.ViewModel
                 .ConfigureAwait(false);
         }
 
-        private bool isLostFocus = GameConfig.NoFocus;
-        public bool IsLostFocus { get => isLostFocus; set { isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); } }
+        #region TextControl Pin
+        private Visibility _pinSourceTextToggleVisubility = IoC.Get<MecabViewModel>().MecabSwitch ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility PinSourceTextToggleVisubility
+        {
+            get => _pinSourceTextToggleVisubility;
+            set
+            {
+                _pinSourceTextToggleVisubility = value;
+                NotifyOfPropertyChange(() => PinSourceTextToggleVisubility);
+            }
+        }
+
+        private bool _isSourceTextPined = true;
+        public bool IsSourceTextPined 
+        { 
+            get => _isSourceTextPined; 
+            set { _isSourceTextPined = value; NotifyOfPropertyChange(() => IsSourceTextPined); } 
+        }
+
+        public bool CanPinSourceTextToggle => true;
+        public void PinSourceTextToggle()
+        {
+            if (IsSourceTextPined)
+            {
+                TriggerBarVisibility = Visibility.Collapsed;
+                TextControlVisibility = Visibility.Visible;
+                TextControl.Background = new SolidColorBrush();
+            }
+            else
+            {
+                TriggerBarVisibility = Visibility.Visible;
+                TextControlVisibility = Visibility.Collapsed;
+                TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5};
+            }
+        }
+
+        public Visibility TriggerBarVisibility
+        {
+            get => _triggerBarVisibility;
+            set
+            {
+                _triggerBarVisibility = value;
+                NotifyOfPropertyChange(() => TriggerBarVisibility);
+            }
+        }
+        public Visibility TextControlVisibility
+        {
+            get => _textControlVisibility;
+            set
+            {
+                _textControlVisibility = value;
+                NotifyOfPropertyChange(() => TextControlVisibility);
+            }
+        }
+
+        public void TriggerBarEnter()
+        {
+            if (IsSourceTextPined == false)
+            {
+                TextControlVisibility = Visibility.Visible;
+                TriggerBarVisibility = Visibility.Collapsed;
+            }
+        }
+
+        public void TextControlLeave()
+        {
+            if (IsSourceTextPined == false)
+            {
+                TextControlVisibility = Visibility.Collapsed;
+                TriggerBarVisibility = Visibility.Visible;
+            }
+        }
+        #endregion
+
+        private bool _isLostFocus = GameConfig.NoFocus;
+        public bool IsLostFocus { get => _isLostFocus; set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); } }
         public void FocusToggle()
         {
             if (IsLostFocus)

@@ -28,7 +28,7 @@ namespace ErogeHelper.Common.Service
         private void DataProcess(object sender, HookParam hp)
         {
             // Refresh
-            IoC.Get<GameViewModel>().AppendTextList.Clear(); // Clear or give new value? is that same
+            IoC.Get<GameViewModel>().AppendTextList.Clear();
 
             // User define RegExp 
             var pattern = GameConfig.RegExp;
@@ -75,8 +75,10 @@ namespace ErogeHelper.Common.Service
                 }
             }
 
+            IoC.Get<GameViewModel>().SourceTextQueue.Enqueue(hp.Text);
+
             // Process source japanese text
-            if (IoC.Get<GeneralViewModel>().ShowSource)
+            if (IoC.Get<MecabViewModel>().MecabSwitch)
             {
                 var collect = new BindableCollection<SingleTextItem>();
 

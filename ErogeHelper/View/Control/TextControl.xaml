@@ -139,7 +139,7 @@
     </UserControl.Resources>
 
     <ItemsControl
-        Visibility="{Binding TextVisible}"
+        Background="{Binding Background}"
         ItemsSource="{Binding SourceTextCollection}"
         ItemTemplateSelector="{StaticResource KanaTemplateSelector}">
         <ItemsControl.ItemsPanel>

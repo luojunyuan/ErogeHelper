@@ -11,8 +11,9 @@
       Title="{x:Static resx:Strings.MecabPage_Title}">
 
     <ScrollViewer PanningMode="Both">
-        <StackPanel Margin="20,10">
-            <GroupBox Header="Text Flyout">
+        <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+            <ui:ToggleSwitch Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabSwitch}" />
+            <GroupBox Header="Text Flyout" IsEnabled="{Binding MecabSwitch}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
                         <RadioButton 
@@ -38,7 +39,7 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
 
-            <GroupBox Header="Moji辞書">
+            <GroupBox Header="Moji辞書" IsEnabled="{Binding MecabSwitch}">
                 <ui:SimpleStackPanel Spacing="10">
                     <Label Content="Token"/>
                     <TextBox 
@@ -46,6 +47,6 @@
                         HorizontalAlignment="Left"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
-        </StackPanel>
+        </ui:SimpleStackPanel>
     </ScrollViewer>
 </Page>

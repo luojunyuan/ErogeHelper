@@ -23,7 +23,17 @@ namespace ErogeHelper.ViewModel.Control
     class TextViewModel : Screen
     {
         private BindableCollection<SingleTextItem> _sourceTextCollection = new BindableCollection<SingleTextItem>();
-        private Visibility _textVisible = IoC.Get<GeneralViewModel>().ShowSource ? Visibility.Visible : Visibility.Collapsed;
+        private Brush _background = new SolidColorBrush();
+
+        public Brush Background
+        {
+            get => _background;
+            set
+            {
+                _background = value;
+                NotifyOfPropertyChange(() => Background);
+            }
+        }
 
         public BindableCollection<SingleTextItem> SourceTextCollection
         {
@@ -32,18 +42,6 @@ namespace ErogeHelper.ViewModel.Control
             {
                 _sourceTextCollection = value;
                 NotifyOfPropertyChange(() => SourceTextCollection);
-            }
-        }
-        public Visibility TextVisible
-        {
-            get
-            {
-                return _textVisible;
-            }
-            set
-            {
-                _textVisible = value;
-                NotifyOfPropertyChange(() => TextVisible);
             }
         }
 

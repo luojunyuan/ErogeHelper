@@ -181,7 +181,7 @@
   <data name="GameView.MaxLenthTip" xml:space="preserve">
     <value>跳过过长文本</value>
   </data>
-  <data name="GeneralPage.JapaneseText" xml:space="preserve">
+  <data name="MecabPage.JapaneseText" xml:space="preserve">
     <value>显示日文文本</value>
   </data>
   <data name="GeneralPage.AppendText" xml:space="preserve">
