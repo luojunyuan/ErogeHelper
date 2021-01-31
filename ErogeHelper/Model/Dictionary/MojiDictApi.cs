@@ -49,7 +49,7 @@ namespace ErogeHelper.Model.Dictionary
                 if (token.IsCancellationRequested)
                 {
                     resp.StatusCode = ResponseStatus.Aborted;
-                    Log.Info("Moji search task was canceled");
+                    Log.Debug("Moji search task was canceled");
                 }
                 else if (resp.Result.Words.Count == 0)
                 {
@@ -64,7 +64,7 @@ namespace ErogeHelper.Model.Dictionary
             catch (Exception ex)
             {
                 // Same as `resp.Result.OriginalSearchText == string.Empty`
-                Log.Error(ex.Message);
+                Log.Error(ex);
                 // Any network transport error (network is down, failed DNS lookup, etc), or any kind of server error 
                 // (except 404), `resp.StatusCode` will be set to `ResponseStatus.Error`.
                 resp.StatusCode = ResponseStatus.Error;
@@ -73,26 +73,27 @@ namespace ErogeHelper.Model.Dictionary
             return resp;
         }
 
-        public static async Task<MojiFetchResponse> FetchAsync(string tarId, CancellationToken token = default)
+        public static async Task<MojiFetchResponse> FetchAsync(string tarId)
         {
             MojiFetchPayload fetchPayload = new MojiFetchPayload
             {
                 wordId = tarId, // searchResp.result.searchResults[0].tarId
                 _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
+                _SessionToken = DataRepository.MojiSessionToken // Can be done without this
             };
 
-            var requestFetch = new RestRequest(fetchApi, Method.POST)
+            IRestRequest? requestFetch = new RestRequest(fetchApi, Method.POST)
                 .AddJsonBody(fetchPayload);
 
             MojiFetchResponse resp = new();
 
             try
             {
-                resp = await client.PostAsync<MojiFetchResponse>(requestFetch, token).ConfigureAwait(false);
+                resp = await client.PostAsync<MojiFetchResponse>(requestFetch).ConfigureAwait(false);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex);
             }
 
             return resp;
@@ -254,7 +255,7 @@ namespace ErogeHelper.Model.Dictionary
 
             public class Word
             {
-                public string objectId { get; set; } = string.Empty;
+                public string ObjectId { get; set; } = string.Empty;
 
                 // details[0].title + subdetails[0]
                 public string excerpt { get; set; } = string.Empty;

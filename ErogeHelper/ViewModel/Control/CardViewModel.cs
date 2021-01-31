@@ -12,6 +12,7 @@ namespace ErogeHelper.ViewModel.Control
         private string _word = string.Empty;
         private int _mojiSelectedIndex;
 
+        // TextBox
         public string Word
         {
             get => _word;
@@ -24,8 +25,12 @@ namespace ErogeHelper.ViewModel.Control
 
         public BindableCollection<MojiItem> MojiCollection { get; set; } = new BindableCollection<MojiItem>();
 
+        /// <summary>
+        /// Stop all Action
+        /// </summary>
         internal void ClearData()
         {
+            Log.Debug("Clear MojiCollection");
             MojiCollection.Clear();
         }
 
@@ -86,6 +91,8 @@ namespace ErogeHelper.ViewModel.Control
                 return;
             }
 
+            Log.Debug($"Received the result of {searchResponse.Result.OriginalSearchText}");
+
             foreach (var item in searchResponse.Result.Words)
             {
                 MojiCollection.Add(new MojiItem
@@ -101,29 +108,40 @@ namespace ErogeHelper.ViewModel.Control
             await MojiFetchWord().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Fetch word, also do mess work to MojiCollection
+        /// </summary>
+        /// <param name="wordId"></param>
+        /// <returns></returns>
         internal async Task MojiFetchWord(string wordId = "")
         {
             if (string.IsNullOrWhiteSpace(wordId))
             {
                 wordId = MojiCollection[0].TarId;
-                Log.Info($"查询单词 {MojiCollection[0].Header}");
             }
 
             var wordDetail = await MojiDictApi.FetchAsync(wordId).ConfigureAwait(false);
 
+            Log.Debug($"Completre fetch");
+
+            // 如果在这里clear了，刚好也不会出问题
+            // 循环会持续一定时间，大概率在途中出问题
             // 遍历 找wordDetail对应Word所在序列
             for (var i = 0; i < MojiCollection.Count; i++)
             {
-                if (MojiCollection[i].TarId == wordDetail.result.Word.objectId)
+                if (MojiCollection[i].TarId.Equals(wordDetail.result.Word.ObjectId))
                 {
                     // process infomation
+                    // 如果在这里clear了，出问题
                     MojiCollection[i].Pron = wordDetail.result.Word.Pron;
+                    // FIXME: Thread not safe!
                     // FIXME: 当以比快速慢一点的速度来均速点击查询单词时，MojiSearch的异步任务不会被取消，此时最后一次查询的操作把
                     // MojiCollection清理了。前一次查询所在的另一线程执行此处出错，增加MojiFetch CancellToken可能可以解决这个问题
                     // 因不影响最后一次查询，故结果不会表现异常，不知为什么不会出现在上一句只会出现在这之后
+                    // 如果在这里clear了，出问题
                     if (MojiCollection.Count == 0)
                     {
-                        Log.Error("This can't be true but it happend");
+                        Log.Error("This can't be true but it happend"); // Same as line 145
                         return;
                     }
                     MojiCollection[i].Title = wordDetail.result.Details[0].Title;

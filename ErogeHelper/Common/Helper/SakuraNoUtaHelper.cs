@@ -90,15 +90,15 @@ namespace ErogeHelper.Common.Helper
                 // 查日文文本
                 if (size == "1")
                 {
-                    context = savedText[savedText.Count - 1];
+                    context = savedText[^1];
                 }
                 else if (size == "2")
                 {
-                    context = savedText[savedText.Count - 2] + "||" + savedText[savedText.Count - 1];
+                    context = savedText[^2] + "||" + savedText[^1];
                 }
                 else if (size == "3")
                 {
-                    context = savedText[savedText.Count -3] + "||" + savedText[savedText.Count -2] + "||" + savedText[savedText.Count -1];
+                    context = savedText[^3] + "||" + savedText[^2] + "||" + savedText[^1];
                 }
 
                 Log.Info($"source {context}");

@@ -1,12 +1,8 @@
-﻿using Caliburn.Micro;
-using Serilog;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -18,27 +14,30 @@ namespace ErogeHelper.Common.Helper
         /// 创建一个调整屏幕亮度的对象
         /// </summary>
         /// <returns>如果返回空，则代表此屏幕不支持</returns>
-        public static IAdjustScreen? CreateAdjustScreen(Window window)
+        public static IAdjustScreen? CreateAdjustScreen(IntPtr handle)
         {
-            if (window == null) throw new ArgumentNullException(nameof(window));
-            //第一次尝试使用Dxva2方式
-            AdjustScreenByDxva2 adjustScreenByDxva2 = new AdjustScreenByDxva2();
-            var handle = new WindowInteropHelper(window).Handle;
+            // XXX: Do not use Dxva2, may cause damage to the monitor. `cur` gets 100 first time, set `min`, `max` 
+            // between 22-85 is fine for one of my monitor, out of the range it's not glow anymore.
+            // 第一次尝试使用Dxva2方式
+            //AdjustScreenByDxva2 adjustScreenByDxva2 = new AdjustScreenByDxva2();
             short min = 0;
             short current = 0;
             short max = 0;
-            var adjustScreenByDxva2Value = adjustScreenByDxva2.GetBrightness(handle, ref min, ref current, ref max);
-            if (adjustScreenByDxva2Value)
-                return adjustScreenByDxva2;
-            //如果不满足，则尝试使用Gdi32方式
-            else
-            {
-                Log.Info("Current Screen does not support Dxva2, try gdi32..");
-                var adjustScreenByGdi32 = new AdjustScreenByGdi32();
-                var adjustScreenByGdi32Value = adjustScreenByGdi32.GetBrightness(handle, ref min, ref current, ref max);
-                if (adjustScreenByGdi32Value)
-                    return adjustScreenByGdi32;
-            }
+            //var adjustScreenByDxva2Value = adjustScreenByDxva2.GetBrightness(handle, ref min, ref current, ref max);
+
+            //if (adjustScreenByDxva2Value)
+            //{
+            //    return adjustScreenByDxva2;
+            //}
+            //else
+            //{
+            // 如果不满足，则尝试使用Gdi32方式
+            //Log.Info("Current Screen does not support Dxva2, try gdi32..");
+            var adjustScreenByGdi32 = new AdjustScreenByGdi32();
+            var adjustScreenByGdi32Value = adjustScreenByGdi32.GetBrightness(handle, ref min, ref current, ref max);
+            if (adjustScreenByGdi32Value)
+                return adjustScreenByGdi32;
+            //}
 
             return null;
         }
@@ -210,13 +209,13 @@ namespace ErogeHelper.Common.Helper
     public struct RAMP
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public UInt16[] Red;
+        public ushort[] Red;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public UInt16[] Green;
+        public ushort[] Green;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public UInt16[] Blue;
+        public ushort[] Blue;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -233,5 +232,146 @@ namespace ErogeHelper.Common.Helper
         MonitorDefaultToNull,
         MonitorDefaultToPrimary,
         MonitorDefaultToNearest
+    }
+
+    class AdjustScreenByWMI
+    {
+        // Store array of valid level values
+        private byte[] brightnessLevels = Array.Empty<byte>();
+        // Define scope (namespace)
+        ManagementScope scope = new ManagementScope("root\\WMI");
+        // Define querys
+        SelectQuery query = new SelectQuery("WmiMonitorBrightness");
+        SelectQuery queryMethods = new SelectQuery("WmiMonitorBrightnessMethods");
+
+        public bool IsSupported { get; set; }
+
+        public AdjustScreenByWMI()
+        {
+            //get the level array for this system
+            brightnessLevels = GetBrightnessLevels();
+            if (brightnessLevels.Length == 0)
+            {
+                //"WmiMonitorBrightness" is not supported by the system
+                Log.Info("This System does not support WMI brightness control");
+                IsSupported = false;
+            }
+            else
+            {
+                IsSupported = true;
+            }
+        }
+
+        public void IncreaseBrightness()
+        {
+            if (IsSupported)
+            {
+                Log.Debug($"Current brightness level: {GetBrightness()}");
+                StartupBrightness(GetBrightness() + 10);
+            }
+        }
+
+        public void DecreaseBrightness()
+        {
+            if (IsSupported)
+            {
+                Log.Debug($"Current brightness level: {GetBrightness()}");
+                StartupBrightness(GetBrightness() - 10);
+            }
+        }
+
+        /// <summary>
+        /// Returns the current brightness setting
+        /// </summary>
+        /// <returns></returns>
+        private int GetBrightness()
+        {
+            using ManagementObjectSearcher searcher = new(scope, query);
+            using ManagementObjectCollection objCollection = searcher.Get();
+
+            byte curBrightness = 0;
+            foreach (ManagementObject obj in objCollection)
+            {
+                curBrightness = (byte)obj.GetPropertyValue("CurrentBrightness");
+                break;
+            }
+
+            return curBrightness;
+        }
+
+        /// <summary>
+        /// Convert the brightness percentage to a byte and set the brightness using SetBrightness()
+        /// </summary>
+        /// <param name="iPercent"></param>
+        private void StartupBrightness(int iPercent)
+        {
+            // XXX: ...
+            if (iPercent < 0)
+            {
+                iPercent = 0;
+            }
+            else if (iPercent > 100)
+            {
+                iPercent = 100;
+            }
+
+            // iPercent is in the range of brightnessLevels
+            if (iPercent >= 0 && iPercent <= brightnessLevels[^1])
+            {
+                // Default level 100
+                byte level = 100;
+                foreach (byte item in brightnessLevels)
+                {
+                    // 找到 brightnessLevels 数组中与传入的 iPercent 接近的一项
+                    if (item >= iPercent)
+                    {
+                        level = item;
+                        break;
+                    }
+                }
+                SetBrightness(level);
+            }
+        }
+
+        /// <summary>
+        /// Set the brightnesslevel to the targetBrightness
+        /// </summary>
+        /// <param name="targetBrightness"></param>
+        private void SetBrightness(byte targetBrightness)
+        {
+            using ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, queryMethods);
+            using ManagementObjectCollection objectCollection = searcher.Get();
+            foreach (ManagementObject mObj in objectCollection)
+            {
+                // Note the reversed order - won't work otherwise!
+                mObj.InvokeMethod("WmiSetBrightness", new object[] { uint.MaxValue, targetBrightness });
+                // Only work on the first object
+                break;
+            }
+        }
+
+        private byte[] GetBrightnessLevels()
+        {
+            // Output current brightness
+            using ManagementObjectSearcher mos = new(scope, query);
+
+            byte[] bLevels = Array.Empty<byte>();
+            try
+            {
+                using ManagementObjectCollection moc = mos.Get();
+                foreach (ManagementObject o in moc)
+                {
+                    bLevels = (byte[])o.GetPropertyValue("Level");
+                    // Only work on the first object
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Info(ex.Message);
+            }
+
+            return bLevels;
+        }
     }
 }

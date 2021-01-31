@@ -21,6 +21,7 @@
             <convert:BooleanToVisibilityConverterReverse x:Key="VisibleConverterReverse" />
             <convert:StringToXamlConverter x:Key="TextEvaluateConverter" />
             <convert:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter" />
+            <convert:QueueToTextConverter x:Key="QueueToTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

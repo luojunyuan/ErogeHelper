@@ -1,70 +1,61 @@
 ﻿using Caliburn.Micro;
-using ErogeHelper.Common.Selector;
-using ErogeHelper.Common.Service;
+using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
-using ErogeHelper.ViewModel.Control;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace ErogeHelper.ViewModel.Pages
 {
     class GeneralViewModel : PropertyChangedBase
     {
-        public bool ShowAppend 
+        public bool ShowAppend
         {
-            get => DataRepository.ShowAppendText; 
-            set 
+            get => DataRepository.ShowAppendText;
+            set
             {
                 DataRepository.ShowAppendText = value;
-            } 
+            }
         }
 
         public bool DeepLExtention { get => DataRepository.PasteToDeepL; set => DataRepository.PasteToDeepL = value; }
 
-        //// TENDO: Improve these
-        //short minBrightness = 0; //22
-        //short curBrightness = 0;
-        //short maxBrightness = 0; //85
-        //public bool CanBrightnessDown() => true;
-        //public void BrightnessDown()
-        //{
-        //    bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, --curBrightness);
-        //    log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-        //}
-        //public bool CanBrightnessUp() => true;
-        //public void BrightnessUp()
-        //{
-        //    bool result = brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, ++curBrightness);
-        //    log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-        //}
+        public bool BrightnessSliderEnable
+        {
+            get => _brightnessSliderEnable;
+            set { _brightnessSliderEnable = value; NotifyOfPropertyChange(() => BrightnessSliderEnable); }
+        }
+        public short BrightnessSliderValue
+        {
+            get => _brightnessSliderValue;
+            set
+            {
+                _brightnessSliderValue = value;
+                NotifyOfPropertyChange(() => BrightnessSliderValue);
+                brightnessHelper!.SetBrightness(DataRepository.MainProcess!.MainWindowHandle, value);
+            }
+        }
 
+        private bool _brightnessSliderEnable;
+        private short _brightnessSliderValue;
+        readonly IAdjustScreen? brightnessHelper;
 
-        //IAdjustScreen? brightnessHelper;
-
-        //protected override void OnViewLoaded(object view)
-        //{
-        //    base.OnViewLoaded(view);
-
-        //    brightnessHelper = AdjustScreenBuilder.CreateAdjustScreen((Window)view);
-        //    if (brightnessHelper == null)
-        //    {
-        //        log.Info("Not support brightness adjust");
-        //    }
-        //    else
-        //    {
-        //        // use game's handle or EH GameView's new windowsInterrupter(GetView()).handle
-        //        IntPtr handle = DataRepository.MainProcess!.MainWindowHandle;
-
-        //        brightnessHelper.GetBrightness(handle,
-        //            ref minBrightness,
-        //            ref curBrightness,
-        //            ref maxBrightness);
-        //        log.Info($"Current brightness: {curBrightness} ({minBrightness}-{maxBrightness})");
-        //    }
-        //}
+        public GeneralViewModel()
+        {
+            IntPtr handle = DataRepository.GameViewHandle;
+            brightnessHelper = AdjustScreenBuilder.CreateAdjustScreen(handle);
+            if (brightnessHelper is null)
+            {
+                BrightnessSliderEnable = false;
+                Log.Info("Not support gdi32 brightness adjust");
+            }
+            else
+            {
+                BrightnessSliderEnable = true;
+                short _min = 0;
+                short _max = 0;
+                short cur = 0;
+                brightnessHelper.GetBrightness(handle, ref _min, ref cur, ref _max);
+                BrightnessSliderValue = cur;
+            }
+        }
     }
 }

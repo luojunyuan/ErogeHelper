@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using ErogeHelper.Common.Helper;
+using Serilog;
 using System;
 using System.IO;
 using System.Threading;
@@ -24,7 +25,13 @@ namespace ErogeHelper
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()
+#if DEBUG
+				.MinimumLevel.Debug()
                 .WriteTo.Debug() // VS Output
+#else
+				.MinimumLevel.Information()
+#endif
+                .WriteTo.Sink(new InMemorySink())
                 .CreateLogger();
 
             // Set i18n
@@ -56,7 +63,7 @@ namespace ErogeHelper
             {
                 "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
-                // default english because there can be so many different system language, we rather fallback on 
+                // Default english because there can be so many different system language, we rather fallback on 
                 // english in this case.
                 _ => new System.Globalization.CultureInfo(""),
             };

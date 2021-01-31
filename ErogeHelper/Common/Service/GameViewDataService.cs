@@ -81,7 +81,7 @@ namespace ErogeHelper.Common.Service
                 }
             }
 
-            gameViewModel.SourceTextArchiver.Add(hp.Text);
+            gameViewModel.SourceTextArchiver.Enqueue(hp.Text);
 
             // Process source japanese text
             if (mecabViewModel.MecabSwitch)

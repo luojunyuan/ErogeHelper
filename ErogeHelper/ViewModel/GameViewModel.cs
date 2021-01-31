@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
+using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.View;
@@ -8,6 +9,7 @@ using ErogeHelper.ViewModel.Pages;
 using ModernWpf.Controls;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +34,7 @@ namespace ErogeHelper.ViewModel
         readonly IWindowManager windowManager;
         public readonly IGameViewDataService dataService;
         public TextViewModel TextControl { get; set; }
+        public AdjustScreenByWMI brightnessWMIHelper;
 
         public GameViewModel(
             IWindowManager windowManager,
@@ -41,6 +44,16 @@ namespace ErogeHelper.ViewModel
             this.dataService = dataService;
             this.windowManager = windowManager;
             TextControl = textControl;
+            brightnessWMIHelper = new AdjustScreenByWMI();
+
+            if (brightnessWMIHelper.IsSupported)
+            {
+                ShowBrightnessControl = Visibility.Visible;
+            }
+            else
+            {
+                ShowBrightnessControl = Visibility.Collapsed;
+            }
 
             dataService.Start();
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
@@ -51,7 +64,7 @@ namespace ErogeHelper.ViewModel
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
-        public List<string> SourceTextArchiver = new List<string>(32);
+        public ConcurrentQueue<string> SourceTextArchiver = new();
 
         public bool AssistiveTouchIsVisible
         {
@@ -113,6 +126,16 @@ namespace ErogeHelper.ViewModel
                 .ClickChord(KeyCode.Alt, KeyCode.Enter)
                 .Invoke()
                 .ConfigureAwait(false);
+        }
+
+        public Visibility ShowBrightnessControl { get; set; }
+        public void BrightnessUp()
+        {
+            brightnessWMIHelper.IncreaseBrightness();
+        }
+        public void BrightnessDown()
+        {
+            brightnessWMIHelper.DecreaseBrightness();
         }
 
         #region TextControl Pin

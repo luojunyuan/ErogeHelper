@@ -12,7 +12,7 @@
       Title="{x:Static resx:Strings.About_Title}">
 
     <ScrollViewer PanningMode="Both" VerticalScrollBarVisibility="Auto">
-        <ui:SimpleStackPanel Spacing="10" Margin="20">
+        <ui:SimpleStackPanel Spacing="10" Margin="20, 10">
             <TextBlock 
                 FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" 
                 Text="{x:Static resx:Strings.About_AppName}" />

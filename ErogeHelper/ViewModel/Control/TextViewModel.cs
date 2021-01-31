@@ -52,9 +52,10 @@ namespace ErogeHelper.ViewModel.Control
             if (clickItem.SubMarkColor.ToString() == DataRepository.transparentImage.ToString())
                 return;
 
-            // Clear data first
-            CardControl.Word = clickItem.Text;
+            // Stop Actions
+            // Clear data
             CardControl.ClearData();
+            CardControl.Word = clickItem.Text;
             await CardControl.MojiSearchAsync().ConfigureAwait(false);
         }
 

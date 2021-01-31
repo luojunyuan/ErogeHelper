@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,6 +64,12 @@ namespace ErogeHelper.ViewModel.Pages
                     CheckUpdateStatus = "Latest version";
                     BrushColor = Brushes.Green;
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                CheckUpdateStatus = "Check Failed";
+                BrushColor = Brushes.Red;
+                Log.Info(ex.Message);
             }
             catch (Exception ex)
             {

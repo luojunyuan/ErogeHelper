@@ -54,9 +54,9 @@
                     <ui:FlyoutService.Flyout>
                         <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
                             <ui:AppBarButton 
-                                Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]" ToolTip="Decrease font"/>
+                                Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]" ToolTip="Decrease size"/>
                             <ui:AppBarButton 
-                                Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" ToolTip="Increase font"/>
+                                Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" ToolTip="Increase size"/>
                             <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]" ToolTip="Volume down">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
@@ -64,6 +64,20 @@
                             </ui:AppBarButton>
                             <ui:AppBarButton 
                                 Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" ToolTip="Volume Up"/>
+                            <ui:AppBarButton 
+                                cm:Message.Attach="[Click] = [BrightnessDown]" 
+                                ToolTip="Decrease brightness" Visibility="{Binding ShowBrightnessControl}">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.LowerBrightness}" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                            <ui:AppBarButton 
+                                cm:Message.Attach="[Click] = [BrightnessUp]" 
+                                ToolTip="Increase brightness" Visibility="{Binding ShowBrightnessControl}">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Brightness}" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
                             <ui:AppBarButton 
                                 Icon="{Binding GameScreenSwitchIcon}" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                 ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>

@@ -72,9 +72,19 @@ namespace ErogeHelper.Common
             HookParam hp = ThreadHandleDict[threadid];
             hp.Text = opdata;
 
-            if (hp.Handle == 0 && hp.Text.Contains("Textractor: inserting hook: ")) // Console
+            // TODO: Use this in Inject() only
+            // "Textractor: inserting hook: %s"
+            if (hp.Handle == 0 && hp.Text.Length > 28 && hp.Text[12..20].Equals("inserting")) // hackable
             {
-                InsertMessageEngineName.Add(hp.Text[28..]);
+                try
+                {
+                    InsertMessageEngineName.Add(hp.Text[28..]);
+                }
+                catch(ArgumentOutOfRangeException ex)
+                {
+                    // Weird random error
+                    Log.Error(ex);
+                }
             }
 
             DataEvent?.Invoke(typeof(Textractor), hp);
@@ -83,13 +93,13 @@ namespace ErogeHelper.Common
                 && (GameConfig.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                 && GameConfig.SubThreadContext == hp.Ctx2)
             {
-                Log.Info(hp.Text);
+                Log.Debug(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);
             }
             else if (GameConfig.HookCode.StartsWith('R')
                 && hp.Name.Equals("READ"))
             {
-                Log.Info(hp.Text);
+                Log.Debug(hp.Text);
                 SelectedDataEvent?.Invoke(typeof(Textractor), hp);
             }
         }

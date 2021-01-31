@@ -114,7 +114,7 @@ namespace ErogeHelper
             // Register Serilog logger
             //builder.RegisterLogger();
 
-            // Register Basic Tools
+            // Register basic tools
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -122,7 +122,7 @@ namespace ErogeHelper
             //    .AsImplementedInterfaces()
             //    .SingleInstance();
 
-            // Register ViewModels
+            // Register viewModels
             builder.RegisterType<SelectProcessViewModel>();
             builder.RegisterType<HookConfigViewModel>()
                 .SingleInstance();
@@ -146,8 +146,10 @@ namespace ErogeHelper
                 .SingleInstance();
             builder.RegisterType<AboutViewModel>()
                 .SingleInstance();
+            builder.RegisterType<LogViewModel>()
+                .SingleInstance();
 
-            // Register Services
+            // Register services
             builder.RegisterType<SelectProcessService>()
                 .AsImplementedInterfaces();
             builder.RegisterType<GameViewDataService>()
@@ -166,6 +168,8 @@ namespace ErogeHelper
 
             // Active HookViewModel preview for saving hole console output info
             Container.Resolve<HookViewModel>();
+            // For saving log info
+            Container.Resolve<LogViewModel>();
         }
 
         #region Autofac Init
