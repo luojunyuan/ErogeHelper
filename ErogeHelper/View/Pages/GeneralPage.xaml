@@ -10,8 +10,8 @@
       d:DesignHeight="450" d:DesignWidth="400"
       Title="{x:Static resx:Strings.GeneralPage_Title}">
 
-    <ScrollViewer PanningMode="Both">
-        <StackPanel Margin="20,10">
+    <ScrollViewer PanningMode="None">
+        <StackPanel Margin="20, 10">
             <GroupBox Header="MSIC">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:ToggleSwitch 

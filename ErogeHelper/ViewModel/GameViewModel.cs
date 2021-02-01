@@ -34,7 +34,6 @@ namespace ErogeHelper.ViewModel
         readonly IWindowManager windowManager;
         public readonly IGameViewDataService dataService;
         public TextViewModel TextControl { get; set; }
-        public AdjustScreenByWMI brightnessWMIHelper;
 
         public GameViewModel(
             IWindowManager windowManager,
@@ -44,16 +43,6 @@ namespace ErogeHelper.ViewModel
             this.dataService = dataService;
             this.windowManager = windowManager;
             TextControl = textControl;
-            brightnessWMIHelper = new AdjustScreenByWMI();
-
-            if (brightnessWMIHelper.IsSupported)
-            {
-                ShowBrightnessControl = Visibility.Visible;
-            }
-            else
-            {
-                ShowBrightnessControl = Visibility.Collapsed;
-            }
 
             dataService.Start();
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
@@ -126,16 +115,6 @@ namespace ErogeHelper.ViewModel
                 .ClickChord(KeyCode.Alt, KeyCode.Enter)
                 .Invoke()
                 .ConfigureAwait(false);
-        }
-
-        public Visibility ShowBrightnessControl { get; set; }
-        public void BrightnessUp()
-        {
-            brightnessWMIHelper.IncreaseBrightness();
-        }
-        public void BrightnessDown()
-        {
-            brightnessWMIHelper.DecreaseBrightness();
         }
 
         #region TextControl Pin

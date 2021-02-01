@@ -65,20 +65,6 @@
                             <ui:AppBarButton 
                                 Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" ToolTip="Volume Up"/>
                             <ui:AppBarButton 
-                                cm:Message.Attach="[Click] = [BrightnessDown]" 
-                                ToolTip="Decrease brightness" Visibility="{Binding ShowBrightnessControl}">
-                                <ui:AppBarButton.Icon>
-                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.LowerBrightness}" />
-                                </ui:AppBarButton.Icon>
-                            </ui:AppBarButton>
-                            <ui:AppBarButton 
-                                cm:Message.Attach="[Click] = [BrightnessUp]" 
-                                ToolTip="Increase brightness" Visibility="{Binding ShowBrightnessControl}">
-                                <ui:AppBarButton.Icon>
-                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Brightness}" />
-                                </ui:AppBarButton.Icon>
-                            </ui:AppBarButton>
-                            <ui:AppBarButton 
                                 Icon="{Binding GameScreenSwitchIcon}" cm:Message.Attach="[Click] = [SwitchGameScreen]"
                                 ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
                             <ui:AppBarToggleButton 
