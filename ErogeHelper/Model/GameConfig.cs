@@ -55,7 +55,7 @@ namespace ErogeHelper.Model
             {
                 Log.Warn(ex.Message);
                 ModernWpf.MessageBox.Show($"{ex.Message}\nEroge Helper has no permission to access the path, " +
-                    $"will save text temporally...", "Eroge Helper");
+                    $"will save text thread temporally...", "Eroge Helper");
             }
         }
 

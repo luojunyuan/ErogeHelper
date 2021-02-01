@@ -43,11 +43,12 @@ namespace ErogeHelper.ViewModel.Pages
             else
             {
                 DownloadModuleVisibility = Visibility.Visible;
-                MecabSwitch = false;
+                MecabToggle = false;
                 Log.Info("No mecab-dic found");
             }
         }
 
+        #region Downloader
         public Visibility DownloadModuleVisibility
         {
             get => _progressVisibility;
@@ -113,8 +114,9 @@ namespace ErogeHelper.ViewModel.Pages
                 }
             }
         }
+        #endregion
 
-        public bool MecabSwitch
+        public bool MecabToggle
         {
             get => DataRepository.EnableMecab;
             set
@@ -125,15 +127,15 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     gameViewModel.IsSourceTextPined = true;
                     gameViewModel.PinSourceTextToggle();
-                    gameViewModel.PinSourceTextToggleVisubility = System.Windows.Visibility.Visible;
+                    gameViewModel.PinSourceTextToggleVisubility = Visibility.Visible;
                 }
                 else
                 {
-                    gameViewModel.TextControlVisibility = System.Windows.Visibility.Collapsed;
-                    gameViewModel.PinSourceTextToggleVisubility = System.Windows.Visibility.Collapsed;
+                    gameViewModel.TextControlVisibility = Visibility.Collapsed;
+                    gameViewModel.PinSourceTextToggleVisubility = Visibility.Collapsed;
                 }
 
-                NotifyOfPropertyChange(() => MecabSwitch);
+                NotifyOfPropertyChange(() => MecabToggle);
             }
         }
 

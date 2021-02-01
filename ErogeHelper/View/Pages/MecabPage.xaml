@@ -22,10 +22,10 @@
                 Width="240" HorizontalAlignment="Left"/>
             
             <ui:ToggleSwitch
-                Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabSwitch}" 
+                Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabToggle}" 
                 IsEnabled="{Binding ElementName=ModuleDownloader, Path=Visibility, 
                     Converter={StaticResource VisibleToFalseConverter}}" />
-            <GroupBox Header="Text Flyout" IsEnabled="{Binding MecabSwitch}">
+            <GroupBox Header="Text Flyout" IsEnabled="{Binding MecabToggle}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
                         <RadioButton 
@@ -51,7 +51,7 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
 
-            <GroupBox Header="Moji辞書" IsEnabled="{Binding MecabSwitch}">
+            <GroupBox Header="Moji辞書" IsEnabled="{Binding MecabToggle}">
                 <ui:SimpleStackPanel Spacing="10">
                     <Label Content="Token"/>
                     <TextBox 

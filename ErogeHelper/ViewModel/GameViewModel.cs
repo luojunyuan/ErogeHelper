@@ -59,7 +59,7 @@ namespace ErogeHelper.ViewModel
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
             dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
 
-            PinSourceTextToggleVisubility = dataService.GetPinToggleVisubility();
+            PinSourceTextToggleVisubility = dataService.GetPinToggleVisibility();
         }
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();

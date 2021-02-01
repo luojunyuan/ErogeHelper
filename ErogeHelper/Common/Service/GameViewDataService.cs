@@ -84,7 +84,7 @@ namespace ErogeHelper.Common.Service
             gameViewModel.SourceTextArchiver.Enqueue(hp.Text);
 
             // Process source japanese text
-            if (mecabViewModel.MecabSwitch)
+            if (mecabViewModel.MecabToggle)
             {
                 var collect = new BindableCollection<SingleTextItem>();
 
@@ -112,7 +112,7 @@ namespace ErogeHelper.Common.Service
             //}
         }
 
-        public Visibility GetPinToggleVisubility() => DataRepository.EnableMecab ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility GetPinToggleVisibility() => DataRepository.EnableMecab ? Visibility.Visible : Visibility.Collapsed;
 
         public void RefreshCurentMecabText(string text = "")
         {
@@ -122,7 +122,7 @@ namespace ErogeHelper.Common.Service
                 text = gameViewModel.SourceTextArchiver.Last();
             }
 
-            if (mecabViewModel.MecabSwitch)
+            if (mecabViewModel.MecabToggle)
             {
                 var collect = new BindableCollection<SingleTextItem>();
 
