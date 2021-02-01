@@ -5,6 +5,7 @@ using MeCab.Extension.IpaDic;
 using MeCab.Extension.UniDic;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,11 @@ namespace ErogeHelper.Common.Helper
             parameter = new MeCabParam();
         }
 
-        public void CreateTagger(string path)
+        public bool CanCreateTagger { get => File.Exists(DataRepository.AppDataDir + @"\dic\char.bin");  }
+
+        public void CreateTagger()
         {
-            parameter.DicDir = path;
+            parameter.DicDir = DataRepository.AppDataDir + @"\dic";
             tagger = MeCabTagger.Create(parameter);
         }
 

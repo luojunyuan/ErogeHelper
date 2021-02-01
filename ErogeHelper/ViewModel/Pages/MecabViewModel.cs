@@ -34,18 +34,7 @@ namespace ErogeHelper.ViewModel.Pages
             this.gameViewModel = gameViewModel;
             this.mecabHelper = mecabHelper;
 
-            if (File.Exists(DataRepository.AppDataDir + @"\dic\char.bin"))
-            {
-                DownloadModuleVisibility = Visibility.Collapsed;
-                mecabHelper.CreateTagger(DataRepository.AppDataDir + @"\dic");
-                Log.Info("Loaded mecab-dic");
-            }
-            else
-            {
-                DownloadModuleVisibility = Visibility.Visible;
-                MecabToggle = false;
-                Log.Info("No mecab-dic found");
-            }
+            DownloadModuleVisibility = mecabHelper.CanCreateTagger ? Visibility.Collapsed : Visibility.Visible;
         }
 
         #region Downloader
@@ -90,7 +79,7 @@ namespace ErogeHelper.ViewModel.Pages
                                                                                                 .ConfigureAwait(false);
                 File.Delete(zipFullPath);
                 DownloadModuleVisibility = Visibility.Collapsed;
-                mecabHelper.CreateTagger(DataRepository.AppDataDir + @"\dic");
+                mecabHelper.CreateTagger();
                 Log.Info("Loaded mecab-dic");
             };
 

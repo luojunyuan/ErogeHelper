@@ -24,6 +24,18 @@ namespace ErogeHelper.Common.Service
         public GameViewDataService(MecabHelper mecabHelper)
         {
             this.mecabHelper = mecabHelper;
+
+            if (mecabHelper.CanCreateTagger)
+            {
+                mecabHelper.CreateTagger();
+            }
+            else
+            {
+                if (DataRepository.EnableMecab)
+                {
+                    DataRepository.EnableMecab = false;
+                }
+            }    
         }
 
         public void Start()

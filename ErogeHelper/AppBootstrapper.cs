@@ -29,6 +29,7 @@ namespace ErogeHelper
         /// </summary>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
+            Log.Info("Started Logging");
             if (e.Args.Length == 0)
             {
                 // Display select processes window
@@ -164,13 +165,10 @@ namespace ErogeHelper
 
             Container = builder.Build();
 
-            Log.Info("Started Logging");
             // Active preview for saving hole console output info
             Container.Resolve<HookViewModel>();
             // For saving log info
             Container.Resolve<LogViewModel>();
-            // Active this for checking mecabHelper
-            Container.Resolve<MecabViewModel>();
         }
 
         #region Autofac Init
