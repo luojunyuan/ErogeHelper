@@ -4,7 +4,13 @@ using ErogeHelper.Common.Helper;
 using ErogeHelper.Common.Selector;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
+using System;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ErogeHelper.ViewModel.Pages
 {
@@ -17,8 +23,9 @@ namespace ErogeHelper.ViewModel.Pages
         private bool _hiragana = DataRepository.Hiragana;
         private bool _katakana = DataRepository.Katakana;
         private string _mojiToken = DataRepository.MojiSessionToken;
-
-        // https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip
+        private int _currentProgress;
+        private Visibility _progressVisibility;
+        private bool _downloadButtonEnable = true;
         private readonly GameViewModel gameViewModel;
         private readonly MecabHelper mecabHelper;
 
@@ -26,6 +33,85 @@ namespace ErogeHelper.ViewModel.Pages
         {
             this.gameViewModel = gameViewModel;
             this.mecabHelper = mecabHelper;
+
+            if (File.Exists(DataRepository.AppDataDir + @"\dic\char.bin"))
+            {
+                DownloadModuleVisibility = Visibility.Collapsed;
+                mecabHelper.CreateTagger(DataRepository.AppDataDir + @"\dic");
+                Log.Info("Loaded mecab-dic");
+            }
+            else
+            {
+                DownloadModuleVisibility = Visibility.Visible;
+                MecabSwitch = false;
+                Log.Info("No mecab-dic found");
+            }
+        }
+
+        public Visibility DownloadModuleVisibility
+        {
+            get => _progressVisibility;
+            set
+            {
+                _progressVisibility = value;
+                NotifyOfPropertyChange(() => DownloadModuleVisibility);
+            }
+        }
+
+        public bool DownloadButtonEnable 
+        { 
+            get => _downloadButtonEnable; 
+            set 
+            { 
+                _downloadButtonEnable = value; 
+                NotifyOfPropertyChange(() => DownloadButtonEnable); 
+            } 
+        }
+
+        public void DownloadMecabDic()
+        {
+            DownloadButtonEnable = false;
+
+            using WebClient client = new WebClient();
+            var zipFullPath = DataRepository.AppDataDir + @"\dic.zip";
+
+            client.DownloadProgressChanged += (_, progressEvent) =>
+            {
+                CurrentProgress = progressEvent.ProgressPercentage;
+                // TODO: Show download speed
+            };
+
+            client.DownloadFileCompleted += async (_, _) =>
+            {
+                File.Move(zipFullPath + ".eh", zipFullPath);
+                Log.Info("Download dic.zip finished!");
+                await Task.Run(() => ZipFile.ExtractToDirectory(zipFullPath, DataRepository.AppDataDir + @"\dic"))
+                                                                                                .ConfigureAwait(false);
+                File.Delete(zipFullPath);
+                DownloadModuleVisibility = Visibility.Collapsed;
+                mecabHelper.CreateTagger(DataRepository.AppDataDir + @"\dic");
+                Log.Info("Loaded mecab-dic");
+            };
+
+            client.DownloadFileAsync(
+                // Param1 = Link of file
+                new Uri(DataRepository.MecabDicUrl),
+                // Param2 = Path to save
+                zipFullPath + ".eh"
+            );
+        }
+
+        public int CurrentProgress
+        {
+            get { return _currentProgress; }
+            private set
+            {
+                if (_currentProgress != value)
+                {
+                    _currentProgress = value;
+                    NotifyOfPropertyChange(() => CurrentProgress);
+                }
+            }
         }
 
         public bool MecabSwitch

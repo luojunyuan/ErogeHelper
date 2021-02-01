@@ -19,6 +19,7 @@
             <!-- True to Visible / False to Collapsed -->
             <convert:BooleanToVisibilityConverter x:Key="VisibleConverter" />
             <convert:BooleanToVisibilityConverterReverse x:Key="VisibleConverterReverse" />
+            <convert:VisibleToFalseConverter x:Key="VisibleToFalseConverter" />
             <convert:StringToXamlConverter x:Key="TextEvaluateConverter" />
             <convert:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter" />
             <convert:QueueToTextConverter x:Key="QueueToTextConverter" />

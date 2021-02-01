@@ -67,33 +67,34 @@ namespace ErogeHelper.Model
 
             LocalSetting[propertyName] = value.ToString()!;
             Log.Debug($"{propertyName} changed to {value}");
-            File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
+            File.WriteAllText(SettingPath, JsonSerializer.Serialize(LocalSetting));
         }
 
         private static void ClearAppData()
         {
             LocalSetting.Clear();
 
-            File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
+            File.WriteAllText(SettingPath, JsonSerializer.Serialize(LocalSetting));
         }
 
-        private static readonly string Path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\EHSettings.dict";
+        private static readonly string SettingPath = Environment.GetFolderPath(
+                                    Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\EHSettings.dict";
         private static Dictionary<string, string> LocalSetting { get; } = LocalSettingInit();
         private static Dictionary<string, string> LocalSettingInit()
         {
-            if (!File.Exists(Path))
+            if (!File.Exists(SettingPath))
             {
-                FileInfo file = new FileInfo(Path);
+                FileInfo file = new FileInfo(SettingPath);
                 file.Directory!.Create(); // If the directory already exists, this method does nothing.
                 File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
             }
-            var tmp = File.ReadAllText(Path);
+            var tmp = File.ReadAllText(SettingPath);
             return JsonSerializer.Deserialize<Dictionary<string, string>>(tmp)!;
         }
 
         #endregion
 
-        #region Runtime Variables
+        #region Runtime Variables And Constant Value
 
         public static List<Process> GameProcesses = new List<Process>();
 
@@ -107,6 +108,9 @@ namespace ErogeHelper.Model
         public static readonly BitmapImage aquagreenImage = Utils.LoadBitmapFromResource("Assets/aqua_green.png");
         public static readonly BitmapImage greenImage = Utils.LoadBitmapFromResource("Assets/green.png");
         public static readonly BitmapImage pinkImage = Utils.LoadBitmapFromResource("Assets/pink.png");
+
+        public static readonly string AppDataDir = SettingPath[..SettingPath.LastIndexOf('\\')];
+        public const string MecabDicUrl = @"https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip";
         #endregion
 
         #region Properties

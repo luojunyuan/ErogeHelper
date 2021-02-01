@@ -15,12 +15,16 @@ namespace ErogeHelper.Common.Helper
     public class MecabHelper
     {
         private readonly MeCabParam parameter;
-        private readonly MeCabTagger tagger;
+        private MeCabTagger tagger = null!;
 
         public MecabHelper()
         {
             parameter = new MeCabParam();
-            //parameter.DicDir = @"C:\Users\k1mlka\source\repos\luojunyuan\Eroge-Helper-pakage\mecab-UniDic";
+        }
+
+        public void CreateTagger(string path)
+        {
+            parameter.DicDir = path;
             tagger = MeCabTagger.Create(parameter);
         }
 

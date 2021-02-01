@@ -368,7 +368,7 @@ namespace ErogeHelper.Common.Helper
             }
             catch (Exception ex)
             {
-                Log.Info(ex.Message);
+                Log.Debug(ex.Message);
             }
 
             return bLevels;

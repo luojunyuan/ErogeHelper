@@ -6,13 +6,25 @@
       xmlns:local="clr-namespace:ErogeHelper.View.Pages"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+      xmlns:cm="http://caliburnmicro.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="{x:Static resx:Strings.MecabPage_Title}">
 
     <ScrollViewer PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
-            <ui:ToggleSwitch Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabSwitch}" />
+            <Button 
+                x:Name="ModuleDownloader" Content="Download" ToolTip="Download dic to enable this function"
+                Visibility="{Binding DownloadModuleVisibility}" cm:Message.Attach="[Click] = [DownloadMecabDic]"
+                IsEnabled="{Binding DownloadButtonEnable}"/>
+            <ProgressBar 
+                Value="{Binding CurrentProgress, Mode=OneWay}" Visibility="{Binding DownloadModuleVisibility}"
+                Width="240" HorizontalAlignment="Left"/>
+            
+            <ui:ToggleSwitch
+                Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabSwitch}" 
+                IsEnabled="{Binding ElementName=ModuleDownloader, Path=Visibility, 
+                    Converter={StaticResource VisibleToFalseConverter}}" />
             <GroupBox Header="Text Flyout" IsEnabled="{Binding MecabSwitch}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
