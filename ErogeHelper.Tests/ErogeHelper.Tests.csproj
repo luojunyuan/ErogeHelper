@@ -25,4 +25,8 @@
     <ProjectReference Include="..\ErogeHelper\ErogeHelper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\Dictionary\" />
+  </ItemGroup>
+
 </Project>

@@ -57,13 +57,19 @@
     
     <ui:FlyoutPresenter ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <StackPanel>
-            <!-- And Close Button-->
+            <!-- Tool box -->
             <DockPanel>
-                <TextBox Text="{Binding Word}" Width="240" />
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBox Text="{Binding Word}" Width="180" />
+                    <Button ToolTip="Search" IsEnabled="False">
+                        <ui:SymbolIcon Symbol="Find" />
+                    </Button>
+                    <Button ToolTip="Select text" IsEnabled="False">
+                        <ui:SymbolIcon Symbol="Copy" />
+                    </Button>
+                </ui:SimpleStackPanel>
                 <Button HorizontalAlignment="Right" ToolTip="Close Card" cm:Message.Attach="[Click] = [CloseCard]">
-                    <Viewbox Stretch="None">
-                        <ui:SymbolIcon Symbol="Cancel" />
-                    </Viewbox>
+                    <ui:SymbolIcon Symbol="Clear" />
                 </Button>
             </DockPanel>
 
@@ -90,6 +96,7 @@
                 </TabControl.Items>
             </TabControl>
 
+            <!-- Extened web link -->
             <StackPanel Orientation="Horizontal">
                 <ui:AppBarButton Content="Weblic"/>
                 <ui:AppBarButton Content="kotobank"/>

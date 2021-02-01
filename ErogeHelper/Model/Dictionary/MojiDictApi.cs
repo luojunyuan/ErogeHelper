@@ -18,22 +18,17 @@ namespace ErogeHelper.Model.Dictionary
 
         private static readonly RestClient client = new RestClient("https://api.mojidict.com");
 
-        private static CancellationTokenSource cts = new();
-
-        public static async Task<MojiSearchResponse> SearchAsync(string query)
+        // TODO: Add none async method
+        public static async Task<MojiSearchResponse> SearchAsync(string query, CancellationToken token = default)
         {
-            cts.Cancel();
-            cts = new CancellationTokenSource();
-            var token = cts.Token;
-
             MojiSearchPayload searchPayload = new MojiSearchPayload
             {
                 //langEnv = "zh-CN_ja",
                 needWords = "true",
                 searchText = query,
-                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
-                //_ClientVersion = "",
-                //_InstallationId = "",
+                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",                  // no need
+                _ClientVersion = "js2.12.0",                              // no need
+                _InstallationId = "7d959a18-48c4-243c-7486-632147466544", // no need
                 _SessionToken = DataRepository.MojiSessionToken
             };
 
@@ -46,6 +41,7 @@ namespace ErogeHelper.Model.Dictionary
             {
                 resp = await client.PostAsync<MojiSearchResponse>(request).ConfigureAwait(false);
 
+
                 if (token.IsCancellationRequested)
                 {
                     resp.StatusCode = ResponseStatus.Aborted;
@@ -53,8 +49,9 @@ namespace ErogeHelper.Model.Dictionary
                 }
                 else if (resp.Result.Words.Count == 0)
                 {
+                    // There is no ResponseStatus.NotFound, so make it None
                     // None means no content, like string.Empty
-                    resp.StatusCode = ResponseStatus.None; // There is no ResponseStatus.NotFound
+                    resp.StatusCode = ResponseStatus.None;
                 }
                 else
                 {
@@ -64,22 +61,24 @@ namespace ErogeHelper.Model.Dictionary
             catch (Exception ex)
             {
                 // Same as `resp.Result.OriginalSearchText == string.Empty`
-                Log.Error(ex);
                 // Any network transport error (network is down, failed DNS lookup, etc), or any kind of server error 
                 // (except 404), `resp.StatusCode` will be set to `ResponseStatus.Error`.
                 resp.StatusCode = ResponseStatus.Error;
+                Log.Error(ex);
             }
 
             return resp;
         }
 
-        public static async Task<MojiFetchResponse> FetchAsync(string tarId)
+        public static async Task<MojiFetchResponse> FetchAsync(string tarId, CancellationToken token)
         {
             MojiFetchPayload fetchPayload = new MojiFetchPayload
             {
-                wordId = tarId, // searchResp.result.searchResults[0].tarId
-                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
-                _SessionToken = DataRepository.MojiSessionToken // Can be done without this
+                wordId = tarId,
+                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",                  // no need
+                _ClientVersion = "js2.12.0",                              // no need
+                _InstallationId = "7d959a18-48c4-243c-7486-632147466544", // no need
+                _SessionToken = DataRepository.MojiSessionToken           // no need
             };
 
             IRestRequest? requestFetch = new RestRequest(fetchApi, Method.POST)
@@ -90,50 +89,24 @@ namespace ErogeHelper.Model.Dictionary
             try
             {
                 resp = await client.PostAsync<MojiFetchResponse>(requestFetch).ConfigureAwait(false);
+                if (token.IsCancellationRequested)
+                {
+                    resp.StatusCode = ResponseStatus.Aborted;
+                    Log.Debug("Moji fetch task was canceled");
+                }
+                else
+                {
+                    resp.StatusCode = ResponseStatus.Completed;
+                }
             }
             catch (Exception ex)
             {
+                resp.StatusCode = ResponseStatus.Error;
                 Log.Error(ex);
             }
 
             return resp;
         }
-
-        [Obsolete("Do not use this")]
-        public async Task<string> RequestAsync(string query)
-        {
-            MojiSearchPayload searchPayload = new MojiSearchPayload
-            {
-                //langEnv = "zh-CN_ja",
-                needWords = "true",
-                searchText = query,
-                _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
-                //_ClientVersion = "",
-                //_InstallationId = "",
-                //_SessionToken = ""
-            };
-
-            var request = new RestRequest(searchApi, Method.POST)
-                .AddJsonBody(searchPayload);
-
-            var searchResp = await client.PostAsync<MojiSearchResponse>(request).ConfigureAwait(false);
-
-            //if(searchResp.result.words.Count != 0)
-            //{
-                MojiFetchPayload fetchPayload = new MojiFetchPayload
-                {
-                    wordId = searchResp.Result.Words[0].ObjectId,
-                    _ApplicationId = "E62VyFVLMiW7kvbtVq3p",
-                };
-
-                var requestFetch = new RestRequest(fetchApi, Method.POST)
-                    .AddJsonBody(fetchPayload);
-                var fetchResp = await client.PostAsync<MojiFetchResponse>(requestFetch).ConfigureAwait(false);
-            //}
-
-            return fetchResp.result.Word.Spell;
-        }
-
 
         #region MojiSearchPayload
         private class MojiSearchPayload
@@ -158,7 +131,6 @@ namespace ErogeHelper.Model.Dictionary
             public string _SessionToken { get; set; } = string.Empty;
         }
         #endregion
-
 
         #region MojiSearchResponse
         /*
@@ -234,9 +206,11 @@ namespace ErogeHelper.Model.Dictionary
         #region MojiFetchResponse
         public class MojiFetchResponse
         {
-            public Result result { get; set; } = new Result();
+            public ResponseStatus StatusCode { get; set; }
 
-            public class Result
+            public ResultClass Result { get; set; } = new ResultClass();
+
+            public class ResultClass
             {
                 [JsonPropertyName("word")]
                 public Word Word { get; set; } = new Word();

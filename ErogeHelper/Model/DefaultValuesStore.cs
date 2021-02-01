@@ -29,7 +29,7 @@ namespace ErogeHelper.Model
 
         // Account: erogehelper@github.com
         // Password: erogehelper
-        public const string MojiSessionToken = "r:256b6ae1bca1087937025a5dcc73294f";
+        public const string MojiSessionToken = "r:02625329e868e96b5eb65bca9dead47e";
 
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";

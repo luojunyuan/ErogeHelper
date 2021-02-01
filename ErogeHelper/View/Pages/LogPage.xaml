@@ -18,7 +18,7 @@
             Grid.Row="0" Text="{Binding LogText, Converter={StaticResource QueueToTextConverter}}"
             VerticalContentAlignment="Top" FontFamily="Courier New" IsReadOnly="True" 
             HorizontalAlignment="Left"
-            HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" />
+            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
         <TextBlock Grid.Row="1" Text="{Binding MaxLine}" Margin="0 10 0 0" />
     </Grid>
 </Page>

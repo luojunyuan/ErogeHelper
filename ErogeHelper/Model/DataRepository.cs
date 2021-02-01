@@ -66,16 +66,15 @@ namespace ErogeHelper.Model
                 throw new NullReferenceException();
 
             LocalSetting[propertyName] = value.ToString()!;
-            Log.Info($"{propertyName} changed to {value}");
+            Log.Debug($"{propertyName} changed to {value}");
             File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 
         private static void ClearAppData()
         {
-            var SettingFromFile = LocalSetting;
-            SettingFromFile.Clear();
+            LocalSetting.Clear();
 
-            File.WriteAllText(Path, JsonSerializer.Serialize(SettingFromFile));
+            File.WriteAllText(Path, JsonSerializer.Serialize(LocalSetting));
         }
 
         private static readonly string Path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\EHSettings.dict";

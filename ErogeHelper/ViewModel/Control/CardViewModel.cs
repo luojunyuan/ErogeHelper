@@ -23,16 +23,43 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        public BindableCollection<MojiItem> MojiCollection { get; set; } = new BindableCollection<MojiItem>();
+        private CancellationTokenSource cacelSource = new();
 
-        /// <summary>
-        /// Stop all Action
-        /// </summary>
-        internal void ClearData()
+        public void StartupSearch()
         {
-            Log.Debug("Clear MojiCollection");
+            // Dict init
+
+            cacelSource.Cancel();
+            cacelSource = new();
             MojiCollection.Clear();
+
+            // XXX: Is this weird?
+            Task.Run(()=> ProcessWordAsync(cacelSource.Token), cacelSource.Token);
         }
+
+        private async Task ProcessWordAsync(CancellationToken token)
+        {
+            try
+            {
+                await MojiSearchAsync(token);
+            }
+            catch(TaskCanceledException ex)
+            {
+                // 被MojiAsync处理了，或没有做引发操作
+                Log.Debug(ex.Message);
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                // should not happen
+                Log.Error(ex);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex);
+            }
+        }
+
+        public BindableCollection<MojiItem> MojiCollection { get; set; } = new BindableCollection<MojiItem>();
 
         public int MojiSelectedIndex
         {
@@ -48,9 +75,9 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        internal async Task MojiSearchAsync()
+        internal async Task MojiSearchAsync(CancellationToken token)
         {
-            var searchResponse = await MojiDictApi.SearchAsync(Word).ConfigureAwait(false);
+            var searchResponse = await MojiDictApi.SearchAsync(Word, token);
 
             if (searchResponse.StatusCode == RestSharp.ResponseStatus.Aborted)
             {
@@ -80,10 +107,10 @@ namespace ErogeHelper.ViewModel.Control
                     TarId = string.Empty
                 });
                 MojiCollection[0].ExpanderCollection.Add(
-                    new MojiExpanderItem 
-                    { 
-                        Header = "An error occurred, it may be bad token, or bad net request", 
-                        ExampleCollection = new() 
+                    new MojiExpanderItem
+                    {
+                        Header = "An error occurred, it may be bad token, or bad net request",
+                        ExampleCollection = new()
                     }
                 );
                 MojiSelectedIndex = 0;
@@ -91,10 +118,11 @@ namespace ErogeHelper.ViewModel.Control
                 return;
             }
 
-            Log.Debug($"Received the result of {searchResponse.Result.OriginalSearchText}");
+            Log.Debug($"Received search result of {searchResponse.Result.OriginalSearchText}");
 
             foreach (var item in searchResponse.Result.Words)
             {
+                // XXX: CM error occurred here
                 MojiCollection.Add(new MojiItem
                 {
                     //Header = $"{item.spell} | {item.pron}{item.accent}",
@@ -105,7 +133,7 @@ namespace ErogeHelper.ViewModel.Control
 
             MojiSelectedIndex = 0;
             // Fetch first page
-            await MojiFetchWord().ConfigureAwait(false);
+            await MojiFetchWord(string.Empty, token).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -113,50 +141,49 @@ namespace ErogeHelper.ViewModel.Control
         /// </summary>
         /// <param name="wordId"></param>
         /// <returns></returns>
-        internal async Task MojiFetchWord(string wordId = "")
+        internal async Task MojiFetchWord(string wordId = "", CancellationToken token = default)
         {
+            // XXX: Dirty check with `token.IsCancellationRequested` or `MojiCollection.Count` to avoid thread not safe
+            if (token.IsCancellationRequested)
+                return;
+
             if (string.IsNullOrWhiteSpace(wordId))
             {
                 wordId = MojiCollection[0].TarId;
             }
 
-            var wordDetail = await MojiDictApi.FetchAsync(wordId).ConfigureAwait(false);
+            var wordDetail = await MojiDictApi.FetchAsync(wordId, token).ConfigureAwait(false);
 
-            Log.Debug($"Completre fetch");
+            if (wordDetail.StatusCode == RestSharp.ResponseStatus.Aborted ||
+                wordDetail.StatusCode == RestSharp.ResponseStatus.Error)
+            {
+                return;
+            }
 
-            // 如果在这里clear了，刚好也不会出问题
-            // 循环会持续一定时间，大概率在途中出问题
             // 遍历 找wordDetail对应Word所在序列
             for (var i = 0; i < MojiCollection.Count; i++)
             {
-                if (MojiCollection[i].TarId.Equals(wordDetail.result.Word.ObjectId))
+                if (MojiCollection[i].TarId.Equals(wordDetail.Result.Word.ObjectId))
                 {
                     // process infomation
-                    // 如果在这里clear了，出问题
-                    MojiCollection[i].Pron = wordDetail.result.Word.Pron;
-                    // FIXME: Thread not safe!
-                    // FIXME: 当以比快速慢一点的速度来均速点击查询单词时，MojiSearch的异步任务不会被取消，此时最后一次查询的操作把
-                    // MojiCollection清理了。前一次查询所在的另一线程执行此处出错，增加MojiFetch CancellToken可能可以解决这个问题
-                    // 因不影响最后一次查询，故结果不会表现异常，不知为什么不会出现在上一句只会出现在这之后
-                    // 如果在这里clear了，出问题
-                    if (MojiCollection.Count == 0)
-                    {
-                        Log.Error("This can't be true but it happend"); // Same as line 145
+                    MojiCollection[i].Pron = wordDetail.Result.Word.Pron;
+                    if (token.IsCancellationRequested)
                         return;
-                    }
-                    MojiCollection[i].Title = wordDetail.result.Details[0].Title;
+                    MojiCollection[i].Title = wordDetail.Result.Details[0].Title;
 
-                    foreach (var subDetail in wordDetail.result.Subdetails)
+                    foreach (var subDetail in wordDetail.Result.Subdetails)
                     {
                         var header = subDetail.Title;
                         BindableCollection<MojiExpanderItem.Example> examples = new();
-                        foreach (var example in wordDetail.result.Examples)
+                        foreach (var example in wordDetail.Result.Examples)
                         {
                             if (subDetail.ObjectId == example.SubdetailsId)
                             {
                                 examples.Add(new MojiExpanderItem.Example { Title = example.Title, Trans = example.Trans });
                             }
                         }
+                        if (token.IsCancellationRequested)
+                            return;
                         MojiCollection[i].ExpanderCollection.Add(new MojiExpanderItem { Header = header, ExampleCollection = examples });
                     }
                 }
