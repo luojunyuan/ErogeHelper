@@ -254,6 +254,7 @@ namespace ErogeHelper.ViewModel.Control
 
             foreach(var jishoItem in result.Data)
             {
+                string.Empty.Equals("sss");
                 BindableCollection<JishoItem.Detail> details = new();
                 int senseCount = 1;
                 foreach(var sense in jishoItem.Senses)

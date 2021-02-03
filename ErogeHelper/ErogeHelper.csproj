@@ -26,6 +26,9 @@
     <None Remove="Assets\app_icon_big.png" />
     <None Remove="Assets\aqua_green.png" />
     <None Remove="Assets\green.png" />
+    <None Remove="Assets\jisho.org.ico" />
+    <None Remove="Assets\jisho.org.png" />
+    <None Remove="Assets\mojidict.com.ico" />
     <None Remove="Assets\pink.png" />
     <None Remove="Assets\transparent.png" />
   </ItemGroup>
@@ -54,6 +57,8 @@
     <Resource Include="Assets\app_icon_big.png" />
     <Resource Include="Assets\aqua_green.png" />
     <Resource Include="Assets\green.png" />
+    <Resource Include="Assets\jisho.org.png" />
+    <Resource Include="Assets\mojidict.com.ico" />
     <Resource Include="Assets\pink.png" />
     <Resource Include="Assets\transparent.png" />
   </ItemGroup>
