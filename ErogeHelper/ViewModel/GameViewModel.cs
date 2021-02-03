@@ -97,15 +97,6 @@ namespace ErogeHelper.ViewModel
         public async void VolumeDown() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
-        public FontIcon GameScreenSwitchIcon 
-        { 
-            get => _gameScreenSwitchIcon;
-            set
-            {
-                _gameScreenSwitchIcon = value;
-                NotifyOfPropertyChange(() => GameScreenSwitchIcon);
-            }
-        }
         public bool CanSwitchGameScreen => true;
         public async void SwitchGameScreen()
         {

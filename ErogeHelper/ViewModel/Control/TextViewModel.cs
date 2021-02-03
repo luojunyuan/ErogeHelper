@@ -61,7 +61,7 @@ namespace ErogeHelper.ViewModel.Control
     {
         private ImageSource _subMarkColor = DataRepository.transparentImage;
 
-        public string RubyText { get; set; } = string.Empty;
+        public string Ruby { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public string PartOfSpeed { get; set; } = string.Empty;
         public TextTemplateType TextTemplateType { get; set; }

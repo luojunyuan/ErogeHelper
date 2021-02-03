@@ -188,6 +188,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Window (Alt + Enter) 的本地化字符串。
+        /// </summary>
+        public static string GameView_SwitchWindow {
+            get {
+                return ResourceManager.GetString("GameView.SwitchWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Task View 的本地化字符串。
         /// </summary>
         public static string GameView_TaskView {

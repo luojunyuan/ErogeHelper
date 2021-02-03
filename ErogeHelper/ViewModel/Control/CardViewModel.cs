@@ -1,16 +1,23 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper.Common;
+using ErogeHelper.Model;
 using ErogeHelper.Model.Dictionary;
+using ErogeHelper.ViewModel.Pages;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace ErogeHelper.ViewModel.Control
 {
-    class CardViewModel : Screen
+    class CardViewModel : PropertyChangedBase
     {
         private string _word = string.Empty;
         private int _mojiSelectedIndex;
+        private Visibility _dictTabVisibility = Visibility.Collapsed;
+        private Visibility _mojiTabItemVisible = DataRepository.MojiDictEnable ? Visibility.Visible : Visibility.Collapsed;
+        private Visibility _jishoTabItemVisible = DataRepository.JishoDictEnable ? Visibility.Visible : Visibility.Collapsed;
 
         // TextBox
         public string Word
@@ -25,40 +32,74 @@ namespace ErogeHelper.ViewModel.Control
 
         private CancellationTokenSource cacelSource = new();
 
+        public Visibility DictTabVisibility
+        {
+            get => _dictTabVisibility;
+            set { _dictTabVisibility = value; NotifyOfPropertyChange(() => DictTabVisibility); }
+        }
+        public Visibility MojiTabItemVisible
+        {
+            get => _mojiTabItemVisible;
+            set { _mojiTabItemVisible = value; NotifyOfPropertyChange(() => MojiTabItemVisible); }
+        }
+        public Visibility JishoTabItemVisible
+        {
+            get => _jishoTabItemVisible;
+            set { _jishoTabItemVisible = value; NotifyOfPropertyChange(() => JishoTabItemVisible); }
+        }
+
         public void StartupSearch()
         {
-            // Dict init
+            MojiCollection.Clear();
+            JishoCollection.Clear();
+
+            UpdateDictPanelVisibility();
 
             cacelSource.Cancel();
             cacelSource = new();
-            MojiCollection.Clear();
 
             // XXX: Is this weird?
-            Task.Run(()=> ProcessWordAsync(cacelSource.Token), cacelSource.Token);
+            Task.Run(() => ProcessWordAsync(cacelSource.Token), cacelSource.Token);
+        }
+
+        public void UpdateDictPanelVisibility()
+        {
+            if (DataRepository.MojiDictEnable || DataRepository.JishoDictEnable)
+            {
+                DictTabVisibility = Visibility.Visible;
+            }
+            else
+            {
+                DictTabVisibility = Visibility.Collapsed;
+            }
         }
 
         private async Task ProcessWordAsync(CancellationToken token)
         {
             try
             {
-                await MojiSearchAsync(token);
+                if (DataRepository.MojiDictEnable)
+                {
+                    await MojiSearchAsync(token);
+                }
+                if (DataRepository.JishoDictEnable)
+                {
+                    await JishoSearchAsync(token);
+                }
+
             }
-            catch(TaskCanceledException ex)
-            {
-                // 被MojiAsync处理了，或没有做引发操作
-                Log.Debug(ex.Message);
-            }
-            catch(ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException ex)
             {
                 // should not happen
                 Log.Error(ex);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex);
             }
         }
 
+        #region Moji Dict
         public BindableCollection<MojiItem> MojiCollection { get; set; } = new BindableCollection<MojiItem>();
 
         public int MojiSelectedIndex
@@ -161,6 +202,7 @@ namespace ErogeHelper.ViewModel.Control
             }
 
             // 遍历 找wordDetail对应Word所在序列
+            // FIXME: MojiCollection 在遍历期间被其他线程所修改
             for (var i = 0; i < MojiCollection.Count; i++)
             {
                 if (MojiCollection[i].TarId.Equals(wordDetail.Result.Word.ObjectId))
@@ -189,9 +231,73 @@ namespace ErogeHelper.ViewModel.Control
                 }
             }
         }
+        #endregion
+
+        public BindableCollection<JishoItem> JishoCollection { get; set; } = new();
+
+        internal async Task JishoSearchAsync(CancellationToken token = default)
+        {
+            var result = await JishoApi.SearchWordAsync(Word, token);
+
+            if (result.StatusCode == RestSharp.ResponseStatus.Aborted)
+            {
+                return;
+            }
+            else if (result.StatusCode == RestSharp.ResponseStatus.None)
+            {
+                return;
+            }
+            else if (result.StatusCode == RestSharp.ResponseStatus.Error)
+            {
+                return;
+            }
+
+            foreach(var jishoItem in result.Data)
+            {
+                BindableCollection<JishoItem.Detail> details = new();
+                int senseCount = 1;
+                foreach(var sense in jishoItem.Senses)
+                {
+                    BindableCollection<JishoItem.Detail.Link> links = new();
+                    foreach (var link in sense.Links)
+                    {
+                        links.Add(new JishoItem.Detail.Link { Text = link.Text, HyperLink = link.Url });
+                    }
+
+                    details.Add(new JishoItem.Detail
+                    {
+                        PartOfSpeech = string.Join(", ", sense.PartsOfSpeech),
+                        Explanation = $"{senseCount++}. " + string.Join("; ", sense.EnglishDefinitions),
+                        Links = links
+                    });
+                }
+
+                JishoCollection.Add(new JishoItem
+                {
+                    Ruby = '(' + jishoItem.Japanese[0].Reading + ')',
+                    Word = jishoItem.Japanese[0].Word,
+                    CommonWord = jishoItem.IsCommon ? "Common" : string.Empty,
+                    JlptLevel = jishoItem.Jlpt.Count != 0 ? jishoItem.Jlpt[0] : string.Empty,
+                    WanikanaLevel = jishoItem.Tags.Count != 0 ? jishoItem.Tags[0] : string.Empty,
+                    Details = details
+                });
+            }
+        }
 
         public void CloseCard()
         {
+            IoC.Get<TextViewModel>().CloseCardControl();
+        }
+
+        public void OpenWeblioLink()
+        {
+            Utils.OpenUrl($@"https://www.weblio.jp/content/{Word}");
+            IoC.Get<TextViewModel>().CloseCardControl();
+        }
+
+        public void OpenKotobankLink()
+        {
+            Utils.OpenUrl($@"https://kotobank.jp/gs/?q={Word}");
             IoC.Get<TextViewModel>().CloseCardControl();
         }
     }
@@ -219,6 +325,30 @@ namespace ErogeHelper.ViewModel.Control
         {
             public string Title { get; set; } = string.Empty;
             public string Trans { get; set; } = string.Empty;
+        }
+    }
+
+    class JishoItem
+    {
+        public string Ruby { get; set; } = string.Empty;
+        public string Word { get; set; } = string.Empty;
+        public string CommonWord { get; set; } = string.Empty;
+        public string JlptLevel { get; set; } = string.Empty;
+        public string WanikanaLevel { get; set; } = string.Empty;
+
+        public BindableCollection<Detail> Details { get; set; } = new();
+
+        public class Detail
+        {
+            public string PartOfSpeech { get; set; } = string.Empty;
+            public string Explanation { get; set; } = string.Empty;
+            public BindableCollection<Link> Links { get; set; } = new();
+
+            public class Link
+            {
+                public string Text { get; set; } = string.Empty;
+                public string HyperLink { get; set; } = string.Empty;
+            }
         }
     }
 }

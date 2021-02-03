@@ -27,11 +27,13 @@ namespace ErogeHelper.ViewModel.Pages
         private Visibility _progressVisibility;
         private bool _downloadButtonEnable = true;
         private readonly GameViewModel gameViewModel;
+        private readonly CardViewModel cardViewModel;
         private readonly MecabHelper mecabHelper;
 
-        public MecabViewModel(GameViewModel gameViewModel, MecabHelper mecabHelper)
+        public MecabViewModel(GameViewModel gameViewModel, CardViewModel cardViewModel, MecabHelper mecabHelper)
         {
             this.gameViewModel = gameViewModel;
+            this.cardViewModel = cardViewModel;
             this.mecabHelper = mecabHelper;
 
             DownloadModuleVisibility = mecabHelper.CanCreateTagger ? Visibility.Collapsed : Visibility.Visible;
@@ -264,13 +266,35 @@ namespace ErogeHelper.ViewModel.Pages
                 tmp.Add(new SingleTextItem
                 {
                     Text = mecabWord.Word,
-                    RubyText = mecabWord.Kana,
+                    Ruby = mecabWord.Kana,
                     PartOfSpeed = mecabWord.PartOfSpeech,
                     TextTemplateType = DataRepository.TextTemplateConfig,
                     SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
                 });
             }
             gameViewModel.TextControl.SourceTextCollection = tmp;
+        }
+
+        public bool MojiDictToggle
+        {
+            get => DataRepository.MojiDictEnable;
+            set
+            {
+                DataRepository.MojiDictEnable = value;
+
+                if (value is true)
+                {
+                    // TODO: Make these tab dynamic
+                    cardViewModel.MojiTabItemVisible = Visibility.Visible;
+                }
+                else
+                {
+                    cardViewModel.MojiTabItemVisible = Visibility.Collapsed;
+                }
+
+                cardViewModel.UpdateDictPanelVisibility();
+                NotifyOfPropertyChange(() => MojiDictToggle);
+            }
         }
 
         public string MojiToken
@@ -281,6 +305,27 @@ namespace ErogeHelper.ViewModel.Pages
                 _mojiToken = value;
                 NotifyOfPropertyChange(() => MojiToken);
                 DataRepository.MojiSessionToken = value;
+            }
+        }
+
+        public bool JishoDictToggle
+        {
+            get => DataRepository.JishoDictEnable;
+            set
+            {
+                DataRepository.JishoDictEnable = value;
+
+                if (value is true)
+                {
+                    cardViewModel.JishoTabItemVisible = Visibility.Visible;
+                }
+                else
+                {
+                    cardViewModel.JishoTabItemVisible = Visibility.Collapsed;
+                }
+
+                cardViewModel.UpdateDictPanelVisibility();
+                NotifyOfPropertyChange(() => JishoDictToggle);
             }
         }
     }

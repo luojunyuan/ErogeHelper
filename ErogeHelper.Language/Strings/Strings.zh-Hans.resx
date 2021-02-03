@@ -218,7 +218,7 @@
     <value>罗马音</value>
   </data>
   <data name="GameView.SwitchFullScreen" xml:space="preserve">
-    <value>全屏切换 (Alt + Enter)</value>
+    <value>全屏 (Alt + Enter)</value>
   </data>
   <data name="GameView.FocusTip" xml:space="preserve">
     <value>使EH交互窗口失去焦点
@@ -250,5 +250,8 @@
   </data>
   <data name="MecabPage.FuriganaDefault" xml:space="preserve">
     <value>不显示假名</value>
+  </data>
+  <data name="GameView.SwitchWindow" xml:space="preserve">
+    <value>窗口化 (Alt + Enter)</value>
   </data>
 </root>

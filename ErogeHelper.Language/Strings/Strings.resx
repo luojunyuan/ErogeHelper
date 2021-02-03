@@ -271,4 +271,7 @@
   <data name="MecabPage.FuriganaDefault" xml:space="preserve">
     <value>MecabPage.FuriganaDefault</value>
   </data>
+  <data name="GameView.SwitchWindow" xml:space="preserve">
+    <value>Window (Alt + Enter)</value>
+  </data>
 </root>

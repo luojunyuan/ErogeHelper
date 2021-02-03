@@ -23,6 +23,7 @@
             <convert:StringToXamlConverter x:Key="TextEvaluateConverter" />
             <convert:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter" />
             <convert:QueueToTextConverter x:Key="QueueToTextConverter" />
+            <convert:StringEmptyToCollaspsedConverter x:Key="StringEmptyToCollaspsedConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

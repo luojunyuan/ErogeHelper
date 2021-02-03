@@ -117,6 +117,7 @@ namespace ErogeHelper
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            // TODO: Do refactoring
             //builder.RegisterType<EventAggregator>()
             //    .AsImplementedInterfaces()
             //    .SingleInstance();

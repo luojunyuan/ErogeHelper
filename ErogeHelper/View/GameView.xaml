@@ -65,8 +65,8 @@
                             <ui:AppBarButton 
                                 Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" ToolTip="Volume Up"/>
                             <ui:AppBarButton 
-                                Icon="{Binding GameScreenSwitchIcon}" cm:Message.Attach="[Click] = [SwitchGameScreen]"
-                                ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
+                                cm:Message.Attach="[Click] = [SwitchGameScreen]" Loaded="FullScreenButton_Loaded"
+                                Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
                             <ui:AppBarToggleButton 
                                 IsChecked="{Binding IsSourceTextPined}" Width="40"
                                 Visibility="{Binding PinSourceTextToggleVisubility}"

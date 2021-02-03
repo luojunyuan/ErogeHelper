@@ -181,9 +181,21 @@ namespace ErogeHelper.Model
             set => SetValue(value);
         }
 
+        public static bool MojiDictEnable
+        {
+            get => GetValue(DefaultValuesStore.MojiDictEnable);
+            set => SetValue(value);
+        }
+
         public static string MojiSessionToken
         {
             get => GetValue(DefaultValuesStore.MojiSessionToken);
+            set => SetValue(value);
+        }
+
+        public static bool JishoDictEnable
+        {
+            get => GetValue(DefaultValuesStore.JishoDictEnable);
             set => SetValue(value);
         }
 

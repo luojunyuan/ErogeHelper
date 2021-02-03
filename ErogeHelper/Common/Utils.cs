@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -23,7 +25,7 @@ namespace ErogeHelper.Common
         {
             BitmapImage result = new BitmapImage();
             Stream stream = new MemoryStream();
-
+            
             var iconBitmap = Icon.ExtractAssociatedIcon(fullPath)!.ToBitmap();
             iconBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             iconBitmap.Dispose();   
@@ -77,7 +79,9 @@ namespace ErogeHelper.Common
             catch (UriFormatException ex)
             {
                 // Running in unit test
-                System.Diagnostics.Trace.WriteLine(ex.Message);
+                var path = Directory.GetCurrentDirectory() + pathInApplication;
+                Trace.WriteLine(path);
+                Trace.WriteLine(ex.Message);
                 return new BitmapImage();
             }
         }
@@ -138,5 +142,13 @@ namespace ErogeHelper.Common
                 return sourceInput;
             }    
         }
+
+        public static void OpenUrl(string urlLink) => new Process 
+        { 
+            StartInfo = new ProcessStartInfo(urlLink) 
+            { 
+                UseShellExecute = true 
+            } 
+        }.Start();
     }
 }

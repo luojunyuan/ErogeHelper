@@ -7,7 +7,7 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:cm="http://caliburnmicro.com"
              mc:Ignorable="d" >
-    
+
     <UserControl.Resources>
         <DataTemplate x:Key="MojiContentTemplate">
             <ScrollViewer PanningMode="Both">
@@ -53,13 +53,66 @@
                 </ui:SimpleStackPanel>
             </ScrollViewer>
         </DataTemplate>
+
+        <DataTemplate x:Key="JishoContentTemplate">
+            <StackPanel>
+                <!-- Header -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Word}" FontSize="24" />
+                    <TextBlock Text="{Binding Ruby}" FontSize="16" VerticalAlignment="Bottom"/>
+                </StackPanel>
+                <!-- Content -->
+                <Grid Margin="0 5 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Left Tag -->
+                    <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                        <TextBlock 
+                            Text="{Binding CommonWord}" FontSize="12" 
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource StringEmptyToCollaspsedConverter}}"/>
+                        <TextBlock 
+                            Text="{Binding JlptLevel}" FontSize="12"
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource StringEmptyToCollaspsedConverter}}"/>
+                        <TextBlock 
+                            Text="{Binding WanikanaLevel}" FontSize="12"
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource StringEmptyToCollaspsedConverter}}"/>
+                    </StackPanel>
+                    <!-- Details -->
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding Details}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0 0 0 5">
+                                    <TextBlock Text="{Binding PartOfSpeech}" FontSize="12" Foreground="Gray" />
+                                    <TextBlock Text="{Binding Explanation}" FontWeight="Bold" TextWrapping="Wrap"/>
+
+                                    <ItemsControl ItemsSource="{Binding Links}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ui:HyperlinkButton NavigateUri="{Binding HyperLink}" Content="{Binding Text}"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <!-- Separator -->
+                <Separator Margin="0 10 0 0"/>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
-    
+
     <ui:FlyoutPresenter ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <StackPanel>
             <!-- Tool box -->
             <DockPanel>
-                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
                     <TextBox Text="{Binding Word}" Width="180" />
                     <Button ToolTip="Search" IsEnabled="False">
                         <ui:SymbolIcon Symbol="Find" />
@@ -73,10 +126,10 @@
                 </Button>
             </DockPanel>
 
-            <TabControl SelectedIndex="0" Margin="0 10 0 0">
+            <TabControl SelectedIndex="0" Margin="0 10 0 0" Visibility="{Binding DictTabVisibility}">
                 <TabControl.Items>
-                    <TabItem Header="Moji辞書">
-                        <!-- 控制这个Content宽度 -->
+                    <TabItem Header="Moji辞書" Visibility="{Binding MojiTabItemVisible}">
+                        <!-- 控制这个Content高度与宽度 -->
                         <TabControl 
                             ItemsSource="{Binding MojiCollection}" Width="400" Height="300"
                             ContentTemplate="{StaticResource MojiContentTemplate}" TabStripPlacement="Left"
@@ -88,8 +141,40 @@
                             </TabControl.ItemTemplate>
                         </TabControl>
                     </TabItem>
-                    
-                    <TabItem Header="Jisho">
+
+                    <TabItem Header="Jisho" Visibility="{Binding JishoTabItemVisible}">
+                        <ScrollViewer Width="400" Height="300">
+                            <ItemsControl 
+                                ItemsSource="{Binding JishoCollection}" 
+                                ItemTemplate="{StaticResource JishoContentTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Margin="10 10 0 0"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <!--<StackPanel Width="400" Height="300" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="8*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                                    <TextBlock Text="走る" FontSize="24"/>
+                                    <TextBlock Text="Common word" FontSize="12"/>
+                                    <TextBlock Text="jlpt n5" FontSize="12"/>
+                                    <TextBlock Text="wanikani level 5" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="10 10 0 0">
+                                    <TextBlock Text="to run" />
+                                    <TextBlock 
+                                        Text="to run (of a vehicle); to drive; to travel; to move; to sail" 
+                                        TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>-->
                     </TabItem>
                     <TabItem Header="EBWin">
                     </TabItem>
@@ -97,10 +182,18 @@
             </TabControl>
 
             <!-- Extened web link -->
-            <StackPanel Orientation="Horizontal">
-                <ui:AppBarButton Content="Weblic"/>
-                <ui:AppBarButton Content="kotobank"/>
-            </StackPanel>
+            <ui:CommandBar HorizontalAlignment="Left" DefaultLabelPosition="Bottom" Background="Transparent">
+                <ui:AppBarButton Label="Weblio" cm:Message.Attach="[Click] = [OpenWeblioLink]" >
+                    <ui:AppBarButton.Icon>
+                        <ui:FontIcon FontFamily="Impact" Glyph="&#x0057;" Margin="-6 -8 -6 -5" Foreground="#1F4795"/>
+                    </ui:AppBarButton.Icon>
+                </ui:AppBarButton>
+                <ui:AppBarButton Label="kotobank" cm:Message.Attach="[Click] = [OpenKotobankLink]" >
+                    <ui:AppBarButton.Icon>
+                        <ui:FontIcon FontFamily="Yu Gothic UI" Glyph="&#x32D9;" Margin="-6 -9 -6 -6" FontWeight="Bold" />
+                    </ui:AppBarButton.Icon>
+                </ui:AppBarButton>
+            </ui:CommandBar>
         </StackPanel>
     </ui:FlyoutPresenter>
 </UserControl>

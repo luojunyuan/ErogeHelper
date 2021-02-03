@@ -124,8 +124,17 @@ namespace ErogeHelper.View
             }
         }
 
-        // XXX: ...
-        private GameViewModel? gameViewModel = null;
+        private AppBarButton fullScreenButton = null!;
+
+        private void FullScreenButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            var appBarbutton = sender as AppBarButton;
+            if (appBarbutton is not null)
+            {
+                fullScreenButton = appBarbutton;
+            }
+        }
+
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == uCallBackMsg)
@@ -139,20 +148,18 @@ namespace ErogeHelper.View
                         {
                             break;
                         }
-                        if (gameViewModel == null)
-                        {
-                            gameViewModel = IoC.Get<GameViewModel>();
-                        }
                         //判断是否全屏
                         if ((int)lParam == 1)
                         {
                             Log.Info("The window is being maxsize");
-                            gameViewModel.GameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.BackToWindow };
+                            fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
+                            fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
                         }
                         else
                         {
                             Log.Info("The window is being normalize or minimize");
-                            gameViewModel.GameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.FullScreen };
+                            fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
+                            fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchFullScreen;
                         }
                         GameHooker.CheckWindowHandler();
                         break;

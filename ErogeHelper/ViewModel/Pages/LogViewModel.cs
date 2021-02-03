@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace ErogeHelper.ViewModel.Pages
 {
+    // TODO: Remove this
     class LogViewModel : PropertyChangedBase
     {
         private ConcurrentCircularBuffer<string> _logText = null!;

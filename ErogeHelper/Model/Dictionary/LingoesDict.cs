@@ -9,6 +9,7 @@ namespace ErogeHelper.Model.Dictionary
 {
     class LingoesDict
     {
+        // message = IO.Convert.JsonToObject(result);
         private object ContentToObj(string xml)
         {
             // xml deserilze

@@ -105,7 +105,7 @@ namespace ErogeHelper.Common.Service
                     collect.Add(new SingleTextItem
                     {
                         Text = mecabWord.Word,
-                        RubyText = mecabWord.Kana,
+                        Ruby = mecabWord.Kana,
                         PartOfSpeed = mecabWord.PartOfSpeech,
                         TextTemplateType = DataRepository.TextTemplateConfig,
                         SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
@@ -143,7 +143,7 @@ namespace ErogeHelper.Common.Service
                     collect.Add(new SingleTextItem
                     {
                         Text = mecabWord.Word,
-                        RubyText = mecabWord.Kana,
+                        Ruby = mecabWord.Kana,
                         PartOfSpeed = mecabWord.PartOfSpeech,
                         TextTemplateType = DataRepository.TextTemplateConfig,
                         SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
