@@ -76,7 +76,7 @@
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
                                                 <Setter Property="Icon" Value="Pin"/>
-                                                <Setter Property="ToolTip" Value="Unpin japanese text" />
+                                                <Setter Property="ToolTip" Value="Unpin Japanese text" />
                                             </Trigger>
                                             <Trigger Property="IsChecked" Value="False">
                                                 <Setter Property="Icon">
@@ -84,7 +84,7 @@
                                                         <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Unpin}"/>
                                                     </Setter.Value>
                                                 </Setter>
-                                                <Setter Property="ToolTip" Value="Pin japanese text" />
+                                                <Setter Property="ToolTip" Value="Pin Japanese text" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>

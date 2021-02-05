@@ -1,10 +1,6 @@
-﻿using Caliburn.Micro;
-using RestSharp;
-using Serilog;
+﻿using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,17 +9,18 @@ namespace ErogeHelper.Model.Dictionary
 {
     public class MojiDictApi
     {
+        private const string baseAddress = "https://api.mojidict.com";
         static readonly string searchApi = "/parse/functions/search_v3";
         static readonly string fetchApi = "/parse/functions/fetchWord_v2";
 
-        private static readonly RestClient client = new RestClient("https://api.mojidict.com");
+        private static readonly RestClient client = new RestClient(baseAddress);
 
         // TODO: Add none async method
         public static async Task<MojiSearchResponse> SearchAsync(string query, CancellationToken token = default)
         {
             MojiSearchPayload searchPayload = new MojiSearchPayload
             {
-                //langEnv = "zh-CN_ja",
+                langEnv = "zh-CN_ja",                                     // no need
                 needWords = "true",
                 searchText = query,
                 _ApplicationId = "E62VyFVLMiW7kvbtVq3p",                  // no need

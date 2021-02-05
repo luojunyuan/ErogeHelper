@@ -161,8 +161,8 @@
                             </ItemsControl>
                         </ScrollViewer>
                     </TabItem>
-                    <TabItem Header="EBWin">
-                    </TabItem>
+                    <!--<TabItem Header="EBWin">
+                    </TabItem>-->
                 </TabControl.Items>
             </TabControl>
 

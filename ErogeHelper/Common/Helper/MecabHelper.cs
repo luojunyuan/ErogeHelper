@@ -3,12 +3,8 @@ using ErogeHelper.Model;
 using MeCab;
 using MeCab.Extension.IpaDic;
 using MeCab.Extension.UniDic;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WanaKanaSharp;
 
 namespace ErogeHelper.Common.Helper
@@ -23,7 +19,7 @@ namespace ErogeHelper.Common.Helper
             parameter = new MeCabParam();
         }
 
-        public bool CanCreateTagger { get => File.Exists(DataRepository.AppDataDir + @"\dic\char.bin");  }
+        public bool CanCreateTagger { get => File.Exists(DataRepository.AppDataDir + @"\dic\char.bin"); }
 
         public void CreateTagger()
         {
@@ -31,7 +27,7 @@ namespace ErogeHelper.Common.Helper
             tagger = MeCabTagger.Create(parameter);
         }
 
-        public IEnumerable<MecabWordInfo> MecabWordIpadicEnumerable(string sentence)
+        public IEnumerable<MecabWordInfo> MecabWordIpadicEnumerable(string sentence)　
         {
             // Add Ve paser
             foreach (var node in tagger.ParseToNodes(sentence))
@@ -46,7 +42,7 @@ namespace ErogeHelper.Common.Helper
                         Kana = node.GetReading()
                     };
 
-                    if (string.IsNullOrWhiteSpace(word.Kana) || 
+                    if (string.IsNullOrWhiteSpace(word.Kana) ||
                         word.PartOfSpeech == "記号" ||
                         WanaKana.IsHiragana(node.Surface) ||
                         WanaKana.IsKatakana(node.Surface))
@@ -75,6 +71,7 @@ namespace ErogeHelper.Common.Helper
             }
         }
 
+        // https://stackoverflow.com/questions/7300361/memory-mapped-files-ioexception-on-createviewaccessor-for-large-data
         public IEnumerable<MecabWordInfo> MecabWordUnidicEnumerable(string sentence)
         {
             foreach (var node in tagger.ParseToNodes(sentence))
