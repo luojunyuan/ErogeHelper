@@ -13,6 +13,7 @@ namespace ErogeHelper.Common
 {
     static class Textractor
     {
+        // 4.15
         public static void Init()
         {
             string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
@@ -43,7 +44,6 @@ namespace ErogeHelper.Common
         public static event DataRecvEventHandler? DataEvent;
 
         static readonly Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
-        private static readonly List<string> InsertMessageEngineName = new();
 
         #region TextHostInit Callback Implement
         static public void CreateThreadHandle(
@@ -69,23 +69,11 @@ namespace ErogeHelper.Common
 
         static public void OutputHandle(long threadid, string opdata)
         {
+            if (opdata.Length > 500)
+                return;
+
             HookParam hp = ThreadHandleDict[threadid];
             hp.Text = opdata;
-
-            // TODO: Use this in Inject() only
-            // "Textractor: inserting hook: %s"
-            if (hp.Handle == 0 && hp.Text.Length > 28 && hp.Text[12..20].Equals("inserting")) // hackable
-            {
-                try
-                {
-                    InsertMessageEngineName.Add(hp.Text[28..]);
-                }
-                catch(ArgumentOutOfRangeException ex)
-                {
-                    // Weird random error
-                    Log.Error(ex);
-                }
-            }
 
             DataEvent?.Invoke(typeof(Textractor), hp);
             if (!string.IsNullOrWhiteSpace(GameConfig.HookCode)
@@ -157,26 +145,12 @@ namespace ErogeHelper.Common
                         return;
                     }
                 }
-
-                foreach (var exsitEngine in InsertMessageEngineName)
-                {
-                    if (engineName.Equals(exsitEngine))
-                    {
-                        DataEvent?.Invoke(typeof(Textractor), new HookParam
-                        {
-                            Name = "控制台",
-                            Hookcode = "HB0@0",
-                            Text = $"ErogeHelper: The engine {engineName} has already insert"
-                        });
-                        return;
-                    }
-                }
             }
 
             foreach (Process p in DataRepository.GameProcesses)
             {
                 _ = TextHostLib.InsertHook((uint)p.Id, hookcode);
-                Log.Info($"Try insert code {hookcode} to PID {p.Id}");
+                Log.Info($"Try insert hook {hookcode} to PID {p.Id}");
             }
         }
 
