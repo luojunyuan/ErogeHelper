@@ -16,7 +16,6 @@ namespace ErogeHelper.Model
     public class DataRepository
     {
         #region Methods
-
         internal static T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
         {
             if (LocalSetting.ContainsKey(propertyName))
@@ -85,17 +84,16 @@ namespace ErogeHelper.Model
             if (!File.Exists(SettingPath))
             {
                 FileInfo file = new FileInfo(SettingPath);
-                file.Directory!.Create(); // If the directory already exists, this method does nothing.
+                // If the directory already exists, this method does nothing.
+                file.Directory!.Create();
                 File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
             }
             var tmp = File.ReadAllText(SettingPath);
             return JsonSerializer.Deserialize<Dictionary<string, string>>(tmp)!;
         }
-
         #endregion
 
         #region Runtime Variables And Constant Value
-
         public static List<Process> GameProcesses = new List<Process>();
 
         public static Process? MainProcess;
@@ -110,11 +108,11 @@ namespace ErogeHelper.Model
         public static readonly BitmapImage pinkImage = Utils.LoadBitmapFromResource("Assets/pink.png");
 
         public static readonly string AppDataDir = SettingPath[..SettingPath.LastIndexOf('\\')];
+
         public const string MecabDicUrl = @"https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip";
         #endregion
 
         #region Properties
-
         public static double FontSize
         {
             get => GetValue(DefaultValuesStore.FontSize);
