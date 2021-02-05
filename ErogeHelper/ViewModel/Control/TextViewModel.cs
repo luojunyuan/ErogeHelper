@@ -63,7 +63,6 @@ namespace ErogeHelper.ViewModel.Control
 
         public string Ruby { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
-        public string PartOfSpeed { get; set; } = string.Empty;
         public TextTemplateType TextTemplateType { get; set; }
         public ImageSource SubMarkColor
         {

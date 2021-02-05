@@ -98,20 +98,7 @@ namespace ErogeHelper.Common.Service
             // Process source japanese text
             if (mecabViewModel.MecabToggle)
             {
-                var collect = new BindableCollection<SingleTextItem>();
-
-                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(hp.Text))
-                {
-                    collect.Add(new SingleTextItem
-                    {
-                        Text = mecabWord.Word,
-                        Ruby = mecabWord.Kana,
-                        PartOfSpeed = mecabWord.PartOfSpeech,
-                        TextTemplateType = DataRepository.TextTemplateConfig,
-                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
-                    });
-                }
-
+                var collect = Utils.BindableTextMaker(mecabHelper.IpaDicParser(hp.Text));
                 SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
             }
 
@@ -136,20 +123,7 @@ namespace ErogeHelper.Common.Service
 
             if (mecabViewModel.MecabToggle)
             {
-                var collect = new BindableCollection<SingleTextItem>();
-
-                foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(text))
-                {
-                    collect.Add(new SingleTextItem
-                    {
-                        Text = mecabWord.Word,
-                        Ruby = mecabWord.Kana,
-                        PartOfSpeed = mecabWord.PartOfSpeech,
-                        TextTemplateType = DataRepository.TextTemplateConfig,
-                        SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
-                    });
-                }
-
+                var collect = Utils.BindableTextMaker(mecabHelper.IpaDicParser(text));
                 SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
             }
         }

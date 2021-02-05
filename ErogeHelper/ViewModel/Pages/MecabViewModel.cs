@@ -261,18 +261,9 @@ namespace ErogeHelper.ViewModel.Pages
             {
                 sentence.Append(sourceText.Text);
             }
-            foreach (MecabWordInfo mecabWord in mecabHelper.MecabWordIpadicEnumerable(sentence.ToString()))
-            {
-                tmp.Add(new SingleTextItem
-                {
-                    Text = mecabWord.Word,
-                    Ruby = mecabWord.Kana,
-                    PartOfSpeed = mecabWord.PartOfSpeech,
-                    TextTemplateType = DataRepository.TextTemplateConfig,
-                    SubMarkColor = Utils.Hinshi2Color(mecabWord.PartOfSpeech)
-                });
-            }
-            gameViewModel.TextControl.SourceTextCollection = tmp;
+
+            var collect = Utils.BindableTextMaker(mecabHelper.IpaDicParser(sentence.ToString()));
+            gameViewModel.TextControl.SourceTextCollection = collect;
         }
 
         public bool MojiDictToggle

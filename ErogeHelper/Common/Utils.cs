@@ -15,7 +15,12 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
+using ErogeHelper.Common.Extension;
+using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
+using ErogeHelper.ViewModel.Control;
+using WanaKanaSharp;
 
 namespace ErogeHelper.Common
 {
@@ -37,13 +42,13 @@ namespace ErogeHelper.Common
             return result;
         }
 
-        public static ImageSource Hinshi2Color(string value)
+        public static ImageSource Hinshi2Color(PartOfSpeech value)
         {
-            return (value.ToString()) switch
+            return value switch
             {
-                "名詞" => DataRepository.aquagreenImage,
-                "動詞" or "感動詞" or "副詞" => DataRepository.greenImage,
-                "形容詞" or "形状詞" or "連体詞" => DataRepository.pinkImage,
+                PartOfSpeech.Noun or PartOfSpeech.ProperNoun or PartOfSpeech.Pronoun => DataRepository.aquagreenImage,
+                PartOfSpeech.Verb or PartOfSpeech.Adverb or PartOfSpeech.Interjection => DataRepository.greenImage,
+                PartOfSpeech.Adjective => DataRepository.pinkImage, // "形状詞" or "連体詞"
                 _ => DataRepository.transparentImage, // "助詞" "接続詞"
             };
         }
@@ -150,5 +155,44 @@ namespace ErogeHelper.Common
                 UseShellExecute = true 
             } 
         }.Start();
+
+        public static BindableCollection<SingleTextItem> BindableTextMaker(List<MeCabWord> mecabWords)
+        {
+            BindableCollection<SingleTextItem> collect = new();
+            foreach(var word in mecabWords)
+            {
+                if (string.IsNullOrWhiteSpace(word.Reading) ||
+                    word.PartOfSpeech == PartOfSpeech.Symbol ||
+                    WanaKana.IsHiragana(word.ToString()) ||
+                    WanaKana.IsKatakana(word.ToString()))
+                {
+                    word.Reading = " ";
+                }
+                else
+                {
+                    if (DataRepository.Romaji == true)
+                    {
+                        word.Reading = WanaKana.ToRomaji(input: word.Reading);
+                    }
+                    else if (DataRepository.Hiragana == true)
+                    {
+                        // Not Implament yet
+                        //word.Kana = WanaKana.ToHiragana(word.Kana);
+
+                        word.Reading = word.Reading.Katakana2Hiragana();
+                    }
+                    // Katakana by default
+                }
+
+                collect.Add(new SingleTextItem
+                {
+                    Text = word.Word,
+                    Ruby = word.Reading,
+                    TextTemplateType = DataRepository.TextTemplateConfig,
+                    SubMarkColor = Hinshi2Color(word.PartOfSpeech)
+                });
+            }
+            return collect;
+        }
     }
 }
