@@ -8,6 +8,7 @@ using ModernWpf.Controls;
 using Serilog;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace ErogeHelper.ViewModel.Pages
@@ -249,7 +250,14 @@ namespace ErogeHelper.ViewModel.Pages
             GameConfig.SubThreadContext = SelectedHook.SubThreadContext;
             GameConfig.RegExp = RegExp ?? string.Empty;
 
-            IoC.Get<GameViewModel>().dataService.RefreshCurentMecabText(SelectedText);
+            // TODO: Refactor
+            var sendText = SelectedText;
+            if (!string.IsNullOrWhiteSpace(RegExp))
+            {
+                var list = Regex.Split(sendText, RegExp);
+                sendText = string.Join("", list);
+            }
+            IoC.Get<GameViewModel>().dataService.RefreshCurentMecabText(sendText);
 
             if (File.Exists(configPath))
             {
