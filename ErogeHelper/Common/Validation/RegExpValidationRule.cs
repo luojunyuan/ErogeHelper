@@ -23,7 +23,7 @@ namespace ErogeHelper.Common.Validation
             }
             catch (ArgumentException ex)
             {
-                Log.Info("Check RegExp format, it's fine exception");
+                Log.Debug("Check RegExp format, it's fine exception");
                 return new ValidationResult(false, $"Invalid RegExp. {ex.Message}");
             }
 

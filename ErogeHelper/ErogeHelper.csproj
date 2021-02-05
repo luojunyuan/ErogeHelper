@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ApplicationManifest>Assets/app.manifest</ApplicationManifest>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <Authors>k1mlka</Authors>
 	<OutputPath>..\bin\$(Configuration)</OutputPath>
 	<AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
