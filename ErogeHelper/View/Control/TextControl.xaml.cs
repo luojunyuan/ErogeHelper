@@ -53,7 +53,7 @@ namespace ErogeHelper.View.Control
             border!.Opacity = 0.5;
         }
 
-        private void Border_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var border = sender as Border;
             border!.Opacity = 1;
