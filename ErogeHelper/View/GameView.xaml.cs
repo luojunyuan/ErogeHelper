@@ -124,15 +124,12 @@ namespace ErogeHelper.View
             }
         }
 
-        private AppBarButton fullScreenButton = null!;
+        private AppBarButton? fullScreenButton;
 
         private void FullScreenButton_Loaded(object sender, RoutedEventArgs e)
         {
             var appBarbutton = sender as AppBarButton;
-            if (appBarbutton is not null)
-            {
-                fullScreenButton = appBarbutton;
-            }
+            fullScreenButton = appBarbutton;
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -152,14 +149,20 @@ namespace ErogeHelper.View
                         if ((int)lParam == 1)
                         {
                             Log.Info("The window is being maxsize");
-                            fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
-                            fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
+                            if (fullScreenButton is not null)
+                            {
+                                fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
+                                fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
+                            }
                         }
                         else
                         {
                             Log.Info("The window is being normalize or minimize");
-                            fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
-                            fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchFullScreen;
+                            if (fullScreenButton is not null)
+                            {
+                                fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
+                                fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchFullScreen;
+                            }
                         }
                         GameHooker.CheckWindowHandler();
                         break;
