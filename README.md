@@ -9,8 +9,6 @@ After that press F5
 
 or you can fill the command parameters in ErogeHelper's properties like below
 
-![屏幕截图 2020-09-26 142206.png](https://i.loli.net/2020/09/26/eKrl8tziucgqLZE.png)
-
 one is full path of game, '/le' to use Locate Emulator
 
 
