@@ -42,7 +42,6 @@ namespace ErogeHelper.ViewModel.Control
                 NotifyOfPropertyChange(() => DisplayedText);
             }
         }
-        public string UserSelectedText { get; set; } = string.Empty;
         public void SendSelectedText(object sender)
         {
             var textBox = sender as TextBox;

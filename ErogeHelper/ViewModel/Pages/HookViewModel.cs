@@ -78,7 +78,7 @@ namespace ErogeHelper.ViewModel.Pages
 
         #region RegExp
         private string? _regExp;
-        public string? RegExp // if user click 'x', it will turn to null
+        public string RegExp // if user click 'x', it will turn to null
         {
             get => _regExp ?? string.Empty;
             set
@@ -92,6 +92,7 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook?.Text ?? string.Empty, value);
                 }
+                NotifyOfPropertyChange(() => RegExp);
             }
         }
 
@@ -117,6 +118,18 @@ namespace ErogeHelper.ViewModel.Pages
                 NotifyOfPropertyChange(() => SelectedText);
             }
         }
+
+        private const string tag1 = ".*(?=[「])";
+        private const string tag2 = "(?=[」]).*";
+        private const string tag3 = "<.*?>";
+        private const string tag4 = "_r|<br>|#n|\\n";
+        private const string tag5 = "[\\x00-\\xFF]";
+
+        public void RegExpTag1() => RegExp = RegExp.Equals(string.Empty) ? tag1 : $"{RegExp}|{tag1}";
+        public void RegExpTag2() => RegExp = RegExp.Equals(string.Empty) ? tag2 : $"{RegExp}|{tag2}";
+        public void RegExpTag3() => RegExp = RegExp.Equals(string.Empty) ? tag3 : $"{RegExp}|{tag3}";
+        public void RegExpTag4() => RegExp = RegExp.Equals(string.Empty) ? tag4 : $"{RegExp}|{tag4}";
+        public void RegExpTag5() => RegExp = RegExp.Equals(string.Empty) ? tag5 : $"{RegExp}|{tag5}";
         #endregion
 
         private string _consoleOutput = string.Empty;
@@ -159,7 +172,7 @@ namespace ErogeHelper.ViewModel.Pages
                 if (value is not null)
                 {
                     selectedTextHandle = value.Handle;
-                    SelectedText = Utils.TextEvaluateWithRegExp(value.Text, RegExp ?? string.Empty);
+                    SelectedText = Utils.TextEvaluateWithRegExp(value.Text, RegExp);
                 }
                 else
                 {
@@ -238,7 +251,7 @@ namespace ErogeHelper.ViewModel.Pages
 
             if (selectedTextHandle == hp.Handle)
             {
-                SelectedText = Utils.TextEvaluateWithRegExp(hp.Text, RegExp ?? string.Empty);
+                SelectedText = Utils.TextEvaluateWithRegExp(hp.Text, RegExp);
             }
         }
 
@@ -251,7 +264,7 @@ namespace ErogeHelper.ViewModel.Pages
             GameConfig.HookCode = SelectedHook.HookCode;
             GameConfig.ThreadContext = SelectedHook.ThreadContext;
             GameConfig.SubThreadContext = SelectedHook.SubThreadContext;
-            GameConfig.RegExp = RegExp ?? string.Empty;
+            GameConfig.RegExp = RegExp;
 
             // TODO: Refactor
             var sendText = SelectedText;

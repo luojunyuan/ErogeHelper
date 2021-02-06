@@ -73,7 +73,27 @@
                                 </TextBox.Text>
                             </TextBox>
 
-                            <ui:AppBarButton Height="32" Width="32" ToolTip="Pick up a RegExp" IsEnabled="False">
+                            <ui:AppBarButton Height="32" Width="32" ToolTip="Pick up a RegExp">
+                                <ui:AppBarButton.Flyout>
+                                    <ui:MenuFlyout Placement="Bottom">
+                                        <MenuItem
+                                            Header="Delete characters before '「'"
+                                            cm:Message.Attach="[Click] = [RegExpTag1]"/>
+                                        <MenuItem 
+                                            Header="Delete characters after '」'"
+                                            cm:Message.Attach="[Click] = [RegExpTag2]"/>
+                                        <MenuItem 
+                                            Header="Delete ruby like &lt;.*?>" 
+                                            cm:Message.Attach="[Click] = [RegExpTag3]"/>
+                                        <MenuItem 
+                                            Header="Delete linebreaks"
+                                            cm:Message.Attach="[Click] = [RegExpTag4]"/>
+                                        <MenuItem 
+                                            Header="Delete any Ascii chractors"
+                                            cm:Message.Attach="[Click] = [RegExpTag5]"/>
+                                    </ui:MenuFlyout>
+                                </ui:AppBarButton.Flyout>
+                                <!-- FIXME: Icon no effect-->
                                 <ui:AppBarButton.Icon>
                                     <ui:SymbolIcon Symbol="Filter" Margin="0 -6.5 0 0"/>
                                 </ui:AppBarButton.Icon>
