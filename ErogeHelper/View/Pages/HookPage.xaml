@@ -56,39 +56,6 @@
 
         <ScrollViewer Grid.Row="0" PanningMode="Both">
             <StackPanel Margin="20,10">
-                <!-- Hook Code -->
-                <GroupBox Header="{x:Static resx:Strings.HookPage_HookCode}">
-                    <ui:SimpleStackPanel Spacing="10">
-                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-                            <!--CodeTextBox just suger-->
-                            <TextBox x:Name="CodeTextBox"
-                                behavior:ValidationBehavior.HasError="{Binding InvalidHookCode}"
-                                HorizontalAlignment="Left" Width="240">
-                                <TextBox.Text>
-                                    <Binding Path="InputCode" UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <validation:InvalidCodeFormatValidationRule 
-                                                ValidatesOnTargetUpdated="True"/>
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
-                            
-                            <ui:AppBarButton 
-                                Height="32" Width="32" ToolTip="Search code on Aniclan"
-                                cm:Message.Attach="[Click] = [SearchCode]">
-                                <ui:AppBarButton.Icon>
-                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
-                                </ui:AppBarButton.Icon>
-                            </ui:AppBarButton>
-                        </ui:SimpleStackPanel>
-                        
-                        <Button 
-                            Content="{x:Static resx:Strings.HookPage_Insert}" Width="240" 
-                            cm:Message.Attach="[Click] = [InsertCode(CodeTextBox.Text)]"/>
-                    </ui:SimpleStackPanel>
-                </GroupBox>
-
                 <!-- RegExp -->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                     <ui:SimpleStackPanel Spacing="10">
@@ -135,9 +102,60 @@
                 <!-- Hook Data List -->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
                     <ui:SimpleStackPanel Spacing="10">
-                        <ui:AppBarButton 
-                            Label="Clear" Icon="Refresh" ToolTip="Refresh all thread" 
-                            cm:Message.Attach="[Click] = [ClearHookMapData]"/>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:AppBarButton 
+                                Label="Clear" Icon="Refresh" ToolTip="Refresh all text thread" 
+                                cm:Message.Attach="[Click] = [ClearHookMapData]"/>
+                            <ui:AppBarButton 
+                                x:Name="CodeButton" Label="Code" ToolTip="Input HCode or RCode" 
+                                Click="CodeButton_Click">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE950;" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                            <!-- Hook Code -->
+                            <ui:ContentDialog
+                                x:Name="CodeDialog" Title="{x:Static resx:Strings.HookPage_HookCode}"
+                                CloseButtonText="Cancel" PrimaryButtonText="{x:Static resx:Strings.HookPage_Insert}"
+                                cm:Message.Attach="[PrimaryButtonClick] = [InsertCode]; 
+                                    [Closing] = [DialogClosingEvent($eventArgs)]" DefaultButton="Primary"
+                                IsPrimaryButtonEnabled="{Binding CanInsertCode}">
+                                <ui:SimpleStackPanel Spacing="10">
+                                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                                        <!--CodeTextBox just suger-->
+                                        <TextBox 
+                                            HorizontalAlignment="Left" Width="240"
+                                            behavior:ValidationBehavior.HasError="{Binding DataContext.InvalidHookCode, 
+                                                RelativeSource={RelativeSource AncestorType={x:Type Page}}}">
+                                            <TextBox.Text>
+                                                <Binding 
+                                                    Path="DataContext.InputCode" 
+                                                    RelativeSource="{RelativeSource AncestorType={x:Type Page}}" 
+                                                    UpdateSourceTrigger="PropertyChanged">
+                                                    <Binding.ValidationRules>
+                                                        <validation:InvalidCodeFormatValidationRule 
+                                                            ValidatesOnTargetUpdated="True"/>
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </TextBox.Text>
+                                        </TextBox>
+                                        
+                                        <ui:AppBarButton 
+                                            Height="32" Width="32" ToolTip="Search code on Aniclan"
+                                            cm:Message.Attach="[Click] = [SearchCode]">
+                                            <ui:AppBarButton.Icon>
+                                                <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
+                                            </ui:AppBarButton.Icon>
+                                        </ui:AppBarButton>
+                                    </ui:SimpleStackPanel>
+
+                                    <!--<ui:ProgressBar 
+                                        IsIndeterminate="True" ShowPaused="{Binding IsChecked, ElementName=PausedRB}"
+                                        ShowError="{Binding IsChecked, ElementName=ErrorRB}"/>-->
+                                </ui:SimpleStackPanel>
+                                
+                            </ui:ContentDialog>
+                        </StackPanel>
                         <ListView 
                             ScrollViewer.PanningMode="None"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"

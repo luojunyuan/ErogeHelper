@@ -18,60 +18,62 @@ namespace ErogeHelper.ViewModel.Pages
         #region HookCode
         // InputCode 只在值有效时xaml才会传值过来
         private string _inputCode = string.Empty;
-        public string InputCode { get => _inputCode; set { _inputCode = value; NotifyOfPropertyChange(() => InputCode); } }
+        public string InputCode
+        {
+            get => _inputCode;
+            set
+            {
+                _inputCode = value;
+                NotifyOfPropertyChange(() => InputCode);
+                NotifyOfPropertyChange(() => CanInsertCode);
+            }
+        }
         public bool InvalidHookCode { get; set; }
 
-        public bool CanSearchCode { get => true; }
+        private bool _canSearchCode = true;
+        public bool CanSearchCode
+        { 
+            get => _canSearchCode; 
+            set 
+            { 
+                _canSearchCode = value; 
+                NotifyOfPropertyChange(() => CanSearchCode); 
+            } 
+        }
         public async void SearchCode()
         {
-            var progress = new ProgressRing
+            CanSearchCode = false;
+            var hcode = await QueryHCode.QueryCode(GameConfig.MD5).ConfigureAwait(false);
+            if (!hcode.Equals(string.Empty))
             {
-                IsActive = true,
-                Width = 80,
-                Height = 80,
-            };
-
-            var dialogCanClose = false;
-            var dialog = new ContentDialog
-            {
-                Content = progress,
-            };
-            dialog.Closing += (sender, args) =>
-            {
-                // Block Enter key and PrimaryButton, SecondaryButton, Escape key
-                if (args.Result == ContentDialogResult.Primary ||
-                    args.Result == ContentDialogResult.Secondary ||
-                    args.Result == ContentDialogResult.None && !dialogCanClose)
-                {
-                    args.Cancel = true;
-                }
-                // Only let CloseButton and dialog.Hide() method go
-                //if (args.Result == ContentDialogResult.None)
-            };
-
-            var progressTask = dialog.ShowAsync();
-
-            var hcode = await QueryHCode.QueryCode(GameConfig.MD5);//.ConfigureAwait(false);
-
-            dialogCanClose = true;
-            if (hcode != string.Empty)
-            {
-                progress.IsActive = false;
                 InputCode = hcode;
                 Log.Info(hcode);
-                dialog.Hide();
             }
             else
             {
-                progress.IsActive = false;
-                dialog.Content = "Didn't find hcode for game";
-                dialog.CloseButtonText = "Close";
-                await progressTask;
+                InputCode = "No Result";
             }
+            CanSearchCode = true;
         }
 
-        public bool CanInsertCode() => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
-        public void InsertCode(object inputCode) => Textractor.InsertHook(InputCode);
+        public bool CanInsertCode => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
+        public void InsertCode()
+        {
+            if (CanInsertCode)
+            {
+                Textractor.InsertHook(InputCode);
+            }
+        }
+        public void DialogClosingEvent(ContentDialogClosingEventArgs args)
+        {
+            // Block Enter key and PrimaryButton
+            if (args.Result == ContentDialogResult.Primary && !CanInsertCode)
+            {
+                args.Cancel = true;
+            }
+            // Only let CloseButton and Escape key go
+            //if (args.Result == ContentDialogResult.None)
+        }
         #endregion
 
         #region RegExp
@@ -146,6 +148,7 @@ namespace ErogeHelper.ViewModel.Pages
         public HookBindingList<long, HookMapItem> HookMapData { get; set; } = new HookBindingList<long, HookMapItem>(p => p.Handle);
 
         private HookMapItem? _selectedHook;
+
         public HookMapItem? SelectedHook
         {
             get => _selectedHook;
