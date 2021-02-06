@@ -24,6 +24,7 @@
             <convert:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter" />
             <convert:QueueToTextConverter x:Key="QueueToTextConverter" />
             <convert:StringEmptyToCollaspsedConverter x:Key="StringEmptyToCollaspsedConverter" />
+            <convert:DebugDummyConverter x:Key="DebugDummyConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

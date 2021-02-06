@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ErogeHelper.View.Control"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:cm="http://caliburnmicro.com"
+             xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              mc:Ignorable="d" >
 
     <UserControl.Resources>
@@ -114,11 +115,19 @@
             <DockPanel>
                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
                     <TextBox Text="{Binding Word}" Width="180" />
-                    <Button ToolTip="Search" IsEnabled="False">
+                    <!--<Button ToolTip="Search" IsEnabled="False">
                         <ui:SymbolIcon Symbol="Find" />
-                    </Button>
-                    <Button ToolTip="Select text" IsEnabled="False">
+                    </Button>-->
+                    <Button x:Name="SelectTextButton" ToolTip="Select text">
                         <ui:SymbolIcon Symbol="Copy" />
+                        <ui:FlyoutService.Flyout>
+                            <ui:Flyout Placement="Top">
+                                <TextBox
+                                    Text="{Binding DisplayedText}" IsReadOnly="True" TextWrapping="Wrap" MaxWidth="360"
+                                    cm:Message.Attach="[PreviewMouseLeftButtonUp] = [SendSelectedText($source)]">
+                                </TextBox>
+                            </ui:Flyout>
+                        </ui:FlyoutService.Flyout>
                     </Button>
                 </ui:SimpleStackPanel>
                 <Button HorizontalAlignment="Right" ToolTip="Close Card" cm:Message.Attach="[Click] = [CloseCard]">

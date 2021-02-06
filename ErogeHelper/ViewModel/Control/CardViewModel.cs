@@ -3,11 +3,13 @@ using ErogeHelper.Common;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Dictionary;
 using ErogeHelper.ViewModel.Pages;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ErogeHelper.ViewModel.Control
 {
@@ -18,6 +20,7 @@ namespace ErogeHelper.ViewModel.Control
         private Visibility _dictTabVisibility = Visibility.Collapsed;
         private Visibility _mojiTabItemVisible = DataRepository.MojiDictEnable ? Visibility.Visible : Visibility.Collapsed;
         private Visibility _jishoTabItemVisible = DataRepository.JishoDictEnable ? Visibility.Visible : Visibility.Collapsed;
+        private string _displayedText = string.Empty;
 
         // TextBox
         public string Word
@@ -27,6 +30,32 @@ namespace ErogeHelper.ViewModel.Control
             {
                 _word = value;
                 NotifyOfPropertyChange(() => Word);
+            }
+        }
+
+        public string DisplayedText 
+        { 
+            get => _displayedText;
+            set 
+            { 
+                _displayedText = value;
+                NotifyOfPropertyChange(() => DisplayedText);
+            }
+        }
+        public string UserSelectedText { get; set; } = string.Empty;
+        public void SendSelectedText(object sender)
+        {
+            var textBox = sender as TextBox;
+            if (textBox is not null)
+            {
+                var selectedText = textBox.SelectedText;
+                if (!selectedText.Equals(string.Empty))
+                {
+                    Word = selectedText;
+                    StartupSearch();
+
+                    textBox.SelectionLength = 0;
+                }
             }
         }
 
@@ -252,12 +281,12 @@ namespace ErogeHelper.ViewModel.Control
                 return;
             }
 
-            foreach(var jishoItem in result.Data)
+            foreach (var jishoItem in result.Data)
             {
                 string.Empty.Equals("sss");
                 BindableCollection<JishoItem.Detail> details = new();
                 int senseCount = 1;
-                foreach(var sense in jishoItem.Senses)
+                foreach (var sense in jishoItem.Senses)
                 {
                     BindableCollection<JishoItem.Detail.Link> links = new();
                     foreach (var link in sense.Links)

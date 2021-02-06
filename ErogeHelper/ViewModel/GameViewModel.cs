@@ -1,16 +1,12 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Helper;
+using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Service;
 using ErogeHelper.Model;
 using ErogeHelper.View;
 using ErogeHelper.ViewModel.Control;
-using ErogeHelper.ViewModel.Pages;
 using ModernWpf.Controls;
 using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +17,7 @@ namespace ErogeHelper.ViewModel
 {
     class GameViewModel : PropertyChangedBase
     {
-        #region Properties
+        #region Fields
         private double _fontSize = DataRepository.FontSize;
         private bool _assistiveTouchIsVisible = true;
         private Visibility _textControlVisibility = Visibility.Visible;
@@ -52,7 +48,7 @@ namespace ErogeHelper.ViewModel
 
         public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
 
-        public ConcurrentQueue<string> SourceTextArchiver = new();
+        public ConcurrentCircularBuffer<string> SourceTextArchiver = new(10);
 
         public bool AssistiveTouchIsVisible
         {
