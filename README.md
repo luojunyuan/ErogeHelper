@@ -1,3 +1,4 @@
+[简体中文](https://github.com/luojunyuan/Eroge-Helper/blob/master/README_zh-cn.md)
 
 ### How to build
 
