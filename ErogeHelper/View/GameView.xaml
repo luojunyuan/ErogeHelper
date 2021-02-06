@@ -100,8 +100,12 @@
                                     Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" 
                                     cm:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
                                 <ui:AppBarButton 
-                                    Icon="DockLeft" Label="{x:Static resx:Strings.GameView_TaskView}" 
-                                    cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab"/>
+                                    Label="{x:Static resx:Strings.GameView_TaskView}" 
+                                    cm:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.TaskView}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
                                 <ui:AppBarButton 
                                     Icon="Pictures" Label="{x:Static resx:Strings.GameView_Screenshot}" 
                                     cm:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S">

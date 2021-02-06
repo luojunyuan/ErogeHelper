@@ -75,7 +75,7 @@
 
                             <ui:AppBarButton Height="32" Width="32" ToolTip="Pick up a RegExp" IsEnabled="False">
                                 <ui:AppBarButton.Icon>
-                                    <ui:FontIcon Glyph="&#xE16E;" Margin="0 -6.5 0 0"/>
+                                    <ui:SymbolIcon Symbol="Filter" Margin="0 -6.5 0 0"/>
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
                         </ui:SimpleStackPanel>
@@ -110,7 +110,7 @@
                                 x:Name="CodeButton" Label="Code" ToolTip="Input HCode or RCode" 
                                 Click="CodeButton_Click">
                                 <ui:AppBarButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE950;" />
+                                    <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Component}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
                             <!-- Hook Code -->

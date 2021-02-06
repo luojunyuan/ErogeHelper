@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Model
 {
-    public static class CommonGlyphs
+    public class CommonGlyphs
     {
         // See https://docs.microsoft.com/en-us/windows/uwp/design/style/segoe-ui-symbol-font#icon-list
 
@@ -29,5 +29,9 @@ namespace ErogeHelper.Model
         public const string BackToWindow = "\uE1D8";
 
         public const string FullScreen = "\uE1D9";
+
+        public const string TaskView = "\uE7C4";
+
+        public const string Component = "\uE950";
     }
 }

@@ -28,7 +28,6 @@ namespace ErogeHelper.ViewModel
         private Visibility _triggerBarVisibility = Visibility.Collapsed;
         private Visibility _pinSourceTextToggleVisubility;
         private bool _isLostFocus = GameConfig.NoFocus;
-        private FontIcon _gameScreenSwitchIcon = new FontIcon { Glyph = CommonGlyphs.FullScreen };
         #endregion
 
         readonly IWindowManager windowManager;
