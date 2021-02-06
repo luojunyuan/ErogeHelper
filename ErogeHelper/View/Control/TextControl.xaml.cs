@@ -56,7 +56,6 @@ namespace ErogeHelper.View.Control
         private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var border = sender as Border;
-            border!.Opacity = 1;
 
             Popup? popup = Resources["CardPopup"] as Popup;
             popup!.PlacementTarget = border;
@@ -86,5 +85,11 @@ namespace ErogeHelper.View.Control
                 Cursor = Cursors.Arrow;
         }
         #endregion
+
+        private void Border_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as Border;
+            border!.Opacity = 1;
+        }
     }
 }
