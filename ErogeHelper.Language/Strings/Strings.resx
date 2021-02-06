@@ -352,4 +352,10 @@
   <data name="MecabPage.Dict" xml:space="preserve">
     <value>Dict</value>
   </data>
+  <data name="CardControl.CloseTip" xml:space="preserve">
+    <value>Close Card</value>
+  </data>
+  <data name="CardControl.SelectTextTip" xml:space="preserve">
+    <value>Select text</value>
+  </data>
 </root>

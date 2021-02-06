@@ -303,10 +303,10 @@
     <value>在 Aniclan 上搜索特殊码</value>
   </data>
   <data name="HookPage.RegExpTag1" xml:space="preserve">
-    <value>去除“「”之前的所有文本</value>
+    <value>去除“『”之前的所有文本</value>
   </data>
   <data name="HookPage.RegExpTag2" xml:space="preserve">
-    <value>去除“」”之后的所有文本</value>
+    <value>去除“』”之后的所有文本</value>
   </data>
   <data name="HookPage.RegExpTag3" xml:space="preserve">
     <value>去除形如&lt;.*?&gt;的假名标签</value>
@@ -331,5 +331,11 @@
   </data>
   <data name="MecabPage.TextFlyout" xml:space="preserve">
     <value>文本显示方式</value>
+  </data>
+  <data name="CardControl.CloseTip" xml:space="preserve">
+    <value>关闭卡片</value>
+  </data>
+  <data name="CardControl.SelectTextTip" xml:space="preserve">
+    <value>自由选择文本</value>
   </data>
 </root>

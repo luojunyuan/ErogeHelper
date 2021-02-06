@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ErogeHelper.View.Control"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:cm="http://caliburnmicro.com"
+             xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
              xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              mc:Ignorable="d" >
 
@@ -118,7 +119,7 @@
                     <!--<Button ToolTip="Search" IsEnabled="False">
                         <ui:SymbolIcon Symbol="Find" />
                     </Button>-->
-                    <Button x:Name="SelectTextButton" ToolTip="Select text">
+                    <Button x:Name="SelectTextButton" ToolTip="{x:Static resx:Strings.CardControl_SelectTextTip}">
                         <ui:SymbolIcon Symbol="Copy" />
                         <ui:FlyoutService.Flyout>
                             <ui:Flyout Placement="Top">
@@ -130,7 +131,7 @@
                         </ui:FlyoutService.Flyout>
                     </Button>
                 </ui:SimpleStackPanel>
-                <Button HorizontalAlignment="Right" ToolTip="Close Card" cm:Message.Attach="[Click] = [CloseCard]">
+                <Button HorizontalAlignment="Right" ToolTip="{x:Static resx:Strings.CardControl_CloseTip}" cm:Message.Attach="[Click] = [CloseCard]">
                     <ui:SymbolIcon Symbol="Clear" />
                 </Button>
             </DockPanel>

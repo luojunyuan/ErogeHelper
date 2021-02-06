@@ -133,6 +133,24 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Close Card 的本地化字符串。
+        /// </summary>
+        public static string CardControl_CloseTip {
+            get {
+                return ResourceManager.GetString("CardControl.CloseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select text 的本地化字符串。
+        /// </summary>
+        public static string CardControl_SelectTextTip {
+            get {
+                return ResourceManager.GetString("CardControl.SelectTextTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Action Center 的本地化字符串。
         /// </summary>
         public static string GameView_ActionCenter {

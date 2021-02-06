@@ -119,8 +119,8 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
 
-        private const string tag1 = ".*(?=[「])";
-        private const string tag2 = "((?<=」).*)";
+        private const string tag1 = ".*(?=[「|『])";
+        private const string tag2 = "((?<=[」|』]).*)";
         private const string tag3 = "<.*?>";
         private const string tag4 = "_r|<br>|#n|\\n";
         private const string tag5 = "[\\x00-\\xFF]";
