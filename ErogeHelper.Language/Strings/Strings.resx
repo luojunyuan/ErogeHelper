@@ -274,4 +274,82 @@
   <data name="GameView.SwitchWindow" xml:space="preserve">
     <value>Window (Alt + Enter)</value>
   </data>
+  <data name="HookPage.RegExpTag1" xml:space="preserve">
+    <value>Delete characters before '「'</value>
+  </data>
+  <data name="HookPage.RegExpTag2" xml:space="preserve">
+    <value>Delete characters after '」'</value>
+  </data>
+  <data name="HookPage.RegExpTag3" xml:space="preserve">
+    <value>Delete ruby like &lt;.*?&gt;</value>
+  </data>
+  <data name="HookPage.RegExpTag4" xml:space="preserve">
+    <value>Delete linebreaks</value>
+  </data>
+  <data name="HookPage.RegExpTag5" xml:space="preserve">
+    <value>Delete any Ascii chractors</value>
+  </data>
+  <data name="HookPage.RegExpTip" xml:space="preserve">
+    <value>Pick up a RegExp</value>
+  </data>
+  <data name="HookPage.TextThreadRefreshTip" xml:space="preserve">
+    <value>Refresh all text thread</value>
+  </data>
+  <data name="HookPage.CodeInsertDialogTip" xml:space="preserve">
+    <value>Input HCode or RCode</value>
+  </data>
+  <data name="HookPage.CodeInsertLabel" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="HookPage.TextThreadRefreshLabel" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="HookPage.CodeSearchTip" xml:space="preserve">
+    <value>Search code on Aniclan</value>
+  </data>
+  <data name="HookPage.CodeSearchNoResult" xml:space="preserve">
+    <value>No Result</value>
+  </data>
+  <data name="HookPage.CodeSearchCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="GameView.FontDecreaseTip" xml:space="preserve">
+    <value>Decrease size</value>
+  </data>
+  <data name="GameView.FontIncreaseTip" xml:space="preserve">
+    <value>Increase size</value>
+  </data>
+  <data name="GameView.VolumeIncreaseTip" xml:space="preserve">
+    <value>Volume Up</value>
+  </data>
+  <data name="GameView.VolumeDecreaseTip" xml:space="preserve">
+    <value>Volume down</value>
+  </data>
+  <data name="GameView.PinnedTip" xml:space="preserve">
+    <value>Unpin Japanese text</value>
+  </data>
+  <data name="GameView.UnpinTip" xml:space="preserve">
+    <value>Pin Japanese text</value>
+  </data>
+  <data name="GeneralPage.Msic" xml:space="preserve">
+    <value>MSIC</value>
+  </data>
+  <data name="GeneralPage.DeepL" xml:space="preserve">
+    <value>DeepL Client Extention</value>
+  </data>
+  <data name="GeneralPage.DeepLDownload" xml:space="preserve">
+    <value>Download DeepL</value>
+  </data>
+  <data name="GeneralPage.Brightness" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="GeneralPage.BrightnessTip" xml:space="preserve">
+    <value>Would change the gamma value</value>
+  </data>
+  <data name="MecabPage.TextFlyout" xml:space="preserve">
+    <value>Text Flyout</value>
+  </data>
+  <data name="MecabPage.Dict" xml:space="preserve">
+    <value>Dict</value>
+  </data>
 </root>

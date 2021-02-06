@@ -51,7 +51,7 @@ namespace ErogeHelper.ViewModel.Pages
             }
             else
             {
-                InputCode = "No Result";
+                InputCode = Language.Strings.HookPage_CodeSearchNoResult;
             }
             CanSearchCode = true;
         }

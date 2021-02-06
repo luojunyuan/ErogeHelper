@@ -152,11 +152,38 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Decrease size 的本地化字符串。
+        /// </summary>
+        public static string GameView_FontDecreaseTip {
+            get {
+                return ResourceManager.GetString("GameView.FontDecreaseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Increase size 的本地化字符串。
+        /// </summary>
+        public static string GameView_FontIncreaseTip {
+            get {
+                return ResourceManager.GetString("GameView.FontIncreaseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Skip too long text 的本地化字符串。
         /// </summary>
         public static string GameView_MaxLenthTip {
             get {
                 return ResourceManager.GetString("GameView.MaxLenthTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unpin Japanese text 的本地化字符串。
+        /// </summary>
+        public static string GameView_PinnedTip {
+            get {
+                return ResourceManager.GetString("GameView.PinnedTip", resourceCulture);
             }
         }
         
@@ -206,11 +233,83 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Pin Japanese text 的本地化字符串。
+        /// </summary>
+        public static string GameView_UnpinTip {
+            get {
+                return ResourceManager.GetString("GameView.UnpinTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Volume down 的本地化字符串。
+        /// </summary>
+        public static string GameView_VolumeDecreaseTip {
+            get {
+                return ResourceManager.GetString("GameView.VolumeDecreaseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Volume Up 的本地化字符串。
+        /// </summary>
+        public static string GameView_VolumeIncreaseTip {
+            get {
+                return ResourceManager.GetString("GameView.VolumeIncreaseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Show other texts 的本地化字符串。
         /// </summary>
         public static string GeneralPage_AppendText {
             get {
                 return ResourceManager.GetString("GeneralPage.AppendText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Brightness 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_Brightness {
+            get {
+                return ResourceManager.GetString("GeneralPage.Brightness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Would change the gamma value 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_BrightnessTip {
+            get {
+                return ResourceManager.GetString("GeneralPage.BrightnessTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 DeepL Client Extention 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_DeepL {
+            get {
+                return ResourceManager.GetString("GeneralPage.DeepL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Download DeepL 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_DeepLDownload {
+            get {
+                return ResourceManager.GetString("GeneralPage.DeepLDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 MSIC 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_Msic {
+            get {
+                return ResourceManager.GetString("GeneralPage.Msic", resourceCulture);
             }
         }
         
@@ -229,6 +328,51 @@ namespace ErogeHelper.Language {
         public static string HookConfig_Title {
             get {
                 return ResourceManager.GetString("HookConfig.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Input HCode or RCode 的本地化字符串。
+        /// </summary>
+        public static string HookPage_CodeInsertDialogTip {
+            get {
+                return ResourceManager.GetString("HookPage.CodeInsertDialogTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Code 的本地化字符串。
+        /// </summary>
+        public static string HookPage_CodeInsertLabel {
+            get {
+                return ResourceManager.GetString("HookPage.CodeInsertLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cancel 的本地化字符串。
+        /// </summary>
+        public static string HookPage_CodeSearchCancel {
+            get {
+                return ResourceManager.GetString("HookPage.CodeSearchCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No Result 的本地化字符串。
+        /// </summary>
+        public static string HookPage_CodeSearchNoResult {
+            get {
+                return ResourceManager.GetString("HookPage.CodeSearchNoResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Search code on Aniclan 的本地化字符串。
+        /// </summary>
+        public static string HookPage_CodeSearchTip {
+            get {
+                return ResourceManager.GetString("HookPage.CodeSearchTip", resourceCulture);
             }
         }
         
@@ -265,6 +409,60 @@ namespace ErogeHelper.Language {
         public static string HookPage_RegExp {
             get {
                 return ResourceManager.GetString("HookPage.RegExp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete characters before &apos;「&apos; 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTag1 {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTag1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete characters after &apos;」&apos; 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTag2 {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTag2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete ruby like &lt;.*?&gt; 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTag3 {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTag3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete linebreaks 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTag4 {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTag4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Delete any Ascii chractors 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTag5 {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTag5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Pick up a RegExp 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RegExpTip {
+            get {
+                return ResourceManager.GetString("HookPage.RegExpTip", resourceCulture);
             }
         }
         
@@ -314,6 +512,24 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Clear 的本地化字符串。
+        /// </summary>
+        public static string HookPage_TextThreadRefreshLabel {
+            get {
+                return ResourceManager.GetString("HookPage.TextThreadRefreshLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Refresh all text thread 的本地化字符串。
+        /// </summary>
+        public static string HookPage_TextThreadRefreshTip {
+            get {
+                return ResourceManager.GetString("HookPage.TextThreadRefreshTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Hook Config 的本地化字符串。
         /// </summary>
         public static string HookPage_Title {
@@ -346,6 +562,15 @@ namespace ErogeHelper.Language {
         public static string Installer_Unload {
             get {
                 return ResourceManager.GetString("Installer.Unload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Dict 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_Dict {
+            get {
+                return ResourceManager.GetString("MecabPage.Dict", resourceCulture);
             }
         }
         
@@ -427,6 +652,15 @@ namespace ErogeHelper.Language {
         public static string MecabPage_Romaji {
             get {
                 return ResourceManager.GetString("MecabPage.Romaji", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text Flyout 的本地化字符串。
+        /// </summary>
+        public static string MecabPage_TextFlyout {
+            get {
+                return ResourceManager.GetString("MecabPage.TextFlyout", resourceCulture);
             }
         }
         

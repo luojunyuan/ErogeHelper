@@ -54,16 +54,21 @@
                     <ui:FlyoutService.Flyout>
                         <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
                             <ui:AppBarButton 
-                                Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]" ToolTip="Decrease size"/>
+                                Icon="FontDecrease" cm:Message.Attach="[Click] = [ZoomOut]" 
+                                ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
                             <ui:AppBarButton 
-                                Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" ToolTip="Increase size"/>
-                            <ui:AppBarButton cm:Message.Attach="[Click] = [VolumeDown]" ToolTip="Volume down">
+                                Icon="FontIncrease" cm:Message.Attach="[Click] = [ZoomIn]" 
+                                ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}"/>
+                            <ui:AppBarButton 
+                                cm:Message.Attach="[Click] = [VolumeDown]" 
+                                ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Volume1}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
                             <ui:AppBarButton 
-                                Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" ToolTip="Volume Up"/>
+                                Icon="Volume" cm:Message.Attach="[Click] = [VolumeUp]" 
+                                ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}"/>
                             <ui:AppBarButton 
                                 cm:Message.Attach="[Click] = [SwitchGameScreen]" Loaded="FullScreenButton_Loaded"
                                 Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
@@ -76,7 +81,7 @@
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
                                                 <Setter Property="Icon" Value="Pin"/>
-                                                <Setter Property="ToolTip" Value="Unpin Japanese text" />
+                                                <Setter Property="ToolTip" Value="{x:Static resx:Strings.GameView_PinnedTip}" />
                                             </Trigger>
                                             <Trigger Property="IsChecked" Value="False">
                                                 <Setter Property="Icon">
@@ -84,7 +89,7 @@
                                                         <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Unpin}"/>
                                                     </Setter.Value>
                                                 </Setter>
-                                                <Setter Property="ToolTip" Value="Pin Japanese text" />
+                                                <Setter Property="ToolTip" Value="{x:Static resx:Strings.GameView_UnpinTip}" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>

@@ -73,23 +73,23 @@
                                 </TextBox.Text>
                             </TextBox>
 
-                            <ui:AppBarButton Height="32" Width="32" ToolTip="Pick up a RegExp">
+                            <ui:AppBarButton Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_RegExpTip}">
                                 <ui:AppBarButton.Flyout>
                                     <ui:MenuFlyout Placement="Bottom">
                                         <MenuItem
-                                            Header="Delete characters before '「'"
+                                            Header="{x:Static resx:Strings.HookPage_RegExpTag1}"
                                             cm:Message.Attach="[Click] = [RegExpTag1]"/>
                                         <MenuItem 
-                                            Header="Delete characters after '」'"
+                                            Header="{x:Static resx:Strings.HookPage_RegExpTag2}"
                                             cm:Message.Attach="[Click] = [RegExpTag2]"/>
                                         <MenuItem 
-                                            Header="Delete ruby like &lt;.*?>" 
+                                            Header="{x:Static resx:Strings.HookPage_RegExpTag3}" 
                                             cm:Message.Attach="[Click] = [RegExpTag3]"/>
                                         <MenuItem 
-                                            Header="Delete linebreaks"
+                                            Header="{x:Static resx:Strings.HookPage_RegExpTag4}"
                                             cm:Message.Attach="[Click] = [RegExpTag4]"/>
                                         <MenuItem 
-                                            Header="Delete any Ascii chractors"
+                                            Header="{x:Static resx:Strings.HookPage_RegExpTag5}"
                                             cm:Message.Attach="[Click] = [RegExpTag5]"/>
                                     </ui:MenuFlyout>
                                 </ui:AppBarButton.Flyout>
@@ -124,10 +124,12 @@
                     <ui:SimpleStackPanel Spacing="10">
                         <StackPanel Orientation="Horizontal">
                             <ui:AppBarButton 
-                                Label="Clear" Icon="Refresh" ToolTip="Refresh all text thread" 
+                                Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}" 
+                                Icon="Refresh" ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" 
                                 cm:Message.Attach="[Click] = [ClearHookMapData]"/>
                             <ui:AppBarButton 
-                                x:Name="CodeButton" Label="Code" ToolTip="Input HCode or RCode" 
+                                x:Name="CodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}"
+                                ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}" 
                                 Click="CodeButton_Click">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Component}" />
@@ -136,7 +138,8 @@
                             <!-- Hook Code -->
                             <ui:ContentDialog
                                 x:Name="CodeDialog" Title="{x:Static resx:Strings.HookPage_HookCode}"
-                                CloseButtonText="Cancel" PrimaryButtonText="{x:Static resx:Strings.HookPage_Insert}"
+                                CloseButtonText="{x:Static resx:Strings.HookPage_CodeSearchCancel}" 
+                                PrimaryButtonText="{x:Static resx:Strings.HookPage_Insert}"
                                 cm:Message.Attach="[PrimaryButtonClick] = [InsertCode]; 
                                     [Closing] = [DialogClosingEvent($eventArgs)]" DefaultButton="Primary"
                                 IsPrimaryButtonEnabled="{Binding CanInsertCode}">
@@ -161,17 +164,13 @@
                                         </TextBox>
                                         
                                         <ui:AppBarButton 
-                                            Height="32" Width="32" ToolTip="Search code on Aniclan"
+                                            Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_CodeSearchTip}"
                                             cm:Message.Attach="[Click] = [SearchCode]">
                                             <ui:AppBarButton.Icon>
                                                 <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
                                             </ui:AppBarButton.Icon>
                                         </ui:AppBarButton>
                                     </ui:SimpleStackPanel>
-
-                                    <!--<ui:ProgressBar 
-                                        IsIndeterminate="True" ShowPaused="{Binding IsChecked, ElementName=PausedRB}"
-                                        ShowError="{Binding IsChecked, ElementName=ErrorRB}"/>-->
                                 </ui:SimpleStackPanel>
                                 
                             </ui:ContentDialog>

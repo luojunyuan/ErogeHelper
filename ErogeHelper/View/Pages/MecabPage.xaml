@@ -25,7 +25,7 @@
                 Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabToggle}" 
                 IsEnabled="{Binding ElementName=ModuleDownloader, Path=Visibility, 
                     Converter={StaticResource VisibleToFalseConverter}}" />
-            <GroupBox Header="Text Flyout" IsEnabled="{Binding MecabToggle}">
+            <GroupBox Header="{x:Static resx:Strings.MecabPage_TextFlyout}" IsEnabled="{Binding MecabToggle}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">
                         <RadioButton 
@@ -51,7 +51,7 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
 
-            <GroupBox Header="Dict" IsEnabled="{Binding MecabToggle}">
+            <GroupBox Header="{x:Static resx:Strings.MecabPage_Dict}" IsEnabled="{Binding MecabToggle}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:ToggleSwitch Header="Moji辞書" IsOn="{Binding MojiDictToggle}" />
                     <Label Content="Token"/>
