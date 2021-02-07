@@ -9,8 +9,6 @@
   <br>
 </p>
 
-![example](https://i.loli.net/2021/02/06/5oZNrmnFstWyX3z.png)
-
 帮助日语学习者轻松阅读不认识的汉字读音，以及查询游戏中的单词！现仅支持在线的Moji辞书。
 
 Eroge Helper 面向用户友好进行开发。
