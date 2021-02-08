@@ -16,41 +16,54 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{22D70A92-E0F9-47DF-AB90-165521F42662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22D70A92-E0F9-47DF-AB90-165521F42662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22D70A92-E0F9-47DF-AB90-165521F42662}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{22D70A92-E0F9-47DF-AB90-165521F42662}.Debug|x86.Build.0 = Debug|Any CPU
 		{22D70A92-E0F9-47DF-AB90-165521F42662}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22D70A92-E0F9-47DF-AB90-165521F42662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22D70A92-E0F9-47DF-AB90-165521F42662}.Release|x86.ActiveCfg = Release|Any CPU
+		{22D70A92-E0F9-47DF-AB90-165521F42662}.Release|x86.Build.0 = Release|Any CPU
 		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Debug|x86.Build.0 = Debug|Any CPU
 		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Release|x86.ActiveCfg = Release|Any CPU
+		{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}.Release|x86.Build.0 = Release|Any CPU
 		{9E103978-DD5E-4DA1-968A-971904BA725B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E103978-DD5E-4DA1-968A-971904BA725B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E103978-DD5E-4DA1-968A-971904BA725B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E103978-DD5E-4DA1-968A-971904BA725B}.Debug|x86.Build.0 = Debug|Any CPU
 		{9E103978-DD5E-4DA1-968A-971904BA725B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E103978-DD5E-4DA1-968A-971904BA725B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E103978-DD5E-4DA1-968A-971904BA725B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E103978-DD5E-4DA1-968A-971904BA725B}.Release|x86.Build.0 = Release|Any CPU
 		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Debug|x86.Build.0 = Debug|Any CPU
 		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Release|x86.ActiveCfg = Release|Any CPU
+		{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}.Release|x86.Build.0 = Release|Any CPU
 		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Debug|x86.Build.0 = Debug|Any CPU
 		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Release|x86.ActiveCfg = Release|Any CPU
+		{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {52982E9E-C273-42CD-97B6-B156E1006A71}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {52982E9E-C273-42CD-97B6-B156E1006A71}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {52982E9E-C273-42CD-97B6-B156E1006A71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52982E9E-C273-42CD-97B6-B156E1006A71}

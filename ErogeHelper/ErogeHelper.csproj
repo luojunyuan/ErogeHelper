@@ -75,8 +75,9 @@
     </None>
   </ItemGroup>-->
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist $(ProjectDir)$(OutDir)libs\ xcopy $(ProjectDir)libs\ $(ProjectDir)$(OutDir)\libs\ /e" />
-  </Target>
-
+  <ItemGroup>
+    <Content Include="libs\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
