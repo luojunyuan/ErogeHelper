@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 
 namespace ErogeHelper.Common.Helper
 {
-    internal static class ScrollViewerHelperEx
+    internal static class ScrollViewerHelper
     {
         #region IsAnimating
 
@@ -18,7 +18,7 @@ namespace ErogeHelper.Common.Helper
             DependencyProperty.RegisterAttached(
                 "IsAnimating",
                 typeof(bool),
-                typeof(ScrollViewerHelperEx),
+                typeof(ScrollViewerHelper),
                 new PropertyMetadata(false));
 
         internal static bool GetIsAnimating(ScrollViewer scrollViewer)
@@ -38,7 +38,7 @@ namespace ErogeHelper.Common.Helper
         internal static readonly DependencyProperty CurrentVerticalOffsetProperty =
             DependencyProperty.RegisterAttached("CurrentVerticalOffset",
                 typeof(double),
-                typeof(ScrollViewerHelperEx),
+                typeof(ScrollViewerHelper),
                 new PropertyMetadata(0.0, OnCurrentVerticalOffsetChanged));
 
         private static double GetCurrentVerticalOffset(ScrollViewer scrollViewer)
@@ -66,7 +66,7 @@ namespace ErogeHelper.Common.Helper
         internal static readonly DependencyProperty CurrentHorizontalOffsetProperty =
             DependencyProperty.RegisterAttached("CurrentHorizontalOffset",
                 typeof(double),
-                typeof(ScrollViewerHelperEx),
+                typeof(ScrollViewerHelper),
                 new PropertyMetadata(0.0, OnCurrentHorizontalOffsetChanged));
 
         private static double GetCurrentHorizontalOffset(ScrollViewer scrollViewer)

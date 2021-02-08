@@ -11,7 +11,7 @@
       d:DesignHeight="450" d:DesignWidth="400"
       Title="{x:Static resx:Strings.About_Title}">
 
-    <ScrollViewer PanningMode="Both" VerticalScrollBarVisibility="Auto">
+    <control:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Spacing="10" Margin="20, 10">
             <TextBlock 
                 FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" 
@@ -54,5 +54,5 @@
                 Content="{x:Static resx:Strings.About_OpenNewIssue}" 
                 NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
         </ui:SimpleStackPanel>
-    </ScrollViewer>
+    </control:ScrollViewerSmooth>
 </Page>

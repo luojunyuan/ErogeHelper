@@ -6,11 +6,12 @@
       xmlns:local="clr-namespace:ErogeHelper.View.Pages"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+      xmlns:control="clr-namespace:ErogeHelper.View.Control"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="400"
       Title="{x:Static resx:Strings.GeneralPage_Title}">
 
-    <ScrollViewer PanningMode="None">
+    <control:ScrollViewerSmooth PanningMode="None">
         <StackPanel Margin="20, 10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Msic}">
                 <ui:SimpleStackPanel Spacing="10">
@@ -28,5 +29,5 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>
-    </ScrollViewer>
+    </control:ScrollViewerSmooth>
 </Page>

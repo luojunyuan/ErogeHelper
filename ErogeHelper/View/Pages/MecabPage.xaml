@@ -7,11 +7,12 @@
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       xmlns:cm="http://caliburnmicro.com"
+      xmlns:control="clr-namespace:ErogeHelper.View.Control" 
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="800"
       Title="{x:Static resx:Strings.MecabPage_Title}">
 
-    <ScrollViewer PanningMode="Both">
+    <control:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <Button 
                 x:Name="ModuleDownloader" Content="Download" ToolTip="Download dic to enable this function"
@@ -62,5 +63,5 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
         </ui:SimpleStackPanel>
-    </ScrollViewer>
+    </control:ScrollViewerSmooth>
 </Page>

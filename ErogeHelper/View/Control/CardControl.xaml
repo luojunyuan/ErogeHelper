@@ -8,11 +8,12 @@
              xmlns:cm="http://caliburnmicro.com"
              xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
              xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+             xmlns:control="clr-namespace:ErogeHelper.View.Control"
              mc:Ignorable="d" >
 
     <UserControl.Resources>
         <DataTemplate x:Key="MojiContentTemplate">
-            <ScrollViewer PanningMode="Both">
+            <control:ScrollViewerSmooth PanningMode="Both">
                 <!--<ProgressBar IsIndeterminate="{Binding CardInfo.IsProcess}" />-->
                 <ui:SimpleStackPanel Spacing="10" Margin="10 20">
                     <!--Word-->
@@ -53,7 +54,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ui:SimpleStackPanel>
-            </ScrollViewer>
+            </control:ScrollViewerSmooth>
         </DataTemplate>
 
         <DataTemplate x:Key="JishoContentTemplate">
@@ -159,7 +160,7 @@
                         <ui:TabItemHelper.Icon>
                             <ui:BitmapIcon UriSource="/Assets/jisho.org.png" ShowAsMonochrome="False" />
                         </ui:TabItemHelper.Icon>
-                        <ScrollViewer Width="400" Height="300">
+                        <control:ScrollViewerSmooth Width="400" Height="300">
                             <ItemsControl 
                                 ItemsSource="{Binding JishoCollection}" 
                                 ItemTemplate="{StaticResource JishoContentTemplate}">
@@ -169,7 +170,7 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
-                        </ScrollViewer>
+                        </control:ScrollViewerSmooth>
                     </TabItem>
                     <!--<TabItem Header="EBWin">
                     </TabItem>-->

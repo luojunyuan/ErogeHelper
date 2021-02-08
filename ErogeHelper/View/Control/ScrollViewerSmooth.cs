@@ -26,7 +26,7 @@ namespace ErogeHelper.View.Control
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             if (e.Handled) { return; }
-            ScrollViewerHelperEx.OnMouseWheel(this, e);
+            ScrollViewerHelper.OnMouseWheel(this, e);
             e.Handled = true;
         }
     }
