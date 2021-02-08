@@ -15,6 +15,8 @@ namespace ErogeHelper
     {
         App()
         {
+            AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
+
             // Set environment to app directory
             var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location)!;
             Directory.SetCurrentDirectory(currentDirectory);

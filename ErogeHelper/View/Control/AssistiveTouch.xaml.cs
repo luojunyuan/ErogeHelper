@@ -261,30 +261,5 @@ namespace ErogeHelper.View.Control
                 });
             }, cancelToken);
         }
-
-        // XXX: Seems didn't work in this Controls, maybe only work with window
-        #region Disable White Point by Touch
-        protected override void OnPreviewTouchDown(TouchEventArgs e)
-        {
-            base.OnPreviewTouchDown(e);
-            Cursor = Cursors.None;
-        }
-        protected override void OnPreviewTouchMove(TouchEventArgs e)
-        {
-            base.OnPreviewTouchMove(e);
-            Cursor = Cursors.None;
-        }
-        protected override void OnGotMouseCapture(MouseEventArgs e)
-        {
-            base.OnGotMouseCapture(e);
-            Cursor = Cursors.Arrow;
-        }
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            base.OnPreviewMouseMove(e);
-            if (e.StylusDevice == null)
-                Cursor = Cursors.Arrow;
-        }
-        #endregion
     }
 }
