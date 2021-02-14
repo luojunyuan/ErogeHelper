@@ -211,6 +211,10 @@ namespace ErogeHelper.ViewModel.Pages
             }
             else if (hp.Handle == 1) // Clipboard
             {
+                if (!Language.Strings.Culture.Name.Equals("zh-Hans"))
+                {
+                    hp.Name = "Clipboard";
+                }
                 return;
             }
 
