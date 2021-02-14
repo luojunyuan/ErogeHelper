@@ -223,9 +223,6 @@ namespace ErogeHelper.Common
                                                WinEventDelegate _delegate,
                                                uint idProcess, uint idThread)
         {
-#pragma warning disable SYSLIB0003 // 类型或成员已过时
-            new UIPermission(UIPermissionWindow.AllWindows).Demand();
-#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.SetWinEventHook(eventFrom, eventTo,
                                                        IntPtr.Zero, _delegate,
                                                        idProcess, idThread,
@@ -234,9 +231,6 @@ namespace ErogeHelper.Common
         
         public static IntPtr WinEventHookOne(SWEH_Events _event, WinEventDelegate _delegate, uint idProcess, uint idThread)
         {
-#pragma warning disable SYSLIB0003 // 类型或成员已过时
-            new UIPermission(UIPermissionWindow.AllWindows).Demand();
-#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.SetWinEventHook(_event, _event,
                                                        IntPtr.Zero, _delegate,
                                                        idProcess, idThread,
@@ -255,9 +249,6 @@ namespace ErogeHelper.Common
         /// <returns></returns>
         public static uint GetWindowThread(IntPtr hWnd)
         {
-#pragma warning disable SYSLIB0003 // 类型或成员已过时
-            new UIPermission(UIPermissionWindow.AllWindows).Demand();
-#pragma warning restore SYSLIB0003 // 类型或成员已过时
             return UnsafeNativeMethods.GetWindowThreadProcessId(hWnd, IntPtr.Zero);
         }
 
