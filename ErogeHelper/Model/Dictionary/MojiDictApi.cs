@@ -13,11 +13,11 @@ namespace ErogeHelper.Model.Dictionary
         static readonly string searchApi = "/parse/functions/search_v3";
         static readonly string fetchApi = "/parse/functions/fetchWord_v2";
 
-        private static readonly RestClient client = new RestClient(baseAddress);
-
         // TODO: Add none async method
         public static async Task<MojiSearchResponse> SearchAsync(string query, CancellationToken token = default)
         {
+            var client = new RestClient(baseAddress);
+
             MojiSearchPayload searchPayload = new MojiSearchPayload
             {
                 langEnv = "zh-CN_ja",                                     // no need
@@ -69,6 +69,8 @@ namespace ErogeHelper.Model.Dictionary
 
         public static async Task<MojiFetchResponse> FetchAsync(string tarId, CancellationToken token)
         {
+            var client = new RestClient(baseAddress);
+
             MojiFetchPayload fetchPayload = new MojiFetchPayload
             {
                 wordId = tarId,

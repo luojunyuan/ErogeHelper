@@ -13,10 +13,10 @@ namespace ErogeHelper.Model.Dictionary
     {
         private const string baseAddress = "https://jisho.org";
 
-        private static readonly RestClient client = new RestClient(baseAddress);
-
         public static async Task<JishoResult> SearchWordAsync(string query, CancellationToken token = default)
         {
+            var client = new RestClient(baseAddress);
+
             var request = new RestRequest("api/v1/search/words", Method.GET)
                 .AddParameter("keyword", query);
 
