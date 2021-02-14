@@ -12,7 +12,7 @@
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350"
-        Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height">
+        Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
     <control:ScrollViewerSmooth PanningMode="Both">
         <StackPanel Margin="20,10">

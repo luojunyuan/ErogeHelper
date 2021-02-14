@@ -275,10 +275,10 @@
     <value>Window (Alt + Enter)</value>
   </data>
   <data name="HookPage.RegExpTag1" xml:space="preserve">
-    <value>Delete characters before '「'</value>
+    <value>Delete characters before '「' or '『'</value>
   </data>
   <data name="HookPage.RegExpTag2" xml:space="preserve">
-    <value>Delete characters after '」'</value>
+    <value>Delete characters after '」' or '』'</value>
   </data>
   <data name="HookPage.RegExpTag3" xml:space="preserve">
     <value>Delete ruby like &lt;.*?&gt;</value>

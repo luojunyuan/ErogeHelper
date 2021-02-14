@@ -431,7 +431,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Delete characters before &apos;「&apos; 的本地化字符串。
+        ///   查找类似 Delete characters before &apos;「&apos; or &apos;『&apos; 的本地化字符串。
         /// </summary>
         public static string HookPage_RegExpTag1 {
             get {
@@ -440,7 +440,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Delete characters after &apos;」&apos; 的本地化字符串。
+        ///   查找类似 Delete characters after &apos;」&apos; or &apos;』&apos; 的本地化字符串。
         /// </summary>
         public static string HookPage_RegExpTag2 {
             get {

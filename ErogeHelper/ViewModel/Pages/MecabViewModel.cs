@@ -199,6 +199,7 @@ namespace ErogeHelper.ViewModel.Pages
             DataRepository.TextTemplateConfig = type;
         }
 
+        // TODO: show all ruby when select romoji
         public bool Romaji
         {
             get => _romaji;

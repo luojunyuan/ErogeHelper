@@ -15,6 +15,7 @@ namespace ErogeHelper
     {
         App()
         {
+            // Enable Pointer for touch device
             AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
 
             // Set environment to app directory

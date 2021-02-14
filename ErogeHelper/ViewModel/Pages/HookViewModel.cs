@@ -120,7 +120,7 @@ namespace ErogeHelper.ViewModel.Pages
         }
 
         private const string tag1 = ".*(?=[「|『])";
-        private const string tag2 = "((?<=[」|』]).*)";
+        private const string tag2 = "(?<=[」|』]).*";
         private const string tag3 = "<.*?>";
         private const string tag4 = "_r|<br>|#n|\\n";
         private const string tag5 = "[\\x00-\\xFF]";
@@ -271,7 +271,9 @@ namespace ErogeHelper.ViewModel.Pages
             GameConfig.RegExp = RegExp;
 
             // TODO: Refactor
-            var sendText = SelectedText;
+            var sendText = SelectedText
+                .Replace("|~S~|", string.Empty)
+                .Replace("|~E~|", string.Empty);
             if (!string.IsNullOrWhiteSpace(RegExp))
             {
                 var list = Regex.Split(sendText, RegExp);

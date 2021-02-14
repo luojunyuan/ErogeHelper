@@ -303,10 +303,10 @@
     <value>在 Aniclan 上搜索特殊码</value>
   </data>
   <data name="HookPage.RegExpTag1" xml:space="preserve">
-    <value>去除“『”之前的所有文本</value>
+    <value>去除或“「”之前的所有文本</value>
   </data>
   <data name="HookPage.RegExpTag2" xml:space="preserve">
-    <value>去除“』”之后的所有文本</value>
+    <value>去除“』”或“」”之后的所有文本</value>
   </data>
   <data name="HookPage.RegExpTag3" xml:space="preserve">
     <value>去除形如&lt;.*?&gt;的假名标签</value>

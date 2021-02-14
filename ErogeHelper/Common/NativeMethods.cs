@@ -88,7 +88,7 @@ namespace ErogeHelper.Common
         {
             EVENT_MIN = 0x00000001,
             EVENT_MAX = 0x7FFFFFFF,
-            EVENT_SYSTEM_SOUND = 0x0001,
+            //EVENT_SYSTEM_SOUND = 0x0001,
             EVENT_SYSTEM_ALERT = 0x0002,
             EVENT_SYSTEM_FOREGROUND = 0x0003,
             EVENT_SYSTEM_MENUSTART = 0x0004,
@@ -331,35 +331,35 @@ namespace ErogeHelper.Common
         }
         public static void PressKey(byte Keys)
         {
-            SafeNativeMethods.keybd_event(Keys, 0, 0, 0);
-            SafeNativeMethods.keybd_event(Keys, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(Keys, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(Keys, 0, 2, 0);
         }
         public static void PressCtrlC()
         {
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 2, 0);
         }
         public static void PressCtrlV()
         {
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyV, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
-            SafeNativeMethods.keybd_event(vbKeyV, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyV, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyV, 0, 2, 0);
         }
         public static void ActiveDeepL()
         {
             // Ctrl+C Shift+C
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyControl, 0, 2, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyControl, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 2, 0);
 
-            SafeNativeMethods.keybd_event(vbKeyShift, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 0, 0);
-            SafeNativeMethods.keybd_event(vbKeyShift, 0, 2, 0);
-            SafeNativeMethods.keybd_event(vbKeyC, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyShift, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 0, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyShift, 0, 2, 0);
+            SafeNativeMethods.KeybdEvent(vbKeyC, 0, 2, 0);
         }
 
         // ---
@@ -439,14 +439,14 @@ namespace ErogeHelper.Common
         public static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
 
         [DllImport("user32.dll", EntryPoint = "keybd_event", SetLastError = true)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+        public static extern void KeybdEvent(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
 
         // ---
 
         [DllImport("SHELL32", CallingConvention = CallingConvention.StdCall)]
         public static extern uint SHAppBarMessage(int dwMessage, ref APPBARDATA pData);
 
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        [DllImport("User32.dll", CharSet = CharSet.Unicode)]
         public static extern int RegisterWindowMessage(string msg);
 
         [DllImport("user32.dll")]
