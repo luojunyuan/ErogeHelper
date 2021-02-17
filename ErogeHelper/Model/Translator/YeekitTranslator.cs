@@ -19,9 +19,9 @@ namespace ErogeHelper.Model.Translator
         public string Name => "Yeekit";
 
         // Supported languages https://www.yeekit.com/site/translate
-        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
+        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 
-        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語 };
+        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
         private static RestClient client = new RestClient("https://www.yeekit.com");

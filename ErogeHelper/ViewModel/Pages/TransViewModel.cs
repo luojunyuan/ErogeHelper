@@ -20,16 +20,16 @@ namespace ErogeHelper.ViewModel.Pages
 
         public TransViewModel()
         {
+            SrcLanguageList = SrcLanguageListInit();
             SelectedSrcLang = DataRepository.TransSrcLanguage;
+
+            TargetLanguageList = TargetLanguageListRefresh(out _);
             SelectedTarLang = DataRepository.TransTargetLanguage;
+
             RefreshTranslatorList();
         }
 
-        public BindableCollection<LanguageItem> SrcLanguageList { get; } = new()
-        {
-            new() { Language = Languages.日本語.ToString(), LangEnum = Languages.日本語 },
-            new() { Language = Languages.English.ToString(), LangEnum = Languages.English },
-        };
+        public BindableCollection<LanguageItem> SrcLanguageList { get; }
 
         public Languages SelectedSrcLang { get => _selectedSrcLang; set { _selectedSrcLang = value; NotifyOfPropertyChange(() => SelectedSrcLang); } }
 
@@ -37,22 +37,25 @@ namespace ErogeHelper.ViewModel.Pages
         {
             DataRepository.TransSrcLanguage = SelectedSrcLang;
 
-            //RefreshTargetLanguageList();
+            var markTarLang = SelectedTarLang;
+            TargetLanguageListRefresh(out Dictionary<Languages, bool> tmpLangDict);
+            if (!tmpLangDict.ContainsKey(markTarLang))
+            {
+                Languages firstLang = tmpLangDict.GetEnumerator().Current.Key;
+                Log.Debug(firstLang.ToString());
+                SelectedTarLang = firstLang;
+                DataRepository.TransTargetLanguage = SelectedTarLang;
+            }
             RefreshTranslatorList();
         }
 
-        public BindableCollection<LanguageItem> TargetLanguageList { get; } = new()
-        {
-            new() { Language = Languages.简体中文.ToString(), LangEnum = Languages.简体中文 },
-            new() { Language = Languages.English.ToString(), LangEnum = Languages.English },
-        };
+        public BindableCollection<LanguageItem> TargetLanguageList { get; }
 
         public Languages SelectedTarLang { get => _selectedTarLang; set { _selectedTarLang = value; NotifyOfPropertyChange(() => SelectedTarLang); } }
 
         public void TargetLanguageChanged()
         {
             DataRepository.TransTargetLanguage = SelectedTarLang;
-
             RefreshTranslatorList();
         }
 
@@ -73,95 +76,44 @@ namespace ErogeHelper.ViewModel.Pages
             }
         }
 
-        private void RefreshTargetLanguageList()
+        private BindableCollection<LanguageItem> SrcLanguageListInit()
         {
-            var markLangItem = new LanguageItem() { Language = SelectedTarLang.ToString(), LangEnum = SelectedTarLang };
-            TargetLanguageList.Clear();
+            BindableCollection<LanguageItem> langList = new();
+            Dictionary<Languages, bool> tmpMark = new();
+            foreach (var translator in TranslatorManager.GetAll)
+            {
+                foreach(var lang in translator.SupportSrcLang)
+                {
+                    if (!tmpMark.ContainsKey(lang))
+                    {
+                        langList.Add(new LanguageItem() { LangEnum = lang, Language = lang.ToString() });
+                        tmpMark[lang] = true;
+                    }
+                }
+            }
+            return langList;
+        }
 
-            Languages markFirstPositionTargetlang = Languages.Auto;
-            foreach(var translator in TranslatorManager.GetAll)
+        private BindableCollection<LanguageItem> TargetLanguageListRefresh(out Dictionary<Languages, bool> tmpMark)
+        {
+            BindableCollection<LanguageItem> langList = new();
+            tmpMark = new();
+            foreach (var translator in TranslatorManager.GetAll)
             {
                 if (translator.SupportSrcLang.Contains(SelectedSrcLang))
                 {
                     foreach (var lang in translator.SupportDesLang)
                     {
-                        var item = new LanguageItem() { LangEnum = lang, Language = lang.ToString() };
-                        if (!TargetLanguageList.Contains(item))
+                        if (!tmpMark.ContainsKey(lang))
                         {
-                            markFirstPositionTargetlang = lang;
-                            TargetLanguageList.Add(item);
+                            langList.Add(new LanguageItem() { LangEnum = lang, Language = lang.ToString() });
+                            tmpMark[lang] = true;
                         }
                     }
                 }
             }
-            if (TargetLanguageList.Contains(markLangItem))
-            {
-                SelectedTarLang = markLangItem.LangEnum;
-            }
-            else
-            {
-                SelectedTarLang = markFirstPositionTargetlang;
-            }
+            return langList;
         }
-
-        //public BindableCollection<string> SrcLanguageList { get; set; } = new() { "Japanese" };
-        //public BindableCollection<string> TargetLanguageList { get; set; } = new() { "Chinese Simplify" };
-
-        //public ComboBoxItem SrcLangItem
-        //{
-        //    get => _srcLangItem;
-        //    set
-        //    {
-        //        _srcLangItem = value;
-        //        NotifyOfPropertyChange(() => SrcLangItem);
-        //    }
-        //}
-        //public string SrcLang
-        //{
-        //    get => _srcLang; set
-        //    {
-        //        _srcLang = value;
-        //        NotifyOfPropertyChange(() => SrcLang);
-        //    }
-        //}
-        //public int SrcLangIndex
-        //{
-        //    get => _srcLangIndex; set { _srcLangIndex = value; NotifyOfPropertyChange(() => SrcLangIndex); }
-        //}
-        //public Languages? TarLang
-        //{
-        //    get => _tarLang;
-        //    set
-        //    {
-        //        _tarLang = value;
-        //        NotifyOfPropertyChange(() => TarLang);
-        //    }
-        //}
-
-
-        //public void TargetLanguageChanged()
-        //{
-        //    Log.Debug("right");
-        //}
-
-        //public TransViewModel()
-        //{
-        //    if (DataRepository.TransSrcLanguage == Languages.Japenese)
-        //    {
-        //        SrcLangIndex = 0;
-        //    }
-        //    else if (DataRepository.TransSrcLanguage == Languages.English)
-        //    {
-        //        SrcLangIndex = 1;
-        //    }
-        //    var srcLangText = new LanguageEnumToStringConverter().Convert(DataRepository.TransSrcLanguage, null!, null!, null!) as string;
-        //    SrcLang = srcLangText!;
-        //    SrcLangItem = new ComboBoxItem() { Content = srcLangText };
-        //    TarLang = DataRepository.TransTargetLanguage;
-        //    //RefreshTranslatorList();
-        //}
-
-
     }
 
     class TransItem
