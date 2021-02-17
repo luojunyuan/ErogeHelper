@@ -12,7 +12,7 @@ namespace ErogeHelper.Common.Service
     interface IGameViewDataService
     {
         public delegate void SourceDataEventHandler(object sender, BindableCollection<SingleTextItem> e);
-        public delegate void AppendDataEventHandler(object sender, string e);
+        public delegate void AppendDataEventHandler(object sender, string e, string extra);
         public event SourceDataEventHandler? SourceDataEvent;
         public event AppendDataEventHandler? AppendDataEvent;
 

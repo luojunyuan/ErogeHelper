@@ -41,12 +41,12 @@ namespace ErogeHelper.ViewModel
 
             dataService.Start();
             dataService.SourceDataEvent += (_, receiveData) => TextControl.SourceTextCollection = receiveData;
-            dataService.AppendDataEvent += (_, receiveData) => AppendTextList.Add(receiveData);
+            dataService.AppendDataEvent += (_, receiveData, extraInfo) => AppendTextList.Add(new() { Message = receiveData, ExtraInfo = extraInfo});
 
             PinSourceTextToggleVisubility = dataService.GetPinToggleVisibility();
         }
 
-        public BindableCollection<string> AppendTextList { get; set; } = new BindableCollection<string>();
+        public BindableCollection<AppendItem> AppendTextList { get; set; } = new();
 
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(10);
 
@@ -251,5 +251,11 @@ namespace ErogeHelper.ViewModel
             .Hold(KeyCode.Control).Invoke().ConfigureAwait(false);
         public async void PressSkipRelease() => await WindowsInput.Simulate.Events()
             .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
+    }
+
+    class AppendItem
+    {
+        public string Message { get; set; } = string.Empty;
+        public string ExtraInfo { get; set; } = string.Empty;
     }
 }

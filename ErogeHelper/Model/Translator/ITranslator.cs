@@ -13,9 +13,13 @@ namespace ErogeHelper.Model.Translator
 
         bool IsEnable { get; set; }
 
+        bool NeedKey { get; }
+
         List<Languages> SupportSrcLang { get; }
 
         List<Languages> SupportDesLang { get; }
+
+        Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang);
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
@@ -24,17 +28,16 @@ namespace ErogeHelper.Model.Translator
             // SetCancelToken
             cancelToken.Cancel();
             cancelToken = new CancellationTokenSource();
+            var token = cancelToken.Token;
 
             var result = await TranslateAsyncImpl(sourceText, srcLang, desLang);
 
             // Insert CancelAssert Before Return
-            if (cancelToken.Token.IsCancellationRequested)
+            if (token.IsCancellationRequested)
             {
                 return string.Empty;
             }
             return result;
         }
-
-        Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang);
     }
 }

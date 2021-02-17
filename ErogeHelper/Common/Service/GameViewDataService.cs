@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
+using ErogeHelper.Model.Translator;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Control;
 using ErogeHelper.ViewModel.Pages;
@@ -8,6 +9,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace ErogeHelper.Common.Service
@@ -66,7 +68,7 @@ namespace ErogeHelper.Common.Service
             if (hp.Text.Length > 120)
             {
                 gameViewModel.TextControl.SourceTextCollection.Clear();
-                AppendDataEvent?.Invoke(typeof(GameViewDataService), Language.Strings.GameView_MaxLenthTip);
+                AppendDataEvent?.Invoke(typeof(GameViewDataService), Language.Strings.GameView_MaxLenthTip, string.Empty);
                 return;
             }
 
@@ -101,6 +103,19 @@ namespace ErogeHelper.Common.Service
             {
                 var collect = Utils.BindableTextMaker(mecabHelper.IpaDicParser(hp.Text));
                 SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
+            }
+
+            foreach(var translator in TranslatorManager.GetEnabled())
+            {
+                Task.Run(async () =>
+                { 
+                    var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
+                    if (!result.Equals(string.Empty))
+                    {
+                        Log.Debug($"{translator.Name}: {result}");
+                        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, translator.Name);
+                    }
+                });
             }
 
             // hard code for sakura no uta

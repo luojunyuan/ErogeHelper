@@ -11,20 +11,20 @@ namespace ErogeHelper.Model.Translator
 {
     public class BaiduApiTranslator : ITranslator
     {
-        public bool IsEnable { get; set; } = DataRepository.BaiduApiEnable;
-
         public string Name => "BaiduApi";
 
-        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
+        public bool IsEnable { get => DataRepository.BaiduApiEnable; set => DataRepository.BaiduApiEnable = value; }
+
+        public bool NeedKey { get => true; }
 
         public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語 };
 
-        private static readonly RestClient client = new RestClient("http://api.fanyi.baidu.com");
-
         public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
         {
+            RestClient client = new RestClient("http://api.fanyi.baidu.com");
+
             // Define Support Language
             string from = srcLang switch
             {
@@ -66,6 +66,8 @@ namespace ErogeHelper.Model.Translator
 
             return result;
         }
+
+        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
         private string EncryptString(string str)
         {

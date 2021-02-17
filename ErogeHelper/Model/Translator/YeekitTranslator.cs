@@ -14,24 +14,26 @@ namespace ErogeHelper.Model.Translator
 {
     class YeekitTranslator : ITranslator
     {
-        public bool IsEnable { get; set; } = DataRepository.YeekitEnable;
-
         public string Name => "Yeekit";
+
+        public bool IsEnable { get => DataRepository.YeekitEnable;  set => DataRepository.YeekitEnable = value; } 
+
+        public bool NeedKey => false;
 
         // Supported languages https://www.yeekit.com/site/translate
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 
         public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
-        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
-        private static RestClient client = new RestClient("https://www.yeekit.com");
-
         public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
         {
+            RestClient client = new RestClient("https://www.yeekit.com");
+
             // Define Support Language
             string from = srcLang switch
             {
                 Languages.日本語 => "nja",
+                Languages.English => "nen",
                 _ => throw new Exception("Language not supported"),
             };
             string to = desLang switch
@@ -62,6 +64,8 @@ namespace ErogeHelper.Model.Translator
 
             return result;
         }
+
+        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
         private class YeekitResponse
         {

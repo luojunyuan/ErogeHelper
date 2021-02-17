@@ -8,7 +8,7 @@ namespace ErogeHelper.Model.Translator
 {
     class TranslatorManager
     {
-        public static List<ITranslator> GetAll { get; set; } = new List<ITranslator>()
+        public static List<ITranslator> GetAll { get; } = new List<ITranslator>()
         {
             new BaiduApiTranslator(),
             new YeekitTranslator(),
@@ -28,6 +28,18 @@ namespace ErogeHelper.Model.Translator
 
             return collect; 
         }
+
+        public static ITranslator GetTranslatorByName(string name)
+        {
+            foreach(var translator in GetAll)
+            {
+                if (translator.Name.Equals(name))
+                {
+                    return translator;
+                }
+            }
+            throw new Exception($"No translator {name}");
+        }
     }
 
     public enum TranslatorName
@@ -43,5 +55,4 @@ namespace ErogeHelper.Model.Translator
         日本語,
         English,
     }
-
 }

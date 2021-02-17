@@ -26,7 +26,15 @@ namespace ErogeHelper.ViewModel.Pages
             TargetLanguageList = TargetLanguageListRefresh(out _);
             SelectedTarLang = DataRepository.TransTargetLanguage;
 
-            RefreshTranslatorList();
+            foreach (var translator in TranslatorManager.GetAll)
+            {
+                if (translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang))
+                {
+                    var translatorItem = new TransItem()
+                    { CanbeSelected = !translator.NeedKey, Enable = translator.IsEnable, TransName = translator.Name };
+                    TranslatorList.Add(translatorItem);
+                }
+            }
         }
 
         public BindableCollection<LanguageItem> SrcLanguageList { get; }
@@ -63,6 +71,10 @@ namespace ErogeHelper.ViewModel.Pages
 
         private void RefreshTranslatorList()
         {
+            foreach(var translator in TranslatorManager.GetAll)
+            {
+                translator.IsEnable = false;
+            }
             TranslatorList.Clear();
 
             foreach (var translator in TranslatorManager.GetAll)
@@ -70,7 +82,7 @@ namespace ErogeHelper.ViewModel.Pages
                 if (translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang))
                 {
                     var translatorItem = new TransItem()
-                    { CanbeSelected = false, Enable = translator.IsEnable, TransName = translator.Name };
+                    { CanbeSelected = !translator.NeedKey, Enable = translator.IsEnable, TransName = translator.Name };
                     TranslatorList.Add(translatorItem);
                 }
             }
@@ -118,8 +130,20 @@ namespace ErogeHelper.ViewModel.Pages
 
     class TransItem
     {
+        private bool _enable;
+
         public bool CanbeSelected { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable 
+        { 
+            get => _enable; 
+            set { 
+                _enable = value; 
+                if (!TransName.Equals(string.Empty))
+                {
+                   TranslatorManager.GetTranslatorByName(TransName).IsEnable = value;
+                }
+            } 
+        }
         public string TransName { get; set; } = string.Empty;
     }
 
