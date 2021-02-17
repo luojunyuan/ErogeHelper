@@ -118,9 +118,9 @@ namespace ErogeHelper
                 .AsImplementedInterfaces()
                 .SingleInstance();
             // TODO: Do refactoring
-            //builder.RegisterType<EventAggregator>()
-            //    .AsImplementedInterfaces()
-            //    .SingleInstance();
+            builder.RegisterType<EventAggregator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             // Register viewModels
             builder.RegisterType<SelectProcessViewModel>();

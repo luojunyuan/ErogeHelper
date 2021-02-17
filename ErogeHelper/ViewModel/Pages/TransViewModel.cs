@@ -1,25 +1,32 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Converter;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Translator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ErogeHelper.ViewModel.Pages
 {
-    class TransViewModel : PropertyChangedBase
+    class TransViewModel : PropertyChangedBase, IHandle<RefreshTranslatorsListMessage>
     {
         #region Fields
         private Languages _selectedSrcLang;
         private Languages _selectedTarLang;
         #endregion
 
-        public TransViewModel()
+        private readonly IEventAggregator eventAggregator;
+
+        public TransViewModel(IEventAggregator eventAggregator)
         {
+            this.eventAggregator = eventAggregator;
+            eventAggregator.SubscribeOnUIThread(this);
+
             SrcLanguageList = SrcLanguageListInit();
             SelectedSrcLang = DataRepository.TransSrcLanguage;
 
@@ -61,10 +68,9 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<TransItem> TranslatorList { get; set; } = new();
 
-        public void SetTranslatorDialog(string translatorName)
-        {
-            Log.Debug(translatorName);
-        }
+        public async void SetTranslatorDialog(string translatorName) => 
+            await eventAggregator.PublishOnUIThreadAsync(
+                                                    new OpenApiKeyDialogMessage { TranslatorName = translatorName });
 
         private void RefreshTranslatorList(bool reset = false)
         {
@@ -83,10 +89,10 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     var translatorItem = new TransItem()
                     {
-                        CanbeSelected = !translator.NeedKey,
+                        CanbeSelected = translator.UnLock,
                         Enable = translator.IsEnable,
                         TransName = translator.Name,
-                        DialogHasExist = true,
+                        CanEdit = !translator.NeedKey,
                     };
                     TranslatorList.Add(translatorItem);
                 }
@@ -132,25 +138,18 @@ namespace ErogeHelper.ViewModel.Pages
             return langList;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="status">true enable, false disable</param>
-        private void SwitchDialogButtonEnable(bool status)
+        public async Task HandleAsync(RefreshTranslatorsListMessage message, CancellationToken cancellationToken)
         {
-            foreach (var item in TranslatorList)
-            {
-                item.DialogHasExist = status;
-            }
+            await Task.Run(() => RefreshTranslatorList());
         }
     }
 
     class TransItem : PropertyChangedBase
     {
         private bool _enable;
-        private bool dialogHasExist;
 
         public bool CanbeSelected { get; set; }
+
         public bool Enable
         {
             get => _enable;
@@ -163,17 +162,10 @@ namespace ErogeHelper.ViewModel.Pages
                 }
             }
         }
+
         public string TransName { get; set; } = string.Empty;
 
-        public bool DialogHasExist 
-        {
-            get => dialogHasExist;
-            set 
-            { 
-                dialogHasExist = value;
-                NotifyOfPropertyChange(() => DialogHasExist);
-            } 
-        }
+        public bool CanEdit { get; set; }
     }
 
     class LanguageItem

@@ -1,29 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common.Messenger;
+using ErogeHelper.View.Dialog;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ErogeHelper.View.Pages
 {
     /// <summary>
     /// TransPage.xaml 的交互逻辑
     /// </summary>
-    public partial class TransPage : Page
+    public partial class TransPage : Page, IHandle<OpenApiKeyDialogMessage>
     {
         public TransPage()
         {
             InitializeComponent();
-            DataContext = Caliburn.Micro.IoC.Get<ViewModel.Pages.TransViewModel>();
+            DataContext = IoC.Get<ViewModel.Pages.TransViewModel>();
+            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
+        }
+
+        public async Task HandleAsync(OpenApiKeyDialogMessage message, CancellationToken cancellationToken)
+        {
+            var translatorName = message.TranslatorName;
+            if (translatorName.Equals("BaiduApi"))
+            {
+                var result = await new BaiduApiDialog().ShowAsync();
+                if (result == ModernWpf.Controls.ContentDialogResult.Primary)
+                {
+                    await IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new RefreshTranslatorsListMessage());
+                }
+            }
         }
     }
 }

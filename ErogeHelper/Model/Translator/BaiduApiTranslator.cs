@@ -17,9 +17,11 @@ namespace ErogeHelper.Model.Translator
 
         public bool NeedKey { get => true; }
 
+        public bool UnLock { get => !DataRepository.BaiduApiSecretKey.Equals(string.Empty); }
+
         public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
-        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語 };
+        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 
         public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
         {
@@ -34,11 +36,15 @@ namespace ErogeHelper.Model.Translator
             string to = desLang switch
             {
                 Languages.简体中文 => "zh",
+                Languages.English => "en",
                 _ => throw new Exception("Language not supported"),
             };
 
-            string appId = DataRepository.BaiduApiAppid;
-            string secretKey = DataRepository.BaiduApiSecretKey;
+            if (appId.Equals(string.Empty))
+            {
+                appId = DataRepository.BaiduApiAppid;
+                secretKey = DataRepository.BaiduApiSecretKey;
+            }
             string query = sourceText;
             string salt = new Random().Next(100000).ToString();
             string sign = EncryptString(appId + query + salt + secretKey);
@@ -55,6 +61,8 @@ namespace ErogeHelper.Model.Translator
             string result;
             try
             {
+                // request.AddParameter(_cookie_name, _cookie_value, ParameterType.Cookie);
+                // FIXME: "System.Net.CookieException" (System.Net.Primitives.dll) ?
                 response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
                 result = string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
             }
@@ -67,7 +75,10 @@ namespace ErogeHelper.Model.Translator
             return result;
         }
 
-        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
+        public string appId = DataRepository.BaiduApiAppid;
+        public string secretKey = DataRepository.BaiduApiSecretKey;
+
+        private static CancellationTokenSource cancelToken = new();
 
         private string EncryptString(string str)
         {

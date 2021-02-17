@@ -20,6 +20,8 @@ namespace ErogeHelper.Model.Translator
 
         public bool NeedKey => false;
 
+        public bool UnLock { get => true; }
+
         // Supported languages https://www.yeekit.com/site/translate
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 

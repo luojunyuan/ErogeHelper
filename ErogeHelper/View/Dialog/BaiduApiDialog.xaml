@@ -1,0 +1,25 @@
+﻿<ui:ContentDialog x:Class="ErogeHelper.View.Dialog.BaiduApiDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:local="clr-namespace:ErogeHelper.View.Dialog"
+                  xmlns:ui="http://schemas.modernwpf.com/2019"
+                  mc:Ignorable="d" 
+                  CloseButtonText="Close" Closing="ContentDialog_Closing" 
+                  PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+                  PrimaryButtonText="OK" IsPrimaryButtonEnabled="False" DefaultButton="Primary">
+    
+    <ui:SimpleStackPanel Spacing="10">
+        <Label Content="Baidu Api"/>
+        <Separator />
+        <TextBlock Text="Appid" />
+        <TextBox Name="Appid"/>
+        <TextBlock Text="SecretKey"/>
+        <TextBox Name="SecretKey"/>
+        <StackPanel Orientation="Horizontal">
+            <Button Name="TestApiButton" Content="Test" Click="TestApiButton_Click"/>
+            <TextBlock Name="TestStatus" VerticalAlignment="Center" Margin="10 0 0 0"/>
+        </StackPanel>
+    </ui:SimpleStackPanel>
+</ui:ContentDialog>

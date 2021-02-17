@@ -15,6 +15,8 @@ namespace ErogeHelper.Model.Translator
 
         bool NeedKey { get; }
 
+        bool UnLock { get; }
+
         List<Languages> SupportSrcLang { get; }
 
         List<Languages> SupportDesLang { get; }
@@ -35,6 +37,7 @@ namespace ErogeHelper.Model.Translator
             // Insert CancelAssert Before Return
             if (token.IsCancellationRequested)
             {
+                Log.Debug($"{Name} Canceled");
                 return string.Empty;
             }
             return result;

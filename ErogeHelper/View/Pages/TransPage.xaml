@@ -26,8 +26,8 @@
                 <!--<Image Source="{Binding TransIcon, Mode=OneTime}" Stretch="Fill" />-->
                 <TextBlock x:Name="TranslatorName" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TransName}"/>
                 <Button 
-                    Grid.Column="2" Content="Detail" Visibility="{Binding CanbeSelected, 
-                        Converter={StaticResource VisibleConverterReverse}}" IsEnabled="{Binding DialogHasExist}"
+                    Grid.Column="2" Content="Detail" Visibility="{Binding CanEdit, 
+                        Converter={StaticResource VisibleConverterReverse}}"
                     cm:Message.Attach="[Click] = [SetTranslatorDialog(TranslatorName)]"
                     cm:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type Page}}}"/>
