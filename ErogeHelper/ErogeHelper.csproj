@@ -63,13 +63,13 @@
     <Resource Include="Assets\transparent.png" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Include="Properties\DesignTimeResources.xaml">
       <ContainsDesignTimeResources>True</ContainsDesignTimeResources>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <Content Include="libs\**">

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Helper\" />
+    <Folder Include="Function\Translator\" />
   </ItemGroup>
 
 </Project>

@@ -27,6 +27,7 @@ namespace ErogeHelper.View
             ("general", typeof(GeneralPage)),
             ("mecab", typeof(MecabPage)),
             ("hook", typeof(HookPage)),
+            ("trans", typeof(TransPage)),
             ("log", typeof(LogPage)),
 
             ("about", typeof(AboutPage)),

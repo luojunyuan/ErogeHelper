@@ -22,6 +22,7 @@
             <ui:NavigationViewItem Icon="AllApps" Content="{x:Static resx:Strings.GeneralPage_Title}" Tag="general"/>
             <ui:NavigationViewItem Icon="Character" Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab"/>
             <ui:NavigationViewItem Icon="Attach" Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook"/>
+            <ui:NavigationViewItem  Content="Trans" Tag="trans"/>
             <ui:NavigationViewItem Icon="Message" Content="Log" Tag="log"/>
         </ui:NavigationView.MenuItems>
         

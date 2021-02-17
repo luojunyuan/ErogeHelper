@@ -148,6 +148,8 @@ namespace ErogeHelper
                 .SingleInstance();
             builder.RegisterType<LogViewModel>()
                 .SingleInstance();
+            builder.RegisterType<TransViewModel>()
+                .SingleInstance();
 
             // Register services
             builder.RegisterType<SelectProcessService>()
