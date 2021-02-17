@@ -44,7 +44,7 @@ namespace ErogeHelper.Model.Translator.Tests
             var redict = "皇帝的新心";
 
             ITranslator BaiduApiTranslatorInstance = new BaiduApiTranslator();
-            var result = await BaiduApiTranslatorInstance.TranslateAsync(queryText, Languages.日本語, Languages.简体中文);
+            var result = await BaiduApiTranslatorInstance.TranslateAsync(queryText);
             Assert.AreEqual(redict, result);
         }
 

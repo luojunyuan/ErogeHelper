@@ -38,7 +38,7 @@ namespace ErogeHelper.Common.Service
                     {
                         // Casued by `GetMainModuleFileName()`
                         // Access Denied. 32bit -> 64bit module
-                        Log.Info(ex.Message);
+                        Log.Debug(ex.Message);
                     }
                 }
                 foreach (var i in data.ToList())

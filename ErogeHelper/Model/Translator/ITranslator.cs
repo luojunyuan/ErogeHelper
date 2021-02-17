@@ -23,14 +23,14 @@ namespace ErogeHelper.Model.Translator
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-        async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
+        async Task<string> TranslateAsync(string sourceText)
         {
             // SetCancelToken
             cancelToken.Cancel();
             cancelToken = new CancellationTokenSource();
             var token = cancelToken.Token;
 
-            var result = await TranslateAsyncImpl(sourceText, srcLang, desLang);
+            var result = await TranslateAsyncImpl(sourceText, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
 
             // Insert CancelAssert Before Return
             if (token.IsCancellationRequested)

@@ -108,12 +108,15 @@ namespace ErogeHelper.Common.Service
             foreach(var translator in TranslatorManager.GetEnabled())
             {
                 Task.Run(async () =>
-                { 
-                    var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
+                {
+                    Stopwatch sw = new();
+                    sw.Start();
+                    var result = await translator.TranslateAsync(hp.Text);
+                    sw.Stop();
                     if (!result.Equals(string.Empty))
                     {
                         Log.Debug($"{translator.Name}: {result}");
-                        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, translator.Name);
+                        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, $"{translator.Name} {sw.ElapsedMilliseconds}ms");
                     }
                 });
             }

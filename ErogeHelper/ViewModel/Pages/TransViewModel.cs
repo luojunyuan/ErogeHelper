@@ -26,15 +26,7 @@ namespace ErogeHelper.ViewModel.Pages
             TargetLanguageList = TargetLanguageListRefresh(out _);
             SelectedTarLang = DataRepository.TransTargetLanguage;
 
-            foreach (var translator in TranslatorManager.GetAll)
-            {
-                if (translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang))
-                {
-                    var translatorItem = new TransItem()
-                    { CanbeSelected = !translator.NeedKey, Enable = translator.IsEnable, TransName = translator.Name };
-                    TranslatorList.Add(translatorItem);
-                }
-            }
+            RefreshTranslatorList();
         }
 
         public BindableCollection<LanguageItem> SrcLanguageList { get; }
@@ -54,7 +46,7 @@ namespace ErogeHelper.ViewModel.Pages
                 SelectedTarLang = firstLang;
                 DataRepository.TransTargetLanguage = SelectedTarLang;
             }
-            RefreshTranslatorList();
+            RefreshTranslatorList(true);
         }
 
         public BindableCollection<LanguageItem> TargetLanguageList { get; }
@@ -64,16 +56,24 @@ namespace ErogeHelper.ViewModel.Pages
         public void TargetLanguageChanged()
         {
             DataRepository.TransTargetLanguage = SelectedTarLang;
-            RefreshTranslatorList();
+            RefreshTranslatorList(true);
         }
 
         public BindableCollection<TransItem> TranslatorList { get; set; } = new();
 
-        private void RefreshTranslatorList()
+        public void SetTranslatorDialog(string translatorName)
         {
-            foreach(var translator in TranslatorManager.GetAll)
+            Log.Debug(translatorName);
+        }
+
+        private void RefreshTranslatorList(bool reset = false)
+        {
+            if (reset)
             {
-                translator.IsEnable = false;
+                foreach (var translator in TranslatorManager.GetAll)
+                {
+                    translator.IsEnable = false;
+                }
             }
             TranslatorList.Clear();
 
@@ -82,7 +82,12 @@ namespace ErogeHelper.ViewModel.Pages
                 if (translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang))
                 {
                     var translatorItem = new TransItem()
-                    { CanbeSelected = !translator.NeedKey, Enable = translator.IsEnable, TransName = translator.Name };
+                    {
+                        CanbeSelected = !translator.NeedKey,
+                        Enable = translator.IsEnable,
+                        TransName = translator.Name,
+                        DialogHasExist = true,
+                    };
                     TranslatorList.Add(translatorItem);
                 }
             }
@@ -126,25 +131,49 @@ namespace ErogeHelper.ViewModel.Pages
             }
             return langList;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status">true enable, false disable</param>
+        private void SwitchDialogButtonEnable(bool status)
+        {
+            foreach (var item in TranslatorList)
+            {
+                item.DialogHasExist = status;
+            }
+        }
     }
 
-    class TransItem
+    class TransItem : PropertyChangedBase
     {
         private bool _enable;
+        private bool dialogHasExist;
 
         public bool CanbeSelected { get; set; }
-        public bool Enable 
-        { 
-            get => _enable; 
-            set { 
-                _enable = value; 
+        public bool Enable
+        {
+            get => _enable;
+            set
+            {
+                _enable = value;
                 if (!TransName.Equals(string.Empty))
                 {
-                   TranslatorManager.GetTranslatorByName(TransName).IsEnable = value;
+                    TranslatorManager.GetTranslatorByName(TransName).IsEnable = value;
                 }
-            } 
+            }
         }
         public string TransName { get; set; } = string.Empty;
+
+        public bool DialogHasExist 
+        {
+            get => dialogHasExist;
+            set 
+            { 
+                dialogHasExist = value;
+                NotifyOfPropertyChange(() => DialogHasExist);
+            } 
+        }
     }
 
     class LanguageItem
