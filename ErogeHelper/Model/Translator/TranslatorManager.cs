@@ -36,11 +36,12 @@ namespace ErogeHelper.Model.Translator
         Yeekit,
     }
 
-    public enum Language
+    public enum Languages
     {
         Auto,
-        ChineseSimplified,
-        Japenese,
+        简体中文,
+        日本語,
         English,
     }
+
 }

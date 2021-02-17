@@ -23,8 +23,8 @@ namespace ErogeHelper
             Directory.SetCurrentDirectory(currentDirectory);
 
             // Switch on Caliburn.Micro.ViewModelBinder debug monitor
-            //var baseGetLog = LogManager.GetLog;
-            //LogManager.GetLog = t => t == typeof(ViewModelBinder) ? new DebugLog(t) : baseGetLog(t);
+            //var baseGetLog = Caliburn.Micro.LogManager.GetLog;
+            //Caliburn.Micro.LogManager.GetLog = t => t == typeof(Caliburn.Micro.ViewModelBinder) ? new Caliburn.Micro.DebugLog(t) : baseGetLog(t);
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()

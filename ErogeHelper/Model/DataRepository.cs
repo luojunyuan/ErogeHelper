@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Selector;
+using ErogeHelper.Model.Translator;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -216,6 +217,16 @@ namespace ErogeHelper.Model
         public static bool YeekitEnable
         {
             get => GetValue(DefaultValuesStore.YeekitEnable);
+            set => SetValue(value);
+        }
+        public static Languages TransSrcLanguage 
+        {
+            get => GetValue(DefaultValuesStore.TransSrcLanguage);
+            set => SetValue(value);
+        }
+        public static Languages TransTargetLanguage 
+        {
+            get => GetValue(DefaultValuesStore.TransTargetLanguage);
             set => SetValue(value);
         }
         #endregion

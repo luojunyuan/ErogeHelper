@@ -9,17 +9,17 @@ namespace ErogeHelper.Model.Translator
 {
     public interface ITranslator
     {
-        TranslatorName Name { get; }
+        string Name { get; }
 
         bool IsEnable { get; set; }
 
-        List<Language> SupportSrcLang();
+        List<Languages> SupportSrcLang { get; }
 
-        List<Language> SupportDesLang();
+        List<Languages> SupportDesLang { get; }
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-        async Task<string> TranslateAsync(string sourceText, Language srcLang, Language desLang)
+        async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
             // SetCancelToken
             cancelToken.Cancel();
@@ -35,6 +35,6 @@ namespace ErogeHelper.Model.Translator
             return result;
         }
 
-        Task<string> TranslateAsyncImpl(string sourceText, Language srcLang, Language desLang);
+        Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang);
     }
 }

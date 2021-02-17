@@ -194,5 +194,18 @@ namespace ErogeHelper.Common
             }
             return collect;
         }
+
+        // Enum To Converter
+        public static string LanguageEnumToStringI18n(ErogeHelper.Model.Translator.Languages lang)
+        {
+            return lang switch
+            {
+                Model.Translator.Languages.Auto => "Auto",
+                Model.Translator.Languages.简体中文 => "简体中文",
+                Model.Translator.Languages.English => "English",
+                Model.Translator.Languages.日本語 => "日本語",
+                _ => throw new Exception("Error language")
+            };
+        }
     }
 }

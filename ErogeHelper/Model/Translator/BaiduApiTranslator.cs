@@ -13,27 +13,27 @@ namespace ErogeHelper.Model.Translator
     {
         public bool IsEnable { get; set; } = DataRepository.BaiduApiEnable;
 
-        public TranslatorName Name => TranslatorName.BaiduApi;
+        public string Name => "BaiduApi";
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-        public List<Language> SupportDesLang() => new List<Language> { Language.ChineseSimplified };
+        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
-        public List<Language> SupportSrcLang() => new List<Language> { Language.Japenese };
+        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語 };
 
         private static readonly RestClient client = new RestClient("http://api.fanyi.baidu.com");
 
-        public async Task<string> TranslateAsyncImpl(string sourceText, Language srcLang, Language desLang)
+        public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
         {
             // Define Support Language
             string from = srcLang switch
             {
-                Language.Japenese => "jp",
+                Languages.日本語 => "jp",
                 _ => throw new Exception("Language not supported"),
             };
             string to = desLang switch
             {
-                Language.ChineseSimplified => "zh",
+                Languages.简体中文 => "zh",
                 _ => throw new Exception("Language not supported"),
             };
 

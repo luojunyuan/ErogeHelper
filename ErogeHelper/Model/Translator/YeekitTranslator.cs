@@ -16,27 +16,27 @@ namespace ErogeHelper.Model.Translator
     {
         public bool IsEnable { get; set; } = DataRepository.YeekitEnable;
 
-        public TranslatorName Name => TranslatorName.Yeekit;
+        public string Name => "Yeekit";
 
         // Supported languages https://www.yeekit.com/site/translate
-        public List<Language> SupportDesLang() => new List<Language> { Language.ChineseSimplified };
+        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
-        public List<Language> SupportSrcLang() => new List<Language> { Language.Japenese };
+        public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語 };
 
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
         private static RestClient client = new RestClient("https://www.yeekit.com");
 
-        public async Task<string> TranslateAsyncImpl(string sourceText, Language srcLang, Language desLang)
+        public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
         {
             // Define Support Language
             string from = srcLang switch
             {
-                Language.Japenese => "nja",
+                Languages.日本語 => "nja",
                 _ => throw new Exception("Language not supported"),
             };
             string to = desLang switch
             {
-                Language.ChineseSimplified => "nzh",
+                Languages.简体中文 => "nzh",
                 _ => throw new Exception("Language not supported"),
             };
 

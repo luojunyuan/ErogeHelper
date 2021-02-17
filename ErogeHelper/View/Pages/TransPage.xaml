@@ -6,27 +6,47 @@
       xmlns:local="clr-namespace:ErogeHelper.View.Pages"
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:c="clr-namespace:System.Collections;assembly=mscorlib"
+      xmlns:cm="http://caliburnmicro.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TransPage">
 
     <Page.Resources>
         <DataTemplate x:Key="TranslatorListViewTemplate">
-            <TextBlock Text="{Binding Name}" Margin="0,5,0,5"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <ui:ToggleSwitch 
+                    Grid.Column="0"
+                    OffContent="" OnContent="" Width="50" IsEnabled="{Binding CanbeSelected}" IsOn="{Binding Enable}"/>
+                <!--<Image Source="{Binding TransIcon, Mode=OneTime}" Stretch="Fill" />-->
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding TransName}"/>
+                <Button 
+                    Grid.Column="2" Content="Detail" Visibility="{Binding CanbeSelected, 
+                        Converter={StaticResource VisibleConverterReverse}}"/>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
     <ui:SimpleStackPanel Spacing="10" Margin="20 10">
         <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
             <TextBlock Text="Trans" />
-            <ComboBox></ComboBox>
+            <ComboBox 
+                cm:Message.Attach="[SelectionChanged] = [SrcLanguageChanged]" 
+                DisplayMemberPath="Language" ItemsSource="{Binding SrcLanguageList}" 
+                SelectedValuePath="LangEnum" SelectedValue="{Binding SelectedSrcLang}"/>
             <TextBlock Text="To" />
-            <ComboBox></ComboBox>
+            <ComboBox 
+                cm:Message.Attach="[SelectionChanged] = [TargetLanguageChanged]" 
+                DisplayMemberPath="Language" ItemsSource="{Binding TargetLanguageList}"
+                SelectedValuePath="LangEnum" SelectedValue="{Binding SelectedTarLang}" />
         </ui:SimpleStackPanel>
         <ui:ListView 
-            SelectionMode="Single" ItemTemplate="{StaticResource ResourceKey=TranslatorListViewTemplate}"
-            ItemsSource="{Binding TranslatorList}">
-            
-        </ui:ListView>
+            IsSelectionEnabled="False" ItemTemplate="{StaticResource ResourceKey=TranslatorListViewTemplate}"
+            ItemsSource="{Binding TranslatorList}" MinWidth="240" HorizontalAlignment="Left"/>
     </ui:SimpleStackPanel>
 </Page>

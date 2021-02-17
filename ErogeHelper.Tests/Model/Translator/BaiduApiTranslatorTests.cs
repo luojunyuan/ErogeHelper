@@ -28,7 +28,7 @@ namespace ErogeHelper.Model.Translator.Tests
             var redict = "我";
 
             var BaiduApiTranslatorInstance = new BaiduApiTranslator();
-            var result = await BaiduApiTranslatorInstance.TranslateAsyncImpl(queryText, Language.Japenese, Language.ChineseSimplified);
+            var result = await BaiduApiTranslatorInstance.TranslateAsyncImpl(queryText, Languages.日本語, Languages.简体中文);
             Assert.AreEqual(redict, result);
         }
 
@@ -44,7 +44,7 @@ namespace ErogeHelper.Model.Translator.Tests
             var redict = "皇帝的新心";
 
             ITranslator BaiduApiTranslatorInstance = new BaiduApiTranslator();
-            var result = await BaiduApiTranslatorInstance.TranslateAsync(queryText, Language.Japenese, Language.ChineseSimplified);
+            var result = await BaiduApiTranslatorInstance.TranslateAsync(queryText, Languages.日本語, Languages.简体中文);
             Assert.AreEqual(redict, result);
         }
 
@@ -71,7 +71,7 @@ namespace ErogeHelper.Model.Translator.Tests
                 {
                     var stopWatch = new Stopwatch();
                     stopWatch.Start();
-                    result = await BaiduApiTranslatorInstance.TranslateAsyncImpl(queryText, Language.Japenese, Language.ChineseSimplified);
+                    result = await BaiduApiTranslatorInstance.TranslateAsyncImpl(queryText, Languages.日本語, Languages.简体中文);
                     stopWatch.Stop();
                     Trace.WriteLine(stopWatch.ElapsedMilliseconds + "ms");
                 }));

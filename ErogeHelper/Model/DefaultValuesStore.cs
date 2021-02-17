@@ -1,4 +1,5 @@
 ﻿using ErogeHelper.Common.Selector;
+using ErogeHelper.Model.Translator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,5 +39,8 @@ namespace ErogeHelper.Model
         public const string BaiduApiSecretKey = "";
 
         public const bool YeekitEnable = false;
+
+        public static Languages TransSrcLanguage = Languages.日本語;
+        public static Languages TransTargetLanguage = Languages.English;
     }
 }
