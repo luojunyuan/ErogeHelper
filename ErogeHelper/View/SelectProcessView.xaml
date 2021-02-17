@@ -11,7 +11,7 @@
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350"
+        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Topmost="True"
         Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
     <control:ScrollViewerSmooth PanningMode="Both">

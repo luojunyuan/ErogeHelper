@@ -21,26 +21,8 @@ namespace ErogeHelper.Model.Translator
 
         List<Languages> SupportDesLang { get; }
 
-        Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang);
-
         private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-        async Task<string> TranslateAsync(string sourceText)
-        {
-            // SetCancelToken
-            cancelToken.Cancel();
-            cancelToken = new CancellationTokenSource();
-            var token = cancelToken.Token;
-
-            var result = await TranslateAsyncImpl(sourceText, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
-
-            // Insert CancelAssert Before Return
-            if (token.IsCancellationRequested)
-            {
-                Log.Debug($"{Name} Canceled");
-                return string.Empty;
-            }
-            return result;
-        }
+        Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang);
     }
 }

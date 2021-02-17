@@ -39,7 +39,7 @@ namespace ErogeHelper.View.Dialog
             var translator = new BaiduApiTranslator();
             translator.appId = Appid.Text;
             translator.secretKey = SecretKey.Text;
-            string result = await translator.TranslateAsyncImpl("頼りになる", Languages.日本語, Languages.English);
+            string result = await translator.TranslateAsync("頼りになる", Languages.日本語, Languages.English);
             if (result.Equals("Rely on"))
             {
                 IsPrimaryButtonEnabled = true;

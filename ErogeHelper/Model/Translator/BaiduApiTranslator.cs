@@ -23,9 +23,12 @@ namespace ErogeHelper.Model.Translator
 
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 
-        public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
+        public async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
-            RestClient client = new RestClient("http://api.fanyi.baidu.com");
+            // SetCancelToken
+            cancelToken.Cancel();
+            cancelToken = new CancellationTokenSource();
+            var token = cancelToken.Token;
 
             // Define Support Language
             string from = srcLang switch
@@ -63,6 +66,7 @@ namespace ErogeHelper.Model.Translator
             {
                 // request.AddParameter(_cookie_name, _cookie_value, ParameterType.Cookie);
                 // FIXME: "System.Net.CookieException" (System.Net.Primitives.dll) ?
+                RestClient client = new RestClient("http://api.fanyi.baidu.com");
                 response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
                 result = string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
             }
@@ -70,6 +74,13 @@ namespace ErogeHelper.Model.Translator
             {
                 Log.Error(ex.Message);
                 result = ex.Message;
+            }
+
+            // Insert CancelAssert Before Return
+            if (token.IsCancellationRequested)
+            {
+                Log.Debug($"{Name} Canceled");
+                return string.Empty;
             }
 
             return result;

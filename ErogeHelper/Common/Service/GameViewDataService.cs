@@ -111,7 +111,7 @@ namespace ErogeHelper.Common.Service
                 {
                     Stopwatch sw = new();
                     sw.Start();
-                    var result = await translator.TranslateAsync(hp.Text);
+                    var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
                     sw.Stop();
                     if (!result.Equals(string.Empty))
                     {

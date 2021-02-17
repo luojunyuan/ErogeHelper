@@ -27,9 +27,12 @@ namespace ErogeHelper.Model.Translator
 
         public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
-        public async Task<string> TranslateAsyncImpl(string sourceText, Languages srcLang, Languages desLang)
+        public async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
-            RestClient client = new RestClient("https://www.yeekit.com");
+            // SetCancelToken
+            cancelToken.Cancel();
+            cancelToken = new CancellationTokenSource();
+            var token = cancelToken.Token;
 
             // Define Support Language
             string from = srcLang switch
@@ -52,6 +55,7 @@ namespace ErogeHelper.Model.Translator
             string result;
             try
             {
+                RestClient client = new RestClient("https://www.yeekit.com");
                 var resp = await client.ExecuteAsync(request).ConfigureAwait(false);
                 dynamic raw = JsonSerializer.Deserialize<dynamic>(resp.Content)!;
                 string jsonString = raw[0].ToString();
@@ -62,6 +66,13 @@ namespace ErogeHelper.Model.Translator
             {
                 Log.Info(ex.Message);
                 result = ex.Message;
+            }
+
+            // Insert CancelAssert Before Return
+            if (token.IsCancellationRequested)
+            {
+                Log.Debug($"{Name} Canceled");
+                return string.Empty;
             }
 
             return result;
