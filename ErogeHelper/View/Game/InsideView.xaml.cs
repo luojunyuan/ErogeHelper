@@ -12,16 +12,16 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace ErogeHelper.View
+namespace ErogeHelper.View.Game
 {
     /// <summary>
     /// GameView.xaml 的交互逻辑
     /// </summary>
-    public partial class GameView : Window
+    public partial class InsideView : Window
     {
         private double dpi;
 
-        public GameView()
+        public InsideView()
         {
             InitializeComponent();
 
@@ -170,7 +170,7 @@ namespace ErogeHelper.View
                         break;
                 }
             }
-            
+
             return IntPtr.Zero;
         }
     }

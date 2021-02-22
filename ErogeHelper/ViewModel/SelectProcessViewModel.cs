@@ -61,7 +61,7 @@ namespace ErogeHelper.ViewModel
 
                     Log.Info($"Get HCode {GameConfig.HookCode} from file {SelectedProcItem.proc.ProcessName}.exe.eh.config");
                     // Display text window
-                    await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
+                    await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>(), "InsideView").ConfigureAwait(false);
                 }
                 else
                 {

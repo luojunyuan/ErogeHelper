@@ -38,7 +38,8 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<LanguageItem> SrcLanguageList { get; }
 
-        public Languages SelectedSrcLang { get => _selectedSrcLang; set { _selectedSrcLang = value; NotifyOfPropertyChange(() => SelectedSrcLang); } }
+        public Languages SelectedSrcLang 
+        { get => _selectedSrcLang; set { _selectedSrcLang = value; NotifyOfPropertyChange(() => SelectedSrcLang); } }
 
         public void SrcLanguageChanged()
         {
@@ -58,7 +59,8 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<LanguageItem> TargetLanguageList { get; }
 
-        public Languages SelectedTarLang { get => _selectedTarLang; set { _selectedTarLang = value; NotifyOfPropertyChange(() => SelectedTarLang); } }
+        public Languages SelectedTarLang 
+        { get => _selectedTarLang; set { _selectedTarLang = value; NotifyOfPropertyChange(() => SelectedTarLang); } }
 
         public void TargetLanguageChanged()
         {

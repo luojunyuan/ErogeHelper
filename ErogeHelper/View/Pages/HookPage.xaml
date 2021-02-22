@@ -100,11 +100,11 @@
                             </ui:AppBarButton>
                         </ui:SimpleStackPanel>
 
-                        <!-- TODO: Add a friendly Popup for RegExp-->
                         <Label Content="{x:Static resx:Strings.HookPage_Text}" />
                         <ContentControl
                             Height="80" HorizontalAlignment="Left" FontSize="16"
-                            Content="{Binding SelectedText, Converter={StaticResource TextEvaluateConverter}, Mode=OneWay}">
+                            Content="{Binding SelectedText, Converter={StaticResource TextEvaluateConverter}, 
+                                Mode=OneWay}">
                         </ContentControl>
                     </ui:SimpleStackPanel>
                 </GroupBox>

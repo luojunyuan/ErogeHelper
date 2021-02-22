@@ -27,13 +27,13 @@ namespace ErogeHelper
         /// <summary>
         /// Entry Point
         /// </summary>
-        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
+        protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             Log.Info("Started Logging");
             if (e.Args.Length == 0)
             {
                 // Display select processes window
-                DisplayRootViewFor<SelectProcessViewModel>();
+                await DisplayRootViewFor<SelectProcessViewModel>();
             }
             else
             {
@@ -66,6 +66,7 @@ namespace ErogeHelper
                         WorkingDirectory = gameDir
                     });
                 }
+
                 // 🧀
                 var findResult = MatchProcess.Collect(Path.GetFileNameWithoutExtension(gamePath));
                 if (findResult != true)
@@ -82,12 +83,13 @@ namespace ErogeHelper
                     Log.Info($"Get HCode {GameConfig.HookCode} from file " +
                         $"{Path.GetFileNameWithoutExtension(gamePath)}.exe.eh.config");
                     // Display text window
-                    DisplayRootViewForAsync(typeof(GameViewModel));
+
+                    await Container.Resolve<IWindowManager>().ShowWindowAsync(Container.Resolve<GameViewModel>(), "InsideView");
                 }
                 else
                 {
                     Log.Info("Not find xml config file, open hook panel.");
-                    DisplayRootViewFor<HookConfigViewModel>();
+                    await DisplayRootViewFor<HookConfigViewModel>();
                 }
 
                 Textractor.Init();
@@ -122,7 +124,7 @@ namespace ErogeHelper
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            // Register viewModels
+            // Register viewModels, Window
             builder.RegisterType<SelectProcessViewModel>();
             builder.RegisterType<HookConfigViewModel>()
                 .SingleInstance();
