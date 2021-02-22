@@ -19,7 +19,7 @@ namespace ErogeHelper.ViewModel.Pages
         #region Fields
         private Languages _selectedSrcLang;
         private Languages _selectedTarLang;
-        private BindableCollection<LanguageItem> _targetLanguageList;
+        private BindableCollection<LanguageItem> _targetLanguageList = null!;
         #endregion
 
         private readonly IEventAggregator eventAggregator;

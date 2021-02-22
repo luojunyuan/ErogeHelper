@@ -198,6 +198,17 @@ namespace ErogeHelper.Model
             set => SetValue(value);
         }
 
+        public static Languages TransSrcLanguage
+        {
+            get => GetValue(DefaultValuesStore.TransSrcLanguage);
+            set => SetValue(value);
+        }
+        public static Languages TransTargetLanguage
+        {
+            get => GetValue(DefaultValuesStore.TransTargetLanguage);
+            set => SetValue(value);
+        }
+
         public static bool BaiduApiEnable
         {
             get => GetValue(DefaultValuesStore.BaiduApiEnable);
@@ -219,14 +230,10 @@ namespace ErogeHelper.Model
             get => GetValue(DefaultValuesStore.YeekitEnable);
             set => SetValue(value);
         }
-        public static Languages TransSrcLanguage 
+
+        public static bool BaiduWebEnable
         {
-            get => GetValue(DefaultValuesStore.TransSrcLanguage);
-            set => SetValue(value);
-        }
-        public static Languages TransTargetLanguage 
-        {
-            get => GetValue(DefaultValuesStore.TransTargetLanguage);
+            get => GetValue(DefaultValuesStore.BaiduWebEnable);
             set => SetValue(value);
         }
         #endregion

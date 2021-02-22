@@ -39,6 +39,7 @@
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Caliburn.Micro" Version="4.0.155-rc" />
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
+    <PackageReference Include="Jurassic" Version="3.1.0" />
     <PackageReference Include="MeCab.DotNet" Version="0.0.30" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.1" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.3.0" />

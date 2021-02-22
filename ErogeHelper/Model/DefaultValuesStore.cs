@@ -34,13 +34,15 @@ namespace ErogeHelper.Model
         public const bool MojiDictEnable = false;
         public const bool JishoDictEnable = false;
 
+        public static Languages TransSrcLanguage = Languages.日本語;
+        public static Languages TransTargetLanguage = Languages.English;
+
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";
         public const string BaiduApiSecretKey = "";
 
         public const bool YeekitEnable = false;
 
-        public static Languages TransSrcLanguage = Languages.日本語;
-        public static Languages TransTargetLanguage = Languages.English;
+        public const bool BaiduWebEnable = false;
     }
 }

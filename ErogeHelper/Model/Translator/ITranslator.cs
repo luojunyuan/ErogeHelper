@@ -17,13 +17,15 @@ namespace ErogeHelper.Model.Translator
 
         bool NeedKey { get; }
 
+        /// <summary>
+        /// <para>This means translator is weather CanEnable in TransViewModel.cs</para>
+        /// <para>Always true if `NeedKey == false`</para>
+        /// </summary>
         bool UnLock { get; }
 
         List<Languages> SupportSrcLang { get; }
 
         List<Languages> SupportDesLang { get; }
-
-        private static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
         Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang);
     }
