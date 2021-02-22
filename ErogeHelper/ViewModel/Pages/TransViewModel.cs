@@ -89,7 +89,7 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     var translatorItem = new TransItem()
                     {
-                        CanbeSelected = translator.UnLock,
+                        CanbeEnable = translator.UnLock,
                         Enable = translator.IsEnable,
                         TransName = translator.Name,
                         CanEdit = !translator.NeedKey,
@@ -138,17 +138,15 @@ namespace ErogeHelper.ViewModel.Pages
             return langList;
         }
 
-        public async Task HandleAsync(RefreshTranslatorsListMessage message, CancellationToken cancellationToken)
-        {
+        public async Task HandleAsync(RefreshTranslatorsListMessage message, CancellationToken cancellationToken) => 
             await Task.Run(() => RefreshTranslatorList());
-        }
     }
 
     class TransItem : PropertyChangedBase
     {
         private bool _enable;
 
-        public bool CanbeSelected { get; set; }
+        public bool CanbeEnable { get; set; }
 
         public bool Enable
         {

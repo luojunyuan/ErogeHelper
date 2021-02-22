@@ -1,11 +1,17 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ErogeHelper.Model.Translator
 {
@@ -48,31 +54,41 @@ namespace ErogeHelper.Model.Translator
                 appId = DataRepository.BaiduApiAppid;
                 secretKey = DataRepository.BaiduApiSecretKey;
             }
+
             string query = sourceText;
             string salt = new Random().Next(100000).ToString();
             string sign = EncryptString(appId + query + salt + secretKey);
+            StringBuilder urlButilder = new();
+            urlButilder
+                .Append("http://api.fanyi.baidu.com/api/trans/vip/translate?")
+                .Append("q=" + HttpUtility.UrlEncode(query))
+                .Append("&from=" + from)
+                .Append("&to=" + to)
+                .Append("&appid=" + appId)
+                .Append("&salt=" + salt)
+                .Append("&sign=" + sign);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlButilder.ToString());
+            request.Method = "GET";
+            request.ContentType = "text/html;charset=UTF-8";
+            request.UserAgent = null;
+            request.Timeout = 6000;
 
-            var request = new RestRequest("api/trans/vip/translate", Method.GET)
-                .AddParameter("q", query)
-                .AddParameter("from", from)
-                .AddParameter("to", to)
-                .AddParameter("appid", appId)
-                .AddParameter("salt", salt)
-                .AddParameter("sign", sign);
-
-            BaiduApiResponse response;
             string result;
             try
             {
-                // request.AddParameter(_cookie_name, _cookie_value, ParameterType.Cookie);
-                // FIXME: "System.Net.CookieException" (System.Net.Primitives.dll) ?
-                RestClient client = new RestClient("http://api.fanyi.baidu.com");
-                response = await client.PostAsync<BaiduApiResponse>(request).ConfigureAwait(false);
-                result = string.IsNullOrWhiteSpace(response.ErrorCode) ? response.TransResult[0].Dst : response.ErrorCode;
+                var response = await request.GetResponseAsync();
+
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
+
+                var resp = JsonSerializer.Deserialize<BaiduApiResponse>(retString)!;
+                result = string.IsNullOrWhiteSpace(resp.ErrorCode) ? resp.TransResult[0].Dst : resp.ErrorCode;
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
                 result = ex.Message;
             }
 

@@ -22,7 +22,7 @@
                 
                 <ui:ToggleSwitch 
                     Grid.Column="0"
-                    OffContent="" OnContent="" Width="50" IsEnabled="{Binding CanbeSelected}" IsOn="{Binding Enable}"/>
+                    OffContent="" OnContent="" Width="50" IsEnabled="{Binding CanbeEnable}" IsOn="{Binding Enable}"/>
                 <!--<Image Source="{Binding TransIcon, Mode=OneTime}" Stretch="Fill" />-->
                 <TextBlock x:Name="TranslatorName" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TransName}"/>
                 <Button 
