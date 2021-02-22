@@ -11,6 +11,8 @@ namespace ErogeHelper.Model.Translator
     {
         string Name { get; }
 
+        string IconPath { get; }
+
         bool IsEnable { get; set; }
 
         bool NeedKey { get; }

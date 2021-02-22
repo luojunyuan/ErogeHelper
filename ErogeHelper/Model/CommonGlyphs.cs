@@ -33,5 +33,7 @@ namespace ErogeHelper.Model
         public const string TaskView = "\uE7C4";
 
         public const string Component = "\uE950";
+
+        public const string LangJPN = "\uE7DE";
     }
 }

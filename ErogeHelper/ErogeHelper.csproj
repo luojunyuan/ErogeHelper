@@ -25,12 +25,14 @@
     <None Remove="Assets\app.ico" />
     <None Remove="Assets\app_icon_big.png" />
     <None Remove="Assets\aqua_green.png" />
+    <None Remove="Assets\baidu.com.ico" />
     <None Remove="Assets\green.png" />
     <None Remove="Assets\jisho.org.ico" />
     <None Remove="Assets\jisho.org.png" />
     <None Remove="Assets\mojidict.com.ico" />
     <None Remove="Assets\pink.png" />
     <None Remove="Assets\transparent.png" />
+    <None Remove="Assets\yeekit.com.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,11 +58,13 @@
     <Resource Include="Assets\app.ico" />
     <Resource Include="Assets\app_icon_big.png" />
     <Resource Include="Assets\aqua_green.png" />
+    <Resource Include="Assets\baidu.com.ico" />
     <Resource Include="Assets\green.png" />
     <Resource Include="Assets\jisho.org.png" />
     <Resource Include="Assets\mojidict.com.ico" />
     <Resource Include="Assets\pink.png" />
     <Resource Include="Assets\transparent.png" />
+    <Resource Include="Assets\yeekit.com.ico" />
   </ItemGroup>
 
   <!--<ItemGroup>

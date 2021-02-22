@@ -3,6 +3,7 @@ using ErogeHelper.Common.Converter;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model;
 using ErogeHelper.Model.Translator;
+using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,6 +94,7 @@ namespace ErogeHelper.ViewModel.Pages
                     {
                         CanbeEnable = translator.UnLock,
                         Enable = translator.IsEnable,
+                        IconPath = translator.IconPath,
                         TransName = translator.Name,
                         CanEdit = !translator.NeedKey,
                     };
@@ -162,6 +164,8 @@ namespace ErogeHelper.ViewModel.Pages
                 }
             }
         }
+
+        public string IconPath { get; set; } = string.Empty;
 
         public string TransName { get; set; } = string.Empty;
 

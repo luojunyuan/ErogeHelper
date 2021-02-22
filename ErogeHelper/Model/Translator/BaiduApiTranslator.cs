@@ -21,13 +21,15 @@ namespace ErogeHelper.Model.Translator
 
         public bool IsEnable { get => DataRepository.BaiduApiEnable; set => DataRepository.BaiduApiEnable = value; }
 
-        public bool NeedKey { get => true; }
+        public bool NeedKey => true; 
 
-        public bool UnLock { get => !DataRepository.BaiduApiSecretKey.Equals(string.Empty); }
+        public bool UnLock => !DataRepository.BaiduApiSecretKey.Equals(string.Empty);
 
-        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
+        public string IconPath => @"/Assets/baidu.com.ico";
 
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
+
+        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
 
         public async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
@@ -40,12 +42,12 @@ namespace ErogeHelper.Model.Translator
             string from = srcLang switch
             {
                 Languages.日本語 => "jp",
+                Languages.English => "en",
                 _ => throw new Exception("Language not supported"),
             };
             string to = desLang switch
             {
                 Languages.简体中文 => "zh",
-                Languages.English => "en",
                 _ => throw new Exception("Language not supported"),
             };
 

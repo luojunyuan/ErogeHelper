@@ -13,36 +13,28 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TranslatorListViewTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                
+            <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                 <ui:ToggleSwitch 
-                    Grid.Column="0"
-                    OffContent="" OnContent="" Width="50" IsEnabled="{Binding CanbeEnable}" IsOn="{Binding Enable}"/>
-                <!--<Image Source="{Binding TransIcon, Mode=OneTime}" Stretch="Fill" />-->
-                <TextBlock x:Name="TranslatorName" Grid.Column="1" VerticalAlignment="Center" Text="{Binding TransName}"/>
+                    OffContent="" OnContent="" Width="40" IsEnabled="{Binding CanbeEnable}" IsOn="{Binding Enable}"/>
+                <ui:BitmapIcon UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30"/>
+                <TextBlock x:Name="TranslatorName" VerticalAlignment="Center" Text="{Binding TransName}"/>
                 <Button 
-                    Grid.Column="2" Content="Detail" Visibility="{Binding CanEdit, 
-                        Converter={StaticResource VisibleConverterReverse}}"
+                    Content="Detail" Visibility="{Binding CanEdit, Converter={StaticResource VisibleConverterReverse}}"
                     cm:Message.Attach="[Click] = [SetTranslatorDialog(TranslatorName)]"
                     cm:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type Page}}}"/>
-            </Grid>
+            </ui:SimpleStackPanel>
         </DataTemplate>
     </Page.Resources>
 
     <ui:SimpleStackPanel Spacing="10" Margin="20 10">
         <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-            <TextBlock Text="Trans" />
+            <TextBlock Text="Trans" VerticalAlignment="Center" />
             <ComboBox 
                 cm:Message.Attach="[SelectionChanged] = [SrcLanguageChanged]" 
                 DisplayMemberPath="Language" ItemsSource="{Binding SrcLanguageList}" 
                 SelectedValuePath="LangEnum" SelectedValue="{Binding SelectedSrcLang}"/>
-            <TextBlock Text="To" />
+            <TextBlock Text="To" VerticalAlignment="Center" />
             <ComboBox 
                 cm:Message.Attach="[SelectionChanged] = [TargetLanguageChanged]" 
                 DisplayMemberPath="Language" ItemsSource="{Binding TargetLanguageList}"
