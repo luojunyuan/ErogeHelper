@@ -19,6 +19,7 @@ namespace ErogeHelper.ViewModel.Pages
         #region Fields
         private Languages _selectedSrcLang;
         private Languages _selectedTarLang;
+        private BindableCollection<LanguageItem> _targetLanguageList;
         #endregion
 
         private readonly IEventAggregator eventAggregator;
@@ -39,7 +40,7 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<LanguageItem> SrcLanguageList { get; }
 
-        public Languages SelectedSrcLang 
+        public Languages SelectedSrcLang
         { get => _selectedSrcLang; set { _selectedSrcLang = value; NotifyOfPropertyChange(() => SelectedSrcLang); } }
 
         public void SrcLanguageChanged()
@@ -47,20 +48,29 @@ namespace ErogeHelper.ViewModel.Pages
             DataRepository.TransSrcLanguage = SelectedSrcLang;
 
             var markTarLang = SelectedTarLang;
-            TargetLanguageListRefresh(out Dictionary<Languages, bool> tmpLangDict);
+            TargetLanguageList = TargetLanguageListRefresh(out Dictionary<Languages, bool> tmpLangDict);
+            // To avoid if last target language not include in new target language list
             if (!tmpLangDict.ContainsKey(markTarLang))
             {
-                Languages firstLang = tmpLangDict.GetEnumerator().Current.Key;
+                var enumerator = tmpLangDict.GetEnumerator();
+                enumerator.MoveNext();
+                var firstLang = enumerator.Current.Key;
                 Log.Debug(firstLang.ToString());
                 SelectedTarLang = firstLang;
                 DataRepository.TransTargetLanguage = SelectedTarLang;
             }
+            else
+            {
+                SelectedTarLang = markTarLang;
+            }
+
             RefreshTranslatorList(true);
         }
 
-        public BindableCollection<LanguageItem> TargetLanguageList { get; }
+        public BindableCollection<LanguageItem> TargetLanguageList
+        { get => _targetLanguageList; set { _targetLanguageList = value; NotifyOfPropertyChange(() => TargetLanguageList); } }
 
-        public Languages SelectedTarLang 
+        public Languages SelectedTarLang
         { get => _selectedTarLang; set { _selectedTarLang = value; NotifyOfPropertyChange(() => SelectedTarLang); } }
 
         public void TargetLanguageChanged()
@@ -71,7 +81,7 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<TransItem> TranslatorList { get; set; } = new();
 
-        public async void SetTranslatorDialog(string translatorName) => 
+        public async void SetTranslatorDialog(string translatorName) =>
             await eventAggregator.PublishOnUIThreadAsync(
                                                     new OpenApiKeyDialogMessage { TranslatorName = translatorName });
 
@@ -109,7 +119,7 @@ namespace ErogeHelper.ViewModel.Pages
             Dictionary<Languages, bool> tmpMark = new();
             foreach (var translator in TranslatorManager.GetAll)
             {
-                foreach(var lang in translator.SupportSrcLang)
+                foreach (var lang in translator.SupportSrcLang)
                 {
                     if (!tmpMark.ContainsKey(lang))
                     {
@@ -131,7 +141,7 @@ namespace ErogeHelper.ViewModel.Pages
                 {
                     foreach (var lang in translator.SupportDesLang)
                     {
-                        if (!tmpMark.ContainsKey(lang))
+                        if (!tmpMark.ContainsKey(lang) && lang != SelectedSrcLang)
                         {
                             langList.Add(new LanguageItem() { LangEnum = lang, Language = lang.ToString() });
                             tmpMark[lang] = true;
@@ -142,7 +152,7 @@ namespace ErogeHelper.ViewModel.Pages
             return langList;
         }
 
-        public async Task HandleAsync(RefreshTranslatorsListMessage message, CancellationToken cancellationToken) => 
+        public async Task HandleAsync(RefreshTranslatorsListMessage message, CancellationToken cancellationToken) =>
             await Task.Run(() => RefreshTranslatorList());
     }
 

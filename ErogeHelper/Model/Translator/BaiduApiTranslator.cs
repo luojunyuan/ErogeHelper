@@ -29,7 +29,7 @@ namespace ErogeHelper.Model.Translator
 
         public List<Languages> SupportSrcLang => new List<Languages> { Languages.日本語, Languages.English };
 
-        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文 };
+        public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文, Languages.English };
 
         public async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
@@ -48,6 +48,7 @@ namespace ErogeHelper.Model.Translator
             string to = desLang switch
             {
                 Languages.简体中文 => "zh",
+                Languages.English => "en",
                 _ => throw new Exception("Language not supported"),
             };
 

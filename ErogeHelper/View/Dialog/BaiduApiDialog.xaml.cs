@@ -35,6 +35,8 @@ namespace ErogeHelper.View.Dialog
         private async void TestApiButton_Click(object sender, RoutedEventArgs e)
         {
             TestApiButton.IsEnabled = false;
+            Appid.IsEnabled = false;
+            SecretKey.IsEnabled = false;
 
             var translator = new BaiduApiTranslator();
             translator.appId = Appid.Text;
@@ -51,6 +53,8 @@ namespace ErogeHelper.View.Dialog
                 IsPrimaryButtonEnabled = false;
                 TestStatus.Text = "X";
                 TestStatus.Foreground = Brushes.Red;
+                Appid.IsEnabled = true;
+                SecretKey.IsEnabled = true;
             }
 
             TestApiButton.IsEnabled = true;
