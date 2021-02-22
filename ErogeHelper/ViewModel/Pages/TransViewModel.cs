@@ -81,9 +81,12 @@ namespace ErogeHelper.ViewModel.Pages
 
         public BindableCollection<TransItem> TranslatorList { get; set; } = new();
 
-        public async void SetTranslatorDialog(string translatorName) =>
+        public async void SetTranslatorDialog(string translatorName)
+        {
+            View.Pages.TransPage.MessageLock = true;
             await eventAggregator.PublishOnUIThreadAsync(
                                                     new OpenApiKeyDialogMessage { TranslatorName = translatorName });
+        }
 
         private void RefreshTranslatorList(bool reset = false)
         {

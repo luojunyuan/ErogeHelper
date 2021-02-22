@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModernWpf.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Model
 {
-    public class CommonGlyphs
+    public static class CommonGlyphs
     {
         // See https://docs.microsoft.com/en-us/windows/uwp/design/style/segoe-ui-symbol-font#icon-list
 
@@ -34,6 +35,6 @@ namespace ErogeHelper.Model
 
         public const string Component = "\uE950";
 
-        public const string LangJPN = "\uE7DE";
+        public static SymbolIcon LangJPN = new SymbolIcon { Symbol = (Symbol)59358 };
     }
 }

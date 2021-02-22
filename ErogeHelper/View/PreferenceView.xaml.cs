@@ -50,6 +50,7 @@ namespace ErogeHelper.View
             // if not same page
             if (pageType != null && ContentFrame!.CurrentSourcePageType != pageType)
             {
+                // FIXME: Navigate() lead memory leak
                 ContentFrame.Navigate(pageType, null, info);
                 //ContentFrame.DataContext = item.DataContext;
             }
