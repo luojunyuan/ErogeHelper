@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -79,7 +80,7 @@ namespace ErogeHelper.Model.Translator
             string result;
             try
             {
-                var response = await request.GetResponseAsync();
+                var response = await request.GetResponseAsync().ConfigureAwait(false);
 
                 Stream myResponseStream = response.GetResponseStream();
                 StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));

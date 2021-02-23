@@ -236,6 +236,17 @@ namespace ErogeHelper.Model
             get => GetValue(DefaultValuesStore.BaiduWebEnable);
             set => SetValue(value);
         }
+
+        public static bool CaiyunEnable
+        {
+            get => GetValue(DefaultValuesStore.CaiyunEnable);
+            set => SetValue(value);
+        }
+        public static string CaiyunToken
+        {
+            get => GetValue(DefaultValuesStore.CaiyunDefaultToken);
+            set => SetValue(value);
+        }
         #endregion
     }
 }

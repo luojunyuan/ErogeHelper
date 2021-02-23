@@ -26,6 +26,7 @@
     <None Remove="Assets\app_icon_big.png" />
     <None Remove="Assets\aqua_green.png" />
     <None Remove="Assets\baidu.com.ico" />
+    <None Remove="Assets\caiyunapp.com.ico" />
     <None Remove="Assets\green.png" />
     <None Remove="Assets\jisho.org.ico" />
     <None Remove="Assets\jisho.org.png" />
@@ -60,6 +61,7 @@
     <Resource Include="Assets\app_icon_big.png" />
     <Resource Include="Assets\aqua_green.png" />
     <Resource Include="Assets\baidu.com.ico" />
+    <Resource Include="Assets\caiyunapp.com.ico" />
     <Resource Include="Assets\green.png" />
     <Resource Include="Assets\jisho.org.png" />
     <Resource Include="Assets\mojidict.com.ico" />

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace ErogeHelper.View
 {
@@ -50,17 +51,21 @@ namespace ErogeHelper.View
             // if not same page
             if (pageType != null && ContentFrame!.CurrentSourcePageType != pageType)
             {
-                // FIXME: Navigate() lead memory leak
+                // Clear Journal info
+                while (ContentFrame.CanGoBack)
+                {
+                    ContentFrame.RemoveBackEntry();
+                }
                 ContentFrame.Navigate(pageType, null, info);
-                //ContentFrame.DataContext = item.DataContext;
             }
         }
 
-        private void OnNavigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void OnNavigated(object sender, NavigationEventArgs args)
         {
             NavView.IsBackEnabled = ContentFrame.CanGoBack;
             Type sourcePageType = ContentFrame.SourcePageType;
-            if (sourcePageType != null)
+            // Set header text
+            if (sourcePageType is not null)
             {
                 var item = pages.FirstOrDefault(p => p.PageType == sourcePageType);
 

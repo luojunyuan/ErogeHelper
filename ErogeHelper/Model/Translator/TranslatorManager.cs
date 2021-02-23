@@ -13,6 +13,7 @@ namespace ErogeHelper.Model.Translator
             new BaiduApiTranslator(),
             new YeekitTranslator(),
             new BaiduWebTranslator(),
+            new CaiyunTranslator(),
         };
 
         public static List<ITranslator> GetEnabled()
