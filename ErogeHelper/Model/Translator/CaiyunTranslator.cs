@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -74,7 +73,7 @@ namespace ErogeHelper.Model.Translator
                     result = resp.Message;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Warn(ex.Message);
                 result = ex.Message;

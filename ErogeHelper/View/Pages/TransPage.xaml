@@ -13,17 +13,27 @@
 
     <Page.Resources>
         <DataTemplate x:Key="TranslatorListViewTemplate">
-            <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
                 <ui:ToggleSwitch 
+                    Grid.Column="0"
                     OffContent="" OnContent="" Width="40" IsEnabled="{Binding CanbeEnable}" IsOn="{Binding Enable}"/>
-                <ui:BitmapIcon UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30"/>
-                <TextBlock x:Name="TranslatorName" VerticalAlignment="Center" Text="{Binding TransName}"/>
-                <Button 
+                <ui:BitmapIcon Grid.Column="1" UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30"/>
+                <TextBlock
+                    Grid.Column="2" x:Name="TranslatorName" VerticalAlignment="Center" Text="{Binding TransName}"/>
+                <Button
+                    Grid.Column="3"
                     Content="Detail" Visibility="{Binding CanEdit, Converter={StaticResource VisibleConverterReverse}}"
                     cm:Message.Attach="[Click] = [SetTranslatorDialog(TranslatorName)]"
                     cm:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type Page}}}"/>
-            </ui:SimpleStackPanel>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
