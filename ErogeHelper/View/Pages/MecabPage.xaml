@@ -15,17 +15,12 @@
     <control:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <Button 
-                x:Name="ModuleDownloader" Content="Download" ToolTip="Download dic to enable this function"
-                Visibility="{Binding DownloadModuleVisibility}" cm:Message.Attach="[Click] = [DownloadMecabDic]"
-                IsEnabled="{Binding DownloadButtonEnable}"/>
-            <ProgressBar 
-                Value="{Binding CurrentProgress, Mode=OneWay}" Visibility="{Binding DownloadModuleVisibility}"
-                Width="240" HorizontalAlignment="Left"/>
+                Content="Choose IpaDic zip file" ToolTip="Unpack dic.zip to enable this function"
+                cm:Message.Attach="[Click] = [ChooseMecabDic]" />
             
             <ui:ToggleSwitch
                 Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabToggle}" 
-                IsEnabled="{Binding ElementName=ModuleDownloader, Path=Visibility, 
-                    Converter={StaticResource VisibleToFalseConverter}}" />
+                IsEnabled="{Binding CanEnableMecab}"/>
             <GroupBox Header="{x:Static resx:Strings.MecabPage_TextFlyout}" IsEnabled="{Binding MecabToggle}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons Header="{x:Static resx:Strings.MecabPage_PositionFormat}">

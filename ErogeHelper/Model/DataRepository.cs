@@ -109,8 +109,6 @@ namespace ErogeHelper.Model
         public static readonly BitmapImage pinkImage = Utils.LoadBitmapFromResource("Assets/pink.png");
 
         public static readonly string AppDataDir = SettingPath[..SettingPath.LastIndexOf('\\')];
-
-        public const string MecabDicUrl = @"https://cdn.jsdelivr.net/gh/luojunyuan/EH-Packages/dic.zip";
         #endregion
 
         #region Properties
