@@ -15,7 +15,7 @@ namespace ErogeHelper.Model.Translator
 
         bool IsEnable { get; set; }
 
-        bool NeedKey { get; }
+        bool NeedEdit { get; }
 
         /// <summary>
         /// <para>This means translator is weather CanEnable in TransViewModel.cs</para>

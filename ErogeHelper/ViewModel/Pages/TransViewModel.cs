@@ -109,7 +109,7 @@ namespace ErogeHelper.ViewModel.Pages
                         Enable = translator.IsEnable,
                         IconPath = translator.IconPath,
                         TransName = translator.Name,
-                        CanEdit = !translator.NeedKey,
+                        CanEdit = !translator.NeedEdit,
                     };
                     TranslatorList.Add(translatorItem);
                 }

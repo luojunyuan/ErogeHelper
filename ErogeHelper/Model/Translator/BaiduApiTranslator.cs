@@ -22,7 +22,7 @@ namespace ErogeHelper.Model.Translator
 
         public bool IsEnable { get => DataRepository.BaiduApiEnable; set => DataRepository.BaiduApiEnable = value; }
 
-        public bool NeedKey => true; 
+        public bool NeedEdit => true; 
 
         public bool UnLock => !DataRepository.BaiduApiSecretKey.Equals(string.Empty);
 
@@ -32,6 +32,7 @@ namespace ErogeHelper.Model.Translator
 
         public List<Languages> SupportDesLang => new List<Languages> { Languages.简体中文, Languages.English };
 
+        // XXX: Too slow 
         public async Task<string> TranslateAsync(string sourceText, Languages srcLang, Languages desLang)
         {
             // SetCancelToken

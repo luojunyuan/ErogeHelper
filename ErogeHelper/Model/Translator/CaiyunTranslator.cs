@@ -17,7 +17,7 @@ namespace ErogeHelper.Model.Translator
 
         public bool IsEnable { get => DataRepository.CaiyunEnable; set => DataRepository.CaiyunEnable = value; }
 
-        public bool NeedKey => true;
+        public bool NeedEdit => true;
 
         public bool UnLock => !DataRepository.CaiyunToken.Equals(string.Empty);
 

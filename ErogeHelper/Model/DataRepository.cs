@@ -245,6 +245,12 @@ namespace ErogeHelper.Model
             get => GetValue(DefaultValuesStore.CaiyunDefaultToken);
             set => SetValue(value);
         }
+
+        public static bool AlapiEnable
+        {
+            get => GetValue(DefaultValuesStore.AlapiEnable);
+            set => SetValue(value);
+        }
         #endregion
     }
 }

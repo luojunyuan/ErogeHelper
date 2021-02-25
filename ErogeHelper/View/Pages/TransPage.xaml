@@ -24,7 +24,8 @@
                 <ui:ToggleSwitch 
                     Grid.Column="0"
                     OffContent="" OnContent="" Width="40" IsEnabled="{Binding CanbeEnable}" IsOn="{Binding Enable}"/>
-                <ui:BitmapIcon Grid.Column="1" UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30"/>
+                <ui:BitmapIcon 
+                    Grid.Column="1" UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30" Height="30"/>
                 <TextBlock
                     Grid.Column="2" x:Name="TranslatorName" VerticalAlignment="Center" Text="{Binding TransName}"/>
                 <Button

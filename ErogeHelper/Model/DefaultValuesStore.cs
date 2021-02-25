@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Model
 {
-    internal class DefaultValuesStore
+    internal static class DefaultValuesStore
     {
         public const double FontSize = 28;
 
@@ -36,6 +36,9 @@ namespace ErogeHelper.Model
 
         public static Languages TransSrcLanguage = Languages.日本語;
         public static Languages TransTargetLanguage = Languages.English;
+
+        public const bool AlapiEnable = false;
+
         public const bool BaiduApiEnable = false;
         public const string BaiduApiAppid = "";
         public const string BaiduApiSecretKey = "";

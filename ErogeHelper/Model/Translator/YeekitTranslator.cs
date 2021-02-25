@@ -18,7 +18,7 @@ namespace ErogeHelper.Model.Translator
 
         public bool IsEnable { get => DataRepository.YeekitEnable;  set => DataRepository.YeekitEnable = value; } 
 
-        public bool NeedKey => false;
+        public bool NeedEdit => false;
 
         public bool UnLock => true;
 

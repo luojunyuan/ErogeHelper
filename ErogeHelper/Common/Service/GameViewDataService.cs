@@ -126,9 +126,11 @@ namespace ErogeHelper.Common.Service
             //{
             //    string result = sakuraNoUtaHelper.QueryText(hp.Text);
             //    if (!string.IsNullOrWhiteSpace(result))
-            //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result);
+            //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, "人工字幕 by luki");
             //}
         }
+
+        //private SakuraNoUtaHelper sakuraNoUtaHelper = new();
 
         public Visibility GetPinToggleVisibility() => DataRepository.EnableMecab ? Visibility.Visible : Visibility.Collapsed;
 
