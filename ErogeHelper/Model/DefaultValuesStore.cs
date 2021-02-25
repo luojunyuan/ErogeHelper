@@ -36,7 +36,6 @@ namespace ErogeHelper.Model
 
         public static Languages TransSrcLanguage = Languages.日本語;
         public static Languages TransTargetLanguage = Languages.English;
-
         public const bool AlapiEnable = false;
 
         public const bool BaiduApiEnable = false;
@@ -51,5 +50,8 @@ namespace ErogeHelper.Model
         public const string CaiyunDefaultToken = "3975l6lr5pcbvidl6jl2";
 
         public const bool YoudaoEnable = false;
+
+        public const bool XiaoniuEnable = false;
+        public const string NiuTransApiKey = "";
     }
 }

@@ -39,7 +39,14 @@ namespace ErogeHelper.View.Pages
                         }
                         break;
                     case "Caiyun":
-                        result = await new CaiyunDialog().ShowAsync();
+                        await new CaiyunDialog().ShowAsync();
+                        break;
+                    case "Xiaoniu":
+                        result = await new NiuTransDialog().ShowAsync();
+                        if (result == ContentDialogResult.Primary)
+                        {
+                            await IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new RefreshTranslatorsListMessage());
+                        }
                         break;
                 }
             }

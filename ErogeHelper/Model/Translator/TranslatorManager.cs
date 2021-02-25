@@ -16,6 +16,7 @@ namespace ErogeHelper.Model.Translator
             new CaiyunTranslator(),
             new AlapiTranslator(),
             new YoudaoTranslator(),
+            new NiuTransTranslator(),
         };
 
         public static List<ITranslator> GetEnabled()
