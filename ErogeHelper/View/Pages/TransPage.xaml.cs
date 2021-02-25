@@ -48,6 +48,13 @@ namespace ErogeHelper.View.Pages
                             await IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new RefreshTranslatorsListMessage());
                         }
                         break;
+                    case "TencentMT":
+                        result = await new TencentMTDialog().ShowAsync();
+                        if (result == ContentDialogResult.Primary)
+                        {
+                            await IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new RefreshTranslatorsListMessage());
+                        }
+                        break;
                 }
             }
         }

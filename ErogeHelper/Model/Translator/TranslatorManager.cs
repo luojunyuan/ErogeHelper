@@ -18,6 +18,7 @@ namespace ErogeHelper.Model.Translator
             new YoudaoTranslator(),
             new NiuTransTranslator(),
             new GoogleCNTranslator(),
+            new TencentMTTranslator(),
         };
 
         public static List<ITranslator> GetEnabled()

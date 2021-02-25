@@ -36,6 +36,7 @@ namespace ErogeHelper.Model
 
         public static Languages TransSrcLanguage = Languages.日本語;
         public static Languages TransTargetLanguage = Languages.English;
+
         public const bool AlapiEnable = false;
 
         public const bool BaiduApiEnable = false;
@@ -55,5 +56,9 @@ namespace ErogeHelper.Model
         public const string NiuTransApiKey = "";
 
         public const bool GoogleCNEnable = false;
+
+        public const bool TencentApiEnable = false;
+        public const string TencentApiSecretId = "";
+        public const string TencentApiSecretKey = "";
     }
 }

@@ -268,9 +268,26 @@ namespace ErogeHelper.Model
             get => GetValue(DefaultValuesStore.NiuTransApiKey);
             set => SetValue(value);
         }
+
         public static bool GoogleCNEnable
         {
             get => GetValue(DefaultValuesStore.GoogleCNEnable);
+            set => SetValue(value);
+        }
+
+        public static bool TencentMTEnable
+        {
+            get => GetValue(DefaultValuesStore.TencentApiEnable);
+            set => SetValue(value);
+        }
+        public static string TencentMTSecretId
+        {
+            get => GetValue(DefaultValuesStore.TencentApiSecretId);
+            set => SetValue(value);
+        }
+        public static string TencentMTSecretKey
+        {
+            get => GetValue(DefaultValuesStore.TencentApiSecretKey);
             set => SetValue(value);
         }
         #endregion
