@@ -12,7 +12,7 @@ namespace ErogeHelper.Model.Translator
     {
         public string Name => "Youdao";
 
-        public string IconPath => @"/Assets/transparent.png";
+        public string IconPath => @"/Assets/fanyi.youdao.com.ico";
 
         public bool IsEnable { get => DataRepository.YoudaoEnable; set => DataRepository.YoudaoEnable = value; }
 

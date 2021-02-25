@@ -15,7 +15,7 @@ namespace ErogeHelper.Model.Translator
     {
         public string Name => "TencentMT";
 
-        public string IconPath => @"/Assets/transparent.png";
+        public string IconPath => @"/Assets/cloud.tencent.com.ico";
 
         public bool IsEnable { get => DataRepository.TencentMTEnable; set => DataRepository.TencentMTEnable = value; }
 

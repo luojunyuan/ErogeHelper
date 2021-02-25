@@ -27,11 +27,15 @@
     <None Remove="Assets\aqua_green.png" />
     <None Remove="Assets\baidu.com.ico" />
     <None Remove="Assets\caiyunapp.com.ico" />
+    <None Remove="Assets\cloud.tencent.com.ico" />
+    <None Remove="Assets\fanyi.youdao.com.ico" />
     <None Remove="Assets\green.png" />
     <None Remove="Assets\jisho.org.ico" />
     <None Remove="Assets\jisho.org.png" />
     <None Remove="Assets\mojidict.com.ico" />
+    <None Remove="Assets\niutrans.com.ico" />
     <None Remove="Assets\pink.png" />
+    <None Remove="Assets\translate.google.cn.ico" />
     <None Remove="Assets\transparent.png" />
     <None Remove="Assets\yeekit.com.ico" />
   </ItemGroup>
@@ -63,10 +67,14 @@
     <Resource Include="Assets\aqua_green.png" />
     <Resource Include="Assets\baidu.com.ico" />
     <Resource Include="Assets\caiyunapp.com.ico" />
+    <Resource Include="Assets\cloud.tencent.com.ico" />
+    <Resource Include="Assets\fanyi.youdao.com.ico" />
     <Resource Include="Assets\green.png" />
     <Resource Include="Assets\jisho.org.png" />
     <Resource Include="Assets\mojidict.com.ico" />
+    <Resource Include="Assets\niutrans.com.ico" />
     <Resource Include="Assets\pink.png" />
+    <Resource Include="Assets\translate.google.cn.ico" />
     <Resource Include="Assets\transparent.png" />
     <Resource Include="Assets\yeekit.com.ico" />
   </ItemGroup>

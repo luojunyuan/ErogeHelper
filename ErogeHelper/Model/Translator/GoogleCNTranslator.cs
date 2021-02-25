@@ -14,7 +14,7 @@ namespace ErogeHelper.Model.Translator
     {
         public string Name => "GoogleCN";
 
-        public string IconPath => @"/Assets/transparent.png";
+        public string IconPath => @"/Assets/translate.google.cn.ico";
 
         public bool IsEnable { get => DataRepository.GoogleCNEnable; set => DataRepository.GoogleCNEnable = value; }
 

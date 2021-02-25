@@ -13,7 +13,7 @@ namespace ErogeHelper.Model.Translator
     {
         public string Name => "Xiaoniu";
 
-        public string IconPath => @"/Assets/transparent.png";
+        public string IconPath => @"/Assets/niutrans.com.ico";
 
         public bool IsEnable { get => DataRepository.XiaoniuEnable; set => DataRepository.XiaoniuEnable = value; }
 
