@@ -260,12 +260,17 @@ namespace ErogeHelper.Model
 
         public static bool XiaoniuEnable
         {
-            get => GetValue(DefaultValuesStore.XiaoniuEnable);
+            get => GetValue(DefaultValuesStore.NiuTransEnable);
             set => SetValue(value);
         }
         public static string NiuTransApiKey
         {
             get => GetValue(DefaultValuesStore.NiuTransApiKey);
+            set => SetValue(value);
+        }
+        public static bool GoogleCNEnable
+        {
+            get => GetValue(DefaultValuesStore.GoogleCNEnable);
             set => SetValue(value);
         }
         #endregion

@@ -51,7 +51,9 @@ namespace ErogeHelper.Model
 
         public const bool YoudaoEnable = false;
 
-        public const bool XiaoniuEnable = false;
+        public const bool NiuTransEnable = false;
         public const string NiuTransApiKey = "";
+
+        public const bool GoogleCNEnable = false;
     }
 }

@@ -59,8 +59,7 @@ namespace ErogeHelper.Model.Translator
                 var request = new RestRequest(url);
                 var response = await client.ExecuteGetAsync(request);
 
-                var resp = JsonSerializer.Deserialize<NiuTransResponse>(response.Content);
-
+                var resp = JsonSerializer.Deserialize<NiuTransResponse>(response.Content)!;
                 result = resp.tgt_text.Equals(string.Empty) ? resp.error_code + ": " + resp.error_msg : resp.tgt_text;
             }
             catch (Exception ex)
