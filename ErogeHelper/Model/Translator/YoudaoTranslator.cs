@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Translator
 {
-    class AlapiTranslator : ITranslator
+    class YoudaoTranslator : ITranslator
     {
-        public string Name => "Alapi";
+        public string Name => "Youdao";
 
         public string IconPath => @"/Assets/transparent.png";
 
-        public bool IsEnable { get => DataRepository.AlapiEnable; set => DataRepository.AlapiEnable = value; }
+        public bool IsEnable { get => DataRepository.YoudaoEnable; set => DataRepository.YoudaoEnable = value; }
 
         public bool NeedEdit => false;
 
@@ -32,45 +32,43 @@ namespace ErogeHelper.Model.Translator
             var token = cancelToken.Token;
 
             // Define Support Language
-            // Doc: https://www.alapi.cn/doc/show/32.html
             string from = srcLang switch
             {
-                Languages.日本語 => "jp",
+                Languages.日本語 => "ja",
                 _ => throw new Exception("Language not supported"),
             };
             string to = desLang switch
             {
-                Languages.简体中文 => "zh",
+                Languages.简体中文 => "zh_cn",
                 _ => throw new Exception("Language not supported"),
             };
 
+            string transType = from + "2" + to;
             string q = sourceText;
+            string url = "https://fanyi.youdao.com/translate?&doctype=json&type=" + transType + "&i=" + q;
+
+
             string result;
-
-            string url = "https://v1.alapi.cn/api/fanyi?q=" + q + "&from=" + from + "&to=" + to;
-            // TODO: https://v2.alapi.cn/api/fanyi v2 with token
-
             try
             {
                 var client = new RestClient();
                 var request = new RestRequest(url);
+                var resp = await client.GetAsync<YoudaoResponse>(request);
 
-                var resp = await client.GetAsync<AliapiResponse>(request);
-
-                if (resp.msg.Equals("success"))
+                if (resp.errorCode == 0)
                 {
-                    if (resp.data.trans_result.Count == 1)
+                    if (resp.translateResult.Count == 1)
                     {
-                        result = resp.data.trans_result[0].dst;
+                        result =  string.Join("", resp.translateResult[0].Select(x => x.tgt));
                     }
                     else
                     {
-                        result = "Unknown Error";
+                        result = "Error translateResultList";
                     }
                 }
                 else
                 {
-                    result = resp.msg;
+                    result = "Error code: " + resp.errorCode;
                 }
             }
             catch (Exception ex)
@@ -91,23 +89,17 @@ namespace ErogeHelper.Model.Translator
 
         private static CancellationTokenSource cancelToken = new();
 
-        class AliapiResponse
+        class YoudaoResponse
         {
-            public int code { get; set; }
-            public string msg { get; set; } = string.Empty;
-            public AliapiTransData data { get; set; } = new();
+            public string type { get; set; } = string.Empty;
+            public int errorCode { get; set; }
+            public int elapsedTime { get; set; }
+            public List<List<YoudaoTransData>> translateResult { get; set; } = new();
 
-            public class AliapiTransData
+            public class YoudaoTransData
             {
-                public string from { get; set; } = string.Empty;
-                public string to { get; set; } = string.Empty;
-                public List<AliapiTransResData> trans_result { get; set; } = new();
-
-                public class AliapiTransResData
-                {
-                    public string src { get; set; } = string.Empty;
-                    public string dst { get; set; } = string.Empty;
-                }
+                public string src { get; set; } = string.Empty;
+                public string tgt { get; set; } = string.Empty;
             }
         }
     }

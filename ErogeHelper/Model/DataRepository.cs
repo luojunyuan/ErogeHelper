@@ -251,6 +251,11 @@ namespace ErogeHelper.Model
             get => GetValue(DefaultValuesStore.AlapiEnable);
             set => SetValue(value);
         }
+        public static bool YoudaoEnable
+        {
+            get => GetValue(DefaultValuesStore.YoudaoEnable);
+            set => SetValue(value);
+        }
         #endregion
     }
 }

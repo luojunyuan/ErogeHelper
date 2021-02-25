@@ -49,5 +49,7 @@ namespace ErogeHelper.Model
 
         public const bool CaiyunEnable = false;
         public const string CaiyunDefaultToken = "3975l6lr5pcbvidl6jl2";
+
+        public const bool YoudaoEnable = false;
     }
 }
