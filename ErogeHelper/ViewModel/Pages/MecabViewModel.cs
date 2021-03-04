@@ -41,8 +41,8 @@ namespace ErogeHelper.ViewModel.Pages
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             // Set filter for file extension and default file extension 
-            dlg.DefaultExt = ".zip";
-            dlg.Filter = "IpaDic zip file (*.zip) | *.zip";
+            dlg.DefaultExt = ".eh";
+            dlg.Filter = "IpaDic.eh file (*.eh) | *.eh";
 
             // Display OpenFileDialog by calling ShowDialog method 
             bool? result = dlg.ShowDialog();

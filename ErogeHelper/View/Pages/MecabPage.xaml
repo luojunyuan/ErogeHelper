@@ -15,8 +15,9 @@
     <control:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <Button 
-                Content="Choose IpaDic zip file" ToolTip="Unpack dic.zip to enable this function"
-                cm:Message.Attach="[Click] = [ChooseMecabDic]" />
+                Content="Choose file IpaDic.eh" ToolTip="Unpack IpaDic.eh to enable this function"
+                cm:Message.Attach="[Click] = [ChooseMecabDic]" Visibility="{Binding CanEnableMecab, 
+                    Converter={StaticResource VisibleConverterReverse}}"/>
             
             <ui:ToggleSwitch
                 Header="{x:Static resx:Strings.MecabPage_JapaneseText}" IsOn="{Binding MecabToggle}" 
