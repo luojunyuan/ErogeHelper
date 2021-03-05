@@ -15,8 +15,8 @@
         <StackPanel Margin="20, 10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Msic}">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ui:ToggleSwitch 
-                        Header="{x:Static resx:Strings.GeneralPage_AppendText}" IsOn="{Binding ShowAppend}" />
+                    <!-- <ui:ToggleSwitch  -->
+                    <!--     Header="{x:Static resx:Strings.GeneralPage_AppendText}" IsOn="{Binding ShowAppend}" /> -->
                     <ui:ToggleSwitch 
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />
                     <ui:HyperlinkButton 

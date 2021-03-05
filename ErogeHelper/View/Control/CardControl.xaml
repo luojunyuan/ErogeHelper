@@ -177,7 +177,7 @@
                 </TabControl.Items>
             </TabControl>
 
-            <!-- Extened web link -->
+            <!-- Extended web link -->
             <ui:CommandBar HorizontalAlignment="Left" DefaultLabelPosition="Bottom" Background="Transparent">
                 <ui:AppBarButton Label="Weblio" cm:Message.Attach="[Click] = [OpenWeblioLink]" >
                     <ui:AppBarButton.Icon>

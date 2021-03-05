@@ -45,6 +45,7 @@ namespace ErogeHelper.View.Control
         {
             var border = sender as Border;
             border!.ClearValue(EffectProperty);
+            border!.Opacity = 1;
         }
 
         private void Border_PreviewMouseDown(object sender, MouseButtonEventArgs e)
