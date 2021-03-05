@@ -96,7 +96,7 @@ namespace ErogeHelper.Common.Service
             }
 
             gameViewModel.SourceTextArchiver.Enqueue(hp.Text);
-            gameViewModel.TextControl.CardControl.DisplayedText = hp.Text;
+            gameViewModel.TextControl.CardControl.TotalText = hp.Text;
 
             // Process source japanese text
             if (mecabViewModel.MecabToggle)

@@ -125,7 +125,7 @@
                         <ui:FlyoutService.Flyout>
                             <ui:Flyout Placement="Top">
                                 <TextBox 
-                                    Text="{Binding DisplayedText}" IsReadOnly="True" TextWrapping="Wrap" MaxWidth="360"
+                                    Text="{Binding TotalText}" IsReadOnly="True" TextWrapping="Wrap" MaxWidth="360"
                                     cm:Message.Attach="[PreviewMouseLeftButtonUp] = [SendSelectedText($source)]">
                                 </TextBox>
                             </ui:Flyout>

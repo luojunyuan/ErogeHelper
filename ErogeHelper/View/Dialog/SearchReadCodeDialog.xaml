@@ -10,12 +10,15 @@
                   Title="Search Text" IsPrimaryButtonEnabled="False">
     
     <ui:SimpleStackPanel Spacing="10">
-        <Separator />
-        <TextBlock 
-            Text="Please enter the current text displayed by the game and type from the beginning of the text (including the '「'　symbol, if exist) (Read-Code may only work this turn during the game run)"
-            TextWrapping="Wrap" />
-        <ui:AppBarButton Icon="Crop" Height="32" Width="32" ToolTip="Select text area" IsEnabled="False" />
-        <TextBox Name="JapaneseText" HorizontalAlignment="Left" Width="240" TextChanged="JapaneseText_OnTextChanged" />
+        <!--Please enter the current text displayed by the game and type from the beginning of the text (including the '「'　symbol, if exist) (Read-Code may only work this turn during the game run)"-->
+        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+            <TextBox Name="JapaneseText" HorizontalAlignment="Left" Width="240" TextChanged="JapaneseText_OnTextChanged" />
+            <ui:AppBarButton Height="32" Width="32" ToolTip="Select text area" IsEnabled="False" >
+                <ui:AppBarButton.Icon>
+                    <ui:SymbolIcon Symbol="Crop" Margin="0 -6.5 0 0"/>
+                </ui:AppBarButton.Icon>
+            </ui:AppBarButton>
+        </ui:SimpleStackPanel>
         <TextBlock Name="TextValidationTip" Text="The text should more than 5 characters" Foreground="Red" Visibility="Collapsed" />
     </ui:SimpleStackPanel>
 </ui:ContentDialog>

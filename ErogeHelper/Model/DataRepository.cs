@@ -63,7 +63,11 @@ namespace ErogeHelper.Model
         internal static void SetValue<T>(T value, [CallerMemberName] string propertyName = "")
         {
             if (value is null)
-                throw new NullReferenceException();
+                return;
+
+            var targetValue = value.ToString()!;
+            if (LocalSetting.TryGetValue(propertyName, out var outValue) && outValue.Equals(targetValue))
+                return;
 
             LocalSetting[propertyName] = value.ToString()!;
             Log.Debug($"{propertyName} changed to {value}");

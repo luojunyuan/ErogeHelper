@@ -20,9 +20,9 @@ namespace ErogeHelper.ViewModel.Control
         private Visibility _dictTabVisibility = Visibility.Collapsed;
         private Visibility _mojiTabItemVisible = DataRepository.MojiDictEnable ? Visibility.Visible : Visibility.Collapsed;
         private Visibility _jishoTabItemVisible = DataRepository.JishoDictEnable ? Visibility.Visible : Visibility.Collapsed;
-        private string _displayedText = string.Empty;
+        private string _totalText = string.Empty;
 
-        // TextBox
+        /// <summary>The main text in the TextBox</summary>
         public string Word
         {
             get => _word;
@@ -33,19 +33,21 @@ namespace ErogeHelper.ViewModel.Control
             }
         }
 
-        public string DisplayedText 
+        /// <summary>
+        /// Total sentence
+        /// </summary>
+        public string TotalText 
         { 
-            get => _displayedText;
+            get => _totalText;
             set 
             { 
-                _displayedText = value;
-                NotifyOfPropertyChange(() => DisplayedText);
+                _totalText = value;
+                NotifyOfPropertyChange(() => TotalText);
             }
         }
         public void SendSelectedText(object sender)
         {
-            var textBox = sender as TextBox;
-            if (textBox is not null)
+            if (sender is TextBox textBox)
             {
                 var selectedText = textBox.SelectedText;
                 if (!selectedText.Equals(string.Empty))
