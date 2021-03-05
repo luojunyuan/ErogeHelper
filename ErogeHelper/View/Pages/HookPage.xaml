@@ -122,11 +122,13 @@
                 <!-- Hook Data List -->
                 <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
                     <ui:SimpleStackPanel Spacing="10">
+                        <!-- Commanders -->
                         <StackPanel Orientation="Horizontal">
                             <ui:AppBarButton 
                                 Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}" 
                                 Icon="Refresh" ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" 
                                 cm:Message.Attach="[Click] = [ClearHookMapData]"/>
+                            <!-- Hook Code -->
                             <ui:AppBarButton 
                                 x:Name="CodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}"
                                 ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}" 
@@ -135,7 +137,6 @@
                                     <ui:FontIcon Glyph="{x:Static model:CommonGlyphs.Component}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
-                            <!-- Hook Code -->
                             <ui:ContentDialog
                                 x:Name="CodeDialog" Title="{x:Static resx:Strings.HookPage_HookCode}"
                                 CloseButtonText="{x:Static resx:Strings.HookPage_CodeSearchCancel}" 
@@ -145,7 +146,7 @@
                                 IsPrimaryButtonEnabled="{Binding CanInsertCode}">
                                 <ui:SimpleStackPanel Spacing="10">
                                     <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-                                        <!--CodeTextBox just suger-->
+                                        <!--CodeTextBox just sugar-->
                                         <TextBox 
                                             HorizontalAlignment="Left" Width="240"
                                             behavior:ValidationBehavior.HasError="{Binding DataContext.InvalidHookCode, 
@@ -172,8 +173,11 @@
                                         </ui:AppBarButton>
                                     </ui:SimpleStackPanel>
                                 </ui:SimpleStackPanel>
-                                
                             </ui:ContentDialog>
+                            <!-- Read Code -->
+                            <ui:AppBarButton 
+                                Name="RCodeButton" Label="Read Code" Icon="{x:Static model:CommonSymbols.Search}"
+                                ToolTip="Search text help find out read code" Click="RCodeButton_OnClick" />
                         </StackPanel>
                         <ListView 
                             ScrollViewer.PanningMode="None"

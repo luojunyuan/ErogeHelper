@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace ErogeHelper.Common
 {
-    static class Textractor
+    internal static class Textractor
     {
-        // 4.15
         public static void Init()
         {
+            // Current texthook.dll version 4.15
             string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
             if (!File.Exists(textractorPath))
                 throw new FileNotFoundException(textractorPath);
 
-            createthread = CreateThreadHandle;
-            output = OutputHandle;
-            removethread = RemoveThreadHandle;
-            callback = OnConnectCallBackHandle;
+            _createThread = CreateThreadHandle;
+            _output = OutputHandle;
+            _removeThread = RemoveThreadHandle;
+            _callback = OnConnectCallBackHandle;
 
-            _ = TextHostLib.TextHostInit(callback, _ => { }, createthread, removethread, output);
+            _ = TextHostLib.TextHostInit(_callback, _ => { }, _createThread, _removeThread, _output);
 
             foreach (Process p in DataRepository.GameProcesses)
             {
@@ -34,24 +34,25 @@ namespace ErogeHelper.Common
             }
         }
 
-        static private TextHostLib.OnOutputText? output;
-        static private TextHostLib.ProcessCallback? callback;
-        static private TextHostLib.OnCreateThread? createthread;
-        static private TextHostLib.OnRemoveThread? removethread;
+        private static TextHostLib.OnOutputText? _output;
+        private static TextHostLib.ProcessCallback? _callback;
+        private static TextHostLib.OnCreateThread? _createThread;
+        private static TextHostLib.OnRemoveThread? _removeThread;
 
         public delegate void DataRecvEventHandler(object sender, HookParam e);
         public static event DataRecvEventHandler? SelectedDataEvent;
         public static event DataRecvEventHandler? DataEvent;
 
-        static readonly Dictionary<long, HookParam> ThreadHandleDict = new Dictionary<long, HookParam>();
+        private static readonly Dictionary<long, HookParam> ThreadHandleDict = new();
 
         #region TextHostInit Callback Implement
-        static public void CreateThreadHandle(
+
+        private static void CreateThreadHandle(
             long threadId,
             uint processId,
             ulong address,
             ulong context,
-            ulong subcontext,
+            ulong subContext,
             string name,
             string hookCode)
         {
@@ -61,19 +62,19 @@ namespace ErogeHelper.Common
                 Pid = processId,
                 Addr = (long)address,
                 Ctx = (long)context,
-                Ctx2 = (long)subcontext,
+                Ctx2 = (long)subContext,
                 Name = name,
                 Hookcode = hookCode
             };
         }
 
-        static public void OutputHandle(long threadid, string opdata)
+        private static void OutputHandle(long threadId, string opData)
         {
-            if (opdata.Length > 500)
+            if (opData.Length > 500)
                 return;
 
-            HookParam hp = ThreadHandleDict[threadid];
-            hp.Text = opdata;
+            HookParam hp = ThreadHandleDict[threadId];
+            hp.Text = opData;
 
             DataEvent?.Invoke(typeof(Textractor), hp);
             if (!string.IsNullOrWhiteSpace(GameConfig.HookCode)
@@ -92,16 +93,16 @@ namespace ErogeHelper.Common
             }
         }
 
-        static public void RemoveThreadHandle(long threadId) { }
+        private static void RemoveThreadHandle(long threadId) { }
 
-        static public void OnConnectCallBackHandle(uint processId)
+        private static void OnConnectCallBackHandle(uint processId)
         {
             if (!string.IsNullOrWhiteSpace(GameConfig.Path) && GameConfig.IsUserHook)
             {
                 InsertHook(GameConfig.HookCode);
             }
         }
-        #endregion
+        #endregion TextHostInit Callback Implement
 
         public static void InsertHook(string hookcode)
         {
@@ -111,19 +112,16 @@ namespace ErogeHelper.Common
             string engineName;
             if (hookcode.StartsWith('R'))
             {
-                engineName = "READ";
-                foreach (var hcodeItem in ThreadHandleDict)
+                // engineName = "READ";
+                if (ThreadHandleDict.Any(hcodeItem => hookcode.Equals(hcodeItem.Value.Hookcode)))
                 {
-                    if (hookcode.Equals(hcodeItem.Value.Hookcode))
+                    DataEvent?.Invoke(typeof(Textractor), new HookParam
                     {
-                        DataEvent?.Invoke(typeof(Textractor), new HookParam
-                        {
-                            Name = "控制台",
-                            Hookcode = "HB0@0",
-                            Text = "ErogeHelper: The Read-Code has already insert"
-                        });
-                        return;
-                    }
+                        Name = "控制台",
+                        Hookcode = "HB0@0",
+                        Text = "ErogeHelper: The Read-Code has already insert"
+                    });
+                    return;
                 }
             }
             else
@@ -132,18 +130,15 @@ namespace ErogeHelper.Common
                 engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
 
                 // 重复插入相同的code(可能)会导致产生很高位的Context
-                foreach (var hcodeItem in ThreadHandleDict) // ThreadHandleDict只会出现移动游戏文本或程序后产生的钩子
+                if (ThreadHandleDict.Any(hcodeItem => engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode)))
                 {
-                    if (engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode))
+                    DataEvent?.Invoke(typeof(Textractor), new HookParam
                     {
-                        DataEvent?.Invoke(typeof(Textractor), new HookParam
-                        {
-                            Name = "控制台",
-                            Hookcode = "HB0@0",
-                            Text = "ErogeHelper: The Hook-Code has already insert" // 该特殊码已插入
-                        });
-                        return;
-                    }
+                        Name = "控制台",
+                        Hookcode = "HB0@0",
+                        Text = "ErogeHelper: The Hook-Code has already insert" // 该特殊码已插入
+                    });
+                    return;
                 }
             }
 
@@ -154,7 +149,15 @@ namespace ErogeHelper.Common
             }
         }
 
-        internal class TextHostLib
+        public static void SearchRCode(string text)
+        {
+            foreach (Process p in DataRepository.GameProcesses)
+            {
+                _ = TextHostLib.SearchForText((uint)p.Id, text, 932);
+            }
+        }
+        
+        private static class TextHostLib
         {
             #region 回调委托
             internal delegate void ProcessCallback(uint processId);
@@ -176,11 +179,11 @@ namespace ErogeHelper.Common
 
             [DllImport(@"libs\texthost.dll")]
             internal static extern int TextHostInit(
-                ProcessCallback OnConnect,
-                ProcessCallback OnDisconnect,
-                OnCreateThread OnCreateThread,
-                OnRemoveThread OnRemoveThread,
-                OnOutputText OnOutputText
+                ProcessCallback onConnect,
+                ProcessCallback onDisconnect,
+                OnCreateThread onCreateThread,
+                OnRemoveThread onRemoveThread,
+                OnOutputText onOutputText
                 );
 
             [DllImport(@"libs\texthost.dll")]
@@ -189,17 +192,22 @@ namespace ErogeHelper.Common
                 [MarshalAs(UnmanagedType.LPWStr)] string hookCode
                 );
 
+            // TODO: Add right click menu in HookPage
             [DllImport(@"libs\texthost.dll")]
             internal static extern int RemoveHook(uint processId, ulong address);
 
             [DllImport(@"libs\texthost.dll")]
-            internal extern static int InjectProcess(uint processId);
+            internal static extern int InjectProcess(uint processId);
 
             [DllImport(@"libs\texthost.dll")]
-            internal extern static int DetachProcess(uint processId);
+            internal static extern int DetachProcess(uint processId);
 
             [DllImport(@"libs\texthost.dll")]
-            internal extern static int AddClipboardThread(IntPtr windowHandle);
+            internal static extern int SearchForText(
+                uint processId,
+                [MarshalAs(UnmanagedType.LPWStr)] string text,
+                int codepage
+            );
 
             //用于搜索钩子的结构体参数，32bit size=608 ,64bit size=632
             [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

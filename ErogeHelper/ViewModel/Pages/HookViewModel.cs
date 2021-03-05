@@ -75,7 +75,7 @@ namespace ErogeHelper.ViewModel.Pages
             //if (args.Result == ContentDialogResult.None)
         }
         #endregion
-
+        
         #region RegExp
         private string? _regExp;
         public string RegExp // if user click 'x', it will turn to null

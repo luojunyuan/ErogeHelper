@@ -20,7 +20,7 @@
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItemSeparator Margin="0 30 0 0"/>
             <ui:NavigationViewItem Icon="AllApps" Content="{x:Static resx:Strings.GeneralPage_Title}" Tag="general"/>
-            <ui:NavigationViewItem Icon="{x:Static model:CommonGlyphs.LangJPN}" Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab"/>
+            <ui:NavigationViewItem Icon="{x:Static model:CommonSymbols.LangJPN}" Content="{x:Static resx:Strings.MecabPage_Title}" Tag="mecab"/>
             <ui:NavigationViewItem Icon="Attach" Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook"/>
             <!-- <ui:NavigationViewItem Icon="Character" Content="Trans" Tag="trans"/> -->
             <ui:NavigationViewItem Icon="Message" Content="Log" Tag="log"/>

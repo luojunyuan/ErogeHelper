@@ -34,7 +34,12 @@ namespace ErogeHelper.Model
         public const string TaskView = "\uE7C4";
 
         public const string Component = "\uE950";
+    }
 
-        public static SymbolIcon LangJPN = new SymbolIcon { Symbol = (Symbol)59358 };
+    public static class CommonSymbols
+    {
+        public static readonly SymbolIcon LangJPN = new() { Symbol = (Symbol)59358 };
+
+        public static readonly SymbolIcon Search = new() {Symbol = (Symbol)59169 };
     }
 }
