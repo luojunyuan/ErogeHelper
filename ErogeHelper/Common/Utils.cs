@@ -20,6 +20,7 @@ using ErogeHelper.Common.Extension;
 using ErogeHelper.Common.Helper;
 using ErogeHelper.Model;
 using ErogeHelper.ViewModel.Control;
+using NETWORKLIST;
 using WanaKanaSharp;
 
 namespace ErogeHelper.Common
@@ -207,5 +208,9 @@ namespace ErogeHelper.Common
                 _ => throw new Exception("Error language")
             };
         }
+
+        private static readonly INetworkListManager _networkListManager = new NetworkListManager();
+
+        public static bool NetIsConnected => _networkListManager.IsConnectedToInternet;
     }
 }

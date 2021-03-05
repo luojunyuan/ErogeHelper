@@ -92,7 +92,8 @@ namespace ErogeHelper.ViewModel.Control
 
         public void UpdateDictPanelVisibility()
         {
-            if (DataRepository.MojiDictEnable || DataRepository.JishoDictEnable)
+            if (Utils.NetIsConnected && 
+                (DataRepository.MojiDictEnable || DataRepository.JishoDictEnable))
             {
                 DictTabVisibility = Visibility.Visible;
             }
@@ -106,15 +107,17 @@ namespace ErogeHelper.ViewModel.Control
         {
             try
             {
-                if (DataRepository.MojiDictEnable)
+                if (Utils.NetIsConnected)
                 {
-                    await MojiSearchAsync(token);
+                    if (DataRepository.MojiDictEnable)
+                    {
+                        await MojiSearchAsync(token);
+                    }
+                    if (DataRepository.JishoDictEnable)
+                    {
+                        await JishoSearchAsync(token);
+                    }
                 }
-                if (DataRepository.JishoDictEnable)
-                {
-                    await JishoSearchAsync(token);
-                }
-
             }
             catch (ArgumentOutOfRangeException ex)
             {

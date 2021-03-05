@@ -105,20 +105,23 @@ namespace ErogeHelper.Common.Service
                 SourceDataEvent?.Invoke(typeof(GameViewDataService), collect);
             }
 
-            foreach(var translator in TranslatorManager.GetEnabled())
+            if (Utils.NetIsConnected)
             {
-                Task.Run(async () =>
+                foreach (var translator in TranslatorManager.GetEnabled())
                 {
-                    Stopwatch sw = new();
-                    sw.Start();
-                    var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
-                    sw.Stop();
-                    if (!result.Equals(string.Empty))
+                    Task.Run(async () =>
                     {
-                        Log.Debug($"{translator.Name}: {result}");
-                        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, $"{translator.Name} {sw.ElapsedMilliseconds}ms");
-                    }
-                });
+                        Stopwatch sw = new();
+                        sw.Start();
+                        var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
+                        sw.Stop();
+                        if (!result.Equals(string.Empty))
+                        {
+                            Log.Debug($"{translator.Name}: {result}");
+                            AppendDataEvent?.Invoke(typeof(GameViewDataService), result, $"{translator.Name} {sw.ElapsedMilliseconds}ms");
+                        }
+                    });
+                }
             }
 
             // hard code for sakura no uta
