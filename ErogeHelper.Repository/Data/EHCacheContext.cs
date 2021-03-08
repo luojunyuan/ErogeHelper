@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ErogeHelper.Repository.Data
 {
-    public class EHDbTmpContext : DbContext
+    public class EHCacheContext : DbContext
     {
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
             var file = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\eh_temp.db");
+                Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\eh_cache.db");
             file = Path.GetFullPath(file);
 
             optionsBuilder.UseSqlite(

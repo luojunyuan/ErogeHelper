@@ -7,6 +7,12 @@ namespace ErogeHelper.Repository.Data
 {
     public class EHDbContext : DbContext
     {
+        /// <summary>
+        /// This context is read-only 
+        /// </summary>
+        public EHDbContext()
+        { }
+
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
@@ -16,7 +22,6 @@ namespace ErogeHelper.Repository.Data
 
             optionsBuilder.UseSqlite(
                 $"Filename={file}");
-            // optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
         }
 

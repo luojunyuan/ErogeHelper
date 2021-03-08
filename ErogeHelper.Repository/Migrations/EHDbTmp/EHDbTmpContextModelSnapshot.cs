@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ErogeHelper.Repository.Migrations.EHDbTmp
 {
-    [DbContext(typeof(EHDbTmpContext))]
+    [DbContext(typeof(EHCacheContext))]
     partial class EHDbTmpContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

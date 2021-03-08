@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ErogeHelper.Repository.Migrations.EHDbTmp
 {
-    [DbContext(typeof(EHDbTmpContext))]
+    [DbContext(typeof(EHCacheContext))]
     [Migration("20210308031806_InitialCreate")]
     partial class InitialCreate
     {

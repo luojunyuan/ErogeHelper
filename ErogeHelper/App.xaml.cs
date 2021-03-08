@@ -51,7 +51,7 @@ namespace ErogeHelper
                 {
                     db.Database.Migrate();
                 }
-                using var dbTmp = new Repository.Data.EHDbTmpContext();
+                using var dbTmp = new Repository.Data.EHCacheContext();
                 if (dbTmp.Database.GetPendingMigrations().Any())
                 {
                     dbTmp.Database.Migrate();
