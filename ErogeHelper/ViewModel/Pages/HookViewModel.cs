@@ -294,7 +294,7 @@ namespace ErogeHelper.ViewModel.Pages
             else
             {
                 GameConfig.CreateConfig(configPath);
-                await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>()).ConfigureAwait(false);
+                await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>(), "InsideView").ConfigureAwait(false);
                 await IoC.Get<HookConfigViewModel>().TryClose().ConfigureAwait(false);
             }
         }
