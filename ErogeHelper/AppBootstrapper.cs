@@ -54,7 +54,7 @@ namespace ErogeHelper
                                                ? $"-run \"{gamePath}\""
                                                : $"\"{gamePath}\""
                     });
-                    // XXX: LE may throw AccessViolationException which can not be catch
+                    // XXX: LE may throw AccessViolationException which can not be catched
                 }
                 else
                 {

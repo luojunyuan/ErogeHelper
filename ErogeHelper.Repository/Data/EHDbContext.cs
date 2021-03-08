@@ -11,6 +11,8 @@ namespace ErogeHelper.Repository.Data
 
         public DbSet<Game> Games => Set<Game>();
 
+        public DbSet<GameCache> GameCaches => Set<GameCache>();
+
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,4 +1,5 @@
 ﻿using ErogeHelper.Common.Helper;
+using ErogeHelper.Model.Service;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
@@ -44,16 +45,11 @@ namespace ErogeHelper
             SetLanguageDictionary();
 
             // Init database
-            Task.Run(() => 
+            Task.Run(async () => 
             {
-                using var db = new Repository.Data.EHDbContext();
-                if (db.Database.GetPendingMigrations().Any())
-                {
-                    db.Database.Migrate();
-                }
-
-                var newist = db.Games.OrderByDescending(g => g.UpdateTime).FirstOrDefault();
-                Model.Api.EHServer.SyncGame(newist?.UpdateTime ?? new());
+                var dbService = new EHDbService();
+                await dbService.Migrate();
+                await dbService.SyncGameInfo();
             });
 
             // Set thread error handle

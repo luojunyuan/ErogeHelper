@@ -15,13 +15,13 @@ namespace ErogeHelper.Repository.Models
         public DateTime UpdateTime { get; set; }
     }
 
-    //public class TextSetting
-    //{
-    //    public int Id { get; set; }
-    //    public bool UserHook { get; set; }
-    //    public string HookCode { get; set; } = string.Empty;
-    //    public string RegExp { get; set; } = string.Empty;
-    //    public long ThreadContext { get; set; }
-    //    public long SubThreadContext { get; set; }
-    //}
+    public class GameCache
+    {
+        public string Md5 { get; set; } = string.Empty;
+        public bool UserHook { get; set; }
+        public string HookCode { get; set; } = string.Empty;
+        public string RegExp { get; set; } = string.Empty;
+        public long ThreadContext { get; set; }
+        public long SubThreadContext { get; set; }
+    }
 }
