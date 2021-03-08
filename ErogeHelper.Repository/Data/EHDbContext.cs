@@ -7,17 +7,16 @@ namespace ErogeHelper.Repository.Data
 {
     public class EHDbContext : DbContext
     {
-        /// <summary>
-        /// This context is read-only 
-        /// </summary>
-        public EHDbContext()
-        { }
+        public DbSet<Subtitle> Subtitles => Set<Subtitle>();
+
+        public DbSet<Game> Games => Set<Game>();
 
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
+            // TODO: if folder not exitst, then create one 
             var file = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\eh_readonly.db");
+                Environment.SpecialFolder.LocalApplicationData) + @"\ErogeHelper\eh.db");
             file = Path.GetFullPath(file);
 
             optionsBuilder.UseSqlite(
@@ -25,16 +24,7 @@ namespace ErogeHelper.Repository.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Game>()
-                .HasMany(it => it.Names)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-
-        public DbSet<Subtitle> Comments => Set<Subtitle>();
-        public DbSet<Game> Games => Set<Game>();
-        public DbSet<User> Users => Set<User>();
+        // Migration command
+        // C:/Program Files (x86)/dotnet/dotnet.exe" dotnet ef migrations add
     }
 }

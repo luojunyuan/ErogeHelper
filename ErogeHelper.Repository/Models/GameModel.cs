@@ -9,35 +9,19 @@ namespace ErogeHelper.Repository.Models
 
         public string Md5 { get; set; } = string.Empty;
 
-        public List<GameName> Names { get; set; } = new();
+        public string TextSettingJson { get; set; } = string.Empty;
 
-        public int TextSettingId { get; set; }
-
-        public TextSetting TextSetting { get; set; } = new();
-
-        public int CreatorId { get; set; }
-
-        public User Creator { get; set; } = new();
-
-        public DateTime CreationTime { get; set; }
-
-        public DateTime ModifiedTime { get; set; }
+        // 2019-07-26T00:00:00
+        public DateTime UpdateTime { get; set; }
     }
 
-    public class GameName
-    {
-        public int Id { get; set; }
-        public string Type { get; set; } = string.Empty;
-        public string Value { get; set; } = string.Empty;
-    }
-
-    public class TextSetting
-    {
-        public int Id { get; set; }
-        public bool UserHook { get; set; }
-        public string HookCode { get; set; } = string.Empty;
-        public string RegExp { get; set; } = string.Empty;
-        public long ThreadContext { get; set; }
-        public long SubThreadContext { get; set; }
-    }
+    //public class TextSetting
+    //{
+    //    public int Id { get; set; }
+    //    public bool UserHook { get; set; }
+    //    public string HookCode { get; set; } = string.Empty;
+    //    public string RegExp { get; set; } = string.Empty;
+    //    public long ThreadContext { get; set; }
+    //    public long SubThreadContext { get; set; }
+    //}
 }

@@ -30,7 +30,7 @@
                         cm:Message.Attach="[DropDownOpened] = [GetProcessAction]">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" MaxWidth="500">
                                     <Image Source="{Binding Icon}" />
                                     <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
                                 </StackPanel>

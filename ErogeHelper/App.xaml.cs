@@ -51,11 +51,9 @@ namespace ErogeHelper
                 {
                     db.Database.Migrate();
                 }
-                using var dbTmp = new Repository.Data.EHCacheContext();
-                if (dbTmp.Database.GetPendingMigrations().Any())
-                {
-                    dbTmp.Database.Migrate();
-                }
+
+                var newist = db.Games.OrderByDescending(g => g.UpdateTime).FirstOrDefault();
+                Model.Api.EHServer.SyncGame(newist?.UpdateTime ?? new());
             });
 
             // Set thread error handle
