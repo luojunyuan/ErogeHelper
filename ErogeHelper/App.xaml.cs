@@ -1,8 +1,11 @@
 ﻿using ErogeHelper.Common.Helper;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -39,6 +42,21 @@ namespace ErogeHelper
 
             // Set i18n
             SetLanguageDictionary();
+
+            // Init database
+            Task.Run(() => 
+            {
+                using var db = new Repository.Data.EHDbContext();
+                if (db.Database.GetPendingMigrations().Any())
+                {
+                    db.Database.Migrate();
+                }
+                using var dbTmp = new Repository.Data.EHDbTmpContext();
+                if (dbTmp.Database.GetPendingMigrations().Any())
+                {
+                    dbTmp.Database.Migrate();
+                }
+            });
 
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (s, unhandledExceptionArgs) =>

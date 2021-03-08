@@ -17,15 +17,17 @@ namespace ErogeHelper.ViewModel
         readonly IWindowManager windowManager;
         private ProcComboboxItem? _selectedProcItem;
 
-        public SelectProcessViewModel(ISelectProcessService dataService, IWindowManager windowManager)
+        public SelectProcessViewModel(
+            ISelectProcessService dataService, 
+            IWindowManager windowManager)
         {
             this.dataService = dataService;
             this.windowManager = windowManager;
-            
+
             dataService.GetProcessListAsync(ProcItems);
         }
 
-        public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new BindableCollection<ProcComboboxItem>();
+        public BindableCollection<ProcComboboxItem> ProcItems { get; private set; } = new();
         public ProcComboboxItem? SelectedProcItem
         {
             get => _selectedProcItem;
