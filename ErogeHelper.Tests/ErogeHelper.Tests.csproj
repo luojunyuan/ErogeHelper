@@ -15,8 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\**" />
     <Compile Remove="Function\**" />
+    <EmbeddedResource Remove="Common\**" />
     <EmbeddedResource Remove="Function\**" />
+    <None Remove="Common\**" />
     <None Remove="Function\**" />
   </ItemGroup>
 
@@ -29,10 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ErogeHelper\ErogeHelper.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Helper\" />
   </ItemGroup>
 
 </Project>
