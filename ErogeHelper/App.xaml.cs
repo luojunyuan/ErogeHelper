@@ -1,36 +1,63 @@
 ﻿using System;
 using System.Threading;
-using System.Windows;
 using System.Windows.Threading;
+using Serilog;
 
 namespace ErogeHelper
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
-        App()
+        private App()
         {
             // Enable Pointer for touch device
             AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
 
+            // Set logger
+            Serilog.Log.Logger = new LoggerConfiguration()
+#if DEBUG
+                .MinimumLevel.Debug()
+                // VS Output
+                .WriteTo.Debug(outputTemplate: 
+                    "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+#else
+				.MinimumLevel.Information()
+#endif
+                .CreateLogger();
+
+            // Set i18n
+            SetLanguageDictionary();
+
             // Set thread error handle
-            AppDomain.CurrentDomain.UnhandledException += (s, unhandledExceptionArgs) =>
+            AppDomain.CurrentDomain.UnhandledException += (_, unhandledExceptionArgs) =>
             {
                 var dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
                 if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
                     return;
 
                 Exception ex = (Exception)unhandledExceptionArgs.ExceptionObject;
-                System.Diagnostics.Trace.WriteLine(ex);
+                Log.Fatal(ex);
             };
-            DispatcherUnhandledException += (s, dispatcherUnhandledExceptionEventArgs) =>
+            DispatcherUnhandledException += (_, dispatcherUnhandledExceptionEventArgs) =>
             {
                 // More friendly
                 dispatcherUnhandledExceptionEventArgs.Handled = true;
 
-                System.Diagnostics.Trace.WriteLine(dispatcherUnhandledExceptionEventArgs.Exception);
+                Log.Error(dispatcherUnhandledExceptionEventArgs.Exception);
+            };
+        }
+
+        private static void SetLanguageDictionary()
+        {
+            Language.Strings.Culture = (Thread.CurrentThread.CurrentCulture.ToString()) switch
+            {
+                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
+                // Default english because there can be so many different system language, we rather fallback on
+                // english in this case.
+                _ => new System.Globalization.CultureInfo("en-US"),
             };
         }
     }

@@ -8,16 +8,30 @@
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <ApplicationManifest>Assets\app.manifest</ApplicationManifest>
+    <Version>0.0.6</Version>
+    <Authors>k1mlka</Authors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
     <PackageReference Include="ModernWpfUI" Version="0.9.3" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Common\" />
+    <Folder Include="Common\Extention\" />
+    <Folder Include="Model\Repository\Translator\" />
+    <Folder Include="Model\Repository\Dictionary\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.Language\ErogeHelper.Language.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="libs\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
