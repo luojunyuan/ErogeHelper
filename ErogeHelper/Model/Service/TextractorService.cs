@@ -45,6 +45,9 @@ namespace ErogeHelper.Model.Service
 
         public void InsertHook(string hookcode)
         {
+            if (!_processes.Any())
+                throw new ArgumentException(_processes.ToString());
+
             if (hookcode.StartsWith('/'))
                 hookcode = hookcode[1..];
 
@@ -91,6 +94,9 @@ namespace ErogeHelper.Model.Service
 
         public void SearchRCode(string text)
         {
+            if (!_processes.Any())
+                throw new ArgumentException(_processes.ToString());
+
             throw new NotImplementedException();
         }
 

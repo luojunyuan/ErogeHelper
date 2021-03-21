@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Caliburn.Micro;
+using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
@@ -45,6 +46,8 @@ namespace ErogeHelper
             _container.Singleton<GameViewModel>();
 
             // Services
+            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            _container.Instance(new EhConfigRepository(appDataDir));
             _container.Singleton<ITextractorService, TextractorService>();
         }
 

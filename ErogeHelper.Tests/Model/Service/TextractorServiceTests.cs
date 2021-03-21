@@ -31,23 +31,5 @@ namespace ErogeHelper.Tests.Model.Service
             Assert.AreEqual("Textractor: pipe connected", receivedTexts[1]);
             notepad.Kill();
         }
-
-        [TestMethod]
-        public void InsertHookTest()
-        {
-            //Assert.Fail();
-        }
-
-        [TestMethod]
-        public void SearchRCodeTest()
-        {
-            //Assert.Fail();
-        }
-
-        [TestMethod]
-        public void UpdateSelectedThreadSettingTest()
-        {
-            //Assert.Fail();
-        }
     }
 }
