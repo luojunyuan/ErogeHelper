@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Caliburn.Micro;
+using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
@@ -19,10 +20,16 @@ namespace ErogeHelper
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            var windowManager = IoC.Get<IWindowManager>();
+            var windowManager = _container.GetInstance<IWindowManager>();
+
+            if (e.Args.Length == 0)
+            {
+                await DisplayRootViewFor<SelectProcessViewModel>();
+                return;
+            }
 
             Log.Debug("a");
-            await windowManager.ShowWindowAsync(IoC.Get<GameViewModel>(), "InsideView");
+            await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView");
             Log.Debug("b");
         }
 
@@ -44,6 +51,7 @@ namespace ErogeHelper
 
             // ViewModels
             _container.Singleton<GameViewModel>();
+            _container.PerRequest<SelectProcessViewModel>();
 
             // Services
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
