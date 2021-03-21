@@ -24,12 +24,12 @@ namespace ErogeHelper
 
             if (e.Args.Length == 0)
             {
-                await DisplayRootViewFor<SelectProcessViewModel>();
+                await DisplayRootViewFor<SelectProcessViewModel>().ConfigureAwait(false);
                 return;
             }
 
             Log.Debug("a");
-            await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView");
+            await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             Log.Debug("b");
         }
 
@@ -57,6 +57,8 @@ namespace ErogeHelper
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             _container.Instance(new EhConfigRepository(appDataDir));
             _container.Singleton<ITextractorService, TextractorService>();
+            _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();
+            _container.PerRequest<ISelectProcessDataService, SelectProcessDataService>();
         }
 
         #region Simple IoC Init
