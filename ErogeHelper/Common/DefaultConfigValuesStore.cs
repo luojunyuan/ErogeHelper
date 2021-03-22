@@ -2,7 +2,7 @@
 
 namespace ErogeHelper.Common
 {
-    internal static class DefaultConstValuesStore
+    internal static class DefaultConfigValuesStore
     {
         public const double FontSize = 28;
 

@@ -12,7 +12,7 @@ using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
-    public class SelectProcessDataService : ISelectProcessDataService
+    public class SelectProcessDataService : ISelectProcessDataService, IDisposable
     {
         public async Task RefreshBindableProcComboBoxAsync(BindableCollection<ProcComboBoxItem> refData) =>
             await Task.Run(() =>
@@ -64,5 +64,7 @@ namespace ErogeHelper.Model.Service
             "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps", "WhiteboardWRT",
             "PeopleApp", "RtkUWP"
         };
+
+        public void Dispose() => Log.Debug($"{nameof(SelectProcessDataService)}.Dispose()");
     }
 }

@@ -11,14 +11,10 @@ namespace ErogeHelper.Model.Service.Interface
 
         event Action<HookParam> SelectedDataEvent;
 
-        bool HasInjected { get; set; }
-
-        void InjectProcesses(IEnumerable<Process> processEnumerable);
+        void InjectProcesses();
 
         void InsertHook(string hookcode);
 
         void SearchRCode(string text);
-
-        void UpdateSelectedThreadSetting(HookParam setting);
     }
 }

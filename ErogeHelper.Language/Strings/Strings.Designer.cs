@@ -721,9 +721,9 @@ namespace ErogeHelper.Language {
         /// <summary>
         ///   查找类似 Select Application 的本地化字符串。
         /// </summary>
-        public static string SelectProcess_Lable {
+        public static string SelectProcess_Label {
             get {
-                return ResourceManager.GetString("SelectProcess.Lable", resourceCulture);
+                return ResourceManager.GetString("SelectProcess.Label", resourceCulture);
             }
         }
         

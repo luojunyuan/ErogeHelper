@@ -5,21 +5,25 @@ using System.IO;
 using System.Linq;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Function;
+using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
-    public class TextractorService : ITextractorService
+    public class TextractorService : ITextractorService, IDisposable
     {
         public event Action<HookParam>? DataEvent;
         public event Action<HookParam>? SelectedDataEvent;
 
-        public bool HasInjected { get; set; }
-
-        public void InjectProcesses(IEnumerable<Process> processEnumerable)
+        public TextractorService(EhConfigRepository ehConfigRepository)
         {
-            _processes = processEnumerable;
+            _ehConfigRepository = ehConfigRepository;
+        }
 
+        private readonly EhConfigRepository _ehConfigRepository;
+
+        public void InjectProcesses()
+        {
             // Current texthook.dll version 4.15
             string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
             if (!File.Exists(textractorPath))
@@ -32,22 +36,15 @@ namespace ErogeHelper.Model.Service
 
             _ = TextHostDll.TextHostInit(_callback, _ => { }, _createThread, _removeThread, _output);
 
-            foreach (Process p in _processes)
+            foreach (Process p in _ehConfigRepository.GameProcesses)
             {
                 _ = TextHostDll.InjectProcess((uint)p.Id);
                 Log.Info($"attach to PID {p.Id}.");
             }
-
-            HasInjected = true;
         }
-
-        private IEnumerable<Process> _processes = Array.Empty<Process>();
 
         public void InsertHook(string hookcode)
         {
-            if (!_processes.Any())
-                throw new ArgumentException(_processes.ToString());
-
             if (hookcode.StartsWith('/'))
                 hookcode = hookcode[1..];
 
@@ -85,7 +82,7 @@ namespace ErogeHelper.Model.Service
                 }
             }
 
-            foreach (Process p in _processes)
+            foreach (Process p in _ehConfigRepository.GameProcesses)
             {
                 _ = TextHostDll.InsertHook((uint)p.Id, hookcode);
                 Log.Info($"Try insert hook {hookcode} to PID {p.Id}");
@@ -94,15 +91,7 @@ namespace ErogeHelper.Model.Service
 
         public void SearchRCode(string text)
         {
-            if (!_processes.Any())
-                throw new ArgumentException(_processes.ToString());
-
             throw new NotImplementedException();
-        }
-
-        public void UpdateSelectedThreadSetting(HookParam setting)
-        {
-            _setting = setting;
         }
 
         #region TextHost Callback Implement
@@ -135,8 +124,6 @@ namespace ErogeHelper.Model.Service
             };
         }
 
-        private HookParam _setting = new();
-
         private void OutputHandle(long threadId, string opData, uint length)
         {
             if (length > 500)
@@ -147,15 +134,17 @@ namespace ErogeHelper.Model.Service
 
             DataEvent?.Invoke(hp);
 
-            if (!string.IsNullOrWhiteSpace(_setting.Hookcode)
-                && _setting.Hookcode == hp.Hookcode
-                && (_setting.Ctx & 0xFFFF) == (hp.Ctx & 0xFFFF)
-                && _setting.Ctx2 == hp.Ctx2)
+            var setting = _ehConfigRepository.TextractorSetting;
+
+            if (!string.IsNullOrWhiteSpace(setting.Hookcode)
+                && setting.Hookcode == hp.Hookcode
+                && (setting.Ctx & 0xFFFF) == (hp.Ctx & 0xFFFF)
+                && setting.Ctx2 == hp.Ctx2)
             {
                 Log.Debug(hp.Text);
                 SelectedDataEvent?.Invoke(hp);
             }
-            else if (_setting.Hookcode.StartsWith('R')
+            else if (setting.Hookcode.StartsWith('R')
                      && hp.Name.Equals("READ"))
             {
                 Log.Debug(hp.Text);
@@ -167,12 +156,16 @@ namespace ErogeHelper.Model.Service
 
         private void OnConnectCallBackHandle(uint processId)
         {
-            if (_setting.Hookcode != string.Empty)
+            var setting = _ehConfigRepository.TextractorSetting;
+
+            if (setting.Hookcode != string.Empty)
             {
-                InsertHook(_setting.Hookcode);
+                InsertHook(setting.Hookcode);
             }
         }
 
         #endregion
+
+        public void Dispose() => Log.Debug($"{nameof(TextractorService)}.Dispose()");
     }
 }

@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\site_icon\" />
+    <Folder Include="Assets\text_background\" />
+    <Folder Include="Common\Converter\" />
+    <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Repository\Translator\" />
     <Folder Include="Model\Repository\Dictionary\" />
   </ItemGroup>
@@ -31,6 +35,14 @@
     <Content Include="libs\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
   </ItemGroup>
 
 </Project>

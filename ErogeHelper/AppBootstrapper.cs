@@ -18,15 +18,21 @@ namespace ErogeHelper
             Initialize();
         }
 
+        /// <summary>
+        /// Entry point
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            var windowManager = _container.GetInstance<IWindowManager>();
-
             if (e.Args.Length == 0)
             {
                 await DisplayRootViewFor<SelectProcessViewModel>().ConfigureAwait(false);
                 return;
             }
+
+            var windowManager = _container.GetInstance<IWindowManager>();
+            var ehConfigRepository = _container.GetInstance<EhConfigRepository>();
 
             Log.Debug("a");
             await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
@@ -47,14 +53,19 @@ namespace ErogeHelper
             ViewModelLocator.ConfigureTypeMappings(config);
 
             // Basic tools
-            _container.PerRequest<IWindowManager, WindowManager>();
+            _container.Singleton<IWindowManager, WindowManager>();
+            _container.Singleton<IEventAggregator, EventAggregator>();
 
             // ViewModels
             _container.Singleton<GameViewModel>();
             _container.PerRequest<SelectProcessViewModel>();
 
-            // Services
+            // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            // XXX: EhConfigRepository instance is not created by container
+            // Will SimpleContainer help me release the service?
+            // Should I dispose the EhConfigRepository which may run for the entire wpf lifecycle? 
+            // XXX: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
             _container.Instance(new EhConfigRepository(appDataDir));
             _container.Singleton<ITextractorService, TextractorService>();
             _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();

@@ -123,7 +123,7 @@
   <data name="SelectProcess.Tips" xml:space="preserve">
     <value>You can use ErogeHelper.Installer.exe to install me~</value>
   </data>
-  <data name="SelectProcess.Lable" xml:space="preserve">
+  <data name="SelectProcess.Label" xml:space="preserve">
     <value>Select Application</value>
   </data>
   <data name="SelectProcess.InjectButton" xml:space="preserve">

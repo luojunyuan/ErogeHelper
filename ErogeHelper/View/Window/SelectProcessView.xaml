@@ -3,10 +3,47 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ErogeHelper.View.Window"
+        xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+        xmlns:cal="http://caliburnmicro.com"
         mc:Ignorable="d"
-        Title="SelectProcessView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        d:DataContext="{d:DesignInstance vm:SelectProcessViewModel, IsDesignTimeCreatable=True}"
+        cal:Bind.AtDesignTime="True"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Topmost="True"
+        Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+
+    <ScrollViewer PanningMode="Both">
+        <StackPanel Margin="20,10">
+            <GroupBox>
+                <ui:SimpleStackPanel Spacing="10">
+                    <TextBlock 
+                        Text="{x:Static resx:Strings.SelectProcess_Tips}" 
+                        Style="{StaticResource SubtitleTextBlockStyle}" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+            <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ComboBox 
+                        Width="240" 
+                        ItemsSource="{Binding ProcItems}"
+                        SelectedItem="{Binding SelectedProcItem}"
+                        cal:Message.Attach="[DropDownOpened] = [GetProcessAction]">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Title}">
+                                    <Image Source="{Binding Icon}" />
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button 
+                        x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
+                        Style="{StaticResource AccentButtonStyle}" MinWidth="240"/>
+                </ui:SimpleStackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
 </Window>
