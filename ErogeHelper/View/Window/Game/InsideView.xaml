@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
-        ui:WindowHelper.UseModernWindowStyle="True"
-        Title="InsideView" Top="-32000" Left="-32000" Topmost="True">
+        Title="InsideView" Top="-32000" Left="-32000" Topmost="True"
+        AllowsTransparency="True" WindowStyle="None">
 
     <Window.Background>
         <SolidColorBrush />
@@ -14,7 +14,7 @@
     <!-- Layout of the whole game window -->
     <Border>
         <!-- Client area -->
-        <Border x:Name="ClientArea">
+        <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
 
         </Border>
     </Border>

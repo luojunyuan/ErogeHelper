@@ -25,14 +25,13 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            var windowManager = _container.GetInstance<IWindowManager>();
-
             if (e.Args.Length == 0)
             {
                 await DisplayRootViewFor<SelectProcessViewModel>().ConfigureAwait(false);
                 return;
             }
 
+            var windowManager = _container.GetInstance<IWindowManager>();
             var ehConfigRepository = _container.GetInstance<EhConfigRepository>();
 
             Log.Debug("a");

@@ -1,9 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Interop;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.View.Window.Game
@@ -11,12 +15,14 @@ namespace ErogeHelper.View.Window.Game
     /// <summary>
     /// Interaction logic for InsideView.xaml
     /// </summary>
-    public partial class InsideView
+    public partial class InsideView : IHandle<ViewActionMessage>
     {
         public InsideView()
         {
             InitializeComponent();
 
+            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
+            Visibility = Visibility.Collapsed;
             dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             IoC.Get<IGameWindowHooker>().GamePosArea += PositionChanged;
             Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
@@ -38,6 +44,25 @@ namespace ErogeHelper.View.Window.Game
                     pos.ClientArea.Right / dpi,
                     pos.ClientArea.Bottom / dpi);
             });
+        }
+
+        public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
+        {
+            if (message.WindowType == GetType())
+            {
+                switch (message.Action)
+                {
+                    case ViewAction.Hide:
+                        Hide(); // TODO: pending to test
+                        break;
+                    case ViewAction.Show:
+                        Show();
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            return Task.CompletedTask;
         }
     }
 }

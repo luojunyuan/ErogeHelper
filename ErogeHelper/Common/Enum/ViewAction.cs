@@ -3,6 +3,7 @@
     public enum ViewAction
     {
         Hide,
+        Show,
         Close,
         OpenDialog,
     }
