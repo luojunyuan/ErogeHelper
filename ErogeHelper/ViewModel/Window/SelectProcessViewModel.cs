@@ -74,6 +74,8 @@ namespace ErogeHelper.ViewModel.Window
             (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) = 
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
 
+
+            
             #region 这一段必须在确定textsetting状态之后 的原因是 关闭hooksetting窗口程序不会结束 除非我手动让hooksetting窗口关闭后结束整个程序
             // 才可以全部显示出来，要关一起关 怎么办呢，1.关hook窗口等于关整个程序. 2.先确定需不需要hook窗口后再启动俩窗口。我选择后者
 

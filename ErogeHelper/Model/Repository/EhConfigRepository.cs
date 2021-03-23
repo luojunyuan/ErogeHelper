@@ -127,6 +127,12 @@ namespace ErogeHelper.Model.Repository
 
         #region Local Properties
 
+        public string EhServerBaseUrl
+        {
+            get => GetValue(DefaultConfigValuesStore.EhServerUrl);
+            set => SetValue(value);
+        }
+
         public double FontSize
         {
             get => GetValue(DefaultConfigValuesStore.FontSize);

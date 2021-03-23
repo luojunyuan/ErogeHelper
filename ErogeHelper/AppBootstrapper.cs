@@ -4,9 +4,11 @@ using System.Windows;
 using Caliburn.Micro;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
+using Refit;
 
 namespace ErogeHelper
 {
@@ -66,7 +68,9 @@ namespace ErogeHelper
             // Will SimpleContainer help me release the service?
             // Should I dispose the EhConfigRepository which may run for the entire wpf lifecycle? 
             // XXX: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
-            _container.Instance(new EhConfigRepository(appDataDir));
+            var configRepo = new EhConfigRepository(appDataDir);
+            _container.Instance(configRepo);
+            _container.Instance(new EhServerApi(configRepo));
             _container.Singleton<ITextractorService, TextractorService>();
             _container.Singleton<IGameWindowHooker, GameWindowHooker>();
             _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();

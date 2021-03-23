@@ -4,6 +4,8 @@ namespace ErogeHelper.Common
 {
     internal static class DefaultConfigValuesStore
     {
+        public const string EhServerUrl = "http://106.15.88.80";
+
         public const double FontSize = 28;
 
         public const bool EnableMeCab = false;

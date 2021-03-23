@@ -44,7 +44,9 @@ namespace ErogeHelper.Tests.Model.Service
             _single.WaitOne();
             Assert.AreEqual(2, receivedTexts.Count);
             Assert.AreEqual("Textractor: initialization completed", receivedTexts[0]);
-            Assert.AreEqual("Textractor: pipe connected", receivedTexts[1]);
+            var result = receivedTexts[1] == "Textractor: pipe connected" ||
+                         receivedTexts[1] == "Textractor: already injected";
+            Assert.AreEqual(true, result);
             notepad.Kill();
         }
     }
