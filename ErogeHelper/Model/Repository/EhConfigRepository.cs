@@ -30,7 +30,7 @@ namespace ErogeHelper.Model.Repository
 
         private readonly string _configFilePath;
         private Dictionary<string, string> LocalSetting { get; }
-        private static Dictionary<string, string> LocalSettingInit(string settingPath)
+        private Dictionary<string, string> LocalSettingInit(string settingPath)
         {
             if (!File.Exists(settingPath))
             {
@@ -101,7 +101,7 @@ namespace ErogeHelper.Model.Repository
             File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
         }
 
-        private void ClearAppData()
+        private void ClearConfig()
         {
             LocalSetting.Clear();
 
@@ -112,7 +112,9 @@ namespace ErogeHelper.Model.Repository
 
         #region Runtime Properties
 
-        public List<Process> GameProcesses { get; set; } = new();
+        public IEnumerable<Process> GameProcesses { get; set; } = new List<Process>();
+
+        public Process MainProcess { get; set; } = new ();
 
         // TODO: To local? or consider about sqlite
         public HookParam TextractorSetting = new();

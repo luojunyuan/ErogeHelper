@@ -68,6 +68,7 @@ namespace ErogeHelper
             // XXX: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
             _container.Instance(new EhConfigRepository(appDataDir));
             _container.Singleton<ITextractorService, TextractorService>();
+            _container.Singleton<IGameWindowHooker, GameWindowHooker>();
             _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();
             _container.PerRequest<ISelectProcessDataService, SelectProcessDataService>();
         }

@@ -12,7 +12,7 @@
         cal:Bind.AtDesignTime="True"
         ui:WindowHelper.UseModernWindowStyle="True"
         Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Topmost="True"
-        Icon="pack://application:,,,/Assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Icon="pack://application:,,,/assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">

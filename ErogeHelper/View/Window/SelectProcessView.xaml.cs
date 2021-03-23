@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.View.Dialog;
 
 namespace ErogeHelper.View.Window
 {
@@ -19,7 +20,7 @@ namespace ErogeHelper.View.Window
             IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
         }
 
-        public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
         {
             if (message.WindowType == GetType())
             {
@@ -31,12 +32,13 @@ namespace ErogeHelper.View.Window
                     case ViewAction.Close:
                         Close();
                         break;
+                    case ViewAction.OpenDialog:
+                        await new SelectProcessTipDialog().ShowAsync();
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

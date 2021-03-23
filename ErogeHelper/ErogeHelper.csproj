@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <ApplicationManifest>Assets\app.manifest</ApplicationManifest>
+    <ApplicationManifest>assets\app.manifest</ApplicationManifest>
     <Version>0.0.6</Version>
     <Authors>k1mlka</Authors>
   </PropertyGroup>
@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\site_icon\" />
-    <Folder Include="Assets\text_background\" />
+    <Folder Include="assets\site_icon\" />
+    <Folder Include="assets\text_background\" />
     <Folder Include="Common\Converter\" />
     <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Repository\Translator\" />
@@ -38,11 +38,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\app.ico" />
+    <None Remove="assets\app.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\app.ico" />
+    <Resource Include="assets\app.ico" />
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,7 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="friendlyName"><see cref="Process.ProcessName"/></param>
         /// <returns>if process with hWnd found, give all back, other wise return blank list</returns>
-        public static IEnumerable<Process> ProcessCollect(string friendlyName)
+        public static (IEnumerable<Process>, Process) ProcessCollect(string friendlyName)
         {
             const int timeoutSeconds = 20;
             var spendTime = new Stopwatch();
@@ -61,7 +61,7 @@ namespace ErogeHelper.Common
                          $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
             }
 
-            return mainProcess is null ? new List<Process>() : procList;
+            return mainProcess is null ? (new List<Process>(), new Process()) : (procList, mainProcess);
         }
     }
 }

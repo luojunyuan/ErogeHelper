@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
@@ -9,23 +6,26 @@ using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
-using ModernWpf.Controls;
+using System;
+using System.Globalization;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class SelectProcessViewModel : Screen, IDisposable
+    public class SelectProcessViewModel : PropertyChangedBase, IDisposable
     {
         public SelectProcessViewModel(
             ISelectProcessDataService dataService,
             IWindowManager windowManager,
             IEventAggregator eventAggregator,
             ITextractorService textractorService,
+            IGameWindowHooker gameWindowHooker,
             EhConfigRepository ehConfigRepository)
         {
             _dataService = dataService;
             _windowManager = windowManager;
             _eventAggregator = eventAggregator;
             _textractorService = textractorService;
+            _gameWindowHooker = gameWindowHooker;
             _ehConfigRepository = ehConfigRepository;
 
             _dataService.RefreshBindableProcComboBoxAsync(ProcItems);
@@ -35,9 +35,10 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly ITextractorService _textractorService;
+        private readonly IGameWindowHooker _gameWindowHooker;
         private readonly EhConfigRepository _ehConfigRepository;
 
-        public BindableCollection<ProcComboBoxItem> ProcItems { get; private set; } = new();
+        public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
 
         private ProcComboBoxItem? _selectedProcItem;
         public ProcComboBoxItem? SelectedProcItem
@@ -50,7 +51,7 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        public async void GetProcessAction() => 
+        public async void GetProcessAction() =>
             await _dataService.RefreshBindableProcComboBoxAsync(ProcItems).ConfigureAwait(false);
 
         public bool CanInject => SelectedProcItem is not null;
@@ -59,34 +60,32 @@ namespace ErogeHelper.ViewModel.Window
         {
             if (SelectedProcItem!.Proc.HasExited)
             {
-                await new ContentDialog
-                {
-                    Title = "Eroge Helper",
-                    Content = Language.Strings.SelectProcess_ProcessExit,
-                    CloseButtonText = "OK"
-                }.ShowAsync().ConfigureAwait(false);
+                await _eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(GetType(), ViewAction.OpenDialog, ModernDialog.SelectProcessNoProcessTip))
+                    .ConfigureAwait(false);
                 // Cause this turn SelectedProcItem to null
-                ProcItems.Remove(SelectedProcItem); 
+                // XXX: 用户此时来个快速操作，ProcItems.Remove(null)，无事发生
+                ProcItems.Remove(SelectedProcItem);
                 return;
             }
 
-            //if (GetView() is System.Windows.Window view)
-            //    view.Hide();
-            await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
+            _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
-            var processes = Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
+            (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) = 
+                Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
+
 
             // GameHooker注入进程，拿坐标信息事件 textractor 其实也可以动好像没啥先后关系
-
+            _gameWindowHooker.GamePosArea += pos => Log.Debug(pos.Left.ToString());
+                await _gameWindowHooker.SetGameWindowHookAsync();
             // 在调textractor之前先检查本地textsetting
             // 没有 再拿md5从服务器获取id textsetting 所以这个过程可以和gameHooker一起，异步进行，gamehooker可以异步吗
-            _ehConfigRepository.TextractorSetting = new();
+            _ehConfigRepository.TextractorSetting = new HookParam();
             _textractorService.InjectProcesses();
 
             // 都没有开setting
             await _windowManager.ShowWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
-            //await TryCloseAsync();
-            await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
+            _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
         }
 
         public void Dispose() => Log.Debug($"{nameof(SelectProcessViewModel)}.Dispose()");

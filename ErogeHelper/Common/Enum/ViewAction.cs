@@ -4,5 +4,6 @@
     {
         Hide,
         Close,
+        OpenDialog,
     }
 }

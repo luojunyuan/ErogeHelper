@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,9 +22,14 @@ namespace ErogeHelper.Tests.Model.Service
         {
             var notepad = Process.Start("notepad");
             var testStuff = Process.GetProcessesByName("notepad");
+            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var config = new EhConfigRepository(appDataDir)
+            {
+                GameProcesses = testStuff
+            };
 
             List<string> receivedTexts = new();
-            ITextractorService textractorService = new TextractorService();
+            ITextractorService textractorService = new TextractorService(config);
             textractorService.DataEvent += param =>
             {
                 if (receivedTexts.Count > 1)
@@ -32,7 +39,7 @@ namespace ErogeHelper.Tests.Model.Service
                 }
                 receivedTexts.Add(param.Text);
             };
-            textractorService.InjectProcesses(testStuff);
+            textractorService.InjectProcesses();
 
             _single.WaitOne();
             Assert.AreEqual(2, receivedTexts.Count);
