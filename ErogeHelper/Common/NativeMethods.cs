@@ -10,6 +10,11 @@ namespace ErogeHelper.Common
 {
     public static class NativeMethods
     {
+        public const long SWEH_CHILDID_SELF = 0;
+        public const int WS_EX_NOACTIVATE = 0x08000000;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
+        public const int GWL_EXSTYLE = -20;
+
         public delegate void WinEventDelegate(IntPtr hWinEventHook,
                                               SWEHEvents eventType,
                                               IntPtr hwnd,
@@ -136,8 +141,6 @@ namespace ErogeHelper.Common
             SafeNativeMethods.SwitchToThisWindow(hWnd, fAltTab);
         }
 
-        public const long SWEH_CHILDID_SELF = 0;
-
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD;
@@ -191,7 +194,7 @@ namespace ErogeHelper.Common
             public static extern void KeybdEvent(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
 
             [DllImport("SHELL32", CallingConvention = CallingConvention.StdCall)]
-            public static extern uint SHAppBarMessage(int dwMessage, ref AppBarData pData);
+            public static extern uint SHAppbarMessage(int dwMessage, ref AppbarData pData);
 
             [DllImport("User32.dll", CharSet = CharSet.Unicode)]
             public static extern int RegisterWindowMessage(string msg);
@@ -231,7 +234,7 @@ namespace ErogeHelper.Common
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct AppBarData
+        public struct AppbarData
         {
             public int cbSize;
             public IntPtr hWnd;

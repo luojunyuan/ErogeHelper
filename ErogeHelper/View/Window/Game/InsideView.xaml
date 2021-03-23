@@ -5,37 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
-        ui:WindowHelper.UseModernWindowStyle="True" Topmost="True"
-        Title="InsideView" Height="450" Width="800">
-    <Grid>
-        <Button Content="Options" >
-            <ui:FlyoutService.Flyout>
-                <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard">
-                    <ui:AppBarButton 
-                        Icon="FontDecrease" />
-                    <ui:AppBarButton 
-                        Icon="FontIncrease"  />
-                    <ui:AppBarButton  >
-                    </ui:AppBarButton>
-                    <ui:AppBarToggleButton 
-                                Icon="Trim"/>
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="InsideView" Top="-32000" Left="-32000" Topmost="True">
 
-                    <ui:CommandBarFlyout.SecondaryCommands>
-                        <ui:AppBarButton />
-                        <ui:AppBarButton 
-                                    Label="asdasdasdasd" >
-                        </ui:AppBarButton>
-                        <ui:AppBarButton 
-                                    Icon="Pictures" Label="asdasd" InputGestureText="Win+Shift+S">
-                        </ui:AppBarButton>
-                        <ui:AppBarSeparator/>
-                        <ui:AppBarButton />
-                        <ui:AppBarElementContainer>
-                            <Button />
-                        </ui:AppBarElementContainer>
-                    </ui:CommandBarFlyout.SecondaryCommands>
-                </ui:CommandBarFlyout>
-            </ui:FlyoutService.Flyout>
-        </Button>
-    </Grid>
+    <Window.Background>
+        <SolidColorBrush />
+    </Window.Background>
+    <!-- Layout of the whole game window -->
+    <Border>
+        <!-- Client area -->
+        <Border x:Name="ClientArea">
+
+        </Border>
+    </Border>
 </Window>

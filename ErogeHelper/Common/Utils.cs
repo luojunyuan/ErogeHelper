@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
 namespace ErogeHelper.Common
@@ -62,6 +64,14 @@ namespace ErogeHelper.Common
             }
 
             return mainProcess is null ? (new List<Process>(), new Process()) : (procList, mainProcess);
+        }
+
+        public static void HideWindowInAltTab(Window window)
+        {
+            var windowInterop = new WindowInteropHelper(window);
+            var exStyle = NativeMethods.GetWindowLong(windowInterop.Handle, NativeMethods.GWL_EXSTYLE);
+            exStyle |= NativeMethods.WS_EX_TOOLWINDOW;
+            NativeMethods.SetWindowLong(windowInterop.Handle, NativeMethods.GWL_EXSTYLE, exStyle);
         }
     }
 }

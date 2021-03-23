@@ -74,17 +74,18 @@ namespace ErogeHelper.ViewModel.Window
             (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) = 
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
 
+            // XXX: 注意WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View
+            await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView");
+            _ = _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView");
 
-            // GameHooker注入进程，拿坐标信息事件 textractor 其实也可以动好像没啥先后关系
-            _gameWindowHooker.GamePosArea += pos => Log.Debug(pos.Left.ToString());
-                await _gameWindowHooker.SetGameWindowHookAsync();
+            // gameWindowHooker 在设置是立马就会发送游戏当前坐标，就开始启用了，所以必须先准备InsideView的，event，Outside不受影响
+            _ = _gameWindowHooker.SetGameWindowHookAsync();
+
             // 在调textractor之前先检查本地textsetting
             // 没有 再拿md5从服务器获取id textsetting 所以这个过程可以和gameHooker一起，异步进行，gamehooker可以异步吗
             _ehConfigRepository.TextractorSetting = new HookParam();
             _textractorService.InjectProcesses();
 
-            // 都没有开setting
-            await _windowManager.ShowWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
         }
 
