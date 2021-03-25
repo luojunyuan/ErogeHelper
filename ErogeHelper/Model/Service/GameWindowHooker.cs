@@ -23,12 +23,11 @@ namespace ErogeHelper.Model.Service
         }
 
         private readonly EhConfigRepository _ehConfigRepository;
-
+  
         public async Task SetGameWindowHookAsync()
         {
             _gameProc = _ehConfigRepository.MainProcess;
-            _gameHWnd = _gameProc.MainWindowHandle;
-
+            _gameHWnd = _gameProc.MainWindowHandle;  
             await Task.Run(() =>
             {
                 _winEventDelegate = WinEventCallback;
@@ -39,13 +38,19 @@ namespace ErogeHelper.Model.Service
                 _gameProc.Exited += ApplicationExit;
 
                 ResetWindowHandler();
-                // For the first time
+                // For the first time QUESTION: ?
                 if (_gameHWnd == _gameProc.MainWindowHandle)
                 {
                     SetWindowHandler();
                 }
             });
         }
+
+        public void InvokeLastWindowPosition()
+        {
+            GamePosArea?.Invoke(_lastPos);
+            Log.Debug(_lastPos.ToString());
+        } 
 
         public void ResetWindowHandler()
         {
@@ -137,6 +142,8 @@ namespace ErogeHelper.Model.Service
             }
         }
 
+        private GameWindowPosition _lastPos = HiddenPos;
+
         private void UpdateLocation()
         {
             var rect = NativeMethods.GetWindowRect(_gameHWnd);
@@ -152,14 +159,15 @@ namespace ErogeHelper.Model.Service
 
             var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
-            GamePosArea?.Invoke(new GameWindowPosition
+            _lastPos = new GameWindowPosition
             {
                 Height = height,
                 Width = width,
                 Left = rect.Left,
                 Top = rect.Top,
                 ClientArea = clientArea
-            });
+            };
+            GamePosArea?.Invoke(_lastPos);
 
             #region Change FloatButton Position
             //if (oldWidth == -1 && oldHeight == -1)

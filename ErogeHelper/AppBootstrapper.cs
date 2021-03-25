@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Windows;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
@@ -15,8 +9,11 @@ using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Page;
 using ErogeHelper.ViewModel.Window;
 using FluentMigrator.Runner;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows;
 
 namespace ErogeHelper
 {
@@ -35,8 +32,7 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            // Put the database update into a scope to ensure
-            // that all resources will be disposed.
+            // Put the database update into a scope to ensure that all resources will be disposed.
             using var scope = _serviceProvider.CreateScope();
             Utils.UpdateEhDatabase(scope.ServiceProvider);
 
@@ -72,13 +68,19 @@ namespace ErogeHelper
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services)
         {
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
 
             // ViewModels
+            //GetType().Assembly.GetTypes()
+            //    .Where(type => type.IsClass)
+            //    .Where(type => type.Name.EndsWith("ViewModel"))
+            //    .ToList()
+            //    .ForEach(viewModelType => services.AddTransient(
+            //        viewModelType, viewModelType));
             services.AddSingleton<GameViewModel>();
             services.AddTransient<SelectProcessViewModel>();
             services.AddTransient<HookConfigViewModel>();
@@ -88,26 +90,21 @@ namespace ErogeHelper
             // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var configRepo = new EhConfigRepository(appDataDir);
+            var dbFile = Path.Combine(configRepo.AppDataDir, "eh.db");
+            var connectString = $"Data Source={dbFile}";
             services.AddSingleton(configRepo);
             services.AddSingleton<IEhServerApi>(new EhServerApi(configRepo));
             services.AddSingleton<ITextractorService, TextractorService>();
             services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
             services.AddTransient<IGameViewModelDataService, GameViewModelDataService>();
             services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
-
-            // Database migration
-            var dbFile = Path.Combine(configRepo.AppDataDir, "eh.db");
+            services.AddSingleton(new EhDbRepository(connectString));
             // XXX: too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
-                    // Add SQLite support to FluentMigrator
                     .AddSQLite()
-                    // Set the connection string
-                    // NOTE: Please ensure db file exist before using
-                    .WithGlobalConnectionString($"Data Source={dbFile}")
-                    // Define the assembly containing the migrations
+                    .WithGlobalConnectionString(connectString)
                     .ScanIn(typeof(AddGameInfoTable).Assembly).For.Migrations())
-                // Enable logging to console in the FluentMigrator way
                 .AddLogging(lb => lb.AddFluentMigratorConsole());
         }
 

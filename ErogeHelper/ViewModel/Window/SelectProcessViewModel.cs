@@ -23,6 +23,7 @@ namespace ErogeHelper.ViewModel.Window
             ITextractorService textractorService,
             IGameWindowHooker gameWindowHooker,
             IEhServerApi ehServerApi,
+            EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository)
         {
             _dataService = dataService;
@@ -31,7 +32,7 @@ namespace ErogeHelper.ViewModel.Window
             _textractorService = textractorService;
             _gameWindowHooker = gameWindowHooker;
             _ehServerApi = ehServerApi;
-            // _ehDatabase = ehDatabase
+            _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
 
             _dataService.RefreshBindableProcComboBoxAsync(ProcItems);
@@ -43,6 +44,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly ITextractorService _textractorService;
         private readonly IGameWindowHooker _gameWindowHooker;
         private readonly IEhServerApi _ehServerApi;
+        private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
 
         public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
@@ -80,29 +82,36 @@ namespace ErogeHelper.ViewModel.Window
 
             (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) =
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
+            _ = _gameWindowHooker.SetGameWindowHookAsync();
 
             var gamePath = 
                 _ehConfigRepository.GamePath = _ehConfigRepository.MainProcess.MainModule?.FileName ?? string.Empty;
             var md5 = Utils.GetFileMd5(gamePath);
 
             var settingJson = string.Empty;
-            // 先使用dapper获取本地有没有对应md5的游戏信息
-            // 一大帕拉东西找json
-            try
+            var gameInfo = _ehDbRepository.GetGameInfo(md5);
+            if (gameInfo is not null)
             {
-                using var resp = await _ehServerApi.GetGameSetting(md5).ConfigureAwait(true);
-                // For throw ApiException
-                //resp = await resp.EnsureSuccessStatusCodeAsync();
-                if (resp.StatusCode == HttpStatusCode.OK)
-                {
-                    var gameInfo = resp.Content ?? new GameSetting();
-                    settingJson = gameInfo.GameSettingJson;
-                }
-                Log.Debug($"{resp.StatusCode} {resp.Content}");
+                settingJson = gameInfo.GameSettingJson;
             }
-            catch (HttpRequestException ex)
+            else
             {
-                Log.Warn("Can't connect to internet", ex);
+                try
+                {
+                    using var resp = await _ehServerApi.GetGameSetting(md5).ConfigureAwait(true);
+                    // For throw ApiException
+                    //resp = await resp.EnsureSuccessStatusCodeAsync();
+                    if (resp.StatusCode == HttpStatusCode.OK)
+                    {
+                        var content = resp.Content ?? new GameSetting();
+                        settingJson = content.GameSettingJson;
+                    }
+                    Log.Debug($"{resp.StatusCode} {resp.Content}");
+                }
+                catch (HttpRequestException ex)
+                {
+                    Log.Warn("Can't connect to internet", ex);
+                }
             }
 
             if (settingJson == string.Empty)
@@ -112,8 +121,7 @@ namespace ErogeHelper.ViewModel.Window
                 return;
             }
 
-            var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ??
-                              new GameTextSetting();
+            var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
             gameSetting.Md5 = md5;
             _ehConfigRepository.TextractorSetting = gameSetting;
             _textractorService.InjectProcesses();
@@ -121,8 +129,6 @@ namespace ErogeHelper.ViewModel.Window
             // NOTE: WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
-
-            _ = _gameWindowHooker.SetGameWindowHookAsync();
 
             _ = _ehConfigRepository.UseOutsideWindow
                 ? _eventAggregator.PublishOnUIThreadAsync(

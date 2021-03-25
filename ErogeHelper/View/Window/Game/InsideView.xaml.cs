@@ -24,10 +24,12 @@ namespace ErogeHelper.View.Window.Game
             IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
             dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            IoC.Get<IGameWindowHooker>().GamePosArea += PositionChanged;
+            _gameWindowHooker = IoC.Get<IGameWindowHooker>();
+            _gameWindowHooker.GamePosArea += PositionChanged;
             Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
         }
 
+        private readonly IGameWindowHooker _gameWindowHooker;
         private double dpi;
 
         private void PositionChanged(GameWindowPosition pos)
@@ -56,6 +58,7 @@ namespace ErogeHelper.View.Window.Game
                         Hide(); // UNDONE: pending to test in InsideWindow switch
                         break;
                     case ViewAction.Show:
+                        _gameWindowHooker.InvokeLastWindowPosition();
                         Show();
                         break;
                     default:

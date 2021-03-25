@@ -9,5 +9,10 @@ namespace ErogeHelper.Common.Entity
         public double Left;
         public double Top;
         public Thickness ClientArea;
+
+        public override string ToString()
+        {
+            return $"({Left}, {Top}), width={Width} height={Height}";
+        }
     }
 }
