@@ -1,7 +1,33 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=4386F01B791C56499C7EA059B55FFB54/@KeyIndexDefined">False</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/Color/@EntryValue">WindowText</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/Name/@EntryValue">Question</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;QUESTION)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=494166F664999C479583213DEC210797/TodoIconStyle/@EntryValue">Question</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/Color/@EntryValue">WindowText</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/Name/@EntryValue">Note</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;NOTE)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=79135BD5B0E2DB4295EFBA91A4621C3C/TodoIconStyle/@EntryValue">Normal</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/Color/@EntryValue">WindowText</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/Name/@EntryValue">Undone</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;UNDONE)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=B45A353C6FEF9C4A8030323031FBECF9/TodoIconStyle/@EntryValue">Edit</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/Color/@EntryValue">WindowText</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/Name/@EntryValue">Instead</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;INSTEAD)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=DFEAAA5BEBB8084DB54E2D180B7E3CD5/TodoIconStyle/@EntryValue">Edit</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=accel/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Alapi/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Appbar/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Autofac/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Baidu/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Bindable/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Caiyun/@EntryIndexedValue">True</s:Boolean>

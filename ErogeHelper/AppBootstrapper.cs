@@ -68,7 +68,7 @@ namespace ErogeHelper
 
             // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            // EhConfigRepository instance is not created by container
+            // QUESTION: EhConfigRepository instance may not created by container
             // Will SimpleContainer help me release the service?
             // Should I dispose the EhConfigRepository which may run for the entire app lifecycle? 
             // NOTE: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
@@ -82,7 +82,7 @@ namespace ErogeHelper
         }
 
         #region Simple IoC Init
-
+        // INSTEAD: Use Microsoft DI or Autofac 
         private readonly SimpleContainer _container = new();
 
         protected override object GetInstance(Type serviceType, string key)

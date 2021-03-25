@@ -2,7 +2,7 @@
 {
     public class GameTextSetting
     {
-        // ?: Do I need MD5 in this class?
+        // QUESTION: Do I need MD5 in this class
         public string Md5 { get; set; } = string.Empty;
         public bool UserHook { get; set; }
         public string Hookcode { get; set; } = string.Empty;

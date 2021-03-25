@@ -53,7 +53,7 @@ namespace ErogeHelper.View.Window.Game
                 switch (message.Action)
                 {
                     case ViewAction.Hide:
-                        Hide(); // UNDONE: pending to test
+                        Hide(); // UNDONE: pending to test in InsideWindow switch
                         break;
                     case ViewAction.Show:
                         Show();

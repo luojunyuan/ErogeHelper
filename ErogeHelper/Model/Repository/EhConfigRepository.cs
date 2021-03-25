@@ -111,7 +111,7 @@ namespace ErogeHelper.Model.Repository
         #endregion
 
         #region Runtime Properties
-        // ?: Should I make these another repo
+        // QUESTION: Should I make these another repo
         public IEnumerable<Process> GameProcesses { get; set; } = new List<Process>();
 
         public Process MainProcess { get; set; } = new ();
