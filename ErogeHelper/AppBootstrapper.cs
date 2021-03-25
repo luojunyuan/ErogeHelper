@@ -12,8 +12,17 @@ using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
 using System.Windows;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Messenger;
+using ErogeHelper.Model.Repository.Entity;
 
 namespace ErogeHelper
 {
@@ -42,12 +51,100 @@ namespace ErogeHelper
                 return;
             }
 
+            var gamePath = e.Args[0];
+            var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
+            Log.Info($"Game's path: {e.Args[0]}");
+            Log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
             var windowManager = _serviceProvider.GetService<IWindowManager>();
+            var eventAggregator = _serviceProvider.GetService<IEventAggregator>();
             var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
+            var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
+            var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
+            var ehServerApi = _serviceProvider.GetService<IEhServerApi>();
+            var textractorService = _serviceProvider.GetService<ITextractorService>();
 
-            Log.Debug("a");
-            await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
-            Log.Debug("b");
+            if (e.Args.Contains("/le") || e.Args.Contains("-le"))
+            {
+                // Use Locate Emulator (only x86 game)
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Directory.GetCurrentDirectory() + @"\libs\x86\LEProc.exe",
+                    UseShellExecute = false,
+                    Arguments = File.Exists(gamePath + ".le.config")
+                        ? $"-run \"{gamePath}\""
+                        : $"\"{gamePath}\""
+                });
+                // NOTE: LE may throw AccessViolationException which can not be catch
+            }
+            else
+            {
+                // Direct start
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = gamePath,
+                    UseShellExecute = false,
+                    WorkingDirectory = gameDir
+                });
+            }
+
+            (ehConfigRepository.GameProcesses, ehConfigRepository.MainProcess) =
+                Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
+            if (!ehConfigRepository.GameProcesses.Any())
+            {
+                MessageBox.Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
+                return ;
+            }
+
+            _ = gameWindowHooker.SetGameWindowHookAsync();
+
+            ehConfigRepository.GamePath = gamePath;
+            var md5 = Utils.GetFileMd5(gamePath);
+
+            var settingJson = string.Empty;
+            var gameInfo = ehDbRepository.GetGameInfo(md5);
+            if (gameInfo is not null)
+            {
+                settingJson = gameInfo.GameSettingJson;
+            }
+            else
+            {
+                try
+                {
+                    using var resp = await ehServerApi.GetGameSetting(md5).ConfigureAwait(true);
+                    // For throw ApiException
+                    //resp = await resp.EnsureSuccessStatusCodeAsync();
+                    if (resp.StatusCode == HttpStatusCode.OK)
+                    {
+                        var content = resp.Content ?? new GameSetting();
+                        settingJson = content.GameSettingJson;
+                    }
+                    Log.Debug($"{resp.StatusCode} {resp.Content}");
+                }
+                catch (HttpRequestException ex)
+                {
+                    Log.Warn("Can't connect to internet", ex);
+                }
+            }
+
+            if (settingJson == string.Empty)
+            {
+                await windowManager.ShowWindowFromIoCAsync<HookConfigViewModel>().ConfigureAwait(false);
+                return;
+            }
+
+            var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
+            gameSetting.Md5 = md5;
+            ehConfigRepository.TextractorSetting = gameSetting;
+            textractorService.InjectProcesses();
+
+            await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
+            await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
+
+            _ = ehConfigRepository.UseOutsideWindow
+                ? eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"))
+                : eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
         }
 
         protected override void Configure()
@@ -68,7 +165,7 @@ namespace ErogeHelper
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();

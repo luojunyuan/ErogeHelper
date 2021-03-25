@@ -30,7 +30,7 @@ namespace ErogeHelper.Model.Repository
 
         private readonly string _configFilePath;
         private Dictionary<string, string> LocalSetting { get; }
-        private Dictionary<string, string> LocalSettingInit(string settingPath)
+        private static Dictionary<string, string> LocalSettingInit(string settingPath)
         {
             if (!File.Exists(settingPath))
             {
@@ -120,7 +120,7 @@ namespace ErogeHelper.Model.Repository
 
         public string GamePath { get; set; } = string.Empty;
 
-        public string AppVersion => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
+        public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
 
         public string AppDataDir { get; }
 
