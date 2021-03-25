@@ -9,6 +9,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using FluentMigrator.Runner;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ErogeHelper.Common
 {
@@ -94,6 +96,18 @@ namespace ErogeHelper.Common
                 sb.Append(byteItem.ToString("x2"));
             }
             return sb.ToString().ToUpper();
+        }
+
+        /// <summary>
+        /// Update the database
+        /// </summary>
+        public static void UpdateEhDatabase(IServiceProvider serviceProvider)
+        {
+            // Instantiate the runner
+            var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+
+            // Execute the migrations
+            runner.MigrateUp();
         }
     }
 }

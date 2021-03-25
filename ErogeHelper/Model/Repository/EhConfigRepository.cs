@@ -16,12 +16,12 @@ namespace ErogeHelper.Model.Repository
         /// <summary>
         /// Will generate file "ErogeHelper\EhSettings.dict" to the specified directory
         /// </summary>
-        /// <param name="appDataDir"></param>
-        public EhConfigRepository(string appDataDir)
+        /// <param name="rootDir"></param>
+        public EhConfigRepository(string rootDir)
         {
-            AppDataDir = appDataDir;
+            AppDataDir = Path.Combine(rootDir, "ErogeHelper");
 
-            _configFilePath = Path.Combine(AppDataDir, @"ErogeHelper\EhSettings.dict");
+            _configFilePath = Path.Combine(AppDataDir, "EhSettings.dict");
             LocalSetting = LocalSettingInit(_configFilePath);
             Log.Info($"Application config path {_configFilePath}");
         }

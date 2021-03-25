@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
+using ErogeHelper.Common;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Repository.Interface;
@@ -34,6 +35,11 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            // Put the database update into a scope to ensure
+            // that all resources will be disposed.
+            using var scope = _serviceProvider.CreateScope();
+            Utils.UpdateEhDatabase(scope.ServiceProvider);
+
             if (e.Args.Length == 0)
             {
                 await DisplayRootViewFor<SelectProcessViewModel>().ConfigureAwait(false);
@@ -66,7 +72,7 @@ namespace ErogeHelper
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
@@ -74,8 +80,8 @@ namespace ErogeHelper
 
             // ViewModels
             services.AddSingleton<GameViewModel>();
-            services.AddScoped<SelectProcessViewModel>();
-            services.AddScoped<HookConfigViewModel>();
+            services.AddTransient<SelectProcessViewModel>();
+            services.AddTransient<HookConfigViewModel>();
 
             services.AddSingleton<HookViewModel>();
 
@@ -88,7 +94,23 @@ namespace ErogeHelper
             services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
             services.AddTransient<IGameViewModelDataService, GameViewModelDataService>();
             services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
+
+            // Database migration
+            var dbFile = Path.Combine(configRepo.AppDataDir, "eh.db");
+            // XXX: too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(rb => rb
+                    // Add SQLite support to FluentMigrator
+                    .AddSQLite()
+                    // Set the connection string
+                    // NOTE: Please ensure db file exist before using
+                    .WithGlobalConnectionString($"Data Source={dbFile}")
+                    // Define the assembly containing the migrations
+                    .ScanIn(typeof(AddGameInfoTable).Assembly).For.Migrations())
+                // Enable logging to console in the FluentMigrator way
+                .AddLogging(lb => lb.AddFluentMigratorConsole());
         }
+
 
         #region Microsoft DependencyInjection Init
         private IServiceProvider? _serviceProvider;
