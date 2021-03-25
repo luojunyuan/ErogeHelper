@@ -60,7 +60,7 @@ namespace ErogeHelper
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
                 // Default english because there can be so many different system language, we rather fallback on
                 // english in this case.
-                _ => new System.Globalization.CultureInfo("en-US"),
+                _ => new System.Globalization.CultureInfo(string.Empty),
             };
         }
     }

@@ -116,7 +116,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehConfigRepository.TextractorSetting = gameSetting;
             _textractorService.InjectProcesses();
 
-            // NOTE: 注意WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View
+            // NOTE: WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
 
