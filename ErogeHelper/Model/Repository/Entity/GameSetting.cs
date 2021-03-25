@@ -9,5 +9,10 @@ namespace ErogeHelper.Model.Repository.Entity
 
         [JsonPropertyName("textSettingJson")]
         public string GameSettingJson { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"GameId={GameId} GameSettingJson={GameSettingJson}";
+        }
     }
 }

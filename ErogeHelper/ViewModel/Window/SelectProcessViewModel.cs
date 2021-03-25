@@ -81,7 +81,9 @@ namespace ErogeHelper.ViewModel.Window
             (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) =
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
 
-            var md5 = Utils.GetFileMd5(_ehConfigRepository.MainProcess.MainModule?.FileName ?? string.Empty);
+            var gamePath = 
+                _ehConfigRepository.GamePath = _ehConfigRepository.MainProcess.MainModule?.FileName ?? string.Empty;
+            var md5 = Utils.GetFileMd5(gamePath);
 
             var settingJson = string.Empty;
             // 先使用dapper获取本地有没有对应md5的游戏信息

@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Repository.Interface;
+using ErogeHelper.Model.Repository.Migration;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Page;
 using ErogeHelper.ViewModel.Window;
-using Refit;
+using FluentMigrator.Runner;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ErogeHelper
 {
@@ -34,8 +40,8 @@ namespace ErogeHelper
                 return;
             }
 
-            var windowManager = _container.GetInstance<IWindowManager>();
-            var ehConfigRepository = _container.GetInstance<EhConfigRepository>();
+            var windowManager = _serviceProvider.GetService<IWindowManager>();
+            var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
 
             Log.Debug("a");
             await windowManager.ShowWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
@@ -55,49 +61,55 @@ namespace ErogeHelper
             ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
 
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
             // Basic tools
-            _container.Singleton<IWindowManager, WindowManager>();
-            _container.Singleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<IWindowManager, WindowManager>();
 
             // ViewModels
-            _container.Singleton<GameViewModel>();
-            _container.PerRequest<SelectProcessViewModel>();
-            _container.PerRequest<HookConfigViewModel>();
+            services.AddSingleton<GameViewModel>();
+            services.AddScoped<SelectProcessViewModel>();
+            services.AddScoped<HookConfigViewModel>();
 
-            _container.Singleton<HookViewModel>();
+            services.AddSingleton<HookViewModel>();
 
             // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            // QUESTION: EhConfigRepository instance may not created by container
-            // Will SimpleContainer help me release the service?
-            // Should I dispose the EhConfigRepository which may run for the entire app lifecycle? 
-            // NOTE: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
             var configRepo = new EhConfigRepository(appDataDir);
-            _container.Instance(configRepo);
-            _container.Instance<IEhServerApi>(new EhServerApi(configRepo));
-            _container.Singleton<ITextractorService, TextractorService>();
-            _container.Singleton<IGameWindowHooker, GameWindowHooker>();
-            _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();
-            _container.PerRequest<ISelectProcessDataService, SelectProcessDataService>();
+            services.AddSingleton(configRepo);
+            services.AddSingleton<IEhServerApi>(new EhServerApi(configRepo));
+            services.AddSingleton<ITextractorService, TextractorService>();
+            services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
+            services.AddTransient<IGameViewModelDataService, GameViewModelDataService>();
+            services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
         }
 
-        #region Simple IoC Init
-        // INSTEAD: Use Microsoft DI or Autofac 
-        private readonly SimpleContainer _container = new();
+        #region Microsoft DependencyInjection Init
+        private IServiceProvider? _serviceProvider;
 
-        protected override object GetInstance(Type serviceType, string key)
+        protected override object GetInstance(Type serviceType, string? key)
         {
-            return _container.GetInstance(serviceType, key);
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                var service = _serviceProvider?.GetService(serviceType);
+                if (service is not null)
+                    return service;
+            }
+
+            throw new Exception(
+                $"Could not locate any instances of contract {(key == string.Empty ? serviceType.Name : key)}.");
         }
 
         protected override IEnumerable<object> GetAllInstances(Type serviceType)
         {
-            return _container.GetAllInstances(serviceType);
-        }
-
-        protected override void BuildUp(object instance)
-        {
-            _container.BuildUp(instance);
+            var type = typeof(IEnumerable<>).MakeGenericType(serviceType);
+            return _serviceProvider.GetServices(type);
         }
         #endregion
     }

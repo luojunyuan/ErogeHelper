@@ -118,6 +118,8 @@ namespace ErogeHelper.Model.Repository
 
         public GameTextSetting TextractorSetting { get; set; } = new ();
 
+        public string GamePath { get; set; } = string.Empty;
+
         public string AppVersion => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
 
         public string AppDataDir { get; }
