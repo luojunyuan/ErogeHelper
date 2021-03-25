@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets_tmp\site_icon\" />
-    <Folder Include="Assets_tmp\text_background\" />
+    <Folder Include="assets\site_icon\" />
+    <Folder Include="assets\text_background\" />
     <Folder Include="Common\Converter\" />
     <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Repository\Translator\" />
@@ -39,11 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets_tmp\app.ico" />
+    <None Remove="assets\app.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets_tmp\app.ico" />
+    <Resource Include="assets\app.ico" />
   </ItemGroup>
 
 </Project>
