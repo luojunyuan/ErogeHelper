@@ -37,15 +37,18 @@ namespace ErogeHelper
                 if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
                     return;
 
-                Exception ex = (Exception)unhandledExceptionArgs.ExceptionObject;
+                var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
+
                 Log.Fatal(ex);
             };
             DispatcherUnhandledException += (_, dispatcherUnhandledExceptionEventArgs) =>
             {
                 // More friendly
-                dispatcherUnhandledExceptionEventArgs.Handled = true;
+                //dispatcherUnhandledExceptionEventArgs.Handled = true;
 
-                Log.Error(dispatcherUnhandledExceptionEventArgs.Exception);
+                var ex = dispatcherUnhandledExceptionEventArgs.Exception;
+
+                Log.Error(ex);
             };
         }
 

@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -72,6 +74,26 @@ namespace ErogeHelper.Common
             var exStyle = NativeMethods.GetWindowLong(windowInterop.Handle, NativeMethods.GWL_EXSTYLE);
             exStyle |= NativeMethods.WS_EX_TOOLWINDOW;
             NativeMethods.SetWindowLong(windowInterop.Handle, NativeMethods.GWL_EXSTYLE, exStyle);
+        }
+
+        /// <summary>
+        /// Get MD5 hash by file
+        /// </summary>
+        /// <param name="filePath">Absolute file path</param>
+        /// <returns>Upper case string</returns>
+        public static string GetFileMd5(string filePath)
+        {
+            FileStream file = File.OpenRead(filePath);
+            var md5 = new MD5CryptoServiceProvider();
+            byte[] retVal = md5.ComputeHash(file);
+            file.Close();
+
+            var sb = new StringBuilder();
+            foreach (var byteItem in retVal)
+            {
+                sb.Append(byteItem.ToString("x2"));
+            }
+            return sb.ToString().ToUpper();
         }
     }
 }

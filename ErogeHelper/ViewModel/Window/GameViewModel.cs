@@ -5,12 +5,10 @@ using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase, IDisposable
+    public class GameViewModel : PropertyChangedBase
     {
         public GameViewModel()
         {
         }
-
-        public void Dispose() => Log.Debug($"{nameof(GameViewModel)}.Dispose()");
     }
 }

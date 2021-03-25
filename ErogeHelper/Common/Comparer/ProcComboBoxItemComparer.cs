@@ -7,7 +7,7 @@ namespace ErogeHelper.Common.Comparer
     {
         public bool Equals(ProcComboBoxItem? x, ProcComboBoxItem? y)
         {
-            return x?.Title == y?.Title;
+            return string.Equals(x?.Title, y?.Title);
         }
 
         public int GetHashCode(ProcComboBoxItem obj)

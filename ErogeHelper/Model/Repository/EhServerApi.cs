@@ -10,20 +10,22 @@ using ErogeHelper.Model.Repository.Entity;
 
 namespace ErogeHelper.Model.Repository
 {
-    public class EhServerApi
+    public class EhServerApi : IEhServerApi
     {
         private readonly IEhServerApi _ehServerApi;
 
         public EhServerApi(EhConfigRepository configRepo)
         {
-            var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new HttpClientHandler()))
+            // For debug using
+            //var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new HttpClientHandler()))
+            var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(configRepo.EhServerBaseUrl)
             };
             _ehServerApi = RestService.For<IEhServerApi>(httpClient);
         }
 
-        public async Task<GameSetting> GetGameSetting(string md5)
+        public async Task<ApiResponse<GameSetting>> GetGameSetting(string md5)
         {
             return await _ehServerApi.GetGameSetting(md5).ConfigureAwait(false);
         }

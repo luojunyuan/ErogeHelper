@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Interface;
+using ErogeHelper.Model.Repository.Entity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Refit;
 
@@ -12,16 +13,28 @@ namespace ErogeHelper.Tests.Model.Repository
     public class EhServerApiTests
     {
         [TestMethod]
-        public async Task EhServerApiTest()
+        //[ExpectedException(typeof(HttpRequestException))]
+        public async Task GetExistGameTest()
         {
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var configRepo = new EhConfigRepository(appDataDir);
             var ehServerApi = new EhServerApi(configRepo);
 
-            var setting = await ehServerApi.GetGameSetting("1ef3cdc2e666091bda2dc828872d597b");
+            // Act
+            var resp = await ehServerApi.GetGameSetting("1ef3cdc2e666091bda2dc828872d597b");
+            await resp.EnsureSuccessStatusCodeAsync();
+            var gameSettingContent = resp.Content;
 
-            Assert.AreEqual(13455, setting.GameId);
-            Assert.AreEqual(string.Empty, setting.GameSettingJson);
+            // Assert
+            if (resp.IsSuccessStatusCode && gameSettingContent is not null && resp.StatusCode == HttpStatusCode.OK)
+            {
+                Assert.AreEqual(13455, gameSettingContent.GameId);
+                Assert.AreEqual(string.Empty, gameSettingContent.GameSettingJson);
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

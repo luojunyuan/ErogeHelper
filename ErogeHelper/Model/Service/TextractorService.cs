@@ -10,7 +10,7 @@ using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
-    public class TextractorService : ITextractorService, IDisposable
+    public class TextractorService : ITextractorService
     {
         public event Action<HookParam>? DataEvent;
         public event Action<HookParam>? SelectedDataEvent;
@@ -135,11 +135,12 @@ namespace ErogeHelper.Model.Service
             DataEvent?.Invoke(hp);
 
             var setting = _ehConfigRepository.TextractorSetting;
+            if (setting.Md5 == string.Empty)
+                return;
 
-            if (!string.IsNullOrWhiteSpace(setting.Hookcode)
-                && setting.Hookcode == hp.Hookcode
-                && (setting.Ctx & 0xFFFF) == (hp.Ctx & 0xFFFF)
-                && setting.Ctx2 == hp.Ctx2)
+            if (setting.Hookcode.Equals(hp.Hookcode)
+                && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
+                && setting.SubThreadContext == hp.Ctx2)
             {
                 Log.Debug(hp.Text);
                 SelectedDataEvent?.Invoke(hp);
@@ -165,7 +166,5 @@ namespace ErogeHelper.Model.Service
         }
 
         #endregion
-
-        public void Dispose() => Log.Debug($"{nameof(TextractorService)}.Dispose()");
     }
 }

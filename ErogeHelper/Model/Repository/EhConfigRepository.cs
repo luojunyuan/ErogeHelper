@@ -11,7 +11,7 @@ using ErogeHelper.Common.Enum;
 
 namespace ErogeHelper.Model.Repository
 {
-    public class EhConfigRepository : IDisposable
+    public class EhConfigRepository
     {
         /// <summary>
         /// Will generate file "ErogeHelper\EhSettings.dict" to the specified directory
@@ -45,7 +45,7 @@ namespace ErogeHelper.Model.Repository
 
         private T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
         {
-            // TODO: blog.lindexi.com/post/C-字典-Dictionary-的-TryGetValue-与先判断-ContainsKey-然后-Get-的性能对比.html
+            // UNDONE: blog.lindexi.com/post/C-字典-Dictionary-的-TryGetValue-与先判断-ContainsKey-然后-Get-的性能对比.html
             if (!LocalSetting.ContainsKey(propertyName) || LocalSetting[propertyName] is null)
                 return defaultValue;
 
@@ -93,7 +93,7 @@ namespace ErogeHelper.Model.Repository
         {
             string targetStrValue = (value as string)!;
 
-            if (LocalSetting.TryGetValue(propertyName, out var outValue) && outValue == targetStrValue)
+            if (LocalSetting.TryGetValue(propertyName, out var outValue) && outValue.Equals(targetStrValue))
                 return;
 
             LocalSetting[propertyName] = targetStrValue;
@@ -111,13 +111,12 @@ namespace ErogeHelper.Model.Repository
         #endregion
 
         #region Runtime Properties
-
+        // ?: Should I make these another repo
         public IEnumerable<Process> GameProcesses { get; set; } = new List<Process>();
 
         public Process MainProcess { get; set; } = new ();
 
-        // TODO: To local? or consider about sqlite
-        public HookParam TextractorSetting = new();
+        public GameTextSetting TextractorSetting { get; set; } = new ();
 
         public string AppVersion => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
 
@@ -142,6 +141,12 @@ namespace ErogeHelper.Model.Repository
         public bool EnableMeCab
         {
             get => GetValue(DefaultConfigValuesStore.EnableMeCab);
+            set => SetValue(value);
+        }
+
+        public bool UseOutsideWindow
+        {
+            get => GetValue(DefaultConfigValuesStore.UseOutsideWindow);
             set => SetValue(value);
         }
 
@@ -205,11 +210,7 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
-        public string MojiSessionToken
-        {
-            get => GetValue(DefaultConfigValuesStore.MojiSessionToken);
-            set => SetValue(value);
-        }
+        public string MojiSessionToken => GetValue(DefaultConfigValuesStore.MojiSessionToken);
 
         public bool JishoDictEnable
         {
@@ -313,7 +314,5 @@ namespace ErogeHelper.Model.Repository
         }
 
         #endregion
-
-        public void Dispose() => Log.Debug($"{nameof(EhConfigRepository)}.Dispose()");
     }
 }

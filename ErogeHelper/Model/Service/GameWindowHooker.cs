@@ -99,7 +99,7 @@ namespace ErogeHelper.Model.Service
                      $"Title: {_gameProc.MainWindowTitle}");
             var targetThreadId = NativeMethods.GetWindowThread(_gameHWnd);
 
-            // XXX: Application.Current made tightly coupled to wpf System.Windows.Application and hard to test
+            // NOTE: Application.Current made tightly coupled to wpf System.Windows.Application and hard to test
             // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
             Dispatcher.InvokeAsync(
                 () => _hWinEventHook = NativeMethods.WinEventHookOne(
@@ -184,12 +184,13 @@ namespace ErogeHelper.Model.Service
 
             Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
 
-            // Must use original gameProc.MainWindowHandle
+            // NOTE: Must use original gameProc.MainWindowHandle
             var first = NativeMethods.GetWindow(_gameProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
             var last = NativeMethods.GetWindow(_gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
 
             var cur = first;
-            // 遍历所有窗口标题(TODO: limit in gameProc only)
+            // 遍历计算机上所有窗口标题
+            // UNDONE: limit in gameProc only
             while (cur != last)
             {
                 var outText = new StringBuilder(textLength + 1);
@@ -200,7 +201,7 @@ namespace ErogeHelper.Model.Service
                     if (rectClient.Right != 0 && rectClient.Bottom != 0)
                     {
                         // check pid
-                        _ = NativeMethods.GetWindowThread(cur, out uint pid);
+                        _ = NativeMethods.GetWindowThread(cur, out var pid);
                         if (_ehConfigRepository.GameProcesses.Any(proc => proc.Id == pid))
                         {
                             Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
@@ -224,7 +225,7 @@ namespace ErogeHelper.Model.Service
             _gcSafetyHandle.Free();
             NativeMethods.WinEventUnhook(_hWinEventHook);
 
-            Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
+            Dispatcher.InvokeShutdown();
         }
 
         // For running in the unit test

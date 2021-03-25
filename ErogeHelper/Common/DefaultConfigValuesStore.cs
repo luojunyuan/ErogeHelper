@@ -10,6 +10,8 @@ namespace ErogeHelper.Common
 
         public const bool EnableMeCab = false;
 
+        public const bool UseOutsideWindow = false;
+
         public const bool ShowAppendText = true;
 
         public const bool PasteToDeepL = false;

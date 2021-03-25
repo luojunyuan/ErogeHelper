@@ -11,23 +11,23 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ErogeHelper.Tests.Model.Service
 {
-    [TestClass()]
+    [TestClass]
     public class GameWindowHookerTests
     {
         private readonly AutoResetEvent _single = new(false);
 
-        [TestMethod()]
-        // XXX: Cause the service is depending on System.Windows.Application, this test may less meaningful
-        public async Task GameWindowHookerTest()
+        [TestMethod]
+        // NOTE: Cause the service is depending on System.Windows.Application, this test may less meaningful
+        public async Task WindowHookerTest()
         {
-            // Prepare assets
+            // Arrange
             var notepad = Process.Start("notepad");
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var config = new EhConfigRepository(appDataDir) {MainProcess = notepad};
             var posCollect = new List<GameWindowPosition>();
             IGameWindowHooker hooker = new GameWindowHooker(config);
 
-
+            // Act
             hooker.GamePosArea += pos =>
             {
                 posCollect.Add(pos);
@@ -41,6 +41,7 @@ namespace ErogeHelper.Tests.Model.Service
             // Depend on GameProcesses
             //await hooker.ResetWindowHandler();
 
+            // Assert
             Assert.AreEqual((0, 0), (posCollect[0].Left, posCollect[0].Top));
             notepad.Kill();
             _single.WaitOne();

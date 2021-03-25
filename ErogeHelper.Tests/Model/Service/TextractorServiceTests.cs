@@ -20,6 +20,7 @@ namespace ErogeHelper.Tests.Model.Service
         [Timeout(1000)]
         public void InjectProcessesTest()
         {
+            // Arrange
             var notepad = Process.Start("notepad");
             var testStuff = Process.GetProcessesByName("notepad");
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -27,9 +28,10 @@ namespace ErogeHelper.Tests.Model.Service
             {
                 GameProcesses = testStuff
             };
-
             List<string> receivedTexts = new();
             ITextractorService textractorService = new TextractorService(config);
+
+            // Act
             textractorService.DataEvent += param =>
             {
                 if (receivedTexts.Count > 1)
@@ -41,12 +43,11 @@ namespace ErogeHelper.Tests.Model.Service
             };
             textractorService.InjectProcesses();
 
+            // Assert
             _single.WaitOne();
             Assert.AreEqual(2, receivedTexts.Count);
             Assert.AreEqual("Textractor: initialization completed", receivedTexts[0]);
-            var result = receivedTexts[1] == "Textractor: pipe connected" ||
-                         receivedTexts[1] == "Textractor: already injected";
-            Assert.AreEqual(true, result);
+            Assert.IsTrue(receivedTexts[1] == "Textractor: pipe connected" || receivedTexts[1] == "Textractor: already injected");
             notepad.Kill();
         }
     }

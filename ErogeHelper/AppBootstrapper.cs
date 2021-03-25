@@ -7,6 +7,7 @@ using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Page;
 using ErogeHelper.ViewModel.Window;
 using Refit;
 
@@ -61,16 +62,19 @@ namespace ErogeHelper
             // ViewModels
             _container.Singleton<GameViewModel>();
             _container.PerRequest<SelectProcessViewModel>();
+            _container.PerRequest<HookConfigViewModel>();
+
+            _container.Singleton<HookViewModel>();
 
             // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            // XXX: EhConfigRepository instance is not created by container
+            // EhConfigRepository instance is not created by container
             // Will SimpleContainer help me release the service?
-            // Should I dispose the EhConfigRepository which may run for the entire wpf lifecycle? 
-            // XXX: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
+            // Should I dispose the EhConfigRepository which may run for the entire app lifecycle? 
+            // NOTE: SimpleContainer 似乎没有注册 Transient Scoped 这类功能，注册 PerRequest 的也不给我释放
             var configRepo = new EhConfigRepository(appDataDir);
             _container.Instance(configRepo);
-            _container.Instance(new EhServerApi(configRepo));
+            _container.Instance<IEhServerApi>(new EhServerApi(configRepo));
             _container.Singleton<ITextractorService, TextractorService>();
             _container.Singleton<IGameWindowHooker, GameWindowHooker>();
             _container.PerRequest<IGameViewModelDataService, GameViewModelDataService>();
@@ -78,6 +82,7 @@ namespace ErogeHelper
         }
 
         #region Simple IoC Init
+
         private readonly SimpleContainer _container = new();
 
         protected override object GetInstance(Type serviceType, string key)
