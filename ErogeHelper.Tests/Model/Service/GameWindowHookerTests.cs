@@ -22,8 +22,7 @@ namespace ErogeHelper.Tests.Model.Service
         {
             // Arrange
             var notepad = Process.Start("notepad");
-            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var config = new EhConfigRepository(appDataDir) {MainProcess = notepad};
+            var config = new EhGlobalValueRepository { MainProcess = notepad };
             var posCollect = new List<GameWindowPosition>();
             IGameWindowHooker hooker = new GameWindowHooker(config);
 

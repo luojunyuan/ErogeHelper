@@ -6,7 +6,6 @@ using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Repository.Migration;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.ViewModel.Page;
 using ErogeHelper.ViewModel.Window;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,8 +41,10 @@ namespace ErogeHelper
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             // Put the database update into a scope to ensure that all resources will be disposed.
-            using var scope = _serviceProvider.CreateScope();
-            Utils.UpdateEhDatabase(scope.ServiceProvider);
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                Utils.UpdateEhDatabase(scope.ServiceProvider);
+            }
 
             if (e.Args.Length == 0)
             {
@@ -55,17 +56,16 @@ namespace ErogeHelper
             var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
             Log.Info($"Game's path: {e.Args[0]}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
-            var windowManager = _serviceProvider.GetService<IWindowManager>();
-            var eventAggregator = _serviceProvider.GetService<IEventAggregator>();
-            var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
+
             var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
             var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
+            var ehGlobalValueRepository = _serviceProvider.GetService<EhGlobalValueRepository>();
             var ehServerApi = _serviceProvider.GetService<IEhServerApi>();
             var textractorService = _serviceProvider.GetService<ITextractorService>();
 
             if (e.Args.Contains("/le") || e.Args.Contains("-le"))
             {
-                // Use Locate Emulator (only x86 game)
+                // Use Locate Emulator (x86 game only)
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = Directory.GetCurrentDirectory() + @"\libs\x86\LEProc.exe",
@@ -87,9 +87,9 @@ namespace ErogeHelper
                 });
             }
 
-            (ehConfigRepository.GameProcesses, ehConfigRepository.MainProcess) =
+            (ehGlobalValueRepository.GameProcesses, ehGlobalValueRepository.MainProcess) =
                 Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-            if (!ehConfigRepository.GameProcesses.Any())
+            if (!ehGlobalValueRepository.GameProcesses.Any())
             {
                 MessageBox.Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
                 return ;
@@ -97,7 +97,7 @@ namespace ErogeHelper
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
 
-            ehConfigRepository.GamePath = gamePath;
+            ehGlobalValueRepository.GamePath = gamePath;
             var md5 = Utils.GetFileMd5(gamePath);
 
             var settingJson = string.Empty;
@@ -117,6 +117,12 @@ namespace ErogeHelper
                     {
                         var content = resp.Content ?? new GameSetting();
                         settingJson = content.GameSettingJson;
+                        ehDbRepository.SetGameInfo(new GameInfo
+                        {
+                            Md5 = md5,
+                            GameIdList = content.GameId.ToString(),
+                            GameSettingJson = content.GameSettingJson,
+                        });
                     }
                     Log.Debug($"{resp.StatusCode} {resp.Content}");
                 }
@@ -128,13 +134,19 @@ namespace ErogeHelper
 
             if (settingJson == string.Empty)
             {
-                await windowManager.ShowWindowFromIoCAsync<HookConfigViewModel>().ConfigureAwait(false);
+                Log.Info("Not find game hook setting, open hook panel.");
+                await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false);
+                textractorService.InjectProcesses();
                 return;
             }
 
+            var windowManager = _serviceProvider.GetService<IWindowManager>();
+            var eventAggregator = _serviceProvider.GetService<IEventAggregator>();
+            var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
+
             var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
-            gameSetting.Md5 = md5;
-            ehConfigRepository.TextractorSetting = gameSetting;
+            ehGlobalValueRepository.Md5 = md5;
+            ehGlobalValueRepository.TextractorSetting = gameSetting;
             textractorService.InjectProcesses();
 
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
@@ -165,38 +177,39 @@ namespace ErogeHelper
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services)
         {
+            // UNDONE: Add developer option in UI Preference-MSIC, to check all registered instances
+            // ViewModels
+            GetType().Assembly.GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith("ViewModel"))
+                .ToList()
+                .ForEach(viewModelType => services.AddTransient(
+                    viewModelType, viewModelType));
+
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
 
-            // ViewModels
-            //GetType().Assembly.GetTypes()
-            //    .Where(type => type.IsClass)
-            //    .Where(type => type.Name.EndsWith("ViewModel"))
-            //    .ToList()
-            //    .ForEach(viewModelType => services.AddTransient(
-            //        viewModelType, viewModelType));
-            services.AddSingleton<GameViewModel>();
-            services.AddTransient<SelectProcessViewModel>();
-            services.AddTransient<HookConfigViewModel>();
-
-            services.AddSingleton<HookViewModel>();
-
             // Services, no helper, manager
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var configRepo = new EhConfigRepository(appDataDir);
-            var dbFile = Path.Combine(configRepo.AppDataDir, "eh.db");
+            var ehConfigRepository = new EhConfigRepository(appDataDir);
+            var dbFile = Path.Combine(ehConfigRepository.AppDataDir, "eh.db");
             var connectString = $"Data Source={dbFile}";
-            services.AddSingleton(configRepo);
-            services.AddSingleton<IEhServerApi>(new EhServerApi(configRepo));
+
+            services.AddSingleton<EhGlobalValueRepository>();
             services.AddSingleton<ITextractorService, TextractorService>();
             services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
-            services.AddTransient<IGameViewModelDataService, GameViewModelDataService>();
+
+            services.AddScoped(_ => ehConfigRepository);
+            services.AddScoped<IEhServerApi>(_ => new EhServerApi(ehConfigRepository));
+            services.AddScoped(_ => new EhDbRepository(connectString));
+
+            services.AddTransient<IGameDataService, GameDataService>();
             services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
-            services.AddSingleton(new EhDbRepository(connectString));
-            // XXX: too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
+            services.AddTransient<IHookDataService, HookDataService>();
+            // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
@@ -205,8 +218,8 @@ namespace ErogeHelper
                 .AddLogging(lb => lb.AddFluentMigratorConsole());
         }
 
-
         #region Microsoft DependencyInjection Init
+
         private IServiceProvider? _serviceProvider;
 
         protected override object GetInstance(Type serviceType, string? key)
@@ -227,6 +240,7 @@ namespace ErogeHelper
             var type = typeof(IEnumerable<>).MakeGenericType(serviceType);
             return _serviceProvider.GetServices(type);
         }
+
         #endregion
     }
 }

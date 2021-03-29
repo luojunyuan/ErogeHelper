@@ -780,5 +780,59 @@ namespace ErogeHelper.Language {
                 return ResourceManager.GetString("ShellMenu.LEStart", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 Textractor: already injected 的本地化字符串。
+        /// </summary>
+        public static string Textractor_AlreadyInject {
+            get {
+                return ResourceManager.GetString("Textractor.AlreadyInject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Clipboard 的本地化字符串。
+        /// </summary>
+        public static string Textractor_Clipboard {
+            get {
+                return ResourceManager.GetString("Textractor.Clipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Textractor: initialization completed 的本地化字符串。
+        /// </summary>
+        public static string Textractor_Init {
+            get {
+                return ResourceManager.GetString("Textractor.Init", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Textractor: couldn&apos;t inject 的本地化字符串。
+        /// </summary>
+        public static string Textractor_InjectFailed {
+            get {
+                return ResourceManager.GetString("Textractor.InjectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Textractor: invalid code 的本地化字符串。
+        /// </summary>
+        public static string Textractor_InvalidCode {
+            get {
+                return ResourceManager.GetString("Textractor.InvalidCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Textractor: invalid process 的本地化字符串。
+        /// </summary>
+        public static string Textractor_InvalidProcess {
+            get {
+                return ResourceManager.GetString("Textractor.InvalidProcess", resourceCulture);
+            }
+        }
     }
 }

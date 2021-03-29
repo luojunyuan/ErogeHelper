@@ -17,16 +17,16 @@ namespace ErogeHelper.Model.Service
     {
         public event Action<GameWindowPosition>? GamePosArea;
 
-        public GameWindowHooker(EhConfigRepository ehConfigRepository)
+        public GameWindowHooker(EhGlobalValueRepository ehGlobalValueRepository)
         {
-            _ehConfigRepository = ehConfigRepository;
+            _ehGlobalValueRepository = ehGlobalValueRepository;
         }
 
-        private readonly EhConfigRepository _ehConfigRepository;
+        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
   
         public async Task SetGameWindowHookAsync()
         {
-            _gameProc = _ehConfigRepository.MainProcess;
+            _gameProc = _ehGlobalValueRepository.MainProcess;
             _gameHWnd = _gameProc.MainWindowHandle;  
             await Task.Run(() =>
             {
@@ -210,7 +210,7 @@ namespace ErogeHelper.Model.Service
                     {
                         // check pid
                         _ = NativeMethods.GetWindowThread(cur, out var pid);
-                        if (_ehConfigRepository.GameProcesses.Any(proc => proc.Id == pid))
+                        if (_ehGlobalValueRepository.GameProcesses.Any(proc => proc.Id == pid))
                         {
                             Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
                             // Search over, believe handle is found

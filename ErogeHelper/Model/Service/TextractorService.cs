@@ -15,12 +15,12 @@ namespace ErogeHelper.Model.Service
         public event Action<HookParam>? DataEvent;
         public event Action<HookParam>? SelectedDataEvent;
 
-        public TextractorService(EhConfigRepository ehConfigRepository)
+        public TextractorService(EhGlobalValueRepository ehGlobalValueRepository)
         {
-            _ehConfigRepository = ehConfigRepository;
+            _ehGlobalValueRepository = ehGlobalValueRepository;
         }
 
-        private readonly EhConfigRepository _ehConfigRepository;
+        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
 
         public void InjectProcesses()
         {
@@ -36,7 +36,7 @@ namespace ErogeHelper.Model.Service
 
             _ = TextHostDll.TextHostInit(_callback, _ => { }, _createThread, _removeThread, _output);
 
-            foreach (Process p in _ehConfigRepository.GameProcesses)
+            foreach (Process p in _ehGlobalValueRepository.GameProcesses)
             {
                 _ = TextHostDll.InjectProcess((uint)p.Id);
                 Log.Info($"attach to PID {p.Id}.");
@@ -82,7 +82,7 @@ namespace ErogeHelper.Model.Service
                 }
             }
 
-            foreach (Process p in _ehConfigRepository.GameProcesses)
+            foreach (Process p in _ehGlobalValueRepository.GameProcesses)
             {
                 _ = TextHostDll.InsertHook((uint)p.Id, hookcode);
                 Log.Info($"Try insert hook {hookcode} to PID {p.Id}");
@@ -134,8 +134,8 @@ namespace ErogeHelper.Model.Service
 
             DataEvent?.Invoke(hp);
 
-            var setting = _ehConfigRepository.TextractorSetting;
-            if (setting.Md5 == string.Empty)
+            var setting = _ehGlobalValueRepository.TextractorSetting;
+            if (_ehGlobalValueRepository.Md5 == string.Empty)
                 return;
 
             if (setting.Hookcode.Equals(hp.Hookcode)
@@ -157,7 +157,7 @@ namespace ErogeHelper.Model.Service
 
         private void OnConnectCallBackHandle(uint processId)
         {
-            var hookcode = _ehConfigRepository.TextractorSetting.Hookcode;
+            var hookcode = _ehGlobalValueRepository.TextractorSetting.Hookcode;
 
             if (hookcode != string.Empty)
             {

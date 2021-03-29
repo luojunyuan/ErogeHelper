@@ -24,7 +24,8 @@ namespace ErogeHelper.ViewModel.Window
             IGameWindowHooker gameWindowHooker,
             IEhServerApi ehServerApi,
             EhDbRepository ehDbRepository,
-            EhConfigRepository ehConfigRepository)
+            EhConfigRepository ehConfigRepository,
+            EhGlobalValueRepository ehGlobalValueRepository)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -34,6 +35,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehServerApi = ehServerApi;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
+            _ehGlobalValueRepository = ehGlobalValueRepository;
 
             _dataService.RefreshBindableProcComboBoxAsync(ProcItems);
         }
@@ -46,6 +48,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IEhServerApi _ehServerApi;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
+        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
 
         public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
 
@@ -80,12 +83,13 @@ namespace ErogeHelper.ViewModel.Window
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
-            (_ehConfigRepository.GameProcesses, _ehConfigRepository.MainProcess) =
+            (_ehGlobalValueRepository.GameProcesses, _ehGlobalValueRepository.MainProcess) =
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
             _ = _gameWindowHooker.SetGameWindowHookAsync();
 
-            var gamePath = 
-                _ehConfigRepository.GamePath = _ehConfigRepository.MainProcess.MainModule?.FileName ?? string.Empty;
+            var gamePath =
+                _ehGlobalValueRepository.GamePath =
+                    _ehGlobalValueRepository.MainProcess.MainModule?.FileName ?? string.Empty;
             var md5 = Utils.GetFileMd5(gamePath);
 
             var settingJson = string.Empty;
@@ -116,14 +120,15 @@ namespace ErogeHelper.ViewModel.Window
 
             if (settingJson == string.Empty)
             {
+                Log.Info("Not find game hook setting, open hook panel.");
                 await _windowManager.ShowWindowFromIoCAsync<HookConfigViewModel>().ConfigureAwait(false);
                 _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
                 return;
             }
 
             var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
-            gameSetting.Md5 = md5;
-            _ehConfigRepository.TextractorSetting = gameSetting;
+            _ehGlobalValueRepository.Md5 = md5;
+            _ehGlobalValueRepository.TextractorSetting = gameSetting;
             _textractorService.InjectProcesses();
 
             // NOTE: WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View

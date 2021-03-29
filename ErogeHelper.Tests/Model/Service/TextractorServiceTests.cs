@@ -23,8 +23,7 @@ namespace ErogeHelper.Tests.Model.Service
             // Arrange
             var notepad = Process.Start("notepad");
             var testStuff = Process.GetProcessesByName("notepad");
-            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var config = new EhConfigRepository(appDataDir)
+            var config = new EhGlobalValueRepository
             {
                 GameProcesses = testStuff
             };

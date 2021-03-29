@@ -1,18 +1,17 @@
-﻿using System;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Enum;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Common.Enum;
 
 namespace ErogeHelper.Model.Repository
 {
     public class EhConfigRepository
     {
+        public string AppDataDir { get; }
+
         /// <summary>
         /// Will generate file "ErogeHelper\EhSettings.dict" to the specified directory
         /// </summary>
@@ -107,22 +106,6 @@ namespace ErogeHelper.Model.Repository
 
             File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
         }
-
-        #endregion
-
-        #region Runtime Properties
-        // QUESTION: Should I make these another repo
-        public IEnumerable<Process> GameProcesses { get; set; } = new List<Process>();
-
-        public Process MainProcess { get; set; } = new ();
-
-        public GameTextSetting TextractorSetting { get; set; } = new ();
-
-        public string GamePath { get; set; } = string.Empty;
-
-        public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version!.ToString();
-
-        public string AppDataDir { get; }
 
         #endregion
 

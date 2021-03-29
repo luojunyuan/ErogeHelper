@@ -2,7 +2,7 @@
 
 namespace ErogeHelper.Model.Service
 {
-    public class GameViewModelDataService : IGameViewModelDataService
+    public class GameDataService : IGameDataService
     {
         
     }

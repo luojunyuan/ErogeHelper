@@ -358,4 +358,22 @@
   <data name="CardControl.SelectTextTip" xml:space="preserve">
     <value>自由选择文本</value>
   </data>
+  <data name="Textractor.AlreadyInject" xml:space="preserve">
+    <value>Textractor: 已经注入</value>
+  </data>
+  <data name="Textractor.InvalidCode" xml:space="preserve">
+    <value>Textractor: 无效特殊码</value>
+  </data>
+  <data name="Textractor.InvalidProcess" xml:space="preserve">
+    <value>Textractor: 无效进程ID</value>
+  </data>
+  <data name="Textractor.Init" xml:space="preserve">
+    <value>Textractor: 初始化完成</value>
+  </data>
+  <data name="Textractor.InjectFailed" xml:space="preserve">
+    <value>Textractor: 无法注入</value>
+  </data>
+  <data name="Textractor.Clipboard" xml:space="preserve">
+    <value>剪切板</value>
+  </data>
 </root>

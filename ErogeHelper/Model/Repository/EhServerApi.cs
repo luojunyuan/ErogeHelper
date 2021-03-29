@@ -1,12 +1,9 @@
-﻿using Refit;
-using System.Collections.Generic;
-using System.DirectoryServices;
+﻿using ErogeHelper.Model.Repository.Entity;
+using ErogeHelper.Model.Repository.Interface;
+using Refit;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ErogeHelper.Model.Repository.Interface;
-using System;
-using ErogeHelper.Common.Extention;
-using ErogeHelper.Model.Repository.Entity;
 
 namespace ErogeHelper.Model.Repository
 {

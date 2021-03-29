@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -46,6 +47,7 @@ namespace ErogeHelper.Common
             var procList = new List<Process>();
             while (mainProcess is null && spendTime.Elapsed.TotalSeconds < timeoutSeconds)
             {
+                procList.Clear();
                 procList.AddRange(Process.GetProcessesByName(friendlyName));
                 procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
                 procList.AddRange(Process.GetProcessesByName("main.bin"));
@@ -108,6 +110,43 @@ namespace ErogeHelper.Common
 
             // Execute the migrations
             runner.MigrateUp();
+        }
+
+        /// <summary>
+        /// Wrapper no need characters with |~S~| |~E~|
+        /// </summary>
+        /// <param name="sourceInput"></param>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public static string TextEvaluateWithRegExp(string sourceInput, string expr)
+        {
+            const string begin = "|~S~|";
+            const string end = "|~E~|";
+
+            if (!string.IsNullOrEmpty(expr))
+            {
+                if (expr[^1] == '|')
+                    return sourceInput;
+
+                string wrapperText = sourceInput;
+
+                var instant = new Regex(expr);
+                var collect = instant.Matches(sourceInput);
+                foreach (Match match in collect)
+                {
+                    var beginPos = wrapperText.LastIndexOf(end, StringComparison.Ordinal);
+                    wrapperText = instant.Replace(
+                        wrapperText,
+                        begin + match + end,
+                        1,
+                        beginPos == -1 ? 0 : beginPos + 5);
+                }
+                return wrapperText;
+            }
+            else
+            {
+                return sourceInput;
+            }
         }
     }
 }

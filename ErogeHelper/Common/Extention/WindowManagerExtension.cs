@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Caliburn.Micro;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
 
 namespace ErogeHelper.Common.Extention
 {
@@ -13,14 +11,14 @@ namespace ErogeHelper.Common.Extention
 
         public static async Task SilentStartWindowFromIoCAsync<T>(this IWindowManager windowManager, object? context = null)
         {
-            // 启动的时候屏幕左下角会弹出小黑框再Hidden
-            // 注意如果不关闭所有窗口程序是不会结束的，所以不要在应用顶层使用
+            // NOTE: 注意如果不关闭所有窗口程序是不会结束的，所以不要在应用顶层使用
             var settings = new Dictionary<string, object>
             {
-                //{ "WindowState", WindowState.Minimized }, // cant use
+                // 因为设置了ShowInTaskbar=false，所以不能使用WindowState.Minimized，不然会造成缩小到屏幕左下角的效果
+                //{ "WindowState", WindowState.Minimized },
                 { "ShowInTaskbar", false },
-                // Collapsed 与 Hidden 似乎也不启用，所以没办法我只好在两个窗口的构造函数中手动添加了
-                //{ "Visibility", Visibility.Hidden },
+                // Collapsed 与 Hidden 似乎也无法启用，所以没办法我只好在两个窗口的构造函数中手动添加Visibility.Collapsed
+                //{ "Visibility", Visibility.Hidden }, // or Visibility.Collapsed
                 { "Left", -32000 },
                 { "Top", -32000 },
             };

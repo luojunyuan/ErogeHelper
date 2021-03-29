@@ -1,11 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity;
+﻿using ErogeHelper.Model.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Refit;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Tests.Model.Repository
 {

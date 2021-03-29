@@ -4,10 +4,10 @@ namespace ErogeHelper.Model.Repository.Entity
 {
     public class GameSetting
     {
-        [JsonPropertyName("id")]
+        [JsonPropertyName("Id")]
         public int GameId { get; set; }
 
-        [JsonPropertyName("textSettingJson")]
+        [JsonPropertyName("TextSettingJson")]
         public string GameSettingJson { get; set; } = string.Empty;
 
         public override string ToString()

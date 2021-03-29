@@ -16,5 +16,11 @@ namespace ErogeHelper.Model.Repository
 
         public GameInfo? GetGameInfo(string md5) =>
             _connection.QuerySingleOrDefault<GameInfo>($"SELECT * FROM GameInfo WHERE Md5='{md5}'");
+
+        public void SetGameInfo(GameInfo gameInfo)
+        {
+            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @GameSettingJson)";
+            _connection.Execute(query, gameInfo);
+        }
     }
 }

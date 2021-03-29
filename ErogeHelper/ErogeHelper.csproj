@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="assets\site_icon\" />
     <Folder Include="assets\text_background\" />
-    <Folder Include="Common\Converter\" />
     <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Repository\Translator\" />
     <Folder Include="Model\Repository\Dictionary\" />

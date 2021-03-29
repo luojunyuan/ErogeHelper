@@ -12,6 +12,9 @@ namespace ErogeHelper
     {
         private App()
         {
+            // UNDONE: Check singleton app
+            // use toast tip user after 20s, turn ErogeHelper down in TaskManager or EH handle this
+
             // Enable Pointer for touch device
             AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
 
@@ -54,7 +57,7 @@ namespace ErogeHelper
 
         private static void SetLanguageDictionary()
         {
-            Language.Strings.Culture = (Thread.CurrentThread.CurrentCulture.ToString()) switch
+            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
                 "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),

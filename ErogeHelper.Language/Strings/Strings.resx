@@ -358,4 +358,22 @@
   <data name="CardControl.SelectTextTip" xml:space="preserve">
     <value>Select text</value>
   </data>
+  <data name="Textractor.AlreadyInject" xml:space="preserve">
+    <value>Textractor: already injected</value>
+  </data>
+  <data name="Textractor.InvalidCode" xml:space="preserve">
+    <value>Textractor: invalid code</value>
+  </data>
+  <data name="Textractor.Init" xml:space="preserve">
+    <value>Textractor: initialization completed</value>
+  </data>
+  <data name="Textractor.InjectFailed" xml:space="preserve">
+    <value>Textractor: couldn't inject</value>
+  </data>
+  <data name="Textractor.InvalidProcess" xml:space="preserve">
+    <value>Textractor: invalid process</value>
+  </data>
+  <data name="Textractor.Clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
 </root>
