@@ -91,17 +91,21 @@ namespace ErogeHelper
                 Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             if (!ehGlobalValueRepository.GameProcesses.Any())
             {
-                MessageBox.Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
-                return ;
+                // FIXME: 
+                await ModernWpf.MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
+                    .ConfigureAwait(false);
+
+                Application.Shutdown();
             }
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
 
             ehGlobalValueRepository.GamePath = gamePath;
             var md5 = Utils.GetFileMd5(gamePath);
+            ehGlobalValueRepository.Md5 = md5;
 
             var settingJson = string.Empty;
-            var gameInfo = ehDbRepository.GetGameInfo(md5);
+            var gameInfo = await ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
             if (gameInfo is not null)
             {
                 settingJson = gameInfo.GameSettingJson;
@@ -117,12 +121,12 @@ namespace ErogeHelper
                     {
                         var content = resp.Content ?? new GameSetting();
                         settingJson = content.GameSettingJson;
-                        ehDbRepository.SetGameInfo(new GameInfo
+                        await ehDbRepository.SetGameInfoAsync(new GameInfo
                         {
                             Md5 = md5,
                             GameIdList = content.GameId.ToString(),
                             GameSettingJson = content.GameSettingJson,
-                        });
+                        }).ConfigureAwait(false);
                     }
                     Log.Debug($"{resp.StatusCode} {resp.Content}");
                 }
@@ -145,7 +149,6 @@ namespace ErogeHelper
             var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
 
             var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
-            ehGlobalValueRepository.Md5 = md5;
             ehGlobalValueRepository.TextractorSetting = gameSetting;
             textractorService.InjectProcesses();
 
@@ -209,6 +212,7 @@ namespace ErogeHelper
             services.AddTransient<IGameDataService, GameDataService>();
             services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.AddTransient<IHookDataService, HookDataService>();
+
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb

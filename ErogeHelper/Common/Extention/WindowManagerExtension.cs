@@ -16,6 +16,7 @@ namespace ErogeHelper.Common.Extention
             {
                 // 因为设置了ShowInTaskbar=false，所以不能使用WindowState.Minimized，不然会造成缩小到屏幕左下角的效果
                 //{ "WindowState", WindowState.Minimized },
+                // NOTE: 设置了这一项之后，在主动Call Show() 方法时似乎会在任务栏再次出现
                 { "ShowInTaskbar", false },
                 // Collapsed 与 Hidden 似乎也无法启用，所以没办法我只好在两个窗口的构造函数中手动添加Visibility.Collapsed
                 //{ "Visibility", Visibility.Hidden }, // or Visibility.Collapsed

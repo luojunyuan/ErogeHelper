@@ -36,7 +36,7 @@ namespace ErogeHelper.View.Window.Game
                         Show();
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new InvalidOperationException();
                 }
             }
             return Task.CompletedTask;

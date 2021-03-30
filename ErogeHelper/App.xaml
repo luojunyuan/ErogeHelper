@@ -16,6 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
             <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
+            <converter:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

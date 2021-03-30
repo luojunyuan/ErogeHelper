@@ -105,6 +105,7 @@ namespace ErogeHelper.Model.Service
             var targetThreadId = NativeMethods.GetWindowThread(_gameHWnd);
 
             // NOTE: Application.Current made tightly coupled to wpf System.Windows.Application and hard to test
+            // 如果使用await等待会导致GameWindowHooker一连串async变得繁琐起来..
             // 调用 SetWinEventHook 传入 WinEventDelegate 回调函数，必须在UI线程上执行启用
             Dispatcher.InvokeAsync(
                 () => _hWinEventHook = NativeMethods.WinEventHookOne(

@@ -10,10 +10,11 @@ namespace ErogeHelper.Common.Behavior
         #region Attached Properties
 
         public static readonly DependencyProperty HasErrorProperty = DependencyProperty.RegisterAttached(
-           "HasError",
+            "HasError",
             typeof(bool),
             typeof(ValidationBehavior),
-            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceHasError));
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null,
+                CoerceHasError));
 
         private static readonly DependencyProperty HasErrorDescriptorProperty = DependencyProperty.RegisterAttached(
            "HasErrorDescriptor",

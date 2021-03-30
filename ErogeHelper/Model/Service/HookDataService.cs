@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace ErogeHelper.Model.Service
         // INSTEAD: try use RestSharp 
         public async Task<string> QueryHCode(string md5)
         {
+            if (md5.Length != 32)
+                throw new ArgumentOutOfRangeException(md5);
+
             string param = $"md5={md5}";
             byte[] bs = Encoding.ASCII.GetBytes(param);
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(GameQuery);
@@ -25,7 +29,7 @@ namespace ErogeHelper.Model.Service
                 await reqStream.WriteAsync(bs, 0, bs.Length);
             }
             using WebResponse wr = await req.GetResponseAsync();
-            using StreamReader sr = new StreamReader(wr.GetResponseStream());
+            using StreamReader sr = new(wr.GetResponseStream());
             string xmlString = await sr.ReadToEndAsync();
 
             var xDoc = XDocument.Parse(xmlString);

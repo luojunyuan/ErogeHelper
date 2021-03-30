@@ -93,7 +93,7 @@ namespace ErogeHelper.ViewModel.Window
             var md5 = Utils.GetFileMd5(gamePath);
 
             var settingJson = string.Empty;
-            var gameInfo = _ehDbRepository.GetGameInfo(md5);
+            var gameInfo = await _ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
             if (gameInfo is not null)
             {
                 settingJson = gameInfo.GameSettingJson;

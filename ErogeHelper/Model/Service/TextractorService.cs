@@ -157,11 +157,11 @@ namespace ErogeHelper.Model.Service
 
         private void OnConnectCallBackHandle(uint processId)
         {
-            var hookcode = _ehGlobalValueRepository.TextractorSetting.Hookcode;
+            var setting = _ehGlobalValueRepository.TextractorSetting;
 
-            if (hookcode != string.Empty)
+            if (setting.IsUserHook)
             {
-                InsertHook(hookcode);
+                InsertHook(setting.Hookcode);
             }
         }
 

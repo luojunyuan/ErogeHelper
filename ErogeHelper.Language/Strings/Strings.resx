@@ -376,4 +376,13 @@
   <data name="Textractor.Clipboard" xml:space="preserve">
     <value>Clipboard</value>
   </data>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="HookPage.RCodeLabel" xml:space="preserve">
+    <value>Read Code</value>
+  </data>
+  <data name="HookPage.RCodeTip" xml:space="preserve">
+    <value>Search text help find out read code</value>
+  </data>
 </root>

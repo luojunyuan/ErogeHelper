@@ -10,11 +10,12 @@
       xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
       xmlns:entity="clr-namespace:ErogeHelper.Common.Entity"
+      xmlns:dialog="clr-namespace:ErogeHelper.View.Dialog"
       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DataContext="{d:DesignInstance vm:HookViewModel, IsDesignTimeCreatable=True}"
       cal:Bind.AtDesignTime="True"
-      d:DesignHeight="800" d:DesignWidth="450"
+      d:DesignHeight="800" d:DesignWidth="850"
       Title="{x:Static resx:Strings.HookPage_Title}">
 
     <Page.Resources>
@@ -26,7 +27,8 @@
                             <Style TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
                                 <Style.Triggers>
                                     <DataTrigger 
-                                        Binding="{Binding ElementName=engineName, Path=Text}" 
+                                        Binding="{Binding ElementName=engineName, Path=Text, 
+                                            Converter={StaticResource ResourceKey=HookEngineHighlightConverter}}" 
                                         Value="UserHook">
                                         <Setter Property="Foreground" Value="Red"/>
                                     </DataTrigger>
@@ -124,66 +126,39 @@
                     <ui:SimpleStackPanel Spacing="10">
                         <!-- Commanders -->
                         <StackPanel Orientation="Horizontal">
+                            <!-- Refresh -->
                             <ui:AppBarButton 
                                 Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}" 
                                 Icon="Refresh" ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" 
                                 cal:Message.Attach="[Click] = [ClearHookMapData]"/>
                             <!-- Hook Code -->
                             <ui:AppBarButton 
-                                x:Name="CodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}"
-                                ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}" >
+                                Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}"
+                                ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}"
+                                cal:Message.Attach="[Click] = [OpenHCodeDialog]"
+                                IsEnabled="{Binding CanOpenDialog}">
                                 <ui:AppBarButton.Icon>
                                     <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Component}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
-                            <ui:ContentDialog
-                                x:Name="CodeDialog" Title="{x:Static resx:Strings.HookPage_HookCode}"
-                                CloseButtonText="{x:Static resx:Strings.HookPage_CodeSearchCancel}" 
-                                PrimaryButtonText="{x:Static resx:Strings.HookPage_Insert}"
-                                cal:Message.Attach="[PrimaryButtonClick] = [InsertCode]; 
-                                    [Closing] = [DialogClosingEvent($eventArgs)]" DefaultButton="Primary"
-                                IsPrimaryButtonEnabled="{Binding CanInsertCode}">
-                                <ui:SimpleStackPanel Spacing="10">
-                                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-                                        <!--CodeTextBox just sugar-->
-                                        <TextBox 
-                                            HorizontalAlignment="Left" Width="240"
-                                            behavior:ValidationBehavior.HasError="{Binding DataContext.InvalidHookCode, 
-                                                RelativeSource={RelativeSource AncestorType={x:Type Page}}}">
-                                            <TextBox.Text>
-                                                <Binding 
-                                                    Path="DataContext.InputCode" 
-                                                    RelativeSource="{RelativeSource AncestorType={x:Type Page}}" 
-                                                    UpdateSourceTrigger="PropertyChanged">
-                                                    <Binding.ValidationRules>
-                                                        <validation:InvalidCodeFormatValidationRule 
-                                                            ValidatesOnTargetUpdated="True"/>
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </TextBox.Text>
-                                        </TextBox>
-
-                                        <ui:AppBarButton 
-                                            Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_CodeSearchTip}"
-                                            cal:Message.Attach="[Click] = [SearchCode]">
-                                            <ui:AppBarButton.Icon>
-                                                <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
-                                            </ui:AppBarButton.Icon>
-                                        </ui:AppBarButton>
-                                    </ui:SimpleStackPanel>
-                                </ui:SimpleStackPanel>
-                            </ui:ContentDialog>
                             <!-- Read Code -->
-                            <!--<ui:AppBarButton 
-                                Name="RCodeButton" Label="Read Code" Icon="{x:Static common:CommonSymbols.Search}"
-                                ToolTip="Search text help find out read code" />-->
+                            <ui:AppBarButton 
+                                Label="{x:Static resx:Strings.HookPage_RCodeLabel}" Icon="Find"
+                                ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" IsEnabled="False" />
+
+                            <dialog:HCodeDialog 
+                                x:Name="HCodeDialog" cal:Message.Attach="[SearchCodeClick] = [SearchHCode]; 
+                                    [PrimaryButtonClick] = [InsertCode]"
+                                CanSearchCode="{Binding CanSearchCode}"
+                                InputCode="{Binding InputHCode, Mode=TwoWay}"/>
                         </StackPanel>
                         <ListView 
                             ScrollViewer.PanningMode="None"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             ItemsSource="{Binding HookMapData}" 
-                            SelectedItem="{Binding SelectedHook}" SelectionMode="Single"
+                            SelectedItem="{Binding SelectedHook}" 
+                            SelectionMode="Single"
                             ItemTemplate="{StaticResource HpItemTemplate}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>

@@ -10,7 +10,6 @@ namespace ErogeHelper.Tests.Model.Repository
     public class EhServerApiTests
     {
         [TestMethod]
-        // UNDONE: Use it in regexp matcher [ExpectedException(typeof(HttpRequestException))]
         public async Task GetExistGameTest()
         {
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

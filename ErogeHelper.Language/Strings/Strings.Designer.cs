@@ -151,6 +151,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 OK 的本地化字符串。
+        /// </summary>
+        public static string Common_OK {
+            get {
+                return ResourceManager.GetString("Common.OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Action Center 的本地化字符串。
         /// </summary>
         public static string GameView_ActionCenter {
@@ -418,6 +427,24 @@ namespace ErogeHelper.Language {
         public static string HookPage_Insert {
             get {
                 return ResourceManager.GetString("HookPage.Insert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Read Code 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeLabel {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Search text help find out read code 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeTip {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeTip", resourceCulture);
             }
         }
         

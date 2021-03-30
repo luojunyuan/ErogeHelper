@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Threading.Tasks;
+using Dapper;
 using ErogeHelper.Model.Repository.Entity;
 using Microsoft.Data.Sqlite;
 
@@ -14,13 +15,30 @@ namespace ErogeHelper.Model.Repository
 
         private readonly SqliteConnection _connection;
 
-        public GameInfo? GetGameInfo(string md5) =>
-            _connection.QuerySingleOrDefault<GameInfo>($"SELECT * FROM GameInfo WHERE Md5='{md5}'");
+        public async Task<GameInfo?> GetGameInfoAsync(string md5) =>
+            await _connection.QuerySingleOrDefaultAsync<GameInfo>($"SELECT * FROM GameInfo WHERE Md5='{md5}'")
+                .ConfigureAwait(false);
 
-        public void SetGameInfo(GameInfo gameInfo)
+        public async Task SetGameInfoAsync(GameInfo gameInfo)
         {
             string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @GameSettingJson)";
-            _connection.Execute(query, gameInfo);
+            await _connection.ExecuteAsync(query, gameInfo).ConfigureAwait(false);
+        }
+
+        public async Task UpdateGameInfoAsync(GameInfo gameInfo)
+        {
+            string query = @"
+UPDATE GameInfo 
+SET GameIdList = @GameIdList, GameSettingJson = @GameSettingJson
+WHERE Md5 = @Md5";
+            await _connection.ExecuteAsync(query, gameInfo).ConfigureAwait(false);
+        }
+
+        public async Task DeleteGameInfoAsync(string md5)
+        {
+            string query =
+                "DELETE FROM GameInfo WHERE Md5=@Md5";
+            await _connection.ExecuteAsync(query, new {Md5=md5}).ConfigureAwait(false);
         }
     }
 }

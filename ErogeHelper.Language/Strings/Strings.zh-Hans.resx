@@ -323,7 +323,7 @@
     <value>在 Aniclan 上搜索特殊码</value>
   </data>
   <data name="HookPage.RegExpTag1" xml:space="preserve">
-    <value>去除或“「”之前的所有文本</value>
+    <value>去除“『”或“「”之前的所有文本</value>
   </data>
   <data name="HookPage.RegExpTag2" xml:space="preserve">
     <value>去除“』”或“」”之后的所有文本</value>
@@ -375,5 +375,14 @@
   </data>
   <data name="Textractor.Clipboard" xml:space="preserve">
     <value>剪切板</value>
+  </data>
+  <data name="Common.OK" xml:space="preserve">
+    <value>彳亍</value>
+  </data>
+  <data name="HookPage.RCodeLabel" xml:space="preserve">
+    <value>阅读码</value>
+  </data>
+  <data name="HookPage.RCodeTip" xml:space="preserve">
+    <value>搜索文本帮助插入阅读码</value>
   </data>
 </root>

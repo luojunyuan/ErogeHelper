@@ -8,14 +8,29 @@ namespace ErogeHelper.Common.Messenger
         /// <summary>
         /// </summary>
         /// <param name="viewModelType">Sub name `ViewModel` mapping to `View`</param>
+        /// <param name="viewType"></param>
         /// <param name="action"></param>
         /// <param name="dialogType"></param>
         /// <param name="context"></param>
-        public ViewActionMessage(Type viewModelType, ViewAction action, ModernDialog? dialogType = null, object? context = null)
+        public ViewActionMessage(
+            Type viewModelType, 
+            ViewAction action, 
+            ModernDialog? dialogType = null, 
+            object? context = null,
+            ViewType viewType = ViewType.Window)
         {
-            var viewName = context is null ? 
-                viewModelType.ToString().Replace("Model", string.Empty) :
-                viewModelType.ToString().Replace("Model", string.Empty)[..^4] + '.' + context;
+            var viewName = string.Empty;
+
+            if (viewType == ViewType.Window)
+            {
+                viewName = context is null ?
+                    viewModelType.ToString().Replace("Model", string.Empty) :
+                    viewModelType.ToString().Replace("Model", string.Empty)[..^4] + '.' + context;
+            }
+            else if (viewType == ViewType.Page)
+            {
+                viewName = viewModelType.ToString().Replace("Model", string.Empty)[..^4] + "Page";
+            }
 
             WindowType = Type.GetType(viewName) ?? throw new InvalidCastException(viewName);
             Action = action;

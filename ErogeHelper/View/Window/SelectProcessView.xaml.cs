@@ -33,10 +33,11 @@ namespace ErogeHelper.View.Window
                         Close();
                         break;
                     case ViewAction.OpenDialog:
-                        await new SelectProcessTipDialog().ShowAsync();
+                        if (message.DialogType == ModernDialog.SelectProcessNoProcessTip)
+                            await new SelectProcessTipDialog().ShowAsync().ConfigureAwait(false);
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new InvalidOperationException();
                 }
             }
         }

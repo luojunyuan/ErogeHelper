@@ -1,11 +1,17 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Repository.Entity;
 using ErogeHelper.Model.Service.Interface;
-using ModernWpf.Controls;
+using ErogeHelper.ViewModel.Window;
+using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -16,30 +22,38 @@ namespace ErogeHelper.ViewModel.Page
         public HookViewModel(
             IHookDataService dataService,
             IWindowManager windowManager,
+            IEventAggregator eventAggregator,
             ITextractorService textractorService,
+            EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
             EhGlobalValueRepository ehGlobalValueRepository)
         {
             _dataService = dataService;
             _windowManager = windowManager;
+            _eventAggregator = eventAggregator;
             _textractorService = textractorService;
+            _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
             _ehGlobalValueRepository = ehGlobalValueRepository;
 
-            //RegExp = dataService.GetRegExp();
             _textractorService.DataEvent += DataProcess;
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
 
         private readonly IHookDataService _dataService;
         private readonly IWindowManager _windowManager;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ITextractorService _textractorService;
+        private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly EhGlobalValueRepository _ehGlobalValueRepository;
 
         #region RegExp
-        private string? _regExp;
-        public string? RegExp // if user click 'x', it will turn to null
+
+        private string? _regExp = string.Empty;
+
+        // if user click 'x', it will turn to null
+        public string? RegExp
         {
             get => _regExp ?? string.Empty;
             set
@@ -58,27 +72,15 @@ namespace ErogeHelper.ViewModel.Page
         }
 
         private bool _invalidRegExp;
-        public bool InvalidRegExp // trans: 无效的RegExp
-        {
-            get => _invalidRegExp;
-            set
-            {
-                _invalidRegExp = value;
-                NotifyOfPropertyChange(() => CanSubmitSetting);
-            }
-        }
+
+        // RegExp 无效的状态
+        public bool InvalidRegExp
+        { get => _invalidRegExp; set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); } }
 
         private long _selectedTextHandle;
         private string _selectedText = string.Empty;
         public string SelectedText
-        {
-            get => _selectedText;
-            set
-            {
-                _selectedText = value;
-                NotifyOfPropertyChange(() => SelectedText);
-            }
-        }
+        { get => _selectedText; set { _selectedText = value; NotifyOfPropertyChange(() => SelectedText); } }
 
         private const string Tag1 = ".*(?=[「|『])";
         private const string Tag2 = "(?<=[」|』]).*";
@@ -102,69 +104,72 @@ namespace ErogeHelper.ViewModel.Page
 
         #endregion
 
-        #region HookCode
+        #region HookCode ReadCode
 
-        private string _inputCode = string.Empty;
+        // Fields
+        private bool _canOpenDialog = true;
+        private string _inputHCode = string.Empty;
         private bool _canSearchCode = true;
 
-        public string InputCode
+        public bool CanOpenDialog
+        { get => _canOpenDialog; set { _canOpenDialog = value; NotifyOfPropertyChange(() => CanOpenDialog); } }
+
+        public async void OpenHCodeDialog()
         {
-            get => _inputCode;
+            CanOpenDialog = false;
+            // 如果是new Dialog，窗口在关闭后立即被释放
+            // 但如果持有一个或多个实例，必须先等他们 Close 再 Open
+            // 否则会引发 "Only a single ContentDialog can be open at any time."
+            // “指定的 Visual 已经是另一个 Visual 的子级或者已经是 CompositionTarget 的根。”
+            await _eventAggregator.PublishOnUIThreadAsync(
+                new ViewActionMessage(GetType(), ViewAction.OpenDialog, ModernDialog.HookCode, null, ViewType.Page))
+                .ConfigureAwait(false);
+            CanOpenDialog = true;
+        }
+
+        public string InputHCode
+        {
+            get => _inputHCode;
             set
             {
-                // InputCode 只在值有效时xaml才会传值过来
-                _inputCode = value;
-                NotifyOfPropertyChange(() => InputCode);
-                NotifyOfPropertyChange(() => CanInsertCode);
+                // 因 validation 约束 InputHCode 只在值有效、或null empty时，xaml才会传值过来
+                _inputHCode = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
+                NotifyOfPropertyChange(() => InputHCode);
             }
         }
 
-        public bool InvalidHookCode { get; set; }
 
+        // HCodeDialog Search Button
         public bool CanSearchCode
+        { get => _canSearchCode; set { _canSearchCode = value; NotifyOfPropertyChange(() => CanSearchCode); } }
+
+        public async void SearchHCode()
         {
-            get => _canSearchCode;
-            set
-            {
-                _canSearchCode = value;
-                NotifyOfPropertyChange(() => CanSearchCode);
-            }
-        }
-        public async void SearchCode()
-        {
+            Log.Debug(InputHCode);
             CanSearchCode = false;
             var hcode = await _dataService.QueryHCode(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
             if (hcode != string.Empty)
             {
-                InputCode = hcode;
+                InputHCode = hcode;
                 Log.Info(hcode);
             }
             else
             {
-                InputCode = Language.Strings.HookPage_CodeSearchNoResult;
+                InputHCode = Language.Strings.HookPage_CodeSearchNoResult;
             }
             CanSearchCode = true;
         }
 
-        public bool CanInsertCode => !string.IsNullOrWhiteSpace(InputCode) && !InvalidHookCode;
         public void InsertCode()
         {
-            if (CanInsertCode)
+            // Condition here cause "Enter" key will cross this
+            if (InputHCode != string.Empty)
             {
-                _textractorService.InsertHook(InputCode);
+                _textractorService.InsertHook(InputHCode);
             }
+            //Log.Debug("Enter key active here!");
         }
-        public void DialogClosingEvent(ContentDialogClosingEventArgs args)
-        {
-            // TODO
-            // Block Enter key and PrimaryButton
-            if (args.Result == ContentDialogResult.Primary && !CanInsertCode)
-            {
-                args.Cancel = true;
-            }
-            // Only let CloseButton and Escape key go
-            //if (args.Result == ContentDialogResult.None)
-        }
+
         #endregion
 
         public void ClearHookMapData()
@@ -198,7 +203,7 @@ namespace ErogeHelper.ViewModel.Page
             }
         }
 
-        private void DataProcess(HookParam hp)
+        private async void DataProcess(HookParam hp)
         {
             switch (hp.Handle)
             {
@@ -222,9 +227,11 @@ namespace ErogeHelper.ViewModel.Page
                     return;
             }
 
-            Application.Current.Dispatcher.InvokeAsync(() =>
+            // QUESTION: this await may cause problem
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                // Error Info: 在“ItemAdded”事件后具有意外的长度。\n如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这种情况。
+                // Error Info: 在“ItemAdded”事件后具有意外的长度。\n
+                // 如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这种情况。
                 var targetItem = HookMapData.FastFind(hp.Handle);
                 if (targetItem == null)
                 {
@@ -244,7 +251,7 @@ namespace ErogeHelper.ViewModel.Page
                 {
                     string tmp = targetItem.TotalText + "\n\n" + hp.Text;
 
-                    // HACK: Dummy way to do my TextBlock item
+                    // HACK: Dummy way to generate my TextBlock item text
                     var count = tmp.Count(f => f.Equals('\n'));
                     if (count > 5)
                     {
@@ -267,19 +274,91 @@ namespace ErogeHelper.ViewModel.Page
 
         public async void SubmitSetting()
         {
-            // TODO: Refactor
-            var sendText = SelectedText
+            var textPendingToSend = SelectedText
                 .Replace("|~S~|", string.Empty)
                 .Replace("|~E~|", string.Empty);
 
             if (!string.IsNullOrWhiteSpace(RegExp))
             {
-                var list = Regex.Split(sendText, RegExp);
-                sendText = string.Join("", list);
+                var list = Regex.Split(textPendingToSend, RegExp);
+                textPendingToSend = string.Join("", list);
             }
+
+            // UNDONE: Invoke sendText to GameView, pass through MeCab and color
+
+            if (SelectedHook is null)
+                throw new ArgumentNullException(nameof(SelectedHook));
+
+            _ehGlobalValueRepository.TextractorSetting.IsUserHook = SelectedHook.EngineName.Contains("UserHook");
+            _ehGlobalValueRepository.TextractorSetting.Hookcode = SelectedHook.HookCode;
+            _ehGlobalValueRepository.TextractorSetting.ThreadContext = SelectedHook.ThreadContext;
+            _ehGlobalValueRepository.TextractorSetting.SubThreadContext = SelectedHook.SubThreadContext;
+            _ehGlobalValueRepository.TextractorSetting.RegExp = RegExp ?? string.Empty;
+
+            // 用一个开关? 异步
+            // UNDONE: ehApi SubmitSetting with gameNames
+
+            var gameInfoTable =
+                await _ehDbRepository.GetGameInfoAsync(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
+            if (gameInfoTable is null)
+            {
+                // HookPage must in HookConfigView window
+                // This happen when server has no data or user uses EH offline
+                gameInfoTable = new GameInfo
+                {
+                    Md5 = _ehGlobalValueRepository.Md5,
+                    GameIdList = string.Empty,
+                    GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                };
+                await _ehDbRepository.SetGameInfoAsync(gameInfoTable).ConfigureAwait(false);
+            }
+            else
+            {
+                var hookSetting = gameInfoTable.GameSettingJson;
+                if (hookSetting == string.Empty)
+                {
+                    // HookPage in HookConfigView window
+                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfo
+                    {
+                        Md5 = gameInfoTable.Md5,
+                        GameIdList = gameInfoTable.GameIdList,
+                        GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                    }).ConfigureAwait(false);
+                }
+                else
+                {
+                    // HookPage in Preference window
+                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfo
+                    {
+                        Md5 = gameInfoTable.Md5,
+                        GameIdList = gameInfoTable.GameIdList,
+                        GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                    }).ConfigureAwait(false);
+                    Log.Debug("Update db.sqlite");
+                    // QUESTION: 也许我不用在Page中OpenDialog，而在Window中。可能都一样
+                    await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(),
+                            ViewAction.OpenDialog, ModernDialog.HookSettingUpdatedTip, null, ViewType.Page))
+                        .ConfigureAwait(false);
+                    return;
+                }
+            }
+
+            // 在HookViewModel(page vm)以HookConfigViewModel(window vm)的名义向HookConfigView(window)发消息
+            _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(typeof(HookConfigViewModel), ViewAction.Hide));
+
+            await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
+            await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
+
+            _ = _ehConfigRepository.UseOutsideWindow
+                ? _eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"))
+                : _eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
+
+            _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(typeof(HookConfigViewModel), ViewAction.Close));
         }
 
-        #pragma warning disable 8618
+#pragma warning disable 8618
         public HookViewModel() { }
     }
 }
