@@ -143,10 +143,42 @@ namespace ErogeHelper.Common
                 }
                 return wrapperText;
             }
-            else
+
+            return sourceInput;
+        }
+
+        public static Dictionary<string, string> GetGameNamesByProcess(Process proc)
+        {
+            var fullPath = proc.MainModule?.FileName ?? string.Empty;
+            var fullDir = Path.GetDirectoryName(fullPath) ?? string.Empty;
+
+            var file = Path.GetFileName(fullPath);
+            var dir = Path.GetFileName(fullDir);
+            var title = proc.MainWindowTitle;
+            var fileWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
+
+            return new Dictionary<string, string>
             {
-                return sourceInput;
-            }
+                { "File", file},
+                { "Dir", dir},
+                { "Title", title},
+                { "FileNoExt", fileWithoutExtension },
+            };
+        }
+
+        public static Dictionary<string, string> GetGameNamesByPath(string absolutePath)
+        {
+            var file = Path.GetFileName(absolutePath);
+            var fullDir = Path.GetDirectoryName(absolutePath) ?? string.Empty;
+            var dir = Path.GetFileName(fullDir);
+            var fileWithoutExtension = Path.GetFileNameWithoutExtension(absolutePath);
+
+            return new Dictionary<string, string>
+            {
+                { "File", file },
+                { "Dir", dir },
+                { "FileNoExt", fileWithoutExtension },
+            };
         }
     }
 }

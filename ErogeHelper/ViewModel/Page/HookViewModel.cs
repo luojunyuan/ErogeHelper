@@ -9,7 +9,6 @@ using ErogeHelper.Model.Repository.Entity;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
