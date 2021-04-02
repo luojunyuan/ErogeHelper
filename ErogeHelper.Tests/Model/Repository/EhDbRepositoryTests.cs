@@ -1,12 +1,11 @@
-﻿using System;
-using System.Diagnostics;
+﻿using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Repository.Entity.Table;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ErogeHelper.Tests.Model.Repository
 {
@@ -51,13 +50,13 @@ namespace ErogeHelper.Tests.Model.Repository
                 ThreadContext = 0,
             };
             var fakeJson = JsonSerializer.Serialize(hookSetting);
-            var fakeGameInfo = new GameInfo
+            var fakeGameInfo = new GameInfoTable
             {
                 Md5 = fakeMd5,
                 GameIdList = fakeIdList,
                 GameSettingJson = fakeJson,
             };
-            var newGameInfo = new GameInfo
+            var newGameInfo = new GameInfoTable
             {
                 Md5 = fakeMd5,
                 GameIdList = fakeIdList,

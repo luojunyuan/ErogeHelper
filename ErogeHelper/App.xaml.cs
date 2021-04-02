@@ -13,10 +13,10 @@ namespace ErogeHelper
         private App()
         {
             // UNDONE: Check singleton app
-            // use toast tip user after 20s, turn ErogeHelper down in TaskManager or EH handle this
+            // Toast user ErogeHelper is running, or you can turn ErogeHelper down immediately
 
             // Enable Pointer for touch device
-            AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
+            //AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()

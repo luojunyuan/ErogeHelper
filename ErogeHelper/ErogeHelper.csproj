@@ -19,7 +19,6 @@
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.0" />
-    <PackageReference Include="ModernWpfUI" Version="0.9.4" />
     <PackageReference Include="Refit" Version="6.0.38" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
   </ItemGroup>
@@ -28,6 +27,7 @@
     <Folder Include="assets\site_icon\" />
     <Folder Include="assets\text_background\" />
     <Folder Include="Common\Messenger\" />
+    <Folder Include="Model\Repository\Entity\Payload\" />
     <Folder Include="Model\Repository\Translator\" />
     <Folder Include="Model\Repository\Dictionary\" />
   </ItemGroup>

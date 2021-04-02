@@ -1,9 +1,9 @@
-﻿using ErogeHelper.Model.Repository.Entity;
-using ErogeHelper.Model.Repository.Interface;
+﻿using ErogeHelper.Model.Repository.Interface;
 using Refit;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Repository.Entity.Response;
 
 namespace ErogeHelper.Model.Repository
 {
@@ -22,7 +22,7 @@ namespace ErogeHelper.Model.Repository
             _ehServerApi = RestService.For<IEhServerApi>(httpClient);
         }
 
-        public async Task<ApiResponse<GameSetting>> GetGameSetting(string md5)
+        public async Task<ApiResponse<GameSettingResponse>> GetGameSetting(string md5)
         {
             return await _ehServerApi.GetGameSetting(md5).ConfigureAwait(false);
         }

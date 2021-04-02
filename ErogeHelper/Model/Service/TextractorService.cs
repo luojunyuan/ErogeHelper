@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ErogeHelper.Common.Entity;
-using ErogeHelper.Function;
+using ErogeHelper.Common.Function;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 

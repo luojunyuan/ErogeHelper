@@ -10,6 +10,7 @@
       xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
       xmlns:entity="clr-namespace:ErogeHelper.Common.Entity"
+      xmlns:control="clr-namespace:ErogeHelper.View.Control"
       xmlns:dialog="clr-namespace:ErogeHelper.View.Dialog"
       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
       mc:Ignorable="d"
@@ -53,7 +54,7 @@
             <!-- Main Panel -->
             <RowDefinition Height="*" />
             <!-- Submit Button -->
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="0" PanningMode="Both">

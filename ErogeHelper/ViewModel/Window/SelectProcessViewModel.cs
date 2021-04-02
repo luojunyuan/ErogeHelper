@@ -10,7 +10,7 @@ using ErogeHelper.Model.Service.Interface;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using ErogeHelper.Model.Repository.Entity;
+using ErogeHelper.Model.Repository.Entity.Response;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -107,7 +107,7 @@ namespace ErogeHelper.ViewModel.Window
                     //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {
-                        var content = resp.Content ?? new GameSetting();
+                        var content = resp.Content ?? new GameSettingResponse();
                         settingJson = content.GameSettingJson;
                     }
                     Log.Debug($"{resp.StatusCode} {resp.Content}");

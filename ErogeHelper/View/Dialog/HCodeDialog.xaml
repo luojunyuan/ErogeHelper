@@ -29,6 +29,7 @@
                 </TextBox.Text>
             </TextBox>
 
+            <!-- UNDONE: wait button -->
             <ui:AppBarButton 
                 Name="SearchCodeButton" Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_CodeSearchTip}"
                 Click="SearchCodeButton_OnClick">

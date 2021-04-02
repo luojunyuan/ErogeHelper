@@ -1,6 +1,6 @@
-﻿namespace ErogeHelper.Model.Repository.Entity
+﻿namespace ErogeHelper.Model.Repository.Entity.Table
 {
-    public class GameInfo
+    public class GameInfoTable
     {
         public string Md5 { get; set; } = string.Empty;
         // 186,143,123

@@ -17,6 +17,8 @@ namespace ErogeHelper.Model.Service
     {
         public event Action<GameWindowPosition>? GamePosArea;
 
+        public event Action<WindowSize>? NewWindowSize;
+
         public GameWindowHooker(EhGlobalValueRepository ehGlobalValueRepository)
         {
             _ehGlobalValueRepository = ehGlobalValueRepository;
@@ -57,6 +59,7 @@ namespace ErogeHelper.Model.Service
             var clientRect = NativeMethods.GetClientRect(_gameHWnd);
             var realHandle = IntPtr.Zero;
 
+            // InsideView命中的客户区窗口范围很小，说明不是正常的游戏窗口
             if (400 > clientRect.Bottom && 400 > clientRect.Right)
             {
                 // Tip: This would active even when game window get minimize
@@ -64,7 +67,7 @@ namespace ErogeHelper.Model.Service
                 if ($"{windowRect.Left} {windowRect.Top} {windowRect.Right} {windowRect.Bottom}"
                     .Equals(MinimizedPosition))
                 {
-                    // Ignore minimize window situation
+                    // Ignore minimized window situation
                     return;
                 }
 
@@ -128,7 +131,7 @@ namespace ErogeHelper.Model.Service
             uint dwmsEventTime)
         {
             // 游戏窗口获取焦点时会调用
-            //if (hWnd == GameInfo.Instance.hWnd &&
+            //if (hWnd == GameInfoTable.Instance.hWnd &&
             //    eventType == Hook.SWEH_Events.EVENT_OBJECT_FOCUS)
             //{
             //    log.Info("Game window get focus");
@@ -144,6 +147,9 @@ namespace ErogeHelper.Model.Service
         }
 
         private GameWindowPosition _lastPos = HiddenPos;
+
+        private int _oldWidth = -1;
+        private int _oldHeight = -1;
 
         private void UpdateLocation()
         {
@@ -171,17 +177,17 @@ namespace ErogeHelper.Model.Service
             GamePosArea?.Invoke(_lastPos);
 
             #region Change FloatButton Position
-            //if (oldWidth == -1 && oldHeight == -1)
-            //{
-            //    oldWidth = width;
-            //    oldHeight = height;
-            //}
-            //else if (oldHeight != height || oldWidth != width)
-            //{
-            //    UpdateButtonPosEvent?.Invoke(typeof(GameHooker), rectClient.Bottom, rectClient.Right);
-            //    oldHeight = height;
-            //    oldWidth = width;
-            //}
+            if (_oldWidth == -1 && _oldHeight == -1)
+            {
+                _oldWidth = width;
+                _oldHeight = height;
+            }
+            else if (_oldHeight != height || _oldWidth != width)
+            { 
+                NewWindowSize?.Invoke(new WindowSize(rectClient.Right, rectClient.Bottom));
+                _oldHeight = height;
+                _oldWidth = width;
+            }
             #endregion
         }
 
@@ -191,6 +197,7 @@ namespace ErogeHelper.Model.Service
             var title = new StringBuilder(textLength + 1);
             NativeMethods.GetWindowText(_gameProc.MainWindowHandle, title, title.Capacity);
 
+            // UNDONE: 这个是以匹配标题的方式找handle，这样不好
             Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
 
             // NOTE: Must use original gameProc.MainWindowHandle

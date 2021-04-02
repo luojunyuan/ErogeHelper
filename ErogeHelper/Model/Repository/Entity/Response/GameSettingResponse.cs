@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ErogeHelper.Model.Repository.Entity
+namespace ErogeHelper.Model.Repository.Entity.Response
 {
-    public class GameSetting
+    public class GameSettingResponse
     {
         [JsonPropertyName("Id")]
         public int GameId { get; set; }

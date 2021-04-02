@@ -34,7 +34,7 @@ namespace ErogeHelper.View.Window.Game
 
         private void PositionChanged(GameWindowPosition pos)
         {
-            // Use await, after game quit: System.Threading.Tasks.TaskCanceledException:“A task was canceled.”
+            // XXX: Use await, after game quit: System.Threading.Tasks.TaskCanceledException:“A task was canceled.”
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Height = pos.Height / dpi;

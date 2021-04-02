@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ErogeHelper.Model.Repository.Entity;
+using ErogeHelper.Model.Repository.Entity.Response;
 using Refit;
 
 namespace ErogeHelper.Model.Repository.Interface
@@ -7,6 +7,6 @@ namespace ErogeHelper.Model.Repository.Interface
     public interface IEhServerApi
     {
         [Get("/v1/Game/Setting?md5={md5}")]
-        Task<ApiResponse<GameSetting>> GetGameSetting(string md5);
+        Task<ApiResponse<GameSettingResponse>> GetGameSetting(string md5);
     }
 }

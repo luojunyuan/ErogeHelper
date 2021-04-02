@@ -9,10 +9,13 @@ namespace ErogeHelper.Model.Service.Interface
     {
         event Action<GameWindowPosition> GamePosArea;
 
+        event Action<WindowSize> NewWindowSize;
+
         Task SetGameWindowHookAsync();
 
         void InvokeLastWindowPosition();
 
+        // UNDONE: Add a button in panel
         /// <summary>
         /// Some games may change their handle when the window is switched full screen
         /// </summary>

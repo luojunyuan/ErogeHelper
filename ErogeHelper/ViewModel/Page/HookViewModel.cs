@@ -5,7 +5,7 @@ using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity;
+using ErogeHelper.Model.Repository.Entity.Table;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using System;
@@ -76,7 +76,6 @@ namespace ErogeHelper.ViewModel.Page
         public bool InvalidRegExp
         { get => _invalidRegExp; set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); } }
 
-        private long _selectedTextHandle;
         private string _selectedText = string.Empty;
         public string SelectedText
         { get => _selectedText; set { _selectedText = value; NotifyOfPropertyChange(() => SelectedText); } }
@@ -179,6 +178,8 @@ namespace ErogeHelper.ViewModel.Page
 
         public HookBindingList<long, HookMapItem> HookMapData { get; set; } = new(p => p.Handle);
 
+        private long _selectedTextHandle;
+
         private HookMapItem? _selectedHook;
 
         public HookMapItem? SelectedHook
@@ -226,7 +227,7 @@ namespace ErogeHelper.ViewModel.Page
                     return;
             }
 
-            // QUESTION: this await may cause problem
+            // Note: this await may cause problem
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 // Error Info: 在“ItemAdded”事件后具有意外的长度。\n
@@ -263,6 +264,18 @@ namespace ErogeHelper.ViewModel.Page
                 }
             });
 
+            if (SelectedHook is null && _ehGlobalValueRepository.TextractorSetting.Hookcode != string.Empty)
+            {
+                var setting = _ehGlobalValueRepository.TextractorSetting;
+                if (setting.Hookcode.Equals(hp.Hookcode)
+                    && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
+                    && setting.SubThreadContext == hp.Ctx2)
+                {
+                    // UNDONE: Pending to test
+                    SelectedHook = HookMapData.FastFind(hp.Handle);
+                }
+            }
+
             if (_selectedTextHandle == hp.Handle)
             {
                 SelectedText = Utils.TextEvaluateWithRegExp(hp.Text, RegExp ?? string.Empty);
@@ -295,7 +308,7 @@ namespace ErogeHelper.ViewModel.Page
             _ehGlobalValueRepository.TextractorSetting.RegExp = RegExp ?? string.Empty;
 
             // 用一个开关? 异步
-            // UNDONE: ehApi SubmitSetting with gameNames
+            // UNDONE: ehApi SubmitSetting with gameNames RCode不要
 
             var gameInfoTable =
                 await _ehDbRepository.GetGameInfoAsync(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
@@ -303,7 +316,7 @@ namespace ErogeHelper.ViewModel.Page
             {
                 // HookPage must in HookConfigView window
                 // This happen when server has no data or user uses EH offline
-                gameInfoTable = new GameInfo
+                gameInfoTable = new GameInfoTable
                 {
                     Md5 = _ehGlobalValueRepository.Md5,
                     GameIdList = string.Empty,
@@ -317,7 +330,7 @@ namespace ErogeHelper.ViewModel.Page
                 if (hookSetting == string.Empty)
                 {
                     // HookPage in HookConfigView window
-                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfo
+                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfoTable
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,
@@ -327,7 +340,7 @@ namespace ErogeHelper.ViewModel.Page
                 else
                 {
                     // HookPage in Preference window
-                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfo
+                    await _ehDbRepository.UpdateGameInfoAsync(new GameInfoTable
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,

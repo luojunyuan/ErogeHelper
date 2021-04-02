@@ -1,7 +1,12 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Repository.Entity.Response;
+using ErogeHelper.Model.Repository.Entity.Table;
 using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Repository.Migration;
 using ErogeHelper.Model.Service;
@@ -9,6 +14,7 @@ using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
+using ModernWpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,11 +23,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using System.Windows;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Common.Enum;
-using ErogeHelper.Common.Messenger;
-using ErogeHelper.Model.Repository.Entity;
 
 namespace ErogeHelper
 {
@@ -38,7 +39,7 @@ namespace ErogeHelper
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">Command line parameters</param>
-        protected override async void OnStartup(object sender, StartupEventArgs e)
+        protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             // Put the database update into a scope to ensure that all resources will be disposed.
             using (var scope = _serviceProvider.CreateScope())
@@ -54,8 +55,10 @@ namespace ErogeHelper
 
             var gamePath = e.Args[0];
             var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
-            Log.Info($"Game's path: {e.Args[0]}");
-            Log.Info($"Locate Emulator status: {e.Args.Contains("/le")}");
+            if (!File.Exists(gamePath))
+                throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
+            Log.Info($"Game's path: {gamePath}");
+            Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
 
             var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
             var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
@@ -91,11 +94,9 @@ namespace ErogeHelper
                 Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             if (!ehGlobalValueRepository.GameProcesses.Any())
             {
-                // FIXME: 
-                await ModernWpf.MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
+                await MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
-
-                Application.Shutdown();
+                return;
             }
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
@@ -114,14 +115,14 @@ namespace ErogeHelper
             {
                 try
                 {
-                    using var resp = await ehServerApi.GetGameSetting(md5).ConfigureAwait(true);
+                    using var resp = await ehServerApi.GetGameSetting(md5).ConfigureAwait(false);
                     // For throw ApiException
                     //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {
-                        var content = resp.Content ?? new GameSetting();
+                        var content = resp.Content ?? new GameSettingResponse();
                         settingJson = content.GameSettingJson;
-                        await ehDbRepository.SetGameInfoAsync(new GameInfo
+                        await ehDbRepository.SetGameInfoAsync(new GameInfoTable
                         {
                             Md5 = md5,
                             GameIdList = content.GameId.ToString(),
@@ -139,7 +140,9 @@ namespace ErogeHelper
             if (settingJson == string.Empty)
             {
                 Log.Info("Not find game hook setting, open hook panel.");
-                await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false);
+                // XXX: Correspond line 115
+                await Application.Dispatcher.InvokeAsync(
+                    async () => await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false));
                 textractorService.InjectProcesses();
                 return;
             }

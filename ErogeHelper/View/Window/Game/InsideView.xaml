@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:control="clr-namespace:ErogeHelper.View.Control"
         mc:Ignorable="d"
         Title="InsideView" Top="-32000" Left="-32000" Topmost="True" ShowInTaskbar="False"
         AllowsTransparency="True" WindowStyle="None">
@@ -15,7 +16,15 @@
     <Border>
         <!-- Client area -->
         <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
-
+            <!-- Interaction Button -->
+            <control:AssistiveTouch 
+                Width="55" Height="55"
+                Visibility="Visible">
+                <ui:FlyoutService.Flyout>
+                    <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
+                    </ui:CommandBarFlyout>
+                </ui:FlyoutService.Flyout>
+            </control:AssistiveTouch>
         </Border>
     </Border>
 </Window>

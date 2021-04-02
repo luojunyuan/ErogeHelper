@@ -6,6 +6,7 @@ using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.View.Dialog;
 
+
 namespace ErogeHelper.View.Window
 {
     /// <summary>
