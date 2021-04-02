@@ -6,6 +6,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:cal="http://caliburnmicro.com"
         xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+        xmlns:common="clr-namespace:ErogeHelper.Common"
         xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:SelectProcessViewModel, IsDesignTimeCreatable=True}"
@@ -26,7 +27,7 @@
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
                     <ComboBox 
-                        Width="240" 
+                        Width="{x:Static common:DefaultXamlUiValues.ControllerWidth}" 
                         ItemsSource="{Binding ProcItems}"
                         SelectedItem="{Binding SelectedProcItem}"
                         cal:Message.Attach="[DropDownOpened] = [GetProcessAction]">
@@ -41,7 +42,8 @@
                     </ComboBox>
                     <Button 
                         x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
-                        Style="{StaticResource AccentButtonStyle}" MinWidth="240"/>
+                        Style="{StaticResource AccentButtonStyle}" 
+                        Width="{x:Static common:DefaultXamlUiValues.ControllerWidth}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

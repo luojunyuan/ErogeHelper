@@ -72,12 +72,11 @@ namespace ErogeHelper.ViewModel.Window
         {
             if (SelectedProcItem!.Proc.HasExited)
             {
-                // Cause this turn SelectedProcItem to null
-                // NOTE: 此时用户来个手速操作，ProcItems.Remove(null)，无事发生
+                // This would turn SelectedProcItem to null
                 ProcItems.Remove(SelectedProcItem);
-                await _eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(GetType(), ViewAction.OpenDialog, ModernDialog.SelectProcessNoProcessTip))
-                    .ConfigureAwait(false);
+                await _eventAggregator
+                    .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
+                        ModernDialog.SelectProcessNoProcessTip)).ConfigureAwait(false);
                 return;
             }
 

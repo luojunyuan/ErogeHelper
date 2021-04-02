@@ -141,6 +141,34 @@ namespace ErogeHelper.Common
             SafeNativeMethods.SwitchToThisWindow(hWnd, fAltTab);
         }
 
+        /// <summary>
+        /// 取得桌面窗口句柄函数
+        /// </summary>
+        /// <returns></returns>
+        public static IntPtr GetDesktopWindow()
+        {
+            return SafeNativeMethods.GetDesktopWindow();
+        }
+
+        /// <summary>
+        /// 取得Shell窗口句柄函数
+        /// </summary>
+        /// <returns></returns>
+        public static IntPtr GetShellWindow()
+        {
+            return SafeNativeMethods.GetShellWindow();
+        }
+
+        public static int RegisterWindowMessage(string msg)
+        {
+            return SafeNativeMethods.RegisterWindowMessage(msg);
+        }
+
+        public static uint SHAppBarMessage(int dwMessage, ref AppbarData pData)
+        {
+            return SafeNativeMethods.SHAppBarMessage(dwMessage, ref pData);
+        }
+
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD;
@@ -194,7 +222,7 @@ namespace ErogeHelper.Common
             public static extern void KeybdEvent(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
 
             [DllImport("SHELL32", CallingConvention = CallingConvention.StdCall)]
-            public static extern uint SHAppbarMessage(int dwMessage, ref AppbarData pData);
+            public static extern uint SHAppBarMessage(int dwMessage, ref AppbarData pData);
 
             [DllImport("User32.dll", CharSet = CharSet.Unicode)]
             public static extern int RegisterWindowMessage(string msg);

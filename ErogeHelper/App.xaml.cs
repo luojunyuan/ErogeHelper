@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Threading;
 using System.Windows.Threading;
-using Serilog;
 
 namespace ErogeHelper
 {
@@ -23,7 +23,7 @@ namespace ErogeHelper
 #if DEBUG
                 .MinimumLevel.Debug()
                 // VS Output
-                .WriteTo.Debug(outputTemplate: 
+                .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 #else
 				.MinimumLevel.Information()

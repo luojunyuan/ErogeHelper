@@ -36,7 +36,7 @@ namespace ErogeHelper.Common
         /// <summary>
         /// Get all processes of the game (timeout 20s)
         /// </summary>
-        /// <param name="friendlyName"><see cref="Process.ProcessName"/></param>
+        /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
         /// <returns>if process with hWnd found, give all back, other wise return blank list</returns>
         public static (IEnumerable<Process>, Process) ProcessCollect(string friendlyName)
         {

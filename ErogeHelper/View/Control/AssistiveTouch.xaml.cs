@@ -36,7 +36,13 @@ namespace ErogeHelper.View.Control
 
         private Point _lastPos;
 
+        /// <summary>
+        /// The position of the button after the left mouse button is released
+        /// </summary>
         private Point _newPos;
+        /// <summary>
+        /// The position of the button
+        /// </summary>
         private Point _oldPos;
 
         private bool _isFromUpdateButtonPosEvent;

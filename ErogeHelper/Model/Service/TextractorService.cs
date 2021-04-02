@@ -134,9 +134,10 @@ namespace ErogeHelper.Model.Service
 
             DataEvent?.Invoke(hp);
 
-            var setting = _ehGlobalValueRepository.TextractorSetting;
             if (_ehGlobalValueRepository.Md5 == string.Empty)
                 return;
+
+            var setting = _ehGlobalValueRepository.TextractorSetting;
 
             if (setting.Hookcode.Equals(hp.Hookcode)
                 && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
