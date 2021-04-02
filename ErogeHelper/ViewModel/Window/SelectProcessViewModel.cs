@@ -109,7 +109,7 @@ namespace ErogeHelper.ViewModel.Window
                         var content = resp.Content ?? new GameSettingResponse();
                         settingJson = content.GameSettingJson;
                     }
-                    Log.Debug($"{resp.StatusCode} {resp.Content}");
+                    Log.Debug($"EHServer: {resp.StatusCode} {resp.Content}");
                 }
                 catch (HttpRequestException ex)
                 {
@@ -121,6 +121,7 @@ namespace ErogeHelper.ViewModel.Window
             {
                 Log.Info("Not find game hook setting, open hook panel.");
                 await _windowManager.ShowWindowFromIoCAsync<HookConfigViewModel>().ConfigureAwait(false);
+                _textractorService.InjectProcesses();
                 _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
                 return;
             }

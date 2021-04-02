@@ -174,6 +174,7 @@ namespace ErogeHelper.ViewModel.Page
         {
             SelectedHook = null;
             HookMapData.Clear();
+            SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
 
         public HookBindingList<long, HookMapItem> HookMapData { get; set; } = new(p => p.Handle);

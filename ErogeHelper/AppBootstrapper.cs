@@ -128,7 +128,7 @@ namespace ErogeHelper
                             GameSettingJson = content.GameSettingJson,
                         }).ConfigureAwait(false);
                     }
-                    Log.Debug($"{resp.StatusCode} {resp.Content}");
+                    Log.Debug($"EHServer: {resp.StatusCode} {resp.Content}");
                 }
                 catch (HttpRequestException ex)
                 {

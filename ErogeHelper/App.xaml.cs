@@ -65,6 +65,9 @@ namespace ErogeHelper
                 // english in this case.
                 _ => new System.Globalization.CultureInfo(string.Empty),
             };
+            // UNDONE: Delete those directories which not defined in the ErogeHelper.Language project after build
+            // But define all the the name in this dictionary switcher
+            // 真的没有和他文件夹一样多的国家与地区，上一个版本就很好。选择性的增加语言还是明智之举
         }
     }
 }
