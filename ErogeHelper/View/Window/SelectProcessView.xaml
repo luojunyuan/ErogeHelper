@@ -27,7 +27,7 @@
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
                     <ComboBox 
-                        Width="{x:Static common:DefaultXamlUiValues.ControllerWidth}" 
+                        Width="{x:Static common:StaticXamlUiValues.ControllerWidth}" 
                         ItemsSource="{Binding ProcItems}"
                         SelectedItem="{Binding SelectedProcItem}"
                         cal:Message.Attach="[DropDownOpened] = [GetProcessAction]">
@@ -43,7 +43,7 @@
                     <Button 
                         x:Name="Inject" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
                         Style="{StaticResource AccentButtonStyle}" 
-                        Width="{x:Static common:DefaultXamlUiValues.ControllerWidth}" />
+                        Width="{x:Static common:StaticXamlUiValues.ControllerWidth}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -19,7 +20,11 @@ namespace ErogeHelper.Common
     {
         public static BitmapImage PeIcon2BitmapImage(string fullPath)
         {
-            BitmapImage result = new ();
+            var result = new BitmapImage();
+
+            if (fullPath == string.Empty)
+                return result;
+
             Stream stream = new MemoryStream();
 
             var iconBitmap = Icon.ExtractAssociatedIcon(fullPath)!.ToBitmap();
@@ -179,6 +184,35 @@ namespace ErogeHelper.Common
                 { "Dir", dir },
                 { "FileNoExt", fileWithoutExtension },
             };
+        }
+
+        /// <summary>
+        /// Load a resource WPF-BitmapImage (png, bmp, ...) from embedded resource defined as 'Resource' not as 
+        /// 'Embedded resource'.
+        /// </summary>
+        /// <param name="pathInApplication">Path without starting slash</param>
+        /// <param name="assembly">Usually 'Assembly.GetExecutingAssembly()'. If not mentioned, I will use the calling
+        /// assembly</param>
+        /// <returns></returns>
+        public static BitmapImage LoadBitmapFromResource(string pathInApplication, Assembly? assembly = null)
+        {
+            assembly ??= Assembly.GetCallingAssembly();
+            if (pathInApplication[0] == '/')
+                pathInApplication = pathInApplication[1..];
+
+            try
+            {
+                var uri = new Uri(
+                    @"pack://application:,,,/" + assembly.GetName().Name + ";component/" + pathInApplication,
+                    UriKind.Absolute);
+                return new BitmapImage(uri);
+            }
+            catch (UriFormatException ex)
+            {
+                // May running in unit test
+                Log.Warn(ex);
+                return new BitmapImage();
+            }
         }
     }
 }

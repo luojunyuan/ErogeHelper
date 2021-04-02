@@ -23,9 +23,9 @@
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
   </ItemGroup>
 
+  <!-- No content directories -->
   <ItemGroup>
     <Folder Include="assets\site_icon\" />
-    <Folder Include="assets\text_background\" />
     <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Repository\Entity\Payload\" />
     <Folder Include="Model\Repository\Translator\" />
@@ -44,10 +44,18 @@
 
   <ItemGroup>
     <None Remove="assets\app.ico" />
+    <None Remove="assets\text_background\aqua_green.png" />
+    <None Remove="assets\text_background\green.png" />
+    <None Remove="assets\text_background\pink.png" />
+    <None Remove="assets\text_background\transparent.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="assets\app.ico" />
+    <Resource Include="assets\text_background\aqua_green.png" />
+    <Resource Include="assets\text_background\green.png" />
+    <Resource Include="assets\text_background\pink.png" />
+    <Resource Include="assets\text_background\transparent.png" />
   </ItemGroup>
 
 </Project>

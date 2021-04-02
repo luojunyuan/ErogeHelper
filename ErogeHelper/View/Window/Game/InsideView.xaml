@@ -19,8 +19,8 @@
         <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
             <!-- Interaction Button -->
             <control:AssistiveTouch 
-                Width="{x:Static common:DefaultXamlUiValues.AssistiveTouchSize}" 
-                Height="{x:Static common:DefaultXamlUiValues.AssistiveTouchSize}" 
+                Width="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
+                Height="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
                 Visibility="Visible">
                 <ui:FlyoutService.Flyout>
                     <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >

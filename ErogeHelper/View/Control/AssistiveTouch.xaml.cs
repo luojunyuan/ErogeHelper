@@ -145,17 +145,17 @@ namespace ErogeHelper.View.Control
                 else if (left < _halfDistance && bottom < _twoThirdDistance) // 左下
                 {
                     left = ButtonSpace;
-                    top = parentActualHeight - ActualHeight - ButtonSpace;
+                    top = parentActualHeight - ActualHeight - ButtonSpace * 2;
                 }
                 else if (right < _halfDistance && top < _twoThirdDistance) // 右上
                 {
-                    left = parentActualWidth - ActualWidth - ButtonSpace;
+                    left = parentActualWidth - ActualWidth - ButtonSpace * 2;
                     top = ButtonSpace;
                 }
                 else if (right < _halfDistance && bottom < _twoThirdDistance) // 右下
                 {
-                    left = parentActualWidth - ActualWidth - ButtonSpace;
-                    top = parentActualHeight - ActualHeight - ButtonSpace;
+                    left = parentActualWidth - ActualWidth - ButtonSpace * 2;
+                    top = parentActualHeight - ActualHeight - ButtonSpace * 2;
                 }
                 else if (top < _twoThirdDistance) // 上
                 {
@@ -165,7 +165,7 @@ namespace ErogeHelper.View.Control
                 else if (bottom < _twoThirdDistance) // 下
                 {
                     left = Margin.Left;
-                    top = parentActualHeight - ActualHeight - ButtonSpace;
+                    top = parentActualHeight - ActualHeight - ButtonSpace * 2;
                 }
                 else if (left < verticalMiddleLine) // 左
                 {
@@ -174,7 +174,7 @@ namespace ErogeHelper.View.Control
                 }
                 else if (right < verticalMiddleLine) // 右
                 {
-                    left = parentActualWidth - ActualWidth - ButtonSpace;
+                    left = parentActualWidth - ActualWidth - ButtonSpace * 2;
                     top = Margin.Top;
                 }
                 else
