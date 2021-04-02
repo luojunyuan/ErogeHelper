@@ -17,9 +17,9 @@ namespace ErogeHelper.Installer
         }
 
         private const string UniqueEventName = "{2d0ccd54-f861-46be-9804-43aff3775111}";
-        private EventWaitHandle eventWaitHandle = null!;
+        private EventWaitHandle _eventWaitHandle = null!;
 
-        /// <summary>prevent a second instance and signal it to bring its mainwindow to foreground</summary>
+        /// <summary>prevent a second instance and signal it to bring its MainWindow to foreground</summary>
         /// <seealso cref="https://stackoverflow.com/a/23730146/1644202"/>
         private void SingleInstanceWatcher()
         {
@@ -27,10 +27,10 @@ namespace ErogeHelper.Installer
             try
             {
                 // try to open it - if another instance is running, it will exist , if not it will throw
-                this.eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
+                this._eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
 
                 // Notify other instance so it could bring itself to foreground.
-                this.eventWaitHandle.Set();
+                this._eventWaitHandle.Set();
 
                 // Terminate this instance.
                 this.Shutdown();
@@ -38,13 +38,13 @@ namespace ErogeHelper.Installer
             catch (WaitHandleCannotBeOpenedException)
             {
                 // listen to a new event (this app instance will be the new "master")
-                this.eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
+                this._eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
             // if this instance gets the signal to show the main window
             new Task(() =>
             {
-                while (this.eventWaitHandle.WaitOne())
+                while (this._eventWaitHandle.WaitOne())
                 {
                     Current.Dispatcher.InvokeAsync(() =>
                     {

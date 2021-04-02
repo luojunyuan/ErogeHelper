@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.View.Control
 {
@@ -46,7 +47,7 @@ namespace ErogeHelper.View.Control
         {
             InitializeComponent();
 
-            IoC.Get<GameWindowHooker>().NewWindowSize += windowSize =>
+            IoC.Get<IGameWindowHooker>().NewWindowSize += windowSize =>
             {
                 _move = true;
                 _isFromUpdateButtonPosEvent = true;

@@ -2,16 +2,24 @@
 
 ### How to build
 
-Recommand VS2019 to clone `https://github.com/luojunyuan/Eroge-Helper` down.
+Recommand VS2019 to clone `https://github.com/luojunyuan/Eroge-Helper` down. Rider is ok, but you won't see the output of Textractor `OutputText` callback. (idk why, maybe something happend to the pipe) Recommand VS + Reshaper
 
-Use Package Manager Console in VS, type `Install-Package Caliburn.Micro -Version 4.0.136-rc -Source https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json `
+Just prees F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
 
-After that press F5
+one is full path of game, '/le' or '-le' to start with Locate Emulator
 
-or you can fill the command parameters in ErogeHelper's properties like below
+### Publish
 
-one is full path of game, '/le' to use Locate Emulator
+Run `dotnet publish -c Release -r win-x64 --self-contained false` in the root directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
 
+```
+ErogeHelper.ShellMenuHandler.dll 
+ErogeHelper.ShellMenuHandler.pdb 
+SharpShell.xml 
+SharpShell.dll
+```
+
+to `bin\Release\win-x64\publish\`. Finally package the publish directory.
 
 ### Install
 

@@ -42,10 +42,8 @@ namespace ErogeHelper
         protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             // Put the database update into a scope to ensure that all resources will be disposed.
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                Utils.UpdateEhDatabase(scope.ServiceProvider);
-            }
+            using var scope = _serviceProvider.CreateScope();
+            Utils.UpdateEhDatabase(scope.ServiceProvider);
 
             if (e.Args.Length == 0)
             {
@@ -60,11 +58,7 @@ namespace ErogeHelper
             Log.Info($"Game's path: {gamePath}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
 
-            var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
-            var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
             var ehGlobalValueRepository = _serviceProvider.GetService<EhGlobalValueRepository>();
-            var ehServerApi = _serviceProvider.GetService<IEhServerApi>();
-            var textractorService = _serviceProvider.GetService<ITextractorService>();
 
             if (e.Args.Contains("/le") || e.Args.Contains("-le"))
             {
@@ -98,6 +92,11 @@ namespace ErogeHelper
                     .ConfigureAwait(false);
                 return;
             }
+
+            var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
+            var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
+            var ehServerApi = _serviceProvider.GetService<IEhServerApi>();
+            var textractorService = _serviceProvider.GetService<ITextractorService>();
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
 
@@ -239,13 +238,18 @@ namespace ErogeHelper
             }
 
             throw new Exception(
-                $"Could not locate any instances of contract {(key == string.Empty ? serviceType.Name : key)}.");
+                $"Could not locate any instances of contract {(string.IsNullOrEmpty(key) ? serviceType.Name : key)}.");
         }
 
         protected override IEnumerable<object> GetAllInstances(Type serviceType)
         {
             var type = typeof(IEnumerable<>).MakeGenericType(serviceType);
             return _serviceProvider.GetServices(type);
+        }
+
+        protected override void BuildUp(object instance)
+        {
+            // There is no Property Injection for Microsoft DI
         }
 
         #endregion

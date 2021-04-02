@@ -1,18 +1,7 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace ErogeHelper.Installer
 {
@@ -27,6 +16,24 @@ namespace ErogeHelper.Installer
 
             InstallButton.IsEnabled = !ShellExtensionManager.IsInstalled();
             UninstallButton.IsEnabled = ShellExtensionManager.IsInstalled();
+
+            Loaded += CheckNecessaryFile;
+        }
+
+        private void CheckNecessaryFile(object sender, RoutedEventArgs e)
+        {
+            var shellMenuDllPath = Path.Combine(Environment.CurrentDirectory, "ErogeHelper.ShellMenuHandler.dll");
+            var serverRegistrationManagerPath = Path.Combine(Environment.CurrentDirectory, "ServerRegistrationManager.exe");
+            if (!File.Exists(shellMenuDllPath))
+            {
+                ModernWpf.MessageBox.Show($"Not found file {shellMenuDllPath}", "Eroge Helper");
+                Close();
+            }
+            else if (!File.Exists(serverRegistrationManagerPath))
+            {
+                ModernWpf.MessageBox.Show($"Not found file {serverRegistrationManagerPath}", "Eroge Helper");
+                Close();
+            }
         }
 
         private readonly string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
@@ -51,7 +58,7 @@ namespace ErogeHelper.Installer
                 FileName = "ServerRegistrationManager.exe",
                 Arguments = $"uninstall {shellMenuDllName} -codebase"
             });
-            // restart all exploer.exe
+            // restart all explore.exe
             var helper = new ExplorerHelper();
             helper.CollectDir();
             helper.KillExplorer();

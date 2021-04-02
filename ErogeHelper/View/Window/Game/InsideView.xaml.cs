@@ -23,30 +23,38 @@ namespace ErogeHelper.View.Window.Game
 
             IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
-            dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             _gameWindowHooker = IoC.Get<IGameWindowHooker>();
             _gameWindowHooker.GamePosArea += PositionChanged;
             Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
         }
 
         private readonly IGameWindowHooker _gameWindowHooker;
-        private double dpi;
+        private double _dpi;
 
         private void PositionChanged(GameWindowPosition pos)
         {
             // XXX: Use await, after game quit: System.Threading.Tasks.TaskCanceledException:“A task was canceled.”
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                Height = pos.Height / dpi;
-                Width = pos.Width / dpi;
-                Left = pos.Left / dpi;
-                Top = pos.Top / dpi;
+                Height = pos.Height / _dpi;
+                Width = pos.Width / _dpi;
+                Left = pos.Left / _dpi;
+                Top = pos.Top / _dpi;
                 ClientArea.Margin = new Thickness(
-                    pos.ClientArea.Left / dpi,
-                    pos.ClientArea.Top / dpi,
-                    pos.ClientArea.Right / dpi,
-                    pos.ClientArea.Bottom / dpi);
+                    pos.ClientArea.Left / _dpi,
+                    pos.ClientArea.Top / _dpi,
+                    pos.ClientArea.Right / _dpi,
+                    pos.ClientArea.Bottom / _dpi);
             });
+        }
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+
+            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            Log.Info($"Current screen dpi {_dpi * 100}%");
         }
 
         public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)

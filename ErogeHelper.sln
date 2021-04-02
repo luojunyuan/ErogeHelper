@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.ShellMenuHandle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Installer", "ErogeHelper.Installer\ErogeHelper.Installer.csproj", "{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper", "ErogeHelper\ErogeHelper.csproj", "{DE65FC3D-E74F-4C0E-9772-CE1C7D98C88D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper", "ErogeHelper\ErogeHelper.csproj", "{DE65FC3D-E74F-4C0E-9772-CE1C7D98C88D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
