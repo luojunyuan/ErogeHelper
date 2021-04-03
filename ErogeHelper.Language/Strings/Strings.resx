@@ -201,7 +201,7 @@
   <data name="GameView.MaxLenthTip" xml:space="preserve">
     <value>Skip too long text</value>
   </data>
-  <data name="MecabPage.JapaneseText" xml:space="preserve">
+  <data name="MeCabPage.JapaneseText" xml:space="preserve">
     <value>Show japanese text</value>
   </data>
   <data name="GeneralPage.AppendText" xml:space="preserve">
@@ -210,31 +210,31 @@
   <data name="GeneralPage.Title" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="MecabPage.Title" xml:space="preserve">
+  <data name="MeCabPage.Title" xml:space="preserve">
     <value>Mecab</value>
   </data>
-  <data name="MecabPage.PositionFormat" xml:space="preserve">
+  <data name="MeCabPage.PositionFormat" xml:space="preserve">
     <value>Text dispaly position</value>
   </data>
-  <data name="MecabPage.FuriganaTop" xml:space="preserve">
+  <data name="MeCabPage.FuriganaTop" xml:space="preserve">
     <value>MacabPage.FuriganaTop</value>
   </data>
-  <data name="MecabPage.FuriganaBottom" xml:space="preserve">
+  <data name="MeCabPage.FuriganaBottom" xml:space="preserve">
     <value>FuriganaBottom</value>
   </data>
-  <data name="MecabPage.TextVertical" xml:space="preserve">
+  <data name="MeCabPage.TextVertical" xml:space="preserve">
     <value>MecabPage.TextVertical</value>
   </data>
-  <data name="MecabPage.FuriganaType" xml:space="preserve">
+  <data name="MeCabPage.FuriganaType" xml:space="preserve">
     <value>Furigana display type</value>
   </data>
-  <data name="MecabPage.Romaji" xml:space="preserve">
+  <data name="MeCabPage.Romaji" xml:space="preserve">
     <value>Romaji</value>
   </data>
-  <data name="MecabPage.Hiragana" xml:space="preserve">
+  <data name="MeCabPage.Hiragana" xml:space="preserve">
     <value>Hiragana</value>
   </data>
-  <data name="MecabPage.Katakana" xml:space="preserve">
+  <data name="MeCabPage.Katakana" xml:space="preserve">
     <value>Katakana</value>
   </data>
   <data name="GameView.SwitchFullScreen" xml:space="preserve">
@@ -250,8 +250,8 @@
   <data name="GameView.TaskView" xml:space="preserve">
     <value>Task View</value>
   </data>
-  <data name="GameView.Screenshot" xml:space="preserve">
-    <value>Screenshot</value>
+  <data name="GameView.ScreenShot" xml:space="preserve">
+    <value>ScreenShot</value>
   </data>
   <data name="GameView.Preference" xml:space="preserve">
     <value>Preference</value>
@@ -268,7 +268,7 @@
   <data name="About.Title" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="MecabPage.FuriganaDefault" xml:space="preserve">
+  <data name="MeCabPage.FuriganaDefault" xml:space="preserve">
     <value>MecabPage.FuriganaDefault</value>
   </data>
   <data name="GameView.SwitchWindow" xml:space="preserve">
@@ -346,10 +346,10 @@
   <data name="GeneralPage.BrightnessTip" xml:space="preserve">
     <value>Would change the gamma value</value>
   </data>
-  <data name="MecabPage.TextFlyout" xml:space="preserve">
+  <data name="MeCabPage.TextFlyout" xml:space="preserve">
     <value>Text Flyout</value>
   </data>
-  <data name="MecabPage.Dict" xml:space="preserve">
+  <data name="MeCabPage.Dict" xml:space="preserve">
     <value>Dict</value>
   </data>
   <data name="CardControl.CloseTip" xml:space="preserve">

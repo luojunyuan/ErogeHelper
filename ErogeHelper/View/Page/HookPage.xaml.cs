@@ -1,15 +1,12 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
+using ModernWpf.Controls;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using ErogeHelper.Common.Enum;
-using ErogeHelper.View.Dialog;
-using ModernWpf.Controls;
 
 namespace ErogeHelper.View.Page
 {
@@ -45,6 +42,38 @@ namespace ErogeHelper.View.Page
                         break;
                     default:
                         throw new InvalidOperationException();
+                }
+            }
+        }
+
+        private bool _contentIsExpanded;
+
+        private void OnContentRootSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // 在设置Grid布局后，ContentColumn的真实宽度瞬间减小了InfoColumn的宽度左右
+            var frameWidth = ContentColumn.ActualWidth;
+            if (_contentIsExpanded)
+            {
+                // HACK: With many magic number this 100, frameWidth=700, Text.MaxWidth=430, InfoColumn width=160
+                frameWidth += InfoColumn.Width + 100;
+            }
+
+            if (frameWidth > 700)
+            {
+                if (_contentIsExpanded == false)
+                {
+                    InfoColumn.SetValue(Grid.RowProperty, 0);
+                    InfoColumn.SetValue(Grid.ColumnProperty, 1);
+                    _contentIsExpanded = true;
+                }
+            }
+            else
+            {
+                if (_contentIsExpanded)
+                {
+                    InfoColumn.SetValue(Grid.RowProperty, 1);
+                    InfoColumn.SetValue(Grid.ColumnProperty, 0);
+                    _contentIsExpanded = false;
                 }
             }
         }

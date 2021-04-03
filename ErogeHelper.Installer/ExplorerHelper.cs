@@ -10,7 +10,7 @@ namespace ErogeHelper.Installer
 {
     class ExplorerHelper
     {
-        public static List<string> Paths = new List<string>();
+        public static List<string> Paths = new ();
 
         #region Win32 Apis
         private delegate bool CallBack(int hwnd, int y);
@@ -94,7 +94,6 @@ namespace ErogeHelper.Installer
 
         public void ReOpenDirs()
         {
-            Process.Start("explorer");
             foreach (var dir in Paths)
             {
                 Process.Start(new ProcessStartInfo() 
@@ -103,6 +102,7 @@ namespace ErogeHelper.Installer
                     Arguments = dir
                 });
             }
+            Paths.Clear();
         }
     }
 }

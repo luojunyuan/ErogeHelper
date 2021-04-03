@@ -36,6 +36,7 @@ namespace ErogeHelper.ViewModel.Page
             _ehGlobalValueRepository = ehGlobalValueRepository;
 
             _textractorService.DataEvent += DataProcess;
+            RegExp = _ehGlobalValueRepository.TextractorSetting.RegExp;
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
 
@@ -201,6 +202,7 @@ namespace ErogeHelper.ViewModel.Page
                     SelectedText = string.Empty;
                 }
                 NotifyOfPropertyChange(() => CanSubmitSetting);
+                NotifyOfPropertyChange(() => SelectedHook);
             }
         }
 

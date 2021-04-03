@@ -12,7 +12,7 @@
         d:DataContext="{d:DesignInstance vm:SelectProcessViewModel, IsDesignTimeCreatable=True}"
         cal:Bind.AtDesignTime="True"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="350" Width="350" Topmost="True"
+        Title="{x:Static resx:Strings.SelectProcess_Title}" MinWidth="400" Width="400" Topmost="True"
         Icon="pack://application:,,,/assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
     <ScrollViewer PanningMode="Both">

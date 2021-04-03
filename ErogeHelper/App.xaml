@@ -17,6 +17,7 @@
             <!-- Other app resources here -->
             <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
             <converter:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter"/>
+            <converter:TrueToVisibleConverter x:Key="TrueToVisibleConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

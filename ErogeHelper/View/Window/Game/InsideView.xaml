@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:cal="http://caliburnmicro.com"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         xmlns:common="clr-namespace:ErogeHelper.Common"
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
+        xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:GameViewModel, IsDesignTimeCreatable=True}"
+        cal:Bind.AtDesignTime="True"
         Title="InsideView" Top="-32000" Left="-32000" Topmost="True" ShowInTaskbar="False"
         AllowsTransparency="True" WindowStyle="None">
 
@@ -17,16 +22,101 @@
     <Border>
         <!-- Client area -->
         <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
-            <!-- Interaction Button -->
-            <control:AssistiveTouch 
-                Width="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
-                Height="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
-                Visibility="Visible">
-                <ui:FlyoutService.Flyout>
-                    <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
-                    </ui:CommandBarFlyout>
-                </ui:FlyoutService.Flyout>
-            </control:AssistiveTouch>
+            <Grid>
+
+                <!-- Interaction Button -->
+                <control:AssistiveTouch 
+                    Width="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
+                    Height="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
+                    Visibility="{Binding AssistiveTouchIsVisible, 
+                        Converter={StaticResource TrueToVisibleConverter}}">
+                    <ui:FlyoutService.Flyout>
+                        <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
+                            <ui:AppBarButton 
+                                Icon="FontDecrease" cal:Message.Attach="[Click] = [ZoomOut]" 
+                                ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
+                            <ui:AppBarButton 
+                                Icon="FontIncrease" cal:Message.Attach="[Click] = [ZoomIn]" 
+                                ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}"/>
+                            <ui:AppBarButton 
+                                cal:Message.Attach="[Click] = [VolumeDown]" 
+                                ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
+                                <ui:AppBarButton.Icon>
+                                    <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Volume1}" />
+                                </ui:AppBarButton.Icon>
+                            </ui:AppBarButton>
+                            <ui:AppBarButton 
+                                Icon="Volume" cal:Message.Attach="[Click] = [VolumeUp]" 
+                                ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}"/>
+                            <ui:AppBarButton 
+                                cal:Message.Attach="[Click] = [SwitchGameScreen]" Loaded="FullScreenButton_Loaded"
+                                Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
+                            <ui:AppBarToggleButton 
+                                IsChecked="{Binding IsSourceTextPined}" Width="40"
+                                Visibility="{Binding PinSourceTextToggleVisibility}"
+                                cal:Message.Attach="[Click] = [PinSourceTextToggle]" >
+                                <ui:AppBarToggleButton.Resources>
+                                    <Style TargetType="ui:AppBarToggleButton">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Icon" Value="Pin"/>
+                                                <Setter Property="ToolTip" Value="{x:Static resx:Strings.GameView_PinnedTip}" />
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Icon">
+                                                    <Setter.Value>
+                                                        <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Unpin}"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="ToolTip" Value="{x:Static resx:Strings.GameView_UnpinTip}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ui:AppBarToggleButton.Resources>
+                            </ui:AppBarToggleButton>
+                            <ui:AppBarToggleButton 
+                                Icon="Trim" IsChecked="{Binding IsLostFocus}" 
+                                ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
+                                cal:Message.Attach="[Click] = [FocusToggle]"/>
+
+                            <ui:CommandBarFlyout.SecondaryCommands>
+                                <ui:AppBarButton 
+                                    Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" 
+                                    cal:Message.Attach="[Click] = [TaskbarNotifyArea]" InputGestureText="Win+A"/>
+                                <ui:AppBarButton 
+                                    Label="{x:Static resx:Strings.GameView_TaskView}" 
+                                    cal:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.TaskView}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
+                                <ui:AppBarButton 
+                                    Icon="Pictures" Label="{x:Static resx:Strings.GameView_ScreenShot}" 
+                                    cal:Message.Attach="[Click] = [ScreenShot]" InputGestureText="Win+Shift+S">
+                                    <!-- UNDONE: Other ScreenShot-->
+                                    <!--<ui:AppBarButton.Flyout>
+                                        <ui:MenuFlyout Placement="RightEdgeAlignedTop">
+                                            
+                                        </ui:MenuFlyout>
+                                    </ui:AppBarButton.Flyout>-->
+                                </ui:AppBarButton>
+                                <ui:AppBarSeparator/>
+                                <ui:AppBarButton 
+                                    Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}"
+                                    cal:Message.Attach="[Click] = [OpenPreference]"/>
+                                <ui:AppBarElementContainer>
+                                    <Button
+                                        Visibility="{Binding IsLostFocus, 
+                                            Converter={StaticResource TrueToVisibleConverter}}"
+                                        Width="80" Height="40" Margin="10 5 0 5" Content="Skip" ToolTip="Ctrl"
+                                        cal:Message.Attach="[PreviewMouseDown] = [PressSkip]; 
+                                            [PreviewMouseUp] = [PressSkipRelease]"/>
+                                </ui:AppBarElementContainer>
+                            </ui:CommandBarFlyout.SecondaryCommands>
+                        </ui:CommandBarFlyout>
+                    </ui:FlyoutService.Flyout>
+                </control:AssistiveTouch>
+            </Grid>
         </Border>
     </Border>
 </Window>

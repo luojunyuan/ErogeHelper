@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows.Threading;
 
@@ -13,10 +14,17 @@ namespace ErogeHelper
         private App()
         {
             // UNDONE: Check singleton app
+            // see Windows.UI.Notifications; or ToastNotifications
             // Toast user ErogeHelper is running, or you can turn ErogeHelper down immediately
 
             // Enable Pointer for touch device
             //AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
+
+            // Set environment to app directory
+            var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+            Directory.SetCurrentDirectory(currentDirectory ?? 
+                                          throw new ArgumentNullException(nameof(currentDirectory), 
+                                              @"Could not located Eroge Helper's directory"));
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()
@@ -26,7 +34,7 @@ namespace ErogeHelper
                 .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 #else
-				.MinimumLevel.Information()
+            .MinimumLevel.Information()
 #endif
                 .CreateLogger();
 
@@ -36,11 +44,14 @@ namespace ErogeHelper
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (_, unhandledExceptionArgs) =>
             {
-                var dispatcher = Dispatcher.FromThread(Thread.CurrentThread);
-                if (dispatcher is null && Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
+                if (Dispatcher.FromThread(Thread.CurrentThread) is null || 
+                    Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
                     return;
 
                 var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
+
+                // UNDONE: Use https://github.com/ookii-dialogs/ookii-dialogs-wpf TaskDialog
+                ModernWpf.MessageBox.Show(ex.ToString());
 
                 Log.Fatal(ex);
             };
@@ -50,6 +61,8 @@ namespace ErogeHelper
                 //dispatcherUnhandledExceptionEventArgs.Handled = true;
 
                 var ex = dispatcherUnhandledExceptionEventArgs.Exception;
+
+                ModernWpf.MessageBox.Show(ex.ToString(), "UI");
 
                 Log.Error(ex);
             };

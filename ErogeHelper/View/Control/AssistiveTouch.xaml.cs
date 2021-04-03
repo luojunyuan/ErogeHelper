@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using ErogeHelper.Model.Service;
+using ErogeHelper.Model.Service.Interface;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.View.Control
 {
@@ -130,6 +129,7 @@ namespace ErogeHelper.View.Control
                 var right = parentActualWidth - left - ActualWidth;
                 // button 距离下边缘距离
                 var bottom = parentActualHeight - top - ActualHeight;
+                // FIXME: WHAT'S WRONG
                 var verticalMiddleLine = parentActualHeight - ActualHeight - ButtonSpace;
 
                 //Log.Info($"鼠标位置 {_newPos.X} {_newPos.Y}");
@@ -249,17 +249,18 @@ namespace ErogeHelper.View.Control
         private const int ButtonOpacityTimeout = 5000;
 
         // After mouse released
-        private async void FloatButton_Click(object sender, RoutedEventArgs e)
+        private async void FloatButton_Click(object sender, RoutedEventArgs? e)
         {
             if (_newPos.Equals(_oldPos))
             {
                 // Fire MouseClickEvent, no use for me
-                ClickEvent?.Invoke(sender, e);
+                ClickEvent?.Invoke(sender, e ?? new RoutedEventArgs());
             }
             else
             {
                 // Disable flyout popup
-                e.Handled = true;
+                if (e is not null) 
+                    e.Handled = true;
             }
 
             _tokenSource.Cancel();

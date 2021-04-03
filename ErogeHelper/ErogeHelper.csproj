@@ -21,6 +21,7 @@
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Refit" Version="6.0.38" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="WindowsInput" Version="6.2.1" />
   </ItemGroup>
 
   <!-- No content directories -->

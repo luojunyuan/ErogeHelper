@@ -18,6 +18,7 @@ namespace ErogeHelper.Model.Repository
         /// <param name="rootDir"></param>
         public EhConfigRepository(string rootDir)
         {
+            // INSTEAD: Have a look on System.Configuration ?
             AppDataDir = Path.Combine(rootDir, "ErogeHelper");
 
             _configFilePath = Path.Combine(AppDataDir, "EhSettings.dict");

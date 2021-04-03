@@ -224,11 +224,11 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Screenshot 的本地化字符串。
+        ///   查找类似 ScreenShot 的本地化字符串。
         /// </summary>
-        public static string GameView_Screenshot {
+        public static string GameView_ScreenShot {
             get {
-                return ResourceManager.GetString("GameView.Screenshot", resourceCulture);
+                return ResourceManager.GetString("GameView.ScreenShot", resourceCulture);
             }
         }
         
@@ -613,117 +613,117 @@ namespace ErogeHelper.Language {
         /// <summary>
         ///   查找类似 Dict 的本地化字符串。
         /// </summary>
-        public static string MecabPage_Dict {
+        public static string MeCabPage_Dict {
             get {
-                return ResourceManager.GetString("MecabPage.Dict", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.Dict", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 FuriganaBottom 的本地化字符串。
         /// </summary>
-        public static string MecabPage_FuriganaBottom {
+        public static string MeCabPage_FuriganaBottom {
             get {
-                return ResourceManager.GetString("MecabPage.FuriganaBottom", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.FuriganaBottom", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 MecabPage.FuriganaDefault 的本地化字符串。
         /// </summary>
-        public static string MecabPage_FuriganaDefault {
+        public static string MeCabPage_FuriganaDefault {
             get {
-                return ResourceManager.GetString("MecabPage.FuriganaDefault", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.FuriganaDefault", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 MacabPage.FuriganaTop 的本地化字符串。
         /// </summary>
-        public static string MecabPage_FuriganaTop {
+        public static string MeCabPage_FuriganaTop {
             get {
-                return ResourceManager.GetString("MecabPage.FuriganaTop", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.FuriganaTop", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Furigana display type 的本地化字符串。
         /// </summary>
-        public static string MecabPage_FuriganaType {
+        public static string MeCabPage_FuriganaType {
             get {
-                return ResourceManager.GetString("MecabPage.FuriganaType", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.FuriganaType", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Hiragana 的本地化字符串。
         /// </summary>
-        public static string MecabPage_Hiragana {
+        public static string MeCabPage_Hiragana {
             get {
-                return ResourceManager.GetString("MecabPage.Hiragana", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.Hiragana", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Show japanese text 的本地化字符串。
         /// </summary>
-        public static string MecabPage_JapaneseText {
+        public static string MeCabPage_JapaneseText {
             get {
-                return ResourceManager.GetString("MecabPage.JapaneseText", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.JapaneseText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Katakana 的本地化字符串。
         /// </summary>
-        public static string MecabPage_Katakana {
+        public static string MeCabPage_Katakana {
             get {
-                return ResourceManager.GetString("MecabPage.Katakana", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.Katakana", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Text dispaly position 的本地化字符串。
         /// </summary>
-        public static string MecabPage_PositionFormat {
+        public static string MeCabPage_PositionFormat {
             get {
-                return ResourceManager.GetString("MecabPage.PositionFormat", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.PositionFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Romaji 的本地化字符串。
         /// </summary>
-        public static string MecabPage_Romaji {
+        public static string MeCabPage_Romaji {
             get {
-                return ResourceManager.GetString("MecabPage.Romaji", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.Romaji", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Text Flyout 的本地化字符串。
         /// </summary>
-        public static string MecabPage_TextFlyout {
+        public static string MeCabPage_TextFlyout {
             get {
-                return ResourceManager.GetString("MecabPage.TextFlyout", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.TextFlyout", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 MecabPage.TextVertical 的本地化字符串。
         /// </summary>
-        public static string MecabPage_TextVertical {
+        public static string MeCabPage_TextVertical {
             get {
-                return ResourceManager.GetString("MecabPage.TextVertical", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.TextVertical", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 Mecab 的本地化字符串。
         /// </summary>
-        public static string MecabPage_Title {
+        public static string MeCabPage_Title {
             get {
-                return ResourceManager.GetString("MecabPage.Title", resourceCulture);
+                return ResourceManager.GetString("MeCabPage.Title", resourceCulture);
             }
         }
         
