@@ -17,6 +17,7 @@
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
+    <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Refit" Version="6.0.38" />
@@ -45,6 +46,7 @@
 
   <ItemGroup>
     <None Remove="assets\app.ico" />
+    <None Remove="assets\app.png" />
     <None Remove="assets\text_background\aqua_green.png" />
     <None Remove="assets\text_background\green.png" />
     <None Remove="assets\text_background\pink.png" />
@@ -53,6 +55,7 @@
 
   <ItemGroup>
     <Resource Include="assets\app.ico" />
+    <Resource Include="assets\app.png" />
     <Resource Include="assets\text_background\aqua_green.png" />
     <Resource Include="assets\text_background\green.png" />
     <Resource Include="assets\text_background\pink.png" />

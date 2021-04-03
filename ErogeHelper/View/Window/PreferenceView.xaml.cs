@@ -28,7 +28,7 @@ namespace ErogeHelper.View.Window
             ("hook", typeof(HookPage)),
             //("trans", typeof(TransPage)),
 
-            //("about", typeof(AboutPage)),
+            ("about", typeof(AboutPage)),
         };
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
