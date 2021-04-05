@@ -22,9 +22,8 @@ namespace ErogeHelper
 
             // Set environment to app directory
             var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
-            Directory.SetCurrentDirectory(currentDirectory ?? 
-                                          throw new ArgumentNullException(nameof(currentDirectory), 
-                                              @"Could not located Eroge Helper's directory"));
+            Directory.SetCurrentDirectory(currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory),
+                                                            @"Could not located Eroge Helper's directory"));
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()
@@ -51,6 +50,7 @@ namespace ErogeHelper
                 var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
 
                 // UNDONE: Use https://github.com/ookii-dialogs/ookii-dialogs-wpf TaskDialog
+                // UNDONE: Clear sub process
                 ModernWpf.MessageBox.Show(ex.ToString());
 
                 Log.Fatal(ex);

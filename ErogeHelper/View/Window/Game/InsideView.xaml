@@ -9,6 +9,7 @@
         xmlns:common="clr-namespace:ErogeHelper.Common"
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
         xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
+        xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:GameViewModel, IsDesignTimeCreatable=True}"
         cal:Bind.AtDesignTime="True"
@@ -23,11 +24,40 @@
         <!-- Client area -->
         <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
             <Grid>
+                <DockPanel LastChildFill="False">
+                    <!-- Main top activity area -->
+                    <StackPanel DockPanel.Dock="Top">
+                        <!-- Source Text -->
+                        <Border 
+                            Width="auto" Height="12" Visibility="{Binding TriggerBarVisibility}"
+                            Background="Black" Opacity="0.002" cal:Message.Attach="[MouseEnter] = [TriggerBarEnter]"/>
+                        <StackPanel >
+                            <ContentControl 
+                                x:Name="TextControl" Visibility="{Binding TextControlVisibility}" 
+                                cal:Message.Attach="[MouseLeave] = [TextControlLeave]"/>
+                            <!-- Extra Text-->
+                            <ItemsControl x:Name="AppendTextList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type notifyItem:AppendTextItem}">
+                                        <StackPanel Orientation="Vertical">
+                                            <control:OutlinedTextBlock 
+                                                Margin="0 0 0 -5" Stroke="Black" Fill="white" ClipToBounds="False" 
+                                                StrokePosition="Outside" StrokeThickness="1" TextWrapping="Wrap" 
+                                                Text="{Binding Message}" FontSize="{Binding DataContext.FontSize,
+                                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                ToolTip="{Binding ExtraInfo}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                    </StackPanel>
+                </DockPanel>
 
                 <!-- Interaction Button -->
                 <control:AssistiveTouch 
-                    Width="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
-                    Height="{x:Static common:StaticXamlUiValues.AssistiveTouchSize}" 
+                    Width="{StaticResource AssistiveTouchSize}" Height="{StaticResource AssistiveTouchSize}" 
                     Visibility="{Binding AssistiveTouchIsVisible, 
                         Converter={StaticResource TrueToVisibleConverter}}">
                     <ui:FlyoutService.Flyout>

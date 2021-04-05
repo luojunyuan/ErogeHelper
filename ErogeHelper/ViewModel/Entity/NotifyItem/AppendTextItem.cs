@@ -1,4 +1,4 @@
-﻿namespace ErogeHelper.Common.Entity
+﻿namespace ErogeHelper.ViewModel.Entity.NotifyItem
 {
     public class AppendTextItem
     {

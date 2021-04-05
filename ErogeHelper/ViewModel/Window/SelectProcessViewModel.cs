@@ -4,13 +4,13 @@ using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.Model.Entity.Response;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using ErogeHelper.Model.Repository.Entity.Response;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -22,7 +22,7 @@ namespace ErogeHelper.ViewModel.Window
             IEventAggregator eventAggregator,
             ITextractorService textractorService,
             IGameWindowHooker gameWindowHooker,
-            IEhServerApi ehServerApi,
+            IEhServerApiService ehServerApiService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
             EhGlobalValueRepository ehGlobalValueRepository)
@@ -32,7 +32,7 @@ namespace ErogeHelper.ViewModel.Window
             _eventAggregator = eventAggregator;
             _textractorService = textractorService;
             _gameWindowHooker = gameWindowHooker;
-            _ehServerApi = ehServerApi;
+            _ehServerApiService = ehServerApiService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
             _ehGlobalValueRepository = ehGlobalValueRepository;
@@ -45,7 +45,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IEventAggregator _eventAggregator;
         private readonly ITextractorService _textractorService;
         private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IEhServerApi _ehServerApi;
+        private readonly IEhServerApiService _ehServerApiService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly EhGlobalValueRepository _ehGlobalValueRepository;
@@ -101,7 +101,7 @@ namespace ErogeHelper.ViewModel.Window
             {
                 try
                 {
-                    using var resp = await _ehServerApi.GetGameSetting(md5).ConfigureAwait(true);
+                    using var resp = await _ehServerApiService.GetGameSetting(md5).ConfigureAwait(true);
                     // For throw ApiException
                     //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
@@ -144,7 +144,7 @@ namespace ErogeHelper.ViewModel.Window
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
         }
 
-        #pragma warning disable 8618
+#pragma warning disable 8618
         public SelectProcessViewModel() { }
     }
 }

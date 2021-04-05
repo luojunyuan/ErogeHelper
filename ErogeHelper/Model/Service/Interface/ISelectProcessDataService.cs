@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Caliburn.Micro;
-using ErogeHelper.Common.Entity;
+﻿using Caliburn.Micro;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Service.Interface
 {

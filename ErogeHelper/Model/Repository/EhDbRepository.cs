@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Dapper;
-using ErogeHelper.Model.Repository.Entity.Table;
+using ErogeHelper.Model.Entity.Table;
 using Microsoft.Data.Sqlite;
 
 
 namespace ErogeHelper.Model.Repository
 {
+    // QUESTION: Repository 或 Factory 层与VM完全隔离？通过Service交互，感觉麻烦还是算了
     public class EhDbRepository
     {
         public EhDbRepository(string connStr)

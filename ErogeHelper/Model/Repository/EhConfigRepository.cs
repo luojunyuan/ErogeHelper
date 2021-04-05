@@ -13,7 +13,7 @@ namespace ErogeHelper.Model.Repository
         public string AppDataDir { get; }
 
         /// <summary>
-        /// Will generate file "ErogeHelper\EhSettings.dict" to the specified directory
+        /// We generate file "ErogeHelper\EhSettings.json" to the specified directory
         /// </summary>
         /// <param name="rootDir"></param>
         public EhConfigRepository(string rootDir)
@@ -21,7 +21,7 @@ namespace ErogeHelper.Model.Repository
             // INSTEAD: Have a look on System.Configuration ?
             AppDataDir = Path.Combine(rootDir, "ErogeHelper");
 
-            _configFilePath = Path.Combine(AppDataDir, "EhSettings.dict");
+            _configFilePath = Path.Combine(AppDataDir, "EhSettings.json");
             LocalSetting = LocalSettingInit(_configFilePath);
             Log.Info($"Application config path {_configFilePath}");
         }
@@ -45,11 +45,10 @@ namespace ErogeHelper.Model.Repository
 
         private T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
         {
-            // UNDONE: blog.lindexi.com/post/C-字典-Dictionary-的-TryGetValue-与先判断-ContainsKey-然后-Get-的性能对比.html
-            if (!LocalSetting.ContainsKey(propertyName) || LocalSetting[propertyName] is null)
+            if (!LocalSetting.TryGetValue(propertyName, out var outValue))
                 return defaultValue;
 
-            string value = LocalSetting[propertyName];
+            string value = outValue;
 
             T ret = default!;
             if (typeof(T) == typeof(string))
@@ -91,9 +90,9 @@ namespace ErogeHelper.Model.Repository
 
         private void SetValue<T>(T value, [CallerMemberName] string propertyName = "")
         {
-            string targetStrValue = (value as string)!;
+            var targetStrValue = value?.ToString() ?? string.Empty;
 
-            if (LocalSetting.TryGetValue(propertyName, out var outValue) && outValue.Equals(targetStrValue))
+            if (LocalSetting.TryGetValue(propertyName, out var outValue) && targetStrValue.Equals(outValue))
                 return;
 
             LocalSetting[propertyName] = targetStrValue;
@@ -204,12 +203,12 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
-        public Languages TransSrcLanguage
+        public TransLanguage SrcTransLanguage
         {
             get => GetValue(DefaultConfigValuesStore.TransSrcLanguage);
             set => SetValue(value);
         }
-        public Languages TransTargetLanguage
+        public TransLanguage TargetTransLanguage
         {
             get => GetValue(DefaultConfigValuesStore.TransTargetLanguage);
             set => SetValue(value);

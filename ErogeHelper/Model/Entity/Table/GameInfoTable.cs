@@ -1,4 +1,4 @@
-﻿namespace ErogeHelper.Model.Repository.Entity.Table
+﻿namespace ErogeHelper.Model.Entity.Table
 {
     public class GameInfoTable
     {

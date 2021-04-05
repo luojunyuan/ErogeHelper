@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Caliburn.Micro;
-using ErogeHelper.Common.Entity;
+﻿using Caliburn.Micro;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Tests.Model.Service
 {

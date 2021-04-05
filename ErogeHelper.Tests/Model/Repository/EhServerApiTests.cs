@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Service;
 
 namespace ErogeHelper.Tests.Model.Repository
 {
@@ -14,7 +15,7 @@ namespace ErogeHelper.Tests.Model.Repository
         {
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var configRepo = new EhConfigRepository(appDataDir);
-            var ehServerApi = new EhServerApi(configRepo);
+            var ehServerApi = new EhServerApiServiceService(configRepo);
 
             // Act
             var resp = await ehServerApi.GetGameSetting("1ef3cdc2e666091bda2dc828872d597b");

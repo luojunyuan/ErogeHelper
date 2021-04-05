@@ -1,4 +1,11 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Extention;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
+using FluentMigrator.Runner;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,8 +18,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using FluentMigrator.Runner;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ErogeHelper.Common
 {
@@ -128,28 +133,27 @@ namespace ErogeHelper.Common
             const string begin = "|~S~|";
             const string end = "|~E~|";
 
-            if (!string.IsNullOrEmpty(expr))
+            if (expr == string.Empty)
+                return sourceInput;
+
+            if (expr[^1] == '|')
+                return sourceInput;
+
+            string wrapperText = sourceInput;
+
+            var instant = new Regex(expr);
+            var collect = instant.Matches(sourceInput);
+            foreach (Match match in collect)
             {
-                if (expr[^1] == '|')
-                    return sourceInput;
-
-                string wrapperText = sourceInput;
-
-                var instant = new Regex(expr);
-                var collect = instant.Matches(sourceInput);
-                foreach (Match match in collect)
-                {
-                    var beginPos = wrapperText.LastIndexOf(end, StringComparison.Ordinal);
-                    wrapperText = instant.Replace(
-                        wrapperText,
-                        begin + match + end,
-                        1,
-                        beginPos == -1 ? 0 : beginPos + 5);
-                }
-                return wrapperText;
+                var beginPos = wrapperText.LastIndexOf(end, StringComparison.Ordinal);
+                wrapperText = instant.Replace(
+                    wrapperText,
+                    begin + match + end,
+                    1,
+                    beginPos == -1 ? 0 : beginPos + 5);
             }
+            return wrapperText;
 
-            return sourceInput;
         }
 
         public static Dictionary<string, string> GetGameNamesByProcess(Process proc)
@@ -213,6 +217,35 @@ namespace ErogeHelper.Common
                 Log.Warn(ex);
                 return new BitmapImage();
             }
+        }
+
+        public static void OpenUrl(string urlLink) => new Process
+        {
+            StartInfo = new ProcessStartInfo(urlLink)
+            {
+                UseShellExecute = true
+            }
+        }.Start();
+
+        public static BindableCollection<SingleTextItem> BindableTextMaker(
+            string sentence,
+            Func<string, IEnumerable<MeCabWord>> callback,
+            TextTemplateType templateType)
+        {
+            BindableCollection<SingleTextItem> collect = new();
+            // 必须在与 DependencyObject 相同的 Thread 上创建 DependencySource
+            Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                foreach (var word in callback(sentence))
+                {
+                    collect.Add(new SingleTextItem(
+                        word.Kana,
+                        word.Word,
+                        templateType,
+                        word.PartOfSpeech.ToColor()));
+                }
+            });
+            return collect;
         }
     }
 }

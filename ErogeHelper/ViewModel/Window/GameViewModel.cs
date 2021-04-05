@@ -1,12 +1,15 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.View.Window;
+using ErogeHelper.ViewModel.Control;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using WindowsInput.Events;
 
 namespace ErogeHelper.ViewModel.Window
@@ -15,34 +18,51 @@ namespace ErogeHelper.ViewModel.Window
     {
 
         public GameViewModel(
+            IGameDataService dataService,
             IWindowManager windowManager,
             EhConfigRepository ehConfigRepository,
-            EhGlobalValueRepository ehGlobalValueRepository)
+            EhGlobalValueRepository ehGlobalValueRepository,
+            TextViewModel textViewModel)
         {
             _windowManager = windowManager;
             _ehConfigRepository = ehConfigRepository;
             _ehGlobalValueRepository = ehGlobalValueRepository;
+            TextControl = textViewModel;
 
             _fontSize = _ehConfigRepository.FontSize;
+            dataService.SourceTextReceived += text =>
+            {
+                SourceTextArchiver.Enqueue(text);
+                TextControl.CardControl.TotalText = text;
+            };
+            dataService.BindableTextItem += textItem => TextControl.SourceTextCollection = textItem;
+            dataService.AppendTextReceived += (text, tip) => AppendTextList.Add(new AppendTextItem
+            {
+                Message = text,
+                ExtraInfo = tip,
+            });
+            dataService.AppendTextsRefresh += _ => AppendTextList.Clear();
         }
 
         private readonly IWindowManager _windowManager;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly EhGlobalValueRepository _ehGlobalValueRepository;
 
+        private bool _assistiveTouchIsVisible = true;
+        private double _fontSize;
+
+        public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
 
         // UNDONE: OutsideView scroll able text
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(30);
 
-        private bool _assistiveTouchIsVisible = true;
         public bool AssistiveTouchIsVisible
         {
             get => _assistiveTouchIsVisible;
             set { _assistiveTouchIsVisible = value; NotifyOfPropertyChange(() => AssistiveTouchIsVisible); }
         }
 
-        private double _fontSize;
         public double FontSize
         {
             get => _fontSize;
@@ -113,13 +133,13 @@ namespace ErogeHelper.ViewModel.Window
             {
                 TriggerBarVisibility = Visibility.Collapsed;
                 TextControlVisibility = Visibility.Visible;
-                //TextControl.Background = new SolidColorBrush();
+                TextControl.Background = new SolidColorBrush();
             }
             else
             {
                 TriggerBarVisibility = Visibility.Visible;
                 TextControlVisibility = Visibility.Collapsed;
-                //TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
+                TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
             }
         }
 
@@ -148,20 +168,20 @@ namespace ErogeHelper.ViewModel.Window
 
         public void TriggerBarEnter()
         {
-            if (IsSourceTextPined == false)
-            {
-                TextControlVisibility = Visibility.Visible;
-                TriggerBarVisibility = Visibility.Collapsed;
-            }
+            if (IsSourceTextPined) 
+                return;
+
+            TextControlVisibility = Visibility.Visible;
+            TriggerBarVisibility = Visibility.Collapsed;
         }
 
         public void TextControlLeave()
         {
-            if (IsSourceTextPined == false)
-            {
-                TextControlVisibility = Visibility.Collapsed;
-                TriggerBarVisibility = Visibility.Visible;
-            }
+            if (IsSourceTextPined) 
+                return;
+
+            TextControlVisibility = Visibility.Collapsed;
+            TriggerBarVisibility = Visibility.Visible;
         }
 
         #endregion
@@ -247,5 +267,9 @@ namespace ErogeHelper.ViewModel.Window
             .Hold(KeyCode.Control).Invoke().ConfigureAwait(false);
         public async void PressSkipRelease() => await WindowsInput.Simulate.Events()
             .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
+
+
+#pragma warning disable CS8618
+        public GameViewModel() { }
     }
 }

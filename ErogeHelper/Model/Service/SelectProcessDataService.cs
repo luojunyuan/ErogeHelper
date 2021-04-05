@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Comparer;
+using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Comparer;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
@@ -53,12 +53,12 @@ namespace ErogeHelper.Model.Service
 
         private IEnumerable<Process> ProcessEnumerable() =>
             Process.GetProcesses()
-                .Where(proc => 
+                .Where(proc =>
                     proc.MainWindowHandle != IntPtr.Zero
                     && proc.MainWindowTitle != string.Empty
                     && !_uselessProcess.Contains(proc.ProcessName));
 
-        private readonly IEnumerable<string> _uselessProcess = new []
+        private readonly IEnumerable<string> _uselessProcess = new[]
         {
             "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
             "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps", "WhiteboardWRT",

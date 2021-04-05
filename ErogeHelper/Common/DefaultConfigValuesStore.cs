@@ -32,8 +32,8 @@ namespace ErogeHelper.Common
         public const bool MojiDictEnable = false;
         public const bool JishoDictEnable = false;
 
-        public const Languages TransSrcLanguage = Languages.日本語;
-        public const Languages TransTargetLanguage = Languages.English;
+        public const Enum.TransLanguage TransSrcLanguage = Enum.TransLanguage.日本語;
+        public const Enum.TransLanguage TransTargetLanguage = Enum.TransLanguage.English;
 
         public const bool AlapiEnable = false;
 

@@ -18,20 +18,20 @@
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
+    <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Refit" Version="6.0.38" />
+    <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.11.7" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="WanaKana-net" Version="1.0.0" />
     <PackageReference Include="WindowsInput" Version="6.2.1" />
   </ItemGroup>
 
   <!-- No content directories -->
   <ItemGroup>
-    <Folder Include="assets\site_icon\" />
     <Folder Include="Common\Messenger\" />
-    <Folder Include="Model\Repository\Entity\Payload\" />
-    <Folder Include="Model\Repository\Translator\" />
-    <Folder Include="Model\Repository\Dictionary\" />
+    <Folder Include="Model\Factory\Translator\Interface\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +47,8 @@
   <ItemGroup>
     <None Remove="assets\app.ico" />
     <None Remove="assets\app.png" />
+    <None Remove="assets\site_icon\jisho.org.png" />
+    <None Remove="assets\site_icon\mojidict.com.ico" />
     <None Remove="assets\text_background\aqua_green.png" />
     <None Remove="assets\text_background\green.png" />
     <None Remove="assets\text_background\pink.png" />
@@ -56,6 +58,8 @@
   <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
+    <Resource Include="assets\site_icon\jisho.org.png" />
+    <Resource Include="assets\site_icon\mojidict.com.ico" />
     <Resource Include="assets\text_background\aqua_green.png" />
     <Resource Include="assets\text_background\green.png" />
     <Resource Include="assets\text_background\pink.png" />

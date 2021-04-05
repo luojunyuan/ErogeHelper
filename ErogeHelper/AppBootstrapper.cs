@@ -4,10 +4,9 @@ using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.Model.Entity.Response;
+using ErogeHelper.Model.Entity.Table;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity.Response;
-using ErogeHelper.Model.Repository.Entity.Table;
-using ErogeHelper.Model.Repository.Interface;
 using ErogeHelper.Model.Repository.Migration;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
@@ -23,6 +22,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using ErogeHelper.Model.Factory;
+using ErogeHelper.Model.Factory.Interface;
+using ErogeHelper.ViewModel.Control;
 
 namespace ErogeHelper
 {
@@ -95,7 +97,7 @@ namespace ErogeHelper
 
             var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
             var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
-            var ehServerApi = _serviceProvider.GetService<IEhServerApi>();
+            var ehServerApi = _serviceProvider.GetService<IEhServerApiService>();
             var textractorService = _serviceProvider.GetService<ITextractorService>();
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
@@ -139,7 +141,7 @@ namespace ErogeHelper
             if (settingJson == string.Empty)
             {
                 Log.Info("Not find game hook setting, open hook panel.");
-                // XXX: Correspond line 115
+                // XXX: Correspond line 116
                 await Application.Dispatcher.InvokeAsync(
                     async () => await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false));
                 textractorService.InjectProcesses();
@@ -172,7 +174,7 @@ namespace ErogeHelper
                 IncludeViewSuffixInViewModelNames = false,
                 DefaultSubNamespaceForViewModels = "ViewModel",
                 DefaultSubNamespaceForViews = "View",
-                ViewSuffixList = new List<string> { "View", "Page", "Control" }
+                ViewSuffixList = new List<string> { "View", "Page", "Control", "Popup" }
             };
             ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
@@ -193,12 +195,13 @@ namespace ErogeHelper
                 .ToList()
                 .ForEach(viewModelType => services.AddTransient(
                     viewModelType, viewModelType));
+            services.AddSingleton<CardViewModel>();
 
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
 
-            // Services, no helper, manager
+            // Services
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var ehConfigRepository = new EhConfigRepository(appDataDir);
             var dbFile = Path.Combine(ehConfigRepository.AppDataDir, "eh.db");
@@ -209,12 +212,14 @@ namespace ErogeHelper
             services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
 
             services.AddScoped(_ => ehConfigRepository);
-            services.AddScoped<IEhServerApi>(_ => new EhServerApi(ehConfigRepository));
+            services.AddScoped<IEhServerApiService>(_ => new EhServerApiServiceService(ehConfigRepository));
             services.AddScoped(_ => new EhDbRepository(connectString));
 
             services.AddTransient<IGameDataService, GameDataService>();
             services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.AddTransient<IHookDataService, HookDataService>();
+            services.AddTransient<IDictFactory, DictFactory>();
+            services.AddTransient<IMeCabService, MeCabService>();
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()

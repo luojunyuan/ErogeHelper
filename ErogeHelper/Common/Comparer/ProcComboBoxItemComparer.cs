@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ErogeHelper.Common.Entity;
+﻿using ErogeHelper.ViewModel.Entity.NotifyItem;
+using System.Collections.Generic;
 
 namespace ErogeHelper.Common.Comparer
 {

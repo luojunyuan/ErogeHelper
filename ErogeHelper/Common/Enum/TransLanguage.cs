@@ -1,6 +1,6 @@
 ﻿namespace ErogeHelper.Common.Enum
 {
-    public enum Languages
+    public enum TransLanguage
     {
         Auto,
         简体中文,

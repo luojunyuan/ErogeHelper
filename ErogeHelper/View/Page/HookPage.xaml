@@ -9,9 +9,9 @@
       xmlns:common="clr-namespace:ErogeHelper.Common"
       xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
-      xmlns:entity="clr-namespace:ErogeHelper.Common.Entity"
       xmlns:dialog="clr-namespace:ErogeHelper.View.Dialog"
       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
+      xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance vm:HookViewModel, IsDesignTimeCreatable=True}"
       cal:Bind.AtDesignTime="True" d:DesignHeight="800" d:DesignWidth="850"
@@ -19,7 +19,7 @@
     <!-- QUESTION: Does KeepAlive always stay in memory? -->
 
     <Page.Resources>
-        <DataTemplate x:Key="HpItemTemplate" DataType="{x:Type entity:HookMapItem}">
+        <DataTemplate x:Key="HpItemTemplate" DataType="{x:Type notifyItem:HookMapItem}">
             <GroupBox Width="300" Height="240" ToolTip="{Binding HookCode}">
                 <GroupBox.Header>
                     <TextBlock x:Name="engineName" Text="{Binding EngineName}">
@@ -69,6 +69,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <!-- TODO: 把 Hook Data List 拿出来，Grid分四格，HookDataList占下方两格，InfoColumn只在大于X时出现在0, 1 -->
                 <StackPanel Margin="20,10" HorizontalAlignment="Left">
                     <!-- RegExp -->
                     <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">

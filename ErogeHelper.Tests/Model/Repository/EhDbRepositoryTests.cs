@@ -1,11 +1,11 @@
 ﻿using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity.Table;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Entity.Table;
 
 namespace ErogeHelper.Tests.Model.Repository
 {

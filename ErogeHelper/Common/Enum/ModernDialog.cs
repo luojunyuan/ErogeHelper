@@ -2,8 +2,8 @@
 {
     public enum ModernDialog
     {
-        SelectProcessNoProcessTip,
         HookCode,
+        SelectProcessNoProcessTip,
         HookSettingUpdatedTip,
     }
 }

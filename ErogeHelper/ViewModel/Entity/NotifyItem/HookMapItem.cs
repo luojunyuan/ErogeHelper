@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 
-namespace ErogeHelper.Common.Entity
+namespace ErogeHelper.ViewModel.Entity.NotifyItem
 {
     public class HookMapItem : PropertyChangedBase
     {

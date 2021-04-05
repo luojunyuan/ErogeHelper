@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Media.Imaging;
 
-namespace ErogeHelper.Common.Entity
+namespace ErogeHelper.ViewModel.Entity.NotifyItem
 {
     public class ProcComboBoxItem
     {

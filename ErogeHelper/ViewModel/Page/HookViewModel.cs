@@ -4,9 +4,10 @@ using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.Model.Entity.Table;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Entity.Table;
 using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Entity.NotifyItem;
 using ErogeHelper.ViewModel.Window;
 using System;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService.DataEvent += DataProcess;
             RegExp = _ehGlobalValueRepository.TextractorSetting.RegExp;
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
+            // UNDONE: Loading all output text from textractorService
         }
 
         private readonly IHookDataService _dataService;
@@ -304,11 +306,14 @@ namespace ErogeHelper.ViewModel.Page
             if (SelectedHook is null)
                 throw new ArgumentNullException(nameof(SelectedHook));
 
-            _ehGlobalValueRepository.TextractorSetting.IsUserHook = SelectedHook.EngineName.Contains("UserHook");
-            _ehGlobalValueRepository.TextractorSetting.Hookcode = SelectedHook.HookCode;
-            _ehGlobalValueRepository.TextractorSetting.ThreadContext = SelectedHook.ThreadContext;
-            _ehGlobalValueRepository.TextractorSetting.SubThreadContext = SelectedHook.SubThreadContext;
-            _ehGlobalValueRepository.TextractorSetting.RegExp = RegExp ?? string.Empty;
+            _ehGlobalValueRepository.TextractorSetting = new GameTextSetting
+            {
+                IsUserHook = SelectedHook.EngineName.Contains("UserHook"),
+                Hookcode = SelectedHook.HookCode,
+                ThreadContext = SelectedHook.ThreadContext,
+                SubThreadContext = SelectedHook.SubThreadContext,
+                RegExp = RegExp ?? string.Empty,
+            };
 
             // 用一个开关? 异步
             // UNDONE: ehApi SubmitSetting with gameNames RCode不要

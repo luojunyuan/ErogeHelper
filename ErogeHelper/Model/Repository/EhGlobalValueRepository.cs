@@ -9,6 +9,7 @@ using ErogeHelper.ViewModel.Page;
 
 namespace ErogeHelper.Model.Repository
 {
+    // UNDONE: Vanish global
     public class EhGlobalValueRepository
     {
         /// <summary>

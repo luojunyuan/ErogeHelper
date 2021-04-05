@@ -13,11 +13,14 @@
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="Bootstrapper"/>
                 </ResourceDictionary>
+                <ResourceDictionary Source="Common/UiValueDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
             <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
             <converter:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter"/>
             <converter:TrueToVisibleConverter x:Key="TrueToVisibleConverter"/>
+            <converter:FalseToVisibleConverter x:Key="FalseToVisibleConverter"/>
+            <converter:EmptyStringToCollapsedConverter x:Key="EmptyStringToCollapsedConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

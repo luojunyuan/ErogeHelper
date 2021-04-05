@@ -47,7 +47,7 @@ namespace ErogeHelper.ViewModel.Page
                     var latestVersion = updateChecker.LatestVersion;
                     //var latestVersionUrl = updateChecker.LatestVersionUrl;
                     //var assetsUrl = updateChecker.LatestRelease?.assets?.Select(asset => asset.browser_download_url);
-                    Log.Info($"Found new {latestVersion}");
+                    Log.Debug($"Found new {latestVersion}");
 
                     CheckUpdateStatus = $"Found new version {latestVersion}";
                     BrushColor = Brushes.Orange;
@@ -57,7 +57,7 @@ namespace ErogeHelper.ViewModel.Page
                 else
                 {
                     // No newer version was found
-                    Log.Info("Current version is latest");
+                    Log.Debug("Current version is latest");
 
                     CheckUpdateStatus = "Latest version";
                     BrushColor = Brushes.Green;
@@ -67,7 +67,7 @@ namespace ErogeHelper.ViewModel.Page
             {
                 CheckUpdateStatus = "Check Failed";
                 BrushColor = Brushes.Red;
-                Log.Info(ex.Message);
+                Log.Warn(ex.Message);
             }
             catch (Exception ex)
             {

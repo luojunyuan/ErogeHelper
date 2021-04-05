@@ -1,0 +1,203 @@
+﻿<Popup x:Class="ErogeHelper.View.Control.CardPopup"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:ui="http://schemas.modernwpf.com/2019"
+       xmlns:cal="http://caliburnmicro.com"
+       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+       xmlns:control="clr-namespace:ErogeHelper.View.Control"
+       xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
+       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Control"
+       mc:Ignorable="d" 
+       d:DataContext="{d:DesignInstance vm:CardViewModel, IsDesignTimeCreatable=True}"
+       cal:Bind.AtDesignTime="True"
+       d:DesignHeight="450" d:DesignWidth="800"
+       StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" 
+       IsOpen="{Binding IsOpen}">
+
+    <Popup.Resources>
+        <DataTemplate x:Key="MojiContentTemplate" DataType="{x:Type notifyItem:MojiItem}">
+            <control:ScrollViewerSmooth PanningMode="Both">
+                <!--<ProgressBar IsIndeterminate="{Binding CardInfo.IsProcess}" />-->
+                <ui:SimpleStackPanel Spacing="10" Margin="10 20">
+                    <!-- Word -->
+                    <TextBlock Text="{Binding Header}" Style="{DynamicResource TitleTextBlockStyle}"/>
+                    <!-- Pron -->
+                    <TextBlock 
+                        Text="{Binding Pron}" Margin="0 -10 0 0" Foreground="Gray" 
+                        Style="{DynamicResource SubtitleTextBlockStyle}"/>
+                    <!-- Hinshi -->
+                    <Border BorderThickness="1" BorderBrush="red" HorizontalAlignment="Left">
+                        <TextBlock Text="{Binding Title}" Foreground="red"/>
+                    </Border>
+                    <!-- Expander -->
+                    <ItemsControl ItemsSource="{Binding ExpanderCollection}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander IsExpanded="True">
+                                    <Expander.Header>
+                                        <TextBlock Text="{Binding Header}" TextWrapping="Wrap"/>
+                                    </Expander.Header>
+                                    <ItemsControl ItemsSource="{Binding ExampleCollection}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Margin="10 0 0 0">
+                                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" />
+                                                    <TextBlock Text="{Binding Trans}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <ui:SimpleStackPanel Spacing="10" Margin="20 10"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ui:SimpleStackPanel>
+            </control:ScrollViewerSmooth>
+        </DataTemplate>
+
+        <DataTemplate x:Key="JishoContentTemplate" DataType="{x:Type notifyItem:JishoItem}">
+            <StackPanel>
+                <!-- Header -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Word}" FontSize="24" />
+                    <TextBlock Text="{Binding Ruby}" FontSize="16" VerticalAlignment="Bottom"/>
+                </StackPanel>
+                <!-- Content -->
+                <Grid Margin="0 5 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Left Tag -->
+                    <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                        <TextBlock 
+                            Text="{Binding CommonWord}" FontSize="12" 
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource EmptyStringToCollapsedConverter}}"/>
+                        <TextBlock 
+                            Text="{Binding JlptLevel}" FontSize="12"
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource EmptyStringToCollapsedConverter}}"/>
+                        <TextBlock 
+                            Text="{Binding WanikanaLevel}" FontSize="12"
+                            Visibility="{Binding CommonWord, 
+                                Converter={StaticResource EmptyStringToCollapsedConverter}}"/>
+                    </StackPanel>
+                    <!-- Details -->
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding Details}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0 0 0 5">
+                                    <TextBlock Text="{Binding PartOfSpeech}" FontSize="12" Foreground="Gray" />
+                                    <TextBlock Text="{Binding Explanation}" FontWeight="Bold" TextWrapping="Wrap"/>
+
+                                    <ItemsControl ItemsSource="{Binding Links}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ui:HyperlinkButton 
+                                                    NavigateUri="{Binding HyperLink}" Content="{Binding Text}"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <!-- Separator -->
+                <Separator Margin="0 10 0 0"/>
+            </StackPanel>
+        </DataTemplate>
+    </Popup.Resources>
+
+    <ui:FlyoutPresenter ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <!-- Tool box -->
+            <DockPanel>
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10" Margin="0 0 10 0">
+                    <TextBox Text="{Binding Word}" Width="180" />
+                    <!--<Button ToolTip="Search" IsEnabled="False">
+                        <ui:SymbolIcon Symbol="Find" />
+                    </Button>-->
+                    <Button x:Name="SelectTextButton" ToolTip="{x:Static resx:Strings.CardControl_SelectTextTip}">
+                        <ui:SymbolIcon Symbol="Copy" />
+                        <ui:FlyoutService.Flyout>
+                            <ui:Flyout Placement="Top">
+                                <TextBox 
+                                    Text="{Binding TotalText}" IsReadOnly="True" TextWrapping="Wrap" MaxWidth="360"
+                                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SendSelectedText($source)]">
+                                </TextBox>
+                            </ui:Flyout>
+                        </ui:FlyoutService.Flyout>
+                    </Button>
+                </ui:SimpleStackPanel>
+                <Button 
+                    HorizontalAlignment="Right" ToolTip="{x:Static resx:Strings.CardControl_CloseTip}" 
+                    cal:Message.Attach="[Click] = [CloseCard]">
+                    <ui:SymbolIcon Symbol="Clear" />
+                </Button>
+            </DockPanel>
+
+            <TabControl SelectedIndex="0" Margin="0 10 0 0" Visibility="{Binding DictTabVisibility}">
+                <TabControl.Items>
+                    <TabItem Header="Moji辞書" Visibility="{Binding MojiTabItemVisible}">
+                        <ui:TabItemHelper.Icon>
+                            <ui:BitmapIcon UriSource="/assets/site_icon/mojidict.com.ico" ShowAsMonochrome="False" />
+                        </ui:TabItemHelper.Icon>
+                        <!-- 控制这个Content高度与宽度 -->
+                        <TabControl 
+                            ItemsSource="{Binding MojiCollection}" Width="400" Height="300"
+                            ContentTemplate="{StaticResource MojiContentTemplate}" TabStripPlacement="Left"
+                            SelectedIndex="{Binding MojiSelectedIndex}">
+                            <TabControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Header}" ToolTip="{Binding Header}" Width="76"/>
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                        </TabControl>
+                    </TabItem>
+
+                    <TabItem Header="Jisho" Visibility="{Binding JishoTabItemVisible}">
+                        <ui:TabItemHelper.Icon>
+                            <ui:BitmapIcon UriSource="/assets/site_icon/jisho.org.png" ShowAsMonochrome="False" />
+                        </ui:TabItemHelper.Icon>
+                        <control:ScrollViewerSmooth Width="400" Height="300">
+                            <ItemsControl 
+                                ItemsSource="{Binding JishoCollection}" 
+                                ItemTemplate="{StaticResource JishoContentTemplate}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Margin="10 10 0 0"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </control:ScrollViewerSmooth>
+                    </TabItem>
+                    <!--<TabItem Header="EBWin">
+                    </TabItem>-->
+                </TabControl.Items>
+            </TabControl>
+
+            <!-- Extended web link -->
+            <ui:CommandBar HorizontalAlignment="Left" DefaultLabelPosition="Bottom" Background="Transparent">
+                <ui:AppBarButton Label="Weblio" cal:Message.Attach="[Click] = [OpenWeblioLink]" >
+                    <ui:AppBarButton.Icon>
+                        <ui:FontIcon FontFamily="Impact" Glyph="&#x0057;" Margin="-6 -8 -6 -5" Foreground="#1F4795"/>
+                    </ui:AppBarButton.Icon>
+                </ui:AppBarButton>
+                <ui:AppBarButton Label="kotobank" cal:Message.Attach="[Click] = [OpenKotobankLink]" >
+                    <ui:AppBarButton.Icon>
+                        <ui:FontIcon FontFamily="Yu Gothic UI" Glyph="&#x32D9;" Margin="-6 -9 -6 -6" FontWeight="Bold" />
+                    </ui:AppBarButton.Icon>
+                </ui:AppBarButton>
+            </ui:CommandBar>
+        </StackPanel>
+    </ui:FlyoutPresenter>
+</Popup>

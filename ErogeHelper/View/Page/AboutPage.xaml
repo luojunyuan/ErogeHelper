@@ -7,8 +7,10 @@
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
       xmlns:repo="clr-namespace:ErogeHelper.Model.Repository"
       xmlns:control="clr-namespace:ErogeHelper.View.Control"
+      xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="400"
+      d:DesignHeight="450" d:DesignWidth="400" 
+      d:DataContext="{d:DesignInstance vm:AboutViewModel, IsDesignTimeCreatable=True}"
       Title="{x:Static resx:Strings.About_Title}">
 
     <control:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">

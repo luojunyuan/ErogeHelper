@@ -15,9 +15,8 @@
     <ui:NavigationView 
         x:Name="NavView" IsSettingsVisible="False" IsTabStop="False" PaneDisplayMode="Auto"
         SelectionChanged="NavView_SelectionChanged" CompactModeThresholdWidth="0" IsBackButtonVisible="Collapsed" 
-        IsPaneToggleButtonVisible="False"
-        OpenPaneLength="{x:Static common:StaticXamlUiValues.SidePaneLength}" 
-        ExpandedModeThresholdWidth="{x:Static common:StaticXamlUiValues.ExpandedModeThresholdWidth}" >
+        IsPaneToggleButtonVisible="False" OpenPaneLength="{StaticResource SidePaneLength}" 
+        ExpandedModeThresholdWidth="{StaticResource ExpandedModeThresholdWidth}" >
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItemSeparator Margin="0 30 0 0"/>
             <ui:NavigationViewItem 

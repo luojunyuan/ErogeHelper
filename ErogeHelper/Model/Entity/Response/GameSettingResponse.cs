@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ErogeHelper.Model.Repository.Entity.Response
+namespace ErogeHelper.Model.Entity.Response
 {
     public class GameSettingResponse
     {
