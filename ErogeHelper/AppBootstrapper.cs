@@ -195,7 +195,7 @@ namespace ErogeHelper
                 .ToList()
                 .ForEach(viewModelType => services.AddTransient(
                     viewModelType, viewModelType));
-            services.AddSingleton<CardViewModel>();
+            //services.AddSingleton<CardViewModel>();
 
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();

@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
+using System.Windows.Controls;
 using System.Windows.Media;
-using ErogeHelper.Common;
 
 namespace ErogeHelper.ViewModel.Control
 {
@@ -29,9 +29,11 @@ namespace ErogeHelper.ViewModel.Control
             set { _sourceTextCollection = value; NotifyOfPropertyChange(() => SourceTextCollection); }
         }
 
-        public void SearchWord(SingleTextItem clickItem)
+        public void SearchWord(Border border, SingleTextItem clickItem)
         {
+            CardControl.PlacementTarget = border;
             CardControl.Word = clickItem.Text;
+            CardControl.IsOpen = true;
             CardControl.Search();
         }
 

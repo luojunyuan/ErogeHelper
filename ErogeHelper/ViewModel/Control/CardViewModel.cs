@@ -37,6 +37,8 @@ namespace ErogeHelper.ViewModel.Control
         private Visibility _mojiTabItemVisible;
         private Visibility _jishoTabItemVisible;
         private bool _isOpen;
+        private UIElement? _placementTarget;
+        private CancellationTokenSource _cancelSource = new();
 
         /// <summary>
         /// The main text in the TextBox
@@ -59,13 +61,11 @@ namespace ErogeHelper.ViewModel.Control
         /// <summary>
         /// Send selected text to current word
         /// </summary>
-        public void SendSelectedText(object sender)
+        public void SendSelectedText(TextBox textBox)
         {
             // * use Attach Property binding to SelectionLength, SelectedText
             // * use System.Windows.Controls.TextBox
-            // * send message to CardPopup.cs (give TextBox a Name, operation in View, do Search() in VM)
-            if (sender is not TextBox textBox)
-                return;
+            // * send message to CardControl.cs (give TextBox a Name, operation in View, do Search() in VM)
             if (textBox.SelectedText == string.Empty)
                 return;
 
@@ -74,7 +74,11 @@ namespace ErogeHelper.ViewModel.Control
             textBox.SelectionLength = 0;
         }
 
-        private CancellationTokenSource _cancelSource = new();
+        public UIElement? PlacementTarget
+        {
+            get => _placementTarget;
+            set { _placementTarget = value; NotifyOfPropertyChange(() => PlacementTarget);}
+        }
 
         /// <summary>
         /// Search entry point
@@ -319,6 +323,8 @@ namespace ErogeHelper.ViewModel.Control
             get => _isOpen;
             set { _isOpen = value; NotifyOfPropertyChange(() => IsOpen); }
         }
+
+        public void CloseCard() => IsOpen = false;
 
         public void OpenWeblioLink()
         {

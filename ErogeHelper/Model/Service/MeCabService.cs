@@ -49,24 +49,24 @@ namespace ErogeHelper.Model.Service
                     Word = node.Surface,
                     // 全角空格让假名渲染占位
                     Kana = " ",
-                    PartOfSpeech = node.GetPos1().ToHinshi()
+                    PartOfSpeech = (node.GetPos1() ?? string.Empty).ToHinshi()
                 };
 
                 // kana
-                if (node.GetGoshu().Equals("外"))
+                if ((node.GetGoshu() ?? string.Empty).Equals("外"))
                 {
-                    mecabWord.Kana = node.GetLemma().Split('-')[^1];
+                    mecabWord.Kana = (node.GetLemma() ?? " ").Split('-')[^1];
                 }
                 else if (_ehConfigRepository.Romaji)
                 {
-                    mecabWord.Kana = WanaKana.ToRomaji(node.GetPron());
+                    mecabWord.Kana = WanaKana.ToRomaji(node.GetPron() ?? " ");
                 }
                 else if (!WanaKana.IsKana(node.Surface) &&
                          mecabWord.PartOfSpeech != Hinshi.補助記号)
                 {
                     mecabWord.Kana = _ehConfigRepository.Hiragana
-                        ? WanaKana.ToHiragana(node.GetPron())
-                        : node.GetPron(); // Katakana by default
+                        ? WanaKana.ToHiragana(node.GetPron() ?? " ")
+                        : node.GetPron() ?? " "; // Katakana by default
                 }
 
                 yield return mecabWord;

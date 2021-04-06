@@ -47,15 +47,6 @@ namespace ErogeHelper.View.Control
             }
         }
 
-        private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is not Border border) 
-                return;
-
-            CardPopup.PlacementTarget = border;
-            CardPopup.IsOpen = true;
-        }
-
         private void Border_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (sender is Border border)

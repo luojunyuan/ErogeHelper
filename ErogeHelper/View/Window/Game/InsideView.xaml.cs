@@ -59,7 +59,7 @@ namespace ErogeHelper.View.Window.Game
             base.OnDpiChanged(oldDpi, newDpi);
 
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            Log.Info($"Current screen dpi {_dpi * 100}%");
+            Log.Debug($"Current screen dpi {_dpi * 100}%");
         }
 
         public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
@@ -106,9 +106,13 @@ namespace ErogeHelper.View.Window.Game
                 {
                     timer.Stop();
                 }
+                // UNDONE
+                // 不加这个条件？ 另外这些其实是在有了工具窗口判断全屏前写的，后来有了判断全屏就没改过这些
+                // 全屏判断相当稳定、考虑一下，以及计时器的停止啥的
                 if (globalValues.MainProcess.MainWindowHandle == NativeMethods.GetForegroundWindow())
                 {
                     NativeMethods.BringWindowToTop(pointer.Handle);
+                    //Log.Debug("yes");
                 }
             };
             timer.Interval = TimeSpan.FromMilliseconds(50);
@@ -171,7 +175,8 @@ namespace ErogeHelper.View.Window.Game
                     //判断是否全屏
                     if ((int)lParam == 1)
                     {
-                        Log.Info("The front window is being maxsize");
+                        Log.Debug("The front window is being maxsize");
+
                         if (_fullScreenButton is not null)
                         {
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
@@ -180,7 +185,7 @@ namespace ErogeHelper.View.Window.Game
                     }
                     else
                     {
-                        Log.Info("The front window is being normalize or minimize");
+                        Log.Debug("The front window is being normalize or minimize");
                         if (_fullScreenButton is not null)
                         {
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };

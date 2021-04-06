@@ -19,13 +19,12 @@
         <DataTemplate x:Key="OutLineDefaultTemplate" DataType="{x:Type notifyEntity:SingleTextItem}">
             <StackPanel>
                 <Border
-                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord(TextItem)]"
+                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord($source, TextItem)]"
                     cal:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                     Visibility="{Binding CanBeSearch, Converter={StaticResource TrueToVisibleConverter}}"
                     MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" 
-                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp"
-                    PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
+                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp">
                     <Border.Background>
                         <ImageBrush x:Name="DummyBug" ImageSource="{Binding SubMarkColor}" />
                     </Border.Background>
@@ -61,13 +60,12 @@
                 </control:OutlinedTextBlock>
                 <!-- 文字部分 -->
                 <Border
-                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord(TextItem)]"
+                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord($source, TextItem)]"
                     cal:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                     Visibility="{Binding CanBeSearch, Converter={StaticResource TrueToVisibleConverter}}"
                     MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" 
-                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp"
-                    PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
+                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp">
                     <Border.Background>
                         <ImageBrush x:Name="DummyBug" ImageSource="{Binding SubMarkColor}" Opacity="1"/>
                     </Border.Background>
@@ -96,13 +94,12 @@
             <StackPanel>
                 <!-- 文字部分 -->
                 <Border
-                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord(TextItem)]"
+                    cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SearchWord($source, TextItem)]"
                     cal:Action.TargetWithoutContext="{Binding DataContext, 
                         RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                     Visibility="{Binding CanBeSearch, Converter={StaticResource TrueToVisibleConverter}}"
                     MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" 
-                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp"
-                    PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
+                    PreviewMouseDown="Border_PreviewMouseDown" PreviewMouseUp="Border_PreviewMouseUp">
                     <Border.Background>
                         <ImageBrush x:Name="DummyBug" ImageSource="{Binding SubMarkColor}" />
                     </Border.Background>
@@ -140,7 +137,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <control:CardPopup x:Name="CardPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" />
+        <ContentControl x:Name="CardControl"/>
 
         <ItemsControl
             Background="{Binding Background}"
