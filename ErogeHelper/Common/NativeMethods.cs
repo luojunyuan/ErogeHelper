@@ -210,6 +210,21 @@ namespace ErogeHelper.Common
             return SafeNativeMethods.GetMessageExtraInfo();
         }
 
+        public static bool PostMessage(IntPtr hWnd, WMessages Msg, int wParam, int lParam)
+        {
+            return SafeNativeMethods.PostMessage((int)hWnd, (uint)Msg, wParam, lParam);
+        }
+
+        public static void MouseEventClick()
+        {
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        }
+
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD;
@@ -282,6 +297,14 @@ namespace ErogeHelper.Common
 
             [DllImport("user32.dll")]
             public static extern IntPtr GetMessageExtraInfo();
+
+            [DllImport("user32.dll", EntryPoint = "mouse_event", CharSet = CharSet.Auto, 
+                CallingConvention = CallingConvention.StdCall)]
+            public static extern void MouseEvent(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool PostMessage(int hWnd, uint Msg, int wParam, int lParam);
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -317,6 +340,18 @@ namespace ErogeHelper.Common
 
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             public static extern IntPtr GetModuleHandle(string? lpModuleName);
+        }
+
+        public enum WMessages : uint
+        {
+            WM_LBUTTONDOWN = 0x201,
+            WM_LBUTTONUP = 0x202,
+
+            WM_KEYDOWN = 0x100,
+            WM_KEYUP = 0x101,
+
+            WH_KEYBOARD_LL = 13,
+            WH_MOUSE_LL = 14,
         }
 
         [Flags]
@@ -390,7 +425,7 @@ namespace ErogeHelper.Common
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
+        public struct Point
         {
             public int X;
             public int Y;
@@ -399,7 +434,7 @@ namespace ErogeHelper.Common
         [StructLayout(LayoutKind.Sequential)]
         public struct MSLLHook
         {
-            public POINT Point;
+            public Point Point;
             public uint MouseData;
             public uint Flags;
             public uint Time;

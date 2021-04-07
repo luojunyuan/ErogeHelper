@@ -3,6 +3,6 @@
     public struct TouchInfo
     {
         public int Token;
-        public NativeMethods.POINT Point;
+        public NativeMethods.Point Point;
     }
 }

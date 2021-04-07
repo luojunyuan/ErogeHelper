@@ -3,8 +3,9 @@ using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Service.Interface;
 using System;
 using System.ComponentModel;
+using Caliburn.Micro;
+using ErogeHelper.Model.Repository;
 using System.Runtime.InteropServices;
-using WindowsInput.Events;
 
 namespace ErogeHelper.Model.Service
 {
@@ -48,55 +49,13 @@ namespace ErogeHelper.Model.Service
                         {
                             NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
 
-                            NativeMethods.Input[] inputs = {
-                                new()
-                                {
-                                    type = (int) NativeMethods.InputType.Mouse,
-                                    u = new NativeMethods.InputUnion
-                                    {
-                                        mi = new NativeMethods.MouseInput
-                                        {
-                                            Dx = _pos4.Point.X,
-                                            Dy = _pos4.Point.Y,
-                                            DwFlags = (uint)NativeMethods.MouseEventF.LeftDown,
-                                            DwExtraInfo = NativeMethods.GetMessageExtraInfo()
-                                        }
-                                    }
-                                },
-                                new()
-                                {
-                                    type = (int) NativeMethods.InputType.Mouse,
-                                    u = new NativeMethods.InputUnion
-                                    {
-                                        mi = new NativeMethods.MouseInput
-                                        {
-                                            DwFlags = (uint)NativeMethods.MouseEventF.LeftUp,
-                                            DwExtraInfo = NativeMethods.GetMessageExtraInfo()
-                                        }
-                                    }
-                                }
-                            };
-
-                            NativeMethods.SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(NativeMethods.Input)));
-
-
-
-
-
-
-
-
-
-
-
-
-                            Log.Debug($"press {info.Point.X} {info.Point.Y}");
+                            SendClick(NativeMethods.WMessages.WM_LBUTTONDOWN, _pos4.Point);
+                            SendClick(NativeMethods.WMessages.WM_LBUTTONUP, _pos4.Point);
                         }
 
                         if (_longPress)
                         {
                             NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
-                            Log.Debug($"long press {info.Point.X} {info.Point.Y}");
                         }
                         return new IntPtr(1);
                     }
@@ -135,6 +94,28 @@ namespace ErogeHelper.Model.Service
                 _longPress = false;
             }
         }
+
+        private readonly IntPtr _handle = IoC.Get<EhGlobalValueRepository>().MainProcess.MainWindowHandle;
+
+        private void SendClick(NativeMethods.WMessages type, NativeMethods.Point pos)
+        {
+            switch (type)
+            {
+                case NativeMethods.WMessages.WM_LBUTTONDOWN:
+                    NativeMethods.PostMessage(_handle,
+                        NativeMethods.WMessages.WM_LBUTTONDOWN, 0x1,
+                        (pos.Y << 16) | (pos.X & 0xFFFF));
+                    return;
+                case NativeMethods.WMessages.WM_LBUTTONUP:
+                    NativeMethods.PostMessage(_handle,
+                        NativeMethods.WMessages.WM_LBUTTONUP, 0x1,
+                        (pos.Y << 16) | (pos.X & 0xFFFF));
+                    return;
+                default:
+                    return;
+            }
+        }
+
 
         private bool _disposed;
 
