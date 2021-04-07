@@ -20,6 +20,8 @@ namespace ErogeHelper.ViewModel.Window
         public GameViewModel(
             IGameDataService dataService,
             IWindowManager windowManager,
+            // UNDONE
+            ITouchConversionHooker touchConversionHooker,
             EhConfigRepository ehConfigRepository,
             EhGlobalValueRepository ehGlobalValueRepository,
             TextViewModel textViewModel)
@@ -29,6 +31,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehGlobalValueRepository = ehGlobalValueRepository;
             TextControl = textViewModel;
 
+            touchConversionHooker.SetHook();
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {

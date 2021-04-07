@@ -10,6 +10,7 @@
     <ApplicationManifest>assets\app.manifest</ApplicationManifest>
     <Version>0.0.6</Version>
     <Authors>k1mlka</Authors>
+    <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,7 +8,6 @@
         public CardControl()
         {
             InitializeComponent();
-            //DataContext = Caliburn.Micro.IoC.Get<ViewModel.Control.CardViewModel>();
         }
     }
 }

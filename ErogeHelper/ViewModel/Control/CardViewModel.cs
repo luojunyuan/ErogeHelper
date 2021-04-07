@@ -77,7 +77,7 @@ namespace ErogeHelper.ViewModel.Control
         public UIElement? PlacementTarget
         {
             get => _placementTarget;
-            set { _placementTarget = value; NotifyOfPropertyChange(() => PlacementTarget);}
+            set { _placementTarget = value; NotifyOfPropertyChange(() => PlacementTarget); }
         }
 
         /// <summary>

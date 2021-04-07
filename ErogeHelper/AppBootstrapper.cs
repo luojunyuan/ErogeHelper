@@ -24,7 +24,6 @@ using System.Net.Http;
 using System.Text.Json;
 using ErogeHelper.Model.Factory;
 using ErogeHelper.Model.Factory.Interface;
-using ErogeHelper.ViewModel.Control;
 
 namespace ErogeHelper
 {
@@ -45,7 +44,7 @@ namespace ErogeHelper
         {
             // Put the database update into a scope to ensure that all resources will be disposed.
             using var scope = _serviceProvider.CreateScope();
-            Utils.UpdateEhDatabase(scope.ServiceProvider);
+            Utils.UpdateEhDatabase(scope.ServiceProvider); 
 
             if (e.Args.Length == 0)
             {
@@ -195,7 +194,6 @@ namespace ErogeHelper
                 .ToList()
                 .ForEach(viewModelType => services.AddTransient(
                     viewModelType, viewModelType));
-            //services.AddSingleton<CardViewModel>();
 
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
@@ -220,6 +218,7 @@ namespace ErogeHelper
             services.AddTransient<IHookDataService, HookDataService>();
             services.AddTransient<IDictFactory, DictFactory>();
             services.AddTransient<IMeCabService, MeCabService>();
+            services.AddTransient<ITouchConversionHooker, TouchConversionHooker>();
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()

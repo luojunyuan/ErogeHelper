@@ -13,28 +13,17 @@ namespace ErogeHelper.Model.Service
 {
     public class MeCabService : IMeCabService
     {
-        public MeCabService(EhConfigRepository ehConfigRepository)
-        {
-            _ehConfigRepository = ehConfigRepository;
-
-            _tagger = MeCabTagger.Create(new MeCabParam
-            {
-                DicDir = Path.Combine(_ehConfigRepository.AppDataDir, "dic")
-            });
-        }
-
-        private readonly EhConfigRepository _ehConfigRepository;
         private MeCabTagger? _tagger;
 
-        public void CreateTagger()
+        public void CreateTagger(string dicDir)
         {
             _tagger = MeCabTagger.Create(new MeCabParam
             {
-                DicDir = Path.Combine(_ehConfigRepository.AppDataDir, "dic")
+                DicDir = dicDir
             });
         }
 
-        public IEnumerable<MeCabWord> MeCabWordUniDicEnumerable(string sentence)
+        public IEnumerable<MeCabWord> MeCabWordUniDicEnumerable(string sentence, EhConfigRepository config)
         {
             if (_tagger is null)
                 yield break;
@@ -57,14 +46,14 @@ namespace ErogeHelper.Model.Service
                 {
                     mecabWord.Kana = (node.GetLemma() ?? " ").Split('-')[^1];
                 }
-                else if (_ehConfigRepository.Romaji)
+                else if (config.Romaji)
                 {
                     mecabWord.Kana = WanaKana.ToRomaji(node.GetPron() ?? " ");
                 }
                 else if (!WanaKana.IsKana(node.Surface) &&
                          mecabWord.PartOfSpeech != Hinshi.補助記号)
                 {
-                    mecabWord.Kana = _ehConfigRepository.Hiragana
+                    mecabWord.Kana = config.Hiragana
                         ? WanaKana.ToHiragana(node.GetPron() ?? " ")
                         : node.GetPron() ?? " "; // Katakana by default
                 }

@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using ErogeHelper.Model.Repository;
 
 namespace ErogeHelper.Common
 {
@@ -119,7 +120,7 @@ namespace ErogeHelper.Common
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
             // Execute the migrations
-            runner.MigrateUp();
+            runner.MigrateUp(); // System.IO.FileNotFoundException
         }
 
         /// <summary>
@@ -229,14 +230,15 @@ namespace ErogeHelper.Common
 
         public static BindableCollection<SingleTextItem> BindableTextMaker(
             string sentence,
-            Func<string, IEnumerable<MeCabWord>> callback,
+            EhConfigRepository config,
+            Func<string, EhConfigRepository, IEnumerable<MeCabWord>> callback,
             TextTemplateType templateType)
         {
             BindableCollection<SingleTextItem> collect = new();
             // 必须在与 DependencyObject 相同的 Thread 上创建 DependencySource
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                foreach (var word in callback(sentence))
+                foreach (var word in callback(sentence, config))
                 {
                     collect.Add(new SingleTextItem(
                         word.Kana,

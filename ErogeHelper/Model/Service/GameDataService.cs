@@ -76,6 +76,7 @@ namespace ErogeHelper.Model.Service
             {
                 BindableTextItem?.Invoke(Utils.BindableTextMaker(
                     hp.Text,
+                    _ehConfigRepository,
                     _meCabService.MeCabWordUniDicEnumerable,
                     _ehConfigRepository.TextTemplateConfig));
             }

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable InconsistentNaming XXX: allowed uppercase naming
 // ReSharper disable IdentifierTypo XXX: allowed all (uppercase) naming
@@ -14,6 +15,10 @@ namespace ErogeHelper.Common
         public const int WS_EX_NOACTIVATE = 0x08000000;
         public const int WS_EX_TOOLWINDOW = 0x00000080;
         public const int GWL_EXSTYLE = -20;
+        public const int WH_MOUSE_LL = 14;
+        public const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
+
+        public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public delegate void WinEventDelegate(IntPtr hWinEventHook,
                                               SWEHEvents eventType,
@@ -169,6 +174,42 @@ namespace ErogeHelper.Common
             return SafeNativeMethods.SHAppBarMessage(dwMessage, ref pData);
         }
 
+        public static IntPtr GetModuleHandle()
+        {
+            return UnsafeNativeMethods.GetModuleHandle(null);
+        }
+
+        public static IntPtr SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, IntPtr hMod,
+            uint dwThreadId)
+        {
+            return UnsafeNativeMethods.SetWindowsHookEx(idHook, lpfn, hMod, dwThreadId);
+        }
+
+        public static IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            return UnsafeNativeMethods.CallNextHookEx(hhk, nCode, wParam, lParam);
+        }
+
+        public static bool UnhookWindowsHookEx(IntPtr hhk)
+        {
+            return UnsafeNativeMethods.UnhookWindowsHookEx(hhk);
+        }
+
+        public static void MoveCursorToPoint(int x, int y)
+        {
+            SafeNativeMethods.SetCursorPos(x, y);
+        }
+
+        public static void SendInput(uint nInputs, Input[] pInputs, int cbSize)
+        {
+            SafeNativeMethods.SendInput(nInputs, pInputs, cbSize);
+        }
+
+        public static IntPtr GetMessageExtraInfo()
+        {
+            return SafeNativeMethods.GetMessageExtraInfo();
+        }
+
         private static readonly SWEH_dwFlags WinEventHookInternalFlags = SWEH_dwFlags.WINEVENT_OUTOFCONTEXT |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS |
                                                                          SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD;
@@ -210,7 +251,7 @@ namespace ErogeHelper.Common
             public static extern bool BringWindowToTop(IntPtr hWnd);
 
             [DllImport("user32.dll")]
-            public static extern IntPtr GetWindow(IntPtr parentHWnd, NativeMethods.GW uCmd);
+            public static extern IntPtr GetWindow(IntPtr parentHWnd, GW uCmd);
 
             [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
             public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
@@ -232,6 +273,15 @@ namespace ErogeHelper.Common
 
             [DllImport("user32.dll")]
             public static extern IntPtr GetDesktopWindow();
+
+            [DllImport("user32.dll")]
+            public static extern bool SetCursorPos(int X, int Y);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            public static extern uint SendInput(uint nInputs, Input[] pInputs, int cbSize);
+
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetMessageExtraInfo();
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -244,14 +294,118 @@ namespace ErogeHelper.Common
             public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr voidProcessId);
 
             [DllImport("user32.dll", SetLastError = false)]
-            public static extern IntPtr SetWinEventHook(NativeMethods.SWEHEvents eventMin, NativeMethods.SWEHEvents eventMax,
-                                                        IntPtr hmodWinEventProc, NativeMethods.WinEventDelegate lpfnWinEventProc,
-                                                        uint idProcess, uint idThread, NativeMethods.SWEH_dwFlags dwFlags);
+            public static extern IntPtr SetWinEventHook(SWEHEvents eventMin, SWEHEvents eventMax,
+                                                        IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc,
+                                                        uint idProcess, uint idThread, SWEH_dwFlags dwFlags);
 
             [DllImport("user32.dll", SetLastError = false)]
             public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr SetWindowsHookEx(int idHook, LowLevelMouseProc lpfn, IntPtr hMod,
+                uint dwThreadId);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
+                IntPtr wParam, IntPtr lParam);
+
+
+            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr GetModuleHandle(string? lpModuleName);
         }
-         
+
+        [Flags]
+        public enum MouseEventF
+        {
+            Absolute = 0x8000,
+            HWheel = 0x01000,
+            Move = 0x0001,
+            MoveNoCoalesce = 0x2000,
+            LeftDown = 0x0002,
+            LeftUp = 0x0004,
+            RightDown = 0x0008,
+            RightUp = 0x0010,
+            MiddleDown = 0x0020,
+            MiddleUp = 0x0040,
+            VirtualDesk = 0x4000,
+            Wheel = 0x0800,
+            XDown = 0x0080,
+            XUp = 0x0100
+        }
+
+        [Flags]
+        public enum InputType
+        {
+            Mouse = 0,
+            Keyboard = 1,
+            Hardware = 2
+        }
+
+        public struct Input
+        {
+            public int type;
+            public InputUnion u;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct InputUnion
+        {
+            [FieldOffset(0)] public MouseInput mi;
+            [FieldOffset(0)] public KeyboardInput ki;
+            [FieldOffset(0)] public HardwareInput hi;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MouseInput
+        {
+            public int Dx;
+            public int Dy;
+            public uint MouseData;
+            public uint DwFlags;
+            public uint Time;
+            public IntPtr DwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct KeyboardInput
+        {
+            public ushort wVk;
+            public ushort wScan;
+            public uint dwFlags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HardwareInput
+        {
+            public uint uMsg;
+            public ushort wParamL;
+            public ushort wParamH;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MSLLHook
+        {
+            public POINT Point;
+            public uint MouseData;
+            public uint Flags;
+            public uint Time;
+            public IntPtr DwExtraInfo;
+        }
+
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
@@ -320,7 +474,9 @@ namespace ErogeHelper.Common
             ABE_BOTTOM
         }
 
-        //SetWinEventHook() flags
+        /// <summary>
+        /// <see cref="UnsafeNativeMethods.SetWinEventHook"/> flags
+        /// </summary>
         public enum SWEH_dwFlags : uint
         {
             WINEVENT_OUTOFCONTEXT = 0x0000,     // Events are ASYNC
@@ -329,7 +485,9 @@ namespace ErogeHelper.Common
             WINEVENT_INCONTEXT = 0x0004         // Events are SYNC, this causes your dll to be injected into every process
         }
 
-        //SetWinEventHook() Object Ids
+        /// <summary>
+        /// <see cref="UnsafeNativeMethods.SetWinEventHook"/> Object Ids
+        /// </summary>
         public enum SWEH_ObjectId : long
         {
             OBJID_WINDOW = 0x00000000,
@@ -348,7 +506,9 @@ namespace ErogeHelper.Common
             OBJID_NATIVEOM = 0xFFFFFFF0
         }
 
-        //SetWinEventHook() events
+        /// <summary>
+        /// <see cref="UnsafeNativeMethods.SetWinEventHook"/> events
+        /// </summary>
         public enum SWEHEvents : uint
         {
             EventMin = 0x00000001,
@@ -420,7 +580,9 @@ namespace ErogeHelper.Common
             EventAiaEnd = 0xAFFF
         }
 
-        //uCmd 可选值:
+        /// <summary>
+        /// uCmd optional values
+        /// </summary>
         public enum GW : uint
         {
             /// <summary>

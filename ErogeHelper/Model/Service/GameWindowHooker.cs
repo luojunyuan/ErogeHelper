@@ -24,6 +24,7 @@ namespace ErogeHelper.Model.Service
             _ehGlobalValueRepository = ehGlobalValueRepository;
         }
 
+        // UNDONE: 
         private readonly EhGlobalValueRepository _ehGlobalValueRepository;
   
         public async Task SetGameWindowHookAsync()
@@ -207,6 +208,7 @@ namespace ErogeHelper.Model.Service
             var cur = first;
             // 遍历计算机上所有窗口标题
             // UNDONE: limit in gameProc only
+            // https://stackoverflow.com/questions/3019066/get-all-window-handles-for-a-process
             while (cur != last)
             {
                 var outText = new StringBuilder(textLength + 1);
