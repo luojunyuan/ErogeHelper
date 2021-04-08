@@ -200,11 +200,6 @@ namespace ErogeHelper.Common
             SafeNativeMethods.SetCursorPos(x, y);
         }
 
-        public static void SendInput(uint nInputs, Input[] pInputs, int cbSize)
-        {
-            SafeNativeMethods.SendInput(nInputs, pInputs, cbSize);
-        }
-
         public static IntPtr GetMessageExtraInfo()
         {
             return SafeNativeMethods.GetMessageExtraInfo();
@@ -220,14 +215,9 @@ namespace ErogeHelper.Common
             SafeNativeMethods.MouseEvent(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
         }
 
-        public static bool GetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp)
+        public static void MouseEventRight()
         {
-            return SafeNativeMethods.GetDeviceGammaRamp(hDc, ref lpRamp);
-        }
-
-        public static bool SetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp)
-        {
-            return SafeNativeMethods.SetDeviceGammaRamp(hDc, ref lpRamp);
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
         }
 
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
@@ -315,12 +305,6 @@ namespace ErogeHelper.Common
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool PostMessage(int hWnd, uint Msg, int wParam, int lParam);
-
-            [DllImport("gdi32.dll")]
-            public static extern bool GetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp);
-
-            [DllImport("gdi32.dll")]
-            public static extern bool SetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp);
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -354,21 +338,8 @@ namespace ErogeHelper.Common
                 IntPtr wParam, IntPtr lParam);
 
 
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
             public static extern IntPtr GetModuleHandle(string? lpModuleName);
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        public struct Ramp
-        {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-            public ushort[] Red;
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-            public ushort[] Green;
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-            public ushort[] Blue;
         }
 
         public enum WMessages : uint

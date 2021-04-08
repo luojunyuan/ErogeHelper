@@ -60,8 +60,11 @@ namespace ErogeHelper.ViewModel.Page
 
             string filename = dlg.FileName;
             var dicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
+            // UNDONE: Need progress dialog
             await Task.Run(() => ZipFile.ExtractToDirectory(filename, dicPath)).ConfigureAwait(false);
             _meCabService.CreateTagger(dicPath);
+            File.Delete(filename);
+            CanEnableMecab = true;
             Log.Info("Loaded mecab-dic");
         }
 

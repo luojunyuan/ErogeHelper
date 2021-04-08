@@ -195,6 +195,7 @@ namespace ErogeHelper
                 .ToList()
                 .ForEach(viewModelType => services.AddTransient(
                     viewModelType, viewModelType));
+            services.AddSingleton<GameViewModel>();
 
             // Basic tools
             services.AddSingleton<IEventAggregator, EventAggregator>();
@@ -220,7 +221,6 @@ namespace ErogeHelper
             services.AddTransient<IDictFactory, DictFactory>();
             services.AddTransient<IMeCabService, MeCabService>();
             services.AddTransient<ITouchConversionHooker, TouchConversionHooker>();
-            services.AddTransient<IAdjustScreenBrightness, AdjustScreenBrightness>();
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()

@@ -11,7 +11,7 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>zh-Hans;zh-CN</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>

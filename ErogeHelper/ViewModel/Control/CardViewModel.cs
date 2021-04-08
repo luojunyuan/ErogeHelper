@@ -111,16 +111,13 @@ namespace ErogeHelper.ViewModel.Control
         private void SetupSearch()
         {
             MojiCollection.Clear();
-            //JishoCollection.Clear();
+            JishoCollection.Clear();
 
-            if (_ehConfigRepository.MojiDictEnable || _ehConfigRepository.JishoDictEnable)
-            {
-                DictTabVisibility = Visibility.Visible;
-            }
-            else
-            {
-                DictTabVisibility = Visibility.Collapsed;
-            }
+            MojiTabItemVisible = _ehConfigRepository.MojiDictEnable ? Visibility.Visible : Visibility.Collapsed;
+            JishoTabItemVisible = _ehConfigRepository.JishoDictEnable ? Visibility.Visible : Visibility.Collapsed;
+            DictTabVisibility = _ehConfigRepository.MojiDictEnable || _ehConfigRepository.JishoDictEnable
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         // XXX: Is this weird?
@@ -132,7 +129,7 @@ namespace ErogeHelper.ViewModel.Control
             }
             if (_ehConfigRepository.JishoDictEnable)
             {
-                //await Task.Run(async() => await JishoSearchAsync(token), token);
+                await Task.Run(async () => await JishoSearchAsync(token), token);
             }
         }
 

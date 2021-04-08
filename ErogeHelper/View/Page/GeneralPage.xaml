@@ -22,15 +22,7 @@
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />
                     <ui:HyperlinkButton 
                         Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app"/>
-                    
-                    <TextBlock Text="{x:Static resx:Strings.GeneralPage_Brightness}"/>
-                    <Slider 
-                        IsEnabled="{Binding BrightnessSliderEnable}" 
-                        Minimum="{Binding MinBrightness}" 
-                        Maximum="{Binding MaxBrightness}" Width="240"
-                        Value="{Binding BrightnessSliderValue}" 
-                        ToolTip="{x:Static resx:Strings.GeneralPage_BrightnessTip}"
-                        HorizontalAlignment="Left" AutoToolTipPlacement="TopLeft" />
+                    <Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

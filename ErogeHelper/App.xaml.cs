@@ -1,10 +1,9 @@
-﻿using Serilog;
+﻿using Ookii.Dialogs.Wpf;
+using Serilog;
 using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-using ErogeHelper.Language;
-using Ookii.Dialogs.Wpf;
 
 namespace ErogeHelper
 {
@@ -26,6 +25,8 @@ namespace ErogeHelper
             var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
             Directory.SetCurrentDirectory(currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory),
                                                             @"Could not located Eroge Helper's directory"));
+            // Set i18n
+            SetLanguageDictionary();
 
             // Set logger
             Serilog.Log.Logger = new LoggerConfiguration()
@@ -42,7 +43,7 @@ namespace ErogeHelper
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (_, unhandledExceptionArgs) =>
             {
-                if (Dispatcher.FromThread(Thread.CurrentThread) is null || 
+                if (Dispatcher.FromThread(Thread.CurrentThread) is null ||
                     Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
                     return;
 
@@ -50,7 +51,6 @@ namespace ErogeHelper
 
                 // UNDONE: Clear sub process
                 ShowErrorDialog("Fatal", ex);
-
                 Log.Fatal(ex);
             };
             DispatcherUnhandledException += (_, dispatcherUnhandledExceptionEventArgs) =>
@@ -69,16 +69,28 @@ namespace ErogeHelper
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = $"Eroge Helper - {errorLevel} Error",
+                WindowTitle = $@"Eroge Helper - {errorLevel} Error",
                 MainInstruction = ex.Message,
                 Content =
-                    "Eroge Helper run into some trouble. See detail error by click Detail information below.",
+                    @"Eroge Helper run into some trouble. See detail error by click Detail information below.",
                 ExpandedInformation = ex.InnerException?.ToString(),
             };
 
             TaskDialogButton okButton = new(ButtonType.Ok);
             dialog.Buttons.Add(okButton);
             _ = dialog.ShowDialog();
+        }
+
+        private static void SetLanguageDictionary()
+        {
+            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+            {
+                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
+                // Default english because there can be so many different system language, we rather fallback on 
+                // english in this case.
+                _ => new System.Globalization.CultureInfo(""),
+            };
         }
     }
 }

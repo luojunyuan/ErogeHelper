@@ -69,6 +69,10 @@ namespace ErogeHelper.ViewModel.Page
                 BrushColor = Brushes.Red;
                 Log.Warn(ex.Message);
             }
+            catch (TaskCanceledException ex)
+            {
+                Log.Warn(ex.Message);
+            }
             catch (Exception ex)
             {
                 // Network exception or cannot find any correct tag.

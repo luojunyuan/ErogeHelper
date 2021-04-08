@@ -18,7 +18,7 @@ namespace ErogeHelper.View.Window
             InitializeComponent();
 
             ContentFrame.Navigated += OnNavigated;
-            PageNavigate("hook", new EntranceNavigationTransitionInfo());
+            PageNavigate("general", new EntranceNavigationTransitionInfo());
         }
 
         private readonly List<(string Tag, Type PageType)> _pages = new()

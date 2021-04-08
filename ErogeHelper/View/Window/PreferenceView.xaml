@@ -8,7 +8,7 @@
         xmlns:common="clr-namespace:ErogeHelper.Common"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True" ui:TitleBar.ExtendViewIntoTitleBar="True"
-        Title="PreferenceView" Height="600" Width="800" 
+        Title="PreferenceView" Height="600" Width="600" 
         ResizeMode="CanResizeWithGrip" Topmost="True"
         Icon="pack://application:,,,/assets/app.ico" MinWidth="400">
         <!--helper:WindowPlacement.Save="True"-->
