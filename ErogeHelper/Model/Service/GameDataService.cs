@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -31,6 +32,10 @@ namespace ErogeHelper.Model.Service
             _ehConfigRepository = ehConfigRepository;
          
             textractorService.SelectedDataEvent += ProcessDataText;
+            if (_ehConfigRepository.EnableMeCab)
+            {
+                _meCabService.CreateTagger(Path.Combine(_ehConfigRepository.AppDataDir, "dic"));
+            }
         }
 
         private readonly IMeCabService _meCabService;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -8,7 +7,7 @@ namespace ErogeHelper.Installer
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {
@@ -20,36 +19,36 @@ namespace ErogeHelper.Installer
         private EventWaitHandle _eventWaitHandle = null!;
 
         /// <summary>prevent a second instance and signal it to bring its MainWindow to foreground</summary>
-        /// <seealso cref="https://stackoverflow.com/a/23730146/1644202"/>
+        /// <seealso cref="http://stackoverflow.com/a/23730146/1644202"/>
         private void SingleInstanceWatcher()
         {
             // check if it is already open.
             try
             {
                 // try to open it - if another instance is running, it will exist , if not it will throw
-                this._eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
+                _eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
 
                 // Notify other instance so it could bring itself to foreground.
-                this._eventWaitHandle.Set();
+                _eventWaitHandle.Set();
 
                 // Terminate this instance.
-                this.Shutdown();
+                Shutdown();
             }
             catch (WaitHandleCannotBeOpenedException)
             {
                 // listen to a new event (this app instance will be the new "master")
-                this._eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
+                _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
             // if this instance gets the signal to show the main window
             new Task(() =>
             {
-                while (this._eventWaitHandle.WaitOne())
+                while (_eventWaitHandle.WaitOne())
                 {
                     Current.Dispatcher.InvokeAsync(() =>
                     {
                         // could be set or removed anytime
-                        if (!Current.MainWindow.Equals(null))
+                        if (Current.MainWindow is not null)
                         {
                             var mw = Current.MainWindow;
 

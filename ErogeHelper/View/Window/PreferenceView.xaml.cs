@@ -23,8 +23,8 @@ namespace ErogeHelper.View.Window
 
         private readonly List<(string Tag, Type PageType)> _pages = new()
         {
-            //("general", typeof(GeneralPage)),
-            //("mecab", typeof(MecabPage)),
+            ("general", typeof(GeneralPage)),
+            ("mecab", typeof(MeCabPage)),
             ("hook", typeof(HookPage)),
             //("trans", typeof(TransPage)),
 

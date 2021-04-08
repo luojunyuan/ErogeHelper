@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
+using ErogeHelper.Language;
+using Ookii.Dialogs.Wpf;
 
 namespace ErogeHelper
 {
@@ -37,9 +39,6 @@ namespace ErogeHelper
 #endif
                 .CreateLogger();
 
-            // Set i18n
-            SetLanguageDictionary();
-
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (_, unhandledExceptionArgs) =>
             {
@@ -49,38 +48,37 @@ namespace ErogeHelper
 
                 var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
 
-                // UNDONE: Use https://github.com/ookii-dialogs/ookii-dialogs-wpf TaskDialog
                 // UNDONE: Clear sub process
-                ModernWpf.MessageBox.Show(ex.ToString());
+                ShowErrorDialog("Fatal", ex);
 
                 Log.Fatal(ex);
             };
             DispatcherUnhandledException += (_, dispatcherUnhandledExceptionEventArgs) =>
             {
                 // More friendly
-                //dispatcherUnhandledExceptionEventArgs.Handled = true;
+                dispatcherUnhandledExceptionEventArgs.Handled = true;
 
                 var ex = dispatcherUnhandledExceptionEventArgs.Exception;
 
-                ModernWpf.MessageBox.Show(ex.ToString(), "UI");
-
+                ShowErrorDialog("UI", ex);
                 Log.Error(ex);
             };
         }
 
-        private static void SetLanguageDictionary()
+        private static void ShowErrorDialog(string errorLevel, Exception ex)
         {
-            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+            using var dialog = new TaskDialog
             {
-                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
-                // Default english because there can be so many different system language, we rather fallback on
-                // english in this case.
-                _ => new System.Globalization.CultureInfo(string.Empty),
+                WindowTitle = $"Eroge Helper - {errorLevel} Error",
+                MainInstruction = ex.Message,
+                Content =
+                    "Eroge Helper run into some trouble. See detail error by click Detail information below.",
+                ExpandedInformation = ex.InnerException?.ToString(),
             };
-            // UNDONE: Delete those directories which not defined in the ErogeHelper.Language project after build
-            // But define all the the name in this dictionary switcher
-            // 真的没有和他文件夹一样多的国家与地区，上一个版本就很好。选择性的增加语言还是明智之举
+
+            TaskDialogButton okButton = new(ButtonType.Ok);
+            dialog.Buttons.Add(okButton);
+            _ = dialog.ShowDialog();
         }
     }
 }

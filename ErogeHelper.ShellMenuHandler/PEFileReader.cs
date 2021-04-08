@@ -2,19 +2,19 @@
 
 namespace ErogeHelper.ShellMenuHandler
 {
-    public enum PEType
+    public enum PeType
     {
         X32,
         X64,
         Unknown
     }
 
-    public static class PEFileReader
+    public static class PeFileReader
     {
-        public static PEType GetPEType(string path)
+        public static PeType GetPeType(string path)
         {
             if (string.IsNullOrEmpty(path))
-                return PEType.Unknown;
+                return PeType.Unknown;
 
             try
             {
@@ -24,28 +24,31 @@ namespace ErogeHelper.ShellMenuHandler
                                                     FileShare.ReadWrite)))
                 {
                     if (br.BaseStream.Length < 0x3C + 4 || br.ReadUInt16() != 0x5A4D)
-                        return PEType.Unknown;
+                        return PeType.Unknown;
 
                     br.BaseStream.Seek(0x3C, SeekOrigin.Begin);
                     var pos = br.ReadUInt32() + 4;
 
                     if (pos + 2 > br.BaseStream.Length)
-                        return PEType.Unknown;
+                        return PeType.Unknown;
 
                     br.BaseStream.Seek(pos, SeekOrigin.Begin);
                     var machine = br.ReadUInt16();
 
-                    if (machine == 0x014C)
-                        return PEType.X32;
-                    else if (machine == 0x8664)
-                        return PEType.X64;
-
-                    return PEType.Unknown;
+                    switch (machine)
+                    {
+                        case 0x014C:
+                            return PeType.X32;
+                        case 0x8664:
+                            return PeType.X64;
+                        default:
+                            return PeType.Unknown;
+                    }
                 }
             }
             catch
             {
-                return PEType.Unknown;
+                return PeType.Unknown;
             }
         }
     }

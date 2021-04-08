@@ -4,19 +4,19 @@ using System.Runtime.InteropServices;
 
 namespace ErogeHelper.ShellMenuHandler
 {
-    static class SystemHelper
+    internal static class SystemHelper
     {
         public static bool Is4KDisplay()
         {
-            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
-            IntPtr desktop = g.GetHdc();
+            var g = Graphics.FromHwnd(IntPtr.Zero);
+            var desktop = g.GetHdc();
 
             // 10 = VERTRES
             // 90 = LOGPIXELSY
             // 117 = DESKTOPVERTRES
-            int logicDpi = GetDeviceCaps(desktop, 10);
-            int logY = GetDeviceCaps(desktop, 90);
-            int realDpi = GetDeviceCaps(desktop, 117);
+            var logicDpi = GetDeviceCaps(desktop, 10);
+            var logY = GetDeviceCaps(desktop, 90);
+            var realDpi = GetDeviceCaps(desktop, 117);
 
             g.ReleaseHdc();
 
@@ -24,6 +24,6 @@ namespace ErogeHelper.ShellMenuHandler
         }
 
         [DllImport("gdi32.dll")]
-        private static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
+        private static extern int GetDeviceCaps(IntPtr hDc, int nIndex);
     }
 }

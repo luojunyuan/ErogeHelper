@@ -220,6 +220,16 @@ namespace ErogeHelper.Common
             SafeNativeMethods.MouseEvent(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
         }
 
+        public static bool GetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp)
+        {
+            return SafeNativeMethods.GetDeviceGammaRamp(hDc, ref lpRamp);
+        }
+
+        public static bool SetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp)
+        {
+            return SafeNativeMethods.SetDeviceGammaRamp(hDc, ref lpRamp);
+        }
+
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
@@ -305,6 +315,12 @@ namespace ErogeHelper.Common
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool PostMessage(int hWnd, uint Msg, int wParam, int lParam);
+
+            [DllImport("gdi32.dll")]
+            public static extern bool GetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp);
+
+            [DllImport("gdi32.dll")]
+            public static extern bool SetDeviceGammaRamp(IntPtr hDc, ref Ramp lpRamp);
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -340,6 +356,19 @@ namespace ErogeHelper.Common
 
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             public static extern IntPtr GetModuleHandle(string? lpModuleName);
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        public struct Ramp
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Red;
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Green;
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+            public ushort[] Blue;
         }
 
         public enum WMessages : uint

@@ -163,7 +163,7 @@
     <value>设置管理员身份运行</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要移动或删除EH文件夹请先注销掉我。</value>
+    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要更新、移动或删除EH文件夹请先点击下方的"卸载"来注销掉我。</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>注册</value>

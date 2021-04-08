@@ -18,12 +18,18 @@ namespace ErogeHelper.Model.Repository
         /// <param name="rootDir"></param>
         public EhConfigRepository(string rootDir)
         {
-            // INSTEAD: Have a look on System.Configuration ?
             AppDataDir = Path.Combine(rootDir, "ErogeHelper");
 
             _configFilePath = Path.Combine(AppDataDir, "EhSettings.json");
             LocalSetting = LocalSettingInit(_configFilePath);
             Log.Info($"Application config path {_configFilePath}");
+        }
+
+        public void ClearConfig()
+        {
+            LocalSetting.Clear();
+
+            File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
         }
 
         #region Private Methods
@@ -97,13 +103,6 @@ namespace ErogeHelper.Model.Repository
 
             LocalSetting[propertyName] = targetStrValue;
             Log.Debug($"{propertyName} changed to {targetStrValue}");
-            File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
-        }
-
-        private void ClearConfig()
-        {
-            LocalSetting.Clear();
-
             File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
         }
 

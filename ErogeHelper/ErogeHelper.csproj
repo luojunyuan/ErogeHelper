@@ -24,6 +24,7 @@
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="Refit" Version="6.0.38" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.11.7" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />

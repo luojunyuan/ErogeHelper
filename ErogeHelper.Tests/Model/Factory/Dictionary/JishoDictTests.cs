@@ -8,9 +8,9 @@ namespace ErogeHelper.Tests.Model.Factory.Dictionary
     [TestClass()]
     public class JishoDictTests
     {
-        [TestMethod()]
+        [TestMethod]
         [DataRow("走った")]
-        [DataRow("もだありません")]
+        //[DataRow("もだありません")]
         public async Task SearchWordAsyncTest(string query)
         {
             var dict = new JishoDict();
@@ -20,9 +20,9 @@ namespace ErogeHelper.Tests.Model.Factory.Dictionary
             Assert.AreEqual(200, result.Meta.Status);
         }
 
-        [TestMethod()]
+        [TestMethod]
         [DataRow("pettanko", "", "ぺちゃんこ", "crushed flat", "Na-adjective")]
-        // [DataRow("原発性免疫不全症", "原発性免疫不全症", "げんぱつせいめんえきふぜんしょう", "primary immunodeficiency syndrome", "Noun")] waste my time
+        // [DataRow("原発性免疫不全症", "原発性免疫不全症", "げんぱつせいめんえきふぜんしょう", "primary immunodeficiency syndrome", "Noun")]
         [DataRow("にく", "肉", "にく", "flesh", "Noun")]
         public async Task SearchWordTest(string searchQuery, string firstWord, string firstReading, string firstEnglishDefinition, string firstPartOfSpeech)
         {
@@ -41,7 +41,7 @@ namespace ErogeHelper.Tests.Model.Factory.Dictionary
             Assert.AreEqual(firstPartOfSpeech, dataList[0].Senses[0].PartsOfSpeech[0]);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public async Task SearchWordFullAsync()
         {
             var dict = new JishoDict();

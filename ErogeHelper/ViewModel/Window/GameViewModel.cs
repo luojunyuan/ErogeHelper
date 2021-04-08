@@ -76,7 +76,6 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        public bool CanZoomIn => true;
         public void ZoomIn()
         {
             FontSize += 2;
@@ -90,14 +89,11 @@ namespace ErogeHelper.ViewModel.Window
             NotifyOfPropertyChange(() => CanZoomOut);
         }
 
-        public bool CanVolumeUp => true;
         public async void VolumeUp() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
-        public bool CanVolumeDown => true;
         public async void VolumeDown() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
-        public bool CanSwitchGameScreen => true;
         public async void SwitchGameScreen()
         {
             var handle = _ehGlobalValueRepository.MainProcess.MainWindowHandle;
@@ -128,7 +124,6 @@ namespace ErogeHelper.ViewModel.Window
             set { _isSourceTextPined = value; NotifyOfPropertyChange(() => IsSourceTextPined); }
         }
 
-        public bool CanPinSourceTextToggle => true;
         public void PinSourceTextToggle()
         {
             if (IsSourceTextPined)
@@ -244,15 +239,12 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        public bool CanTaskbarNotifyArea => true;
         public async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.A).Invoke().ConfigureAwait(false);
 
-        public bool CanTaskView => true;
         public async void TaskView() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
 
-        public bool CanScreenShot => true;
         public async void ScreenShot()
         {
             AssistiveTouchIsVisible = false;

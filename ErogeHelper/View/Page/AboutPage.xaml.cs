@@ -8,7 +8,6 @@
         public AboutPage()
         {
             InitializeComponent();
-
             DataContext = Caliburn.Micro.IoC.Get<ViewModel.Page.AboutViewModel>();
         }
     }

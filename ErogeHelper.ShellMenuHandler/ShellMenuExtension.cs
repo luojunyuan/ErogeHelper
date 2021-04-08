@@ -3,6 +3,7 @@ using SharpShell.Attributes;
 using SharpShell.SharpContextMenu;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +16,7 @@ namespace ErogeHelper.ShellMenuHandler
     [COMServerAssociation(AssociationType.ClassOfExtension, ".exe")]
     public class ShellMenuExtension : SharpContextMenu
     {
-        private ContextMenuStrip menu = new ContextMenuStrip();
+        private ContextMenuStrip _menu = new ContextMenuStrip();
 
         /// <summary>
         /// Determines whether the menu item can be shown for the selected item.
@@ -27,15 +28,11 @@ namespace ErogeHelper.ShellMenuHandler
         protected override bool CanShowMenu()
         {
             // We can show the item only for a single selection.
-            if (SelectedItemPaths.Count() == 1)
-            {
-                this.UpdateMenu();
-                return true;
-            }
-            else
-            {
+            if (SelectedItemPaths.Count() != 1)
                 return false;
-            }
+
+            UpdateMenu();
+            return true;
         }
 
         /// <summary>
@@ -47,41 +44,42 @@ namespace ErogeHelper.ShellMenuHandler
         /// </returns>
         protected override ContextMenuStrip CreateMenu()
         {
-            menu.Items.Clear();
+            _menu.Items.Clear();
 
-            bool is64bit = PEFileReader.GetPEType(SelectedItemPaths.First()) == PEType.X64;
+            var is64Bit = PeFileReader.GetPeType(SelectedItemPaths.First()) == PeType.X64;
             // check if the selected executable is 64 bit
-            if (is64bit)
+            if (is64Bit)
             {
-                this.MenuX64();
+                MenuX64();
             }
             else
             {
-                this.MenuX86();
+                MenuX86();
             }
 
             // return the menu item
-            return menu;
+            return _menu;
         }
 
-        private static readonly bool is4K = SystemHelper.Is4KDisplay();
+        private static readonly bool Is4K = SystemHelper.Is4KDisplay();
 
-        private static readonly System.Drawing.Image E = is4K ? Resource.E_200 : Resource.E;
-        private static readonly System.Drawing.Image CheckboxComposite = is4K ? Resource.CheckboxComposite_200 : Resource.CheckboxComposite;
-        private static readonly System.Drawing.Image Checkbox = is4K ? Resource.Checkbox_200 : Resource.Checkbox;
+        private static readonly Image E = Is4K ? Resource.E_200 : Resource.E;
+
+        private static readonly Image CheckboxComposite =
+            Is4K ? Resource.CheckboxComposite_200 : Resource.CheckboxComposite;
+        private static readonly Image Checkbox = Is4K ? Resource.Checkbox_200 : Resource.Checkbox;
 
         private void MenuX64()
         {
-            ToolStripMenuItem MainMenu;
-            MainMenu = new ToolStripMenuItem
+            var mainMenu = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_DirectStart,
                 Image = E
             };
-            MainMenu.Click += (sender, args) => MainProcess(false);
+            mainMenu.Click += (sender, args) => MainProcess(false);
 
-            menu.Items.Clear();
-            menu.Items.Add(MainMenu);
+            _menu.Items.Clear();
+            _menu.Items.Add(mainMenu);
         }
 
         /// <summary>
@@ -89,76 +87,72 @@ namespace ErogeHelper.ShellMenuHandler
         /// </summary>
         protected void MenuX86()
         {
-            ToolStripMenuItem MainMenu;
-            MainMenu = new ToolStripMenuItem
+            var mainMenu = new ToolStripMenuItem
             {
-                Text = "Eroge Helper",
+                Text = Language.Strings.About_AppName,
                 Image = E
             };
 
-            var DirectStartItem = new ToolStripMenuItem
+            var directStartItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_DirectStart,
                 Image = E
             };
 
-            var LEStartItem = new ToolStripMenuItem
+            var leStartItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_LEStart,
                 Image = E
             };
 
-            DirectStartItem.Click += (sender, args) => MainProcess(false);
-            LEStartItem.Click += (sender, args) => MainProcess(true);
+            directStartItem.Click += (sender, args) => MainProcess(false);
+            leStartItem.Click += (sender, args) => MainProcess(true);
 
-            MainMenu.DropDownItems.Add(DirectStartItem);
-            MainMenu.DropDownItems.Add(LEStartItem);
-            var AdminItem = new ToolStripMenuItem
+            mainMenu.DropDownItems.Add(directStartItem);
+            mainMenu.DropDownItems.Add(leStartItem);
+            var adminItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_Administrator,
+                Image = _isAdmin ? CheckboxComposite : Checkbox,
             };
 
-            if (isAdmin) 
-                AdminItem.Image = CheckboxComposite;
-            else 
-                AdminItem.Image = Checkbox;
-            AdminItem.Click += (sender, args) =>
+            adminItem.Click += (sender, args) =>
             {
-                isAdmin = !isAdmin;
+                _isAdmin = !_isAdmin;
             };
-            MainMenu.DropDownItems.Add(AdminItem);
+            mainMenu.DropDownItems.Add(adminItem);
 
-            menu.Items.Clear();
-            menu.Items.Add(MainMenu);
+            _menu.Items.Clear();
+            _menu.Items.Add(mainMenu);
         }
 
-        static bool isAdmin = false;
+        private static bool _isAdmin;
 
-        private void MainProcess(bool useLE)
+        private void MainProcess(bool useLe)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
+            var startInfo = new ProcessStartInfo();
 
             #region Get Path of dll (Same as project binary Path)
             // https://stackoverflow.com/questions/52797/how-do-i-get-the-path-of-the-assembly-the-code-is-in
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
+            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var uri = new UriBuilder(codeBase);
+            var path = Uri.UnescapeDataString(uri.Path);
             #endregion
 
             var dirPath = Path.GetDirectoryName(path);
-            var ErogeHelperProc = dirPath + @"\ErogeHelper.exe";
-            string gamePath = SelectedItemPaths.First();
-            startInfo.FileName = ErogeHelperProc;
+            var erogeHelperProc = dirPath + @"\ErogeHelper.exe";
+            var gamePath = SelectedItemPaths.First();
+            startInfo.FileName = erogeHelperProc;
             startInfo.Arguments = $"\"{gamePath}\"";
             startInfo.UseShellExecute = false;
 
-            if (useLE)
+            if (useLe)
             {
                 // gamePath must be Args[0]
                 startInfo.Arguments += " /le";
             }
 
-            if (isAdmin)
+            if (_isAdmin)
             {
                 //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.UseShellExecute = true;
@@ -181,8 +175,8 @@ namespace ErogeHelper.ShellMenuHandler
         private void UpdateMenu()
         {
             // release all resources associated to existing menu
-            menu.Dispose();
-            menu = CreateMenu();
+            _menu.Dispose();
+            _menu = CreateMenu();
         }
     }
 }

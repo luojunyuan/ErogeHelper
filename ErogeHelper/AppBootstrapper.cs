@@ -220,6 +220,7 @@ namespace ErogeHelper
             services.AddTransient<IDictFactory, DictFactory>();
             services.AddTransient<IMeCabService, MeCabService>();
             services.AddTransient<ITouchConversionHooker, TouchConversionHooker>();
+            services.AddTransient<IAdjustScreenBrightness, AdjustScreenBrightness>();
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
             services.AddFluentMigratorCore()
