@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
@@ -17,12 +18,13 @@ namespace ErogeHelper.Tests.Model.Service
         public void MeCabWordUniDicEnumerableTest()
         {
             var repo = new EhConfigRepository(TestEnvironmentValue.AppDataDir);
-            IMeCabService meCabService = new MeCabService(repo);
+            IMeCabService meCabService = new MeCabService();
             var sentence = "ヒルダは井戸から水を汲み取るのをやめなかったのテキスト。";
 
             // mecab-unidic-neologd get error when produce "スマホ"
 
-            List<MeCabWord> list = meCabService.MeCabWordUniDicEnumerable(sentence).ToList();
+            meCabService.CreateTagger(Path.Combine(repo.AppDataDir, "dic"));
+            List<MeCabWord> list = meCabService.MeCabWordUniDicEnumerable(sentence, repo).ToList();
 
             Assert.AreEqual("ヒルダ", list[0].Word);
             Assert.AreEqual(" ", list[0].Kana);
@@ -75,10 +77,11 @@ namespace ErogeHelper.Tests.Model.Service
         public void MeCabWordUniDicSpecificWordTest()
         {
             var repo = new EhConfigRepository(TestEnvironmentValue.AppDataDir);
-            IMeCabService meCabService = new MeCabService(repo);
+            IMeCabService meCabService = new MeCabService();
             var word = "スマホ";
 
-            var list = meCabService.MeCabWordUniDicEnumerable(word);
+            meCabService.CreateTagger(Path.Combine(repo.AppDataDir, "dic"));
+            var list = meCabService.MeCabWordUniDicEnumerable(word, repo);
             foreach (var meCabWord in list)
             {
                 Trace.WriteLine($"{meCabWord.Kana} {meCabWord.Word} {meCabWord.PartOfSpeech}");

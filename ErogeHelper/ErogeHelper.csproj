@@ -19,6 +19,7 @@
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
+    <PackageReference Include="luojunyuan.autohotkey" Version="1.0.1" />
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />

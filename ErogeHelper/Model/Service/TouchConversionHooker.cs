@@ -3,22 +3,24 @@ using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Service.Interface;
 using System;
 using System.ComponentModel;
-using Caliburn.Micro;
-using ErogeHelper.Model.Repository;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using AutoHotkey.Interop;
 
 namespace ErogeHelper.Model.Service
 {
     public class TouchConversionHooker : ITouchConversionHooker, IDisposable
     {
-        // UNDONE
         public TouchConversionHooker()
         {
             _hookCallback = HookCallback;
         }
 
         private readonly NativeMethods.LowLevelMouseProc _hookCallback;
+
         private IntPtr _hookId = IntPtr.Zero;
+        private AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
 
         public void SetHook()
         {
@@ -31,6 +33,12 @@ namespace ErogeHelper.Model.Service
             }
         }
 
+        public void UnloadHook()
+        {
+            Dispose();
+        }
+
+        private readonly string _projectPath = Path.GetDirectoryName(typeof(App).Assembly.Location) ?? string.Empty;
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
@@ -48,14 +56,13 @@ namespace ErogeHelper.Model.Service
                         if (_press)
                         {
                             NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
-
-                            SendClick(NativeMethods.WMessages.WM_LBUTTONDOWN, _pos4.Point);
-                            SendClick(NativeMethods.WMessages.WM_LBUTTONUP, _pos4.Point);
+                            _ahk.ExecRaw("MouseClick, left");
                         }
 
                         if (_longPress)
                         {
                             NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
+                            _ahk.ExecRaw("MouseClick, right");
                         }
                         return new IntPtr(1);
                     }
@@ -84,6 +91,10 @@ namespace ErogeHelper.Model.Service
             {
                 _press = true;
             }
+            else if (_pos4.Token == 0x200 && _pos3.Token == 0x200 && _pos2.Token == 0x200 && _pos1.Token == 0x202)
+            {
+                _press = true;
+            }
             else if (_pos4.Token == 0x200 && _pos3.Token == 0x200 && _pos2.Token == 0x204 && _pos1.Token == 0x205)
             {
                 _longPress = true;
@@ -94,28 +105,6 @@ namespace ErogeHelper.Model.Service
                 _longPress = false;
             }
         }
-
-        private readonly IntPtr _handle = IoC.Get<EhGlobalValueRepository>().MainProcess.MainWindowHandle;
-
-        private void SendClick(NativeMethods.WMessages type, NativeMethods.Point pos)
-        {
-            switch (type)
-            {
-                case NativeMethods.WMessages.WM_LBUTTONDOWN:
-                    NativeMethods.PostMessage(_handle,
-                        NativeMethods.WMessages.WM_LBUTTONDOWN, 0x1,
-                        (pos.Y << 16) | (pos.X & 0xFFFF));
-                    return;
-                case NativeMethods.WMessages.WM_LBUTTONUP:
-                    NativeMethods.PostMessage(_handle,
-                        NativeMethods.WMessages.WM_LBUTTONUP, 0x1,
-                        (pos.Y << 16) | (pos.X & 0xFFFF));
-                    return;
-                default:
-                    return;
-            }
-        }
-
 
         private bool _disposed;
 

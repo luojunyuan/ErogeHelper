@@ -20,18 +20,17 @@ namespace ErogeHelper.ViewModel.Window
         public GameViewModel(
             IGameDataService dataService,
             IWindowManager windowManager,
-            // UNDONE
             ITouchConversionHooker touchConversionHooker,
             EhConfigRepository ehConfigRepository,
             EhGlobalValueRepository ehGlobalValueRepository,
             TextViewModel textViewModel)
         {
+            _touchHooker = touchConversionHooker;
             _windowManager = windowManager;
             _ehConfigRepository = ehConfigRepository;
             _ehGlobalValueRepository = ehGlobalValueRepository;
             TextControl = textViewModel;
 
-            touchConversionHooker.SetHook();
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {
@@ -50,6 +49,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IWindowManager _windowManager;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly EhGlobalValueRepository _ehGlobalValueRepository;
+        private readonly ITouchConversionHooker _touchHooker;
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
@@ -223,6 +223,25 @@ namespace ErogeHelper.ViewModel.Window
                                             exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
 
                 //GameConfig.NoFocus = false;
+            }
+        }
+
+        private bool _isTouchToMouse;
+
+        public bool IsTouchToMouse
+        {
+            get => _isTouchToMouse;
+            set { _isTouchToMouse = value; NotifyOfPropertyChange(() => IsTouchToMouse); }
+        }
+        public void TouchToMouseToggle()
+        {
+            if (IsTouchToMouse)
+            {
+                _touchHooker.SetHook();
+            }
+            else
+            {
+                _touchHooker.UnloadHook();
             }
         }
 

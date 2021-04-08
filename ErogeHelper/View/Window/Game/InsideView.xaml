@@ -108,6 +108,10 @@
                                 Icon="Trim" IsChecked="{Binding IsLostFocus}" 
                                 ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
                                 cal:Message.Attach="[Click] = [FocusToggle]"/>
+                            <ui:AppBarToggleButton 
+                                Icon="TouchPointer" IsChecked="{Binding IsTouchToMouse}" 
+                                ToolTip="Touch to mouse" 
+                                cal:Message.Attach="[Click] = [TouchToMouseToggle]"/>
 
                             <ui:CommandBarFlyout.SecondaryCommands>
                                 <ui:AppBarButton 
