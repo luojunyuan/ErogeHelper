@@ -44,10 +44,7 @@ namespace ErogeHelper.Model.Repository
         /// </summary>
         public IntPtr GameInsideViewHandle { get; set; } = IntPtr.Zero;
 
-        /// <summary>
-        /// Used in Textractor and <see cref="HookViewModel"/>, especially <see cref="HookViewModel.SubmitSetting"/>
-        /// </summary>
-        public GameTextSetting TextractorSetting { get; set; } = new();
+        public string RegExp { get; set; } = string.Empty;
 
         public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "error";
     }

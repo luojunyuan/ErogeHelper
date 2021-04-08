@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
@@ -82,7 +84,8 @@ namespace ErogeHelper.ViewModel.Window
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
-            (_ehGlobalValueRepository.GameProcesses, _ehGlobalValueRepository.MainProcess) =
+            IEnumerable<Process> gameProcesses;
+            (gameProcesses, _ehGlobalValueRepository.MainProcess) =
                 Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
             _ = _gameWindowHooker.SetGameWindowHookAsync();
 
@@ -90,12 +93,13 @@ namespace ErogeHelper.ViewModel.Window
                 _ehGlobalValueRepository.GamePath =
                     _ehGlobalValueRepository.MainProcess.MainModule?.FileName ?? string.Empty;
             var md5 = Utils.GetFileMd5(gamePath);
+            _ehGlobalValueRepository.Md5 = md5;
 
             var settingJson = string.Empty;
             var gameInfo = await _ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
             if (gameInfo is not null)
             {
-                settingJson = gameInfo.GameSettingJson;
+                settingJson = gameInfo.TextractorSettingJson;
             }
             else
             {
@@ -121,15 +125,13 @@ namespace ErogeHelper.ViewModel.Window
             {
                 Log.Info("Not find game hook setting, open hook panel.");
                 await _windowManager.ShowWindowFromIoCAsync<HookConfigViewModel>().ConfigureAwait(false);
-                _textractorService.InjectProcesses();
+                _textractorService.InjectProcesses(gameProcesses);
                 _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
                 return;
             }
 
-            var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
-            _ehGlobalValueRepository.Md5 = md5;
-            _ehGlobalValueRepository.TextractorSetting = gameSetting;
-            _textractorService.InjectProcesses();
+            var textractorSetting = JsonSerializer.Deserialize<TextractorSetting>(settingJson) ?? new TextractorSetting();
+            _textractorService.InjectProcesses(gameProcesses, textractorSetting);
 
             // NOTE: WindowManger每次都会创建新窗口，之后再调相同的VM的话就会创建新的窗口，所以必须通过VM或Message来操作相应View
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);

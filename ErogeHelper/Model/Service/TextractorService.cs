@@ -1,12 +1,11 @@
-﻿using System;
+﻿using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Function;
+using ErogeHelper.Model.Service.Interface;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Common.Function;
-using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
@@ -15,15 +14,13 @@ namespace ErogeHelper.Model.Service
         public event Action<HookParam>? DataEvent;
         public event Action<HookParam>? SelectedDataEvent;
 
-        public TextractorService(EhGlobalValueRepository ehGlobalValueRepository)
-        {
-            _ehGlobalValueRepository = ehGlobalValueRepository;
-        }
+        public TextractorSetting Setting { get; set; } = new();
 
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
-
-        public void InjectProcesses()
+        public void InjectProcesses(IEnumerable<Process> gameProcesses, TextractorSetting? setting = null)
         {
+            _gameProcesses = gameProcesses;
+            Setting = setting ?? new TextractorSetting();
+
             // Current texthook.dll version 4.15
             string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
             if (!File.Exists(textractorPath))
@@ -36,12 +33,15 @@ namespace ErogeHelper.Model.Service
 
             _ = TextHostDll.TextHostInit(_callback, _ => { }, _createThread, _removeThread, _output);
 
-            foreach (Process p in _ehGlobalValueRepository.GameProcesses)
+            foreach (Process p in _gameProcesses)
             {
                 _ = TextHostDll.InjectProcess((uint)p.Id);
                 Log.Info($"attach to PID {p.Id}.");
             }
+
         }
+
+        private IEnumerable<Process> _gameProcesses = new List<Process>();
 
         public void InsertHook(string hookcode)
         {
@@ -69,7 +69,7 @@ namespace ErogeHelper.Model.Service
                 engineName = hookcode[(hookcode.LastIndexOf(':') + 1)..];
 
                 // 重复插入相同的code(可能)会导致产生很高位的Context
-                if (_threadHandleDict.Any(hcodeItem => 
+                if (_threadHandleDict.Any(hcodeItem =>
                     engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.Hookcode)))
                 {
                     DataEvent?.Invoke(new HookParam
@@ -82,7 +82,7 @@ namespace ErogeHelper.Model.Service
                 }
             }
 
-            foreach (Process p in _ehGlobalValueRepository.GameProcesses)
+            foreach (Process p in _gameProcesses)
             {
                 _ = TextHostDll.InsertHook((uint)p.Id, hookcode);
                 Log.Info($"Try insert hook {hookcode} to PID {p.Id}");
@@ -93,6 +93,10 @@ namespace ErogeHelper.Model.Service
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<string> GetConsoleOutputInfo() => _consoleOutput;
+
+        private readonly List<string> _consoleOutput = new();
 
         #region TextHost Callback Implement
 
@@ -132,25 +136,27 @@ namespace ErogeHelper.Model.Service
             HookParam hp = _threadHandleDict[threadId];
             hp.Text = opData;
 
+            if (threadId == 0)
+                _consoleOutput.Add(hp.Text);
+
             DataEvent?.Invoke(hp);
 
-            if (_ehGlobalValueRepository.Md5 == string.Empty)
-                return;
-
-            var setting = _ehGlobalValueRepository.TextractorSetting;
-
-            if (setting.Hookcode.Equals(hp.Hookcode)
-                && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
-                && setting.SubThreadContext == hp.Ctx2)
+            foreach (var hookSetting in Setting.HookSettings)
             {
-                Log.Debug(hp.Text);
-                SelectedDataEvent?.Invoke(hp);
-            }
-            else if (setting.Hookcode.StartsWith('R')
-                     && hp.Name.Equals("READ"))
-            {
-                Log.Debug(hp.Text);
-                SelectedDataEvent?.Invoke(hp);
+                if (Setting.Hookcode.Equals(hp.Hookcode)
+                    && (hookSetting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
+                    && hookSetting.SubThreadContext == hp.Ctx2)
+                {
+                    Log.Debug(hp.Text);
+                    SelectedDataEvent?.Invoke(hp);
+                }
+                // UNDONE: Improve this in the future
+                else if (Setting.Hookcode.StartsWith('R')
+                         && hp.Name.Equals("READ"))
+                {
+                    Log.Debug(hp.Text);
+                    SelectedDataEvent?.Invoke(hp);
+                }
             }
         }
 
@@ -158,11 +164,9 @@ namespace ErogeHelper.Model.Service
 
         private void OnConnectCallBackHandle(uint processId)
         {
-            var setting = _ehGlobalValueRepository.TextractorSetting;
-
-            if (setting.IsUserHook)
+            if (Setting.IsUserHook)
             {
-                InsertHook(setting.Hookcode);
+                InsertHook(Setting.Hookcode);
             }
         }
 

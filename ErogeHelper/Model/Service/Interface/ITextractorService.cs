@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Repository;
 
 namespace ErogeHelper.Model.Service.Interface
 {
@@ -11,10 +12,19 @@ namespace ErogeHelper.Model.Service.Interface
 
         event Action<HookParam> SelectedDataEvent;
 
-        void InjectProcesses();
+        TextractorSetting Setting { get; set; } 
+
+        /// <summary>
+        /// Inject hooks into target processes
+        /// </summary>
+        /// <param name="gameProcesses"></param>
+        /// <param name="setting">Textractor init callback functions depends on some parameters</param>
+        void InjectProcesses(IEnumerable<Process> gameProcesses, TextractorSetting? setting = null);
 
         void InsertHook(string hookcode);
 
         void SearchRCode(string text);
+
+        IEnumerable<string> GetConsoleOutputInfo();
     }
 }

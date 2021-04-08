@@ -22,7 +22,7 @@ namespace ErogeHelper.Model.Repository
 
         public async Task SetGameInfoAsync(GameInfoTable gameInfoTable)
         {
-            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @GameSettingJson)";
+            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @TextractorSettingJson, @IsLostFocus, @IsEnableTouchToMouse)";
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }
 
@@ -30,7 +30,7 @@ namespace ErogeHelper.Model.Repository
         {
             string query = @"
 UPDATE GameInfo 
-SET GameIdList = @GameIdList, GameSettingJson = @GameSettingJson
+SET GameIdList=@GameIdList, TextractorSettingJson=@TextractorSettingJson, IsLostFocus=@IsLostFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
 WHERE Md5 = @Md5";
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }

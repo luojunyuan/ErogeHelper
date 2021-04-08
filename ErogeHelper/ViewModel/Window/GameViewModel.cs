@@ -16,7 +16,6 @@ namespace ErogeHelper.ViewModel.Window
 {
     public class GameViewModel : PropertyChangedBase
     {
-
         public GameViewModel(
             IGameDataService dataService,
             IWindowManager windowManager,

@@ -2,6 +2,7 @@
 using ErogeHelper.Model.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace ErogeHelper.Tests.Model.Repository
     [TestClass]
     public class EhDbRepositoryTests
     {
+        // UNDONE: 先确认db文件是否存在，不存在就要创建，创建后就不管他了
         [TestMethod]
         public void EhDbRepositoryBasicQueryTest()
         {
@@ -41,26 +43,27 @@ namespace ErogeHelper.Tests.Model.Repository
             var ehDbRepo = new EhDbRepository(connectString);
             var fakeMd5 = "0123456789ABCDEF0123456789ABCDEF";
             var fakeIdList = "1,2,3";
-            var hookSetting = new GameTextSetting
+            var textractorSetting = new TextractorSetting
             {
-                Hookcode = "HA8@168460:cs2_open.exe",
                 IsUserHook = true,
-                RegExp = string.Empty,
-                SubThreadContext = 0,
-                ThreadContext = 0,
+                Hookcode = "HA8@168460:cs2_open.exe",
+                HookSettings = new List<TextractorSetting.HookSetting>
+                {
+                    new() {ThreadContext = 0, SubThreadContext = 0}
+                }
             };
-            var fakeJson = JsonSerializer.Serialize(hookSetting);
+            var fakeJson = JsonSerializer.Serialize(textractorSetting);
             var fakeGameInfo = new GameInfoTable
             {
                 Md5 = fakeMd5,
                 GameIdList = fakeIdList,
-                GameSettingJson = fakeJson,
+                TextractorSettingJson = fakeJson,
             };
             var newGameInfo = new GameInfoTable
             {
                 Md5 = fakeMd5,
                 GameIdList = fakeIdList,
-                GameSettingJson = string.Empty,
+                TextractorSettingJson = string.Empty,
             };
 
             // Act
@@ -76,12 +79,12 @@ namespace ErogeHelper.Tests.Model.Repository
             Assert.IsNotNull(result);
             Assert.AreEqual(fakeMd5, result!.Md5);
             Assert.AreEqual(fakeIdList, result!.GameIdList);
-            Assert.AreEqual(fakeJson, result!.GameSettingJson);
-            // Clear the GameSettingJson field
+            Assert.AreEqual(fakeJson, result!.TextractorSettingJson);
+            // Clear the TextractorSettingJson field
             await ehDbRepo.UpdateGameInfoAsync(newGameInfo).ConfigureAwait(false);
             result = await ehDbRepo.GetGameInfoAsync(fakeMd5).ConfigureAwait(false);
             Assert.IsNotNull(result);
-            Assert.AreEqual(string.Empty, result!.GameSettingJson);
+            Assert.AreEqual(string.Empty, result!.TextractorSettingJson);
             await ehDbRepo.DeleteGameInfoAsync(fakeMd5).ConfigureAwait(false);
             result = await ehDbRepo.GetGameInfoAsync(fakeMd5).ConfigureAwait(false);
             Assert.IsNull(result);

@@ -12,7 +12,7 @@ namespace ErogeHelper.Model.Entity.Response
 
         public override string ToString()
         {
-            return $"GameId={GameId} GameSettingJson={GameSettingJson}";
+            return $"GameId={GameId} TextractorSettingJson={GameSettingJson}";
         }
     }
 }

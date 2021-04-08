@@ -44,7 +44,7 @@ namespace ErogeHelper.Model.Service
 
             // User define RegExp 
             // UNDONE: submit的同时修改到这儿、就不使用运行时变量，直接从repo读？
-            var pattern = _ehGlobalValueRepository.TextractorSetting.RegExp;
+            var pattern = _ehGlobalValueRepository.RegExp;
             if (pattern != string.Empty)
             {
                 var list = Regex.Split(hp.Text, pattern);

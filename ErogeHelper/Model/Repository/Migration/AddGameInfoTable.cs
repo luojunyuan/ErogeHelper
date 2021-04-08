@@ -10,7 +10,9 @@ namespace ErogeHelper.Model.Repository.Migration
             Create.Table("GameInfo")
                 .WithColumn("Md5").AsString()
                 .WithColumn("GameIdList").AsString()
-                .WithColumn("GameSettingJson").AsString();
+                .WithColumn("TextractorSettingJson").AsString()
+                .WithColumn("IsLostFocus").AsBoolean()
+                .WithColumn("IsEnableTouchToMouse").AsBoolean();
         }
 
         public override void Down()

@@ -85,9 +85,11 @@ namespace ErogeHelper
                 });
             }
 
-            (ehGlobalValueRepository.GameProcesses, ehGlobalValueRepository.MainProcess) =
+            IEnumerable<Process> tmp;
+            (tmp, ehGlobalValueRepository.MainProcess) =
                 Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-            if (!ehGlobalValueRepository.GameProcesses.Any())
+            var gameProcesses = tmp.ToList();
+            if (gameProcesses.Any())
             {
                 await MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
@@ -109,7 +111,7 @@ namespace ErogeHelper
             var gameInfo = await ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
             if (gameInfo is not null)
             {
-                settingJson = gameInfo.GameSettingJson;
+                settingJson = gameInfo.TextractorSettingJson;
             }
             else
             {
@@ -126,7 +128,7 @@ namespace ErogeHelper
                         {
                             Md5 = md5,
                             GameIdList = content.GameId.ToString(),
-                            GameSettingJson = content.GameSettingJson,
+                            TextractorSettingJson = content.GameSettingJson,
                         }).ConfigureAwait(false);
                     }
                     Log.Debug($"EHServer: {resp.StatusCode} {resp.Content}");
@@ -140,10 +142,10 @@ namespace ErogeHelper
             if (settingJson == string.Empty)
             {
                 Log.Info("Not find game hook setting, open hook panel.");
-                // XXX: Correspond line 116
+                // XXX: Correspond ehServerApi.GetGameSetting(md5).ConfigureAwait(false)
                 await Application.Dispatcher.InvokeAsync(
                     async () => await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false));
-                textractorService.InjectProcesses();
+                textractorService.InjectProcesses(gameProcesses); // TODO
                 return;
             }
 
@@ -151,9 +153,8 @@ namespace ErogeHelper
             var eventAggregator = _serviceProvider.GetService<IEventAggregator>();
             var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
 
-            var gameSetting = JsonSerializer.Deserialize<GameTextSetting>(settingJson) ?? new GameTextSetting();
-            ehGlobalValueRepository.TextractorSetting = gameSetting;
-            textractorService.InjectProcesses();
+            var textractorSetting = JsonSerializer.Deserialize<TextractorSetting>(settingJson) ?? new TextractorSetting();
+            textractorService.InjectProcesses(gameProcesses, textractorSetting);
 
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);

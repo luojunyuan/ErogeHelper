@@ -10,6 +10,7 @@ using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
 using ErogeHelper.ViewModel.Window;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -37,9 +38,9 @@ namespace ErogeHelper.ViewModel.Page
             _ehGlobalValueRepository = ehGlobalValueRepository;
 
             _textractorService.DataEvent += DataProcess;
-            RegExp = _ehGlobalValueRepository.TextractorSetting.RegExp;
+            RegExp = _ehGlobalValueRepository.RegExp;
+            ConsoleOutput = string.Join('\n', _textractorService.GetConsoleOutputInfo());
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
-            // UNDONE: Loading all output text from textractorService
         }
 
         private readonly IHookDataService _dataService;
@@ -236,9 +237,9 @@ namespace ErogeHelper.ViewModel.Page
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 // Error Info: 在“ItemAdded”事件后具有意外的长度。\n
-                // 如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这种情况。
+                // 如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这个错误。
                 var targetItem = HookMapData.FastFind(hp.Handle);
-                if (targetItem == null)
+                if (targetItem is null)
                 {
                     targetItem = new HookMapItem
                     {
@@ -269,14 +270,13 @@ namespace ErogeHelper.ViewModel.Page
                 }
             });
 
-            if (SelectedHook is null && _ehGlobalValueRepository.TextractorSetting.Hookcode != string.Empty)
+            if (SelectedHook is null && _textractorService.Setting.Hookcode != string.Empty)
             {
-                var setting = _ehGlobalValueRepository.TextractorSetting;
-                if (setting.Hookcode.Equals(hp.Hookcode)
+                var setting = _textractorService.Setting.HookSettings.First();
+                if (_textractorService.Setting.Hookcode.Equals(hp.Hookcode)
                     && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                     && setting.SubThreadContext == hp.Ctx2)
                 {
-                    // UNDONE: Pending to test
                     SelectedHook = HookMapData.FastFind(hp.Handle);
                 }
             }
@@ -306,14 +306,22 @@ namespace ErogeHelper.ViewModel.Page
             if (SelectedHook is null)
                 throw new ArgumentNullException(nameof(SelectedHook));
 
-            _ehGlobalValueRepository.TextractorSetting = new GameTextSetting
+            var textractorSetting = new TextractorSetting
             {
                 IsUserHook = SelectedHook.EngineName.Contains("UserHook"),
                 Hookcode = SelectedHook.HookCode,
-                ThreadContext = SelectedHook.ThreadContext,
-                SubThreadContext = SelectedHook.SubThreadContext,
-                RegExp = RegExp ?? string.Empty,
+                HookSettings = new List<TextractorSetting.HookSetting>()
+                {
+                    new()
+                    {
+                        ThreadContext = SelectedHook.ThreadContext,
+                        SubThreadContext = SelectedHook.SubThreadContext,
+                    }
+                }
             };
+            _textractorService.Setting = textractorSetting;
+
+            _ehGlobalValueRepository.RegExp = RegExp ?? string.Empty;
 
             // 用一个开关? 异步
             // UNDONE: ehApi SubmitSetting with gameNames RCode不要
@@ -327,14 +335,13 @@ namespace ErogeHelper.ViewModel.Page
                 gameInfoTable = new GameInfoTable
                 {
                     Md5 = _ehGlobalValueRepository.Md5,
-                    GameIdList = string.Empty,
-                    GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                    TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
                 };
                 await _ehDbRepository.SetGameInfoAsync(gameInfoTable).ConfigureAwait(false);
             }
             else
             {
-                var hookSetting = gameInfoTable.GameSettingJson;
+                var hookSetting = gameInfoTable.TextractorSettingJson;
                 if (hookSetting == string.Empty)
                 {
                     // HookPage in HookConfigView window
@@ -342,7 +349,9 @@ namespace ErogeHelper.ViewModel.Page
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,
-                        GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                        TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
+                        IsLostFocus = gameInfoTable.IsLostFocus,
+                        IsEnableTouchToMouse = gameInfoTable.IsEnableTouchToMouse,
                     }).ConfigureAwait(false);
                 }
                 else
@@ -352,10 +361,11 @@ namespace ErogeHelper.ViewModel.Page
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,
-                        GameSettingJson = JsonSerializer.Serialize(_ehGlobalValueRepository.TextractorSetting),
+                        TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
+                        IsLostFocus = gameInfoTable.IsLostFocus,
+                        IsEnableTouchToMouse = gameInfoTable.IsEnableTouchToMouse,
                     }).ConfigureAwait(false);
-                    Log.Debug("Update db.sqlite");
-                    // QUESTION: 也许我不用在Page中OpenDialog，而在Window中。可能都一样
+                    Log.Debug("Update eh.db");
                     await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(),
                             ViewAction.OpenDialog, ModernDialog.HookSettingUpdatedTip, null, ViewType.Page))
                         .ConfigureAwait(false);

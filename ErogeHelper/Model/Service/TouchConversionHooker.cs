@@ -1,12 +1,10 @@
-﻿using ErogeHelper.Common;
+﻿using AutoHotkey.Interop;
+using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Service.Interface;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using AutoHotkey.Interop;
 
 namespace ErogeHelper.Model.Service
 {
@@ -20,7 +18,7 @@ namespace ErogeHelper.Model.Service
         private readonly NativeMethods.LowLevelMouseProc _hookCallback;
 
         private IntPtr _hookId = IntPtr.Zero;
-        private AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
+        private readonly AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
 
         public void SetHook()
         {
@@ -37,8 +35,6 @@ namespace ErogeHelper.Model.Service
         {
             Dispose();
         }
-
-        private readonly string _projectPath = Path.GetDirectoryName(typeof(App).Assembly.Location) ?? string.Empty;
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
@@ -23,12 +24,8 @@ namespace ErogeHelper.Tests.Model.Service
             // Arrange
             var notepad = Process.Start("notepad");
             var testStuff = Process.GetProcessesByName("notepad");
-            var config = new EhGlobalValueRepository
-            {
-                GameProcesses = testStuff
-            };
             List<string> receivedTexts = new();
-            ITextractorService textractorService = new TextractorService(config);
+            ITextractorService textractorService = new TextractorService(); // todo
 
             // Act
             textractorService.DataEvent += param =>
@@ -40,7 +37,7 @@ namespace ErogeHelper.Tests.Model.Service
                 }
                 receivedTexts.Add(param.Text);
             };
-            textractorService.InjectProcesses();
+            textractorService.InjectProcesses(testStuff);
 
             // Assert
             _single.WaitOne();
