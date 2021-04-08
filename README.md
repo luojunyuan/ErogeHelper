@@ -10,7 +10,7 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 
 ### Publish
 
-Run `dotnet publish -c Release -r win-x64 --self-contained false` in the root directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
+Run `dotnet publish -c Release -r win-x64 --self-contained false -o ./bin/Publish` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
 
 ```
 ErogeHelper.ShellMenuHandler.dll 
@@ -19,7 +19,7 @@ SharpShell.xml
 SharpShell.dll
 ```
 
-to `bin\Release\win-x64\publish\`. Finally package the publish directory.
+to `bin\Publish\`. Finally package the publish directory.
 
 ### Install
 

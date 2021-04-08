@@ -89,7 +89,7 @@ namespace ErogeHelper
             (tmp, ehGlobalValueRepository.MainProcess) =
                 Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             var gameProcesses = tmp.ToList();
-            if (gameProcesses.Any())
+            if (!gameProcesses.Any())
             {
                 await MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
