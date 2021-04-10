@@ -16,7 +16,7 @@ namespace ErogeHelper.Common.Behavior
             obj.SetValue(SelectedTextProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for SelectedText.  This enables animation, styling, binding, etc...
+        // Using a DependencyProperty as the backing store for SelectedText. This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedTextProperty =
             DependencyProperty.RegisterAttached(
                 "SelectedText",
@@ -51,7 +51,5 @@ namespace ErogeHelper.Common.Behavior
                 SetSelectedText(tb, tb.SelectedText);
             }
         }
-
-        // UNDONE: Add SelectionLength DependencyProperty 
     }
 }

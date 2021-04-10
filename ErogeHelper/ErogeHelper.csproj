@@ -11,7 +11,7 @@
     <Version>0.0.6</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
-    <SatelliteResourceLanguages>zh-Hans;zh-CN</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>zh-CN</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
     <PackageReference Include="luojunyuan.autohotkey" Version="1.0.1" />
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.5" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="Refit" Version="6.0.38" />
@@ -35,7 +35,6 @@
 
   <!-- No content directories -->
   <ItemGroup>
-    <Folder Include="Common\Messenger\" />
     <Folder Include="Model\Factory\Translator\Interface\" />
   </ItemGroup>
 

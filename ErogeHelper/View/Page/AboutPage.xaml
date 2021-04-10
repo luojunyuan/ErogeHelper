@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-      xmlns:repo="clr-namespace:ErogeHelper.Model.Repository"
+      xmlns:common="clr-namespace:ErogeHelper.Common"
       xmlns:control="clr-namespace:ErogeHelper.View.Control"
       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
       mc:Ignorable="d" 
@@ -28,7 +28,7 @@
                 <TextBlock>
                     <Run Text="{x:Static resx:Strings.About_Version}" />
                     <Bold>
-                        <Run Text="{x:Static repo:EhGlobalValueRepository.AppVersion}" />
+                        <Run Text="{x:Static common:Utils.AppVersion}" />
                     </Bold>
                 </TextBlock>
                 <Border 

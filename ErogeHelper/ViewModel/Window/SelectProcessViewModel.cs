@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
@@ -27,7 +28,7 @@ namespace ErogeHelper.ViewModel.Window
             IEhServerApiService ehServerApiService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            EhGlobalValueRepository ehGlobalValueRepository)
+            GameRuntimeInfoRepository gameRuntimeInfoRepository)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -37,7 +38,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehServerApiService = ehServerApiService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
-            _ehGlobalValueRepository = ehGlobalValueRepository;
+            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
 
             _dataService.RefreshBindableProcComboBoxAsync(ProcItems);
         }
@@ -50,7 +51,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IEhServerApiService _ehServerApiService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
+        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
 
         public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
 
@@ -84,19 +85,14 @@ namespace ErogeHelper.ViewModel.Window
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
-            IEnumerable<Process> gameProcesses;
-            (gameProcesses, _ehGlobalValueRepository.MainProcess) =
-                Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
-            _ = _gameWindowHooker.SetGameWindowHookAsync();
+            IEnumerable<Process> gameProcesses = Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
+            var (md5, gameProcess) = _gameRuntimeInfoRepository.Init(gameProcesses);
 
-            var gamePath =
-                _ehGlobalValueRepository.GamePath =
-                    _ehGlobalValueRepository.MainProcess.MainModule?.FileName ?? string.Empty;
-            var md5 = Utils.GetFileMd5(gamePath);
-            _ehGlobalValueRepository.Md5 = md5;
+            _ = _gameWindowHooker.SetGameWindowHookAsync(gameProcess);
 
+            _ehDbRepository.Md5 = md5;
             var settingJson = string.Empty;
-            var gameInfo = await _ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
+            var gameInfo = await _ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);
             if (gameInfo is not null)
             {
                 settingJson = gameInfo.TextractorSettingJson;

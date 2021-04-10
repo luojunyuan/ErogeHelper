@@ -21,7 +21,7 @@ namespace ErogeHelper.View.Window.Game
     /// <summary>
     /// Interaction logic for InsideView.xaml
     /// </summary>
-    public partial class InsideView : IHandle<ViewActionMessage>
+    public partial class InsideView : IHandle<ViewActionMessage>, IHandle<LoseFocusMessage>
     {
         public InsideView()
         {
@@ -40,7 +40,6 @@ namespace ErogeHelper.View.Window.Game
 
         private void PositionChanged(GameWindowPosition pos)
         {
-            // XXX: Use await, after game quit: System.Threading.Tasks.TaskCanceledException:“A task was canceled.”
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Height = pos.Height / _dpi;
@@ -89,8 +88,8 @@ namespace ErogeHelper.View.Window.Game
 
             // Get GameView window handle
             var interopHelper = new WindowInteropHelper(this);
-            var globalValues = IoC.Get<EhGlobalValueRepository>();
-            _handler = globalValues.GameInsideViewHandle = interopHelper.Handle;
+            var globalValues = IoC.Get<GameRuntimeInfoRepository>();
+            _handler = interopHelper.Handle;
 
             // Set fullscreen application listener
             RegisterAppBar(false);
@@ -99,11 +98,13 @@ namespace ErogeHelper.View.Window.Game
 
             // Always make window front
             // UNDONE: Test if can use in both two windows
-            var timer = new DispatcherTimer();
-            var pointer = new WindowInteropHelper(this);
+            var timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromMilliseconds(50),
+            };
             timer.Tick += (_, _) =>
             {
-                if (pointer.Handle == IntPtr.Zero)
+                if (_handler == IntPtr.Zero)
                 {
                     timer.Stop();
                 }
@@ -112,12 +113,10 @@ namespace ErogeHelper.View.Window.Game
                 // 全屏判断相当稳定、考虑一下，以及计时器的停止啥的
                 if (globalValues.MainProcess.MainWindowHandle == NativeMethods.GetForegroundWindow())
                 {
-                    NativeMethods.BringWindowToTop(pointer.Handle);
+                    NativeMethods.BringWindowToTop(_handler);
                     //Log.Debug("yes");
                 }
             };
-            timer.Interval = TimeSpan.FromMilliseconds(50);
-            timer.Start();
         }
 
         private IntPtr _desktopHandle;
@@ -198,6 +197,25 @@ namespace ErogeHelper.View.Window.Game
             }
 
             return IntPtr.Zero;
+        }
+
+        public Task HandleAsync(LoseFocusMessage lostFocus, CancellationToken cancellationToken)
+        {
+            if (lostFocus.Status)
+            {
+                var exStyle = NativeMethods.GetWindowLong(_handler, NativeMethods.GWL_EXSTYLE);
+                NativeMethods.SetWindowLong(_handler, 
+                    NativeMethods.GWL_EXSTYLE, 
+                    exStyle | NativeMethods.WS_EX_NOACTIVATE);
+            }
+            else
+            {
+                var exStyle = NativeMethods.GetWindowLong(_handler, NativeMethods.GWL_EXSTYLE);
+                NativeMethods.SetWindowLong(_handler,
+                    NativeMethods.GWL_EXSTYLE,
+                    exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
+            }
+            return Task.CompletedTask;
         }
     }
 }

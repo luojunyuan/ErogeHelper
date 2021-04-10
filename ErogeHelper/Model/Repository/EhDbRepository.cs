@@ -6,7 +6,6 @@ using Microsoft.Data.Sqlite;
 
 namespace ErogeHelper.Model.Repository
 {
-    // QUESTION: Repository 或 Factory 层与VM完全隔离？通过Service交互，感觉麻烦还是算了
     public class EhDbRepository
     {
         public EhDbRepository(string connStr)
@@ -16,13 +15,20 @@ namespace ErogeHelper.Model.Repository
 
         private readonly SqliteConnection _connection;
 
-        public async Task<GameInfoTable?> GetGameInfoAsync(string md5) =>
-            await _connection.QuerySingleOrDefaultAsync<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{md5}'")
+        private string _md5 = string.Empty;
+        public string Md5 { get => _md5; set => _md5 = value; }
+
+        public GameInfoTable? GetGameInfoTable() =>
+            _connection.QuerySingleOrDefault<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{_md5}'");
+
+        public async Task<GameInfoTable?> GetGameInfoAsync() =>
+            await _connection
+                .QuerySingleOrDefaultAsync<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{_md5}'")
                 .ConfigureAwait(false);
 
         public async Task SetGameInfoAsync(GameInfoTable gameInfoTable)
         {
-            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @TextractorSettingJson, @IsLostFocus, @IsEnableTouchToMouse)";
+            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @RegExp, @TextractorSettingJson, @IsLoseFocus, @IsEnableTouchToMouse)";
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }
 
@@ -30,16 +36,16 @@ namespace ErogeHelper.Model.Repository
         {
             string query = @"
 UPDATE GameInfo 
-SET GameIdList=@GameIdList, TextractorSettingJson=@TextractorSettingJson, IsLostFocus=@IsLostFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
+SET GameIdList=@GameIdList, RegExp=@RegExp, TextractorSettingJson=@TextractorSettingJson, IsLoseFocus=@IsLoseFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
 WHERE Md5 = @Md5";
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }
 
-        public async Task DeleteGameInfoAsync(string md5)
+        public async Task DeleteGameInfoAsync()
         {
             string query =
                 "DELETE FROM GameInfo WHERE Md5=@Md5";
-            await _connection.ExecuteAsync(query, new {Md5=md5}).ConfigureAwait(false);
+            await _connection.ExecuteAsync(query, new {Md5=_md5}).ConfigureAwait(false);
         }
     }
 }

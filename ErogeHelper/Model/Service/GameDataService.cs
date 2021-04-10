@@ -3,18 +3,21 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Function;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
 
 namespace ErogeHelper.Model.Service
 {
-    public class GameDataService : IGameDataService
+    public class GameDataService : IGameDataService, IHandle<RegExpChangedMessage>
     {
         public event Action<string>? SourceTextReceived;
         public event Action<BindableCollection<SingleTextItem>>? BindableTextItem;
@@ -24,11 +27,11 @@ namespace ErogeHelper.Model.Service
         public GameDataService(
             IMeCabService meCabService,
             ITextractorService textractorService, 
-            EhGlobalValueRepository ehGlobalValueRepository,
+            GameRuntimeInfoRepository gameRuntimeInfoRepository,
             EhConfigRepository ehConfigRepository)
         {
             _meCabService = meCabService;
-            _ehGlobalValueRepository = ehGlobalValueRepository;
+            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
             _ehConfigRepository = ehConfigRepository;
          
             textractorService.SelectedDataEvent += ProcessDataText;
@@ -39,8 +42,10 @@ namespace ErogeHelper.Model.Service
         }
 
         private readonly IMeCabService _meCabService;
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
+        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
         private readonly EhConfigRepository _ehConfigRepository;
+
+        private string _pattern = string.Empty;
 
         private void ProcessDataText(HookParam hp)
         {
@@ -48,11 +53,9 @@ namespace ErogeHelper.Model.Service
             AppendTextsRefresh?.Invoke(nameof(GameDataService));
 
             // User define RegExp 
-            // UNDONE: submit的同时修改到这儿、就不使用运行时变量，直接从repo读？
-            var pattern = _ehGlobalValueRepository.RegExp;
-            if (pattern != string.Empty)
+            if (_pattern != string.Empty)
             {
-                var list = Regex.Split(hp.Text, pattern);
+                var list = Regex.Split(hp.Text, _pattern);
                 hp.Text = string.Join("", list);
             }
 
@@ -132,6 +135,12 @@ namespace ErogeHelper.Model.Service
 
                 _ehConfigRepository.PasteToDeepL = false;
             }
+        }
+
+        public Task HandleAsync(RegExpChangedMessage message, CancellationToken cancellationToken)
+        {
+            _pattern = message.RegExp;
+            return Task.CompletedTask;
         }
     }
 }

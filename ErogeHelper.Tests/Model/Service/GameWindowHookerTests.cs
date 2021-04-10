@@ -22,9 +22,8 @@ namespace ErogeHelper.Tests.Model.Service
         {
             // Arrange
             var notepad = Process.Start("notepad");
-            var config = new EhGlobalValueRepository { MainProcess = notepad };
             var posCollect = new List<GameWindowPosition>();
-            IGameWindowHooker hooker = new GameWindowHooker(config);
+            IGameWindowHooker hooker = new GameWindowHooker();
 
             // Act
             hooker.GamePosArea += pos =>
@@ -36,7 +35,7 @@ namespace ErogeHelper.Tests.Model.Service
                 }
             };
             // Depend on MainProcess 
-            await hooker.SetGameWindowHookAsync();
+            await hooker.SetGameWindowHookAsync(notepad);
             // Depend on GameProcesses
             //await hooker.ResetWindowHandler();
 

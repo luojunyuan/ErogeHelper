@@ -2,9 +2,8 @@
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
+using ErogeHelper.Model.Repository;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
-using FluentMigrator.Runner;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +17,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using ErogeHelper.Model.Repository;
 
 namespace ErogeHelper.Common
 {
@@ -49,7 +47,7 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
         /// <returns>if process with hWnd found, give all back, other wise return blank list</returns>
-        public static (IEnumerable<Process>, Process) ProcessCollect(string friendlyName)
+        public static List<Process> ProcessCollect(string friendlyName)
         {
             const int timeoutSeconds = 20;
             var spendTime = new Stopwatch();
@@ -80,7 +78,7 @@ namespace ErogeHelper.Common
                          $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
             }
 
-            return mainProcess is null ? (new List<Process>(), new Process()) : (procList, mainProcess);
+            return mainProcess is null ? new List<Process>() : procList;
         }
 
         public static void HideWindowInAltTab(Window window)
@@ -237,5 +235,7 @@ namespace ErogeHelper.Common
             });
             return collect;
         }
+
+        public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "error";
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
+using ErogeHelper.Common.Messenger;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -19,15 +20,17 @@ namespace ErogeHelper.ViewModel.Window
         public GameViewModel(
             IGameDataService dataService,
             IWindowManager windowManager,
+            IEventAggregator eventAggregator,
             ITouchConversionHooker touchConversionHooker,
             EhConfigRepository ehConfigRepository,
-            EhGlobalValueRepository ehGlobalValueRepository,
+            GameRuntimeInfoRepository gameRuntimeInfoRepository,
             TextViewModel textViewModel)
         {
             _touchHooker = touchConversionHooker;
             _windowManager = windowManager;
+            _eventAggregator = eventAggregator;
             _ehConfigRepository = ehConfigRepository;
-            _ehGlobalValueRepository = ehGlobalValueRepository;
+            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
             TextControl = textViewModel;
 
             _fontSize = _ehConfigRepository.FontSize;
@@ -46,8 +49,9 @@ namespace ErogeHelper.ViewModel.Window
         }
 
         private readonly IWindowManager _windowManager;
+        private readonly IEventAggregator _eventAggregator;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
+        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
         private readonly ITouchConversionHooker _touchHooker;
 
         private bool _assistiveTouchIsVisible = true;
@@ -96,7 +100,7 @@ namespace ErogeHelper.ViewModel.Window
 
         public async void SwitchGameScreen()
         {
-            var handle = _ehGlobalValueRepository.MainProcess.MainWindowHandle;
+            var handle = _gameRuntimeInfoRepository.MainProcess.MainWindowHandle;
             NativeMethods.BringWindowToTop(handle);
             await WindowsInput.Simulate.Events()
                 .ClickChord(KeyCode.Alt, KeyCode.Enter)
@@ -183,40 +187,22 @@ namespace ErogeHelper.ViewModel.Window
 
         #endregion
 
-        // UNDONE: Use GameInfoTable to save single game config
-        private bool _isLostFocus;
+        private bool _isLoseFocus;
 
-        public bool IsLostFocus
+        public bool IsLoseFocus
         {
-            get => _isLostFocus;
-            set { _isLostFocus = value; NotifyOfPropertyChange(() => IsLostFocus); }
+            get => _isLoseFocus;
+            set { _isLoseFocus = value; NotifyOfPropertyChange(() => IsLoseFocus); }
         }
-        public void FocusToggle()
+        public async void FocusToggle()
         {
-            // UNDONE: Use message 
-            if (IsLostFocus)
+            if (IsLoseFocus)
             {
-                var exStyle = NativeMethods.GetWindowLong(
-                                                            _ehGlobalValueRepository.GameInsideViewHandle,
-                                                            NativeMethods.GWL_EXSTYLE);
-                NativeMethods.SetWindowLong(
-                                            _ehGlobalValueRepository.GameInsideViewHandle,
-                                            NativeMethods.GWL_EXSTYLE,
-                                            exStyle | NativeMethods.WS_EX_NOACTIVATE);
-
-                //GameConfig.NoFocus = true;
+                await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = true });
+                // UNDONE: save to eh.db
             }
             else
             {
-                var exStyle = NativeMethods.GetWindowLong(
-                                                        _ehGlobalValueRepository.GameInsideViewHandle,
-                                                        NativeMethods.GWL_EXSTYLE);
-                NativeMethods.SetWindowLong(
-                                            _ehGlobalValueRepository.GameInsideViewHandle,
-                                            NativeMethods.GWL_EXSTYLE,
-                                            exStyle & ~NativeMethods.WS_EX_NOACTIVATE);
-
-                //GameConfig.NoFocus = false;
             }
         }
 

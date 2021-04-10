@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
+using ErogeHelper.Common;
 using ErogeHelper.Model.Repository;
 using UpdateChecker;
 using UpdateChecker.VersionComparers;
@@ -28,7 +29,7 @@ namespace ErogeHelper.ViewModel.Page
 
         private async Task CheckUpdateAsync()
         {
-            var version = EhGlobalValueRepository.AppVersion;
+            var version = Utils.AppVersion;
             var updateChecker = new GitHubReleasesUpdateChecker(
                     @"luojunyuan", // Owner
                     @"Eroge-Helper", // Repo

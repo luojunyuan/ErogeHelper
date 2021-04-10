@@ -27,7 +27,7 @@ namespace ErogeHelper.ViewModel.Page
             ITextractorService textractorService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            EhGlobalValueRepository ehGlobalValueRepository)
+            GameRuntimeInfoRepository gameRuntimeInfoRepository)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -35,10 +35,10 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService = textractorService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
-            _ehGlobalValueRepository = ehGlobalValueRepository;
+            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
 
             _textractorService.DataEvent += DataProcess;
-            RegExp = _ehGlobalValueRepository.RegExp;
+            RegExp = _dataService.GetRegExp();
             ConsoleOutput = string.Join('\n', _textractorService.GetConsoleOutputInfo());
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
@@ -49,7 +49,7 @@ namespace ErogeHelper.ViewModel.Page
         private readonly ITextractorService _textractorService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
+        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
 
         #region RegExp
 
@@ -78,7 +78,7 @@ namespace ErogeHelper.ViewModel.Page
 
         public bool InvalidRegExp
         {
-            get => _invalidRegExp; 
+            get => _invalidRegExp;
             set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); }
         }
 
@@ -116,7 +116,7 @@ namespace ErogeHelper.ViewModel.Page
 
         public bool CanOpenDialog
         {
-            get => _canOpenDialog; 
+            get => _canOpenDialog;
             set { _canOpenDialog = value; NotifyOfPropertyChange(() => CanOpenDialog); }
         }
 
@@ -142,14 +142,14 @@ namespace ErogeHelper.ViewModel.Page
 
         public bool CanSearchCode
         {
-            get => _canSearchCode; 
+            get => _canSearchCode;
             set { _canSearchCode = value; NotifyOfPropertyChange(() => CanSearchCode); }
         }
 
         public async void SearchHCode()
         {
             CanSearchCode = false;
-            var hcode = await _dataService.QueryHCode(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
+            var hcode = await _dataService.QueryHCode(_gameRuntimeInfoRepository.Md5).ConfigureAwait(false);
             if (hcode != string.Empty)
             {
                 InputHCode = hcode;
@@ -311,21 +311,21 @@ namespace ErogeHelper.ViewModel.Page
                 }
             };
             _textractorService.Setting = textractorSetting;
-
-            _ehGlobalValueRepository.RegExp = RegExp ?? string.Empty;
+            await _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
 
             // 用一个开关? 异步
             // UNDONE: ehApi SubmitSetting with gameNames 剪切板，RCode不要 
 
             var gameInfoTable =
-                await _ehDbRepository.GetGameInfoAsync(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
+                await _ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);
             if (gameInfoTable is null)
             {
                 // HookPage must in HookConfigView window
                 // This happen when server has no data or user uses EH offline
                 gameInfoTable = new GameInfoTable
                 {
-                    Md5 = _ehGlobalValueRepository.Md5,
+                    Md5 = _ehDbRepository.Md5,
+                    RegExp = RegExp ?? string.Empty,
                     TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
                 };
                 await _ehDbRepository.SetGameInfoAsync(gameInfoTable).ConfigureAwait(false);
@@ -340,8 +340,9 @@ namespace ErogeHelper.ViewModel.Page
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,
+                        RegExp = RegExp ?? string.Empty,
                         TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
-                        IsLostFocus = gameInfoTable.IsLostFocus,
+                        IsLoseFocus = gameInfoTable.IsLoseFocus,
                         IsEnableTouchToMouse = gameInfoTable.IsEnableTouchToMouse,
                     }).ConfigureAwait(false);
                 }
@@ -352,11 +353,11 @@ namespace ErogeHelper.ViewModel.Page
                     {
                         Md5 = gameInfoTable.Md5,
                         GameIdList = gameInfoTable.GameIdList,
+                        RegExp = RegExp ?? string.Empty,
                         TextractorSettingJson = JsonSerializer.Serialize(textractorSetting),
-                        IsLostFocus = gameInfoTable.IsLostFocus,
+                        IsLoseFocus = gameInfoTable.IsLoseFocus,
                         IsEnableTouchToMouse = gameInfoTable.IsEnableTouchToMouse,
                     }).ConfigureAwait(false);
-                    Log.Debug("Update eh.db");
                     await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(),
                             ViewAction.OpenDialog, ModernDialog.HookSettingUpdatedTip, null, ViewType.Page))
                         .ConfigureAwait(false);

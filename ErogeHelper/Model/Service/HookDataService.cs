@@ -4,6 +4,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Caliburn.Micro;
+using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
@@ -41,5 +43,7 @@ namespace ErogeHelper.Model.Service
 
             return string.Empty;
         }
+
+        public string GetRegExp() => IoC.Get<EhDbRepository>().GetGameInfoTable()?.RegExp ?? string.Empty;
     }
 }

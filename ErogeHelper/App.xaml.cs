@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-using Serilog.Events;
 
 namespace ErogeHelper
 {
@@ -30,18 +29,7 @@ namespace ErogeHelper
             SetLanguageDictionary();
 
             // Set logger
-            Serilog.Log.Logger = new LoggerConfiguration()
-#if DEBUG
-                .MinimumLevel.Debug()
-                // VS Output
-                .WriteTo.Debug(outputTemplate:
-                    "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-#else
-                .MinimumLevel.Information()
-#endif
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .MinimumLevel.Override("System", LogEventLevel.Information)
-                .CreateLogger();
+            CreateLogger();
 
             // Set thread error handle
             AppDomain.CurrentDomain.UnhandledException += (_, unhandledExceptionArgs) =>
@@ -52,7 +40,6 @@ namespace ErogeHelper
 
                 var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
 
-                // UNDONE: Clear sub process
                 ShowErrorDialog("Fatal", ex);
                 Log.Fatal(ex);
             };
@@ -89,12 +76,28 @@ namespace ErogeHelper
         {
             Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
-                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-Hans" => new System.Globalization.CultureInfo("zh-CN"),
+                "zh" => new System.Globalization.CultureInfo("zh-CN"),
+                "zh-CN" => new System.Globalization.CultureInfo("zh-CN"),
+                "zh-SG" => new System.Globalization.CultureInfo("zh-CN"),
                 // Default english because there can be so many different system language, we rather fallback on 
                 // english in this case.
                 _ => new System.Globalization.CultureInfo(""),
             };
+        }
+
+        private static void CreateLogger()
+        {
+            Serilog.Log.Logger = new LoggerConfiguration()
+#if DEBUG
+                .MinimumLevel.Debug()
+                // VS Output
+                .WriteTo.Debug(outputTemplate:
+                    "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+#else
+                .MinimumLevel.Information()
+#endif
+                .CreateLogger();
         }
     }
 }

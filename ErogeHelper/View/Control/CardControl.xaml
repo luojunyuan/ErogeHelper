@@ -131,7 +131,7 @@
                         <ui:SymbolIcon Symbol="Copy" />
                         <ui:FlyoutService.Flyout>
                             <ui:Flyout Placement="Top">
-                                <TextBox 
+                                <TextBox
                                     Text="{Binding TotalText}" IsReadOnly="True" TextWrapping="Wrap" MaxWidth="360"
                                     cal:Message.Attach="[PreviewMouseLeftButtonUp] = [SendSelectedText($source)]">
                                 </TextBox>

@@ -105,7 +105,7 @@
                                 </ui:AppBarToggleButton.Resources>
                             </ui:AppBarToggleButton>
                             <ui:AppBarToggleButton 
-                                Icon="Trim" IsChecked="{Binding IsLostFocus}" 
+                                Icon="Trim" IsChecked="{Binding IsLoseFocus}" 
                                 ToolTip="{x:Static resx:Strings.GameView_FocusTip}" 
                                 cal:Message.Attach="[Click] = [FocusToggle]"/>
                             <ui:AppBarToggleButton 
@@ -140,7 +140,7 @@
                                     cal:Message.Attach="[Click] = [OpenPreference]"/>
                                 <ui:AppBarElementContainer>
                                     <Button
-                                        Visibility="{Binding IsLostFocus, 
+                                        Visibility="{Binding IsLoseFocus, 
                                             Converter={StaticResource TrueToVisibleConverter}}"
                                         Width="80" Height="40" Margin="10 5 0 5" Content="Skip" ToolTip="Ctrl"
                                         cal:Message.Attach="[PreviewMouseDown] = [PressSkip]; 

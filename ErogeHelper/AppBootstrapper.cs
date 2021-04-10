@@ -20,6 +20,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using FluentMigrator;
+using FluentMigrator.Runner;
 
 namespace ErogeHelper
 {
@@ -37,7 +39,6 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            // FIXME: 引发的异常:“System.IO.FileNotFoundException”(位于 System.Private.CoreLib.dll 中)
             // Put the database update into a scope to ensure that all resources will be disposed.
             using var scope = _serviceProvider.CreateScope();
             scope.ServiceProvider.UpdateEhDatabase();
@@ -54,8 +55,6 @@ namespace ErogeHelper
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
             Log.Info($"Game's path: {gamePath}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
-
-            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<EhGlobalValueRepository>();
 
             if (e.Args.Contains("/le") || e.Args.Contains("-le"))
             {
@@ -81,10 +80,12 @@ namespace ErogeHelper
                 });
             }
 
-            IEnumerable<Process> tmp;
-            (tmp, ehGlobalValueRepository.MainProcess) =
-                Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-            var gameProcesses = tmp.ToList();
+            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<GameRuntimeInfoRepository>();
+            var ehDbRepository = _serviceProvider.GetRequiredService<EhDbRepository>();
+
+            IEnumerable<Process> gameProcesses = Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
+            var (md5, gameProcess) = ehGlobalValueRepository.Init(gameProcesses);
+            ehDbRepository.Md5 = md5;
             if (!gameProcesses.Any())
             {
                 await MessageBox.ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
@@ -93,18 +94,13 @@ namespace ErogeHelper
             }
 
             var gameWindowHooker = _serviceProvider.GetRequiredService<IGameWindowHooker>();
-            var ehDbRepository = _serviceProvider.GetRequiredService<EhDbRepository>();
             var ehServerApi = _serviceProvider.GetRequiredService<IEhServerApiService>();
             var textractorService = _serviceProvider.GetRequiredService<ITextractorService>();
 
-            _ = gameWindowHooker.SetGameWindowHookAsync();
-
-            ehGlobalValueRepository.GamePath = gamePath;
-            var md5 = Utils.GetFileMd5(gamePath);
-            ehGlobalValueRepository.Md5 = md5;
+            _ = gameWindowHooker.SetGameWindowHookAsync(gameProcess);
 
             var settingJson = string.Empty;
-            var gameInfo = await ehDbRepository.GetGameInfoAsync(md5).ConfigureAwait(false);
+            var gameInfo = await ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);
             if (gameInfo is not null)
             {
                 settingJson = gameInfo.TextractorSettingJson;
@@ -181,7 +177,7 @@ namespace ErogeHelper
                 .AddRepositories()
                 .AddEhServer()
                 .AddOtherModules()
-                .AddLogging(lb => lb.AddSerilog()) // Not use
+                //.AddLogging(lb => lb.AddSerilog()) // Not use
                 .BuildServiceProvider();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -19,17 +20,9 @@ namespace ErogeHelper.Model.Service
 
         public event Action<WindowSize>? NewWindowSize;
 
-        public GameWindowHooker(EhGlobalValueRepository ehGlobalValueRepository)
+        public async Task SetGameWindowHookAsync(Process gameProcess)
         {
-            _ehGlobalValueRepository = ehGlobalValueRepository;
-        }
-
-        // UNDONE: 
-        private readonly EhGlobalValueRepository _ehGlobalValueRepository;
-  
-        public async Task SetGameWindowHookAsync()
-        {
-            _gameProc = _ehGlobalValueRepository.MainProcess;
+            _gameProc = gameProcess;
             _gameHWnd = _gameProc.MainWindowHandle;  
             await Task.Run(() =>
             {
@@ -220,12 +213,12 @@ namespace ErogeHelper.Model.Service
                     {
                         // check pid
                         _ = NativeMethods.GetWindowThread(cur, out var pid);
-                        if (_ehGlobalValueRepository.GameProcesses.Any(proc => proc.Id == pid))
-                        {
-                            Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
-                            // Search over, believe handle is found
-                            return cur;
-                        }
+                        //if (_gameRuntimeInfoRepository.GameProcesses.Any(proc => proc.Id == pid))
+                        //{
+                        //    Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
+                        //    // Search over, believe handle is found
+                        //    return cur;
+                        //}
                     }
                 }
 

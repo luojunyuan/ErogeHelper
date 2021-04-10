@@ -17,7 +17,7 @@ namespace ErogeHelper.Tests.Model.Service
         [TestMethod]
         public void MeCabWordUniDicEnumerableTest()
         {
-            var repo = new EhConfigRepository(TestEnvironmentValue.AppDataDir);
+            var repo = new EhConfigRepository(TestEnvironmentValue.RoamingDir);
             IMeCabService meCabService = new MeCabService();
             var sentence = "ヒルダは井戸から水を汲み取るのをやめなかったのテキスト。";
 
@@ -76,7 +76,7 @@ namespace ErogeHelper.Tests.Model.Service
         [TestMethod]
         public void MeCabWordUniDicSpecificWordTest()
         {
-            var repo = new EhConfigRepository(TestEnvironmentValue.AppDataDir);
+            var repo = new EhConfigRepository(TestEnvironmentValue.RoamingDir);
             IMeCabService meCabService = new MeCabService();
             var word = "スマホ";
 

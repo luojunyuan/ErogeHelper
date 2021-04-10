@@ -27,7 +27,9 @@ namespace ErogeHelper.Common.Extention
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
             // Execute the migrations
-            runner.MigrateUp(); // System.IO.FileNotFoundException
+            // https://github.com/fluentmigrator/fluentmigrator/issues/1450
+            Log.Debug("FileNotExistExceptions in CLR");
+            runner.MigrateUp(); 
         }
 
         public static IServiceCollection AddViewModels(this IServiceCollection services, Type types)
@@ -54,13 +56,13 @@ namespace ErogeHelper.Common.Extention
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var dbFile = Path.Combine(appDataDir, "eh.db");
+            var roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var dbFile = Path.Combine(roamingPath, "ErogeHelper", "eh.db");
             var connectString = $"Data Source={dbFile}";
 
-            services.TryAddSingleton<EhGlobalValueRepository>();
+            services.TryAddSingleton<GameRuntimeInfoRepository>();
 
-            services.TryAddScoped(_ => new EhConfigRepository(appDataDir));
+            services.TryAddScoped(_ => new EhConfigRepository(roamingPath));
             services.TryAddScoped(_ => new EhDbRepository(connectString));
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
@@ -76,9 +78,9 @@ namespace ErogeHelper.Common.Extention
 
         public static IServiceCollection AddEhServer(this IServiceCollection services)
         {
-            services.TryAddScoped<IEhServerApiService>(provider =>
+            services.TryAddScoped<IEhServerApiService>(p =>
             {
-                var url = provider.GetRequiredService<EhConfigRepository>().EhServerBaseUrl;
+                var url = p.GetRequiredService<EhConfigRepository>().EhServerBaseUrl;
                 return new EhServerApiService(url);
             });
 

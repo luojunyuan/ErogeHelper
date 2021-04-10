@@ -4,6 +4,6 @@ namespace ErogeHelper.Tests
 {
     public static class TestEnvironmentValue
     {
-        public static string AppDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static string RoamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     }
 }

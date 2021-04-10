@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.Common.Entity;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace ErogeHelper.Model.Service.Interface
 
         event Action<WindowSize> NewWindowSize;
 
-        Task SetGameWindowHookAsync();
+        Task SetGameWindowHookAsync(Process gameProcess);
 
         void InvokeLastWindowPosition();
 
