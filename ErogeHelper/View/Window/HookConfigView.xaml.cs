@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Function;
+using ErogeHelper.Common.Messenger;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using ErogeHelper.Common.Enum;
-using ErogeHelper.Common.Messenger;
-using ErogeHelper.View.Dialog;
+using System.Windows.Interop;
 
 
 namespace ErogeHelper.View.Window

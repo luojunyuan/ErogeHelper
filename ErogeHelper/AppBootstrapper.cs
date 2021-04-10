@@ -7,13 +7,11 @@ using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Entity.Response;
 using ErogeHelper.Model.Entity.Table;
 using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Repository.Migration;
-using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
-using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,13 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Text.Json;
-using ErogeHelper.Model.Factory;
-using ErogeHelper.Model.Factory.Interface;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace ErogeHelper
 {
@@ -35,7 +27,6 @@ namespace ErogeHelper
     {
         public AppBootstrapper()
         {
-            // initialize Bootstrapper, include EventAggregator, AssemblySource, IOC, Application event
             Initialize();
         }
 
@@ -147,9 +138,9 @@ namespace ErogeHelper
             if (settingJson == string.Empty)
             {
                 Log.Info("Not find game hook setting, open hook panel.");
+                textractorService.InjectProcesses(gameProcesses);
                 await Application.Dispatcher.InvokeAsync(
                     async () => await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false));
-                textractorService.InjectProcesses(gameProcesses);
                 return;
             }
 
@@ -190,7 +181,7 @@ namespace ErogeHelper
                 .AddRepositories()
                 .AddEhServer()
                 .AddOtherModules()
-                .AddLogging(lb => lb.AddSerilog())
+                .AddLogging(lb => lb.AddSerilog()) // Not use
                 .BuildServiceProvider();
         }
 

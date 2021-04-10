@@ -38,7 +38,6 @@ namespace ErogeHelper.Model.Service
                 _ = TextHostDll.InjectProcess((uint)p.Id);
                 Log.Info($"attach to PID {p.Id}.");
             }
-
         }
 
         private IEnumerable<Process> _gameProcesses = new List<Process>();
@@ -56,6 +55,11 @@ namespace ErogeHelper.Model.Service
                 {
                     DataEvent?.Invoke(new HookParam
                     {
+                        Handle = 0,
+                        Pid = 0,
+                        Address = -1,
+                        Ctx = -1,
+                        Ctx2 = -1,
                         Name = "Console",
                         Hookcode = "HB0@0",
                         Text = "ErogeHelper: The Read-Code has already insert"
@@ -74,6 +78,11 @@ namespace ErogeHelper.Model.Service
                 {
                     DataEvent?.Invoke(new HookParam
                     {
+                        Handle = 0,
+                        Pid = 0,
+                        Address = -1,
+                        Ctx = -1,
+                        Ctx2 = -1,
                         Name = "Console",
                         Hookcode = "HB0@0",
                         Text = "ErogeHelper: The Hook-Code has already insert"
@@ -136,10 +145,13 @@ namespace ErogeHelper.Model.Service
             HookParam hp = _threadHandleDict[threadId];
             hp.Text = opData;
 
-            if (threadId == 0)
-                _consoleOutput.Add(hp.Text);
-
             DataEvent?.Invoke(hp);
+
+            if (threadId == 0)
+            {
+                _consoleOutput.Add(hp.Text);
+                return;
+            }
 
             foreach (var hookSetting in Setting.HookSettings)
             {

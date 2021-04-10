@@ -17,6 +17,7 @@ namespace ErogeHelper.Common
         public const int GWL_EXSTYLE = -20;
         public const int WH_MOUSE_LL = 14;
         public const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
+        public const int WM_CLIPBOARDUPDATE = 0x031D;
 
         public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 

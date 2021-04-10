@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.IO;
 using System.Linq;
+using Serilog;
 
 namespace ErogeHelper.Common.Extention
 {
@@ -68,7 +69,7 @@ namespace ErogeHelper.Common.Extention
                     .AddSQLite()
                     .WithGlobalConnectionString(connectString)
                     .ScanIn(typeof(AddGameInfoTable).Assembly).For.Migrations())
-                .AddLogging(lb => lb.AddFluentMigratorConsole());
+                .AddLogging(lb => lb.AddSerilog());
 
             return services;
         }

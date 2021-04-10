@@ -1,12 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Threading;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
@@ -14,6 +6,15 @@ using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ModernWpf.Controls;
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Threading;
+using ErogeHelper.Common.Function;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -160,7 +161,7 @@ namespace ErogeHelper.View.Window.Game
         /// </summary>
         private IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg != _appbarMsg) 
+            if (msg != _appbarMsg)
                 return IntPtr.Zero;
 
             switch (wParam.ToInt32())

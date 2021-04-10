@@ -55,7 +55,7 @@ namespace ErogeHelper.ViewModel.Page
 
         private string? _regExp = string.Empty;
 
-        // if user click 'x', it will turn to null
+        // If user click 'x', it will turn to null
         public string? RegExp
         {
             get => _regExp ?? string.Empty;
@@ -76,9 +76,11 @@ namespace ErogeHelper.ViewModel.Page
 
         private bool _invalidRegExp;
 
-        // RegExp 无效的状态
         public bool InvalidRegExp
-        { get => _invalidRegExp; set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); } }
+        {
+            get => _invalidRegExp; 
+            set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); }
+        }
 
         private string _selectedText = string.Empty;
         public string SelectedText
@@ -108,21 +110,19 @@ namespace ErogeHelper.ViewModel.Page
 
         #region HookCode ReadCode
 
-        // Fields
         private bool _canOpenDialog = true;
         private string _inputHCode = string.Empty;
         private bool _canSearchCode = true;
 
         public bool CanOpenDialog
-        { get => _canOpenDialog; set { _canOpenDialog = value; NotifyOfPropertyChange(() => CanOpenDialog); } }
+        {
+            get => _canOpenDialog; 
+            set { _canOpenDialog = value; NotifyOfPropertyChange(() => CanOpenDialog); }
+        }
 
         public async void OpenHCodeDialog()
         {
             CanOpenDialog = false;
-            // 如果是new Dialog，窗口在关闭后立即被释放
-            // 但如果持有一个或多个实例，必须先等他们 Close 再 Open
-            // 否则会引发 "Only a single ContentDialog can be open at any time."
-            // “指定的 Visual 已经是另一个 Visual 的子级或者已经是 CompositionTarget 的根。”
             await _eventAggregator.PublishOnUIThreadAsync(
                 new ViewActionMessage(GetType(), ViewAction.OpenDialog, ModernDialog.HookCode, null, ViewType.Page))
                 .ConfigureAwait(false);
@@ -134,16 +134,17 @@ namespace ErogeHelper.ViewModel.Page
             get => _inputHCode;
             set
             {
-                // 因 validation 约束 InputHCode 只在值有效、或null empty时，xaml才会传值过来
+                // 因 validation 约束 InputHCode 只在值有效、null或empty时，xaml才会传值过来
                 _inputHCode = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
                 NotifyOfPropertyChange(() => InputHCode);
             }
         }
 
-
-        // HCodeDialog Search Button
         public bool CanSearchCode
-        { get => _canSearchCode; set { _canSearchCode = value; NotifyOfPropertyChange(() => CanSearchCode); } }
+        {
+            get => _canSearchCode; 
+            set { _canSearchCode = value; NotifyOfPropertyChange(() => CanSearchCode); }
+        }
 
         public async void SearchHCode()
         {
@@ -168,7 +169,6 @@ namespace ErogeHelper.ViewModel.Page
             {
                 _textractorService.InsertHook(InputHCode);
             }
-            //Log.Debug("Enter key active here!");
         }
 
         #endregion
@@ -210,34 +210,25 @@ namespace ErogeHelper.ViewModel.Page
 
         private async void DataProcess(HookParam hp)
         {
-            switch (hp.Handle)
+            if (hp.Handle == 0)
             {
                 // Console
-                case 0:
-                    // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
-                    hp.Text = hp.Text switch
-                    {
-                        "Textractor: already injected" => Language.Strings.Textractor_AlreadyInject,
-                        "Textractor: invalid code" => Language.Strings.Textractor_InvalidCode,
-                        "Textractor: initialization completed" => Language.Strings.Textractor_Init,
-                        "Textractor: couldn't inject" => Language.Strings.Textractor_InjectFailed,
-                        "Textractor: invalid process" => Language.Strings.Textractor_InvalidProcess,
-                        _ => hp.Text
-                    };
-                    ConsoleOutput += "\n" + hp.Text;
-                    return;
-                // Clipboard
-                // UNDONE: 如果没有开启AddClipboard，case 1将不会是Clipboard，AddClipboard会在ThreadId依次添加？待调查 或者我自己添加一个以占有空位
-                //case 1:
-                //    hp.Name = Language.Strings.Textractor_Clipboard;
-                //    break;
+                // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
+                hp.Text = hp.Text switch
+                {
+                    "Textractor: already injected" => Language.Strings.Textractor_AlreadyInject,
+                    "Textractor: invalid code" => Language.Strings.Textractor_InvalidCode,
+                    "Textractor: initialization completed" => Language.Strings.Textractor_Init,
+                    "Textractor: couldn't inject" => Language.Strings.Textractor_InjectFailed,
+                    "Textractor: invalid process" => Language.Strings.Textractor_InvalidProcess,
+                    _ => hp.Text
+                };
+                ConsoleOutput += "\n" + hp.Text;
+                return;
             }
 
-            // Note: this await may cause problem
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                // Error Info: 在“ItemAdded”事件后具有意外的长度。\n
-                // 如果在没有引发相应 ListChanged 事件的情况下更改了 IBindingList，则会出现这个错误。
                 var targetItem = HookMapData.FastFind(hp.Handle);
                 if (targetItem is null)
                 {

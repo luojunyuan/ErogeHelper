@@ -53,6 +53,7 @@ namespace ErogeHelper.View.Window
                 {
                     ContentFrame.RemoveBackEntry();
                 }
+                // https://github.com/Kinnara/ModernWpf/issues/329
                 ContentFrame.Navigate(pageType, null, info);
             }
         }
