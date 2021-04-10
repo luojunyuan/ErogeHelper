@@ -18,7 +18,7 @@ namespace ErogeHelper.View.Window
             InitializeComponent();
 
             ContentFrame.Navigated += OnNavigated;
-            PageNavigate("general", new EntranceNavigationTransitionInfo());
+            Loaded += (_, _) => PageNavigate("general", new EntranceNavigationTransitionInfo());
         }
 
         private readonly List<(string Tag, Type PageType)> _pages = new()
@@ -33,11 +33,11 @@ namespace ErogeHelper.View.Window
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.SelectedItem != null)
-            {
-                var navItemTag = args.SelectedItemContainer.Tag.ToString()!;
-                PageNavigate(navItemTag, args.RecommendedNavigationTransitionInfo);
-            }
+            if (args.SelectedItem is null) 
+                return;
+
+            var navItemTag = args.SelectedItemContainer.Tag.ToString()!;
+            PageNavigate(navItemTag, args.RecommendedNavigationTransitionInfo);
         }
 
         private void PageNavigate(string navItemTag, NavigationTransitionInfo info)
@@ -46,7 +46,7 @@ namespace ErogeHelper.View.Window
             Type pageType = item.PageType;
 
             // if not same page
-            if (pageType != null && ContentFrame!.CurrentSourcePageType != pageType)
+            if (pageType != null && ContentFrame.CurrentSourcePageType != pageType)
             {
                 // Clear Journal info
                 while (ContentFrame.CanGoBack)

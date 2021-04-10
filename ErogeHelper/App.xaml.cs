@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
+using Serilog.Events;
 
 namespace ErogeHelper
 {
@@ -16,7 +17,7 @@ namespace ErogeHelper
         {
             // UNDONE: Check singleton app
             // see Windows.UI.Notifications; or ToastNotifications
-            // Toast user ErogeHelper is running, or you can turn ErogeHelper down immediately
+            // Toast user "ErogeHelper is running, or you can turn ErogeHelper down immediately"
 
             // Enable Pointer for touch device
             //AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
@@ -25,7 +26,7 @@ namespace ErogeHelper
             var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
             Directory.SetCurrentDirectory(currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory),
                                                             @"Could not located Eroge Helper's directory"));
-            // Set i18n
+            // Set i18n (modernWpf controllers)
             SetLanguageDictionary();
 
             // Set logger
@@ -36,8 +37,10 @@ namespace ErogeHelper
                 .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 #else
-            .MinimumLevel.Information()
+                .MinimumLevel.Information()
 #endif
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("System", LogEventLevel.Information)
                 .CreateLogger();
 
             // Set thread error handle
@@ -73,7 +76,8 @@ namespace ErogeHelper
                 MainInstruction = ex.Message,
                 Content =
                     @"Eroge Helper run into some trouble. See detail error by click Detail information below.",
-                ExpandedInformation = ex.InnerException?.ToString(),
+                ExpandedInformation = ex.StackTrace,
+                Width = 300,
             };
 
             TaskDialogButton okButton = new(ButtonType.Ok);

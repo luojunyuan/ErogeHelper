@@ -8,17 +8,17 @@ using Refit;
 
 namespace ErogeHelper.Model.Service
 {
-    public class EhServerApiServiceService : IEhServerApiService
+    public class EhServerApiService : IEhServerApiService
     {
         private readonly IEhServerApiService _ehServerApiService;
 
-        public EhServerApiServiceService(EhConfigRepository configRepo)
+        public EhServerApiService(string baseUrl)
         {
             // For debug using
             //var httpClient = new HttpClient(new HttpClientDiagnosticsHandler(new HttpClientHandler()))
             var httpClient = new HttpClient
             {
-                BaseAddress = new Uri(configRepo.EhServerBaseUrl)
+                BaseAddress = new Uri(baseUrl)
             };
             _ehServerApiService = RestService.For<IEhServerApiService>(httpClient);
         }

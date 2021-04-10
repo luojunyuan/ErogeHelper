@@ -13,10 +13,10 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 Run `dotnet publish -c Release -r win-x64 --self-contained false -o ./bin/Publish` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
 
 ```
-ErogeHelper.ShellMenuHandler.dll 
-ErogeHelper.ShellMenuHandler.pdb 
-SharpShell.xml 
-SharpShell.dll
+bin\Release\ErogeHelper.ShellMenuHandler.dll 
+bin\Release\ErogeHelper.ShellMenuHandler.pdb 
+bin\Release\SharpShell.xml 
+bin\Release\SharpShell.dll
 ```
 
 to `bin\Publish\`. Finally package the publish directory.

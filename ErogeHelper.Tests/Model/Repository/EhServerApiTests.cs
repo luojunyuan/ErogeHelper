@@ -15,7 +15,7 @@ namespace ErogeHelper.Tests.Model.Repository
         {
             var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var configRepo = new EhConfigRepository(appDataDir);
-            var ehServerApi = new EhServerApiServiceService(configRepo);
+            var ehServerApi = new EhServerApiService(configRepo);
 
             // Act
             var resp = await ehServerApi.GetGameSetting("1ef3cdc2e666091bda2dc828872d597b");

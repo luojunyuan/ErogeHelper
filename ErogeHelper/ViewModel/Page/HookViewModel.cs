@@ -147,7 +147,6 @@ namespace ErogeHelper.ViewModel.Page
 
         public async void SearchHCode()
         {
-            Log.Debug(InputHCode);
             CanSearchCode = false;
             var hcode = await _dataService.QueryHCode(_ehGlobalValueRepository.Md5).ConfigureAwait(false);
             if (hcode != string.Empty)
@@ -228,9 +227,10 @@ namespace ErogeHelper.ViewModel.Page
                     ConsoleOutput += "\n" + hp.Text;
                     return;
                 // Clipboard
-                case 1:
-                    hp.Name = Language.Strings.Textractor_Clipboard;
-                    return;
+                // UNDONE: 如果没有开启AddClipboard，case 1将不会是Clipboard，AddClipboard会在ThreadId依次添加？待调查 或者我自己添加一个以占有空位
+                //case 1:
+                //    hp.Name = Language.Strings.Textractor_Clipboard;
+                //    break;
             }
 
             // Note: this await may cause problem
@@ -324,7 +324,7 @@ namespace ErogeHelper.ViewModel.Page
             _ehGlobalValueRepository.RegExp = RegExp ?? string.Empty;
 
             // 用一个开关? 异步
-            // UNDONE: ehApi SubmitSetting with gameNames RCode不要
+            // UNDONE: ehApi SubmitSetting with gameNames 剪切板，RCode不要 
 
             var gameInfoTable =
                 await _ehDbRepository.GetGameInfoAsync(_ehGlobalValueRepository.Md5).ConfigureAwait(false);

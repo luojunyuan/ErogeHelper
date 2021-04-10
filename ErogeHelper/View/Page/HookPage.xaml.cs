@@ -3,10 +3,13 @@ using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
 using ModernWpf.Controls;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ErogeHelper.View.Window;
+using ErogeHelper.ViewModel.Window;
 
 namespace ErogeHelper.View.Page
 {
@@ -20,7 +23,9 @@ namespace ErogeHelper.View.Page
             InitializeComponent();
 
             IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
-            DataContext = IoC.Get<ViewModel.Page.HookViewModel>();
+            var preferenceView = Application.Current.Windows.OfType<PreferenceView>().SingleOrDefault();
+            DataContext = (preferenceView?.DataContext as PreferenceViewModel)?.HookViewModel ??
+                          IoC.Get<ViewModel.Page.HookViewModel>();
         }
 
         public async Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)

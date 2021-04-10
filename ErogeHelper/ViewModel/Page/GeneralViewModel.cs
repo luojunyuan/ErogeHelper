@@ -25,6 +25,8 @@ namespace ErogeHelper.ViewModel.Page
             _ehConfigRepository.ClearConfig();
         }
 
+        // UNDONE: Auto inject hcode
+
 #pragma warning disable CS8618
         public GeneralViewModel() { }
     }

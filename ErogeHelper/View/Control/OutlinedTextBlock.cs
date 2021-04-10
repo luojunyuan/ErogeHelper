@@ -240,7 +240,9 @@ namespace ErogeHelper.View.Control
 
             // the Math.Min call is important - without this constraint (which seems arbitrary, but is the maximum allowable text width), things blow up when availableSize is infinite in both directions
             // the Math.Max call is to ensure we don't hit zero, which will cause MaxTextHeight to throw
-            _formattedText!.MaxTextWidth = Math.Min(3579139, w);
+            if (_formattedText is null)
+                throw new ArgumentNullException(nameof(_formattedText));
+            _formattedText.MaxTextWidth = Math.Min(3579139, w);
             _formattedText.MaxTextHeight = Math.Max(0.0001d, h);
 
             // return the desired size
@@ -252,7 +254,9 @@ namespace ErogeHelper.View.Control
             EnsureFormattedText();
 
             // update the formatted text with the final size
-            _formattedText!.MaxTextWidth = finalSize.Width;
+            if (_formattedText is null)
+                throw new ArgumentNullException(nameof(_formattedText));
+            _formattedText.MaxTextWidth = finalSize.Width;
             _formattedText.MaxTextHeight = Math.Max(0.0001d, finalSize.Height);
 
             // need to re-generate the geometry now that the dimensions have changed
@@ -330,7 +334,9 @@ namespace ErogeHelper.View.Control
             }
 
             EnsureFormattedText();
-            _textGeometry = _formattedText!.BuildGeometry(new Point(0, 0));
+            if (_formattedText is null)
+                throw new ArgumentNullException(nameof(_formattedText));
+            _textGeometry = _formattedText.BuildGeometry(new Point(0, 0));
 
             if (StrokePosition == StrokePosition.Outside)
             {

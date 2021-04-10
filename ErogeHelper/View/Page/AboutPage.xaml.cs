@@ -1,4 +1,9 @@
-﻿namespace ErogeHelper.View.Page
+﻿using ErogeHelper.View.Window;
+using ErogeHelper.ViewModel.Window;
+using System.Linq;
+using System.Windows;
+
+namespace ErogeHelper.View.Page
 {
     /// <summary>
     /// AboutPage.xaml 的交互逻辑
@@ -8,7 +13,9 @@
         public AboutPage()
         {
             InitializeComponent();
-            DataContext = Caliburn.Micro.IoC.Get<ViewModel.Page.AboutViewModel>();
+            DataContext =
+                ((PreferenceViewModel)Application.Current.Windows.OfType<PreferenceView>().Single().DataContext)
+                .AboutViewModel;
         }
     }
 }

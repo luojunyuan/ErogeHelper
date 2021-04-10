@@ -33,7 +33,7 @@ namespace ErogeHelper.Common
 
             Stream stream = new MemoryStream();
 
-            var iconBitmap = Icon.ExtractAssociatedIcon(fullPath)!.ToBitmap();
+            var iconBitmap = (Icon.ExtractAssociatedIcon(fullPath) ?? throw new InvalidOperationException()).ToBitmap();
             iconBitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             iconBitmap.Dispose();
             result.BeginInit();
@@ -109,18 +109,6 @@ namespace ErogeHelper.Common
                 sb.Append(byteItem.ToString("x2"));
             }
             return sb.ToString().ToUpper();
-        }
-
-        /// <summary>
-        /// Update the database
-        /// </summary>
-        public static void UpdateEhDatabase(IServiceProvider serviceProvider)
-        {
-            // Instantiate the runner
-            var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-
-            // Execute the migrations
-            runner.MigrateUp(); // System.IO.FileNotFoundException
         }
 
         /// <summary>

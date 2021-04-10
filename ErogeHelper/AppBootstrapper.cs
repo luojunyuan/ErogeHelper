@@ -21,9 +21,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text.Json;
 using ErogeHelper.Model.Factory;
 using ErogeHelper.Model.Factory.Interface;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace ErogeHelper
 {
@@ -42,9 +46,10 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
+            // FIXME: 引发的异常:“System.IO.FileNotFoundException”(位于 System.Private.CoreLib.dll 中)
             // Put the database update into a scope to ensure that all resources will be disposed.
             using var scope = _serviceProvider.CreateScope();
-            Utils.UpdateEhDatabase(scope.ServiceProvider); 
+            scope.ServiceProvider.UpdateEhDatabase();
 
             if (e.Args.Length == 0)
             {
@@ -59,7 +64,7 @@ namespace ErogeHelper
             Log.Info($"Game's path: {gamePath}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
 
-            var ehGlobalValueRepository = _serviceProvider.GetService<EhGlobalValueRepository>();
+            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<EhGlobalValueRepository>();
 
             if (e.Args.Contains("/le") || e.Args.Contains("-le"))
             {
@@ -96,10 +101,10 @@ namespace ErogeHelper
                 return;
             }
 
-            var gameWindowHooker = _serviceProvider.GetService<IGameWindowHooker>();
-            var ehDbRepository = _serviceProvider.GetService<EhDbRepository>();
-            var ehServerApi = _serviceProvider.GetService<IEhServerApiService>();
-            var textractorService = _serviceProvider.GetService<ITextractorService>();
+            var gameWindowHooker = _serviceProvider.GetRequiredService<IGameWindowHooker>();
+            var ehDbRepository = _serviceProvider.GetRequiredService<EhDbRepository>();
+            var ehServerApi = _serviceProvider.GetRequiredService<IEhServerApiService>();
+            var textractorService = _serviceProvider.GetRequiredService<ITextractorService>();
 
             _ = gameWindowHooker.SetGameWindowHookAsync();
 
@@ -142,16 +147,15 @@ namespace ErogeHelper
             if (settingJson == string.Empty)
             {
                 Log.Info("Not find game hook setting, open hook panel.");
-                // XXX: Correspond ehServerApi.GetGameSetting(md5).ConfigureAwait(false)
                 await Application.Dispatcher.InvokeAsync(
                     async () => await DisplayRootViewFor<HookConfigViewModel>().ConfigureAwait(false));
-                textractorService.InjectProcesses(gameProcesses); // TODO
+                textractorService.InjectProcesses(gameProcesses);
                 return;
             }
 
-            var windowManager = _serviceProvider.GetService<IWindowManager>();
-            var eventAggregator = _serviceProvider.GetService<IEventAggregator>();
-            var ehConfigRepository = _serviceProvider.GetService<EhConfigRepository>();
+            var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
+            var eventAggregator = _serviceProvider.GetRequiredService<IEventAggregator>();
+            var ehConfigRepository = _serviceProvider.GetRequiredService<EhConfigRepository>();
 
             var textractorSetting = JsonSerializer.Deserialize<TextractorSetting>(settingJson) ?? new TextractorSetting();
             textractorService.InjectProcesses(gameProcesses, textractorSetting);
@@ -179,56 +183,15 @@ namespace ErogeHelper
             ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
 
-            // Set DI
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-        }
-
-        private void ConfigureServices(IServiceCollection services)
-        {
-            // UNDONE: Add developer option in UI Preference-MSIC, to check all registered instances
-            // ViewModels
-            GetType().Assembly.GetTypes()
-                .Where(type => type.IsClass)
-                .Where(type => type.Name.EndsWith("ViewModel"))
-                .ToList()
-                .ForEach(viewModelType => services.AddTransient(
-                    viewModelType, viewModelType));
-            services.AddSingleton<GameViewModel>();
-
-            // Basic tools
-            services.AddSingleton<IEventAggregator, EventAggregator>();
-            services.AddSingleton<IWindowManager, WindowManager>();
-
-            // Services
-            var appDataDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var ehConfigRepository = new EhConfigRepository(appDataDir);
-            var dbFile = Path.Combine(ehConfigRepository.AppDataDir, "eh.db");
-            var connectString = $"Data Source={dbFile}";
-
-            services.AddSingleton<EhGlobalValueRepository>();
-            services.AddSingleton<ITextractorService, TextractorService>();
-            services.AddSingleton<IGameWindowHooker, GameWindowHooker>();
-
-            services.AddScoped(_ => ehConfigRepository);
-            services.AddScoped<IEhServerApiService>(_ => new EhServerApiServiceService(ehConfigRepository));
-            services.AddScoped(_ => new EhDbRepository(connectString));
-
-            services.AddTransient<IGameDataService, GameDataService>();
-            services.AddTransient<ISelectProcessDataService, SelectProcessDataService>();
-            services.AddTransient<IHookDataService, HookDataService>();
-            services.AddTransient<IDictFactory, DictFactory>();
-            services.AddTransient<IMeCabService, MeCabService>();
-            services.AddTransient<ITouchConversionHooker, TouchConversionHooker>();
-
-            // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982
-            services.AddFluentMigratorCore()
-                .ConfigureRunner(rb => rb
-                    .AddSQLite()
-                    .WithGlobalConnectionString(connectString)
-                    .ScanIn(typeof(AddGameInfoTable).Assembly).For.Migrations())
-                .AddLogging(lb => lb.AddFluentMigratorConsole());
+            // Set DI ConfigureServices
+            _serviceProvider = new ServiceCollection()
+                .AddViewModels(GetType())
+                .AddCaliburnMicroTools()
+                .AddRepositories()
+                .AddEhServer()
+                .AddOtherModules()
+                .AddLogging(lb => lb.AddSerilog())
+                .BuildServiceProvider();
         }
 
         #region Microsoft DependencyInjection Init
@@ -244,10 +207,11 @@ namespace ErogeHelper
                     return service;
             }
 
-            throw new Exception(
-                $"Could not locate any instances of contract {(string.IsNullOrEmpty(key) ? serviceType.Name : key)}.");
+            var requiredName = string.IsNullOrEmpty(key) ? serviceType.Name : key;
+            throw new ArgumentException($"Could not locate any instances of contract {requiredName}.");
         }
 
+        // QUESTION: May not work when call IoC.GetAllInstances()
         protected override IEnumerable<object> GetAllInstances(Type serviceType)
         {
             var type = typeof(IEnumerable<>).MakeGenericType(serviceType);
@@ -256,7 +220,7 @@ namespace ErogeHelper
 
         protected override void BuildUp(object instance)
         {
-            // There is no Property Injection for Microsoft DI
+            // There is no property injection for microsoft DI by default
         }
 
         #endregion
