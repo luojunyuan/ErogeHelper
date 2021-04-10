@@ -68,9 +68,6 @@ namespace ErogeHelper.View.Window.Game
             {
                 switch (message.Action)
                 {
-                    case ViewAction.Hide:
-                        Hide(); // UNDONE: pending to test in InsideWindow switch
-                        break;
                     case ViewAction.Show:
                         _gameWindowHooker.InvokeLastWindowPosition();
                         Show();

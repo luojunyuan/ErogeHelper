@@ -7,6 +7,7 @@ using ErogeHelper.View.Window;
 using ErogeHelper.ViewModel.Control;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -15,7 +16,7 @@ using ErogeHelper.Common.Messenger;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase
+    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>
     {
         public GameViewModel(
             IGameDataService dataService,
@@ -33,6 +34,7 @@ namespace ErogeHelper.ViewModel.Window
             _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
             TextControl = textViewModel;
 
+            _eventAggregator.SubscribeOnUIThread(this);
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {
@@ -267,6 +269,21 @@ namespace ErogeHelper.ViewModel.Window
         public async void PressSkipRelease() => await WindowsInput.Simulate.Events()
             .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
 
+        public Task HandleAsync(InsideViewTextVisibleMessage message, CancellationToken cancellationToken)
+        {
+            if (message.IsShowed)
+            {
+                IsSourceTextPined = true;
+                PinSourceTextToggle();
+                PinSourceTextToggleVisibility = Visibility.Visible;
+            }
+            else
+            {
+                TextControlVisibility = Visibility.Collapsed;
+                PinSourceTextToggleVisibility = Visibility.Collapsed;
+            }
+            return Task.CompletedTask;
+        }
 
 #pragma warning disable CS8618
         public GameViewModel() { }

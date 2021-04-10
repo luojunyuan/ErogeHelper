@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.Common.Extention;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -33,6 +34,7 @@ namespace ErogeHelper.View.Window.Game
                         Hide();
                         break;
                     case ViewAction.Show:
+                        this.MoveToCenter();
                         Show();
                         break;
                     default:

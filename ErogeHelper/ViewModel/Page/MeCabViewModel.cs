@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
@@ -13,9 +14,11 @@ namespace ErogeHelper.ViewModel.Page
     public class MeCabViewModel : PropertyChangedBase
     {
         public MeCabViewModel(
+            IEventAggregator eventAggregator,
             IMeCabService meCabService,
             EhConfigRepository ehConfigRepository)
         {
+            _eventAggregator = eventAggregator;
             _meCabService = meCabService;
             _ehConfigRepository = ehConfigRepository;
 
@@ -28,6 +31,7 @@ namespace ErogeHelper.ViewModel.Page
             CanEnableMecab = File.Exists(Path.Combine(_ehConfigRepository.AppDataDir, "dic", "char.bin"));
         }
 
+        private readonly IEventAggregator _eventAggregator;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IMeCabService _meCabService;
 
@@ -75,18 +79,9 @@ namespace ErogeHelper.ViewModel.Page
             {
                 _ehConfigRepository.EnableMeCab = value;
 
-                if (value is true)
-                {
-                    // UNDONE: 发送消息到GameViewModel，回到默认pin住文本状态，
-                    //gameViewModel.IsSourceTextPined = true;
-                    //gameViewModel.PinSourceTextToggle();
-                    //gameViewModel.PinSourceTextToggleVisubility = Visibility.Visible;
-                }
-                else
-                {
-                    //gameViewModel.TextControlVisibility = Visibility.Collapsed;
-                    //gameViewModel.PinSourceTextToggleVisubility = Visibility.Collapsed;
-                }
+                _eventAggregator.PublishOnUIThreadAsync(value is true
+                    ? new InsideViewTextVisibleMessage { IsShowed = true }
+                    : new InsideViewTextVisibleMessage { IsShowed = false });
 
                 NotifyOfPropertyChange(() => MeCabToggle);
             }
@@ -219,7 +214,7 @@ namespace ErogeHelper.ViewModel.Page
             var tmp = new BindableCollection<SingleTextItem>();
 
             var sentence = new StringBuilder();
-            // UNDONE: 想想办法看看从哪个依赖获取源文本, 或者获取渲染过的文本。重新弄，然后发送新的样式文本
+            // UNDONE: 想想办法看看从哪个依赖获取源文本, 或者获取渲染过的文本。重新弄，然后发送新样式文本
             //foreach (var sourceText in gameViewModel.TextControl.SourceTextCollection)
             //{
             //    sentence.Append(sourceText.Text);
