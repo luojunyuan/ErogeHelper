@@ -12,11 +12,10 @@ namespace ErogeHelper.Model.Service.Interface
 
         event Action<WindowSize> NewWindowSize;
 
-        Task SetGameWindowHookAsync(Process gameProcess);
+        Task SetGameWindowHookAsync(Process gameProcess, List<Process> gameProcesses);
 
         void InvokeLastWindowPosition();
 
-        // UNDONE: Add a button in panel
         /// <summary>
         /// Some games may change their handle when the window is switched full screen
         /// </summary>

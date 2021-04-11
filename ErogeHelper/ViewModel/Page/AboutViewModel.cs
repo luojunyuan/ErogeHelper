@@ -57,9 +57,6 @@ namespace ErogeHelper.ViewModel.Page
                 }
                 else
                 {
-                    // No newer version was found
-                    Log.Debug("Current version is latest");
-
                     CheckUpdateStatus = "Latest version";
                     BrushColor = Brushes.Green;
                 }

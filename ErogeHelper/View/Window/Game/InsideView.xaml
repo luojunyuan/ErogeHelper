@@ -135,6 +135,11 @@
                                     </ui:AppBarButton.Flyout>-->
                                 </ui:AppBarButton>
                                 <ui:AppBarSeparator/>
+
+                                <ui:AppBarButton 
+                                    Icon="BrowsePhotos" Label="Try reset EH position" cal:Message.Attach="[Click] = [ResetInsideView]"/>
+                                
+                                <ui:AppBarSeparator/>
                                 <ui:AppBarButton 
                                     Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}"
                                     cal:Message.Attach="[Click] = [OpenPreference]"/>

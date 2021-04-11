@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
+using ErogeHelper.View.Page;
 
 namespace ErogeHelper.ViewModel.Page
 {

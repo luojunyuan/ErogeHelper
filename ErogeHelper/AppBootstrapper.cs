@@ -97,7 +97,7 @@ namespace ErogeHelper
             var ehServerApi = _serviceProvider.GetRequiredService<IEhServerApiService>();
             var textractorService = _serviceProvider.GetRequiredService<ITextractorService>();
 
-            _ = gameWindowHooker.SetGameWindowHookAsync(gameProcess);
+            _ = gameWindowHooker.SetGameWindowHookAsync(gameProcess, gameProcesses.ToList());
 
             var settingJson = string.Empty;
             var gameInfo = await ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);

@@ -33,7 +33,7 @@ namespace ErogeHelper.Tests.Model.Service
                 }
             };
             // Depend on MainProcess 
-            await hooker.SetGameWindowHookAsync(notepad);
+            await hooker.SetGameWindowHookAsync(notepad, new List<Process> { notepad });
             // Depend on GameProcesses
             //await hooker.ResetWindowHandler();
 

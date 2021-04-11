@@ -14,7 +14,6 @@ namespace ErogeHelper.Model.Service
     {
         private const string GameQuery = "http://vnr.aniclan.com/connection.php?go=game_query";
 
-        // INSTEAD: try use RestSharp 
         public async Task<string> QueryHCode(string md5)
         {
             if (md5.Length != 32)

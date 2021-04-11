@@ -19,6 +19,8 @@ namespace ErogeHelper.Common
         public const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
         public const int WM_CLIPBOARDUPDATE = 0x031D;
 
+        public delegate bool Win32Callback(IntPtr hwnd, IntPtr lParam);
+
         public delegate IntPtr LowLevelMouseProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         public delegate void WinEventDelegate(IntPtr hWinEventHook,
@@ -221,6 +223,11 @@ namespace ErogeHelper.Common
             SafeNativeMethods.MouseEvent(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
         }
 
+        public static bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam)
+        {
+            return UnsafeNativeMethods.EnumChildWindows(parentHandle, callback, lParam);
+        }
+
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
@@ -333,14 +340,16 @@ namespace ErogeHelper.Common
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool UnhookWindowsHookEx(IntPtr hhk);
 
-
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
                 IntPtr wParam, IntPtr lParam);
 
-
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
             public static extern IntPtr GetModuleHandle(string? lpModuleName);
+
+            [DllImport("user32.Dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam);
         }
 
         public enum WMessages : uint

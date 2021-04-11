@@ -2,6 +2,7 @@
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Service.Interface;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,8 +18,9 @@ namespace ErogeHelper.Model.Service
 
         public event Action<WindowSize>? NewWindowSize;
 
-        public async Task SetGameWindowHookAsync(Process gameProcess)
+        public async Task SetGameWindowHookAsync(Process gameProcess, List<Process> gameProcesses)
         {
+            _gameProcList = gameProcesses;
             _gameProc = gameProcess;
             _gameHWnd = _gameProc.MainWindowHandle;
             await Task.Run(() =>
@@ -31,7 +33,7 @@ namespace ErogeHelper.Model.Service
                 _gameProc.Exited += ApplicationExit;
 
                 ResetWindowHandler();
-                // For the first time QUESTION: ?
+                // For the first time. If MainHandle is okay set it directly
                 if (_gameHWnd == _gameProc.MainWindowHandle)
                 {
                     SetWindowHandler();
@@ -45,8 +47,12 @@ namespace ErogeHelper.Model.Service
             Log.Debug(_lastPos.ToString());
         }
 
+        /// <summary>
+        /// Check and reset or do nothing
+        /// </summary>
         public void ResetWindowHandler()
         {
+            // First, get info from `GameProcess.MainWindowHandle` or last handle
             var clientRect = NativeMethods.GetClientRect(_gameHWnd);
             var realHandle = IntPtr.Zero;
 
@@ -68,6 +74,7 @@ namespace ErogeHelper.Model.Service
 
             if (realHandle != IntPtr.Zero)
             {
+                // New handle found
                 _gameHWnd = realHandle;
                 SetWindowHandler();
             }
@@ -81,6 +88,7 @@ namespace ErogeHelper.Model.Service
         private GCHandle _gcSafetyHandle;
         private IntPtr _hWinEventHook = IntPtr.Zero;
         private Process _gameProc = new();
+        private List<Process> _gameProcList = new();
         private IntPtr _gameHWnd;
         private const string MinimizedPosition = "-32000 -32000 -31840 -31972";
         public static readonly GameWindowPosition HiddenPos = new()
@@ -184,46 +192,65 @@ namespace ErogeHelper.Model.Service
 
         private IntPtr FindRealHandle()
         {
-            var textLength = _gameProc.MainWindowTitle.Length;
-            var title = new StringBuilder(textLength + 1);
-            NativeMethods.GetWindowText(_gameProc.MainWindowHandle, title, title.Capacity);
-
-            // UNDONE: 这个是以匹配标题的方式找handle，这样不好
-            Log.Info($"Can't find standard window in MainWindowHandle! Start search title 「{title}」");
-
-            // NOTE: Must use original gameProc.MainWindowHandle
-            var first = NativeMethods.GetWindow(_gameProc.MainWindowHandle, NativeMethods.GW.HWNDFIRST);
-            var last = NativeMethods.GetWindow(_gameProc.MainWindowHandle, NativeMethods.GW.HWNDLAST);
-
-            var cur = first;
-            // 遍历计算机上所有窗口标题
-            // UNDONE: limit in gameProc only
-            // https://stackoverflow.com/questions/3019066/get-all-window-handles-for-a-process
-            while (cur != last)
+            List<IntPtr> handleList = new();
+            foreach (var process in _gameProcList)
             {
-                var outText = new StringBuilder(textLength + 1);
-                NativeMethods.GetWindowText(cur, outText, title.Capacity);
-                if (outText.Equals(title))
-                {
-                    var rectClient = NativeMethods.GetClientRect(cur);
-                    if (rectClient.Right != 0 && rectClient.Bottom != 0)
-                    {
-                        // check pid
-                        _ = NativeMethods.GetWindowThread(cur, out var pid);
-                        //if (_gameRuntimeInfoRepository.GameProcesses.Any(proc => proc.Id == pid))
-                        //{
-                        //    Log.Info($"Find handle at 0x{Convert.ToString(cur.ToInt64(), 16).ToUpper()}");
-                        //    // Search over, believe handle is found
-                        //    return cur;
-                        //}
-                    }
-                }
-
-                cur = NativeMethods.GetWindow(cur, NativeMethods.GW.HWNDNEXT);
+                handleList.AddRange(GetRootWindowsOfProcess(process.Id));
             }
 
+            foreach (var handle in handleList)
+            {
+                var clientRect = NativeMethods.GetClientRect(handle);
+                if (clientRect.Bottom > 400 && clientRect.Right > 400)
+                {
+                    return handle;
+                }
+            }
             Log.Info("Find failed, use last handle");
             return IntPtr.Zero;
+        }
+
+        private List<IntPtr> GetRootWindowsOfProcess(int pid)
+        {
+            List<IntPtr> rootWindows = GetChildWindows(IntPtr.Zero);
+            List<IntPtr> dsProcRootWindows = new();
+            foreach (var hWnd in rootWindows)
+            {
+                NativeMethods.GetWindowThread(hWnd, out var lpdwProcessId);
+                if (lpdwProcessId == pid)
+                    dsProcRootWindows.Add(hWnd);
+            }
+            return dsProcRootWindows;
+        }
+
+        private List<IntPtr> GetChildWindows(IntPtr parent)
+        {
+            List<IntPtr> result = new();
+            var listHandle = GCHandle.Alloc(result);
+            try
+            {
+                NativeMethods.Win32Callback childProc = new(EnumWindow);
+                NativeMethods.EnumChildWindows(parent, childProc, GCHandle.ToIntPtr(listHandle));
+            }
+            finally
+            {
+                if (listHandle.IsAllocated)
+                    listHandle.Free();
+            }
+            return result;
+        }
+
+        private bool EnumWindow(IntPtr handle, IntPtr pointer)
+        {
+            var gch = GCHandle.FromIntPtr(pointer);
+            var list = gch.Target as List<IntPtr>;
+            if (list is null)
+            {
+                throw new InvalidCastException("GCHandle Target could not be cast as List<IntPtr>");
+            }
+            list.Add(handle);
+            //  You can modify this to check to see if you want to cancel the operation, then return a null here
+            return true;
         }
 
         private void ApplicationExit(object? sender, EventArgs e)

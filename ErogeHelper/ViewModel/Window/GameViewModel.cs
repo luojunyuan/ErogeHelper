@@ -25,7 +25,8 @@ namespace ErogeHelper.ViewModel.Window
             ITouchConversionHooker touchConversionHooker,
             EhConfigRepository ehConfigRepository,
             GameRuntimeInfoRepository gameRuntimeInfoRepository,
-            TextViewModel textViewModel)
+            TextViewModel textViewModel,
+            IGameWindowHooker gameWindowHooker)
         {
             _touchHooker = touchConversionHooker;
             _windowManager = windowManager;
@@ -33,6 +34,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehConfigRepository = ehConfigRepository;
             _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
             TextControl = textViewModel;
+            _gameWindowHooker = gameWindowHooker;
 
             _eventAggregator.SubscribeOnUIThread(this);
             if (_ehConfigRepository.UseOutsideWindow)
@@ -57,6 +59,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
         private readonly ITouchConversionHooker _touchHooker;
+        private readonly IGameWindowHooker _gameWindowHooker;
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
@@ -252,6 +255,8 @@ namespace ErogeHelper.ViewModel.Window
 
             AssistiveTouchIsVisible = true;
         }
+
+        public void ResetInsideView() => _gameWindowHooker.ResetWindowHandler();
 
         public async void OpenPreference()
         {

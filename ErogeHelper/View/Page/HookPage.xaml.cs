@@ -34,13 +34,10 @@ namespace ErogeHelper.View.Page
             {
                 switch (message.Action)
                 {
-                    // FIXME: "System.InvalidOperationException"(ModernWpf.Controls.dll)
-                    // 1. 每次都new 一个新的dialog。2. 只让page存在一个唯一实例。3. 等待GC自己回收。
                     case ViewAction.OpenDialog:
                         if (message.DialogType == ModernDialog.HookCode)
-                            await HCodeDialog.ShowAsync().ConfigureAwait(false);
+                            _ = HCodeDialog.ShowAsync().ConfigureAwait(false);
                         else if (message.DialogType == ModernDialog.HookSettingUpdatedTip)
-                            // UNDONE: 拿出来
                             await new ContentDialog
                             {
                                 Content = "Update succeed",

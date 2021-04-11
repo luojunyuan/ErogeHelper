@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ErogeHelper.Common;
 
 namespace ErogeHelper.View.Dialog
 {
@@ -113,7 +114,7 @@ namespace ErogeHelper.View.Dialog
         private void CodeTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             // see: Common.Validation.InvalidCodeFormatValidationRule
-            const string patten = @"/?H\S+@[A-Fa-f0-9]+:\S+|/?RS@[A-Fa-f0-9]+";
+            const string patten = ConstraintValues.CodeRegExp;
 
             if (sender is TextBox codeTextBox)
             {

@@ -88,7 +88,7 @@ namespace ErogeHelper.ViewModel.Window
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
             var (md5, gameProcess) = _gameRuntimeInfoRepository.Init(gameProcesses);
 
-            _ = _gameWindowHooker.SetGameWindowHookAsync(gameProcess);
+            _ = _gameWindowHooker.SetGameWindowHookAsync(gameProcess, gameProcesses.ToList());
 
             _ehDbRepository.Md5 = md5;
             var settingJson = string.Empty;

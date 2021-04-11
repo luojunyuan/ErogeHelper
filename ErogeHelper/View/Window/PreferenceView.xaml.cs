@@ -1,10 +1,10 @@
 ﻿using ErogeHelper.View.Page;
 using ModernWpf.Controls;
-using ModernWpf.Media.Animation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Navigation;
+using Caliburn.Micro;
 using WindowPage = System.Windows.Controls.Page;
 
 namespace ErogeHelper.View.Window
@@ -31,7 +31,7 @@ namespace ErogeHelper.View.Window
                     ("about", new AboutPage()),
                 };
 
-                PageNavigate("general", new EntranceNavigationTransitionInfo());
+                PageNavigate("general");
             };
         }
 
@@ -53,10 +53,10 @@ namespace ErogeHelper.View.Window
                 return;
 
             var navItemTag = args.SelectedItemContainer.Tag.ToString()!;
-            PageNavigate(navItemTag, args.RecommendedNavigationTransitionInfo);
+            PageNavigate(navItemTag);
         }
 
-        private void PageNavigate(string navItemTag, NavigationTransitionInfo info)
+        private void PageNavigate(string navItemTag)
         {
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
             var instanceItem = _pagesList?.FirstOrDefault(p => p.Tag.Equals(navItemTag));
@@ -72,7 +72,7 @@ namespace ErogeHelper.View.Window
                     ContentFrame.RemoveBackEntry();
                 }
                 // https://github.com/Kinnara/ModernWpf/issues/329
-                ContentFrame.Navigate(pageType, null, info);
+                ContentFrame.Navigate(pageInstance, null);
             }
         }
 
@@ -94,6 +94,15 @@ namespace ErogeHelper.View.Window
 
                 HeaderBlock.Text =
                     ((NavigationViewItem)NavView.SelectedItem!).Content?.ToString();
+            }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            foreach (var (_, instance) in _pagesList ?? throw new InvalidOperationException())
+            {
+                eventAggregator.Unsubscribe(instance);
             }
         }
     }
