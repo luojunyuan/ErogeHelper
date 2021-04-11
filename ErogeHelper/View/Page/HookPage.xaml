@@ -15,8 +15,7 @@
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance vm:HookViewModel, IsDesignTimeCreatable=True}"
       cal:Bind.AtDesignTime="True" d:DesignHeight="800" d:DesignWidth="850"
-      Title="{x:Static resx:Strings.HookPage_Title}" KeepAlive="False">
-    <!-- QUESTION: Does KeepAlive always stay in memory? -->
+      Title="{x:Static resx:Strings.HookPage_Title}">
 
     <Page.Resources>
         <DataTemplate x:Key="HpItemTemplate" DataType="{x:Type notifyItem:HookMapItem}">
