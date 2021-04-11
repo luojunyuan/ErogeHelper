@@ -24,6 +24,7 @@ namespace ErogeHelper.Model.Service
         public event Action<string, string>? AppendTextReceived;
         public event Action<object>? AppendTextsRefresh;
         public void RefreshCurrentText() => ProcessDataText(new HookParam() {Text = _currentText });
+        public void SendNewText(string text) => ProcessDataText(new HookParam() {Text = text});
 
         public GameDataService(
             IMeCabService meCabService,

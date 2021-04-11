@@ -11,5 +11,6 @@ namespace ErogeHelper.Model.Service.Interface
         event Action<string, string> AppendTextReceived;
         event Action<object> AppendTextsRefresh;
         void RefreshCurrentText();
+        void SendNewText(string text);
     }
 }

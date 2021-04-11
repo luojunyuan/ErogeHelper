@@ -15,7 +15,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
-using ErogeHelper.View.Page;
 
 namespace ErogeHelper.ViewModel.Page
 {
@@ -28,7 +27,8 @@ namespace ErogeHelper.ViewModel.Page
             ITextractorService textractorService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            GameRuntimeInfoRepository gameRuntimeInfoRepository)
+            GameRuntimeInfoRepository gameRuntimeInfoRepository,
+            IGameDataService gameDataService)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -37,6 +37,7 @@ namespace ErogeHelper.ViewModel.Page
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
             _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
+            _gameDataService = gameDataService;
 
             _textractorService.DataEvent += DataProcess;
             RegExp = _dataService.GetRegExp();
@@ -51,6 +52,7 @@ namespace ErogeHelper.ViewModel.Page
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
+        private readonly IGameDataService _gameDataService;
 
         #region RegExp
 
@@ -293,8 +295,6 @@ namespace ErogeHelper.ViewModel.Page
                 textPendingToSend = string.Join("", list);
             }
 
-            // UNDONE: Invoke sendText to GameView, pass through MeCab and color
-
             if (SelectedHook is null)
                 throw new ArgumentNullException(nameof(SelectedHook));
 
@@ -350,6 +350,7 @@ namespace ErogeHelper.ViewModel.Page
                 else
                 {
                     // HookPage in Preference window
+                    _gameDataService.SendNewText(textPendingToSend);
                     await _ehDbRepository.UpdateGameInfoAsync(new GameInfoTable
                     {
                         Md5 = gameInfoTable.Md5,
@@ -371,6 +372,8 @@ namespace ErogeHelper.ViewModel.Page
 
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
+
+            _gameDataService.SendNewText(textPendingToSend);
 
             _ = _ehConfigRepository.UseOutsideWindow
                 ? _eventAggregator.PublishOnUIThreadAsync(
