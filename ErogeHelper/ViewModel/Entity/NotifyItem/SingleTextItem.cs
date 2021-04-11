@@ -14,13 +14,10 @@ namespace ErogeHelper.ViewModel.Entity.NotifyItem
             TextTemplateType = templateType;
             SubMarkColor = backgroundColor;
             
-            // UNDONE
-            //Application.Current.Dispatcher.InvokeAsync(
-            //    () => CanBeSearch = !backgroundColor.ToString().Equals(StaticXamlBitmapImage.TransparentImage.ToString()));
             CanBeSearch = backgroundColor != StaticXamlBitmapImage.TransparentImage;
         }
 
-        // UNDONE: 增加啥，增加 动词的lemma
+        // XXX: 可以考虑带一个MeCabWord或VeWord的引用
         public string Ruby { get; }
         public string Text { get; }
         public TextTemplateType TextTemplateType { get; }

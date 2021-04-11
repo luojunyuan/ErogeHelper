@@ -23,15 +23,14 @@ namespace ErogeHelper.Model.Service
         public event Action<BindableCollection<SingleTextItem>>? BindableTextItem;
         public event Action<string, string>? AppendTextReceived;
         public event Action<object>? AppendTextsRefresh;
+        public void RefreshCurrentText() => ProcessDataText(new HookParam() {Text = _currentText });
 
         public GameDataService(
             IMeCabService meCabService,
             ITextractorService textractorService, 
-            GameRuntimeInfoRepository gameRuntimeInfoRepository,
             EhConfigRepository ehConfigRepository)
         {
             _meCabService = meCabService;
-            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
             _ehConfigRepository = ehConfigRepository;
          
             textractorService.SelectedDataEvent += ProcessDataText;
@@ -42,13 +41,16 @@ namespace ErogeHelper.Model.Service
         }
 
         private readonly IMeCabService _meCabService;
-        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
         private readonly EhConfigRepository _ehConfigRepository;
+
+        private string _currentText = string.Empty;
 
         private string _pattern = string.Empty;
 
         private void ProcessDataText(HookParam hp)
         {
+            _currentText = hp.Text;
+
             // Refresh
             AppendTextsRefresh?.Invoke(nameof(GameDataService));
 

@@ -3,10 +3,8 @@ using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.ViewModel.Entity.NotifyItem;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ErogeHelper.ViewModel.Page
@@ -16,11 +14,13 @@ namespace ErogeHelper.ViewModel.Page
         public MeCabViewModel(
             IEventAggregator eventAggregator,
             IMeCabService meCabService,
-            EhConfigRepository ehConfigRepository)
+            EhConfigRepository ehConfigRepository,
+            IGameDataService gameDataService)
         {
             _eventAggregator = eventAggregator;
             _meCabService = meCabService;
             _ehConfigRepository = ehConfigRepository;
+            _gameDataService = gameDataService;
 
             _kanaDefault = _ehConfigRepository.KanaDefault;
             _kanaTop = _ehConfigRepository.KanaTop;
@@ -34,6 +34,7 @@ namespace ErogeHelper.ViewModel.Page
         private readonly IEventAggregator _eventAggregator;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IMeCabService _meCabService;
+        private readonly IGameDataService _gameDataService;
 
         private bool _kanaDefault;
         private bool _kanaTop;
@@ -146,15 +147,8 @@ namespace ErogeHelper.ViewModel.Page
 
         private void ChangeSourceTextTemplate(TextTemplateType type)
         {
-            var tmp = new BindableCollection<SingleTextItem>();
-            // UNDONE: 想想办法看看从哪个依赖获取源文本, 或者获取渲染过的文本。重新弄，然后发送新的样式文本
-            //foreach (var item in gameViewModel.TextControl.SourceTextCollection)
-            //{
-            //    item.TextTemplateType = type;
-            //    tmp.Add(item);
-            //}
-            //gameViewModel.TextControl.SourceTextCollection = tmp;
             _ehConfigRepository.TextTemplateConfig = type;
+            _gameDataService.RefreshCurrentText();
         }
 
         public bool Romaji
@@ -170,7 +164,7 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = true;
                     _ehConfigRepository.Hiragana = false;
                     _ehConfigRepository.Katakana = false;
-                    ChangeKanaType();
+                    _gameDataService.RefreshCurrentText();
                 }
             }
         }
@@ -187,7 +181,7 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = false;
                     _ehConfigRepository.Hiragana = true;
                     _ehConfigRepository.Katakana = false;
-                    ChangeKanaType();
+                    _gameDataService.RefreshCurrentText();
                 }
             }
         }
@@ -204,24 +198,9 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = false;
                     _ehConfigRepository.Hiragana = false;
                     _ehConfigRepository.Katakana = true;
-                    ChangeKanaType();
+                    _gameDataService.RefreshCurrentText();
                 }
             }
-        }
-
-        private void ChangeKanaType()
-        {
-            var tmp = new BindableCollection<SingleTextItem>();
-
-            var sentence = new StringBuilder();
-            // UNDONE: 想想办法看看从哪个依赖获取源文本, 或者获取渲染过的文本。重新弄，然后发送新样式文本
-            //foreach (var sourceText in gameViewModel.TextControl.SourceTextCollection)
-            //{
-            //    sentence.Append(sourceText.Text);
-            //}
-
-            //var collect = Utils.BindableTextMaker(mecabHelper.IpaDicParser(sentence.ToString()));
-            //gameViewModel.TextControl.SourceTextCollection = collect;
         }
 
         public bool MojiDictToggle

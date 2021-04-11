@@ -35,6 +35,8 @@ namespace ErogeHelper.ViewModel.Window
             TextControl = textViewModel;
 
             _eventAggregator.SubscribeOnUIThread(this);
+            if (_ehConfigRepository.UseOutsideWindow)
+                HandleAsync(new InsideViewTextVisibleMessage() {IsShowed = false}, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {

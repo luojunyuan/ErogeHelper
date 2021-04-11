@@ -92,8 +92,8 @@ namespace ErogeHelper.Common.Extention
             // Services
             services.TryAddSingleton<ITextractorService, TextractorService>();
             services.TryAddSingleton<IGameWindowHooker, GameWindowHooker>();
+            services.TryAddSingleton<IGameDataService, GameDataService>();
 
-            services.TryAddTransient<IGameDataService, GameDataService>();
             services.TryAddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.TryAddTransient<IHookDataService, HookDataService>();
             services.TryAddTransient<IDictFactory, DictFactory>();
