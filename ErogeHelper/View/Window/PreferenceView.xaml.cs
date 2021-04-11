@@ -18,25 +18,24 @@ namespace ErogeHelper.View.Window
         {
             InitializeComponent();
 
-            _pagesList =  new List<(string Tag, WindowPage PageInstance)>()
-            {
-                ("general", _generalPage),
-                ("mecab", _mecabPage),
-                ("hook", _hookPage),
-                //("trans", typeof(TransPage)),
-
-                ("about", _aboutPage),
-            };
             ContentFrame.Navigated += OnNavigated;
-            Loaded += (_, _) => PageNavigate("general", new EntranceNavigationTransitionInfo());
+            Loaded += (_, _) =>
+            {
+                _pagesList = new List<(string Tag, WindowPage PageInstance)>()
+                {
+                    ("general", new GeneralPage()),
+                    ("mecab", new MeCabPage()),
+                    ("hook", new HookPage()),
+                    //("trans", typeof(TransPage)),
+
+                    ("about", new AboutPage()),
+                };
+
+                PageNavigate("general", new EntranceNavigationTransitionInfo());
+            };
         }
 
-        private readonly GeneralPage _generalPage = new();
-        private readonly MeCabPage _mecabPage = new();
-        private readonly HookPage _hookPage = new();
-        private readonly AboutPage _aboutPage = new();
-
-        private readonly List<(string Tag, WindowPage PageInstance)> _pagesList;
+        private List<(string Tag, WindowPage PageInstance)>? _pagesList;
 
         private readonly List<(string Tag, Type PageType)> _pages = new()
         {
@@ -50,7 +49,7 @@ namespace ErogeHelper.View.Window
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.SelectedItem is null) 
+            if (args.SelectedItem is null)
                 return;
 
             var navItemTag = args.SelectedItemContainer.Tag.ToString()!;
@@ -60,12 +59,12 @@ namespace ErogeHelper.View.Window
         private void PageNavigate(string navItemTag, NavigationTransitionInfo info)
         {
             var item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
-            var instanceItem = _pagesList.FirstOrDefault(p => p.Tag.Equals(navItemTag));
+            var instanceItem = _pagesList?.FirstOrDefault(p => p.Tag.Equals(navItemTag));
             Type pageType = item.PageType;
-            WindowPage pageInstance = instanceItem.PageInstance;
+            WindowPage pageInstance = (instanceItem ?? throw new InvalidOperationException()).PageInstance;
 
             // if not same page
-            if (pageType != null && ContentFrame.CurrentSourcePageType != pageType)
+            if (pageType != null && ContentFrame.SourcePageType != pageType)
             {
                 // Clear Journal info (non-use)
                 while (ContentFrame.CanGoBack)
@@ -74,7 +73,6 @@ namespace ErogeHelper.View.Window
                 }
                 // https://github.com/Kinnara/ModernWpf/issues/329
                 ContentFrame.Navigate(pageType, null, info);
-                //ContentFrame.Navigate(pageInstance);
             }
         }
 
@@ -85,14 +83,14 @@ namespace ErogeHelper.View.Window
             // Set header text
             if (sourcePageType is not null)
             {
-                var item = _pages.FirstOrDefault(p => p.PageType == sourcePageType);
+                var (tag, _) = _pages.FirstOrDefault(p => p.PageType == sourcePageType);
 
                 NavView.SelectedItem = NavView.FooterMenuItems
                     .OfType<NavigationViewItem>().
-                    FirstOrDefault(n => n.Tag.Equals(item.Tag)) ??
+                    FirstOrDefault(n => n.Tag.Equals(tag)) ??
                     NavView.MenuItems
                     .OfType<NavigationViewItem>()
-                    .FirstOrDefault(n => n.Tag.Equals(item.Tag));
+                    .FirstOrDefault(n => n.Tag.Equals(tag));
 
                 HeaderBlock.Text =
                     ((NavigationViewItem)NavView.SelectedItem!).Content?.ToString();

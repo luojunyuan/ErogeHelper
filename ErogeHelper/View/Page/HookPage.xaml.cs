@@ -28,20 +28,13 @@ namespace ErogeHelper.View.Page
                           IoC.Get<ViewModel.Page.HookViewModel>();
         }
 
-        // 只是加锁没用，可以避免Exception但是dialog还是无法弹出
-        private static bool _messageLock;
-
         public async Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
         {
-            if (message.WindowType == GetType() && _messageLock == false)
+            if (message.WindowType == GetType())
             {
-                _messageLock = true;
-                Log.Debug($"HookPage.xaml.cs received message");
                 switch (message.Action)
                 {
                     // FIXME: "System.InvalidOperationException"(ModernWpf.Controls.dll)
-                    // page instant still exist, message got received many times
-                    // 因为我的Dialog实例是创建在xaml中的，所以这个dialog实例也被创建了很多份，所以消息到page要小心
                     // 1. 每次都new 一个新的dialog。2. 只让page存在一个唯一实例。3. 等待GC自己回收。
                     case ViewAction.OpenDialog:
                         if (message.DialogType == ModernDialog.HookCode)
@@ -50,7 +43,7 @@ namespace ErogeHelper.View.Page
                             // UNDONE: 拿出来
                             await new ContentDialog
                             {
-                                Content = $"Update succeed",
+                                Content = "Update succeed",
                                 CloseButtonText = "OK"
                             }.ShowAsync().ConfigureAwait(false);
                         break;
@@ -58,8 +51,6 @@ namespace ErogeHelper.View.Page
                         throw new InvalidOperationException();
                 }
             }
-
-            _messageLock = false;
         }
 
         private bool _contentIsExpanded;

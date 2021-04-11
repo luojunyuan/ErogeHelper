@@ -3,7 +3,6 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
-using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ModernWpf.Controls;
 using System;
@@ -14,7 +13,6 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using ErogeHelper.Common.Function;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -189,8 +187,8 @@ namespace ErogeHelper.View.Window.Game
             if (lostFocus.Status)
             {
                 var exStyle = NativeMethods.GetWindowLong(_handler, NativeMethods.GWL_EXSTYLE);
-                NativeMethods.SetWindowLong(_handler, 
-                    NativeMethods.GWL_EXSTYLE, 
+                NativeMethods.SetWindowLong(_handler,
+                    NativeMethods.GWL_EXSTYLE,
                     exStyle | NativeMethods.WS_EX_NOACTIVATE);
             }
             else
