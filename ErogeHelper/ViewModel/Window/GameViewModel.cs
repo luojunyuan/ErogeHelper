@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Extention;
+using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.View.Window;
@@ -12,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
-using ErogeHelper.Common.Messenger;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -38,7 +38,7 @@ namespace ErogeHelper.ViewModel.Window
 
             _eventAggregator.SubscribeOnUIThread(this);
             if (_ehConfigRepository.UseOutsideWindow)
-                HandleAsync(new InsideViewTextVisibleMessage() {IsShowed = false}, CancellationToken.None);
+                HandleAsync(new InsideViewTextVisibleMessage() { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {
@@ -67,7 +67,7 @@ namespace ErogeHelper.ViewModel.Window
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
 
-        // UNDONE: OutsideView scroll able text
+        // UNDONE: OutsideView chrome window and scroll able text
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(30);
 
         public bool AssistiveTouchIsVisible
@@ -100,9 +100,9 @@ namespace ErogeHelper.ViewModel.Window
             NotifyOfPropertyChange(() => CanZoomOut);
         }
 
-        public async void VolumeUp() => await WindowsInput.Simulate.Events()
+        public static async void VolumeUp() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeUp).Invoke().ConfigureAwait(false);
-        public async void VolumeDown() => await WindowsInput.Simulate.Events()
+        public static async void VolumeDown() => await WindowsInput.Simulate.Events()
             .Click(KeyCode.VolumeDown).Invoke().ConfigureAwait(false);
 
         public async void SwitchGameScreen()
@@ -176,7 +176,7 @@ namespace ErogeHelper.ViewModel.Window
 
         public void TriggerBarEnter()
         {
-            if (IsSourceTextPined) 
+            if (IsSourceTextPined)
                 return;
 
             TextControlVisibility = Visibility.Visible;
@@ -185,7 +185,7 @@ namespace ErogeHelper.ViewModel.Window
 
         public void TextControlLeave()
         {
-            if (IsSourceTextPined) 
+            if (IsSourceTextPined)
                 return;
 
             TextControlVisibility = Visibility.Collapsed;
@@ -206,11 +206,12 @@ namespace ErogeHelper.ViewModel.Window
             if (IsLoseFocus)
             {
                 await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = true });
-                // UNDONE: save to eh.db
             }
             else
             {
+                await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = false });
             }
+            // UNDONE: Focus status save to eh.db
         }
 
         private bool _isTouchToMouse;
@@ -232,10 +233,10 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        public async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()
+        public static async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.A).Invoke().ConfigureAwait(false);
 
-        public async void TaskView() => await WindowsInput.Simulate.Events()
+        public static async void TaskView() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.Tab).Invoke().ConfigureAwait(false);
 
         public async void ScreenShot()
@@ -271,9 +272,9 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        public async void PressSkip() => await WindowsInput.Simulate.Events()
+        public static async void PressSkip() => await WindowsInput.Simulate.Events()
             .Hold(KeyCode.Control).Invoke().ConfigureAwait(false);
-        public async void PressSkipRelease() => await WindowsInput.Simulate.Events()
+        public static async void PressSkipRelease() => await WindowsInput.Simulate.Events()
             .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
 
         public Task HandleAsync(InsideViewTextVisibleMessage message, CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ namespace ErogeHelper
     {
         private App()
         {
-            // UNDONE: Check singleton app
+            // UNDONE: Check singleton app and Toast
             // see Windows.UI.Notifications; or ToastNotifications
             // Toast user "ErogeHelper is running, or you can turn ErogeHelper down immediately"
 

@@ -52,8 +52,6 @@ namespace ErogeHelper.ViewModel.Page
             _ehConfigRepository.ClearConfig();
         }
 
-        // UNDONE: Auto inject user hook code
-
 #pragma warning disable CS8618
         public GeneralViewModel() { }
     }

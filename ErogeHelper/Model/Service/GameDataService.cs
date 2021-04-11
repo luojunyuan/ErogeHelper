@@ -132,7 +132,7 @@ namespace ErogeHelper.Model.Service
 
             if (NativeMethods.GetForegroundWindow() != handle)
             {
-                // UNDONE: Show DeepL for user or use Toast in win10
+                // UNDONE: (尝试能否唤起deepL窗口
                 Application.Current.Dispatcher.InvokeAsync(() => ModernWpf.MessageBox.Show(
                     "Didn't find DeepL client in front, will turn off DeepL extension..", "Eroge Helper"));
 

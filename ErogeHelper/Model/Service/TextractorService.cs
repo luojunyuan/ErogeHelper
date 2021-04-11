@@ -162,7 +162,7 @@ namespace ErogeHelper.Model.Service
                     Log.Debug(hp.Text);
                     SelectedDataEvent?.Invoke(hp);
                 }
-                // UNDONE: Improve this in the future
+                // UNDONE: Improve read code in the future
                 else if (Setting.Hookcode.StartsWith('R')
                          && hp.Name.Equals("READ"))
                 {

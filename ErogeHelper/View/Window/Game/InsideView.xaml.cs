@@ -163,7 +163,6 @@ namespace ErogeHelper.View.Window.Game
                             _fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
                         }
                         _bringToTopTimer?.Start();
-                        // UNDONE: Also tell OutsideView to start timer
                     }
                     else
                     {

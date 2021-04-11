@@ -23,7 +23,7 @@
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />
                     <ui:HyperlinkButton 
                         Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app"/>
-                    <Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />
+                    <!--<Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />-->
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

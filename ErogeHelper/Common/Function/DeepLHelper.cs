@@ -63,6 +63,7 @@ namespace ErogeHelper.Common.Function
                     }
                     catch
                     {
+                        // UNDONE: (Toast users once, clipboard is been using to restart computer
                         // ex from first exception
                         Log.Warn(ex.Message);
                     }

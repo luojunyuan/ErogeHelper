@@ -65,7 +65,7 @@ namespace ErogeHelper.ViewModel.Page
 
             string filename = dlg.FileName;
             var dicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
-            // UNDONE: Need progress dialog
+            // UNDONE: Unzip dic.eh may need progress dialog
             await Task.Run(() => ZipFile.ExtractToDirectory(filename, dicPath)).ConfigureAwait(false);
             _meCabService.CreateTagger(dicPath);
             File.Delete(filename);

@@ -197,6 +197,7 @@ namespace ErogeHelper.Model.Service
             {
                 handleList.AddRange(GetRootWindowsOfProcess(process.Id));
             }
+            Log.Debug($"{handleList.Count} handles found");
 
             foreach (var handle in handleList)
             {
@@ -243,8 +244,7 @@ namespace ErogeHelper.Model.Service
         private bool EnumWindow(IntPtr handle, IntPtr pointer)
         {
             var gch = GCHandle.FromIntPtr(pointer);
-            var list = gch.Target as List<IntPtr>;
-            if (list is null)
+            if (gch.Target is not List<IntPtr> list)
             {
                 throw new InvalidCastException("GCHandle Target could not be cast as List<IntPtr>");
             }
