@@ -18,7 +18,6 @@ namespace ErogeHelper.Tests.Model.Repository
     [TestClass]
     public class EhDbRepositoryTests
     {
-        // UNDONE: 先确认db文件是否存在，不存在就要创建，创建后就不管他了
         [TestMethod]
         public void EhDbRepositoryBasicQueryTest()
         {

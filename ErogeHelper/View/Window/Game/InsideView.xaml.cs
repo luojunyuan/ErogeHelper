@@ -85,7 +85,6 @@ namespace ErogeHelper.View.Window.Game
 
             // Get GameView window handle
             var interopHelper = new WindowInteropHelper(this);
-            var globalValues = IoC.Get<GameRuntimeInfoRepository>();
             _handler = interopHelper.Handle;
 
             // Set fullscreen application listener
@@ -94,28 +93,14 @@ namespace ErogeHelper.View.Window.Game
             source?.AddHook(WndProc);
 
             // Always make window front
-            // UNDONE: Test if can use in both two windows
-            var timer = new DispatcherTimer()
+            _bringToTopTimer = new DispatcherTimer()
             {
                 Interval = TimeSpan.FromMilliseconds(50),
             };
-            timer.Tick += (_, _) =>
-            {
-                if (_handler == IntPtr.Zero)
-                {
-                    timer.Stop();
-                }
-                // UNDONE
-                // 不加这个条件？ 另外这些其实是在有了工具窗口判断全屏前写的，后来有了判断全屏就没改过这些
-                // 全屏判断相当稳定、考虑一下，以及计时器的停止啥的
-                if (globalValues.MainProcess.MainWindowHandle == NativeMethods.GetForegroundWindow())
-                {
-                    NativeMethods.BringWindowToTop(_handler);
-                    //Log.Debug("yes");
-                }
-            };
+            _bringToTopTimer.Tick += (_, _) => NativeMethods.BringWindowToTop(_handler);
         }
 
+        private DispatcherTimer? _bringToTopTimer;
         private IntPtr _desktopHandle;
         private IntPtr _shellHandle;
         private readonly int _appbarMsg = NativeMethods.RegisterWindowMessage("APPBARMSG_EROGE_HELPER");
@@ -179,6 +164,8 @@ namespace ErogeHelper.View.Window.Game
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
                             _fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
                         }
+                        _bringToTopTimer?.Start();
+                        // UNDONE: Also tell OutsideView to start timer
                     }
                     else
                     {
@@ -188,6 +175,7 @@ namespace ErogeHelper.View.Window.Game
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
                             _fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchFullScreen;
                         }
+                        _bringToTopTimer?.Stop();
                     }
                     _gameWindowHooker.ResetWindowHandler();
                     break;

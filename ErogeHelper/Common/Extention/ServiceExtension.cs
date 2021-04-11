@@ -23,12 +23,10 @@ namespace ErogeHelper.Common.Extention
         /// </summary>
         public static void UpdateEhDatabase(this IServiceProvider serviceProvider)
         {
-            // Instantiate the runner
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
-            // Execute the migrations
             // https://github.com/fluentmigrator/fluentmigrator/issues/1450
-            Log.Debug("FileNotExistExceptions in CLR");
+            Log.Info("Fine FileNotFoundExceptions in CLR");
             runner.MigrateUp(); 
         }
 

@@ -25,7 +25,7 @@ namespace ErogeHelper.Tests.Model.Service
             var notepad = Process.Start("notepad");
             var testStuff = Process.GetProcessesByName("notepad");
             List<string> receivedTexts = new();
-            ITextractorService textractorService = new TextractorService(); // todo
+            ITextractorService textractorService = new TextractorService();
 
             // Act
             textractorService.DataEvent += param =>

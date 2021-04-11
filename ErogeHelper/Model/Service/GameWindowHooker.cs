@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Service.Interface;
+using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Service.Interface;
 
 namespace ErogeHelper.Model.Service
 {
@@ -23,7 +20,7 @@ namespace ErogeHelper.Model.Service
         public async Task SetGameWindowHookAsync(Process gameProcess)
         {
             _gameProc = gameProcess;
-            _gameHWnd = _gameProc.MainWindowHandle;  
+            _gameHWnd = _gameProc.MainWindowHandle;
             await Task.Run(() =>
             {
                 _winEventDelegate = WinEventCallback;
@@ -46,7 +43,7 @@ namespace ErogeHelper.Model.Service
         {
             GamePosArea?.Invoke(_lastPos);
             Log.Debug(_lastPos.ToString());
-        } 
+        }
 
         public void ResetWindowHandler()
         {
@@ -56,7 +53,7 @@ namespace ErogeHelper.Model.Service
             // InsideView命中的客户区窗口范围很小，说明不是正常的游戏窗口
             if (400 > clientRect.Bottom && 400 > clientRect.Right)
             {
-                // Tip: This would active even when game window get minimize
+                // NOTE: This would active even when game window get minimize
                 var windowRect = NativeMethods.GetWindowRect(_gameHWnd);
                 if ($"{windowRect.Left} {windowRect.Top} {windowRect.Right} {windowRect.Bottom}"
                     .Equals(MinimizedPosition))
@@ -83,7 +80,7 @@ namespace ErogeHelper.Model.Service
         private NativeMethods.WinEventDelegate? _winEventDelegate;
         private GCHandle _gcSafetyHandle;
         private IntPtr _hWinEventHook = IntPtr.Zero;
-        private Process _gameProc = new ();
+        private Process _gameProc = new();
         private IntPtr _gameHWnd;
         private const string MinimizedPosition = "-32000 -32000 -31840 -31972";
         public static readonly GameWindowPosition HiddenPos = new()
@@ -177,7 +174,7 @@ namespace ErogeHelper.Model.Service
                 _oldHeight = height;
             }
             else if (_oldHeight != height || _oldWidth != width)
-            { 
+            {
                 NewWindowSize?.Invoke(new WindowSize(rectClient.Right, rectClient.Bottom));
                 _oldHeight = height;
                 _oldWidth = width;

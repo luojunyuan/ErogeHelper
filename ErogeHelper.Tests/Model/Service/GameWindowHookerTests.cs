@@ -1,13 +1,11 @@
-﻿using System;
+﻿using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Service;
+using ErogeHelper.Model.Service.Interface;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Repository;
-using ErogeHelper.Model.Service;
-using ErogeHelper.Model.Service.Interface;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ErogeHelper.Tests.Model.Service
 {
