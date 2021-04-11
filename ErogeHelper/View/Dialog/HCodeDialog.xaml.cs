@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ModernWpf.Controls;
+using System;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ABI.Windows.ApplicationModel.Store;
-using ErogeHelper.Common.Validation;
-using ModernWpf.Controls;
-using Serilog.Core;
 
 namespace ErogeHelper.View.Dialog
 {
@@ -90,8 +77,8 @@ namespace ErogeHelper.View.Dialog
         /// </summary>
         public static readonly DependencyProperty CanSearchCodeProperty =
             DependencyProperty.Register(
-                "CanSearchCode", 
-                typeof(bool), 
+                "CanSearchCode",
+                typeof(bool),
                 typeof(HCodeDialog),
                 new PropertyMetadata(true, (sender, eventArgs) =>
                 {
@@ -104,7 +91,7 @@ namespace ErogeHelper.View.Dialog
         /// </summary>
         public bool CanSearchCode
         {
-            get => (bool)GetValue(CanSearchCodeProperty); 
+            get => (bool)GetValue(CanSearchCodeProperty);
             set => SetValue(CanSearchCodeProperty, value);
         }
 

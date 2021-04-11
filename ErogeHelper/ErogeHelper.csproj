@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
@@ -11,7 +11,7 @@
     <Version>0.0.6</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
-    <SatelliteResourceLanguages>zh-CN</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
     <PackageReference Include="luojunyuan.autohotkey" Version="1.0.1" />
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.5" />
-    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
+    <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="Refit" Version="6.0.38" />
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.11.7" />

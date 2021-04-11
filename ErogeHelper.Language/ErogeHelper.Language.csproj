@@ -20,7 +20,7 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>ErogeHelper.Language</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Update="Strings\Strings.zh-CN.resx">
+    <EmbeddedResource Update="Strings\Strings.zh-Hans.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <CustomToolNamespace>ErogeHelper.Language</CustomToolNamespace>
     </EmbeddedResource>
