@@ -39,6 +39,9 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
+            // Resolve config repo first ensure `Roaming/ErogeHelper/` be created
+            var ehConfigRepository = _serviceProvider.GetRequiredService<EhConfigRepository>();
+
             // Put the database update into a scope to ensure that all resources will be disposed.
             using var scope = _serviceProvider.CreateScope();
             scope.ServiceProvider.UpdateEhDatabase();
@@ -142,7 +145,6 @@ namespace ErogeHelper
 
             var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
             var eventAggregator = _serviceProvider.GetRequiredService<IEventAggregator>();
-            var ehConfigRepository = _serviceProvider.GetRequiredService<EhConfigRepository>();
 
             var textractorSetting = JsonSerializer.Deserialize<TextractorSetting>(settingJson) ?? new TextractorSetting();
             textractorService.InjectProcesses(gameProcesses, textractorSetting);
