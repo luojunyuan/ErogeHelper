@@ -41,5 +41,7 @@ namespace ErogeHelper.View.Window
 
             return Task.CompletedTask;
         }
+
+        protected override void OnClosed(EventArgs e) => eventAggregator.Unsubscribe(HookPage);
     }
 }
