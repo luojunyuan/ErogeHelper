@@ -21,7 +21,6 @@
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
     <PackageReference Include="luojunyuan.autohotkey" Version="1.0.1" />
-    <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.5" />
     <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
@@ -29,6 +28,7 @@
     <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.11.7" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="VeParse.DotNet" Version="5.0.4" />
     <PackageReference Include="WanaKana-net" Version="1.0.0" />
     <PackageReference Include="WindowsInput" Version="6.2.1" />
   </ItemGroup>

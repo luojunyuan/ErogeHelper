@@ -200,7 +200,7 @@ namespace ErogeHelper.Common
             }
             catch (UriFormatException ex)
             {
-                // May running in unit test
+                // If running in unit test
                 Log.Warn(ex);
                 return new BitmapImage();
             }
