@@ -3,15 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Language", "ErogeHelper.Language\ErogeHelper.Language.csproj", "{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Tests", "ErogeHelper.Tests\ErogeHelper.Tests.csproj", "{9E103978-DD5E-4DA1-968A-971904BA725B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.ShellMenuHandler", "ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj", "{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}"
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper", "ErogeHelper\ErogeHelper.csproj", "{DE65FC3D-E74F-4C0E-9772-CE1C7D98C88D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Installer", "ErogeHelper.Installer\ErogeHelper.Installer.csproj", "{670C4F6F-4DE6-406A-B7C0-FE4E6BC76048}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper", "ErogeHelper\ErogeHelper.csproj", "{DE65FC3D-E74F-4C0E-9772-CE1C7D98C88D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.ShellMenuHandler", "ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj", "{D98DEB57-F956-4DC9-95A9-FDBAF6F2F768}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Language", "ErogeHelper.Language\ErogeHelper.Language.csproj", "{4C6AE52D-34F3-4375-8ABB-CF937CFD6316}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Tests", "ErogeHelper.Tests\ErogeHelper.Tests.csproj", "{9E103978-DD5E-4DA1-968A-971904BA725B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
