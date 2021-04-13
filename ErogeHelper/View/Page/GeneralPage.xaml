@@ -24,6 +24,7 @@
                     <ui:HyperlinkButton 
                         Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app"/>
                     <!--<Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />-->
+                    <Button Content="Custom Button" cal:Message.Attach="[Click] = [CustomButton]" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

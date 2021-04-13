@@ -50,19 +50,19 @@ namespace ErogeHelper.Installer
                         // could be set or removed anytime
                         if (Current.MainWindow is not null)
                         {
-                            var mw = Current.MainWindow;
+                            var mainWindow = Current.MainWindow;
 
-                            if (mw.WindowState == WindowState.Minimized || mw.Visibility != Visibility.Visible)
+                            if (mainWindow.WindowState == WindowState.Minimized || mainWindow.Visibility != Visibility.Visible)
                             {
-                                mw.Show();
-                                mw.WindowState = WindowState.Normal;
+                                mainWindow.Show();
+                                mainWindow.WindowState = WindowState.Normal;
                             }
 
                             // According to some sources these steps are required to be sure it went to foreground.
-                            mw.Activate();
-                            mw.Topmost = true;
-                            mw.Topmost = false;
-                            mw.Focus();
+                            mainWindow.Activate();
+                            mainWindow.Topmost = true;
+                            mainWindow.Topmost = false;
+                            mainWindow.Focus();
                         }
                     });
                 }

@@ -52,6 +52,11 @@ namespace ErogeHelper.ViewModel.Page
             _ehConfigRepository.ClearConfig();
         }
 
+        public static void CustomButton()
+        {
+
+        }
+
 #pragma warning disable CS8618
         public GeneralViewModel() { }
     }

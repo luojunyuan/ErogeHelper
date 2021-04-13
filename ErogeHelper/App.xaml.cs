@@ -40,8 +40,8 @@ namespace ErogeHelper
 
                 var ex = unhandledExceptionArgs.ExceptionObject as Exception ?? new Exception("???");
 
-                ShowErrorDialog("Fatal", ex);
                 Log.Fatal(ex);
+                ShowErrorDialog("Fatal", ex);
             };
             DispatcherUnhandledException += (_, dispatcherUnhandledExceptionEventArgs) =>
             {
@@ -50,8 +50,8 @@ namespace ErogeHelper
 
                 var ex = dispatcherUnhandledExceptionEventArgs.Exception;
 
-                ShowErrorDialog("UI", ex);
                 Log.Error(ex);
+                ShowErrorDialog("UI", ex);
             };
         }
 
