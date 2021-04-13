@@ -41,5 +41,7 @@ namespace ErogeHelper.View.Window
                 }
             }
         }
+
+        protected override void OnClosed(EventArgs e) => IoC.Get<IEventAggregator>().Unsubscribe(this);
     }
 }

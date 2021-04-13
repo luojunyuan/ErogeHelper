@@ -43,5 +43,6 @@ namespace ErogeHelper.View.Window.Game
             }
             return Task.CompletedTask;
         }
+        protected override void OnClosed(EventArgs e) => IoC.Get<IEventAggregator>().Unsubscribe(this);
     }
 }

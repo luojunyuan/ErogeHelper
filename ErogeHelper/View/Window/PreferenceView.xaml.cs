@@ -21,7 +21,7 @@ namespace ErogeHelper.View.Window
             ContentFrame.Navigated += OnNavigated;
             Loaded += (_, _) =>
             {
-                _pagesList = new List<(string Tag, WindowPage PageInstance)>()
+                _pagesList = new List<(string Tag, WindowPage PageInstance)>
                 {
                     ("general", new GeneralPage()),
                     ("mecab", new MeCabPage()),
@@ -30,6 +30,9 @@ namespace ErogeHelper.View.Window
 
                     ("about", new AboutPage()),
                 };
+
+                var eventAggregator = IoC.Get<IEventAggregator>();
+                _pagesList.ForEach(item => eventAggregator.SubscribeOnUIThread(item.PageInstance));
 
                 PageNavigate("general");
             };
@@ -100,10 +103,7 @@ namespace ErogeHelper.View.Window
         protected override void OnClosed(EventArgs e)
         {
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-            foreach (var (_, instance) in _pagesList ?? throw new InvalidOperationException())
-            {
-                eventAggregator.Unsubscribe(instance);
-            }
+            _pagesList?.ForEach(item => eventAggregator.Unsubscribe(item.PageInstance));
         }
     }
 }

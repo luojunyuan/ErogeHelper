@@ -293,6 +293,8 @@ namespace ErogeHelper.ViewModel.Window
             return Task.CompletedTask;
         }
 
+        ~GameViewModel() => _eventAggregator.Unsubscribe(this);
+
 #pragma warning disable CS8618
         public GameViewModel() { }
     }

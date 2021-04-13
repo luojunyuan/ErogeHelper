@@ -22,7 +22,6 @@ namespace ErogeHelper.View.Page
         {
             InitializeComponent();
 
-            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
             var preferenceView = Application.Current.Windows.OfType<PreferenceView>().SingleOrDefault();
             DataContext = (preferenceView?.DataContext as PreferenceViewModel)?.HookViewModel ??
                           IoC.Get<ViewModel.Page.HookViewModel>();
@@ -32,11 +31,12 @@ namespace ErogeHelper.View.Page
         {
             if (message.WindowType == GetType())
             {
+                Log.Debug("HookPage.xaml.cs received message");
                 switch (message.Action)
                 {
                     case ViewAction.OpenDialog:
                         if (message.DialogType == ModernDialog.HookCode)
-                            _ = HCodeDialog.ShowAsync().ConfigureAwait(false);
+                            await HCodeDialog.ShowAsync().ConfigureAwait(false);
                         else if (message.DialogType == ModernDialog.HookSettingUpdatedTip)
                             await new ContentDialog
                             {

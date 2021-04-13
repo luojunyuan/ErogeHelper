@@ -46,7 +46,7 @@ namespace ErogeHelper.Model.Repository
                 File.WriteAllText(file.FullName, JsonSerializer.Serialize(new Dictionary<string, string>()));
             }
             var rawText = File.ReadAllText(settingPath);
-            return JsonSerializer.Deserialize<Dictionary<string, string>>(rawText)!;
+            return JsonSerializer.Deserialize<Dictionary<string, string>>(rawText) ?? new Dictionary<string, string>();
         }
 
         private T GetValue<T>(T defaultValue, [CallerMemberName] string propertyName = "")
@@ -103,7 +103,8 @@ namespace ErogeHelper.Model.Repository
 
             LocalSetting[propertyName] = targetStrValue;
             Log.Debug($"{propertyName} changed to {targetStrValue}");
-            File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting));
+            File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting, new JsonSerializerOptions 
+                                                                                          { WriteIndented = true }));
         }
 
         #endregion
