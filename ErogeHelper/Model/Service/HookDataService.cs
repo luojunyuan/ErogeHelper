@@ -12,14 +12,18 @@ namespace ErogeHelper.Model.Service
 {
     public class HookDataService : IHookDataService
     {
+        public HookDataService(EhDbRepository ehDbRepository)
+        {
+            _ehDbRepository = ehDbRepository;
+        }
+
+        private readonly EhDbRepository _ehDbRepository;
+
         private const string GameQuery = "http://vnr.aniclan.com/connection.php?go=game_query";
 
-        public async Task<string> QueryHCode(string md5)
+        public async Task<string> QueryHCode()
         {
-            if (md5.Length != 32)
-                throw new ArgumentOutOfRangeException(md5);
-
-            string param = $"md5={md5}";
+            string param = $"md5={_ehDbRepository.Md5}";
             byte[] bs = Encoding.ASCII.GetBytes(param);
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(GameQuery);
             req.Method = "POST";
@@ -43,6 +47,6 @@ namespace ErogeHelper.Model.Service
             return string.Empty;
         }
 
-        public string GetRegExp() => IoC.Get<EhDbRepository>().GetGameInfoTable()?.RegExp ?? string.Empty;
+        public string GetRegExp() => _ehDbRepository.GetGameInfoTable()?.RegExp ?? string.Empty;
     }
 }

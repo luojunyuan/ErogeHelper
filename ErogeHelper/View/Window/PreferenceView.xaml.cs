@@ -18,6 +18,8 @@ namespace ErogeHelper.View.Window
         {
             InitializeComponent();
 
+            _eventAggregator = IoC.Get<IEventAggregator>();
+
             ContentFrame.Navigated += OnNavigated;
             Loaded += (_, _) =>
             {
@@ -31,12 +33,13 @@ namespace ErogeHelper.View.Window
                     ("about", new AboutPage()),
                 };
 
-                var eventAggregator = IoC.Get<IEventAggregator>();
-                _pagesList.ForEach(item => eventAggregator.SubscribeOnUIThread(item.PageInstance));
+                _pagesList.ForEach(item => _eventAggregator.SubscribeOnUIThread(item.PageInstance));
 
                 PageNavigate("general");
             };
         }
+
+        private readonly IEventAggregator _eventAggregator;
 
         private List<(string Tag, WindowPage PageInstance)>? _pagesList;
 
@@ -100,10 +103,7 @@ namespace ErogeHelper.View.Window
             }
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-            _pagesList?.ForEach(item => eventAggregator.Unsubscribe(item.PageInstance));
-        }
+        protected override void OnClosed(EventArgs e) => 
+            _pagesList?.ForEach(item => _eventAggregator.Unsubscribe(item.PageInstance));
     }
 }

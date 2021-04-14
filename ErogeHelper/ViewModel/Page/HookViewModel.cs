@@ -152,7 +152,7 @@ namespace ErogeHelper.ViewModel.Page
         public async void SearchHCode()
         {
             CanSearchCode = false;
-            var hcode = await _dataService.QueryHCode(_gameRuntimeDataRepo.Md5).ConfigureAwait(false);
+            var hcode = await _dataService.QueryHCode().ConfigureAwait(false);
             if (hcode != string.Empty)
             {
                 InputHCode = hcode;

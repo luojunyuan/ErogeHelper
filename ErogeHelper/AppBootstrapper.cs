@@ -11,7 +11,6 @@ using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,8 +19,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using FluentMigrator;
-using FluentMigrator.Runner;
 
 namespace ErogeHelper
 {
@@ -39,12 +36,14 @@ namespace ErogeHelper
         /// <param name="e">Command line parameters</param>
         protected override async void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+
             // Resolve config repo first ensure `Roaming/ErogeHelper/` be created
-            var ehConfigRepository = _serviceProvider.GetRequiredService<EhConfigRepository>();
+            var ehConfigRepository = serviceProvider.GetRequiredService<EhConfigRepository>();
 
             // Put the database update into a scope to ensure that all resources will be disposed.
-            using var scope = _serviceProvider.CreateScope();
-            scope.ServiceProvider.UpdateEhDatabase();
+            serviceProvider.UpdateEhDatabase();
 
             if (e.Args.Length == 0)
             {
@@ -83,8 +82,8 @@ namespace ErogeHelper
                 });
             }
 
-            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
-            var ehDbRepository = _serviceProvider.GetRequiredService<EhDbRepository>();
+            var ehGlobalValueRepository = serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
+            var ehDbRepository = serviceProvider.GetRequiredService<EhDbRepository>();
 
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             var (md5, gameProcess) = ehGlobalValueRepository.Init(gameProcesses);
@@ -96,9 +95,9 @@ namespace ErogeHelper
                 return;
             }
 
-            var gameWindowHooker = _serviceProvider.GetRequiredService<IGameWindowHooker>();
-            var ehServerApi = _serviceProvider.GetRequiredService<IEhServerApiService>();
-            var textractorService = _serviceProvider.GetRequiredService<ITextractorService>();
+            var gameWindowHooker = serviceProvider.GetRequiredService<IGameWindowHooker>();
+            var ehServerApi = serviceProvider.GetRequiredService<IEhServerApiService>();
+            var textractorService = serviceProvider.GetRequiredService<ITextractorService>();
 
             _ = gameWindowHooker.SetGameWindowHookAsync(gameProcess, gameProcesses.ToList());
 
@@ -143,8 +142,8 @@ namespace ErogeHelper
                 return;
             }
 
-            var windowManager = _serviceProvider.GetRequiredService<IWindowManager>();
-            var eventAggregator = _serviceProvider.GetRequiredService<IEventAggregator>();
+            var windowManager = serviceProvider.GetRequiredService<IWindowManager>();
+            var eventAggregator = serviceProvider.GetRequiredService<IEventAggregator>();
 
             var textractorSetting = JsonSerializer.Deserialize<TextractorSetting>(settingJson) ?? new TextractorSetting();
             textractorService.InjectProcesses(gameProcesses, textractorSetting);

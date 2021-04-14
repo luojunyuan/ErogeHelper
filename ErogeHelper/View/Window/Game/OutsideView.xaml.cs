@@ -19,10 +19,14 @@ namespace ErogeHelper.View.Window.Game
         {
             InitializeComponent();
 
-            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
+            _eventAggregator = IoC.Get<IEventAggregator>();
+
+            _eventAggregator.SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
             Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
         }
+
+        private readonly IEventAggregator _eventAggregator;
 
         public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
         {
@@ -43,6 +47,6 @@ namespace ErogeHelper.View.Window.Game
             }
             return Task.CompletedTask;
         }
-        protected override void OnClosed(EventArgs e) => IoC.Get<IEventAggregator>().Unsubscribe(this);
+        protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
     }
 }

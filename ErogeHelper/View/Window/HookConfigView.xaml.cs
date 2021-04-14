@@ -18,10 +18,13 @@ namespace ErogeHelper.View.Window
         {
             InitializeComponent();
 
-            var eventAggregator = IoC.Get<IEventAggregator>();
-            eventAggregator.SubscribeOnUIThread(this);
-            HookPageFrame.LoadCompleted += (_, _) => eventAggregator.SubscribeOnUIThread(HookPageFrame.Content as HookPage);
+            _eventAggregator = IoC.Get<IEventAggregator>();
+            
+            _eventAggregator.SubscribeOnUIThread(this);
+            HookPageFrame.LoadCompleted += (_, _) => _eventAggregator.SubscribeOnUIThread(HookPageFrame.Content as HookPage);
         }
+
+        private readonly IEventAggregator _eventAggregator;
 
         public Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
         {
@@ -45,9 +48,8 @@ namespace ErogeHelper.View.Window
 
         protected override void OnClosed(EventArgs e)
         {
-            var eventAggregator = IoC.Get<IEventAggregator>();
-            eventAggregator.Unsubscribe(HookPageFrame.Content as HookPage);
-            eventAggregator.Unsubscribe(this);
+            _eventAggregator.Unsubscribe(HookPageFrame.Content as HookPage);
+            _eventAggregator.Unsubscribe(this);
         }
     }
 }

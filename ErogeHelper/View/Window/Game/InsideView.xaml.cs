@@ -25,14 +25,17 @@ namespace ErogeHelper.View.Window.Game
         {
             InitializeComponent();
 
-            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
+            _eventAggregator = IoC.Get<IEventAggregator>();
+            _gameWindowHooker = IoC.Get<IGameWindowHooker>();
+
+            _eventAggregator.SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            _gameWindowHooker = IoC.Get<IGameWindowHooker>();
             _gameWindowHooker.GamePosArea += PositionChanged;
             Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
         }
 
+        private readonly IEventAggregator _eventAggregator;
         private readonly IGameWindowHooker _gameWindowHooker;
         private double _dpi;
 
@@ -200,6 +203,6 @@ namespace ErogeHelper.View.Window.Game
             return Task.CompletedTask;
         }
 
-        protected override void OnClosed(EventArgs e) => IoC.Get<IEventAggregator>().Unsubscribe(this);
+        protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
     }
 }

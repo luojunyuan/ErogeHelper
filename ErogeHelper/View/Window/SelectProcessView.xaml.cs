@@ -17,8 +17,11 @@ namespace ErogeHelper.View.Window
         {
             InitializeComponent();
 
-            IoC.Get<IEventAggregator>().SubscribeOnUIThread(this);
+            _eventAggregator = IoC.Get<IEventAggregator>();
+            _eventAggregator.SubscribeOnUIThread(this);
         }
+
+        private readonly IEventAggregator _eventAggregator;
 
         public async Task HandleAsync(ViewActionMessage message, CancellationToken cancellationToken)
         {
@@ -42,6 +45,6 @@ namespace ErogeHelper.View.Window
             }
         }
 
-        protected override void OnClosed(EventArgs e) => IoC.Get<IEventAggregator>().Unsubscribe(this);
+        protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
     }
 }
