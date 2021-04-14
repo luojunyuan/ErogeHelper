@@ -83,7 +83,7 @@ namespace ErogeHelper
                 });
             }
 
-            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<GameRuntimeInfoRepository>();
+            var ehGlobalValueRepository = _serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
             var ehDbRepository = _serviceProvider.GetRequiredService<EhDbRepository>();
 
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));

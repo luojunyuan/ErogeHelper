@@ -15,7 +15,7 @@ namespace ErogeHelper.Model.Service.Interface
         TextractorSetting Setting { get; set; } 
 
         /// <summary>
-        /// Inject hooks into target processes
+        /// Inject hooks into processes
         /// </summary>
         /// <param name="gameProcesses"></param>
         /// <param name="setting">Textractor init callback functions depends on some parameters</param>

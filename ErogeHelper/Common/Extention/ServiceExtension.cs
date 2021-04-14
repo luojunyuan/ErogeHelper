@@ -58,7 +58,7 @@ namespace ErogeHelper.Common.Extention
             var dbFile = Path.Combine(roamingPath, "ErogeHelper", "eh.db");
             var connectString = $"Data Source={dbFile}";
 
-            services.TryAddSingleton<GameRuntimeInfoRepository>();
+            services.TryAddSingleton<GameRuntimeDataRepo>();
 
             services.TryAddScoped(_ => new EhConfigRepository(roamingPath));
             services.TryAddScoped(_ => new EhDbRepository(connectString));

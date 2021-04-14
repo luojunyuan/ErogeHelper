@@ -24,7 +24,7 @@ namespace ErogeHelper.ViewModel.Window
             IEventAggregator eventAggregator,
             ITouchConversionHooker touchConversionHooker,
             EhConfigRepository ehConfigRepository,
-            GameRuntimeInfoRepository gameRuntimeInfoRepository,
+            GameRuntimeDataRepo gameRuntimeDataRepo,
             TextViewModel textViewModel,
             IGameWindowHooker gameWindowHooker)
         {
@@ -32,7 +32,7 @@ namespace ErogeHelper.ViewModel.Window
             _windowManager = windowManager;
             _eventAggregator = eventAggregator;
             _ehConfigRepository = ehConfigRepository;
-            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
+            _gameRuntimeDataRepo = gameRuntimeDataRepo;
             TextControl = textViewModel;
             _gameWindowHooker = gameWindowHooker;
 
@@ -57,7 +57,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IWindowManager _windowManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
+        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
         private readonly ITouchConversionHooker _touchHooker;
         private readonly IGameWindowHooker _gameWindowHooker;
 
@@ -107,7 +107,7 @@ namespace ErogeHelper.ViewModel.Window
 
         public async void SwitchGameScreen()
         {
-            var handle = _gameRuntimeInfoRepository.MainProcess.MainWindowHandle;
+            var handle = _gameRuntimeDataRepo.MainProcess.MainWindowHandle;
             NativeMethods.BringWindowToTop(handle);
             await WindowsInput.Simulate.Events()
                 .ClickChord(KeyCode.Alt, KeyCode.Enter)

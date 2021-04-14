@@ -15,15 +15,14 @@ namespace ErogeHelper.Model.Repository
 
         private readonly SqliteConnection _connection;
 
-        private string _md5 = string.Empty;
-        public string Md5 { get => _md5; set => _md5 = value; }
+        public string Md5 { get; set; } = string.Empty;
 
         public GameInfoTable? GetGameInfoTable() =>
-            _connection.QuerySingleOrDefault<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{_md5}'");
+            _connection.QuerySingleOrDefault<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{Md5}'");
 
         public async Task<GameInfoTable?> GetGameInfoAsync() =>
             await _connection
-                .QuerySingleOrDefaultAsync<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{_md5}'")
+                .QuerySingleOrDefaultAsync<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{Md5}'")
                 .ConfigureAwait(false);
 
         public async Task SetGameInfoAsync(GameInfoTable gameInfoTable)
@@ -45,7 +44,7 @@ WHERE Md5 = @Md5";
         {
             string query =
                 "DELETE FROM GameInfo WHERE Md5=@Md5";
-            await _connection.ExecuteAsync(query, new {Md5=_md5}).ConfigureAwait(false);
+            await _connection.ExecuteAsync(query, new {Md5=Md5}).ConfigureAwait(false);
         }
     }
 }

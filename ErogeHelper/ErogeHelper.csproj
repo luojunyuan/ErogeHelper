@@ -36,7 +36,6 @@
   <!-- No content directories -->
   <ItemGroup>
     <Folder Include="Model\Factory\Translator\Interface\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>

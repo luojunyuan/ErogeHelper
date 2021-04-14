@@ -28,7 +28,7 @@ namespace ErogeHelper.ViewModel.Window
             IEhServerApiService ehServerApiService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            GameRuntimeInfoRepository gameRuntimeInfoRepository)
+            GameRuntimeDataRepo gameRuntimeDataRepo)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -38,7 +38,7 @@ namespace ErogeHelper.ViewModel.Window
             _ehServerApiService = ehServerApiService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
-            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
+            _gameRuntimeDataRepo = gameRuntimeDataRepo;
 
             _dataService.RefreshBindableProcComboBoxAsync(ProcItems);
         }
@@ -51,7 +51,7 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IEhServerApiService _ehServerApiService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
+        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
 
         public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
 
@@ -86,7 +86,7 @@ namespace ErogeHelper.ViewModel.Window
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);
-            var (md5, gameProcess) = _gameRuntimeInfoRepository.Init(gameProcesses);
+            var (md5, gameProcess) = _gameRuntimeDataRepo.Init(gameProcesses);
 
             _ = _gameWindowHooker.SetGameWindowHookAsync(gameProcess, gameProcesses.ToList());
 

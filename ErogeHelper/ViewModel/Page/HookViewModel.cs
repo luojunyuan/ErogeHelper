@@ -27,7 +27,7 @@ namespace ErogeHelper.ViewModel.Page
             ITextractorService textractorService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            GameRuntimeInfoRepository gameRuntimeInfoRepository,
+            GameRuntimeDataRepo gameRuntimeDataRepo,
             IGameDataService gameDataService)
         {
             _dataService = dataService;
@@ -36,7 +36,7 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService = textractorService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
-            _gameRuntimeInfoRepository = gameRuntimeInfoRepository;
+            _gameRuntimeDataRepo = gameRuntimeDataRepo;
             _gameDataService = gameDataService;
 
             _textractorService.DataEvent += DataProcess;
@@ -51,7 +51,7 @@ namespace ErogeHelper.ViewModel.Page
         private readonly ITextractorService _textractorService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly GameRuntimeInfoRepository _gameRuntimeInfoRepository;
+        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
         private readonly IGameDataService _gameDataService;
 
         #region RegExp
@@ -152,7 +152,7 @@ namespace ErogeHelper.ViewModel.Page
         public async void SearchHCode()
         {
             CanSearchCode = false;
-            var hcode = await _dataService.QueryHCode(_gameRuntimeInfoRepository.Md5).ConfigureAwait(false);
+            var hcode = await _dataService.QueryHCode(_gameRuntimeDataRepo.Md5).ConfigureAwait(false);
             if (hcode != string.Empty)
             {
                 InputHCode = hcode;
