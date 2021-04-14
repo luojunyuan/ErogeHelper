@@ -1,5 +1,4 @@
 ﻿using ErogeHelper.Common.Enum;
-using ErogeHelper.Model.Factory.Dictionary.Interface;
 
 namespace ErogeHelper.Model.Factory.Interface
 {

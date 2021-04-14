@@ -58,7 +58,7 @@ namespace ErogeHelper.View.Page
             var frameWidth = ContentColumn.ActualWidth;
             if (_contentIsExpanded)
             {
-                // HACK: With many magic number this 100, frameWidth=700, Text.MaxWidth=430, InfoColumn width=160
+                // HACK: With many magic number like 100, frameWidth=700, Text.MaxWidth=430, InfoColumn width=160
                 frameWidth += InfoColumn.Width + 100;
             }
 

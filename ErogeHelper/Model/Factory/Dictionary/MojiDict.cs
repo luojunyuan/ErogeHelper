@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using ErogeHelper.Model.Entity.Payload;
 using ErogeHelper.Model.Entity.Response;
-using ErogeHelper.Model.Factory.Dictionary.Interface;
 using RestSharp;
 using RestSharp.Serializers.SystemTextJson;
 using System.Threading;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Factory.Interface;
 
 namespace ErogeHelper.Model.Factory.Dictionary
 {

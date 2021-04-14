@@ -62,7 +62,7 @@ namespace ErogeHelper.Model.Service
         {
             "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
             "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps", "WhiteboardWRT",
-            "PeopleApp", "RtkUWP"
+            "PeopleApp", "RtkUWP", "HxCalendarAppImm"
         };
     }
 }

@@ -15,7 +15,7 @@ namespace ErogeHelper.Common.Validation
                 return ValidationResult.ValidResult;
             }
 
-            var options = RegexOptions.IgnoreCase | RegexOptions.Compiled;
+            const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Compiled;
 
             try
             {
@@ -23,7 +23,7 @@ namespace ErogeHelper.Common.Validation
             }
             catch (ArgumentException ex)
             {
-                Log.Debug("Check RegExp format, it's fine exception");
+                Log.Debug("Checking RegExp format, it's fine exception");
                 return new ValidationResult(false, $"Invalid RegExp. {ex.Message}");
             }
 

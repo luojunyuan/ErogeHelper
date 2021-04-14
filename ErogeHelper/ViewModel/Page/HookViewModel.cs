@@ -92,7 +92,7 @@ namespace ErogeHelper.ViewModel.Page
         private const string Tag1 = ".*(?=[「|『])";
         private const string Tag2 = "(?<=[」|』]).*";
         private const string Tag3 = "<.*?>";
-        private const string Tag4 = "_r|<br>|#n|\\n";
+        private const string Tag4 = "_r|<br>|#n|\\n|\\\\n";
         private const string Tag5 = "[\\x00-\\xFF]";
 
         public void RegExpTag1() => RegExp = string.IsNullOrWhiteSpace(RegExp) ? Tag1 : $"{RegExp}|{Tag1}";

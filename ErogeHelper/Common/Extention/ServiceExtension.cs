@@ -59,8 +59,7 @@ namespace ErogeHelper.Common.Extention
             var connectString = $"Data Source={dbFile}";
 
             services.TryAddSingleton<GameRuntimeDataRepo>();
-
-            services.TryAddScoped(_ => new EhConfigRepository(roamingPath));
+            services.TryAddSingleton(_ => new EhConfigRepository(roamingPath));
             services.TryAddScoped(_ => new EhDbRepository(connectString));
 
             // XXX: FluentMigrator has too many dependencies... https://github.com/fluentmigrator/fluentmigrator/issues/982

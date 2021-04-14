@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using ErogeHelper.Model.Entity.Response;
-using ErogeHelper.Model.Factory.Dictionary.Interface;
+using ErogeHelper.Model.Factory.Interface;
 using RestSharp;
 using RestSharp.Serializers.SystemTextJson;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Model.Factory.Dictionary;
-using ErogeHelper.Model.Factory.Dictionary.Interface;
 using ErogeHelper.Model.Factory.Interface;
 using ErogeHelper.Model.Repository;
 
