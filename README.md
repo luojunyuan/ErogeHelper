@@ -2,9 +2,9 @@
 
 ### How to build
 
-Recommand VS2019 to clone `https://github.com/luojunyuan/Eroge-Helper` down. Rider is ok, but you won't see the output of Textractor `OutputText` callback. (idk why, maybe something happend to the pipe) Recommand VS + Reshaper
+Use VS2019 or Rider to clone `https://github.com/luojunyuan/Eroge-Helper` down.
 
-Just prees F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
+Just press F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
 
 one is full path of game, '/le' or '-le' to start with Locate Emulator
 
