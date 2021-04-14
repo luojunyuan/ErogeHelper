@@ -30,6 +30,7 @@ namespace ErogeHelper.Tests.Model.Service
             // Act
             textractorService.DataEvent += param =>
             {
+                // NOTE: Only received once in Rider
                 if (receivedTexts.Count > 1)
                 {
                     _single.Set();
