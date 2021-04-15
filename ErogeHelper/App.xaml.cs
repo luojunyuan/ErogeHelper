@@ -91,7 +91,7 @@ namespace ErogeHelper
             Serilog.Log.Logger = new LoggerConfiguration()
 #if DEBUG
                 .MinimumLevel.Debug()
-                // VS Output
+                // IDE Output View
                 .WriteTo.Debug(outputTemplate:
                     "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
 #else

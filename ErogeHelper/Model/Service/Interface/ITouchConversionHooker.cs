@@ -2,8 +2,6 @@
 {
     public interface ITouchConversionHooker
     {
-        void SetHook();
-
-        void UnloadHook();
+        bool Enable { get; set; }
     }
 }

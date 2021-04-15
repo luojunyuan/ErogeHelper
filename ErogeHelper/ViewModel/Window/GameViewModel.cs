@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
+using ErogeHelper.Model.Entity.Table;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -26,7 +27,8 @@ namespace ErogeHelper.ViewModel.Window
             EhConfigRepository ehConfigRepository,
             GameRuntimeDataRepo gameRuntimeDataRepo,
             TextViewModel textViewModel,
-            IGameWindowHooker gameWindowHooker)
+            IGameWindowHooker gameWindowHooker,
+            EhDbRepository ehDbRepository)
         {
             _touchHooker = touchConversionHooker;
             _windowManager = windowManager;
@@ -35,10 +37,14 @@ namespace ErogeHelper.ViewModel.Window
             _gameRuntimeDataRepo = gameRuntimeDataRepo;
             TextControl = textViewModel;
             _gameWindowHooker = gameWindowHooker;
+            _ehDbRepository = ehDbRepository;
 
+            var gameInfo = _ehDbRepository.GetGameInfoTable();
+            _isLoseFocus = gameInfo?.IsLoseFocus ?? false;
+            _isTouchToMouse = gameInfo?.IsEnableTouchToMouse ?? false;
             _eventAggregator.SubscribeOnUIThread(this);
             if (_ehConfigRepository.UseOutsideWindow)
-                HandleAsync(new InsideViewTextVisibleMessage() { IsShowed = false }, CancellationToken.None);
+                HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
             dataService.SourceTextReceived += text =>
             {
@@ -60,9 +66,12 @@ namespace ErogeHelper.ViewModel.Window
         private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
         private readonly ITouchConversionHooker _touchHooker;
         private readonly IGameWindowHooker _gameWindowHooker;
+        private readonly EhDbRepository _ehDbRepository;
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
+        private bool _isLoseFocus;
+        private bool _isTouchToMouse;
 
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
@@ -194,8 +203,6 @@ namespace ErogeHelper.ViewModel.Window
 
         #endregion
 
-        private bool _isLoseFocus;
-
         public bool IsLoseFocus
         {
             get => _isLoseFocus;
@@ -211,26 +218,24 @@ namespace ErogeHelper.ViewModel.Window
             {
                 await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = false });
             }
-            // TODO: Focus status save to eh.db
-        }
 
-        private bool _isTouchToMouse;
+            var gameInfo = await _ehDbRepository.GetGameInfoAsync() ?? new GameInfoTable();
+            gameInfo.IsLoseFocus = IsLoseFocus;
+            await _ehDbRepository.SetGameInfoAsync(gameInfo);
+        }
 
         public bool IsTouchToMouse
         {
             get => _isTouchToMouse;
             set { _isTouchToMouse = value; NotifyOfPropertyChange(() => IsTouchToMouse); }
         }
-        public void TouchToMouseToggle()
+        public async void TouchToMouseToggle()
         {
-            if (IsTouchToMouse)
-            {
-                _touchHooker.SetHook();
-            }
-            else
-            {
-                _touchHooker.UnloadHook();
-            }
+            _touchHooker.Enable = IsTouchToMouse;
+
+            var gameInfo = await _ehDbRepository.GetGameInfoAsync() ?? new GameInfoTable();
+            gameInfo.IsEnableTouchToMouse = IsTouchToMouse;
+            await _ehDbRepository.SetGameInfoAsync(gameInfo);
         }
 
         public static async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()

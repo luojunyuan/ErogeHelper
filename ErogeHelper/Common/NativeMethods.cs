@@ -174,6 +174,7 @@ namespace ErogeHelper.Common
 
         public static uint SHAppBarMessage(int dwMessage, ref AppbarData pData)
         {
+            // ExecutionEngineException???
             return SafeNativeMethods.SHAppBarMessage(dwMessage, ref pData);
         }
 

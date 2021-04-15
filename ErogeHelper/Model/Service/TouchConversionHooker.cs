@@ -12,29 +12,19 @@ namespace ErogeHelper.Model.Service
     {
         public TouchConversionHooker()
         {
-            _hookCallback = HookCallback;
-        }
-
-        private readonly NativeMethods.LowLevelMouseProc _hookCallback;
-
-        private IntPtr _hookId = IntPtr.Zero;
-        private readonly AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
-
-        public void SetHook()
-        {
             var moduleHandle = NativeMethods.GetModuleHandle();
 
-            _hookId = NativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE_LL, _hookCallback, moduleHandle, 0);
+            _hookId = NativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE_LL, HookCallback, moduleHandle, 0);
             if (_hookId == IntPtr.Zero)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
-        public void UnloadHook()
-        {
-            Dispose();
-        }
+        private readonly IntPtr _hookId;
+        private readonly AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
+
+        public bool Enable { get; set; }
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
@@ -46,7 +36,8 @@ namespace ErogeHelper.Model.Service
                     var info = (NativeMethods.MSLLHook)obj;
 
                     var extraInfo = (uint)info.DwExtraInfo.ToInt64();
-                    if ((extraInfo & NativeMethods.MOUSEEVENTF_FROMTOUCH) == NativeMethods.MOUSEEVENTF_FROMTOUCH)
+                    if ((extraInfo & NativeMethods.MOUSEEVENTF_FROMTOUCH) == NativeMethods.MOUSEEVENTF_FROMTOUCH
+                        && Enable)
                     {
                         TouchEventFilter(new TouchInfo { Point = info.Point, Token = (int)wParam });
                         if (_press)
@@ -83,22 +74,19 @@ namespace ErogeHelper.Model.Service
             _pos2 = _pos1;
             _pos1 = token;
 
-            if (_pos4.Token == 0x200 && _pos3.Token == 0x200 && _pos2.Token == 0x201 && _pos1.Token == 0x202)
+            switch (_pos4.Token)
             {
-                _press = true;
-            }
-            else if (_pos4.Token == 0x200 && _pos3.Token == 0x200 && _pos2.Token == 0x200 && _pos1.Token == 0x202)
-            {
-                _press = true;
-            }
-            else if (_pos4.Token == 0x200 && _pos3.Token == 0x200 && _pos2.Token == 0x204 && _pos1.Token == 0x205)
-            {
-                _longPress = true;
-            }
-            else
-            {
-                _press = false;
-                _longPress = false;
+                case 0x200 when _pos3.Token == 0x200 && _pos2.Token == 0x201 && _pos1.Token == 0x202:
+                case 0x200 when _pos3.Token == 0x200 && _pos2.Token == 0x200 && _pos1.Token == 0x202:
+                    _press = true;
+                    break;
+                case 0x200 when _pos3.Token == 0x200 && _pos2.Token == 0x204 && _pos1.Token == 0x205:
+                    _longPress = true;
+                    break;
+                default:
+                    _press = false;
+                    _longPress = false;
+                    break;
             }
         }
 
