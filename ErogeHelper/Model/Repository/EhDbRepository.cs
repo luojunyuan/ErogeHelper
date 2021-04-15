@@ -17,13 +17,19 @@ namespace ErogeHelper.Model.Repository
 
         public string Md5 { get; set; } = string.Empty;
 
-        public GameInfoTable? GetGameInfoTable() =>
+        public GameInfoTable? GetGameInfo() =>
             _connection.QuerySingleOrDefault<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{Md5}'");
 
         public async Task<GameInfoTable?> GetGameInfoAsync() =>
             await _connection
                 .QuerySingleOrDefaultAsync<GameInfoTable>($"SELECT * FROM GameInfo WHERE Md5='{Md5}'")
                 .ConfigureAwait(false);
+
+        public void SetGameInfo(GameInfoTable gameInfoTable)
+        {
+            string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @RegExp, @TextractorSettingJson, @IsLoseFocus, @IsEnableTouchToMouse)";
+            _connection.Execute(query, gameInfoTable);
+        }
 
         public async Task SetGameInfoAsync(GameInfoTable gameInfoTable)
         {

@@ -47,6 +47,6 @@ namespace ErogeHelper.Model.Service
             return string.Empty;
         }
 
-        public string GetRegExp() => _ehDbRepository.GetGameInfoTable()?.RegExp ?? string.Empty;
+        public string GetRegExp() => _ehDbRepository.GetGameInfo()?.RegExp ?? string.Empty;
     }
 }

@@ -39,9 +39,6 @@ namespace ErogeHelper.ViewModel.Window
             _gameWindowHooker = gameWindowHooker;
             _ehDbRepository = ehDbRepository;
 
-            var gameInfo = _ehDbRepository.GetGameInfoTable();
-            _isLoseFocus = gameInfo?.IsLoseFocus ?? false;
-            _isTouchToMouse = gameInfo?.IsEnableTouchToMouse ?? false;
             _eventAggregator.SubscribeOnUIThread(this);
             if (_ehConfigRepository.UseOutsideWindow)
                 HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
@@ -70,8 +67,6 @@ namespace ErogeHelper.ViewModel.Window
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
-        private bool _isLoseFocus;
-        private bool _isTouchToMouse;
 
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
@@ -205,8 +200,14 @@ namespace ErogeHelper.ViewModel.Window
 
         public bool IsLoseFocus
         {
-            get => _isLoseFocus;
-            set { _isLoseFocus = value; NotifyOfPropertyChange(() => IsLoseFocus); }
+            get => _ehDbRepository.GetGameInfo()?.IsLoseFocus ?? false;
+            set
+            {
+                NotifyOfPropertyChange(() => IsLoseFocus);
+                var gameInfo =_ehDbRepository.GetGameInfo() ?? new GameInfoTable();
+                gameInfo.IsLoseFocus = value;
+                _ehDbRepository.SetGameInfo(gameInfo);
+            }
         }
         public async void FocusToggle()
         {
@@ -218,25 +219,20 @@ namespace ErogeHelper.ViewModel.Window
             {
                 await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = false });
             }
-
-            var gameInfo = await _ehDbRepository.GetGameInfoAsync() ?? new GameInfoTable();
-            gameInfo.IsLoseFocus = IsLoseFocus;
-            await _ehDbRepository.SetGameInfoAsync(gameInfo);
         }
 
         public bool IsTouchToMouse
         {
-            get => _isTouchToMouse;
-            set { _isTouchToMouse = value; NotifyOfPropertyChange(() => IsTouchToMouse); }
+            get => _ehDbRepository.GetGameInfo()?.IsEnableTouchToMouse ?? false;
+            set
+            {
+                NotifyOfPropertyChange(() => IsTouchToMouse);
+                var gameInfo = _ehDbRepository.GetGameInfo() ?? new GameInfoTable();
+                gameInfo.IsEnableTouchToMouse = value;
+                _ehDbRepository.SetGameInfo(gameInfo);
+            }
         }
-        public async void TouchToMouseToggle()
-        {
-            _touchHooker.Enable = IsTouchToMouse;
-
-            var gameInfo = await _ehDbRepository.GetGameInfoAsync() ?? new GameInfoTable();
-            gameInfo.IsEnableTouchToMouse = IsTouchToMouse;
-            await _ehDbRepository.SetGameInfoAsync(gameInfo);
-        }
+        public void TouchToMouseToggle() => _touchHooker.Enable = IsTouchToMouse;
 
         public static async void TaskbarNotifyArea() => await WindowsInput.Simulate.Events()
             .ClickChord(KeyCode.LWin, KeyCode.A).Invoke().ConfigureAwait(false);
