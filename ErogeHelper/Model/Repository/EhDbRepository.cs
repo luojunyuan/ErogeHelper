@@ -37,6 +37,15 @@ namespace ErogeHelper.Model.Repository
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }
 
+        public void UpdateGameInfo(GameInfoTable gameInfoTable)
+        {
+            string query = @"
+UPDATE GameInfo 
+SET GameIdList=@GameIdList, RegExp=@RegExp, TextractorSettingJson=@TextractorSettingJson, IsLoseFocus=@IsLoseFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
+WHERE Md5 = @Md5";
+            _connection.Execute(query, gameInfoTable);
+        }
+
         public async Task UpdateGameInfoAsync(GameInfoTable gameInfoTable)
         {
             string query = @"

@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
 using ErogeHelper.Model.Entity.Table;
+using ErogeHelper.View.Window.Game;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -40,6 +41,9 @@ namespace ErogeHelper.ViewModel.Window
             _ehDbRepository = ehDbRepository;
 
             _eventAggregator.SubscribeOnUIThread(this);
+            _touchHooker.Init();
+            if (_ehDbRepository.GetGameInfo()?.IsEnableTouchToMouse ?? false)
+                TouchToMouseToggle();
             if (_ehConfigRepository.UseOutsideWindow)
                 HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
@@ -203,10 +207,10 @@ namespace ErogeHelper.ViewModel.Window
             get => _ehDbRepository.GetGameInfo()?.IsLoseFocus ?? false;
             set
             {
-                NotifyOfPropertyChange(() => IsLoseFocus);
                 var gameInfo =_ehDbRepository.GetGameInfo() ?? new GameInfoTable();
                 gameInfo.IsLoseFocus = value;
-                _ehDbRepository.SetGameInfo(gameInfo);
+                _ehDbRepository.UpdateGameInfo(gameInfo);
+                NotifyOfPropertyChange(() => IsLoseFocus);
             }
         }
         public async void FocusToggle()
@@ -226,10 +230,10 @@ namespace ErogeHelper.ViewModel.Window
             get => _ehDbRepository.GetGameInfo()?.IsEnableTouchToMouse ?? false;
             set
             {
-                NotifyOfPropertyChange(() => IsTouchToMouse);
                 var gameInfo = _ehDbRepository.GetGameInfo() ?? new GameInfoTable();
                 gameInfo.IsEnableTouchToMouse = value;
-                _ehDbRepository.SetGameInfo(gameInfo);
+                _ehDbRepository.UpdateGameInfo(gameInfo);
+                NotifyOfPropertyChange(() => IsTouchToMouse);
             }
         }
         public void TouchToMouseToggle() => _touchHooker.Enable = IsTouchToMouse;

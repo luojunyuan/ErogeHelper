@@ -12,16 +12,23 @@ namespace ErogeHelper.Model.Service
     {
         public TouchConversionHooker()
         {
+            _hookCallback = HookCallback;
+        }
+
+        private readonly NativeMethods.LowLevelMouseProc _hookCallback;
+
+        public void Init()
+        {
             var moduleHandle = NativeMethods.GetModuleHandle();
 
-            _hookId = NativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE_LL, HookCallback, moduleHandle, 0);
+            _hookId = NativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE_LL, _hookCallback, moduleHandle, 0);
             if (_hookId == IntPtr.Zero)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
-        private readonly IntPtr _hookId;
+        private IntPtr _hookId = IntPtr.Zero;
         private readonly AutoHotkeyEngine _ahk = AutoHotkeyEngine.Instance;
 
         public bool Enable { get; set; }

@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using ErogeHelper.Model.Repository;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -27,12 +28,19 @@ namespace ErogeHelper.View.Window.Game
 
             _eventAggregator = IoC.Get<IEventAggregator>();
             _gameWindowHooker = IoC.Get<IGameWindowHooker>();
+            var isLoseFocus = IoC.Get<EhDbRepository>().GetGameInfo()?.IsLoseFocus ?? false;
 
             _eventAggregator.SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             _gameWindowHooker.GamePosArea += PositionChanged;
-            Loaded += (_, _) => { Utils.HideWindowInAltTab(this); };
+            Loaded += (_, _) =>
+            {
+                Utils.HideWindowInAltTab(this);
+                HandleAsync(
+                    isLoseFocus ? new LoseFocusMessage {Status = true} : new LoseFocusMessage {Status = false},
+                    CancellationToken.None);
+            };
         }
 
         private readonly IEventAggregator _eventAggregator;
