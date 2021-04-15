@@ -242,7 +242,7 @@ namespace ErogeHelper.ViewModel.Control
                 return;
 
             // 遍历 找wordDetail对应Word所在序列
-            // QUESTION: MojiCollection 在遍历期间被其他线程所修改?
+            // QUESTION: MojiCollection 在遍历期间仍然被其他线程所修改?
             foreach (var mojiItem in MojiCollection)
             {
                 if (token.IsCancellationRequested)

@@ -118,26 +118,24 @@ namespace ErogeHelper.Model.Service
             //}
         }
 
-        private void SendTextToDeepL(string text)
+        private static void SendTextToDeepL(string text)
         {
             Process[] temp = Process.GetProcessesByName("DeepL");
             if (temp.Length == 0)
                 return;
 
-            var handle = temp[0].MainWindowHandle;
+            var deepLProc = temp[0];
+            var handle = deepLProc.MainWindowHandle;
             NativeMethods.SwitchToThisWindow(handle);
 
             // Do SetText and Paste both
             new DeepLHelper(DataFormats.Text, text).Go();
 
-            if (NativeMethods.GetForegroundWindow() != handle)
-            {
-                // UNDONE: (尝试能否唤起deepL窗口
-                Application.Current.Dispatcher.InvokeAsync(() => ModernWpf.MessageBox.Show(
-                    "Didn't find DeepL client in front, will turn off DeepL extension..", "Eroge Helper"));
-
-                _ehConfigRepository.PasteToDeepL = false;
-            }
+            // Bring DeepL from taskbar tray to front
+            if (NativeMethods.GetForegroundWindow() == handle) return;
+            var deepLPath = deepLProc.MainModule?.FileName ?? string.Empty;
+            if (deepLPath == string.Empty) return;
+            Process.Start(deepLPath);
         }
 
         public Task HandleAsync(RegExpChangedMessage message, CancellationToken cancellationToken)

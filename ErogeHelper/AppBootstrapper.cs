@@ -51,8 +51,9 @@ namespace ErogeHelper
                 return;
             }
 
+            // Eroge Helper run from command (or context menu)
             var gamePath = e.Args[0];
-            var gameDir = gamePath.Substring(0, gamePath.LastIndexOf('\\'));
+            var gameDir = gamePath[..gamePath.LastIndexOf('\\')];
             if (!File.Exists(gamePath))
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
             Log.Info($"Game's path: {gamePath}");

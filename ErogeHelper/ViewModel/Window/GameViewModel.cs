@@ -67,7 +67,7 @@ namespace ErogeHelper.ViewModel.Window
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
 
-        // UNDONE: OutsideView chrome window and scroll able text
+        // TODO: OutsideView chrome window and scroll able text
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(30);
 
         public bool AssistiveTouchIsVisible
@@ -211,7 +211,7 @@ namespace ErogeHelper.ViewModel.Window
             {
                 await _eventAggregator.PublishOnUIThreadAsync(new LoseFocusMessage { Status = false });
             }
-            // UNDONE: Focus status save to eh.db
+            // TODO: Focus status save to eh.db
         }
 
         private bool _isTouchToMouse;

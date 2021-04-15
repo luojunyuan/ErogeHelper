@@ -1,8 +1,10 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using ErogeHelper.Common.Function;
+using Ookii.Dialogs.Wpf;
 using Serilog;
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace ErogeHelper
@@ -14,9 +16,7 @@ namespace ErogeHelper
     {
         private App()
         {
-            // UNDONE: Check singleton app and Toast
-            // see Windows.UI.Notifications; or ToastNotifications
-            // Toast user "ErogeHelper is running, or you can turn ErogeHelper down immediately"
+            SingleInstanceWatcher();
 
             // Enable Pointer for touch device
             //AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
@@ -98,6 +98,39 @@ namespace ErogeHelper
                 .MinimumLevel.Information()
 #endif
                 .CreateLogger();
+        }
+
+        private const string UniqueEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
+        private EventWaitHandle? _eventWaitHandle;
+
+        private void SingleInstanceWatcher()
+        {
+            try
+            {
+                _eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
+                _eventWaitHandle.Set();
+                Shutdown();
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
+            }
+
+            new Task(async () =>
+            {
+                while (_eventWaitHandle.WaitOne())
+                {
+                    await Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        var result = await new NotificationToast(
+                            "ErogeHelper is running!",// , or you can turn ErogeHelper down immediately
+                            "15")
+                            .ShowAsync();
+                        if (result != true)
+                            await ModernWpf.MessageBox.ShowAsync("ErogeHelper is running!", "Eroge Helper");
+                    });
+                }
+            }).Start();
         }
     }
 }

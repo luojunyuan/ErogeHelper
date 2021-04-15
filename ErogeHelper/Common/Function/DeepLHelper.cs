@@ -7,8 +7,8 @@ namespace ErogeHelper.Common.Function
 {
     class DeepLHelper : StaHelper
     {
-        readonly string _format;
-        readonly object _data;
+        private readonly string _format;
+        private readonly object _data;
 
         public DeepLHelper(string format, object data)
         {
@@ -29,6 +29,8 @@ namespace ErogeHelper.Common.Function
 
     internal abstract class StaHelper
     {
+        private static bool _notifyOnce = true;
+
         private readonly ManualResetEvent _complete = new(false);
 
         public void Go()
@@ -63,7 +65,15 @@ namespace ErogeHelper.Common.Function
                     }
                     catch
                     {
-                        // UNDONE: (Toast users once, clipboard is been using to restart computer
+                        if (_notifyOnce)
+                        {
+                            new NotificationToast(
+                                    "Clipboard is detected to be occupied by other programs, " +
+                                    "try to close those apps or restart computer to get better experience", 
+                                    "10")
+                                .Show();
+                            _notifyOnce = false;
+                        }
                         // ex from first exception
                         Log.Warn(ex.Message);
                     }

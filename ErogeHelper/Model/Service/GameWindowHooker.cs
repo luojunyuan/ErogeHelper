@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -211,9 +210,9 @@ namespace ErogeHelper.Model.Service
             return IntPtr.Zero;
         }
 
-        private List<IntPtr> GetRootWindowsOfProcess(int pid)
+        private static IEnumerable<IntPtr> GetRootWindowsOfProcess(int pid)
         {
-            List<IntPtr> rootWindows = GetChildWindows(IntPtr.Zero);
+            IEnumerable<IntPtr> rootWindows = GetChildWindows(IntPtr.Zero);
             List<IntPtr> dsProcRootWindows = new();
             foreach (var hWnd in rootWindows)
             {
@@ -224,13 +223,13 @@ namespace ErogeHelper.Model.Service
             return dsProcRootWindows;
         }
 
-        private List<IntPtr> GetChildWindows(IntPtr parent)
+        private static IEnumerable<IntPtr> GetChildWindows(IntPtr parent)
         {
             List<IntPtr> result = new();
             var listHandle = GCHandle.Alloc(result);
             try
             {
-                NativeMethods.Win32Callback childProc = new(EnumWindow);
+                NativeMethods.Win32Callback childProc = EnumWindow;
                 NativeMethods.EnumChildWindows(parent, childProc, GCHandle.ToIntPtr(listHandle));
             }
             finally
@@ -241,7 +240,7 @@ namespace ErogeHelper.Model.Service
             return result;
         }
 
-        private bool EnumWindow(IntPtr handle, IntPtr pointer)
+        private static bool EnumWindow(IntPtr handle, IntPtr pointer)
         {
             var gch = GCHandle.FromIntPtr(pointer);
             if (gch.Target is not List<IntPtr> list)

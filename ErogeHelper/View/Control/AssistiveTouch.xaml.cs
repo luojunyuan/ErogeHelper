@@ -136,7 +136,6 @@ namespace ErogeHelper.View.Control
                 //Log.Info($"释放点与四边距离 {left} {top} {right} {bottom}");
 
                 // 根据button所处屏幕位置来确定button之后应该动画移动到的位置
-                // QUESTION: 这个好像已经修复 still bug in four corners, when button 中间卡在左窗口边缘
                 if (left < _halfDistance && top < _twoThirdDistance) // button 距离左上角边距同时小于 distance
                 {
                     left = ButtonSpace;
