@@ -90,6 +90,7 @@ namespace ErogeHelper.View.Window.Game
         }
         protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
 
+        // MouseDown="OutsideView_OnMouseDown" would cover the CardPopup 
         private void OutsideView_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

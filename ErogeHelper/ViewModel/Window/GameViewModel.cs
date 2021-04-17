@@ -14,11 +14,10 @@ using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
 using ErogeHelper.Model.Entity.Table;
-using ErogeHelper.View.Window.Game;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>
+    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>, IHandle<InsideViewJapaneseVisibleMessage>
     {
         public GameViewModel(
             IGameDataService dataService,
@@ -71,6 +70,9 @@ namespace ErogeHelper.ViewModel.Window
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
+        private Visibility _textControlVisibility = Visibility.Visible;
+        private Visibility _insideTextVisibility;
+
 
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
@@ -123,7 +125,7 @@ namespace ErogeHelper.ViewModel.Window
                 .ConfigureAwait(false);
         }
 
-        #region TextControl Pin
+        #region InsideView TextControl Pin
 
         private Visibility _pinSourceTextToggleVisibility;
         public Visibility PinSourceTextToggleVisibility
@@ -143,19 +145,22 @@ namespace ErogeHelper.ViewModel.Window
             set { _isSourceTextPined = value; NotifyOfPropertyChange(() => IsSourceTextPined); }
         }
 
+        // Should worked in InsideView only
         public void PinSourceTextToggle()
         {
             if (IsSourceTextPined)
             {
                 TriggerBarVisibility = Visibility.Collapsed;
                 TextControlVisibility = Visibility.Visible;
-                TextControl.Background = new SolidColorBrush();
+                if (!_ehConfigRepository.UseOutsideWindow)
+                    TextControl.Background = new SolidColorBrush();
             }
             else
             {
                 TriggerBarVisibility = Visibility.Visible;
                 TextControlVisibility = Visibility.Collapsed;
-                TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
+                if (!_ehConfigRepository.UseOutsideWindow)
+                    TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
             }
         }
 
@@ -169,8 +174,6 @@ namespace ErogeHelper.ViewModel.Window
                 NotifyOfPropertyChange(() => TriggerBarVisibility);
             }
         }
-
-        private Visibility _textControlVisibility = Visibility.Visible;
 
         public Visibility TextControlVisibility
         {
@@ -282,10 +285,23 @@ namespace ErogeHelper.ViewModel.Window
         public static async void PressSkipRelease() => await WindowsInput.Simulate.Events()
             .Release(KeyCode.Control).Invoke().ConfigureAwait(false);
 
+        public Visibility InsideTextVisibility
+        {
+            get => _insideTextVisibility;
+            set { _insideTextVisibility = value; NotifyOfPropertyChange(() => InsideTextVisibility);}
+        }
+
         public Task HandleAsync(InsideViewTextVisibleMessage message, CancellationToken cancellationToken)
+        {
+            InsideTextVisibility = message.IsShowed ? Visibility.Visible : Visibility.Collapsed;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(InsideViewJapaneseVisibleMessage message, CancellationToken cancellationToken)
         {
             if (message.IsShowed)
             {
+                // Reset TextPin button
                 IsSourceTextPined = true;
                 PinSourceTextToggle();
                 PinSourceTextToggleVisibility = Visibility.Visible;

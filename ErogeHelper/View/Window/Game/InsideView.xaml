@@ -25,7 +25,8 @@
         <!--<Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">-->
         <Border x:Name="ClientArea">
             <Grid>
-                <DockPanel LastChildFill="False">
+                <!-- Text inside view -->
+                <DockPanel LastChildFill="False" Visibility="{Binding InsideTextVisibility}">
                     <!-- Main top activity area -->
                     <StackPanel DockPanel.Dock="Top">
                         <!-- Source Text -->
