@@ -1,6 +1,6 @@
 ﻿namespace ErogeHelper.Common.Messenger
 {
-    public class InsideViewJapaneseVisibleMessage
+    public class JapaneseVisibleMessage
     {
         public bool IsShowed { get; set; }
     }

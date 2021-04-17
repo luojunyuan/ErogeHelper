@@ -80,13 +80,10 @@ namespace ErogeHelper.ViewModel.Page
             {
                 _ehConfigRepository.EnableMeCab = value;
 
-                // UNDONE: 这里需要同时关闭OutSideView的原文与InSideView的原文
-                // 清除InsideView的日文，或**生成**InsideView的日文
-                // OutSide中需要先确定OutSide中日文原文的显示形式，根据设计可能不需要管
                 _gameDataService.RefreshCurrentText();
                 _eventAggregator.PublishOnUIThreadAsync(value is true
-                    ? new InsideViewJapaneseVisibleMessage { IsShowed = true }
-                    : new InsideViewJapaneseVisibleMessage { IsShowed = false });
+                    ? new JapaneseVisibleMessage { IsShowed = true }
+                    : new JapaneseVisibleMessage { IsShowed = false });
 
                 NotifyOfPropertyChange(() => MeCabToggle);
             }

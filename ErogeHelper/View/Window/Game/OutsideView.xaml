@@ -26,7 +26,7 @@
             <!-- Top draggable title bar -->
             <Separator Margin="0 26 0 0" />
 
-            <ContentControl x:Name="TextControl" />
+            <ContentControl x:Name="TextControl" Visibility="{Binding OutsideJapaneseVisible}"/>
             <!-- Extra Text-->
             <ItemsControl x:Name="AppendTextList">
                 <ItemsControl.ItemTemplate>

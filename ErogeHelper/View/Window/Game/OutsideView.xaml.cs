@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Enum;
@@ -28,10 +29,11 @@ namespace ErogeHelper.View.Window.Game
             var gameWindowHooker = IoC.Get<IGameWindowHooker>();
 
             _eventAggregator.SubscribeOnUIThread(this);
+            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             gameWindowHooker.GamePosChanged += pos =>
             {
-                Left += pos.HorizontalChange;
-                Top += pos.VerticalChange;
+                Left += pos.HorizontalChange / _dpi;
+                Top += pos.VerticalChange / _dpi;
             };
             Visibility = Visibility.Collapsed;
             Loaded += (_, _) =>
@@ -42,6 +44,13 @@ namespace ErogeHelper.View.Window.Game
         }
 
         private readonly IEventAggregator _eventAggregator;
+        private double _dpi;
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+        }
 
         private void EnableBlur()
         {
@@ -99,6 +108,7 @@ namespace ErogeHelper.View.Window.Game
             }
         }
 
+        // QUESTION: GC active frequently when resize the window with too long Japanese text
         private void ResizeGripper_DragDelta(object sender, DragDeltaEventArgs e)
         {
             if (Width + e.HorizontalChange >= 100 && Width >= 100)

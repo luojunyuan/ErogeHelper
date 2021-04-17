@@ -17,7 +17,7 @@ using ErogeHelper.Model.Entity.Table;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>, IHandle<InsideViewJapaneseVisibleMessage>
+    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>, IHandle<JapaneseVisibleMessage>
     {
         public GameViewModel(
             IGameDataService dataService,
@@ -70,14 +70,15 @@ namespace ErogeHelper.ViewModel.Window
 
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
+        private Visibility _triggerBarVisibility = Visibility.Collapsed;
         private Visibility _textControlVisibility = Visibility.Visible;
         private Visibility _insideTextVisibility;
-
+        private Visibility _outsideJapaneseVisible;
 
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
 
-        // TODO: OutsideView chrome window and scroll able text
+        // Not much use for the moment
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(30);
 
         public bool AssistiveTouchIsVisible
@@ -164,7 +165,6 @@ namespace ErogeHelper.ViewModel.Window
             }
         }
 
-        private Visibility _triggerBarVisibility = Visibility.Collapsed;
         public Visibility TriggerBarVisibility
         {
             get => _triggerBarVisibility;
@@ -297,7 +297,13 @@ namespace ErogeHelper.ViewModel.Window
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(InsideViewJapaneseVisibleMessage message, CancellationToken cancellationToken)
+        public Visibility OutsideJapaneseVisible
+        {
+            get => _outsideJapaneseVisible;
+            set { _outsideJapaneseVisible = value; NotifyOfPropertyChange(() => OutsideJapaneseVisible);}
+        }
+
+        public Task HandleAsync(JapaneseVisibleMessage message, CancellationToken cancellationToken)
         {
             if (message.IsShowed)
             {
@@ -305,11 +311,13 @@ namespace ErogeHelper.ViewModel.Window
                 IsSourceTextPined = true;
                 PinSourceTextToggle();
                 PinSourceTextToggleVisibility = Visibility.Visible;
+                OutsideJapaneseVisible = Visibility.Visible;
             }
             else
             {
                 TextControlVisibility = Visibility.Collapsed;
                 PinSourceTextToggleVisibility = Visibility.Collapsed;
+                OutsideJapaneseVisible = Visibility.Collapsed;
             }
             return Task.CompletedTask;
         }

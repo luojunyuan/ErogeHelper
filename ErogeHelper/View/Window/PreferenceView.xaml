@@ -32,7 +32,7 @@
         </ui:NavigationView.MenuItems>
 
         <ui:NavigationView.FooterMenuItems>
-            <!-- QUESTION: Can I add a new page(account) here -->
+            <!-- QUESTION: Could not add a new page(account) here -->
             <ui:NavigationViewItem Content="{x:Static resx:Strings.About_Title}" Tag="about">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Info}" />
