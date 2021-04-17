@@ -46,19 +46,24 @@ namespace ErogeHelper.Model.Service
                     if ((extraInfo & NativeMethods.MOUSEEVENTF_FROMTOUCH) == NativeMethods.MOUSEEVENTF_FROMTOUCH
                         && Enable)
                     {
-                        TouchEventFilter(new TouchInfo { Point = info.Point, Token = (int)wParam });
-                        if (_press)
+                        //TouchEventFilter(new TouchInfo { Point = info.Point, Token = (int)wParam });
+                        //if (_press)
+                        if ((int)wParam == 0x202)
                         {
-                            NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
+                            //NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
+                            NativeMethods.MoveCursorToPoint(info.Point.X, info.Point.Y);
                             _ahk.ExecRaw("MouseClick, left");
                         }
 
-                        if (_longPress)
+                        //if (_longPress)
+                        if ((int)wParam == 0x205)
                         {
-                            NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
+                            //NativeMethods.MoveCursorToPoint(_pos4.Point.X, _pos4.Point.Y);
+                            NativeMethods.MoveCursorToPoint(info.Point.X, info.Point.Y);
                             _ahk.ExecRaw("MouseClick, right");
                         }
-                        return new IntPtr(1);
+                        //return new IntPtr(1);
+                        return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
                     }
                 }
             }
