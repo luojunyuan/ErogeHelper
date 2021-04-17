@@ -10,6 +10,8 @@ namespace ErogeHelper.Model.Service.Interface
     {
         event Action<GameWindowPosition> GamePosArea;
 
+        event Action<GameWindowPositionChanged> GamePosChanged;
+
         event Action<WindowSize> NewWindowSize;
 
         Task SetGameWindowHookAsync(Process gameProcess, List<Process> gameProcesses);

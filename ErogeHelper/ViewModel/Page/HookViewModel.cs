@@ -315,7 +315,7 @@ namespace ErogeHelper.ViewModel.Page
             await _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
 
             // 用一个开关? 异步
-            // TODO: ehApi SubmitSetting with gameNames 剪切板，RCode不要 
+            // TODO: 先完成服务器重建 ehApi SubmitSetting with gameNames 剪切板，RCode不要 
 
             var gameInfoTable =
                 await _ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);

@@ -122,6 +122,7 @@ namespace ErogeHelper
                 {
                     await Current.Dispatcher.InvokeAsync(async () =>
                     {
+                        // UNDONE: Try automation to run PowerShell
                         var result = await new NotificationToast(
                             "ErogeHelper is running!",// , or you can turn ErogeHelper down immediately
                             "15")

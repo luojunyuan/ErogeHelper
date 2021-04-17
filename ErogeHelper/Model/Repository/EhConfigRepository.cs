@@ -22,7 +22,6 @@ namespace ErogeHelper.Model.Repository
 
             _configFilePath = Path.Combine(AppDataDir, "EhSettings.json");
             LocalSetting = LocalSettingInit(_configFilePath);
-            Log.Info($"Application config path {_configFilePath}");
         }
 
         public void ClearConfig()

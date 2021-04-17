@@ -229,6 +229,11 @@ namespace ErogeHelper.Common
             return UnsafeNativeMethods.EnumChildWindows(parentHandle, callback, lParam);
         }
 
+        public static int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data)
+        {
+            return SafeNativeMethods.SetWindowCompositionAttribute(hwnd, ref data);
+        }
+
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
@@ -314,6 +319,9 @@ namespace ErogeHelper.Common
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool PostMessage(int hWnd, uint Msg, int wParam, int lParam);
+
+            [DllImport("user32.dll")]
+            public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -351,6 +359,37 @@ namespace ErogeHelper.Common
             [DllImport("user32.Dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam);
+        }
+
+        public enum AccentState
+        {
+            ACCENT_DISABLED = 1,
+            ACCENT_ENABLE_GRADIENT = 0,
+            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+            ACCENT_ENABLE_BLURBEHIND = 3,
+            ACCENT_INVALID_STATE = 4
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct AccentPolicy
+        {
+            public AccentState AccentState;
+            public int AccentFlags;
+            public int GradientColor;
+            public int AnimationId;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WindowCompositionAttributeData
+        {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        public enum WindowCompositionAttribute
+        {
+            WCA_ACCENT_POLICY = 19
         }
 
         public enum WMessages : uint

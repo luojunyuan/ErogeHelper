@@ -22,7 +22,8 @@
     <!-- Layout of the whole game window -->
     <Border>
         <!-- Client area -->
-        <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
+        <!--<Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">-->
+        <Border x:Name="ClientArea">
             <Grid>
                 <DockPanel LastChildFill="False">
                     <!-- Main top activity area -->

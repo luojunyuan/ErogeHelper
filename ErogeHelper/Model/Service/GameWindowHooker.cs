@@ -15,6 +15,8 @@ namespace ErogeHelper.Model.Service
     {
         public event Action<GameWindowPosition>? GamePosArea;
 
+        public event Action<GameWindowPositionChanged>? GamePosChanged;
+
         public event Action<WindowSize>? NewWindowSize;
 
         public async Task SetGameWindowHookAsync(Process gameProcess, List<Process> gameProcesses)
@@ -164,6 +166,8 @@ namespace ErogeHelper.Model.Service
 
             var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
+            GamePosChanged?.Invoke(new GameWindowPositionChanged(rect.Left - _lastPos.Left, rect.Top - _lastPos.Top));
+
             _lastPos = new GameWindowPosition
             {
                 Height = height,
@@ -175,11 +179,13 @@ namespace ErogeHelper.Model.Service
             GamePosArea?.Invoke(_lastPos);
 
             #region Change FloatButton Position
+            // init
             if (_oldWidth == -1 && _oldHeight == -1)
             {
                 _oldWidth = width;
                 _oldHeight = height;
             }
+            // UNDONE: 按钮藏到了窗口的下方，但是窗口大小却没变化的情况？
             else if (_oldHeight != height || _oldWidth != width)
             {
                 NewWindowSize?.Invoke(new WindowSize(rectClient.Right, rectClient.Bottom));

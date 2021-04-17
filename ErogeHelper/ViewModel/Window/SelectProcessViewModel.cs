@@ -106,6 +106,8 @@ namespace ErogeHelper.ViewModel.Window
                     //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {
+                        // TODO: 先完成服务器重建 Save game Id also
+                        // TODO: 先完成服务器重建 Also need RegExp info _ehDbRepository
                         var content = resp.Content ?? new GameSettingResponse();
                         settingJson = content.GameSettingJson;
                     }
