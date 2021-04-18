@@ -157,13 +157,17 @@
                                 <!-- Read Code -->
                                 <ui:AppBarButton 
                                     Label="{x:Static resx:Strings.HookPage_RCodeLabel}" Icon="Find"
-                                    ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" IsEnabled="False" />
+                                    ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" 
+                                    cal:Message.Attach="[Click] = [OpenRCodeDialog]"
+                                    IsEnabled="{Binding CanOpenDialog}" />
 
                                 <dialog:HCodeDialog 
                                     x:Name="HCodeDialog" cal:Message.Attach="[SearchCodeClick] = [SearchHCode]; 
                                         [PrimaryButtonClick] = [InsertCode]"
                                     CanSearchCode="{Binding CanSearchCode}"
                                     InputCode="{Binding InputHCode, Mode=TwoWay}"/>
+                                <dialog:RCodeDialog
+                                    x:Name="RCodeDialog" cal:Message.Attach="[PrimaryButtonClick] = [SearchRCodeText($source)]"/>
                             </StackPanel>
                             
                             <!-- UNDONE: Second thread -->

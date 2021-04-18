@@ -100,7 +100,10 @@ namespace ErogeHelper.Model.Service
 
         public void SearchRCode(string text)
         {
-            throw new NotImplementedException();
+            foreach (Process p in _gameProcesses)
+            {
+                _ = TextHostDll.SearchForText((uint)p.Id, text, 932);
+            }
         }
 
         public IEnumerable<string> GetConsoleOutputInfo() => _consoleOutput;
@@ -162,7 +165,7 @@ namespace ErogeHelper.Model.Service
                     Log.Debug(hp.Text);
                     SelectedDataEvent?.Invoke(hp);
                 }
-                // UNDONE: Improve read code in the future
+                // XXX: hp.Name `Search` `Read` is different
                 else if (Setting.Hookcode.StartsWith('R')
                          && hp.Name.Equals("READ"))
                 {

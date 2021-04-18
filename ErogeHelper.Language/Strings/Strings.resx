@@ -397,4 +397,22 @@
   <data name="GeneralPage.OutsideWindow" xml:space="preserve">
     <value>Use outside text window</value>
   </data>
+  <data name="Common.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="HookPage.RCodeSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="HookPage.RCodeInputLabel" xml:space="preserve">
+    <value>Input current Japanese Text</value>
+  </data>
+  <data name="HookPage.RCodeClipTip" xml:space="preserve">
+    <value>Select text area</value>
+  </data>
+  <data name="HookPage.RCodeTextValidationTip" xml:space="preserve">
+    <value>The text should more than 5 characters</value>
+  </data>
+  <data name="HookPage.SubmitDialogMessage" xml:space="preserve">
+    <value>Update succeed</value>
+  </data>
 </root>

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
+using ErogeHelper.View.Dialog;
 
 namespace ErogeHelper.ViewModel.Page
 {
@@ -27,7 +28,6 @@ namespace ErogeHelper.ViewModel.Page
             ITextractorService textractorService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            GameRuntimeDataRepo gameRuntimeDataRepo,
             IGameDataService gameDataService)
         {
             _dataService = dataService;
@@ -36,7 +36,6 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService = textractorService;
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
-            _gameRuntimeDataRepo = gameRuntimeDataRepo;
             _gameDataService = gameDataService;
 
             _textractorService.DataEvent += DataProcess;
@@ -51,7 +50,6 @@ namespace ErogeHelper.ViewModel.Page
         private readonly ITextractorService _textractorService;
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
-        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
         private readonly IGameDataService _gameDataService;
 
         #region RegExp
@@ -174,6 +172,24 @@ namespace ErogeHelper.ViewModel.Page
             }
         }
 
+        public async void OpenRCodeDialog()
+        {
+            CanOpenDialog = false;
+            await _eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(GetType(), ViewAction.OpenDialog, ModernDialog.ReadCode, null, ViewType.Page))
+                .ConfigureAwait(false);
+            CanOpenDialog = true;
+        }
+
+        public void SearchRCodeText(RCodeDialog dialog)
+        {
+            // Condition here cause "Enter" key will cross this
+            if (dialog.IsPrimaryButtonEnabled)
+            {
+                _textractorService.SearchRCode(dialog.JapaneseText.Text);
+            }
+        }
+
         #endregion
 
         public void ClearHookMapData()
@@ -281,10 +297,14 @@ namespace ErogeHelper.ViewModel.Page
             }
         }
 
-        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp;
+        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp && !_submitting;
+        private bool _submitting;
 
         public async void SubmitSetting()
         {
+            _submitting = true;
+            NotifyOfPropertyChange(() => CanSubmitSetting);
+
             var textPendingToSend = SelectedText
                 .Replace("|~S~|", string.Empty)
                 .Replace("|~E~|", string.Empty);
@@ -312,10 +332,10 @@ namespace ErogeHelper.ViewModel.Page
                 }
             };
             _textractorService.Setting = textractorSetting;
-            await _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
+            _ = _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
 
             // 用一个开关? 异步
-            // TODO: 先完成服务器重建 ehApi SubmitSetting with gameNames 剪切板，RCode不要 
+            // TODO: 先完成服务器重建 ehApi SubmitSetting with gameNames 剪切板，hp.Name Search 不要 
 
             var gameInfoTable =
                 await _ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);
@@ -363,6 +383,9 @@ namespace ErogeHelper.ViewModel.Page
                     await _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(),
                             ViewAction.OpenDialog, ModernDialog.HookSettingUpdatedTip, null, ViewType.Page))
                         .ConfigureAwait(false);
+
+                    _submitting = false;
+                    NotifyOfPropertyChange(() => CanSubmitSetting);
                     return;
                 }
             }
@@ -382,6 +405,9 @@ namespace ErogeHelper.ViewModel.Page
                     new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(typeof(HookConfigViewModel), ViewAction.Close));
+
+            _submitting = false;
+            NotifyOfPropertyChange(() => CanSubmitSetting);
         }
 
 #pragma warning disable 8618

@@ -40,9 +40,11 @@ namespace ErogeHelper.View.Page
                         else if (message.DialogType == ModernDialog.HookSettingUpdatedTip)
                             await new ContentDialog
                             {
-                                Content = "Update succeed",
-                                CloseButtonText = "OK"
+                                Content = ErogeHelper.Language.Strings.HookPage_SubmitDialogMessage,
+                                CloseButtonText = ErogeHelper.Language.Strings.Common_OK
                             }.ShowAsync().ConfigureAwait(false);
+                        else if (message.DialogType == ModernDialog.ReadCode)
+                            await RCodeDialog.ShowAsync().ConfigureAwait(false);
                         break;
                     default:
                         throw new InvalidOperationException();

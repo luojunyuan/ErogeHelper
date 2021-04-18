@@ -397,4 +397,22 @@
   <data name="GeneralPage.OutsideWindow" xml:space="preserve">
     <value>使用外部文本窗口</value>
   </data>
+  <data name="Common.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="HookPage.RCodeSearch" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="HookPage.RCodeInputLabel" xml:space="preserve">
+    <value>输入当前日文文本</value>
+  </data>
+  <data name="HookPage.RCodeClipTip" xml:space="preserve">
+    <value>选择待识别的文本区域</value>
+  </data>
+  <data name="HookPage.RCodeTextValidationTip" xml:space="preserve">
+    <value>待搜索的文本至少多于五个字</value>
+  </data>
+  <data name="HookPage.SubmitDialogMessage" xml:space="preserve">
+    <value>已更新</value>
+  </data>
 </root>

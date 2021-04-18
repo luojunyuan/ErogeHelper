@@ -151,6 +151,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Close 的本地化字符串。
+        /// </summary>
+        public static string Common_Close {
+            get {
+                return ResourceManager.GetString("Common.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 OK 的本地化字符串。
         /// </summary>
         public static string Common_OK {
@@ -467,11 +476,47 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Select text area 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeClipTip {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeClipTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Input current Japanese Text 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeInputLabel {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Read Code 的本地化字符串。
         /// </summary>
         public static string HookPage_RCodeLabel {
             get {
                 return ResourceManager.GetString("HookPage.RCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Search 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeSearch {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The text should more than 5 characters 的本地化字符串。
+        /// </summary>
+        public static string HookPage_RCodeTextValidationTip {
+            get {
+                return ResourceManager.GetString("HookPage.RCodeTextValidationTip", resourceCulture);
             }
         }
         
@@ -580,6 +625,15 @@ namespace ErogeHelper.Language {
         public static string HookPage_Submit {
             get {
                 return ResourceManager.GetString("HookPage.Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Update succeed 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SubmitDialogMessage {
+            get {
+                return ResourceManager.GetString("HookPage.SubmitDialogMessage", resourceCulture);
             }
         }
         

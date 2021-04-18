@@ -113,6 +113,7 @@ namespace ErogeHelper
             }
             catch (WaitHandleCannotBeOpenedException)
             {
+                Log.Info("Fine exception WaitHandleCannotBeOpenedException for active singleton app");
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
