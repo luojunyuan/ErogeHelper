@@ -46,7 +46,7 @@ namespace ErogeHelper.ViewModel.Window
             if (_ehConfigRepository.UseOutsideWindow)
                 HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
-            AppendTextList.Add(new AppendTextItem("Waiting for text..."));
+            AppendTextList.Add(new AppendTextItem(Language.Strings.GameViewModel_TextWaitingMessage));
             dataService.SourceTextReceived += text =>
             {
                 SourceTextArchiver.Enqueue(text);

@@ -304,7 +304,7 @@
   <data name="GeneralPage.DeepLDownload" xml:space="preserve">
     <value>下载 DeepL</value>
   </data>
-  <data name="GeneralPage.Msic" xml:space="preserve">
+  <data name="GeneralPage.Misc" xml:space="preserve">
     <value>杂项</value>
   </data>
   <data name="HookPage.CodeInsertDialogTip" xml:space="preserve">
@@ -384,5 +384,17 @@
   </data>
   <data name="HookPage.RCodeTip" xml:space="preserve">
     <value>搜索文本帮助插入阅读码</value>
+  </data>
+  <data name="GameViewModel.TextWaitingMessage" xml:space="preserve">
+    <value>正在等待文本。。。</value>
+  </data>
+  <data name="GameView.ResetTouchPos" xml:space="preserve">
+    <value>尝试重新定位按钮位置</value>
+  </data>
+  <data name="GameView.TouchToMouse" xml:space="preserve">
+    <value>触控转鼠标</value>
+  </data>
+  <data name="GeneralPage.OutsideWindow" xml:space="preserve">
+    <value>使用外部文本窗口</value>
   </data>
 </root>

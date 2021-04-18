@@ -16,9 +16,9 @@
 
     <control:ScrollViewerSmooth PanningMode="None">
         <StackPanel Margin="20, 10">
-            <GroupBox Header="{x:Static resx:Strings.GeneralPage_Msic}">
+            <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ui:ToggleSwitch Header="Use outside text window" IsOn="{Binding OutsideWindow}"/>
+                    <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_OutsideWindow}" IsOn="{Binding OutsideWindow}"/>
                     <ui:ToggleSwitch 
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />
                     <ui:HyperlinkButton 

@@ -331,8 +331,8 @@
   <data name="GameView.UnpinTip" xml:space="preserve">
     <value>Pin Japanese text</value>
   </data>
-  <data name="GeneralPage.Msic" xml:space="preserve">
-    <value>MSIC</value>
+  <data name="GeneralPage.Misc" xml:space="preserve">
+    <value>MISC</value>
   </data>
   <data name="GeneralPage.DeepL" xml:space="preserve">
     <value>DeepL Client Extention</value>
@@ -384,5 +384,17 @@
   </data>
   <data name="HookPage.RCodeTip" xml:space="preserve">
     <value>Search text help find out read code</value>
+  </data>
+  <data name="GameViewModel.TextWaitingMessage" xml:space="preserve">
+    <value>Waiting for text...</value>
+  </data>
+  <data name="GameView.ResetTouchPos" xml:space="preserve">
+    <value>Try reset button position</value>
+  </data>
+  <data name="GameView.TouchToMouse" xml:space="preserve">
+    <value>Touch to mouse</value>
+  </data>
+  <data name="GeneralPage.OutsideWindow" xml:space="preserve">
+    <value>Use outside text window</value>
   </data>
 </root>

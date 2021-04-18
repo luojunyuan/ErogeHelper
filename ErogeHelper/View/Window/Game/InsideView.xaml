@@ -113,7 +113,7 @@
                                 cal:Message.Attach="[Click] = [FocusToggle]"/>
                             <ui:AppBarToggleButton 
                                 Icon="TouchPointer" IsChecked="{Binding IsTouchToMouse}" 
-                                ToolTip="Touch to mouse" 
+                                ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" 
                                 cal:Message.Attach="[Click] = [TouchToMouseToggle]"/>
 
                             <ui:CommandBarFlyout.SecondaryCommands>
@@ -137,10 +137,11 @@
                                         </ui:MenuFlyout>
                                     </ui:AppBarButton.Flyout>-->
                                 </ui:AppBarButton>
-                                <ui:AppBarSeparator/>
 
+                                <ui:AppBarSeparator/>
                                 <ui:AppBarButton 
-                                    Icon="BrowsePhotos" Label="Try reset EH position" cal:Message.Attach="[Click] = [ResetInsideView]"/>
+                                    Icon="BrowsePhotos" Label="{x:Static resx:Strings.GameView_ResetTouchPos}" 
+                                    cal:Message.Attach="[Click] = [ResetInsideView]"/>
                                 
                                 <ui:AppBarSeparator/>
                                 <ui:AppBarButton 
