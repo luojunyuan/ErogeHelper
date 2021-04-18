@@ -224,6 +224,34 @@ namespace ErogeHelper.Common
             SafeNativeMethods.MouseEvent(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
         }
 
+        // https://stackoverflow.com/questions/2416748/how-do-you-simulate-mouse-click-in-c
+        public static MousePoint GetCursorPosition()
+        {
+            var gotPoint = SafeNativeMethods.GetCursorPos(out var currentMousePoint);
+            if (!gotPoint)
+            {
+                currentMousePoint = new MousePoint(0, 0);
+            }
+            return currentMousePoint;
+        }
+
+        public static void MouseLeftDown(MousePoint point)
+        {
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_LEFTDOWN, point.X, point.Y, 0, 0);
+        }
+        public static void MouseLeftUp(MousePoint point)
+        {
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_LEFTUP, point.X, point.Y, 0, 0);
+        }
+        public static void MouseRightDown(MousePoint point)
+        {
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_RIGHTDOWN, point.X, point.Y, 0, 0);
+        }
+        public static void MouseRightUp(MousePoint point)
+        {
+            SafeNativeMethods.MouseEvent(MOUSEEVENTF_RIGHTUP, point.X, point.Y, 0, 0);
+        }
+
         public static bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam)
         {
             return UnsafeNativeMethods.EnumChildWindows(parentHandle, callback, lParam);
@@ -322,6 +350,11 @@ namespace ErogeHelper.Common
 
             [DllImport("user32.dll")]
             public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool GetCursorPos(out MousePoint lpMousePoint);
+
         }
 
         [SuppressUnmanagedCodeSecurity]
@@ -359,6 +392,19 @@ namespace ErogeHelper.Common
             [DllImport("user32.Dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool EnumChildWindows(IntPtr parentHandle, Win32Callback callback, IntPtr lParam);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MousePoint
+        {
+            public int X;
+            public int Y;
+
+            public MousePoint(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
         }
 
         public enum AccentState
