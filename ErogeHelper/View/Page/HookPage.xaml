@@ -33,8 +33,13 @@
                                     </DataTrigger>
                                     <DataTrigger 
                                         Binding="{Binding ElementName=engineName, Path=Text}" 
-                                        Value="READ">
+                                        Value="Search">
                                         <Setter Property="Foreground" Value="Yellow"/>
+                                    </DataTrigger>
+                                    <DataTrigger 
+                                        Binding="{Binding ElementName=engineName, Path=Text}" 
+                                        Value="READ">
+                                        <Setter Property="Foreground" Value="Blue"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
