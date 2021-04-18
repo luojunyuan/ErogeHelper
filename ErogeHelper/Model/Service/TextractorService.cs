@@ -176,6 +176,8 @@ namespace ErogeHelper.Model.Service
 
         private void OnConnectCallBackHandle(uint processId)
         {
+            // UNDONE: Removed hooks from being inserted again on each game
+            // https://github.com/Artikash/Textractor/issues/534
             if (Setting.IsUserHook)
             {
                 InsertHook(Setting.Hookcode);

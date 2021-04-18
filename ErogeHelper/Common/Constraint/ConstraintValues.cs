@@ -1,4 +1,4 @@
-﻿namespace ErogeHelper.Common
+﻿namespace ErogeHelper.Common.Constraint
 {
     public static class ConstraintValues
     {

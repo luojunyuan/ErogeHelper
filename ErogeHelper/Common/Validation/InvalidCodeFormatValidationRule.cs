@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using ErogeHelper.Common.Constraint;
 
 namespace ErogeHelper.Common.Validation
 {

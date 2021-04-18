@@ -18,6 +18,8 @@ namespace ErogeHelper.Model.Service.Interface
 
         void InvokeLastWindowPosition();
 
+        GameWindowPosition GetLastWindowPosition();
+
         /// <summary>
         /// Some games may change their handle when the window is switched full screen
         /// </summary>

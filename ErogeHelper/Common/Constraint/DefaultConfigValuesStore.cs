@@ -1,6 +1,6 @@
 ﻿using ErogeHelper.Common.Enum;
 
-namespace ErogeHelper.Common
+namespace ErogeHelper.Common.Constraint
 {
     internal static class DefaultConfigValuesStore
     {

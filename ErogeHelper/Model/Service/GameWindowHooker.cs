@@ -48,6 +48,8 @@ namespace ErogeHelper.Model.Service
             Log.Debug(_lastPos.ToString());
         }
 
+        public GameWindowPosition GetLastWindowPosition() => _lastPos;
+
         /// <summary>
         /// Check and reset or do nothing
         /// </summary>

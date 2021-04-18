@@ -10,6 +10,7 @@
         xmlns:control="clr-namespace:ErogeHelper.View.Control"
         xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
         xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
+        xmlns:constraint="clr-namespace:ErogeHelper.Common.Constraint"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:GameViewModel, IsDesignTimeCreatable=True}"
         cal:Bind.AtDesignTime="True"
@@ -74,7 +75,7 @@
                                 cal:Message.Attach="[Click] = [VolumeDown]" 
                                 ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
                                 <ui:AppBarButton.Icon>
-                                    <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Volume1}" />
+                                    <ui:FontIcon Glyph="{x:Static constraint:CommonGlyphs.Volume1}" />
                                 </ui:AppBarButton.Icon>
                             </ui:AppBarButton>
                             <ui:AppBarButton 
@@ -97,7 +98,7 @@
                                             <Trigger Property="IsChecked" Value="False">
                                                 <Setter Property="Icon">
                                                     <Setter.Value>
-                                                        <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Unpin}"/>
+                                                        <ui:FontIcon Glyph="{x:Static constraint:CommonGlyphs.Unpin}"/>
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Setter Property="ToolTip" Value="{x:Static resx:Strings.GameView_UnpinTip}" />
@@ -123,7 +124,7 @@
                                     Label="{x:Static resx:Strings.GameView_TaskView}" 
                                     cal:Message.Attach="[Click] = [TaskView]" InputGestureText="Win+Tab">
                                     <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.TaskView}" />
+                                        <ui:FontIcon Glyph="{x:Static constraint:CommonGlyphs.TaskView}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
                                 <ui:AppBarButton 

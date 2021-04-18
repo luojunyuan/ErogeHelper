@@ -8,6 +8,7 @@
                   xmlns:common="clr-namespace:ErogeHelper.Common"
                   xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
                   xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
+                  xmlns:constraint="clr-namespace:ErogeHelper.Common.Constraint"
                   mc:Ignorable="d"
                   Title="{x:Static resx:Strings.HookPage_HookCode}"
                   CloseButtonText="{x:Static resx:Strings.HookPage_CodeSearchCancel}"
@@ -34,7 +35,7 @@
                 Name="SearchCodeButton" Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_CodeSearchTip}"
                 Click="SearchCodeButton_OnClick">
                 <ui:AppBarButton.Icon>
-                    <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
+                    <ui:FontIcon Glyph="{x:Static constraint:CommonGlyphs.Search}" Margin="0 -6.5 0 0"/>
                 </ui:AppBarButton.Icon>
             </ui:AppBarButton>
         </ui:SimpleStackPanel>

@@ -13,7 +13,7 @@
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="Bootstrapper"/>
                 </ResourceDictionary>
-                <ResourceDictionary Source="Common/UiValueDictionary.xaml"/>
+                <ResourceDictionary Source="Common/Constraint/UiValueDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
             <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />

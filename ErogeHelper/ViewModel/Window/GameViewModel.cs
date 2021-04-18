@@ -46,17 +46,14 @@ namespace ErogeHelper.ViewModel.Window
             if (_ehConfigRepository.UseOutsideWindow)
                 HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
+            AppendTextList.Add(new AppendTextItem("Waiting for text..."));
             dataService.SourceTextReceived += text =>
             {
                 SourceTextArchiver.Enqueue(text);
                 TextControl.CardControl.TotalText = text;
             };
             dataService.BindableTextItem += textItem => TextControl.SourceTextCollection = textItem;
-            dataService.AppendTextReceived += (text, tip) => AppendTextList.Add(new AppendTextItem
-            {
-                Message = text,
-                ExtraInfo = tip,
-            });
+            dataService.AppendTextReceived += (text, tip) => AppendTextList.Add(new AppendTextItem(text, tip));
             dataService.AppendTextsRefresh += _ => AppendTextList.Clear();
         }
 

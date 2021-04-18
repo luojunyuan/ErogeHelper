@@ -5,7 +5,7 @@ using WindowsInput.Events;
 
 namespace ErogeHelper.Common.Function
 {
-    class DeepLHelper : StaHelper
+    internal class DeepLHelper : StaHelper
     {
         private readonly string _format;
         private readonly object _data;

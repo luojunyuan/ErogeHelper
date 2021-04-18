@@ -26,11 +26,11 @@ namespace ErogeHelper.View.Window.Game
             InitializeComponent();
 
             _eventAggregator = IoC.Get<IEventAggregator>();
-            var gameWindowHooker = IoC.Get<IGameWindowHooker>();
+            _gameWindowHooker = IoC.Get<IGameWindowHooker>();
 
             _eventAggregator.SubscribeOnUIThread(this);
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            gameWindowHooker.GamePosChanged += pos =>
+            _gameWindowHooker.GamePosChanged += pos =>
             {
                 Left += pos.HorizontalChange / _dpi;
                 Top += pos.VerticalChange / _dpi;
@@ -44,6 +44,7 @@ namespace ErogeHelper.View.Window.Game
         }
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly IGameWindowHooker _gameWindowHooker;
         private double _dpi;
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
@@ -88,7 +89,7 @@ namespace ErogeHelper.View.Window.Game
                         Hide();
                         break;
                     case ViewAction.Show:
-                        this.MoveToCenter();
+                        MoveToGameCenter();
                         Show();
                         break;
                     default:
@@ -97,6 +98,14 @@ namespace ErogeHelper.View.Window.Game
             }
             return Task.CompletedTask;
         }
+
+        private void MoveToGameCenter()
+        {
+            var gamePos = _gameWindowHooker.GetLastWindowPosition();
+            Top = gamePos.Top + gamePos.Height / 2;
+            Left = gamePos.Left + (gamePos.Width - Width) / 2;
+        }
+
         protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
 
         // MouseDown="OutsideView_OnMouseDown" would cover the CardPopup 

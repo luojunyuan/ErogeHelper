@@ -2,7 +2,13 @@
 {
     public class AppendTextItem
     {
-        public string Message { get; set; } = string.Empty;
-        public string ExtraInfo { get; set; } = string.Empty;
+        public AppendTextItem(string message, string extraInfo = "")
+        {
+            Message = message;
+            ExtraInfo = extraInfo;
+        }
+
+        public string Message { get; }
+        public string ExtraInfo { get; }
     }
 }

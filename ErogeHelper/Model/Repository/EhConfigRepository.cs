@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ErogeHelper.Common.Constraint;
 
 namespace ErogeHelper.Model.Repository
 {

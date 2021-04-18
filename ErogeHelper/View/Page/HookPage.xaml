@@ -6,12 +6,12 @@
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:cal="http://caliburnmicro.com"
       xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-      xmlns:common="clr-namespace:ErogeHelper.Common"
       xmlns:behavior="clr-namespace:ErogeHelper.Common.Behavior"
       xmlns:validation="clr-namespace:ErogeHelper.Common.Validation"
       xmlns:dialog="clr-namespace:ErogeHelper.View.Dialog"
       xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
       xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
+      xmlns:constraint="clr-namespace:ErogeHelper.Common.Constraint"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance vm:HookViewModel, IsDesignTimeCreatable=True}"
       cal:Bind.AtDesignTime="True" d:DesignHeight="800" d:DesignWidth="850"
@@ -151,7 +151,7 @@
                                     cal:Message.Attach="[Click] = [OpenHCodeDialog]"
                                     IsEnabled="{Binding CanOpenDialog}">
                                     <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static common:CommonGlyphs.Component}" />
+                                        <ui:FontIcon Glyph="{x:Static constraint:CommonGlyphs.Component}" />
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
                                 <!-- Read Code -->
