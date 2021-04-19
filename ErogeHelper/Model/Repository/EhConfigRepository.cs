@@ -292,7 +292,7 @@ namespace ErogeHelper.Model.Repository
             get => GetValue(DefaultConfigValuesStore.TencentApiSecretId);
             set => SetValue(value);
         }
-        public string TencentMtTSecretKey
+        public string TencentMtSecretKey
         {
             get => GetValue(DefaultConfigValuesStore.TencentApiSecretKey);
             set => SetValue(value);

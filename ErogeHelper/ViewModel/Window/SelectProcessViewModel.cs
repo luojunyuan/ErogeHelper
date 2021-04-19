@@ -79,7 +79,17 @@ namespace ErogeHelper.ViewModel.Window
                 ProcItems.Remove(SelectedProcItem);
                 await _eventAggregator
                     .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
-                        ModernDialog.SelectProcessNoProcessTip)).ConfigureAwait(false);
+                        ModernDialog.SelectProcessTip, extraInfo: Language.Strings.SelectProcess_ProcessExit))
+                    .ConfigureAwait(false);
+                return;
+            }
+
+            if (SelectedProcItem!.Proc.Id == System.Environment.ProcessId)
+            {
+                await _eventAggregator
+                    .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
+                        ModernDialog.SelectProcessTip, extraInfo: Language.Strings.SelectProcess_ProcessItself))
+                    .ConfigureAwait(false);
                 return;
             }
 

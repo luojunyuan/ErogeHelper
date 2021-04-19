@@ -2,7 +2,7 @@
 
 namespace ErogeHelper.Model.Factory.Interface
 {
-    public interface IDictFactory
+    public interface IDictionaryFactory
     {
         IDict GetDictInstance(DictType dictType);
     }

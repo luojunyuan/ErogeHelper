@@ -7,6 +7,6 @@
                   xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
                   mc:Ignorable="d" 
                   Title="Eroge Helper" CloseButtonText="{x:Static resx:Strings.Common_OK}">
-    <Label Content="{x:Static resx:Strings.SelectProcess_ProcessExit}" />
-    <!--<TextBlock Text="{x:Static resx:Strings.SelectProcess_ProcessExit}" />-->
+
+    <Label x:Name="DialogContent" />
 </ui:ContentDialog>

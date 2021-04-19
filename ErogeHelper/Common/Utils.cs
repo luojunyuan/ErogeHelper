@@ -237,5 +237,19 @@ namespace ErogeHelper.Common
         }
 
         public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "error";
+
+        public static string ConsoleI18N(string text)
+        {
+            // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
+            return text switch
+            {
+                "Textractor: already injected" => Language.Strings.Textractor_AlreadyInject,
+                "Textractor: invalid code" => Language.Strings.Textractor_InvalidCode,
+                "Textractor: initialization completed" => Language.Strings.Textractor_Init,
+                "Textractor: couldn't inject" => Language.Strings.Textractor_InjectFailed,
+                "Textractor: invalid process" => Language.Strings.Textractor_InvalidProcess,
+                _ => text
+            };
+        }
     }
 }

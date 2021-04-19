@@ -184,7 +184,7 @@
     <value>选择的文本</value>
   </data>
   <data name="HookPage.RegExp" xml:space="preserve">
-    <value>正则表达式</value>
+    <value>正则表达式（用来去除多余的文字）</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">
     <value>文本</value>
@@ -414,5 +414,59 @@
   </data>
   <data name="HookPage.SubmitDialogMessage" xml:space="preserve">
     <value>已更新</value>
+  </data>
+  <data name="MeCabPage.SelectDict" xml:space="preserve">
+    <value>请选择UniDic.eh文件</value>
+  </data>
+  <data name="MeCabPage.SelectDictTip" xml:space="preserve">
+    <value>解冻字典文件以解锁显示日文的功能</value>
+  </data>
+  <data name="SelectProcess_ProcessItself" xml:space="preserve">
+    <value>不能选择EH自身哦~</value>
+  </data>
+  <data name="Translator.BaiduWeb" xml:space="preserve">
+    <value>百度网页翻译</value>
+  </data>
+  <data name="Translator.BaiduApi" xml:space="preserve">
+    <value>百度翻译Api</value>
+  </data>
+  <data name="Translator.Caiyun" xml:space="preserve">
+    <value>彩云小译</value>
+  </data>
+  <data name="Translator.NiuTrans" xml:space="preserve">
+    <value>小牛翻译</value>
+  </data>
+  <data name="Translator.TencentMt" xml:space="preserve">
+    <value>腾讯机器翻译</value>
+  </data>
+  <data name="Translator.Yeekit" xml:space="preserve">
+    <value>译云机器翻译</value>
+  </data>
+  <data name="Translator.Youdao" xml:space="preserve">
+    <value>有道翻译</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Translator.GoogleCn" xml:space="preserve">
+    <value>Google 翻译（CN）</value>
+  </data>
+  <data name="Common.Test" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="Common.RestoreDefault" xml:space="preserve">
+    <value>恢复默认</value>
+  </data>
+  <data name="TransPage.Title" xml:space="preserve">
+    <value>机器翻译</value>
+  </data>
+  <data name="TransPage.TransLabel" xml:space="preserve">
+    <value>翻译</value>
+  </data>
+  <data name="TransPage.To" xml:space="preserve">
+    <value>到</value>
+  </data>
+  <data name="TransPage.TranslatorDetail" xml:space="preserve">
+    <value>详情</value>
   </data>
 </root>

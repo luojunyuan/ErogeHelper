@@ -12,12 +12,14 @@ namespace ErogeHelper.Common.Messenger
         /// <param name="action"></param>
         /// <param name="dialogType"></param>
         /// <param name="context"></param>
+        /// <param name="extraInfo"></param>
         public ViewActionMessage(
             Type viewModelType, 
             ViewAction action, 
             ModernDialog? dialogType = null, 
             object? context = null,
-            ViewType viewType = ViewType.Window)
+            ViewType viewType = ViewType.Window,
+            string extraInfo = "")
         {
             var viewName = string.Empty;
 
@@ -35,6 +37,7 @@ namespace ErogeHelper.Common.Messenger
             WindowType = Type.GetType(viewName) ?? throw new InvalidCastException(viewName);
             Action = action;
             DialogType = dialogType;
+            ExtraInfo = extraInfo;
         }
 
         public Type WindowType { get; set; } 
@@ -42,5 +45,7 @@ namespace ErogeHelper.Common.Messenger
         public ViewAction Action { get; set; }
 
         public ModernDialog? DialogType { get; set; }
+
+        public string ExtraInfo { get; set; }
     }
 }

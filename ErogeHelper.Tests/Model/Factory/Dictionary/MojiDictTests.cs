@@ -16,8 +16,8 @@ namespace ErogeHelper.Tests.Model.Factory.Dictionary
         [TestMethod]
         public async Task MojiDictTest()
         {
-            IDictFactory dictFactory = new DictFactory(new EhConfigRepository(TestEnvironmentValue.RoamingDir));
-            var dict = dictFactory.GetDictInstance(DictType.Moji);
+            IDictionaryFactory dictionaryFactory = new DictionaryFactory(new EhConfigRepository(TestEnvironmentValue.RoamingDir));
+            var dict = dictionaryFactory.GetDictInstance(DictType.Moji);
 
             if (dict is MojiDict mojiDict)
             {

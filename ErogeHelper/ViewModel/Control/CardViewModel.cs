@@ -16,14 +16,14 @@ namespace ErogeHelper.ViewModel.Control
 {
     public class CardViewModel : PropertyChangedBase
     {
-        public CardViewModel(EhConfigRepository ehConfigRepository, IDictFactory dictFactory)
+        public CardViewModel(EhConfigRepository ehConfigRepository, IDictionaryFactory dictionaryFactory)
         {
             _ehConfigRepository = ehConfigRepository;
 
             _mojiTabItemVisible = _ehConfigRepository.MojiDictEnable ? Visibility.Visible : Visibility.Collapsed;
             _jishoTabItemVisible = _ehConfigRepository.JishoDictEnable ? Visibility.Visible : Visibility.Collapsed;
-            _mojiDict = dictFactory.GetDictInstance(DictType.Moji) as MojiDict ?? throw new Exception();
-            _jishoDict = dictFactory.GetDictInstance(DictType.Jisho) as JishoDict ?? throw new Exception();
+            _mojiDict = dictionaryFactory.GetDictInstance(DictType.Moji) as MojiDict ?? throw new Exception();
+            _jishoDict = dictionaryFactory.GetDictInstance(DictType.Jisho) as JishoDict ?? throw new Exception();
         }
 
         private readonly EhConfigRepository _ehConfigRepository;

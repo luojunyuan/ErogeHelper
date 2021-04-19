@@ -12,7 +12,7 @@
         Title="PreferenceView" Height="600" Width="600" 
         ResizeMode="CanResizeWithGrip" Topmost="True"
         Icon="pack://application:,,,/assets/app.ico" MinWidth="400">
-        <!--helper:WindowPlacement.Save="True"-->
+
     <ui:NavigationView 
         x:Name="NavView" IsSettingsVisible="False" IsTabStop="False" PaneDisplayMode="Auto"
         SelectionChanged="NavView_SelectionChanged" CompactModeThresholdWidth="0" IsBackButtonVisible="Collapsed" 
@@ -29,7 +29,7 @@
             <ui:NavigationViewItem 
                 Icon="Attach" Content="{x:Static resx:Strings.HookPage_Title}" Tag="hook"
                 ToolTip="{x:Static resx:Strings.HookPage_Title}"/>
-            <!-- <ui:NavigationViewItem Icon="Character" Content="Trans" Tag="trans"/> -->
+            <ui:NavigationViewItem Icon="Character" Content="{x:Static resx:Strings.TransPage_Title}" Tag="trans"/> 
         </ui:NavigationView.MenuItems>
 
         <ui:NavigationView.FooterMenuItems>

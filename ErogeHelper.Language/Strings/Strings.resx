@@ -415,4 +415,58 @@
   <data name="HookPage.SubmitDialogMessage" xml:space="preserve">
     <value>Update succeed</value>
   </data>
+  <data name="MeCabPage.SelectDict" xml:space="preserve">
+    <value>Choose file UniDic.eh</value>
+  </data>
+  <data name="MeCabPage.SelectDictTip" xml:space="preserve">
+    <value>Unpack UniDic.eh to enable this function</value>
+  </data>
+  <data name="SelectProcess_ProcessItself" xml:space="preserve">
+    <value>Cannot choose EH itself~</value>
+  </data>
+  <data name="Translator.BaiduWeb" xml:space="preserve">
+    <value>BaiduWeb</value>
+  </data>
+  <data name="Translator.BaiduApi" xml:space="preserve">
+    <value>BaiduApi</value>
+  </data>
+  <data name="Translator.Caiyun" xml:space="preserve">
+    <value>Caiyun</value>
+  </data>
+  <data name="Translator.NiuTrans" xml:space="preserve">
+    <value>NiuTrans</value>
+  </data>
+  <data name="Translator.TencentMt" xml:space="preserve">
+    <value>TencentMt</value>
+  </data>
+  <data name="Translator.Yeekit" xml:space="preserve">
+    <value>Yeekit</value>
+  </data>
+  <data name="Translator.Youdao" xml:space="preserve">
+    <value>Youdao</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Translator.GoogleCn" xml:space="preserve">
+    <value>Google Translate (CN)</value>
+  </data>
+  <data name="Common.Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="Common.RestoreDefault" xml:space="preserve">
+    <value>Restore default</value>
+  </data>
+  <data name="TransPage.Title" xml:space="preserve">
+    <value>Machine Translation</value>
+  </data>
+  <data name="TransPage.TransLabel" xml:space="preserve">
+    <value>Translate</value>
+  </data>
+  <data name="TransPage.To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="TransPage.TranslatorDetail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
 </root>

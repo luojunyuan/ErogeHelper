@@ -6,9 +6,9 @@ using ErogeHelper.Model.Repository;
 
 namespace ErogeHelper.Model.Factory
 {
-    public class DictFactory : IDictFactory
+    public class DictionaryFactory : IDictionaryFactory
     {
-        public DictFactory(EhConfigRepository ehConfigRepository)
+        public DictionaryFactory(EhConfigRepository ehConfigRepository)
         {
             _mojiDict = new MojiDict(ehConfigRepository.MojiSessionToken);
             _jishoDict = new JishoDict();

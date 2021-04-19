@@ -102,8 +102,8 @@ namespace ErogeHelper.View.Window.Game
         private void MoveToGameCenter()
         {
             var gamePos = _gameWindowHooker.GetLastWindowPosition();
-            Top = gamePos.Top + gamePos.Height / 2;
-            Left = gamePos.Left + (gamePos.Width - Width) / 2;
+            Top = (gamePos.Top + gamePos.Height / 2) / _dpi;
+            Left = (gamePos.Left + (gamePos.Width - Width) / 2) / _dpi;
         }
 
         protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);

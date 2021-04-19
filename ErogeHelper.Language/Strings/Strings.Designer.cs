@@ -169,6 +169,33 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Restore default 的本地化字符串。
+        /// </summary>
+        public static string Common_RestoreDefault {
+            get {
+                return ResourceManager.GetString("Common.RestoreDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Save 的本地化字符串。
+        /// </summary>
+        public static string Common_Save {
+            get {
+                return ResourceManager.GetString("Common.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Test 的本地化字符串。
+        /// </summary>
+        public static string Common_Test {
+            get {
+                return ResourceManager.GetString("Common.Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Action Center 的本地化字符串。
         /// </summary>
         public static string GameView_ActionCenter {
@@ -791,6 +818,24 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Choose file UniDic.eh 的本地化字符串。
+        /// </summary>
+        public static string MeCabPage_SelectDict {
+            get {
+                return ResourceManager.GetString("MeCabPage.SelectDict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unpack UniDic.eh to enable this function 的本地化字符串。
+        /// </summary>
+        public static string MeCabPage_SelectDictTip {
+            get {
+                return ResourceManager.GetString("MeCabPage.SelectDictTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Text Flyout 的本地化字符串。
         /// </summary>
         public static string MeCabPage_TextFlyout {
@@ -850,6 +895,15 @@ namespace ErogeHelper.Language {
         public static string SelectProcess_ProcessExit {
             get {
                 return ResourceManager.GetString("SelectProcess.ProcessExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Cannot choose EH itself~ 的本地化字符串。
+        /// </summary>
+        public static string SelectProcess_ProcessItself {
+            get {
+                return ResourceManager.GetString("SelectProcess_ProcessItself", resourceCulture);
             }
         }
         
@@ -949,6 +1003,114 @@ namespace ErogeHelper.Language {
         public static string Textractor_InvalidProcess {
             get {
                 return ResourceManager.GetString("Textractor.InvalidProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 BaiduApi 的本地化字符串。
+        /// </summary>
+        public static string Translator_BaiduApi {
+            get {
+                return ResourceManager.GetString("Translator.BaiduApi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 BaiduWeb 的本地化字符串。
+        /// </summary>
+        public static string Translator_BaiduWeb {
+            get {
+                return ResourceManager.GetString("Translator.BaiduWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Caiyun 的本地化字符串。
+        /// </summary>
+        public static string Translator_Caiyun {
+            get {
+                return ResourceManager.GetString("Translator.Caiyun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Google Translate (CN) 的本地化字符串。
+        /// </summary>
+        public static string Translator_GoogleCn {
+            get {
+                return ResourceManager.GetString("Translator.GoogleCn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 NiuTrans 的本地化字符串。
+        /// </summary>
+        public static string Translator_NiuTrans {
+            get {
+                return ResourceManager.GetString("Translator.NiuTrans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 TencentMt 的本地化字符串。
+        /// </summary>
+        public static string Translator_TencentMt {
+            get {
+                return ResourceManager.GetString("Translator.TencentMt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Yeekit 的本地化字符串。
+        /// </summary>
+        public static string Translator_Yeekit {
+            get {
+                return ResourceManager.GetString("Translator.Yeekit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Youdao 的本地化字符串。
+        /// </summary>
+        public static string Translator_Youdao {
+            get {
+                return ResourceManager.GetString("Translator.Youdao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Machine Translation 的本地化字符串。
+        /// </summary>
+        public static string TransPage_Title {
+            get {
+                return ResourceManager.GetString("TransPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 To 的本地化字符串。
+        /// </summary>
+        public static string TransPage_To {
+            get {
+                return ResourceManager.GetString("TransPage.To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Translate 的本地化字符串。
+        /// </summary>
+        public static string TransPage_TransLabel {
+            get {
+                return ResourceManager.GetString("TransPage.TransLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Detail 的本地化字符串。
+        /// </summary>
+        public static string TransPage_TranslatorDetail {
+            get {
+                return ResourceManager.GetString("TransPage.TranslatorDetail", resourceCulture);
             }
         }
     }

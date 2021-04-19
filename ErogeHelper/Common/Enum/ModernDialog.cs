@@ -4,7 +4,7 @@
     {
         HookCode,
         ReadCode,
-        SelectProcessNoProcessTip,
+        SelectProcessTip,
         HookSettingUpdatedTip,
     }
 }

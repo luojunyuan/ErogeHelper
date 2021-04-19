@@ -31,7 +31,6 @@ namespace ErogeHelper.View.Page
         {
             if (message.WindowType == GetType())
             {
-                Log.Debug("HookPage.xaml.cs received message");
                 switch (message.Action)
                 {
                     case ViewAction.OpenDialog:

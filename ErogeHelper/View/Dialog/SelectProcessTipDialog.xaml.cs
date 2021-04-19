@@ -7,9 +7,11 @@ namespace ErogeHelper.View.Dialog
     /// </summary>
     public partial class SelectProcessTipDialog : ContentDialog
     {
-        public SelectProcessTipDialog()
+        public SelectProcessTipDialog(string extraInfo)
         {
             InitializeComponent();
+
+            DialogContent.Content = extraInfo;
         }
     }
 }

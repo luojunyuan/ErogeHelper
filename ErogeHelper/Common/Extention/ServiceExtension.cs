@@ -93,9 +93,10 @@ namespace ErogeHelper.Common.Extention
 
             services.TryAddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.TryAddTransient<IHookDataService, HookDataService>();
-            services.TryAddTransient<IDictFactory, DictFactory>();
+            services.TryAddTransient<IDictionaryFactory, DictionaryFactory>();
             services.TryAddTransient<IMeCabService, MeCabService>();
             services.TryAddTransient<ITouchConversionHooker, TouchConversionHooker>();
+            services.TryAddTransient<ITranslatorFactory, TranslatorFactory>();
 
             return services;
         }

@@ -11,7 +11,7 @@ namespace ErogeHelper.Common.Converter
         {
             if (value is string text)
             {
-                return text.Equals(string.Empty) ? Visibility.Collapsed : Visibility.Visible;
+                return text == string.Empty ? Visibility.Collapsed : Visibility.Visible;
             }
 
             return Visibility.Collapsed;

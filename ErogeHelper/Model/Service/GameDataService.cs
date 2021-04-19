@@ -9,8 +9,10 @@ using System.Windows;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Function;
 using ErogeHelper.Common.Messenger;
+using ErogeHelper.Model.Factory.Interface;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
@@ -29,11 +31,13 @@ namespace ErogeHelper.Model.Service
         public GameDataService(
             IMeCabService meCabService,
             ITextractorService textractorService, 
-            EhConfigRepository ehConfigRepository)
+            EhConfigRepository ehConfigRepository,
+            ITranslatorFactory translatorFactory)
         {
             _meCabService = meCabService;
             _ehConfigRepository = ehConfigRepository;
-         
+            _translatorFactory = translatorFactory;
+
             textractorService.SelectedDataEvent += ProcessDataText;
             if (_ehConfigRepository.EnableMeCab)
             {
@@ -43,6 +47,7 @@ namespace ErogeHelper.Model.Service
 
         private readonly IMeCabService _meCabService;
         private readonly EhConfigRepository _ehConfigRepository;
+        private readonly ITranslatorFactory _translatorFactory;
 
         private string _currentText = string.Empty;
 
@@ -93,21 +98,22 @@ namespace ErogeHelper.Model.Service
             }
 
             // Process translations
-            //foreach (var translator in TranslatorManager.GetEnabled())
-            //{
-            //    Task.Run(async () =>
-            //    {
-            //        Stopwatch sw = new();
-            //        sw.Start();
-            //        var result = await translator.TranslateAsync(hp.Text, DataRepository.TransSrcLanguage, DataRepository.TransTargetLanguage);
-            //        sw.Stop();
-            //        if (!result.Equals(string.Empty))
-            //        {
-            //            Log.Debug($"{translator.Name}: {result}");
-            //            AppendDataEvent?.Invoke(typeof(GameViewDataService), result, $"{translator.Name} {sw.ElapsedMilliseconds}ms");
-            //        }
-            //    });
-            //}
+            foreach (var translator in _translatorFactory.GetEnabledTranslators())
+            {
+                Task.Run(async () =>
+                {
+                    Stopwatch sw = new();
+                    sw.Start();
+                    var result = await translator.TranslateAsync(hp.Text, _ehConfigRepository.SrcTransLanguage,
+                        _ehConfigRepository.TargetTransLanguage);
+                    sw.Stop();
+                    if (result != string.Empty)
+                    {
+                        Log.Debug($"{translator.Name}: {result}");
+                        AppendTextReceived?.Invoke(result, $"{translator.Name.I18N()} {sw.ElapsedMilliseconds}ms");
+                    }
+                });
+            }
 
             // hard code for sakura no uta
             //if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))

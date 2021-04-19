@@ -17,7 +17,7 @@
     <control:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <Button 
-                Content="Choose file UniDic.eh" ToolTip="Unpack UniDic.eh to enable this function"
+                Content="{x:Static resx:Strings.MeCabPage_SelectDict}" ToolTip="{x:Static resx:Strings.MeCabPage_SelectDictTip}"
                 cal:Message.Attach="[Click] = [ChooseMecabDic]" Visibility="{Binding CanEnableMecab, 
                     Converter={StaticResource FalseToVisibleConverter}}"/>
 

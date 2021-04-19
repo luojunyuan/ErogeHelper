@@ -28,7 +28,7 @@ namespace ErogeHelper.View.Window
                     ("general", new GeneralPage()),
                     ("mecab", new MeCabPage()),
                     ("hook", new HookPage()),
-                    //("trans", typeof(TransPage)),
+                    ("trans", new TransPage()),
 
                     ("about", new AboutPage()),
                 };
@@ -48,7 +48,7 @@ namespace ErogeHelper.View.Window
             ("general", typeof(GeneralPage)),
             ("mecab", typeof(MeCabPage)),
             ("hook", typeof(HookPage)),
-            //("trans", typeof(TransPage)),
+            ("trans", typeof(TransPage)),
 
             ("about", typeof(AboutPage)),
         };

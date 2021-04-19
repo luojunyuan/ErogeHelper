@@ -232,16 +232,6 @@ namespace ErogeHelper.ViewModel.Page
             if (hp.Handle == 0)
             {
                 // Console
-                // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
-                hp.Text = hp.Text switch
-                {
-                    "Textractor: already injected" => Language.Strings.Textractor_AlreadyInject,
-                    "Textractor: invalid code" => Language.Strings.Textractor_InvalidCode,
-                    "Textractor: initialization completed" => Language.Strings.Textractor_Init,
-                    "Textractor: couldn't inject" => Language.Strings.Textractor_InjectFailed,
-                    "Textractor: invalid process" => Language.Strings.Textractor_InvalidProcess,
-                    _ => hp.Text
-                };
                 ConsoleOutput += "\n" + hp.Text;
                 return;
             }

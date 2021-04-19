@@ -152,7 +152,7 @@ namespace ErogeHelper.Model.Service
 
             if (threadId == 0)
             {
-                _consoleOutput.Add(hp.Text);
+                _consoleOutput.Add(Common.Utils.ConsoleI18N(hp.Text));
                 return;
             }
 

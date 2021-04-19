@@ -1,0 +1,64 @@
+﻿<Page x:Class="ErogeHelper.View.Page.TransPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.modernwpf.com/2019"
+      xmlns:cal="http://caliburnmicro.com"
+      xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+      xmlns:control="clr-namespace:ErogeHelper.View.Control"
+      xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Page"
+      xmlns:notifyItem="clr-namespace:ErogeHelper.ViewModel.Entity.NotifyItem"
+      mc:Ignorable="d" 
+      d:DataContext="{d:DesignInstance vm:TransViewModel, IsDesignTimeCreatable=True}"
+      cal:Bind.AtDesignTime="True"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="{x:Static resx:Strings.TransPage_Title}">
+
+    <Page.Resources>
+        <DataTemplate x:Key="TranslatorListViewTemplate" DataType="{x:Type notifyItem:TranslatorItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ui:ToggleSwitch 
+                    Grid.Column="0"
+                    OffContent="" OnContent="" Width="40" IsEnabled="{Binding CanBeEnable}" IsOn="{Binding Enable}"/>
+                <ui:BitmapIcon 
+                    Grid.Column="1" UriSource="{Binding IconPath}" ShowAsMonochrome="False" Width="30" Height="30"/>
+                <TextBlock
+                    Grid.Column="2" x:Name="TranslatorName" VerticalAlignment="Center" Text="{Binding TransName}"/>
+                <Button
+                    Grid.Column="3"
+                    Content="{x:Static resx:Strings.TransPage_TranslatorDetail}" Visibility="{Binding CanEdit, Converter={StaticResource FalseToVisibleConverter}}"
+                    cal:Message.Attach="[Click] = [OpenTranslatorDialog($dataContext)]"
+                    cal:Action.TargetWithoutContext="{Binding DataContext, 
+                        RelativeSource={RelativeSource AncestorType={x:Type Page}}}"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <control:ScrollViewerSmooth PanningMode="Both">
+        <ui:SimpleStackPanel Spacing="10" Margin="20 10">
+            <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                <TextBlock Text="{x:Static resx:Strings.TransPage_TransLabel}" VerticalAlignment="Center" />
+                <ComboBox 
+                    cal:Message.Attach="[SelectionChanged] = [SrcLanguageChanged]" 
+                    DisplayMemberPath="Language" ItemsSource="{Binding SrcLanguageList}" 
+                    SelectedValuePath="LangEnum" SelectedValue="{Binding SelectedSrcLang}"/>
+                <TextBlock Text="{x:Static resx:Strings.TransPage_To}" VerticalAlignment="Center" />
+                <ComboBox 
+                    cal:Message.Attach="[SelectionChanged] = [TargetLanguageChanged]" 
+                    DisplayMemberPath="Language" ItemsSource="{Binding TargetLanguageList}"
+                    SelectedValuePath="LangEnum" SelectedValue="{Binding SelectedTarLang}" />
+            </ui:SimpleStackPanel>
+            <ui:ListView 
+                IsSelectionEnabled="False" ItemTemplate="{StaticResource ResourceKey=TranslatorListViewTemplate}"
+                ItemsSource="{Binding TranslatorList}" MinWidth="240" HorizontalAlignment="Left"/>
+        </ui:SimpleStackPanel>
+    </control:ScrollViewerSmooth>
+</Page>
