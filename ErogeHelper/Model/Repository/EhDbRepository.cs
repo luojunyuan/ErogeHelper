@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Dapper;
 using ErogeHelper.Model.Entity.Table;
 using Microsoft.Data.Sqlite;
@@ -33,12 +34,18 @@ namespace ErogeHelper.Model.Repository
 
         public async Task SetGameInfoAsync(GameInfoTable gameInfoTable)
         {
+            if (gameInfoTable.Md5 == string.Empty)
+                throw new ArgumentException("GameInfoTable Md5 can not be empty!");
+
             string query = "INSERT INTO GameInfo VALUES (@Md5, @GameIdList, @RegExp, @TextractorSettingJson, @IsLoseFocus, @IsEnableTouchToMouse)";
             await _connection.ExecuteAsync(query, gameInfoTable).ConfigureAwait(false);
         }
 
         public void UpdateGameInfo(GameInfoTable gameInfoTable)
         {
+            if (gameInfoTable.Md5 == string.Empty)
+                throw new ArgumentException("GameInfoTable Md5 can not be empty!");
+
             string query = @"
 UPDATE GameInfo 
 SET GameIdList=@GameIdList, RegExp=@RegExp, TextractorSettingJson=@TextractorSettingJson, IsLoseFocus=@IsLoseFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
@@ -48,6 +55,9 @@ WHERE Md5 = @Md5";
 
         public async Task UpdateGameInfoAsync(GameInfoTable gameInfoTable)
         {
+            if (gameInfoTable.Md5 == string.Empty)
+                throw new ArgumentException("GameInfoTable Md5 can not be empty!");
+
             string query = @"
 UPDATE GameInfo 
 SET GameIdList=@GameIdList, RegExp=@RegExp, TextractorSettingJson=@TextractorSettingJson, IsLoseFocus=@IsLoseFocus, IsEnableTouchToMouse=@IsEnableTouchToMouse
@@ -59,7 +69,7 @@ WHERE Md5 = @Md5";
         {
             string query =
                 "DELETE FROM GameInfo WHERE Md5=@Md5";
-            await _connection.ExecuteAsync(query, new {Md5=Md5}).ConfigureAwait(false);
+            await _connection.ExecuteAsync(query, new {Md5}).ConfigureAwait(false);
         }
     }
 }
