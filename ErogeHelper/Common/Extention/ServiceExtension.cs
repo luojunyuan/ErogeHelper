@@ -90,11 +90,11 @@ namespace ErogeHelper.Common.Extention
             services.TryAddSingleton<ITextractorService, TextractorService>();
             services.TryAddSingleton<IGameWindowHooker, GameWindowHooker>();
             services.TryAddSingleton<IGameDataService, GameDataService>();
+            services.TryAddSingleton<IMeCabService, MeCabService>();
 
             services.TryAddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.TryAddTransient<IHookDataService, HookDataService>();
             services.TryAddTransient<IDictionaryFactory, DictionaryFactory>();
-            services.TryAddTransient<IMeCabService, MeCabService>();
             services.TryAddTransient<ITouchConversionHooker, TouchConversionHooker>();
             services.TryAddTransient<ITranslatorFactory, TranslatorFactory>();
 

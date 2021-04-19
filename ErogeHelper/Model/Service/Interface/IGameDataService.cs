@@ -10,7 +10,7 @@ namespace ErogeHelper.Model.Service.Interface
         event Action<BindableCollection<SingleTextItem>> BindableTextItem;
         event Action<string, string> AppendTextReceived;
         event Action<object> AppendTextsRefresh;
-        void RefreshCurrentText();
+        void RefreshCurrentJapanese();
         void SendNewText(string text);
     }
 }

@@ -43,11 +43,18 @@ namespace ErogeHelper.ViewModel.Page
         private bool _hiragana;
         private bool _katakana;
         private bool _canEnableMecab;
+        private bool _chooseDicButtonEnabled = true;
 
         public bool CanEnableMecab
         {
             get => _canEnableMecab;
             set { _canEnableMecab = value; NotifyOfPropertyChange(() => CanEnableMecab); }
+        }
+
+        public bool ChooseDicButtonEnabled
+        {
+            get => _chooseDicButtonEnabled;
+            set { _chooseDicButtonEnabled = value; NotifyOfPropertyChange(() => ChooseDicButtonEnabled);}
         }
 
         public async void ChooseMecabDic()
@@ -63,6 +70,7 @@ namespace ErogeHelper.ViewModel.Page
             if (result is not true)
                 return;
 
+            ChooseDicButtonEnabled = false;
             string filename = dlg.FileName;
             var dicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
             // UNDONE: Unzip dic.eh may need progress dialog
@@ -80,7 +88,7 @@ namespace ErogeHelper.ViewModel.Page
             {
                 _ehConfigRepository.EnableMeCab = value;
 
-                _gameDataService.RefreshCurrentText();
+                _gameDataService.RefreshCurrentJapanese();
                 _eventAggregator.PublishOnUIThreadAsync(value is true
                     ? new JapaneseVisibleMessage { IsShowed = true }
                     : new JapaneseVisibleMessage { IsShowed = false });
@@ -149,7 +157,7 @@ namespace ErogeHelper.ViewModel.Page
         private void ChangeSourceTextTemplate(TextTemplateType type)
         {
             _ehConfigRepository.TextTemplateConfig = type;
-            _gameDataService.RefreshCurrentText();
+            _gameDataService.RefreshCurrentJapanese();
         }
 
         public bool Romaji
@@ -165,7 +173,7 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = true;
                     _ehConfigRepository.Hiragana = false;
                     _ehConfigRepository.Katakana = false;
-                    _gameDataService.RefreshCurrentText();
+                    _gameDataService.RefreshCurrentJapanese();
                 }
             }
         }
@@ -182,7 +190,7 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = false;
                     _ehConfigRepository.Hiragana = true;
                     _ehConfigRepository.Katakana = false;
-                    _gameDataService.RefreshCurrentText();
+                    _gameDataService.RefreshCurrentJapanese();
                 }
             }
         }
@@ -199,7 +207,7 @@ namespace ErogeHelper.ViewModel.Page
                     _ehConfigRepository.Romaji = false;
                     _ehConfigRepository.Hiragana = false;
                     _ehConfigRepository.Katakana = true;
-                    _gameDataService.RefreshCurrentText();
+                    _gameDataService.RefreshCurrentJapanese();
                 }
             }
         }

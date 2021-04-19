@@ -25,7 +25,40 @@ namespace ErogeHelper.Model.Service
         public event Action<BindableCollection<SingleTextItem>>? BindableTextItem;
         public event Action<string, string>? AppendTextReceived;
         public event Action<object>? AppendTextsRefresh;
-        public void RefreshCurrentText() => ProcessDataText(new HookParam() {Text = _currentText });
+        public void RefreshCurrentJapanese()
+        {
+            var text = _currentText;
+            // User define RegExp 
+            if (_pattern != string.Empty)
+            {
+                var list = Regex.Split(text, _pattern);
+                text = string.Join("", list);
+            }
+
+            // Clear ascii control characters
+            text = new string(text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
+            // LineBreak 
+            // Full-width space
+            text = text.Replace("　", string.Empty);
+            // Ruby like <.*?>
+
+            if (text.Length > 120)
+            {
+                BindableTextItem?.Invoke(new BindableCollection<SingleTextItem>());
+                return;
+            }
+
+            // Process source japanese text
+            if (_ehConfigRepository.EnableMeCab)
+            {
+                BindableTextItem?.Invoke(Utils.BindableTextMaker(
+                    text,
+                    _ehConfigRepository,
+                    _meCabService.MeCabWordUniDicEnumerable,
+                    _ehConfigRepository.TextTemplateConfig));
+            }
+        }
+
         public void SendNewText(string text) => ProcessDataText(new HookParam() {Text = text});
 
         public GameDataService(
