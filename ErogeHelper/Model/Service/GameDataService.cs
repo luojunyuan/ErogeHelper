@@ -72,9 +72,10 @@ namespace ErogeHelper.Model.Service
             _translatorFactory = translatorFactory;
 
             textractorService.SelectedDataEvent += ProcessDataText;
-            if (_ehConfigRepository.EnableMeCab)
+            var meCabDicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
+            if (Directory.Exists(meCabDicPath))
             {
-                _meCabService.CreateTagger(Path.Combine(_ehConfigRepository.AppDataDir, "dic"));
+                _meCabService.CreateTagger(meCabDicPath);
             }
         }
 

@@ -152,11 +152,14 @@ namespace ErogeHelper
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
 
-            _ = ehConfigRepository.UseOutsideWindow
-                ? eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"))
-                : eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
+            if (ehConfigRepository.UseOutsideWindow)
+            {
+                _ = eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+            }
+
+            _ = eventAggregator.PublishOnUIThreadAsync(
+                new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
         }
 
         protected override void Configure()

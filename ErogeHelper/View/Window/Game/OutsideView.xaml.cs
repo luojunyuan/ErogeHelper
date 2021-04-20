@@ -39,7 +39,7 @@ namespace ErogeHelper.View.Window.Game
             Loaded += (_, _) =>
             {
                 Utils.HideWindowInAltTab(this);
-                EnableBlur();
+                //EnableBlur();
             };
         }
 
@@ -117,9 +117,9 @@ namespace ErogeHelper.View.Window.Game
             }
         }
 
-        // QUESTION: GC active frequently when resize the window with too long Japanese text
+        // FIXME: GC active frequently when resize the window
         private void ResizeGripper_DragDelta(object sender, DragDeltaEventArgs e)
-        {
+        {                                                     
             if (Width + e.HorizontalChange >= 100 && Width >= 100)
             {
                 Width += e.HorizontalChange;
@@ -129,6 +129,20 @@ namespace ErogeHelper.View.Window.Game
             {
                 Height += e.VerticalChange;
             }
+        }
+
+        // MouseDown
+        private void WindowDrag(object sender, MouseButtonEventArgs e)
+        {
+            NativeMethods.ReleaseCapture();
+            NativeMethods.SendMessage(new WindowInteropHelper(this).Handle, 0xA1, (IntPtr)0x2, (IntPtr)0);
+        }
+        // PreviewMouseLeftButtonDown
+        private void WindowResize(object sender, MouseButtonEventArgs e)
+        {
+            if (PresentationSource.FromVisual((Visual) sender) is not HwndSource hWndSource)
+                throw new ArgumentNullException($"hWndSource can not be null", nameof(hWndSource));
+            NativeMethods.SendMessage(hWndSource.Handle, 0x112, (IntPtr)61448, IntPtr.Zero);
         }
     }
 }

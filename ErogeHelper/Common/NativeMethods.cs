@@ -262,6 +262,16 @@ namespace ErogeHelper.Common
             return SafeNativeMethods.SetWindowCompositionAttribute(hwnd, ref data);
         }
 
+        public static IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
+        {
+            return SafeNativeMethods.SendMessage(hWnd, msg, wParam, lParam);
+        }
+
+        public static bool ReleaseCapture()
+        {
+            return SafeNativeMethods.ReleaseCapture();
+        }
+
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
@@ -355,6 +365,11 @@ namespace ErogeHelper.Common
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool GetCursorPos(out MousePoint lpMousePoint);
 
+            [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("user32.dll")]
+            public static extern bool ReleaseCapture();
         }
 
         [SuppressUnmanagedCodeSecurity]

@@ -46,8 +46,9 @@
 
         <Canvas>
             <ResizeGrip Canvas.Right="5" Canvas.Bottom="5" />
-            <Thumb Background="Transparent"
-                   Name="ResizeGripper" Canvas.Right="5" Canvas.Bottom="5" Width="35" Height="35" DragDelta="ResizeGripper_DragDelta" />
+            <Thumb 
+                Name="ResizeGripper" Canvas.Right="5" Canvas.Bottom="5" Width="35" Height="35" 
+                Background="Transparent" PreviewMouseLeftButtonDown="WindowResize" MouseDown="WindowDrag"/>
         </Canvas>
     </Grid>
 </Window>
