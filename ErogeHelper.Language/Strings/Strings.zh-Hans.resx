@@ -481,4 +481,7 @@
   <data name="Installer.DeleteTip" xml:space="preserve">
     <value>将会删除所有缓存文件如程序配置、字幕、Mecab字典及保存的游戏信息数据库等</value>
   </data>
+  <data name="GeneralPage.CacheSpaceLabel" xml:space="preserve">
+    <value>缓存文件占用的空间</value>
+  </data>
 </root>

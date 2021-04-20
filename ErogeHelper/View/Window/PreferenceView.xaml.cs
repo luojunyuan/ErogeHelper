@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Navigation;
 using Caliburn.Micro;
+using ErogeHelper.Common.Enum;
+using ErogeHelper.Common.Messenger;
+using ErogeHelper.ViewModel.Window;
 using WindowPage = System.Windows.Controls.Page;
 
 namespace ErogeHelper.View.Window
@@ -43,14 +46,14 @@ namespace ErogeHelper.View.Window
 
         private List<(string Tag, WindowPage PageInstance)>? _pagesList;
 
-        private readonly List<(string Tag, Type PageType)> _pages = new()
+        private readonly List<(string Tag, Type PageType, PageName PageName)> _pages = new()
         {
-            ("general", typeof(GeneralPage)),
-            ("mecab", typeof(MeCabPage)),
-            ("hook", typeof(HookPage)),
-            ("trans", typeof(TransPage)),
+            ("general", typeof(GeneralPage), PageName.General),
+            ("mecab", typeof(MeCabPage), PageName.MeCab),
+            ("hook", typeof(HookPage), PageName.Hook),
+            ("trans", typeof(TransPage), PageName.Trans),
 
-            ("about", typeof(AboutPage)),
+            ("about", typeof(AboutPage), PageName.About),
         };
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -72,7 +75,7 @@ namespace ErogeHelper.View.Window
             // if not same page
             if (pageType != null && ContentFrame.SourcePageType != pageType)
             {
-                // Clear Journal info (non-use)
+                // Clear Journal info
                 while (ContentFrame.CanGoBack)
                 {
                     ContentFrame.RemoveBackEntry();
@@ -89,7 +92,7 @@ namespace ErogeHelper.View.Window
             // Set header text
             if (sourcePageType is not null)
             {
-                var (tag, _) = _pages.FirstOrDefault(p => p.PageType == sourcePageType);
+                var (tag, _, pageName) = _pages.FirstOrDefault(p => p.PageType == sourcePageType);
 
                 NavView.SelectedItem = NavView.FooterMenuItems
                     .OfType<NavigationViewItem>().
@@ -100,10 +103,16 @@ namespace ErogeHelper.View.Window
 
                 HeaderBlock.Text =
                     ((NavigationViewItem)NavView.SelectedItem!).Content?.ToString();
+
+                _eventAggregator.PublishOnUIThreadAsync(new PageNavigatedMessage(pageName));
             }
         }
 
-        protected override void OnClosed(EventArgs e) => 
+        protected override void OnClosed(EventArgs e)
+        {
             _pagesList?.ForEach(item => _eventAggregator.Unsubscribe(item.PageInstance));
+            _eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.GeneralViewModel);
+            _eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.TransViewModel);
+        }
     }
 }

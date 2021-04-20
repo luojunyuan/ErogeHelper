@@ -1,4 +1,5 @@
-﻿using ErogeHelper.ViewModel.Page;
+﻿using System;
+using ErogeHelper.ViewModel.Page;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -18,11 +19,11 @@ namespace ErogeHelper.ViewModel.Window
             AboutViewModel = aboutViewModel;
         }
 
-        public readonly GeneralViewModel GeneralViewModel;
-        public readonly MeCabViewModel MeCabViewModel;
-        public readonly HookViewModel HookViewModel;
-        public readonly TransViewModel TransViewModel;
+        public GeneralViewModel GeneralViewModel;
+        public MeCabViewModel MeCabViewModel;
+        public HookViewModel HookViewModel;
+        public TransViewModel TransViewModel;
 
-        public readonly AboutViewModel AboutViewModel;
+        public AboutViewModel AboutViewModel;
     }
 }

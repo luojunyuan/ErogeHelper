@@ -12,7 +12,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:GameViewModel, IsDesignTimeCreatable=True}"
         cal:Bind.AtDesignTime="True"
-        Title="OutsideView" Height="250" Width="800" Topmost="True"
+        Title="OutsideView" Height="250" Width="800" Topmost="True" MinWidth="100" MinHeight="100"
         WindowStyle="None" ResizeMode="NoResize">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="-1" />

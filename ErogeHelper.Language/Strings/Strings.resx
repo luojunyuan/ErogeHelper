@@ -481,4 +481,7 @@
   <data name="Installer.DeleteCheckBox" xml:space="preserve">
     <value>Also delete EH cache files.</value>
   </data>
+  <data name="GeneralPage.CacheSpaceLabel" xml:space="preserve">
+    <value>Cache files space</value>
+  </data>
 </root>

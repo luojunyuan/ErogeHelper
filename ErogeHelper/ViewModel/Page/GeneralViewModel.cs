@@ -1,4 +1,8 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
+using ErogeHelper.Common;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
@@ -7,16 +11,20 @@ using ErogeHelper.ViewModel.Window;
 
 namespace ErogeHelper.ViewModel.Page
 {
-    public class GeneralViewModel : PropertyChangedBase
+    public class GeneralViewModel : PropertyChangedBase, IHandle<PageNavigatedMessage>
     {
         public GeneralViewModel(EhConfigRepository ehConfigRepository, IEventAggregator eventAggregator)
         {
             _ehConfigRepository = ehConfigRepository;
             _eventAggregator = eventAggregator;
+
+            _eventAggregator.SubscribeOnUIThread(this);
         }
 
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IEventAggregator _eventAggregator;
+        private string _diskUsageProgressBarText = string.Empty;
+        private double _diskUsageProgressBarValue;
 
         public bool OutsideWindow
         {
@@ -55,6 +63,45 @@ namespace ErogeHelper.ViewModel.Page
         public static void CustomButton()
         {
 
+        }
+
+        public string DiskUsageProgressBarText
+        {
+            get => _diskUsageProgressBarText;
+            set { _diskUsageProgressBarText = value; NotifyOfPropertyChange(() => DiskUsageProgressBarText);}
+        }
+
+        public double DiskUsageProgressBarValue
+        {
+            get => _diskUsageProgressBarValue;
+            set { _diskUsageProgressBarValue = value; NotifyOfPropertyChange(() => DiskUsageProgressBarValue);}
+        }
+
+        private void GetDiskUsage()
+        {
+            var (availableFreeSpace, totalSize) = Utils.GetDiskUsage(_ehConfigRepository.AppDataDir);
+            if (totalSize != 0)
+            {
+                var cacheSpace = Utils.GetDirectorySize(_ehConfigRepository.AppDataDir);
+                DiskUsageProgressBarText = $@"{Utils.CountSize(cacheSpace)}/{Utils.CountSize(availableFreeSpace + cacheSpace)}";
+                var percentage = cacheSpace / (availableFreeSpace + cacheSpace);
+                DiskUsageProgressBarValue = percentage * 100;
+            }
+            else
+            {
+                DiskUsageProgressBarText = string.Empty;
+                DiskUsageProgressBarValue = 0;
+            }
+        }
+
+        public Task HandleAsync(PageNavigatedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Page == PageName.General)
+            {
+                GetDiskUsage();
+            }
+
+            return Task.CompletedTask;
         }
 
 #pragma warning disable CS8618

@@ -395,6 +395,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Cache files space 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_CacheSpaceLabel {
+            get {
+                return ResourceManager.GetString("GeneralPage.CacheSpaceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 DeepL Client Extention 的本地化字符串。
         /// </summary>
         public static string GeneralPage_DeepL {

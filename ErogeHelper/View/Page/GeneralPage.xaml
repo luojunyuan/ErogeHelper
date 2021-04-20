@@ -25,6 +25,12 @@
                         Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app"/>
                     <!--<Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />-->
                     <!--<Button Content="Custom Button" cal:Message.Attach="[Click] = [CustomButton]" />-->
+                    <Label Content="{x:Static resx:Strings.GeneralPage_CacheSpaceLabel}"/>
+                    <Grid Width="{StaticResource ControllerWidth}" HorizontalAlignment="Left" >
+                        <ui:ProgressBar Height="30" d:Value="38" Value="{Binding DiskUsageProgressBarValue}"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   d:Text="48 GB/128 GB" Text="{Binding DiskUsageProgressBarText}"/>
+                    </Grid>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>
