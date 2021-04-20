@@ -21,6 +21,9 @@
                     <Button 
                         x:Name="UninstallButton" Content="{x:Static resx:Strings.Installer_Unload}" 
                         Click="Unload" MinWidth="90"/>
+                    <CheckBox 
+                        x:Name="DeleteCacheCheckBox" Content="{x:Static resx:Strings.Installer_DeleteCheckBox}" 
+                        IsEnabled="{Binding ElementName=UninstallButton, Path=IsEnabled}"/>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

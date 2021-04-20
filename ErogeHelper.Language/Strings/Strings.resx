@@ -469,4 +469,16 @@
   <data name="TransPage.TranslatorDetail" xml:space="preserve">
     <value>Detail</value>
   </data>
+  <data name="Common.Warn" xml:space="preserve">
+    <value>Warn</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Installer.DeleteTip" xml:space="preserve">
+    <value>This will delete all cache files such like config, subtitles, Mecab dictionary, game info database</value>
+  </data>
+  <data name="Installer.DeleteCheckBox" xml:space="preserve">
+    <value>Also delete EH cache files.</value>
+  </data>
 </root>

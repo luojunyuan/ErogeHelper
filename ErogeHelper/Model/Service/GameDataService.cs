@@ -37,10 +37,8 @@ namespace ErogeHelper.Model.Service
 
             // Clear ascii control characters
             text = new string(text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
-            // LineBreak 
             // Full-width space
             text = text.Replace("　", string.Empty);
-            // Ruby like <.*?>
 
             if (text.Length > 120)
             {

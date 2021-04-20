@@ -151,6 +151,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Cancel 的本地化字符串。
+        /// </summary>
+        public static string Common_Cancel {
+            get {
+                return ResourceManager.GetString("Common.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close 的本地化字符串。
         /// </summary>
         public static string Common_Close {
@@ -192,6 +201,15 @@ namespace ErogeHelper.Language {
         public static string Common_Test {
             get {
                 return ResourceManager.GetString("Common.Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Warn 的本地化字符串。
+        /// </summary>
+        public static string Common_Warn {
+            get {
+                return ResourceManager.GetString("Common.Warn", resourceCulture);
             }
         }
         
@@ -697,6 +715,24 @@ namespace ErogeHelper.Language {
         public static string HookPage_Title {
             get {
                 return ResourceManager.GetString("HookPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Also delete EH cache files. 的本地化字符串。
+        /// </summary>
+        public static string Installer_DeleteCheckBox {
+            get {
+                return ResourceManager.GetString("Installer.DeleteCheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 This will delete all cache files such like config, subtitles, Mecab dictionary, game info database 的本地化字符串。
+        /// </summary>
+        public static string Installer_DeleteTip {
+            get {
+                return ResourceManager.GetString("Installer.DeleteTip", resourceCulture);
             }
         }
         

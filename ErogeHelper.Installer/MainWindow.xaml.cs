@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using ModernWpf.Controls;
 using Path = System.IO.Path;
 
 namespace ErogeHelper.Installer
@@ -50,8 +51,32 @@ namespace ErogeHelper.Installer
             UninstallButton.IsEnabled = true;
         }
 
-        private void Unload(object sender, RoutedEventArgs e)
+        private async void Unload(object sender, RoutedEventArgs e)
         {
+            if (DeleteCacheCheckBox.IsChecked ?? false)
+            {
+                var deleteTipDialog = new ContentDialog
+                {
+                    Title = ErogeHelper.Language.Strings.Common_Warn,
+                    Content = ErogeHelper.Language.Strings.Installer_DeleteTip,
+                    PrimaryButtonText = ErogeHelper.Language.Strings.Common_OK,
+                    CloseButtonText = ErogeHelper.Language.Strings.Common_Cancel,
+                    DefaultButton = ContentDialogButton.Close
+                };
+                var result = await deleteTipDialog.ShowAsync();
+                if (result == ContentDialogResult.None)
+                    return;
+                if (result == ContentDialogResult.Primary)
+                {
+                    string roamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    var cacheDir = Path.Combine(roamingDir, "ErogeHelper");
+                    if (Directory.Exists(cacheDir))
+                    {
+                        Directory.Delete(cacheDir);
+                    }
+                }
+            }
+
             // unload dll first
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
@@ -66,6 +91,7 @@ namespace ErogeHelper.Installer
 
             InstallButton.IsEnabled = true;
             UninstallButton.IsEnabled = false;
+            DeleteCacheCheckBox.IsChecked = false;
         }
     }
 }

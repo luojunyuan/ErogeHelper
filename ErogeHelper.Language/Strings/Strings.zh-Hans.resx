@@ -469,4 +469,16 @@
   <data name="TransPage.TranslatorDetail" xml:space="preserve">
     <value>详情</value>
   </data>
+  <data name="Common.Warn" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Installer.DeleteCheckBox" xml:space="preserve">
+    <value>同时删除EH缓存文件。</value>
+  </data>
+  <data name="Installer.DeleteTip" xml:space="preserve">
+    <value>将会删除所有缓存文件如程序配置、字幕、Mecab字典及保存的游戏信息数据库等</value>
+  </data>
 </root>
