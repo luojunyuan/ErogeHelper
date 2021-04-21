@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -8,21 +9,25 @@ using ErogeHelper.Common.Extention;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.ViewModel.Window;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ErogeHelper.ViewModel.Page
 {
     public class GeneralViewModel : PropertyChangedBase, IHandle<PageNavigatedMessage>
     {
-        public GeneralViewModel(EhConfigRepository ehConfigRepository, IEventAggregator eventAggregator)
+        public GeneralViewModel(EhConfigRepository ehConfigRepository, IEventAggregator eventAggregator, IServiceProvider serviceProvider)
         {
             _ehConfigRepository = ehConfigRepository;
             _eventAggregator = eventAggregator;
+            _serviceProvider = serviceProvider;
 
             _eventAggregator.SubscribeOnUIThread(this);
         }
 
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IServiceProvider _serviceProvider;
+
         private string _diskUsageProgressBarText = string.Empty;
         private double _diskUsageProgressBarValue;
 
@@ -60,9 +65,10 @@ namespace ErogeHelper.ViewModel.Page
             _ehConfigRepository.ClearConfig();
         }
 
-        public static void CustomButton()
+        public void CustomButton()
         {
-
+            //Log.Debug(_serviceProvider.GetServices<PreferenceViewModel>().ToList().Count.ToString());
+            _ = IoC.Get<IWindowManager>().ShowWindowFromIoCAsync<HookConfigViewModel>();
         }
 
         public string DiskUsageProgressBarText

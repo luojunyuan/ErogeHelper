@@ -22,7 +22,7 @@
                     <ui:ToggleSwitch 
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />
                     <ui:HyperlinkButton 
-                        Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app"/>
+                        Content="{x:Static resx:Strings.GeneralPage_DeepLDownload}" NavigateUri="https://www.deepl.com/app" Cursor="Hand"/>
                     <!--<Button Content="Restore default config" cal:Message.Attach="[Click] = [SetDefaultEhConfig]" />-->
                     <!--<Button Content="Custom Button" cal:Message.Attach="[Click] = [CustomButton]" />-->
                     <Label Content="{x:Static resx:Strings.GeneralPage_CacheSpaceLabel}"/>

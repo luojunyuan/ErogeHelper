@@ -269,6 +269,7 @@ namespace ErogeHelper.ViewModel.Window
             var window = Application.Current.Windows.OfType<PreferenceView>().SingleOrDefault();
             if (window is null)
             {
+                // FIXME: Memory leak if add PreferenceViewModel as transition
                 await _windowManager.ShowWindowFromIoCAsync<PreferenceViewModel>().ConfigureAwait(false);
             }
             else
