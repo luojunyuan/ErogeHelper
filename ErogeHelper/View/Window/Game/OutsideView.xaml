@@ -32,11 +32,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type notifyItem:AppendTextItem}">
                         <StackPanel Orientation="Vertical">
-                            <control:OutlinedTextBlock 
-                                Margin="0 0 0 -5" Stroke="Black" Fill="white" ClipToBounds="False" 
-                                StrokePosition="Outside" StrokeThickness="1" TextWrapping="Wrap" 
-                                Text="{Binding Message}" FontSize="{Binding DataContext.FontSize,
-                                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                            <TextBlock 
+                                Text="{Binding Message}"
+                                Foreground="White" TextWrapping="Wrap" FontSize="{Binding DataContext.FontSize,
+                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                 ToolTip="{Binding ExtraInfo}"/>
                         </StackPanel>
                     </DataTemplate>

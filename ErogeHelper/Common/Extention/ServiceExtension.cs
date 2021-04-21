@@ -40,7 +40,7 @@ namespace ErogeHelper.Common.Extention
                     viewModelType, viewModelType));
 
             services.ReAddSingleton<GameViewModel>();
-            //services.ReAddSingleton<PreferenceViewModel>();
+            services.ReAddSingleton<PreferenceViewModel>();
 
             return services;
         }
