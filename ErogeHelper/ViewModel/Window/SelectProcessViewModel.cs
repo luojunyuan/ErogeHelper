@@ -84,15 +84,6 @@ namespace ErogeHelper.ViewModel.Window
                 return;
             }
 
-            if (SelectedProcItem!.Proc.Id == System.Environment.ProcessId)
-            {
-                await _eventAggregator
-                    .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
-                        ModernDialog.SelectProcessTip, extraInfo: Language.Strings.SelectProcess_ProcessItself))
-                    .ConfigureAwait(false);
-                return;
-            }
-
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Hide));
 
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(SelectedProcItem.Proc.ProcessName);

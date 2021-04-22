@@ -9,6 +9,7 @@ using ErogeHelper.Common.Messenger;
 using ErogeHelper.Model.Factory.Interface;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
+using ErogeHelper.ViewModel.Window;
 
 namespace ErogeHelper.ViewModel.Page
 {
@@ -17,11 +18,13 @@ namespace ErogeHelper.ViewModel.Page
         public TransViewModel(
             IEventAggregator eventAggregator, 
             EhConfigRepository ehConfigRepository, 
-            ITranslatorFactory translatorFactory)
+            ITranslatorFactory translatorFactory,
+            IWindowManager windowManager)
         {
             _eventAggregator = eventAggregator;
             _ehConfigRepository = ehConfigRepository;
             _translatorFactory = translatorFactory;
+            _windowManager = windowManager;
 
             _eventAggregator.SubscribeOnUIThread(this);
             SrcLanguageList = SrcLanguageListInit();
@@ -34,10 +37,13 @@ namespace ErogeHelper.ViewModel.Page
         private readonly IEventAggregator _eventAggregator;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly ITranslatorFactory _translatorFactory;
+        private readonly IWindowManager _windowManager;
 
         private TransLanguage _selectedSrcLang;
         private TransLanguage _selectedTarLang;
         private BindableCollection<LanguageComboBoxItem> _targetLanguageList = new();
+
+        public async void OpenTermList() => await _windowManager.ShowDialogFromIoCAsync<TermViewModel>();
 
         public BindableCollection<LanguageComboBoxItem> SrcLanguageList { get; }
 

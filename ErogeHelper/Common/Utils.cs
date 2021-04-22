@@ -22,12 +22,12 @@ namespace ErogeHelper.Common
 {
     public static class Utils
     {
-        public static BitmapImage PeIcon2BitmapImage(string fullPath)
+        public static BitmapImage? PeIcon2BitmapImage(string fullPath)
         {
             var result = new BitmapImage();
 
             if (fullPath == string.Empty)
-                return result;
+                return null;
 
             Stream stream = new MemoryStream();
 
@@ -38,6 +38,10 @@ namespace ErogeHelper.Common
             result.StreamSource = stream;
             result.EndInit();
             result.Freeze();
+
+            // Process no icon
+            if (stream.Length == 389)
+                result = null;
 
             return result;
         }

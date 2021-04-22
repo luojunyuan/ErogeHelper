@@ -559,6 +559,8 @@ namespace ErogeHelper.Common
             public int Top;
             public int Right;
             public int Bottom;
+
+            public override string ToString() => $"{Left} {Top} {Right} {Bottom}";
         }
 
         [StructLayout(LayoutKind.Sequential)]

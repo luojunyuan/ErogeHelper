@@ -23,11 +23,14 @@ namespace ErogeHelper.Model.Service
                 {
                     try
                     {
+                        var icon = Utils.PeIcon2BitmapImage(proc.MainModule?.FileName ?? string.Empty);
+                        if (icon is null)
+                            continue;
                         var item = new ProcComboBoxItem
                         {
                             Proc = proc,
                             Title = proc.MainWindowTitle,
-                            Icon = Utils.PeIcon2BitmapImage(proc.MainModule?.FileName ?? string.Empty)
+                            Icon = icon
                         };
                         tmpCollection.Add(item);
 
@@ -53,16 +56,14 @@ namespace ErogeHelper.Model.Service
 
         private IEnumerable<Process> ProcessEnumerable() =>
             Process.GetProcesses()
-                .Where(proc =>
-                    proc.MainWindowHandle != IntPtr.Zero
-                    && proc.MainWindowTitle != string.Empty
-                    && !_uselessProcess.Contains(proc.ProcessName));
+                .Where(proc => 
+                    proc.MainWindowHandle != IntPtr.Zero && 
+                    proc.MainWindowTitle != string.Empty &&
+                    !_uselessProcess.Contains(proc.ProcessName));
 
         private readonly IEnumerable<string> _uselessProcess = new[]
         {
-            "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App", "SystemSettings",
-            "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps", "WhiteboardWRT",
-            "PeopleApp", "RtkUWP", "HxCalendarAppImm"
+            "SystemSettings"
         };
     }
 }

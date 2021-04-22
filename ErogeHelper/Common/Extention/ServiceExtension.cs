@@ -68,7 +68,9 @@ namespace ErogeHelper.Common.Extention
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
                     .WithGlobalConnectionString(connectString)
-                    .ScanIn(typeof(AddGameInfoTable).Assembly).For.Migrations())
+                    .ScanIn(typeof(AddGameInfoTable).Assembly)
+                    .ScanIn(typeof(AddUserTermTable).Assembly)
+                    .For.Migrations())
                 .AddLogging(lb => lb.AddSerilog());
 
             return services;
@@ -92,6 +94,7 @@ namespace ErogeHelper.Common.Extention
             services.TryAddSingleton<IGameWindowHooker, GameWindowHooker>();
             services.TryAddSingleton<IGameDataService, GameDataService>();
             services.TryAddSingleton<IMeCabService, MeCabService>();
+            services.TryAddSingleton<ITermDataService, TermDataService>();
 
             services.TryAddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.TryAddTransient<IHookDataService, HookDataService>();
