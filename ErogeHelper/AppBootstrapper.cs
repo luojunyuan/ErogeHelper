@@ -57,6 +57,9 @@ namespace ErogeHelper
             var gameDir = gamePath[..gamePath.LastIndexOf('\\')];
             if (!File.Exists(gamePath))
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
+
+            var alreadyHasProcess = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any();
+
             Log.Info($"Game's path: {gamePath}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
 
@@ -87,7 +90,8 @@ namespace ErogeHelper
             var ehGlobalValueRepository = serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
             var ehDbRepository = serviceProvider.GetRequiredService<EhDbRepository>();
 
-            if (File.Exists(Path.Combine(gameDir, "nw.pak")))
+            // For nw.js based game
+            if (File.Exists(Path.Combine(gameDir, "nw.pak")) && !alreadyHasProcess)
             {
                 await Task.Delay(7000);
             }
