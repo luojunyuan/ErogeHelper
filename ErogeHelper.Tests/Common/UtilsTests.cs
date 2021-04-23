@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using ErogeHelper.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -21,15 +22,13 @@ namespace ErogeHelper.Tests.Common
         [TestMethod]
         public void GetGameNamesByProcess()
         {
-            var notepad = Process.Start("notepad");
-            var dict = Utils.GetGameNamesByProcess(notepad);
+            var processes = Process.GetProcessesByName("RuntimeBroker");
+            var dict = Utils.GetGameNamesByProcess(processes.First());
 
-            Assert.AreEqual("notepad.exe", dict["File"]);
-            Assert.AreEqual("SYSTEM32", dict["Dir"]);
-            Assert.AreEqual("notepad", dict["FileNoExt"]);
-            // Expected empty cause title has not been showed
+            Assert.AreEqual("RuntimeBroker.exe", dict["File"]);
+            Assert.AreEqual("System32", dict["Dir"]);
+            Assert.AreEqual("RuntimeBroker", dict["FileNoExt"]);
             Assert.AreEqual(string.Empty, dict["Title"]);
-            notepad.Kill();
         }
 
         [TestMethod()]

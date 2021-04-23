@@ -117,20 +117,27 @@ namespace ErogeHelper
                     //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {
-                        var content = resp.Content ?? new GameSettingResponse();
+                        var content = resp.Content ??
+                                      throw new InvalidOperationException("Server response no content");
                         settingJson = content.GameSettingJson;
                         await ehDbRepository.SetGameInfoAsync(new GameInfoTable
                         {
                             Md5 = md5,
                             GameIdList = content.GameId.ToString(),
+                            RegExp = content.RegExp,
                             TextractorSettingJson = content.GameSettingJson,
                         }).ConfigureAwait(false);
                     }
+
                     Log.Debug($"EHServer: {resp.StatusCode} {resp.Content}");
                 }
                 catch (HttpRequestException ex)
                 {
                     Log.Warn("Can't connect to internet", ex);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Log.Error(ex);
                 }
             }
 

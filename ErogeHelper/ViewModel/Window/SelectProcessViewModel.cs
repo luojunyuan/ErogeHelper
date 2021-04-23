@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Caliburn.Micro;
@@ -14,6 +15,7 @@ using ErogeHelper.ViewModel.Entity.NotifyItem;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using ErogeHelper.Model.Entity.Table;
 
 namespace ErogeHelper.ViewModel.Window
 {
@@ -103,20 +105,28 @@ namespace ErogeHelper.ViewModel.Window
                 try
                 {
                     using var resp = await _ehServerApiService.GetGameSetting(md5).ConfigureAwait(true);
-                    // For throw ApiException
-                    //resp = await resp.EnsureSuccessStatusCodeAsync();
                     if (resp.StatusCode == HttpStatusCode.OK)
                     {
-                        // TODO: 先完成服务器重建 Save game Id also
-                        // TODO: 先完成服务器重建 Also need RegExp info _ehDbRepository
-                        var content = resp.Content ?? new GameSettingResponse();
+                        var content = resp.Content ??
+                                      throw new InvalidOperationException("Server response no content");
                         settingJson = content.GameSettingJson;
+                        await _ehDbRepository.SetGameInfoAsync(new GameInfoTable
+                        {
+                            Md5 = md5,
+                            GameIdList = content.GameId.ToString(),
+                            RegExp = content.RegExp,
+                            TextractorSettingJson = content.GameSettingJson,
+                        }).ConfigureAwait(false);
                     }
                     Log.Debug($"EHServer: {resp.StatusCode} {resp.Content}");
                 }
                 catch (HttpRequestException ex)
                 {
                     Log.Warn("Can't connect to internet", ex);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Log.Error(ex);
                 }
             }
 

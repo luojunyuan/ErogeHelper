@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
+using ErogeHelper.Model.Entity.Payload;
 using ErogeHelper.View.Dialog;
 
 namespace ErogeHelper.ViewModel.Page
@@ -28,7 +30,9 @@ namespace ErogeHelper.ViewModel.Page
             ITextractorService textractorService,
             EhDbRepository ehDbRepository,
             EhConfigRepository ehConfigRepository,
-            IGameDataService gameDataService)
+            IGameDataService gameDataService,
+            IEhServerApiService ehServerApiService,
+            GameRuntimeDataRepo gameRuntimeDataRepo)
         {
             _dataService = dataService;
             _windowManager = windowManager;
@@ -37,6 +41,8 @@ namespace ErogeHelper.ViewModel.Page
             _ehDbRepository = ehDbRepository;
             _ehConfigRepository = ehConfigRepository;
             _gameDataService = gameDataService;
+            _ehServerApiService = ehServerApiService;
+            _gameRuntimeDataRepo = gameRuntimeDataRepo;
 
             _textractorService.DataEvent += DataProcess;
             RegExp = _dataService.GetRegExp();
@@ -51,6 +57,8 @@ namespace ErogeHelper.ViewModel.Page
         private readonly EhDbRepository _ehDbRepository;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IGameDataService _gameDataService;
+        private readonly IEhServerApiService _ehServerApiService;
+        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
 
         #region RegExp
 
@@ -324,8 +332,30 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService.Setting = textractorSetting;
             _ = _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
 
-            // 用一个开关? 异步
-            // TODO: 先完成服务器重建 ehApi SubmitSetting with gameNames 剪切板，hp.Name Search 不要 
+            if (!SelectedHook.EngineName.Equals("Search"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var resp = await _ehServerApiService.SendGameSetting(new GameSettingPayload(
+                            "guest",
+                            "erogehelper",
+                            _ehDbRepository.Md5,
+                            Utils.GetGameNamesByProcess(_gameRuntimeDataRepo.MainProcess),
+                            JsonSerializer.Serialize(textractorSetting),
+                            RegExp ?? string.Empty)).ConfigureAwait(false);
+                        if (!resp.IsSuccessStatusCode)
+                        {
+                            Log.Warn(resp.Error ?? throw new Exception("Refit unknown error"));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                    }
+                });
+            }
 
             var gameInfoTable =
                 await _ehDbRepository.GetGameInfoAsync().ConfigureAwait(false);

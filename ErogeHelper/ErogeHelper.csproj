@@ -54,17 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="assets\site_icon\baidu.com.ico" />
-    <None Remove="assets\site_icon\caiyunapp.com.ico" />
-    <None Remove="assets\site_icon\google.cn.ico" />
-    <None Remove="assets\site_icon\niutrans.com.ico" />
-    <None Remove="assets\site_icon\tencent.com.ico" />
-    <None Remove="assets\site_icon\translate.google.cn.ico" />
-    <None Remove="assets\site_icon\yeekit.com.ico" />
-    <None Remove="assets\site_icon\youdao.com.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
     <Resource Include="assets\site_icon\baidu.com.ico" />

@@ -10,9 +10,11 @@ namespace ErogeHelper.Model.Entity.Response
         [JsonPropertyName("TextSettingJson")]
         public string GameSettingJson { get; set; } = string.Empty;
 
+        public string RegExp { get; set; } = string.Empty;
+
         public override string ToString()
         {
-            return $"GameId={GameId} TextractorSettingJson={GameSettingJson}";
+            return $"GameId={GameId} TextractorSettingJson={GameSettingJson} RegExp={RegExp}";
         }
     }
 }

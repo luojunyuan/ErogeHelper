@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Entity.Payload;
 using ErogeHelper.Model.Entity.Response;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
@@ -26,6 +27,11 @@ namespace ErogeHelper.Model.Service
         public async Task<ApiResponse<GameSettingResponse>> GetGameSetting(string md5)
         {
             return await _ehServerApiService.GetGameSetting(md5).ConfigureAwait(false);
+        }
+
+        public async Task<ApiResponse<SubmitSettingResponse>> SendGameSetting(GameSettingPayload payload)
+        {
+            return await _ehServerApiService.SendGameSetting(payload).ConfigureAwait(false);
         }
     }
 }

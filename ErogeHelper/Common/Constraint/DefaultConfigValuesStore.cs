@@ -4,7 +4,7 @@ namespace ErogeHelper.Common.Constraint
 {
     internal static class DefaultConfigValuesStore
     {
-        public const string EhServerUrl = "http://106.15.88.80";
+        public const string EhServerUrl = "https://eh.nya.run"; // "http://106.15.88.80";
 
         public const double FontSize = 28;
 
