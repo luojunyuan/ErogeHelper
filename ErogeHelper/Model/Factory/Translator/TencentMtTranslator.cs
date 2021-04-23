@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Model.Factory.Interface;
 using ErogeHelper.Model.Repository;
-using TencentCloud.Common;
-using TencentCloud.Common.Profile;
-using TencentCloud.Tmt.V20180321;
-using TencentCloud.Tmt.V20180321.Models;
+using RestSharp;
 
 namespace ErogeHelper.Model.Factory.Translator
 {
@@ -54,35 +54,64 @@ namespace ErogeHelper.Model.Factory.Translator
                 _ => throw new Exception("Language not supported"),
             };
 
-            Credential cred = new()
-            {
-                SecretId = _ehConfigRepository.TencentMtSecretId,
-                SecretKey = _ehConfigRepository.TencentMtSecretKey
-            };
+            #region TencentCloud namespace reference
 
-            ClientProfile clientProfile = new();
-            HttpProfile httpProfile = new()
-            {
-                Endpoint = "tmt.tencentcloudapi.com"
-            };
-            clientProfile.HttpProfile = httpProfile;
+            //Credential cred = new()
+            //{
+            //    SecretId = _ehConfigRepository.TencentMtSecretId,
+            //    SecretKey = _ehConfigRepository.TencentMtSecretKey
+            //};
 
-            TmtClient client = new(cred, "ap-chengdu", clientProfile);
-            TextTranslateRequest req = new()
+            //ClientProfile clientProfile = new();
+            //HttpProfile httpProfile = new()
+            //{
+            //    Endpoint = "tmt.tencentcloudapi.com"
+            //};
+            //clientProfile.HttpProfile = httpProfile;
+
+            //TmtClient client = new(cred, "ap-chengdu", clientProfile);
+            //TextTranslateRequest req = new()
+            //{
+            //    SourceText = sourceText,
+            //    Source = source,
+            //    Target = target,
+            //    ProjectId = 0
+            //};
+
+            #endregion
+
+            string salt = new Random().Next(100000).ToString();
+
+            var requestBuilder = new StringBuilder()
+                .Append("Action=TextTranslate")
+                .Append("&Nonce=").Append(salt)
+                .Append("&ProjectId=0")
+                .Append("&Region=ap-chengdu")
+                .Append("&SecretId=").Append(_ehConfigRepository.TencentMtSecretId)
+                .Append("&Source=").Append(source)
+                .Append("&SourceText=").Append(sourceText)
+                .Append("&Target=").Append(target)
+                .Append("&Timestamp=").Append(DateTimeOffset.Now.ToUnixTimeSeconds())
+                .Append("&Version=2018-03-21");
+            string requestUrl = requestBuilder.ToString();
+            HMACSHA1 hmac = new()
             {
-                SourceText = sourceText,
-                Source = source,
-                Target = target,
-                ProjectId = 0
+                Key = Encoding.UTF8.GetBytes(_ehConfigRepository.TencentMtSecretKey)
             };
+            byte[] data = Encoding.UTF8.GetBytes("GETtmt.tencentcloudapi.com/?" + requestUrl);
+            var dataHash = hmac.ComputeHash(data);
+
+            string baseUrl = "https://tmt.tencentcloudapi.com/?";
+            requestUrl = requestUrl + "&Signature=" + HttpUtility.UrlEncode(Convert.ToBase64String(dataHash));
 
             string result;
             try
             {
-                TextTranslateResponse response = await client.TextTranslate(req);
-                var resp = System.Text.Json.JsonSerializer.Deserialize<TencentMTResponse>(
-                                                                                AbstractModel.ToJsonString(response))!;
-                result = resp.TargetText;
+                var client = new RestClient();
+                var request = new RestRequest(baseUrl + requestUrl);
+                var response = await client.ExecuteGetAsync(request, CancellationToken.None);
+                var resp = System.Text.Json.JsonSerializer.Deserialize<TencentMtResponseWrapper>(response.Content);
+                result = resp?.Response.TargetText ?? "Unknown error";
             }
             catch (Exception ex)
             {
@@ -102,12 +131,24 @@ namespace ErogeHelper.Model.Factory.Translator
 
         private static CancellationTokenSource _cts = new();
 
-        class TencentMTResponse
+        class TencentMtResponse
         {
             public string TargetText { get; set; } = string.Empty;
             public string Source { get; set; } = string.Empty;
             public string Target { get; set; } = string.Empty;
             public string RequestId { get; set; } = string.Empty;
+            public TencentMtErrorMessage Error { get; set; } = new();
+        }
+
+        class TencentMtResponseWrapper
+        {
+            public TencentMtResponse Response { get; set; } = new();
+        }
+
+        class TencentMtErrorMessage
+        {
+            public string Code { get; set; } = string.Empty;
+            public string Message { get; set; } = string.Empty;
         }
     }
 }
