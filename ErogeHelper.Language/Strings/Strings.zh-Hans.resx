@@ -484,4 +484,7 @@
   <data name="GeneralPage.CacheSpaceLabel" xml:space="preserve">
     <value>缓存文件占用的空间</value>
   </data>
+  <data name="SelectProcess.NoIconProc" xml:space="preserve">
+    <value>包含没有图标的程序</value>
+  </data>
 </root>

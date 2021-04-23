@@ -55,6 +55,8 @@ namespace ErogeHelper.ViewModel.Window
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
 
+        public bool IncludeNoIcon { get; set; }
+
         public BindableCollection<ProcComboBoxItem> ProcItems { get; } = new();
 
         private ProcComboBoxItem? _selectedProcItem;
@@ -69,7 +71,7 @@ namespace ErogeHelper.ViewModel.Window
         }
 
         public async void GetProcessAction() =>
-            await _dataService.RefreshBindableProcComboBoxAsync(ProcItems).ConfigureAwait(false);
+            await _dataService.RefreshBindableProcComboBoxAsync(ProcItems, IncludeNoIcon).ConfigureAwait(false);
 
         public bool CanInject => SelectedProcItem is not null;
 
@@ -82,6 +84,15 @@ namespace ErogeHelper.ViewModel.Window
                 await _eventAggregator
                     .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
                         ModernDialog.SelectProcessTip, extraInfo: Language.Strings.SelectProcess_ProcessExit))
+                    .ConfigureAwait(false);
+                return;
+            }
+
+            if (SelectedProcItem.Proc.Id == Environment.ProcessId)
+            {
+                await _eventAggregator
+                    .PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.OpenDialog,
+                        ModernDialog.SelectProcessTip, extraInfo: Language.Strings.SelectProcess_ProcessItself))
                     .ConfigureAwait(false);
                 return;
             }

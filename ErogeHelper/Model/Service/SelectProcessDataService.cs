@@ -14,7 +14,7 @@ namespace ErogeHelper.Model.Service
 {
     public class SelectProcessDataService : ISelectProcessDataService
     {
-        public async Task RefreshBindableProcComboBoxAsync(BindableCollection<ProcComboBoxItem> refData) =>
+        public async Task RefreshBindableProcComboBoxAsync(BindableCollection<ProcComboBoxItem> refData, bool allApp) =>
             await Task.Run(() =>
             {
                 BindableCollection<ProcComboBoxItem> tmpCollection = new();
@@ -23,7 +23,7 @@ namespace ErogeHelper.Model.Service
                 {
                     try
                     {
-                        var icon = Utils.PeIcon2BitmapImage(proc.MainModule?.FileName ?? string.Empty);
+                        var icon = Utils.PeIcon2BitmapImage(proc.MainModule?.FileName ?? string.Empty, allApp);
                         if (icon is null)
                             continue;
                         var item = new ProcComboBoxItem
@@ -63,7 +63,9 @@ namespace ErogeHelper.Model.Service
 
         private readonly IEnumerable<string> _uselessProcess = new[]
         {
-            "SystemSettings"
+            "SystemSettings", "TextInputHost", "ApplicationFrameHost", "Calculator", "Video.UI", "WinStore.App",
+            "PaintStudio.View", "ShellExperienceHost", "commsapps", "Music.UI", "HxOutlook", "Maps", "WhiteboardWRT",
+            "PeopleApp", "RtkUWP", "HxCalendarAppImm", "Cortana"
         };
     }
 }

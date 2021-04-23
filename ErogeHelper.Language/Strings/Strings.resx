@@ -484,4 +484,7 @@
   <data name="GeneralPage.CacheSpaceLabel" xml:space="preserve">
     <value>Cache files space</value>
   </data>
+  <data name="SelectProcess.NoIconProc" xml:space="preserve">
+    <value>Include no icon program</value>
+  </data>
 </root>

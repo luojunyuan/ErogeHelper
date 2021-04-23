@@ -22,7 +22,7 @@ namespace ErogeHelper.Common
 {
     public static class Utils
     {
-        public static BitmapImage? PeIcon2BitmapImage(string fullPath)
+        public static BitmapImage? PeIcon2BitmapImage(string fullPath, bool allApp)
         {
             var result = new BitmapImage();
 
@@ -40,7 +40,7 @@ namespace ErogeHelper.Common
             result.Freeze();
 
             // Process no icon
-            if (stream.Length == 389)
+            if (stream.Length == 389 && !allApp)
                 result = null;
 
             return result;

@@ -6,6 +6,6 @@ namespace ErogeHelper.Model.Service.Interface
 {
     public interface ISelectProcessDataService
     {
-        Task RefreshBindableProcComboBoxAsync(BindableCollection<ProcComboBoxItem> refData);
+        Task RefreshBindableProcComboBoxAsync(BindableCollection<ProcComboBoxItem> refData, bool allApp = false);
     }
 }
