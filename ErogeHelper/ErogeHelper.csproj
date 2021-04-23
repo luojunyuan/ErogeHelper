@@ -8,7 +8,7 @@
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <ApplicationManifest>assets\app.manifest</ApplicationManifest>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
