@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ErogeHelper
 {
@@ -86,6 +87,10 @@ namespace ErogeHelper
             var ehGlobalValueRepository = serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
             var ehDbRepository = serviceProvider.GetRequiredService<EhDbRepository>();
 
+            if (File.Exists(Path.Combine(gameDir, "nw.pak")))
+            {
+                await Task.Delay(7000);
+            }
             IEnumerable<Process> gameProcesses = Utils.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             var (md5, gameProcess) = ehGlobalValueRepository.Init(gameProcesses);
             ehDbRepository.Md5 = md5;
