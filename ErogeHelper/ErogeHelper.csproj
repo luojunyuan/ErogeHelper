@@ -46,13 +46,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Model\Factory\Translator\Interface\**" />
-    <EmbeddedResource Remove="Model\Factory\Translator\Interface\**" />
-    <None Remove="Model\Factory\Translator\Interface\**" />
-    <Page Remove="Model\Factory\Translator\Interface\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
     <Resource Include="assets\site_icon\baidu.com.ico" />
