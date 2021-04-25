@@ -58,11 +58,12 @@ namespace ErogeHelper
             if (!File.Exists(gamePath))
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
 
+            // TODO: 考虑有进程了就不去启动新的但是有可能遇上未清理的游戏程序的情况不知会发生什么
             var alreadyHasProcess = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 
             Log.Info($"Game's path: {gamePath}");
             Log.Info($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
-
+            
             if (e.Args.Contains("/le") || e.Args.Contains("-le"))
             {
                 // Use Locate Emulator (x86 game only)
@@ -90,8 +91,13 @@ namespace ErogeHelper
             var ehGlobalValueRepository = serviceProvider.GetRequiredService<GameRuntimeDataRepo>();
             var ehDbRepository = serviceProvider.GetRequiredService<EhDbRepository>();
 
-            // For nw.js based game
+            // Wait for nw.js based game start multi-process
             if (File.Exists(Path.Combine(gameDir, "nw.pak")) && !alreadyHasProcess)
+            {
+                await Task.Delay(7000);
+            }
+            // Wait for unity game ready, otherwise game may stock caused by Textractor 
+            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
             {
                 await Task.Delay(7000);
             }
