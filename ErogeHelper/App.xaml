@@ -2,25 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:local="clr-namespace:ErogeHelper"
-             xmlns:converter="clr-namespace:ErogeHelper.Common.Converter">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
-                <!-- Other merged dictionaries here -->
-                <ResourceDictionary>
-                    <local:AppBootstrapper x:Key="Bootstrapper"/>
-                </ResourceDictionary>
-                <ResourceDictionary Source="Common/Constraint/UiValueDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
-            <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
-            <converter:HookEngineHighlightConverter x:Key="HookEngineHighlightConverter"/>
-            <converter:TrueToVisibleConverter x:Key="TrueToVisibleConverter"/>
-            <converter:FalseToVisibleConverter x:Key="FalseToVisibleConverter"/>
-            <converter:EmptyStringToCollapsedConverter x:Key="EmptyStringToCollapsedConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
