@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace ErogeHelper
+namespace ErogeHelper.View.Window
 {
-    public partial class MainWindow
+    public partial class MainGameWindow
     {
-        public MainWindow()
+        public MainGameWindow()
         {
             InitializeComponent();
         }
