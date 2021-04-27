@@ -1,4 +1,6 @@
-﻿using ErogeHelper.View.Window;
+﻿using ErogeHelper.Common.Function;
+using ErogeHelper.View.Window;
+using ErogeHelper.ViewModel.Window;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
@@ -17,13 +19,13 @@ namespace ErogeHelper
         {
             try
             {
-                _ = new AppBootstrapper();
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
 			    Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
                 var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
                 Directory.SetCurrentDirectory(currentDirectory ?? 
                     throw new ArgumentNullException(nameof(currentDirectory)));
+                DependencyInject.Register();
             }
             catch (Exception ex)
             {
@@ -39,11 +41,12 @@ namespace ErogeHelper
             {
                 if (e.Args.Length != 0)
                 {
-                    new MainGameWindow().Show();
+                    throw new NotImplementedException();
                 }
                 else
-                { 
-                    new MainGameWindow().Show();
+                {
+                    var view = DependencyInject.GetRequiredService<IViewFor<MainGameViewModel>>() as Window;
+                    view.Show();
                 }
             }
             catch (Exception ex)
@@ -102,11 +105,12 @@ namespace ErogeHelper
             {
                 WindowTitle = $@"Eroge Helper - {errorLevel} Error",
                 MainInstruction = ex.Message,
-                Content = @"Eroge Helper run into some trouble. See detail error by click Detail information below.",
+                Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace) ? string.Empty : "See detail error by click Detail information below.")}",
                 ExpandedInformation = ex.StackTrace,
                 Width = 300,
             };
 
+            // TODO: Add copy to clipboard button
             TaskDialogButton okButton = new(ButtonType.Ok);
             dialog.Buttons.Add(okButton);
             _ = dialog.ShowDialog();
@@ -114,7 +118,6 @@ namespace ErogeHelper
 
         private void AppExit(int exitCode = 0)
 		{
-            this.Log().Info("App Exit");
 			Shutdown(exitCode);
 			if (exitCode != 0)
 			{
