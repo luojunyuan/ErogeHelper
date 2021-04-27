@@ -56,13 +56,14 @@ namespace ErogeHelper
 
         private void SetupExceptionHandling()
         {
-            AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+            AppDomain.CurrentDomain.UnhandledException += (_, args) =>
             {
                 if (Dispatcher.FromThread(Thread.CurrentThread) is null ||
                     Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
                     return;
 
-                var ex = args.ExceptionObject as Exception ?? new Exception("AppDomain.CurrentDomain.UnhandledException");
+                var ex = args.ExceptionObject as Exception ??
+                         new Exception("AppDomain.CurrentDomain.UnhandledException");
 
                 this.Log().Fatal(ex);
                 ShowErrorDialog("Fatal", ex);
@@ -87,7 +88,7 @@ namespace ErogeHelper
                 }
             });
 
-            TaskScheduler.UnobservedTaskException += (s, args) =>
+            TaskScheduler.UnobservedTaskException += (_, args) =>
             {
                 args.SetObserved();
                 this.Log().Error(args.Exception);
@@ -113,6 +114,7 @@ namespace ErogeHelper
 
         private void AppExit(int exitCode = 0)
 		{
+            this.Log().Info("App Exit");
 			Shutdown(exitCode);
 			if (exitCode != 0)
 			{
@@ -133,15 +135,17 @@ namespace ErogeHelper
             }
             catch (WaitHandleCannotBeOpenedException)
             {
-                this.Log().Info("Fine exception WaitHandleCannotBeOpenedException for active singleton app");
+                this.Log().Debug("Fine exception WaitHandleCannotBeOpenedException for active singleton app");
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
             new Task(() =>
             {
                 var isMessageBoxShowed = false;
-                while (_eventWaitHandle.WaitOne() && !isMessageBoxShowed)
+                while (_eventWaitHandle.WaitOne())
                 {
+                    if (isMessageBoxShowed) 
+                        continue;
                     Current.Dispatcher.InvokeAsync(async () =>
                     {
                         isMessageBoxShowed = true;
