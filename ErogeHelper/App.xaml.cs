@@ -6,6 +6,9 @@ using ReactiveUI;
 using Splat;
 using System;
 using System.IO;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -142,21 +145,26 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
-            new Task(() =>
-            {
-                var isMessageBoxShowed = false;
-                while (_eventWaitHandle.WaitOne())
+            bool isMessageBoxShowed = false;
+            Observable.Create<bool>(observer =>
                 {
-                    if (isMessageBoxShowed) 
-                        continue;
-                    Current.Dispatcher.InvokeAsync(async () =>
+                    while (_eventWaitHandle.WaitOne())
                     {
-                        isMessageBoxShowed = true;
-                        await ModernWpf.MessageBox.ShowAsync("ErogeHelper is running!", "Eroge Helper").ConfigureAwait(false);
-                        isMessageBoxShowed = false;
-                    });
-                }
-            }).Start();
+                        observer.OnNext(isMessageBoxShowed);
+                    }
+                    return Disposable.Empty;
+                })
+                .SubscribeOn(ThreadPoolScheduler.Instance)
+                .ObserveOnDispatcher()
+                .Where(opend => opend == false)
+                .Subscribe(async _ =>
+                {
+                    isMessageBoxShowed = true;
+                    await ModernWpf.MessageBox
+                        .ShowAsync("ErogeHelper is running!", "Eroge Helper")
+                        .ConfigureAwait(false);
+                    isMessageBoxShowed = false;
+                });
         }
     }
 }
