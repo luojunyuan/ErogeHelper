@@ -85,75 +85,78 @@ namespace ErogeHelper.Model.Service
 
         private string _pattern = string.Empty;
 
-        private void ProcessDataText(HookParam hp)
+        private async void ProcessDataText(HookParam hp)
         {
-            _currentText = hp.Text;
-
-            // Refresh
-            AppendTextsRefresh?.Invoke(nameof(GameDataService));
-
-            // User define RegExp 
-            if (_pattern != string.Empty)
+            await Task.Run(() =>
             {
-                var list = Regex.Split(hp.Text, _pattern);
-                hp.Text = string.Join("", list);
-            }
+                _currentText = hp.Text;
 
-            // Clear ascii control characters
-            hp.Text = new string(hp.Text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
-            // LineBreak 
-            // Full-width space
-            hp.Text = hp.Text.Replace("　", string.Empty);
-            // Ruby like <.*?>
+                // Refresh
+                AppendTextsRefresh?.Invoke(nameof(GameDataService));
 
-            if (hp.Text.Length > 120)
-            {
-                BindableTextItem?.Invoke(new BindableCollection<SingleTextItem>());
-                AppendTextReceived?.Invoke(Language.Strings.GameView_MaxLenthTip, string.Empty);
-                return;
-            }
-
-            SourceTextReceived?.Invoke(hp.Text);
-
-            // DeepL Extension
-            if (_ehConfigRepository.PasteToDeepL)
-                SendTextToDeepL(hp.Text);
-
-            // Process source japanese text
-            if (_ehConfigRepository.EnableMeCab)
-            {
-                BindableTextItem?.Invoke(Utils.BindableTextMaker(
-                    hp.Text,
-                    _ehConfigRepository,
-                    _meCabService.MeCabWordUniDicEnumerable,
-                    _ehConfigRepository.TextTemplateConfig));
-            }
-
-            // Process translations
-            foreach (var translator in _translatorFactory.GetEnabledTranslators())
-            {
-                Task.Run(async () =>
+                // User define RegExp 
+                if (_pattern != string.Empty)
                 {
-                    Stopwatch sw = new();
-                    sw.Start();
-                    var result = await translator.TranslateAsync(hp.Text, _ehConfigRepository.SrcTransLanguage,
-                        _ehConfigRepository.TargetTransLanguage);
-                    sw.Stop();
-                    if (result != string.Empty)
-                    {
-                        Log.Debug($"{translator.Name}: {result}");
-                        AppendTextReceived?.Invoke(result, $"{translator.Name.I18N()} {sw.ElapsedMilliseconds}ms");
-                    }
-                });
-            }
+                    var list = Regex.Split(hp.Text, _pattern);
+                    hp.Text = string.Join("", list);
+                }
 
-            // hard code for sakura no uta
-            //if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
-            //{
-            //    string result = sakuraNoUtaHelper.QueryText(hp.Text);
-            //    if (!string.IsNullOrWhiteSpace(result))
-            //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, "人工字幕 by luki");
-            //}
+                // Clear ascii control characters
+                hp.Text = new string(hp.Text.Select(c => c < ' ' ? '_' : c).ToArray()).Replace("_", string.Empty);
+                // LineBreak 
+                // Full-width space
+                hp.Text = hp.Text.Replace("　", string.Empty);
+                // Ruby like <.*?>
+
+                if (hp.Text.Length > 120)
+                {
+                    BindableTextItem?.Invoke(new BindableCollection<SingleTextItem>());
+                    AppendTextReceived?.Invoke(Language.Strings.GameView_MaxLenthTip, string.Empty);
+                    return;
+                }
+
+                SourceTextReceived?.Invoke(hp.Text);
+
+                // DeepL Extension
+                if (_ehConfigRepository.PasteToDeepL)
+                    SendTextToDeepL(hp.Text);
+
+                // Process source japanese text
+                if (_ehConfigRepository.EnableMeCab)
+                {
+                    BindableTextItem?.Invoke(Utils.BindableTextMaker(
+                        hp.Text,
+                        _ehConfigRepository,
+                        _meCabService.MeCabWordUniDicEnumerable,
+                        _ehConfigRepository.TextTemplateConfig));
+                }
+
+                // Process translations
+                foreach (var translator in _translatorFactory.GetEnabledTranslators())
+                {
+                    Task.Run(async () =>
+                    {
+                        Stopwatch sw = new();
+                        sw.Start();
+                        var result = await translator.TranslateAsync(hp.Text, _ehConfigRepository.SrcTransLanguage,
+                            _ehConfigRepository.TargetTransLanguage);
+                        sw.Stop();
+                        if (result != string.Empty)
+                        {
+                            Log.Debug($"{translator.Name}: {result}");
+                            AppendTextReceived?.Invoke(result, $"{translator.Name.I18N()} {sw.ElapsedMilliseconds}ms");
+                        }
+                    });
+                }
+
+                // hard code for sakura no uta
+                //if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
+                //{
+                //    string result = sakuraNoUtaHelper.QueryText(hp.Text);
+                //    if (!string.IsNullOrWhiteSpace(result))
+                //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, "人工字幕 by luki");
+                //}
+            });
         }
 
         private static void SendTextToDeepL(string text)
