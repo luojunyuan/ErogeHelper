@@ -184,15 +184,15 @@ namespace ErogeHelper.Model.Service
             // init
             if (_oldWidth == -1 && _oldHeight == -1)
             {
-                _oldWidth = width;
-                _oldHeight = height;
+                _oldWidth = rectClient.Right;
+                _oldHeight = rectClient.Bottom;
             }
             // UNDONE: 按钮藏到了窗口的下方，但是窗口大小却没变化的情况？
-            else if (_oldHeight != height || _oldWidth != width)
+            else if (_oldHeight != rectClient.Bottom || _oldWidth != rectClient.Right)
             {
-                NewWindowSize?.Invoke(new WindowSize(rectClient.Right, rectClient.Bottom));
-                _oldHeight = height;
-                _oldWidth = width;
+                NewWindowSize?.Invoke(new WindowSize(rectClient.Right, rectClient.Bottom), false);
+                _oldWidth = rectClient.Right;
+                _oldHeight = rectClient.Bottom;
             }
             #endregion
         }

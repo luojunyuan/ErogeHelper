@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Service.Interface;
 using System;
 using System.Threading;
@@ -52,12 +53,13 @@ namespace ErogeHelper.View.Control
         {
             InitializeComponent();
 
-            IoC.Get<IGameWindowHooker>().NewWindowSize += windowSize =>
+            IoC.Get<IGameWindowHooker>().NewWindowSize += (windowSize) =>
             {
                 _move = true;
                 _isFromUpdateButtonPosEvent = true;
                 _newGameViewHeight = (int)windowSize.Height;
                 _newGameViewWidth = (int)windowSize.Width;
+                ResetButtonPostion();
                 RaiseMouseUpEventInCode();
             };
         }
@@ -107,11 +109,15 @@ namespace ErogeHelper.View.Control
 
                 double parentActualWidth;
                 double parentActualHeight;
+                double curMarginLeft;
+                double curMarginTop;
 
                 if (_isFromUpdateButtonPosEvent)
                 {
                     parentActualWidth = _newGameViewWidth;
                     parentActualHeight = _newGameViewHeight;
+                    curMarginLeft = _immediateMargin.Left;
+                    curMarginTop = _immediateMargin.Top;
 
                     _isFromUpdateButtonPosEvent = false;
                 }
@@ -121,10 +127,12 @@ namespace ErogeHelper.View.Control
                     _newPos = pos;
                     parentActualHeight = _parent.ActualHeight;
                     parentActualWidth = _parent.ActualWidth;
+                    curMarginLeft = Margin.Left;
+                    curMarginTop = Margin.Top;
                 }
 
-                var left = Margin.Left + _newPos.X - _lastPos.X;
-                var top = Margin.Top + _newPos.Y - _lastPos.Y;
+                var left = curMarginLeft + _newPos.X - _lastPos.X;
+                var top = curMarginTop + _newPos.Y - _lastPos.Y;
                 // button 距离右边缘距离
                 var right = parentActualWidth - left - ActualWidth;
                 // button 距离下边缘距离
@@ -140,41 +148,53 @@ namespace ErogeHelper.View.Control
                 {
                     left = ButtonSpace;
                     top = ButtonSpace;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.UpperLeft);
                 }
                 else if (left < _halfDistance && bottom < _twoThirdDistance) // 左下
                 {
                     left = ButtonSpace;
                     top = parentActualHeight - ActualHeight - ButtonSpace * 2;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.LowerLeft);
                 }
                 else if (right < _halfDistance && top < _twoThirdDistance) // 右上
                 {
                     left = parentActualWidth - ActualWidth - ButtonSpace * 2;
                     top = ButtonSpace;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.UpperRight);
                 }
                 else if (right < _halfDistance && bottom < _twoThirdDistance) // 右下
                 {
                     left = parentActualWidth - ActualWidth - ButtonSpace * 2;
                     top = parentActualHeight - ActualHeight - ButtonSpace * 2;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.LowerRight);
                 }
                 else if (top < _twoThirdDistance) // 上
                 {
-                    left = Margin.Left;
+                    left = curMarginLeft;
                     top = ButtonSpace;
+                    var scale = (curMarginLeft + ButtonSpace + Width / 2) / parentActualWidth;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.Top, scale);
                 }
                 else if (bottom < _twoThirdDistance) // 下
                 {
-                    left = Margin.Left;
+                    left = curMarginLeft;
                     top = parentActualHeight - ActualHeight - ButtonSpace * 2;
+                    var scale = (curMarginLeft + ButtonSpace + Width / 2) / parentActualWidth;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.Bottom, scale);
                 }
                 else if (left < verticalMiddleLine) // 左
                 {
                     left = ButtonSpace;
-                    top = Margin.Top;
+                    top = curMarginTop;
+                    var scale = (curMarginTop + ButtonSpace + Height / 2) / parentActualHeight;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.Left, scale);
                 }
                 else if (right < verticalMiddleLine) // 右
                 {
                     left = parentActualWidth - ActualWidth - ButtonSpace * 2;
-                    top = Margin.Top;
+                    top = curMarginTop;
+                    var scale = (curMarginTop + ButtonSpace + Height / 2) / parentActualHeight;
+                    _touchPosMemory = new AssistiveTouchPosition(TouchButtonCorner.Right, scale);
                 }
                 else
                 {
@@ -210,6 +230,8 @@ namespace ErogeHelper.View.Control
             Margin = new Thickness(left, top, 0, 0);
         }
 
+        private AssistiveTouchPosition _touchPosMemory = new(TouchButtonCorner.UpperLeft);
+
         private void FloatButton_Loaded(object sender, RoutedEventArgs e)
         {
             if (Parent is null && Parent is not FrameworkElement)
@@ -229,7 +251,8 @@ namespace ErogeHelper.View.Control
             // 初始化时Button位置在左上角
             //double left = _parent.ActualWidth - ActualWidth - distanceNew;
             //double top = _parent.ActualHeight - ActualHeight - distanceNew;
-            Margin = new Thickness(ButtonSpace, ButtonSpace, 0, 0);
+            ResetButtonPostion();
+            Margin = _immediateMargin;
 
             // for opacity the button first time loaded
             FloatButton_Click(FloatButton, new RoutedEventArgs());
@@ -278,6 +301,61 @@ namespace ErogeHelper.View.Control
                     }
                 });
             }, cancelToken);
+        }
+
+        private Thickness _immediateMargin = new();
+
+        private void ResetButtonPostion()
+        {
+            switch(_touchPosMemory.Corner)
+            {
+                case TouchButtonCorner.UpperLeft:
+                    _immediateMargin = new Thickness(ButtonSpace, ButtonSpace, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.UpperRight:
+                    _immediateMargin = new Thickness(
+                        _newGameViewWidth - ActualWidth  - ButtonSpace * 2, 
+                        ButtonSpace, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.LowerLeft:
+                    _immediateMargin = new Thickness(
+                        ButtonSpace, 
+                        _newGameViewHeight - ActualHeight - ButtonSpace * 2, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.LowerRight:
+                    _immediateMargin = new Thickness(
+                        _newGameViewWidth - ActualWidth - ButtonSpace * 2, 
+                        _newGameViewHeight - ActualHeight - ButtonSpace * 2, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.Left:
+                    _immediateMargin = new Thickness(
+                        ButtonSpace, 
+                        _touchPosMemory.Scale * _newGameViewHeight - ButtonSpace - Height / 2, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.Top:
+                    _immediateMargin = new Thickness(
+                        _touchPosMemory.Scale * _newGameViewWidth - ButtonSpace - Width / 2, 
+                        ButtonSpace, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.Right:
+                    _immediateMargin = new Thickness(
+                        _newGameViewWidth - ButtonSpace, 
+                        _touchPosMemory.Scale * _newGameViewHeight - ButtonSpace - Height / 2, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+                case TouchButtonCorner.Bottom:
+                    _immediateMargin = new Thickness(
+                        _newGameViewHeight - ButtonSpace, 
+                        _touchPosMemory.Scale * _newGameViewWidth - ButtonSpace - Width / 2, 0, 0);
+                    //Margin = _immediateMargin;
+                    break;
+            }
         }
     }
 }
