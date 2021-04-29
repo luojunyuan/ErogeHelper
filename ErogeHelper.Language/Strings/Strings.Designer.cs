@@ -917,6 +917,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Confirm and copy error to clipboard 的本地化字符串。
+        /// </summary>
+        public static string OokiiDialog_ClipboardLabel {
+            get {
+                return ResourceManager.GetString("OokiiDialog.ClipboardLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Inject 的本地化字符串。
         /// </summary>
         public static string SelectProcess_InjectButton {

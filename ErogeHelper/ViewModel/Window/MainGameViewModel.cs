@@ -4,7 +4,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using ErogeHelper.Common.Function;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 
 namespace ErogeHelper.ViewModel.Window
@@ -18,11 +20,8 @@ namespace ErogeHelper.ViewModel.Window
             ButtonCommand = ReactiveCommand.Create(ButtonClicked);
         }
 
-        public string Text 
-        { 
-            get => _text; 
-            set => this.RaiseAndSetIfChanged(ref _text, value);
-        }
+        [Reactive] 
+        public string Text { get; set; } = string.Empty;
 
         public string ConstString => "default string";
 
@@ -33,6 +32,7 @@ namespace ErogeHelper.ViewModel.Window
             this.Log().Debug(Thread.CurrentThread.ManagedThreadId);
             this.Log().Debug(Text);
             Text = "aass";
+            DependencyInject.ShowView<MainGameViewModel>();
         }
     }
 }

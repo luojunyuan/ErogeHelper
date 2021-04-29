@@ -24,9 +24,9 @@ namespace ErogeHelper
             {
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
-			    Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
+                Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
                 var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
-                Directory.SetCurrentDirectory(currentDirectory ?? 
+                Directory.SetCurrentDirectory(currentDirectory ??
                     throw new ArgumentNullException(nameof(currentDirectory)));
                 DependencyInject.Register();
             }
@@ -44,12 +44,11 @@ namespace ErogeHelper
             {
                 if (e.Args.Length != 0)
                 {
-                    throw new NotImplementedException();
+                    _ = new MainGameWindow();
                 }
                 else
                 {
-                    var view = DependencyInject.GetRequiredService<IViewFor<MainGameViewModel>>() as Window;
-                    view.Show();
+                    DependencyInject.ShowView<MainGameViewModel>();
                 }
             }
             catch (Exception ex)
@@ -76,7 +75,7 @@ namespace ErogeHelper
                 AppExit(-1);
             };
 
-            Current.Events().DispatcherUnhandledException.Subscribe(args => 
+            Current.Events().DispatcherUnhandledException.Subscribe(args =>
             {
                 var ex = args.Exception;
 
@@ -88,7 +87,7 @@ namespace ErogeHelper
                     ShowErrorDialog("UI", ex);
                 }
                 else
-                { 
+                {
                     ShowErrorDialog("UI-Fatal", ex);
                     AppExit(-1);
                 }
@@ -108,25 +107,32 @@ namespace ErogeHelper
             {
                 WindowTitle = $@"Eroge Helper - {errorLevel} Error",
                 MainInstruction = ex.Message,
-                Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace) ? string.Empty : "See detail error by click Detail information below.")}",
+                Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace)
+                    ? string.Empty
+                    : "See detail error by click Detail information below.")}",
                 ExpandedInformation = ex.StackTrace,
                 Width = 300,
             };
 
-            // TODO: Add copy to clipboard button
+            TaskDialogButton clipboardButton = new(Language.Strings.OokiiDialog_ClipboardLabel);
             TaskDialogButton okButton = new(ButtonType.Ok);
+            dialog.Buttons.Add(clipboardButton);
             dialog.Buttons.Add(okButton);
-            _ = dialog.ShowDialog();
+            var clicked = dialog.ShowDialog();
+            if (clicked == clipboardButton)
+            {
+                Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace);
+            }
         }
 
         private void AppExit(int exitCode = 0)
-		{
-			Shutdown(exitCode);
-			if (exitCode != 0)
-			{
-				Environment.Exit(exitCode);
-			}
-		}
+        {
+            Shutdown(exitCode);
+            if (exitCode != 0)
+            {
+                Environment.Exit(exitCode);
+            }
+        }
 
         private const string UniqueEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
         private EventWaitHandle? _eventWaitHandle;
@@ -159,6 +165,7 @@ namespace ErogeHelper
                 .Where(opend => opend == false)
                 .Subscribe(async _ =>
                 {
+                    this.Log().Debug(Environment.CurrentManagedThreadId);
                     isMessageBoxShowed = true;
                     await ModernWpf.MessageBox
                         .ShowAsync("ErogeHelper is running!", "Eroge Helper")

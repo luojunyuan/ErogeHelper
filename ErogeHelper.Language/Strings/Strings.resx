@@ -487,4 +487,7 @@
   <data name="SelectProcess.NoIconProc" xml:space="preserve">
     <value>Include no icon program</value>
   </data>
+  <data name="OokiiDialog.ClipboardLabel" xml:space="preserve">
+    <value>Confirm and copy error to clipboard</value>
+  </data>
 </root>

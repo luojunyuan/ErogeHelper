@@ -487,4 +487,7 @@
   <data name="SelectProcess.NoIconProc" xml:space="preserve">
     <value>包含没有图标的程序</value>
   </data>
+  <data name="OokiiDialog.ClipboardLabel" xml:space="preserve">
+    <value>确定并复制信息到粘贴板</value>
+  </data>
 </root>

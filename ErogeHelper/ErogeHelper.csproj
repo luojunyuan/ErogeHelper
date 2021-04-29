@@ -21,4 +21,12 @@
 	  <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.Language\ErogeHelper.Language.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\Service\" />
+  </ItemGroup>
+
 </Project>
