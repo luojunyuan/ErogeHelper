@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.Repository;
 
@@ -15,7 +16,7 @@ namespace ErogeHelper.Model.Service.Interface
         TextractorSetting Setting { get; set; } 
 
         /// <summary>
-        /// Inject hooks into processes
+        /// Inject hooks into processes, also initialize Textractor service. This should be called only once
         /// </summary>
         /// <param name="gameProcesses"></param>
         /// <param name="setting">Textractor init callback functions depends on some parameters</param>
@@ -26,5 +27,11 @@ namespace ErogeHelper.Model.Service.Interface
         void SearchRCode(string text);
 
         IEnumerable<string> GetConsoleOutputInfo();
+
+        Task ReAttachProcesses();
+
+        void RemoveHook(long address);
+
+        void RemoveUselessHooks();
     }
 }

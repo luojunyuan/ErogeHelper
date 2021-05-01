@@ -12,6 +12,9 @@ namespace ErogeHelper.Common.Extention
         public static async Task ShowDialogFromIoCAsync<T>(this IWindowManager windowManager, object? context = null)
             => await windowManager.ShowDialogAsync(IoC.Get<T>(), context).ConfigureAwait(false);
 
+        public static async Task ShowPopupFromIoCAsync<T>(this IWindowManager windowManager, object? context = null)
+            => await windowManager.ShowPopupAsync(IoC.Get<T>(), context).ConfigureAwait(false);
+
         public static async Task SilentStartWindowFromIoCAsync<T>(this IWindowManager windowManager, object? context = null)
         {
             // NOTE: 注意如果不关闭所有窗口程序是不会结束的，所以不要在应用顶层使用

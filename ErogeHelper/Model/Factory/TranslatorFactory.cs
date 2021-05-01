@@ -32,6 +32,7 @@ namespace ErogeHelper.Model.Factory
 
         // QUESTION: 类似这样的Exception没法catch？
         public ITranslator GetTranslator(TranslatorName name) =>
-            AllInstance.SingleOrDefault(translator => translator.Name == name) ?? throw new Exception($"No translator {name}");
+            AllInstance.SingleOrDefault(translator => translator.Name == name) ??
+            throw new Exception($"No translator {name}");
     }
 }

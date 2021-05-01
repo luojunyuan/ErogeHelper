@@ -16,6 +16,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using ErogeHelper.Model.Entity.Table;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.ViewModel.Window
 {

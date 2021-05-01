@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ErogeHelper.Common.Messenger;
 
 namespace ErogeHelper.ViewModel.Entity.NotifyItem
 {
@@ -6,6 +7,20 @@ namespace ErogeHelper.ViewModel.Entity.NotifyItem
     {
         private string _totalText = string.Empty;
         private string _text = string.Empty;
+        private bool _selected;
+
+        public bool Selected 
+        { 
+            get => _selected; 
+            set 
+            {
+                _selected = value;
+                IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new NewTextThreadSelectedMessage(this, value));
+                NotifyOfPropertyChange(() => Selected);
+            }
+        }
+
+        public long Address { get; set; }
 
         public long Handle { get; set; }
 

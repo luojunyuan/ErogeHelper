@@ -14,6 +14,10 @@ namespace ErogeHelper.Common.Validation
             {
                 return ValidationResult.ValidResult;
             }
+            if (pattern[^1] == '|')
+            { 
+                return new ValidationResult(false, $"Invalid RegExp. '|'");
+            }
 
             const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Compiled;
 

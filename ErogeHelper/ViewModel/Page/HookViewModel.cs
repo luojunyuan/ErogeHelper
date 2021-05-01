@@ -18,10 +18,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using ErogeHelper.Model.Entity.Payload;
 using ErogeHelper.View.Dialog;
+using System.Threading;
 
 namespace ErogeHelper.ViewModel.Page
 {
-    public class HookViewModel : PropertyChangedBase
+    public class HookViewModel : PropertyChangedBase, IHandle<NewTextThreadSelectedMessage>
     {
         public HookViewModel(
             IHookDataService dataService,
@@ -44,7 +45,11 @@ namespace ErogeHelper.ViewModel.Page
             _ehServerApiService = ehServerApiService;
             _gameRuntimeDataRepo = gameRuntimeDataRepo;
 
+            _eventAggregator.SubscribeOnUIThread(this);
             _textractorService.DataEvent += DataProcess;
+            CurrentThreadsNames = _textractorService.Setting.Hookcode == string.Empty 
+                ? "None"
+                : _textractorService.Setting.Hookcode + ' ' + _textractorService.Setting.HookSettings.Count() + " threads";
             RegExp = _dataService.GetRegExp();
             ConsoleOutput = string.Join('\n', _textractorService.GetConsoleOutputInfo());
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
@@ -62,6 +67,14 @@ namespace ErogeHelper.ViewModel.Page
 
         #region RegExp
 
+        private string _currentThreadsNames = string.Empty;
+
+        public string CurrentThreadsNames 
+        { 
+            get => _currentThreadsNames; 
+            set { _currentThreadsNames = value; NotifyOfPropertyChange(() => CurrentThreadsNames); } 
+        }
+
         private string? _regExp = string.Empty;
 
         // If user click 'x', it will turn to null
@@ -73,11 +86,11 @@ namespace ErogeHelper.ViewModel.Page
                 _regExp = value;
                 if (value is null)
                 {
-                    SelectedText = SelectedHook?.Text ?? string.Empty;
+                    SelectedText = _rawText ?? string.Empty;
                 }
                 else if (!InvalidRegExp)
                 {
-                    SelectedText = Utils.TextEvaluateWithRegExp(SelectedHook?.Text ?? string.Empty, value);
+                    SelectedText = Utils.TextEvaluateWithRegExp(_rawText ?? string.Empty, value);
                 }
                 NotifyOfPropertyChange(() => RegExp);
             }
@@ -90,6 +103,8 @@ namespace ErogeHelper.ViewModel.Page
             get => _invalidRegExp;
             set { _invalidRegExp = value; NotifyOfPropertyChange(() => CanSubmitSetting); }
         }
+
+        private string _rawText = string.Empty;
 
         private string _selectedText = string.Empty;
         public string SelectedText
@@ -202,38 +217,59 @@ namespace ErogeHelper.ViewModel.Page
 
         public void ClearHookMapData()
         {
-            SelectedHook = null;
+            SelectedHookItem = null;
+            HookComboSource.Clear();
             HookMapData.Clear();
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
         }
 
-        public HookBindingList<long, HookMapItem> HookMapData { get; set; } = new(p => p.Handle);
-
-        private long _selectedTextHandle;
-
-        private HookMapItem? _selectedHook;
-
-        public HookMapItem? SelectedHook
+        public async void ReInjectProcesses()
         {
-            get => _selectedHook;
+            ClearHookMapData();
+            await _textractorService.ReAttachProcesses();
+        }
+
+        public void RemoveHook(HookMapItem hookItem)
+        {
+            _textractorService.RemoveHook(hookItem.Address);
+            HookComboSource.Remove(hookItem);
+        }
+
+        public HookBindingList<long, HookMapItem> HookComboSource { get; set; } = new(p => p.Address);
+
+        public HookMapItem? SelectedHookItem
+        {
+            get => _selectedHookItem;
             set
             {
-                _selectedHook = value;
-
+                if (_selectedHookItem is not null)
+                {
+                    var lastTextThreads = HookMapData.Where(it => it.Address == _selectedHookItem.Address);
+                    foreach (var textThread in lastTextThreads)
+                    {
+                        textThread.Selected = false;
+                    }
+                }
+                _selectedHookItem = value;
+                SelectedAddressItems.Clear();
                 if (value is not null)
                 {
-                    _selectedTextHandle = value.Handle;
-                    SelectedText = Utils.TextEvaluateWithRegExp(value.Text, RegExp ?? string.Empty);
+                    SelectedAddressItems.AddRange(
+                        HookMapData.Where(it => it.Address == value.Address));
                 }
-                else
-                {
-                    _selectedTextHandle = -1;
-                    SelectedText = string.Empty;
-                }
+                _selectedTextThreads.Clear();
+                SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
+
                 NotifyOfPropertyChange(() => CanSubmitSetting);
-                NotifyOfPropertyChange(() => SelectedHook);
+                NotifyOfPropertyChange(() => SelectedHookItem);
             }
         }
+
+        public BindableCollection<HookMapItem> SelectedAddressItems { get; set; } = new();
+
+        private HookBindingList<long, HookMapItem> HookMapData { get; set; } = new(p => p.Handle);
+
+        private readonly List<HookMapItem> _selectedTextThreads = new();
 
         private async void DataProcess(HookParam hp)
         {
@@ -246,12 +282,14 @@ namespace ErogeHelper.ViewModel.Page
 
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
+                // All datas
                 var targetItem = HookMapData.FastFind(hp.Handle);
                 if (targetItem is null)
                 {
                     targetItem = new HookMapItem
                     {
                         Handle = hp.Handle,
+                        Address = hp.Address,
                         HookCode = hp.Hookcode,
                         ThreadContext = hp.Ctx,
                         SubThreadContext = hp.Ctx2,
@@ -265,38 +303,62 @@ namespace ErogeHelper.ViewModel.Page
                 {
                     string tmp = targetItem.TotalText + "\n\n" + hp.Text;
 
-                    // HACK: Dummy way to generate my TextBlock item text
-                    var count = tmp.Count(f => f.Equals('\n'));
-                    if (count > 5)
-                    {
-                        var index = tmp.IndexOf('\n') + 2;
-                        index = tmp.IndexOf('\n', index);
-                        tmp = tmp[index..];
-                    }
                     targetItem.TotalText = tmp;
                     targetItem.Text = hp.Text;
                 }
-            });
 
-            if (SelectedHook is null && _textractorService.Setting.Hookcode != string.Empty)
-            {
-                var setting = _textractorService.Setting.HookSettings.First();
-                if (_textractorService.Setting.Hookcode.Equals(hp.Hookcode)
-                    && (setting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
-                    && setting.SubThreadContext == hp.Ctx2)
+                targetItem = HookComboSource.FastFind(hp.Address);
+                if (targetItem is null)
                 {
-                    SelectedHook = HookMapData.FastFind(hp.Handle);
+                    targetItem = new HookMapItem
+                    {
+                        Address = hp.Address,
+                        EngineName = hp.Name
+                    };
+                    HookComboSource.Add(targetItem);
                 }
-            }
 
-            if (_selectedTextHandle == hp.Handle)
-            {
-                SelectedText = Utils.TextEvaluateWithRegExp(hp.Text, RegExp ?? string.Empty);
-            }
+                if (SelectedHookItem is null)
+                {
+                    // Set default hook combo item
+                    SelectedHookItem = targetItem;
+                }
+
+                if (_selectedTextThreads.Any(thread => thread.Handle == hp.Handle))
+                {
+                    _rawText = hp.Text;
+                    SelectedText = Utils.TextEvaluateWithRegExp(_rawText ?? string.Empty, RegExp ?? string.Empty);
+                }
+            });
         }
 
-        public bool CanSubmitSetting => SelectedHook is not null && !InvalidRegExp && !_submitting;
+        public Task HandleAsync(NewTextThreadSelectedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Status)
+            {
+                _selectedTextThreads.Add(message.HookMapItem);
+
+                _rawText = message.HookMapItem.Text;
+                SelectedText = Utils.TextEvaluateWithRegExp(_rawText ?? string.Empty, RegExp ?? string.Empty);
+            }
+            else
+            {
+                _selectedTextThreads.Remove(message.HookMapItem);
+            }
+
+            if (!_selectedTextThreads.Any())
+            {
+                SelectedText = Language.Strings.HookPage_SelectedTextInitTip;
+            }
+
+            NotifyOfPropertyChange(() => CanSubmitSetting);
+
+            return Task.CompletedTask;
+        }
+
+        public bool CanSubmitSetting => _selectedTextThreads.Any() && !InvalidRegExp && !_submitting;
         private bool _submitting;
+        private HookMapItem? _selectedHookItem;
 
         public async void SubmitSetting()
         {
@@ -312,27 +374,33 @@ namespace ErogeHelper.ViewModel.Page
                 var list = Regex.Split(textPendingToSend, RegExp);
                 textPendingToSend = string.Join("", list);
             }
+            
+            HookComboSource
+                .Where(combo => !combo.Address.Equals(SelectedHookItem!.Address)).ToList()
+                .ForEach(shouldRemoveThread => HookComboSource.Remove(shouldRemoveThread));
+            _textractorService.RemoveUselessHooks();
 
-            if (SelectedHook is null)
-                throw new ArgumentNullException(nameof(SelectedHook));
-
+            var hookSettings = new List<TextractorSetting.HookSetting>();
+            _selectedTextThreads.ForEach(thread =>
+            {
+                hookSettings.Add(new TextractorSetting.HookSetting
+                {
+                    ThreadContext = thread.ThreadContext,
+                    SubThreadContext = thread.SubThreadContext,
+                });
+            });
             var textractorSetting = new TextractorSetting
             {
-                IsUserHook = SelectedHook.EngineName.Contains("UserHook"),
-                Hookcode = SelectedHook.HookCode,
-                HookSettings = new List<TextractorSetting.HookSetting>()
-                {
-                    new()
-                    {
-                        ThreadContext = SelectedHook.ThreadContext,
-                        SubThreadContext = SelectedHook.SubThreadContext,
-                    }
-                }
+                IsUserHook = _selectedTextThreads.First().EngineName.Contains("UserHook"),
+                Hookcode = _selectedTextThreads.First().HookCode,
+                HookSettings = hookSettings,
             };
             _textractorService.Setting = textractorSetting;
+            CurrentThreadsNames = textractorSetting.Hookcode + ' ' + textractorSetting.HookSettings.Count() + " threads";
+
             _ = _eventAggregator.PublishOnUIThreadAsync(new RegExpChangedMessage { RegExp = RegExp ?? string.Empty });
 
-            if (!SelectedHook.EngineName.Equals("Search"))
+            if (!_selectedTextThreads.First().EngineName.Equals("Search"))
             {
                 _ = Task.Run(async () =>
                 {

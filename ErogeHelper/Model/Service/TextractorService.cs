@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Service
 {
@@ -18,7 +19,7 @@ namespace ErogeHelper.Model.Service
 
         public void InjectProcesses(IEnumerable<Process> gameProcesses, TextractorSetting? setting = null)
         {
-            _gameProcesses = gameProcesses;
+            _gameProcesses = gameProcesses.ToList();
             Setting = setting ?? new TextractorSetting();
 
             // Current texthook.dll version 4.15
@@ -40,7 +41,7 @@ namespace ErogeHelper.Model.Service
             }
         }
 
-        private IEnumerable<Process> _gameProcesses = new List<Process>();
+        private List<Process> _gameProcesses = new List<Process>();
 
         public void InsertHook(string hookcode)
         {
@@ -108,6 +109,47 @@ namespace ErogeHelper.Model.Service
 
         public IEnumerable<string> GetConsoleOutputInfo() => _consoleOutput;
 
+        public async Task ReAttachProcesses()
+        {
+            firstTimeInject = false;
+            // Cause console thread only create once after TextHostInit();
+            var consoleParam = _threadHandleDict.First().Value;
+            _threadHandleDict.Clear();
+            _threadHandleDict.Add(0, consoleParam);
+            _gameProcesses.ForEach(proc => _ = TextHostDll.DetachProcess((uint)proc.Id));
+            DataEvent?.Invoke(new HookParam
+            {
+                Handle = 0,
+                Pid = 0,
+                Address = -1,
+                Ctx = -1,
+                Ctx2 = -1,
+                Name = "Console",
+                Hookcode = "HB0@0",
+                Text = "ErogeHelper: Detach Processes"
+            });
+            // XXX: Too fast
+            await Task.Run(async() => 
+            {
+                await Task.Delay(50);
+                _gameProcesses.ForEach(proc => _ = TextHostDll.InjectProcess((uint)proc.Id));
+            });
+        }
+
+        public void RemoveHook(long address) => 
+            _gameProcesses.ForEach(proc => _ = TextHostDll.RemoveHook((uint)proc.Id, (ulong)address));
+
+        public void RemoveUselessHooks()
+        { 
+            _gameProcesses.ForEach(proc =>
+            { 
+                _threadHandleDict.Values
+                    .Where(thread => !thread.Hookcode.Equals(Setting.Hookcode))
+                    .Select(thread => thread.Address).ToList()
+                    .ForEach(address => _ = TextHostDll.RemoveHook((uint)proc.Id, (ulong)address));
+            });
+        }
+
         private readonly List<string> _consoleOutput = new();
 
         #region TextHost Callback Implement
@@ -119,6 +161,8 @@ namespace ErogeHelper.Model.Service
 
         private readonly Dictionary<long, HookParam> _threadHandleDict = new();
 
+        private bool firstTimeInject = true;
+
         private void CreateThreadHandle(
             long threadId,
             uint processId,
@@ -128,6 +172,12 @@ namespace ErogeHelper.Model.Service
             string name,
             string hookcode)
         {
+            if (Setting.Hookcode != string.Empty && !Setting.Hookcode.Equals(hookcode) && firstTimeInject)
+            {
+                _gameProcesses.ForEach(proc => 
+                    _ = TextHostDll.RemoveHook((uint)proc.Id, address));
+            }
+
             _threadHandleDict[threadId] = new HookParam
             {
                 Handle = threadId,
@@ -177,15 +227,14 @@ namespace ErogeHelper.Model.Service
 
         private void RemoveThreadHandle(long threadId) { }
 
+        // This called when console thread created
         private void OnConnectCallBackHandle(uint processId)
         {
-            Setting.UselessAddresses.ForEach(address => _ = TextHostDll.RemoveHook(processId, address));
             if (Setting.IsUserHook)
             {
                 InsertHook(Setting.Hookcode);
             }
         }
-
         #endregion
     }
 }

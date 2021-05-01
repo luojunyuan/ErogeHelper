@@ -55,9 +55,6 @@
             <ui:HyperlinkButton 
                 Content="{x:Static resx:Strings.About_OpenNewIssue}" 
                 NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
-            <!-- UNDONE: Add erogehelper cache size tip -->
-            <!-- 考虑添加一个与BiliRecoder类似的空间progressBar 显示当前占用空间/所剩余空间，全长度是两者之和 -->
-            <!-- 在Installer中的卸载下方也增加一个复选框，以及占用空间大小的数值，默认不勾选，若勾选会再度弹窗提示用户 -->
         </ui:SimpleStackPanel>
     </control:ScrollViewerSmooth>
 </Page>

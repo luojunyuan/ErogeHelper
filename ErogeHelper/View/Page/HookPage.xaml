@@ -50,6 +50,17 @@
                 <TextBlock Text="{Binding TotalText}" TextWrapping="Wrap"/>
             </GroupBox>
         </DataTemplate>
+        
+        <DataTemplate x:Key="HookItemTemplate" DataType="{x:Type notifyItem:HookMapItem}">
+            <GroupBox Width="300" Height="auto" ToolTip="{Binding HookCode}">
+                <StackPanel>
+                    <ui:ToggleSwitch IsOn="{Binding Selected}"/>
+                    <TextBox 
+                        Text="{Binding TotalText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" 
+                        MaxHeight="150" behavior:ScrollToEndBehavior.OnTextChanged="True" />
+                </StackPanel>
+            </GroupBox>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -73,11 +84,13 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- TODO: 把 Hook Data List 拿出来，Grid分四格，HookDataList占下方两格，InfoColumn只在大于X时出现在0, 1 -->
                 <StackPanel Margin="20,10" HorizontalAlignment="Left">
                     <!-- RegExp -->
                     <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                         <ui:SimpleStackPanel Spacing="10">
+                            <Label Content="Thread current in use" />
+                            <TextBlock Text="{Binding CurrentThreadsNames}" Foreground="red" />
+                            
                             <Label Content="{x:Static resx:Strings.HookPage_RegExp}" />
                             <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
                                 <TextBox 
@@ -175,21 +188,38 @@
                                     x:Name="RCodeDialog" cal:Message.Attach="[PrimaryButtonClick] = [SearchRCodeText($source)]"/>
                             </StackPanel>
                             
-                            <!-- UNDONE: Second thread -->
-                            <ListView 
-                                ScrollViewer.PanningMode="None"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                ItemsSource="{Binding HookMapData}" 
-                                SelectedItem="{Binding SelectedHook}" 
-                                SelectionMode="Single"
-                                ItemTemplate="{StaticResource HpItemTemplate}">
-                                <ListBox.ItemsPanel>
+                            <Button Content="Inject the game again" cal:Message.Attach="[Click] = [ReInjectProcesses]"/>
+                            <Label Content="Select hook" />
+                            <ComboBox 
+                                Width="{StaticResource ControllerWidth}" HorizontalAlignment="Left"
+                                ItemsSource="{Binding HookComboSource}"
+                                SelectedItem="{Binding SelectedHookItem}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel LastChildFill="False" Height="20">
+                                            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding EngineName}"/>
+                                            <Button 
+                                                DockPanel.Dock="Right" Width="20" 
+                                                cal:Message.Attach="[Click] = [RemoveHook($datacontext)]"
+                                                cal:Action.TargetWithoutContext="{Binding DataContext, 
+                                                    RelativeSource={RelativeSource AncestorType={x:Type Page}}}">
+                                                <ui:SymbolIcon Symbol="Clear" Margin="-9 -2.5 -8 -2.5"/>
+                                            </Button>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ItemsControl 
+                                HorizontalAlignment="Left"
+                                MaxWidth="{StaticResource ExpandedModeThresholdWidth}"
+                                ItemsSource="{Binding SelectedAddressItems}" 
+                                ItemTemplate="{StaticResource HookItemTemplate}">
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
+                                        <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                            </ListView>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
                         </ui:SimpleStackPanel>
                     </GroupBox>
                 </StackPanel>

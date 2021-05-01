@@ -111,8 +111,10 @@ namespace ErogeHelper.View.Window
         protected override void OnClosed(EventArgs e)
         {
             _pagesList?.ForEach(item => _eventAggregator.Unsubscribe(item.PageInstance));
-            _eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.GeneralViewModel);
-            _eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.TransViewModel);
+            // only use when PreferenceViewModel register as transition
+            //_eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.GeneralViewModel);
+            //_eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.TransViewModel);
+            //_eventAggregator.Unsubscribe((DataContext as PreferenceViewModel)?.HookViewModel);
         }
     }
 }

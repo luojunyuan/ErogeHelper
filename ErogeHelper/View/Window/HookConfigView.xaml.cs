@@ -2,6 +2,7 @@
 using ErogeHelper.Common.Enum;
 using ErogeHelper.Common.Messenger;
 using ErogeHelper.View.Page;
+using ErogeHelper.ViewModel.Window;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,6 +51,7 @@ namespace ErogeHelper.View.Window
         {
             _eventAggregator.Unsubscribe(HookPageFrame.Content as HookPage);
             _eventAggregator.Unsubscribe(this);
+            _eventAggregator.Unsubscribe((DataContext as HookConfigViewModel)?.HookPageFrame);
         }
     }
 }
