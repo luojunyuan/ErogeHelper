@@ -32,6 +32,8 @@ namespace ErogeHelper.Common.Constraint
         public const bool MojiDictEnable = false;
         public const bool JishoDictEnable = false;
 
+        public const bool UseTermTable = false;
+
         public const TransLanguage TransSrcLanguage = TransLanguage.日本語;
         public const TransLanguage TransTargetLanguage = TransLanguage.English;
 

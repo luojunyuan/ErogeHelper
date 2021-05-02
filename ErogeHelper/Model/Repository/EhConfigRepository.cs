@@ -6,6 +6,8 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using ErogeHelper.Common.Constraint;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Repository
 {
@@ -94,6 +96,8 @@ namespace ErogeHelper.Model.Repository
             return ret;
         }
 
+        private SemaphoreSlim _semaphoreSlim = new(1, 1);
+
         private void SetValue<T>(T value, [CallerMemberName] string propertyName = "")
         {
             var targetStrValue = value?.ToString() ?? string.Empty;
@@ -103,8 +107,24 @@ namespace ErogeHelper.Model.Repository
 
             LocalSetting[propertyName] = targetStrValue;
             Log.Debug($"{propertyName} changed to {targetStrValue}");
-            File.WriteAllText(_configFilePath, JsonSerializer.Serialize(LocalSetting, new JsonSerializerOptions 
-                                                                                          { WriteIndented = true }));
+            Task.Run(async () =>
+            { 
+                await _semaphoreSlim.WaitAsync();
+                try
+                { 
+                    await File.WriteAllTextAsync(
+                        _configFilePath, 
+                        JsonSerializer.Serialize(LocalSetting, new JsonSerializerOptions { WriteIndented = true }));
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(ex);
+                }
+                finally
+                { 
+                    _semaphoreSlim.Release();
+                }
+            });
         }
 
         #endregion
@@ -203,6 +223,11 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
+        public bool UseTermTable
+        {
+            get => GetValue(DefaultConfigValuesStore.UseTermTable);
+            set => SetValue(value);
+        }
         public TransLanguage SrcTransLanguage
         {
             get => GetValue(DefaultConfigValuesStore.TransSrcLanguage);
