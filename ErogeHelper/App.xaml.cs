@@ -25,7 +25,7 @@ namespace ErogeHelper
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
                 Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
-                var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+                var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
                 Directory.SetCurrentDirectory(currentDirectory ??
                     throw new ArgumentNullException(nameof(currentDirectory)));
                 DependencyInject.Register();
