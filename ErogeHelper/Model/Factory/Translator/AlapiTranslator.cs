@@ -63,6 +63,7 @@ namespace ErogeHelper.Model.Factory.Translator
                 var client = new RestClient();
                 var request = new RestRequest(url);
 
+                // FIXME: Alapi broken
                 var resp = await client.GetAsync<AliapiResponse>(request, CancellationToken.None);
 
                 if (resp.msg.Equals("success"))

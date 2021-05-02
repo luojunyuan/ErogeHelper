@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Caliburn.Micro;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Enum;
@@ -12,15 +14,22 @@ namespace ErogeHelper.ViewModel.Window
 {
     public class TermViewModel : PropertyChangedBase
     {
-        public TermViewModel(ITermDataService termDataService, ITranslatorFactory translatorFactory)
+        public TermViewModel(
+            ITermDataService termDataService,
+            ITranslatorFactory translatorFactory,
+            EhConfigRepository ehConfigRepository)
         {
             _termDataService = termDataService;
             _translatorFactory = translatorFactory;
+            _sourceLanguage = ehConfigRepository.SrcTransLanguage;
+            _targetLanguage = ehConfigRepository.TargetTransLanguage;
 
             TermList = _termDataService.GetBindableTermItems();
             _translatorFactory.AllInstance.ForEach(translator =>
             {
-                if (translator.UnLock)
+                if (translator.UnLock &&
+                    translator.SupportSrcLang.Contains(_sourceLanguage) &&
+                    translator.SupportDesLang.Contains(_targetLanguage))
                 {
                     TranslatorItems.Add(new TranslatorComboBoxItem()
                     {
@@ -30,12 +39,19 @@ namespace ErogeHelper.ViewModel.Window
                     });
                 }
             });
+            SourceLanguageLabel = _sourceLanguage.ToString();
+            TargetLanguageLabel = _targetLanguage.ToString();
         }
 
         private readonly ITermDataService _termDataService;
         private readonly ITranslatorFactory _translatorFactory;
+        private readonly TransLanguage _sourceLanguage;
+        private readonly TransLanguage _targetLanguage;
 
+        private bool _translating;
+        private TranslatorComboBoxItem? _selectedTranslator;
         private string _translatedResult = string.Empty;
+        private string _finalResult = string.Empty;
 
         public string SourceWord { get; set; } = string.Empty;
 
@@ -47,7 +63,9 @@ namespace ErogeHelper.ViewModel.Window
             {
                 new ModernWpf.Controls.ContentDialog()
                 {
-                    Title = "Word already exist"
+                    Title = "Word already exist",
+                    CloseButtonText = Language.Strings.Common_Close,
+                    DefaultButton = ModernWpf.Controls.ContentDialogButton.Close
                 }.ShowAsync();
                 return;
             }
@@ -58,12 +76,12 @@ namespace ErogeHelper.ViewModel.Window
 
         public BindableCollection<TermItem> TermList { get; set; }
 
-        public void DeleteWord(TermItem term)
+        public async void DeleteWord(TermItem term)
         {
             var target = TermList.Single(it => it.SourceWord.Equals(term.SourceWord));
             TermList.Remove(target);
             // FIXME:
-            //await _termDataService.DeleteTermInDatabaseAsync(term);
+            await _termDataService.DeleteTermInDatabaseAsync(term);
         }
 
         public string PendingToTranslateText { get; set; } = "【爽】「悠真くんを攻略すれば２１０円か。なるほどなぁ…」";
@@ -73,11 +91,11 @@ namespace ErogeHelper.ViewModel.Window
         public TranslatorComboBoxItem? SelectedTranslator
         {
             get => _selectedTranslator;
-            set { _selectedTranslator = value; NotifyOfPropertyChange(() => CanTestTranslate);}
+            set { _selectedTranslator = value; NotifyOfPropertyChange(() => CanTestTranslate); }
         }
 
-        private bool _translating;
-        private TranslatorComboBoxItem? _selectedTranslator;
+        public string SourceLanguageLabel { get; set; }
+        public string TargetLanguageLabel { get; set; }
 
         public bool CanTestTranslate => SelectedTranslator is not null && !_translating;
         public async void TestTranslate()
@@ -88,7 +106,38 @@ namespace ErogeHelper.ViewModel.Window
             if (SelectedTranslator is not null)
             {
                 TranslatedResult = await _translatorFactory.GetTranslator(SelectedTranslator.TranslatorName)
-                    .TranslateAsync(PendingToTranslateText, TransLanguage.English, TransLanguage.简体中文);
+                    .TranslateAsync(PendingToTranslateText, _sourceLanguage, _targetLanguage);
+
+                var count = 1234;
+                Dictionary<int, string> countSourceWordDic = new();
+                var tmpStr = PendingToTranslateText;
+                // HACK: Bad string operator for terms
+                var termDatas = TermList.ToList();
+                termDatas
+                    .Where(term => tmpStr.Contains(term.SourceWord)).ToList()
+                    .ForEach(term => 
+                    {
+                        tmpStr = tmpStr.Replace(term.SourceWord, $"{{{count}}}");
+                        countSourceWordDic.Add(count, term.SourceWord);
+                        count--;
+                    });
+
+                var tmpStrTranslatedResult = await _translatorFactory.GetTranslator(SelectedTranslator.TranslatorName)
+                    .TranslateAsync(tmpStr, _sourceLanguage, _targetLanguage);
+                try
+                {
+                    for(var i = 0; i < countSourceWordDic.Count; i++)
+                    {
+                        tmpStrTranslatedResult = tmpStrTranslatedResult.Replace(
+                            $"{{{++count}}}", 
+                            _termDataService.GetDictionary()[countSourceWordDic[count]]);
+                    }
+                    FinalResult = tmpStrTranslatedResult;
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(ex);
+                }
             }
 
             _translating = false;
@@ -98,7 +147,13 @@ namespace ErogeHelper.ViewModel.Window
         public string TranslatedResult
         {
             get => _translatedResult;
-            set { _translatedResult = value; NotifyOfPropertyChange(() => TranslatedResult);}
+            set { _translatedResult = value; NotifyOfPropertyChange(() => TranslatedResult); }
+        }
+
+        public string FinalResult 
+        { 
+            get => _finalResult; 
+            set { _finalResult = value; NotifyOfPropertyChange(() => FinalResult); }
         }
 
 #pragma warning disable CS8618

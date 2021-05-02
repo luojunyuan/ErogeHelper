@@ -78,6 +78,7 @@ namespace ErogeHelper.ViewModel.Page
             _meCabService.CreateTagger(dicPath);
             File.Delete(filename);
             CanEnableMecab = true;
+            // FIXME: Notify mecab status
             Log.Info("Loaded mecab-dic");
         }
 

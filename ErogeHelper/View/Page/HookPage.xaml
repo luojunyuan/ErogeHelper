@@ -88,7 +88,7 @@
                     <!-- RegExp -->
                     <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                         <ui:SimpleStackPanel Spacing="10">
-                            <Label Content="Thread current in use" />
+                            <Label Content="Hook current in use" />
                             <TextBlock Text="{Binding CurrentThreadsNames}" Foreground="red" />
                             
                             <Label Content="{x:Static resx:Strings.HookPage_RegExp}" />
@@ -190,7 +190,7 @@
                             
                             <Button Content="Inject the game again" cal:Message.Attach="[Click] = [ReInjectProcesses]"/>
                             <Label Content="Select hook" />
-                            <ComboBox 
+                            <ComboBox
                                 Width="{StaticResource ControllerWidth}" HorizontalAlignment="Left"
                                 ItemsSource="{Binding HookComboSource}"
                                 SelectedItem="{Binding SelectedHookItem}">

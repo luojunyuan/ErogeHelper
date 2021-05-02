@@ -88,7 +88,7 @@ WHERE Md5 = @Md5";
 
         public async Task DeleteUserTermAsync(UserTermTable userTermTable)
         {
-            const string? sqlStatement = "DELETE FROM UserTerm WHERE From = @From";
+            const string? sqlStatement = "DELETE FROM UserTerm WHERE `From` = @From";
             await _connection.ExecuteAsync(sqlStatement, new { userTermTable.From }).ConfigureAwait(false);
         }
 

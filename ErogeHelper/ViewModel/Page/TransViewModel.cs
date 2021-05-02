@@ -16,8 +16,8 @@ namespace ErogeHelper.ViewModel.Page
     public class TransViewModel : PropertyChangedBase, IHandle<RefreshTranslatorEnableSwitch>
     {
         public TransViewModel(
-            IEventAggregator eventAggregator, 
-            EhConfigRepository ehConfigRepository, 
+            IEventAggregator eventAggregator,
+            EhConfigRepository ehConfigRepository,
             ITranslatorFactory translatorFactory,
             IWindowManager windowManager)
         {
@@ -43,13 +43,19 @@ namespace ErogeHelper.ViewModel.Page
         private TransLanguage _selectedTarLang;
         private BindableCollection<LanguageComboBoxItem> _targetLanguageList = new();
 
+        public bool UserTermStatus 
+        { 
+            get => _ehConfigRepository.UseTermTable; 
+            set => _ehConfigRepository.UseTermTable = value; 
+        }
+
         public async void OpenTermList() => await _windowManager.ShowDialogFromIoCAsync<TermViewModel>();
 
         public BindableCollection<LanguageComboBoxItem> SrcLanguageList { get; }
 
         public TransLanguage SelectedSrcLang
         {
-            get => _selectedSrcLang; 
+            get => _selectedSrcLang;
             set { _selectedSrcLang = value; NotifyOfPropertyChange(() => SelectedSrcLang); }
         }
 
@@ -79,13 +85,13 @@ namespace ErogeHelper.ViewModel.Page
 
         public BindableCollection<LanguageComboBoxItem> TargetLanguageList
         {
-            get => _targetLanguageList; 
+            get => _targetLanguageList;
             set { _targetLanguageList = value; NotifyOfPropertyChange(() => TargetLanguageList); }
         }
 
         public TransLanguage SelectedTarLang
         {
-            get => _selectedTarLang; 
+            get => _selectedTarLang;
             set { _selectedTarLang = value; NotifyOfPropertyChange(() => SelectedTarLang); }
         }
 
@@ -108,18 +114,18 @@ namespace ErogeHelper.ViewModel.Page
             }
             TranslatorList.Clear();
 
-            foreach (var translatorItem in 
-                from translator in _translatorFactory.AllInstance 
-                where translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang) 
+            foreach (var translatorItem in
+                from translator in _translatorFactory.AllInstance
+                where translator.SupportSrcLang.Contains(SelectedSrcLang) && translator.SupportDesLang.Contains(SelectedTarLang)
                 select new TranslatorItem
-                        {
-                            CanBeEnable = translator.UnLock,
-                            Enable = translator.IsEnable,
-                            IconPath = translator.IconPath,
-                            TransName = translator.Name.I18N(),
-                            NameEnum = translator.Name,
-                            CanEdit = !translator.NeedEdit,
-                        })
+                {
+                    CanBeEnable = translator.UnLock,
+                    Enable = translator.IsEnable,
+                    IconPath = translator.IconPath,
+                    TransName = translator.Name.I18N(),
+                    NameEnum = translator.Name,
+                    CanEdit = !translator.NeedEdit,
+                })
             {
                 TranslatorList.Add(translatorItem);
             }

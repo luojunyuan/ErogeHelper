@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:cal="http://caliburnmicro.com"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:TermViewModel, IsDesignTimeCreatable=True}"
         cal:Bind.AtDesignTime="True"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="TermView" Height="550" MinWidth="400" Topmost="True">
+        Title="TermView" Height="550" MinWidth="400" Width="400" Topmost="True">
 
     <Grid Margin="20, 10">
         <Grid.RowDefinitions>
@@ -19,6 +20,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- Add word -->
         <ui:SimpleStackPanel Spacing="10" Margin="0 0 0 10">
             <Label Content="Term List" />
             <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
@@ -33,10 +35,11 @@
             </ui:SimpleStackPanel>
         </ui:SimpleStackPanel>
 
+        <!-- Word Table -->
         <ListView 
             Grid.Row="1" Margin="0 0 0 10"
             ItemsSource="{Binding TermList}"
-            BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Left" MaxHeight="{Binding ElementName=TermPart, Path=Height}">
+            BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Left" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Word" Width="140" DisplayMemberBinding="{Binding SourceWord}" />
@@ -60,22 +63,30 @@
             <TextBox 
                 MinWidth="{StaticResource ControllerWidth}" HorizontalAlignment="Left" 
                 Text="{Binding PendingToTranslateText}"/>
-            <ComboBox 
-                ItemsSource="{Binding TranslatorItems}"
-                SelectedItem="{Binding SelectedTranslator}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Icon}" Width="20" Height="20"/>
-                            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                <ComboBox 
+                    ItemsSource="{Binding TranslatorItems}"
+                    SelectedItem="{Binding SelectedTranslator}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Icon}" Width="20" Height="20"/>
+                                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Content="{Binding SourceLanguageLabel}" VerticalAlignment="Center"/>
+                <Label Content="{x:Static resx:Strings.TransPage_To}" VerticalAlignment="Center"/>
+                <Label Content="{Binding TargetLanguageLabel}" VerticalAlignment="Center"/>
+            </ui:SimpleStackPanel>
             <Button Content="Translate" MinWidth="{StaticResource MinButtonWidth}" cal:Message.Attach="[Click] = [TestTranslate]"/>
             <TextBox 
-                ui:ControlHelper.Header="Result" MinWidth="{StaticResource ControllerWidth}" Height="100" 
+                ui:ControlHelper.Header="Direct result" MinWidth="{StaticResource ControllerWidth}" Height="70" 
                 HorizontalAlignment="Left" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding TranslatedResult}"/>
+            <TextBox 
+                ui:ControlHelper.Header="After apply terms" MinWidth="{StaticResource ControllerWidth}" Height="70" 
+                HorizontalAlignment="Left" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding FinalResult}"/>
         </ui:SimpleStackPanel>
     </Grid>
 </Window>

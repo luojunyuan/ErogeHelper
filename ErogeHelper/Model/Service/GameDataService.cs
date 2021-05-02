@@ -91,6 +91,9 @@ namespace ErogeHelper.Model.Service
             {
                 _currentText = hp.Text;
 
+                //if (_ehConfigRepository.EnableMeCab && _translatorFactory.GetEnabledTranslators().Count == 0)
+                //    return ;
+
                 // Refresh
                 AppendTextsRefresh?.Invoke(nameof(GameDataService));
 
