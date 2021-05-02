@@ -23,7 +23,7 @@ namespace ErogeHelper.Model.Service
             Setting = setting ?? new TextractorSetting();
 
             // Current texthook.dll version 4.15
-            string textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
+            var textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
             if (!File.Exists(textractorPath))
                 throw new FileNotFoundException(textractorPath);
 
@@ -41,7 +41,7 @@ namespace ErogeHelper.Model.Service
             }
         }
 
-        private List<Process> _gameProcesses = new List<Process>();
+        private List<Process> _gameProcesses = new(2);
 
         public void InsertHook(string hookcode)
         {

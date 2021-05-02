@@ -2,6 +2,7 @@
 
 namespace ErogeHelper.Common.Entity
 {
+    // Textractor minimum required information
     public class TextractorSetting
     {
         public bool IsUserHook { get; set; }
