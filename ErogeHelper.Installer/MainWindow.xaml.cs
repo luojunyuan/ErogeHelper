@@ -53,6 +53,7 @@ namespace ErogeHelper.Installer
 
         private async void Unload(object sender, RoutedEventArgs e)
         {
+            ContentDialogResult cacheDeleteDialogResult = ContentDialogResult.None;
             if (DeleteCacheCheckBox.IsChecked ?? false)
             {
                 var deleteTipDialog = new ContentDialog
@@ -63,18 +64,9 @@ namespace ErogeHelper.Installer
                     CloseButtonText = ErogeHelper.Language.Strings.Common_Cancel,
                     DefaultButton = ContentDialogButton.Close
                 };
-                var result = await deleteTipDialog.ShowAsync();
-                if (result == ContentDialogResult.None)
+                cacheDeleteDialogResult = await deleteTipDialog.ShowAsync();
+                if (cacheDeleteDialogResult == ContentDialogResult.None)
                     return;
-                if (result == ContentDialogResult.Primary)
-                {
-                    string roamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    var cacheDir = Path.Combine(roamingDir, "ErogeHelper");
-                    if (Directory.Exists(cacheDir))
-                    {
-                        Directory.Delete(cacheDir);
-                    }
-                }
             }
 
             // unload dll first
@@ -87,6 +79,15 @@ namespace ErogeHelper.Installer
             var helper = new ExplorerHelper();
             helper.CollectDir();
             helper.KillExplorer();
+            if (cacheDeleteDialogResult == ContentDialogResult.Primary)
+            {
+                string roamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var cacheDir = Path.Combine(roamingDir, "ErogeHelper");
+                if (Directory.Exists(cacheDir))
+                {
+                    Directory.Delete(cacheDir, true);
+                }
+            }
             helper.ReOpenDirs();
 
             InstallButton.IsEnabled = true;
