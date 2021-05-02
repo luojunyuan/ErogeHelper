@@ -40,9 +40,6 @@ namespace ErogeHelper
             using var scope = _serviceProvider.CreateScope();
             var serviceProvider = scope.ServiceProvider;
 
-            // Resolve config repo first ensure `Roaming/ErogeHelper/` be created
-            var ehConfigRepository = serviceProvider.GetRequiredService<EhConfigRepository>();
-
             // Put the database update into a scope to ensure that all resources will be disposed.
             serviceProvider.UpdateEhDatabase();
 
@@ -175,13 +172,13 @@ namespace ErogeHelper
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
 
-            if (ehConfigRepository.UseOutsideWindow)
+            if (serviceProvider.GetRequiredService<EhConfigRepository>().UseOutsideWindow)
             {
-                _ = eventAggregator.PublishOnUIThreadAsync(
+                await eventAggregator.PublishOnUIThreadAsync(
                     new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
             }
 
-            _ = eventAggregator.PublishOnUIThreadAsync(
+            await eventAggregator.PublishOnUIThreadAsync(
                 new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
         }
 

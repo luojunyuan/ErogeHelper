@@ -22,7 +22,7 @@ namespace ErogeHelper
             //AppContext.SetSwitch("Switch.System.Windows.Input.Stylus.EnablePointerSupport", true);
 
             // Set environment to app directory
-            var currentDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+            var currentDirectory = Path.GetDirectoryName(System.AppContext.BaseDirectory);
             Directory.SetCurrentDirectory(currentDirectory ?? throw new ArgumentNullException(nameof(currentDirectory),
                                                             @"Could not located Eroge Helper's directory"));
             // Set i18n (modernWpf controllers)

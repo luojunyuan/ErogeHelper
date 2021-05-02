@@ -159,11 +159,11 @@ namespace ErogeHelper.ViewModel.Window
 
             if (_ehConfigRepository.UseOutsideWindow)
             {
-                _ = _eventAggregator.PublishOnUIThreadAsync(
+                await _eventAggregator.PublishOnUIThreadAsync(
                     new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
             }
 
-            _ = _eventAggregator.PublishOnUIThreadAsync(
+            await _eventAggregator.PublishOnUIThreadAsync(
                     new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(GetType(), ViewAction.Close));
