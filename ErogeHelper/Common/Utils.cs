@@ -63,7 +63,7 @@ namespace ErogeHelper.Common
                 procList.Clear();
                 procList.AddRange(Process.GetProcessesByName(friendlyName));
                 procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
-                procList.AddRange(Process.GetProcessesByName("main.bin"));
+                //procList.AddRange(Process.GetProcessesByName("main.bin"));
 
                 // 进程找完却没有得到hWnd的可能也是存在的，所以以带hWnd的进程为主
                 mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
