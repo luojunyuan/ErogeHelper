@@ -172,10 +172,13 @@ namespace ErogeHelper
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
 
-            if (serviceProvider.GetRequiredService<EhConfigRepository>().UseOutsideWindow)
+            if (serviceProvider.GetRequiredService<EhConfigRepository>().UseMoveableTextControl)
             {
-                await eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+                await eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = true});
+            }
+            else
+            {
+                await eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = false});
             }
 
             await eventAggregator.PublishOnUIThreadAsync(

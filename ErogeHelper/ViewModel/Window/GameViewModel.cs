@@ -14,10 +14,12 @@ using System.Windows;
 using System.Windows.Media;
 using WindowsInput.Events;
 using ErogeHelper.Model.Entity.Table;
+using ErogeHelper.Common.Enum;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase, IHandle<InsideViewTextVisibleMessage>, IHandle<JapaneseVisibleMessage>
+    public class GameViewModel : PropertyChangedBase, 
+        IHandle<UseMoveableTextMessage>, IHandle<JapaneseVisibleMessage>, IHandle<FullScreenChangedMessage>
     {
         public GameViewModel(
             IGameDataService dataService,
@@ -43,8 +45,6 @@ namespace ErogeHelper.ViewModel.Window
             _touchHooker.Init();
             if (_ehDbRepository.GetGameInfo()?.IsEnableTouchToMouse ?? false)
                 TouchToMouseToggle();
-            if (_ehConfigRepository.UseOutsideWindow)
-                HandleAsync(new InsideViewTextVisibleMessage { IsShowed = false }, CancellationToken.None);
             _fontSize = _ehConfigRepository.FontSize;
             AppendTextList.Add(new AppendTextItem(Language.Strings.GameViewModel_TextWaitingMessage));
             dataService.SourceTextReceived += text =>
@@ -70,6 +70,7 @@ namespace ErogeHelper.ViewModel.Window
         private Visibility _triggerBarVisibility = Visibility.Collapsed;
         private Visibility _textControlVisibility = Visibility.Visible;
         private Visibility _insideTextVisibility;
+        private Visibility _insideMoveableTextVisibility;
         private Visibility _outsideJapaneseVisible;
 
         public TextViewModel TextControl { get; set; }
@@ -137,6 +138,7 @@ namespace ErogeHelper.ViewModel.Window
         }
 
         private bool _isSourceTextPined = true;
+
         public bool IsSourceTextPined
         {
             get => _isSourceTextPined;
@@ -150,14 +152,14 @@ namespace ErogeHelper.ViewModel.Window
             {
                 TriggerBarVisibility = Visibility.Collapsed;
                 TextControlVisibility = Visibility.Visible;
-                if (!_ehConfigRepository.UseOutsideWindow)
+                if (!_ehConfigRepository.UseMoveableTextControl)
                     TextControl.Background = new SolidColorBrush();
             }
             else
             {
                 TriggerBarVisibility = Visibility.Visible;
                 TextControlVisibility = Visibility.Collapsed;
-                if (!_ehConfigRepository.UseOutsideWindow)
+                if (!_ehConfigRepository.UseMoveableTextControl)
                     TextControl.Background = new SolidColorBrush(Colors.Black) { Opacity = 0.5 };
             }
         }
@@ -207,7 +209,7 @@ namespace ErogeHelper.ViewModel.Window
             get => _ehDbRepository.GetGameInfo()?.IsLoseFocus ?? false;
             set
             {
-                var gameInfo =_ehDbRepository.GetGameInfo() ?? new GameInfoTable();
+                var gameInfo = _ehDbRepository.GetGameInfo() ?? new GameInfoTable();
                 gameInfo.IsLoseFocus = value;
                 _ehDbRepository.UpdateGameInfo(gameInfo);
                 NotifyOfPropertyChange(() => IsLoseFocus);
@@ -286,19 +288,68 @@ namespace ErogeHelper.ViewModel.Window
         public Visibility InsideTextVisibility
         {
             get => _insideTextVisibility;
-            set { _insideTextVisibility = value; NotifyOfPropertyChange(() => InsideTextVisibility);}
+            set { _insideTextVisibility = value; NotifyOfPropertyChange(() => InsideTextVisibility); }
         }
 
-        public Task HandleAsync(InsideViewTextVisibleMessage message, CancellationToken cancellationToken)
+        public Visibility InsideMoveableTextVisibility
         {
-            InsideTextVisibility = message.IsShowed ? Visibility.Visible : Visibility.Collapsed;
-            return Task.CompletedTask;
+            get => _insideMoveableTextVisibility;
+            set { _insideMoveableTextVisibility = value; NotifyOfPropertyChange(() => InsideMoveableTextVisibility);}
+        }
+
+        public async Task HandleAsync(UseMoveableTextMessage message, CancellationToken cancellationToken)
+        {
+            if (message.UseMove)
+            {
+                if (Utils.IsGameForegroundFullScreen(_gameRuntimeDataRepo.MainProcess.MainWindowHandle))
+                {
+                    InsideTextVisibility = Visibility.Collapsed;
+                    InsideMoveableTextVisibility = Visibility.Visible;
+                    await _eventAggregator.PublishOnUIThreadAsync(
+                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Hide, null, "OutsideView"));
+                }
+                else
+                {
+                    InsideTextVisibility = Visibility.Collapsed;
+                    InsideMoveableTextVisibility = Visibility.Collapsed;
+                    await _eventAggregator.PublishOnUIThreadAsync(
+                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+                }
+            }
+            else
+            {
+                InsideTextVisibility = Visibility.Visible;
+                InsideMoveableTextVisibility = Visibility.Collapsed;
+                await _eventAggregator.PublishOnUIThreadAsync(
+                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Hide, null, "OutsideView"));
+            }
+        }
+
+        public async Task HandleAsync(FullScreenChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (_ehConfigRepository.UseMoveableTextControl)
+            { 
+                if (message.IsFullScreen)
+                {
+                    InsideTextVisibility = Visibility.Collapsed;
+                    InsideMoveableTextVisibility = Visibility.Visible;
+                    await _eventAggregator.PublishOnUIThreadAsync(
+                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Hide, null, "OutsideView"));
+                }
+                else
+                { 
+                    InsideTextVisibility = Visibility.Collapsed;
+                    InsideMoveableTextVisibility = Visibility.Collapsed;
+                    await _eventAggregator.PublishOnUIThreadAsync(
+                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+                }
+            }
         }
 
         public Visibility OutsideJapaneseVisible
         {
             get => _outsideJapaneseVisible;
-            set { _outsideJapaneseVisible = value; NotifyOfPropertyChange(() => OutsideJapaneseVisible);}
+            set { _outsideJapaneseVisible = value; NotifyOfPropertyChange(() => OutsideJapaneseVisible); }
         }
 
         public Task HandleAsync(JapaneseVisibleMessage message, CancellationToken cancellationToken)

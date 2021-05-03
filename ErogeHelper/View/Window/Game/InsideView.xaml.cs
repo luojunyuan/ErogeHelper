@@ -14,6 +14,8 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using ErogeHelper.Model.Repository;
+using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -173,6 +175,7 @@ namespace ErogeHelper.View.Window.Game
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.BackToWindow };
                             _fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchWindow;
                         }
+                        _eventAggregator.PublishOnUIThreadAsync(new FullScreenChangedMessage {IsFullScreen = true});
                         _bringToTopTimer?.Start();
                     }
                     else
@@ -183,6 +186,7 @@ namespace ErogeHelper.View.Window.Game
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
                             _fullScreenButton.ToolTip = ErogeHelper.Language.Strings.GameView_SwitchFullScreen;
                         }
+                        _eventAggregator.PublishOnUIThreadAsync(new FullScreenChangedMessage {IsFullScreen = false});
                         _bringToTopTimer?.Stop();
                     }
                     _gameWindowHooker.ResetWindowHandler();
@@ -211,6 +215,11 @@ namespace ErogeHelper.View.Window.Game
             return Task.CompletedTask;
         }
 
-        protected override void OnClosed(EventArgs e) => _eventAggregator.Unsubscribe(this);
+        protected override void OnClosed(EventArgs e) 
+        {
+            RegisterAppBar(true);
+            _eventAggregator.Unsubscribe(this);
+        }
+
     }
 }

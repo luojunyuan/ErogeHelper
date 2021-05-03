@@ -149,7 +149,7 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
-        public bool UseOutsideWindow
+        public bool UseMoveableTextControl
         {
             get => GetValue(DefaultConfigValuesStore.UseOutsideWindow);
             set => SetValue(value);

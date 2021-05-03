@@ -117,7 +117,7 @@ namespace ErogeHelper.View.Window.Game
             }
         }
 
-        // FIXME: GC active frequently when resize the window
+        // TODO: 只能左右移动，上下高度由控件自动确定
         private void ResizeGripper_DragDelta(object sender, DragDeltaEventArgs e)
         {                                                     
             if (Width + e.HorizontalChange >= 100 && Width >= 100)

@@ -157,10 +157,13 @@ namespace ErogeHelper.ViewModel.Window
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("InsideView").ConfigureAwait(false);
             await _windowManager.SilentStartWindowFromIoCAsync<GameViewModel>("OutsideView").ConfigureAwait(false);
 
-            if (_ehConfigRepository.UseOutsideWindow)
+            if (_ehConfigRepository.UseMoveableTextControl)
             {
-                await _eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+                await _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = true});
+            }
+            else
+            {
+                await _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = false});
             }
 
             await _eventAggregator.PublishOnUIThreadAsync(

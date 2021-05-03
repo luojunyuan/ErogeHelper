@@ -15,11 +15,16 @@ namespace ErogeHelper.ViewModel.Page
 {
     public class GeneralViewModel : PropertyChangedBase, IHandle<PageNavigatedMessage>
     {
-        public GeneralViewModel(EhConfigRepository ehConfigRepository, IEventAggregator eventAggregator, IServiceProvider serviceProvider)
+        public GeneralViewModel(
+            EhConfigRepository ehConfigRepository, 
+            IEventAggregator eventAggregator, 
+            IServiceProvider serviceProvider,
+            GameRuntimeDataRepo gameRuntimeDataRepo)
         {
             _ehConfigRepository = ehConfigRepository;
             _eventAggregator = eventAggregator;
             _serviceProvider = serviceProvider;
+            _gameRuntimeDataRepo = gameRuntimeDataRepo;
 
             _eventAggregator.SubscribeOnUIThread(this);
         }
@@ -27,28 +32,25 @@ namespace ErogeHelper.ViewModel.Page
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IServiceProvider _serviceProvider;
+        private readonly GameRuntimeDataRepo _gameRuntimeDataRepo;
 
         private string _diskUsageProgressBarText = string.Empty;
         private double _diskUsageProgressBarValue;
 
         public bool OutsideWindow
         {
-            get => _ehConfigRepository.UseOutsideWindow;
+            get => _ehConfigRepository.UseMoveableTextControl;
             set
             {
                 if (value)
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(new InsideViewTextVisibleMessage {IsShowed = false});
-                    _eventAggregator.PublishOnUIThreadAsync(
-                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"));
+                    _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = true});
                 }
                 else
                 {
-                    _eventAggregator.PublishOnUIThreadAsync(
-                        new ViewActionMessage(typeof(GameViewModel), ViewAction.Hide, null, "OutsideView"));
-                    _eventAggregator.PublishOnUIThreadAsync(new InsideViewTextVisibleMessage {IsShowed = true});
+                    _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = false});
                 }
-                _ehConfigRepository.UseOutsideWindow = value;
+                _ehConfigRepository.UseMoveableTextControl = value;
             }
         }
 

@@ -318,5 +318,19 @@ namespace ErogeHelper.Common
 
             return size;
         }
+
+        public static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
+        { 
+            foreach(var screen in WpfScreenHelper.Screen.AllScreens)
+            {
+                var rect = NativeMethods.GetWindowRect(gameHwnd);
+                var systemRect = new Rect(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+                if (systemRect.Contains(screen.Bounds))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

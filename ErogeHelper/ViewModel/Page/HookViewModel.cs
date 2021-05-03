@@ -486,7 +486,7 @@ namespace ErogeHelper.ViewModel.Page
 
             _gameDataService.SendNewText(textPendingToSend);
 
-            _ = _ehConfigRepository.UseOutsideWindow
+            _ = _ehConfigRepository.UseMoveableTextControl
                 ? _eventAggregator.PublishOnUIThreadAsync(
                     new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"))
                 : _eventAggregator.PublishOnUIThreadAsync(

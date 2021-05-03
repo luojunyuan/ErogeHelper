@@ -84,6 +84,7 @@ namespace ErogeHelper.Model.Service
             else
             {
                 // gameHWnd still be last handle
+                UpdateLocation();
             }
         }
 

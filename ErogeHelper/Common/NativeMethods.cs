@@ -81,9 +81,9 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static RECT GetWindowRect(IntPtr hWnd)
+        public static Rect GetWindowRect(IntPtr hWnd)
         {
-            var rect = new RECT();
+            var rect = new Rect();
             _ = SafeNativeMethods.GetWindowRect(hWnd, ref rect);
             return rect;
         }
@@ -93,9 +93,9 @@ namespace ErogeHelper.Common
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        public static RECT GetClientRect(IntPtr hWnd)
+        public static Rect GetClientRect(IntPtr hWnd)
         {
-            var rect = new RECT();
+            var rect = new Rect();
             _ = SafeNativeMethods.GetClientRect(hWnd, ref rect);
             return rect;
         }
@@ -287,11 +287,11 @@ namespace ErogeHelper.Common
         {
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+            public static extern bool GetWindowRect(IntPtr hWnd, ref Rect lpRect);
 
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool GetClientRect(IntPtr hWnd, ref RECT lpRect);
+            public static extern bool GetClientRect(IntPtr hWnd, ref Rect lpRect);
 
             [DllImport("user32.dll", SetLastError = true)]
             public static extern IntPtr GetActiveWindow();
@@ -553,7 +553,7 @@ namespace ErogeHelper.Common
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
+        public struct Rect
         {
             public int Left;
             public int Top;
@@ -570,7 +570,7 @@ namespace ErogeHelper.Common
             public IntPtr hWnd;
             public int uCallbackMessage;
             public int uEdge;
-            public RECT rc;
+            public Rect rc;
             public IntPtr lParam;
         }
 

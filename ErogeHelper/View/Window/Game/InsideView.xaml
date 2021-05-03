@@ -57,6 +57,31 @@
 
                     </StackPanel>
                 </DockPanel>
+                
+                <!-- Moveable text control -->
+                <StackPanel 
+                    x:Name="MoveableStackPanel" Width="320" Height="180"
+                    Visibility="{Binding InsideMoveableTextVisibility}" >
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.6" />
+                    </StackPanel.Background>
+                    <!--<ContentControl x:Name="TextControl" Visibility="{Binding OutsideJapaneseVisible}"/>-->
+                    <!-- Extra Text-->
+                    <ItemsControl
+                        ItemsSource="{Binding AppendTextList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type notifyItem:AppendTextItem}">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock 
+                                        Text="{Binding Message}"
+                                        Foreground="White" TextWrapping="Wrap" FontSize="{Binding DataContext.FontSize,
+                                            RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        ToolTip="{Binding ExtraInfo}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
 
                 <!-- Interaction Button -->
                 <control:AssistiveTouch 

@@ -395,7 +395,7 @@
     <value>触控转鼠标</value>
   </data>
   <data name="GeneralPage.OutsideWindow" xml:space="preserve">
-    <value>使用外部文本窗口</value>
+    <value>使用可自由移动的文本窗口</value>
   </data>
   <data name="Common.Close" xml:space="preserve">
     <value>关闭</value>
