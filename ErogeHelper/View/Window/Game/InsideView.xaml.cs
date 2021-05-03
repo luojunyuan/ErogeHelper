@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using ErogeHelper.Model.Repository;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace ErogeHelper.View.Window.Game
 {
@@ -106,7 +107,7 @@ namespace ErogeHelper.View.Window.Game
             // Always make window front
             _bringToTopTimer = new DispatcherTimer()
             {
-                Interval = TimeSpan.FromMilliseconds(50),
+                Interval = TimeSpan.FromMilliseconds(1000), // 50
             };
             _bringToTopTimer.Tick += (_, _) => NativeMethods.BringWindowToTop(_handler);
         }
@@ -160,16 +161,18 @@ namespace ErogeHelper.View.Window.Game
             {
                 case (int)NativeMethods.ABNotify.ABN_FULLSCREENAPP:
                     var foregroundHWnd = NativeMethods.GetForegroundWindow();
-                    // TODO: 并不准确，这只是判断最前端窗口，如果直接使用判断game handle的方式更稳定的话用后者更好
-                    //判断当前全屏的应用是否是桌面
                     if (foregroundHWnd.Equals(_desktopHandle) || foregroundHWnd.Equals(_shellHandle))
                     {
                         break;
                     }
-                    //判断是否全屏
+                    // XXX: these two are same
+                    //if (foregroundHWnd != IoC.Get<GameRuntimeDataRepo>().MainProcess.MainWindowHandle)
+                    //    break;
+                    //Log.Debug(Utils.IsGameForegroundFullScreen(IoC.Get<GameRuntimeDataRepo>().MainProcess.MainWindowHandle).ToString());
+
                     if ((int)lParam == 1)
                     {
-                        Log.Debug("The front window is being maxsize");
+                        Log.Debug("The game is being maxsize");
 
                         if (_fullScreenButton is not null)
                         {
@@ -181,7 +184,7 @@ namespace ErogeHelper.View.Window.Game
                     }
                     else
                     {
-                        Log.Debug("The front window is being normalize or minimize");
+                        Log.Debug("The game is being normalize or minimize");
                         if (_fullScreenButton is not null)
                         {
                             _fullScreenButton.Icon = new SymbolIcon { Symbol = Symbol.FullScreen };
@@ -230,6 +233,225 @@ namespace ErogeHelper.View.Window.Game
         private void OpenDanmakuPopup(object sender, RoutedEventArgs e)
         {
             DanmakuInputPopup.IsOpen = !DanmakuInputPopup.IsOpen;
+        }
+
+        #region Moveable Text Control
+
+        private System.Windows.Controls.Control _control;
+        
+        const int Band = 10;
+        const int BtnMinWidth = 100;
+        const int BtnMinHeight = 100;
+        private MousePointPosition _enumMousePointPosition;
+        private Point _point; //记录鼠标上次位置;
+
+
+        private MousePointPosition GetMousePointPosition(System.Windows.Controls.Control control, MouseEventArgs e)
+        {
+            Size size = control.RenderSize;
+            Point point = e.GetPosition(control);
+
+            Point pointCanvas = e.GetPosition(CanvasContainer);
+            _point.X = pointCanvas.X;
+            _point.Y = pointCanvas.Y;
+
+            if ((point.X >= -1 * Band) | (point.X <= size.Width) | (point.Y >= -1 * Band) | (point.Y <= size.Height))
+            {
+                if (point.X < Band)
+                {
+                    if (point.Y < Band)
+                    {
+                        return MousePointPosition.MouseSizeTopLeft;
+                    }
+                    else
+                    {
+                        if (point.Y > -1 * Band + size.Height)
+                        {
+                            return MousePointPosition.MouseSizeBottomLeft;
+                        }
+                        else
+                        {
+                            return MousePointPosition.MouseSizeLeft;
+                        }
+                    }
+                }
+                else
+                {
+                    if (point.X > -1 * Band + size.Width)
+                    {
+                        if (point.Y < Band)
+                        {
+                            return MousePointPosition.MouseSizeTopRight;
+                        }
+                        else
+                        {
+                            if (point.Y > -1 * Band + size.Height)
+                            {
+                                return MousePointPosition.MouseSizeBottomRight;
+                            }
+                            else
+                            {
+                                return MousePointPosition.MouseSizeRight;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (point.Y < Band)
+                        {
+                            return MousePointPosition.MouseSizeTop;
+                        }
+                        else
+                        {
+                            if (point.Y > -1 * Band + size.Height)
+                            {
+                                return MousePointPosition.MouseSizeBottom;
+                            }
+                            else
+                            {
+                                return MousePointPosition.MouseDrag;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return MousePointPosition.MouseSizeNone;
+            }
+        }
+
+        private void SetControlLocation(System.Windows.Controls.Control control, Point point)
+        {
+            Canvas.SetLeft(control, point.X);
+            Canvas.SetTop(control, point.Y);
+        }
+
+        #endregion
+
+        private void MoveableControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            _control = (System.Windows.Controls.Control)sender;
+            double left = Canvas.GetLeft(_control);
+            double top = Canvas.GetTop(_control);
+            Point point = e.GetPosition(CanvasContainer);
+            double height = _control.Height;
+            double width = _control.Width;
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                switch (_enumMousePointPosition)
+                {
+                    case MousePointPosition.MouseDrag:
+                        SetControlLocation(_control, new Point(left + point.X - _point.X, top + point.Y - _point.Y));
+                        break;
+                    case MousePointPosition.MouseSizeBottom:
+                        height += point.Y - _point.Y;
+                        break;
+                    case MousePointPosition.MouseSizeBottomRight:
+                        width += point.X - _point.X;
+                        height += point.Y - _point.Y;
+                        break;
+                    case MousePointPosition.MouseSizeRight:
+                        width += point.X - _point.X;
+                        break;
+                    case MousePointPosition.MouseSizeTop:
+                        SetControlLocation(_control, new Point(left, top + point.Y - _point.Y));
+                        height -= (point.Y - _point.Y);
+                        break;
+                    case MousePointPosition.MouseSizeLeft:
+                        SetControlLocation(_control, new Point(left + point.X - _point.X, top));
+                        width -= (point.X - _point.X);
+                        break;
+                    case MousePointPosition.MouseSizeBottomLeft:
+                        SetControlLocation(_control, new Point(left + point.X - _point.X, top));
+                        width -= (point.X - _point.X);
+                        height += point.Y - _point.Y;
+                        break;
+                    case MousePointPosition.MouseSizeTopRight:
+                        SetControlLocation(_control, new Point(left, top + point.Y - _point.Y));
+                        width += (point.X - _point.X);
+                        height -= (point.Y - _point.Y);
+                        break;
+                    case MousePointPosition.MouseSizeTopLeft:
+                        SetControlLocation(_control, new Point(left + point.X - _point.X, top + point.Y - _point.Y));
+                        width -= (point.X - _point.X);
+                        height -= (point.Y - _point.Y);
+                        break;
+                    default:
+                        break;
+                }
+
+                //记录光标拖动到的当前点
+                _point.X = point.X;
+                _point.Y = point.Y;
+
+                if (width < BtnMinWidth) width = BtnMinWidth;
+                if (height < BtnMinHeight) height = BtnMinHeight;
+                _control.Width = width;
+                _control.Height = height;
+            }
+            else
+            {
+                _enumMousePointPosition = GetMousePointPosition(_control, e); //'判断光标的位置状态
+
+                switch (_enumMousePointPosition) //'改变光标
+                {
+                    case MousePointPosition.MouseSizeNone:
+                        _control.Cursor = Cursors.Arrow;       //'箭头
+                        break;
+                    case MousePointPosition.MouseDrag:
+                        _control.Cursor = Cursors.Arrow;     //'四方向
+                        break;
+                    case MousePointPosition.MouseSizeBottom:
+                        _control.Cursor = Cursors.SizeNS;      //'南北
+                        break;
+                    case MousePointPosition.MouseSizeTop:
+                        _control.Cursor = Cursors.SizeNS;      //'南北
+                        break;
+                    case MousePointPosition.MouseSizeLeft:
+                        _control.Cursor = Cursors.SizeWE;      //'东西
+                        break;
+                    case MousePointPosition.MouseSizeRight:
+                        _control.Cursor = Cursors.SizeWE;      //'东西
+                        break;
+                    case MousePointPosition.MouseSizeBottomLeft:
+                        _control.Cursor = Cursors.SizeNESW;    //'东北到南西
+                        break;
+                    case MousePointPosition.MouseSizeBottomRight:
+                        _control.Cursor = Cursors.SizeNWSE;    //'东南到西北
+                        break;
+
+                    case MousePointPosition.MouseSizeTopLeft:
+                        _control.Cursor = Cursors.SizeNWSE;    //'东南到西北
+                        break;
+                    case MousePointPosition.MouseSizeTopRight:
+                        _control.Cursor = Cursors.SizeNESW;    //'东北到南西
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void MoveableControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            _enumMousePointPosition = MousePointPosition.MouseSizeNone;
+            _control.Cursor = Cursors.Arrow;
+        }
+
+        // TODO: 只能左右移动，上下高度由控件自动确定
+        private void ResizeGripper_DragDelta(object sender, DragDeltaEventArgs e)
+        {                                                     
+            if (Width + e.HorizontalChange >= 100 && Width >= 100)
+            {
+                Width += e.HorizontalChange;
+            }
+
+            if (Height + e.VerticalChange >= 100 && Height >= 100)
+            {
+                Height += e.VerticalChange;
+            }
         }
     }
 }

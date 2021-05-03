@@ -58,32 +58,35 @@
                     </StackPanel>
                 </DockPanel>
                 
-                <!-- Moveable text control -->
-                <StackPanel 
-                    x:Name="MoveableStackPanel" Width="320" Height="180"
-                    Visibility="{Binding InsideMoveableTextVisibility}" >
-                    <StackPanel.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.6" />
-                    </StackPanel.Background>
-                    <!--<ContentControl x:Name="TextControl" Visibility="{Binding OutsideJapaneseVisible}"/>-->
-                    <!-- Extra Text-->
-                    <ItemsControl
-                        ItemsSource="{Binding AppendTextList}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type notifyItem:AppendTextItem}">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock 
-                                        Text="{Binding Message}"
-                                        Foreground="White" TextWrapping="Wrap" FontSize="{Binding DataContext.FontSize,
-                                            RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        ToolTip="{Binding ExtraInfo}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-
-                <Canvas cal:Message.Attach="[Loaded] = [DanmakuEngineInit($source)]" Loaded="DanmakuCanvas_Loaded">
+                <Canvas x:Name="CanvasContainer" cal:Message.Attach="[Loaded] = [DanmakuEngineInit($source)]" Loaded="DanmakuCanvas_Loaded">
+                    <!-- Moveable text control -->
+                    <ContentControl
+                        x:Name="MoveableControl" Width="320" Height="180" Canvas.Top="100" Canvas.Left="100"
+                        Visibility="{Binding InsideMoveableTextVisibility}" 
+                        MouseMove="MoveableControl_MouseMove" MouseLeave="MoveableControl_MouseLeave">
+                        <StackPanel >
+                            <StackPanel.Background>
+                                <SolidColorBrush Color="Black" Opacity="0.6" />
+                            </StackPanel.Background>
+                            <!--<ContentControl x:Name="TextControl" Visibility="{Binding OutsideJapaneseVisible}"/>-->
+                            <!-- Extra Text-->
+                            <ItemsControl
+                                ItemsSource="{Binding AppendTextList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type notifyItem:AppendTextItem}">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock 
+                                                Text="{Binding Message}"
+                                                Foreground="White" TextWrapping="Wrap" FontSize="{Binding DataContext.FontSize,
+                                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                ToolTip="{Binding ExtraInfo}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ContentControl>
+                    
                     <Button 
                         Canvas.Left="10" Canvas.Bottom="10" Content="弾" Visibility="{Binding DanmakuVisibility}"
                         x:Name="DanmakuButton" Click="OpenDanmakuPopup"/>

@@ -41,7 +41,6 @@ namespace ErogeHelper.Model.Factory.Translator
 
         public List<TransLanguage> SupportDesLang => new() { TransLanguage.简体中文, TransLanguage.English };
 
-        // FIXME: Baidu api Too slow 
         public async Task<string> TranslateAsync(string sourceText, TransLanguage srcLang, TransLanguage desLang)
         {
             // SetCancelToken

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Interop;
 
 namespace ErogeHelper.Common.Extention
@@ -17,7 +16,7 @@ namespace ErogeHelper.Common.Extention
             window = window ?? throw new ArgumentNullException(nameof(window));
 
             var helper = new WindowInteropHelper(window);
-            var screen = Screen.FromHandle(helper.Handle);
+            var screen = WpfScreenHelper.Screen.FromHandle(helper.Handle);
             var area = screen.WorkingArea;
 
             var source = PresentationSource.FromVisual(window);

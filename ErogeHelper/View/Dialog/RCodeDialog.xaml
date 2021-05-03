@@ -19,7 +19,9 @@
             <TextBox 
                 Name="JapaneseText" HorizontalAlignment="Left" Width="{StaticResource ControllerWidth}" 
                 TextChanged="JapaneseText_OnTextChanged" />
-            <ui:AppBarButton Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_RCodeClipTip}" IsEnabled="False" >
+            <ui:AppBarButton 
+                Height="32" Width="32" ToolTip="{x:Static resx:Strings.HookPage_RCodeClipTip}" IsEnabled="False"
+                ToolTipService.ShowOnDisabled="True">
                 <ui:AppBarButton.Icon>
                     <ui:SymbolIcon Symbol="Crop" Margin="0 -6.5 0 0"/>
                 </ui:AppBarButton.Icon>

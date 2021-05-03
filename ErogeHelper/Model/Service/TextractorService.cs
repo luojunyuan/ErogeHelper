@@ -143,7 +143,7 @@ namespace ErogeHelper.Model.Service
 
         public void RemoveUselessHooks()
         { 
-            // FIXME: ???
+            // FIXME: Unload hooks when submit
             //_gameProcesses.ForEach(proc =>
             //{ 
                 //_threadHandleDict.Values

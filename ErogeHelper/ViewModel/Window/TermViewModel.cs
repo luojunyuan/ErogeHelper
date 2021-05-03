@@ -80,7 +80,6 @@ namespace ErogeHelper.ViewModel.Window
         {
             var target = TermList.Single(it => it.SourceWord.Equals(term.SourceWord));
             TermList.Remove(target);
-            // FIXME:
             await _termDataService.DeleteTermInDatabaseAsync(term);
         }
 
@@ -111,7 +110,6 @@ namespace ErogeHelper.ViewModel.Window
                 var count = 1234;
                 Dictionary<int, string> countSourceWordDic = new();
                 var tmpStr = PendingToTranslateText;
-                // HACK: Bad string operation for terms
                 var termDatas = TermList.ToList();
                 termDatas
                     .Where(term => tmpStr.Contains(term.SourceWord)).ToList()

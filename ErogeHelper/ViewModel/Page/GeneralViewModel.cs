@@ -44,7 +44,6 @@ namespace ErogeHelper.ViewModel.Page
             {
                 if (value < 60 || value > 180 || double.IsNaN(value))
                 { 
-                    ReceivedMaxTextLength = 120;
                     NotifyOfPropertyChange(() => ReceivedMaxTextLength);
                     return ;
                 }

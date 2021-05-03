@@ -114,7 +114,7 @@ namespace ErogeHelper.ViewModel.Window
                 return;
             }
 
-            // TODO: Net submit, only return normal can toast danmaku
+            // XXX: Net submit, only return normal can toast danmaku
             ToastDanmaku(danmakuText);
         }
 
@@ -308,7 +308,6 @@ namespace ErogeHelper.ViewModel.Window
         //    var window = Application.Current.Windows.OfType<DanmakuWindow>().SingleOrDefault();
         //    if (window is null)
         //    {
-        //        // FIXME: Memory leak if add PreferenceViewModel as transition
         //        await _windowManager.ShowWindowFromIoCAsync<PreferenceViewModel>().ConfigureAwait(false);
         //    }
         //    else
@@ -322,7 +321,7 @@ namespace ErogeHelper.ViewModel.Window
             var window = Application.Current.Windows.OfType<PreferenceView>().SingleOrDefault();
             if (window is null)
             {
-                // FIXME: Memory leak if add PreferenceViewModel as transition
+                // XXX: Memory leak if add PreferenceViewModel as transition
                 await _windowManager.ShowWindowFromIoCAsync<PreferenceViewModel>().ConfigureAwait(false);
             }
             else

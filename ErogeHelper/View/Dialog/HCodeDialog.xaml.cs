@@ -119,6 +119,11 @@ namespace ErogeHelper.View.Dialog
 
             if (sender is TextBox codeTextBox)
             {
+                if (codeTextBox.Text[^1] == ':')
+                { 
+                    IsPrimaryButtonEnabled = false;
+                    return ;
+                }
                 IsPrimaryButtonEnabled = Regex.IsMatch(codeTextBox.Text, patten);
             }
         }

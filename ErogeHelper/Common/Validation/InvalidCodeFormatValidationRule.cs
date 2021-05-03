@@ -21,6 +21,11 @@ namespace ErogeHelper.Common.Validation
                 return ValidationResult.ValidResult;
             }
 
+            if (code[^1] == ':')
+            {
+                return new ValidationResult(false, "Invalid HCode.");
+            }
+
             return Regex.IsMatch(code, patten)
                 ? ValidationResult.ValidResult
                 : new ValidationResult(false, "Invalid HCode.");

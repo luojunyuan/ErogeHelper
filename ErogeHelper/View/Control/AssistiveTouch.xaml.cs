@@ -145,7 +145,7 @@ namespace ErogeHelper.View.Control
                 var right = parentActualWidth - left - ActualWidth;
                 // button 距离下边缘距离
                 var bottom = parentActualHeight - top - ActualHeight;
-                // FIXME: WHAT'S WRONG
+                // FIXME: Button release position not really middle
                 var verticalMiddleLine = parentActualHeight - ActualHeight - ButtonSpace;
 
                 //Log.Info($"鼠标位置 {_newPos.X} {_newPos.Y}");
