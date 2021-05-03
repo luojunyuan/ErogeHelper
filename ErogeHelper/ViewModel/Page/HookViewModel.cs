@@ -49,7 +49,7 @@ namespace ErogeHelper.ViewModel.Page
             _textractorService.DataEvent += DataProcess;
             CurrentThreadsNames = _textractorService.Setting.Hookcode == string.Empty 
                 ? "None"
-                : _textractorService.Setting.Hookcode + ' ' + _textractorService.Setting.HookSettings.Count() + " threads";
+                : _textractorService.Setting.Hookcode + " with " + _textractorService.Setting.HookSettings.Count() + " threads";
             RegExp = _dataService.GetRegExp();
             ConsoleOutput = string.Join('\n', _textractorService.GetConsoleOutputInfo());
             SelectedText = Language.Strings.HookPage_SelectedTextInitTip;

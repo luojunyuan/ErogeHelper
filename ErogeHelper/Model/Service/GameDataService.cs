@@ -78,6 +78,7 @@ namespace ErogeHelper.Model.Service
             _eventAggregator = eventAggregator;
             _pattern = ehDbRepository.GetGameInfo()?.RegExp ?? string.Empty;
 
+            _eventAggregator.SubscribeOnUIThread(this);
             textractorService.SelectedDataEvent += ProcessDataText;
             var meCabDicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
             if (Directory.Exists(meCabDicPath))
