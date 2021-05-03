@@ -49,6 +49,7 @@ namespace ErogeHelper.Model.Service
         }
 
         public GameWindowPosition GetLastWindowPosition() => _lastPos;
+        public WindowSize GetLastWindowSize() => new WindowSize(_oldWidth, _oldHeight);
 
         /// <summary>
         /// Check and reset or do nothing
@@ -260,8 +261,11 @@ namespace ErogeHelper.Model.Service
             return true;
         }
 
+        public static event Action<object>? ExitAction;
+
         private void ApplicationExit(object? sender, EventArgs e)
         {
+            ExitAction?.Invoke(new object());
             Log.Info("Detected game quit event");
             GamePosArea?.Invoke(HiddenPos);
             _gcSafetyHandle.Free();

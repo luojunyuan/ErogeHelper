@@ -1,7 +1,10 @@
 ﻿using Caliburn.Micro;
 using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Repository;
+using ErogeHelper.Model.Service;
 using ErogeHelper.Model.Service.Interface;
 using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,6 +56,11 @@ namespace ErogeHelper.View.Control
         {
             InitializeComponent();
 
+            GameWindowHooker.ExitAction += _ => 
+            {
+                IoC.Get<EhConfigRepository>().AssistiveTouchPostion = 
+                    JsonSerializer.Serialize(_touchPosMemory);
+            };
             IoC.Get<IGameWindowHooker>().NewWindowSize += (windowSize) =>
             {
                 _move = true;
@@ -230,8 +238,14 @@ namespace ErogeHelper.View.Control
             Margin = new Thickness(left, top, 0, 0);
         }
 
-        private AssistiveTouchPosition _touchPosMemory = new(TouchButtonCorner.UpperLeft);
+        private AssistiveTouchPosition _touchPosMemory = 
+            System.Text.Json.JsonSerializer.Deserialize<AssistiveTouchPosition>(IoC.Get<EhConfigRepository>().AssistiveTouchPostion) ?? new(TouchButtonCorner.UpperLeft); 
 
+        /// <summary>
+        /// Init
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FloatButton_Loaded(object sender, RoutedEventArgs e)
         {
             if (Parent is null && Parent is not FrameworkElement)
@@ -251,8 +265,13 @@ namespace ErogeHelper.View.Control
             // 初始化时Button位置在左上角
             //double left = _parent.ActualWidth - ActualWidth - distanceNew;
             //double top = _parent.ActualHeight - ActualHeight - distanceNew;
+
+            var gamePos = IoC.Get<IGameWindowHooker>().GetLastWindowSize();
+            _newGameViewHeight = (int)gamePos.Height;
+            _newGameViewWidth = (int)gamePos.Width;
             ResetButtonPostion();
             Margin = _immediateMargin;
+            RaiseMouseUpEventInCode();
 
             // for opacity the button first time loaded
             FloatButton_Click(FloatButton, new RoutedEventArgs());
@@ -345,13 +364,13 @@ namespace ErogeHelper.View.Control
                     break;
                 case TouchButtonCorner.Right:
                     _immediateMargin = new Thickness(
-                        _newGameViewWidth - ButtonSpace, 
+                        _newGameViewWidth - ActualWidth - ButtonSpace * 2, 
                         _touchPosMemory.Scale * _newGameViewHeight - ButtonSpace - Height / 2, 0, 0);
                     //Margin = _immediateMargin;
                     break;
                 case TouchButtonCorner.Bottom:
                     _immediateMargin = new Thickness(
-                        _newGameViewHeight - ButtonSpace, 
+                        _newGameViewHeight - ActualHeight - ButtonSpace * 2, 
                         _touchPosMemory.Scale * _newGameViewWidth - ButtonSpace - Width / 2, 0, 0);
                     //Margin = _immediateMargin;
                     break;

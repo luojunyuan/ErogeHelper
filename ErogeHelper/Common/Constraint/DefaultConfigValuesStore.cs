@@ -1,10 +1,13 @@
-﻿using ErogeHelper.Common.Enum;
+﻿using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Enum;
 
 namespace ErogeHelper.Common.Constraint
 {
     internal static class DefaultConfigValuesStore
     {
         public const string EhServerUrl = "https://eh.nya.run"; // "http://106.15.88.80";
+
+        public static string AssistiveTouchPostion = System.Text.Json.JsonSerializer.Serialize<AssistiveTouchPosition>(new(TouchButtonCorner.UpperLeft));
 
         public const double FontSize = 28;
 

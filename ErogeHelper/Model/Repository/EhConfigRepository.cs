@@ -8,6 +8,7 @@ using System.Text.Json;
 using ErogeHelper.Common.Constraint;
 using System.Threading;
 using System.Threading.Tasks;
+using ErogeHelper.Common.Entity;
 
 namespace ErogeHelper.Model.Repository
 {
@@ -135,6 +136,13 @@ namespace ErogeHelper.Model.Repository
         {
             get => GetValue(DefaultConfigValuesStore.EhServerUrl);
             set => SetValue(value);
+        }
+
+        public string AssistiveTouchPostion
+        {
+            get => GetValue(DefaultConfigValuesStore.AssistiveTouchPostion);
+            set => SetValue(value);
+
         }
 
         public double FontSize
