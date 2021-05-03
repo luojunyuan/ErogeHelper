@@ -18,6 +18,12 @@
         <StackPanel Margin="20, 10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <ui:NumberBox 
+                        x:Name="NumberBoxSpinButtonPlacementExample"
+                        Header="Adjust max length of recevied text"
+                        Value="{Binding ReceivedMaxTextLength}"
+                        SpinButtonPlacementMode="Inline"
+                        Minimum="60" Maximum="180" HorizontalAlignment="Left"/>
                     <!--<ui:ToggleSwitch Header="Danmaku(In Test)" IsOn="{Binding UseDanmaku}" />-->
                     <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_OutsideWindow}" IsOn="{Binding OutsideWindow}"/>
                     <ui:ToggleSwitch 

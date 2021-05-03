@@ -37,6 +37,22 @@ namespace ErogeHelper.ViewModel.Page
         private string _diskUsageProgressBarText = string.Empty;
         private double _diskUsageProgressBarValue;
 
+        public double ReceivedMaxTextLength
+        { 
+            get => _ehConfigRepository.MaxAcceptTextLength;
+            set 
+            {
+                if (value < 60 || value > 180 || double.IsNaN(value))
+                { 
+                    ReceivedMaxTextLength = 120;
+                    NotifyOfPropertyChange(() => ReceivedMaxTextLength);
+                    return ;
+                }
+
+                _ehConfigRepository.MaxAcceptTextLength = (int)value;
+            }
+        }
+
         public bool UseDanmaku
         { 
             get => _ehConfigRepository.UseDanmaku;
