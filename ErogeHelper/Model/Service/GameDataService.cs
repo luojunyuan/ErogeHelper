@@ -124,7 +124,7 @@ namespace ErogeHelper.Model.Service
                 hp.Text = hp.Text.Replace("　", string.Empty);
                 // Ruby like <.*?>
 
-                if (hp.Text.Length > 120)
+                if (hp.Text.Length > _ehConfigRepository.MaxAcceptTextLength)
                 {
                     BindableTextItem?.Invoke(new BindableCollection<SingleTextItem>());
                     AppendTextReceived?.Invoke(Language.Strings.GameView_MaxLenthTip, string.Empty);

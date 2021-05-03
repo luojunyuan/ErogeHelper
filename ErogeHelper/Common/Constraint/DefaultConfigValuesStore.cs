@@ -9,6 +9,8 @@ namespace ErogeHelper.Common.Constraint
 
         public static string AssistiveTouchPostion = System.Text.Json.JsonSerializer.Serialize<AssistiveTouchPosition>(new(TouchButtonCorner.UpperLeft));
 
+        public const int MaxAcceptTextLength = 120;
+
         public const double FontSize = 28;
 
         public const bool EnableMeCab = false;

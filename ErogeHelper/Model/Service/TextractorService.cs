@@ -143,14 +143,15 @@ namespace ErogeHelper.Model.Service
 
         public void RemoveUselessHooks()
         { 
-            _gameProcesses.ForEach(proc =>
-            { 
-                _threadHandleDict.Values
-                    .Where(thread => !thread.Hookcode.Equals(Setting.Hookcode) && thread.Address != -1)
-                    .Select(thread => thread.Address)
-                    .Distinct().ToList()
-                    .ForEach(address => _ = TextHostDll.RemoveHook((uint)proc.Id, (ulong)address));
-            });
+            // FIXME: ???
+            //_gameProcesses.ForEach(proc =>
+            //{ 
+                //_threadHandleDict.Values
+                //    .Where(thread => !thread.Hookcode.Equals(Setting.Hookcode) && thread.Address != -1)
+                //    .Select(thread => thread.Address)
+                //    .Distinct().ToList()
+                //    .ForEach(address => _ = TextHostDll.RemoveHook((uint)proc.Id, (ulong)address));
+            //});
         }
 
         private readonly List<string> _consoleOutput = new();

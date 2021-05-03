@@ -56,7 +56,8 @@ namespace ErogeHelper.Model.Factory.Translator
             string result;
 
             string url = "https://v1.alapi.cn/api/fanyi?q=" + q + "&from=" + from + "&to=" + to;
-            // UNDONE: https://v2.alapi.cn/api/fanyi v2 with token
+            // https://v2.alapi.cn/api/fanyi v2 with token, free version 1000/ per day
+            // http://www.alapi.cn/api/view/42 10 rmb/per month 
 
             try
             {
@@ -64,13 +65,25 @@ namespace ErogeHelper.Model.Factory.Translator
                 var request = new RestRequest(url);
 
                 // FIXME: Alapi broken
-                var resp = await client.GetAsync<AliapiResponse>(request, CancellationToken.None);
+                var resp = await client.ExecuteGetAsync<AliapiResponse>(request, CancellationToken.None);
+                /*
+                 * {
+                 *      "code": 422,
+                 *      "msg": "翻译接口关闭",
+                 *      "data": "",
+                 *      "author": {
+                 *          "name": "Alone88",
+                 *          "desc": "由Alone88提供的免费API 服务，官方文档：www.alapi.cn"
+                 *      }
+                 *  }
+                 */
+                var content = resp.Data;
 
-                if (resp.msg.Equals("success"))
+                if (content.msg.Equals("success"))
                 {
-                    if (resp.data.trans_result.Count == 1)
+                    if (content.data.trans_result.Count == 1)
                     {
-                        result = resp.data.trans_result[0].dst;
+                        result = content.data.trans_result[0].dst;
                     }
                     else
                     {
@@ -79,7 +92,7 @@ namespace ErogeHelper.Model.Factory.Translator
                 }
                 else
                 {
-                    result = resp.msg;
+                    result = content.msg;
                 }
             }
             catch (Exception ex)

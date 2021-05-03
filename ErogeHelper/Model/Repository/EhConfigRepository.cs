@@ -138,6 +138,12 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
+        public int MaxAcceptTextLength
+        {
+            get => GetValue(DefaultConfigValuesStore.MaxAcceptTextLength);
+            set => SetValue(value);
+        }
+
         public string AssistiveTouchPostion
         {
             get => GetValue(DefaultConfigValuesStore.AssistiveTouchPostion);
