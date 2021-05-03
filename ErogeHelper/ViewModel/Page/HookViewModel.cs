@@ -378,6 +378,7 @@ namespace ErogeHelper.ViewModel.Page
             HookComboSource
                 .Where(combo => !combo.Address.Equals(SelectedHookItem!.Address)).ToList()
                 .ForEach(shouldRemoveThread => HookComboSource.Remove(shouldRemoveThread));
+            //FIXME: ?
             _textractorService.RemoveUselessHooks();
 
             var hookSettings = new List<TextractorSetting.HookSetting>();

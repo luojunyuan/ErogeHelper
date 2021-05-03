@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -63,11 +64,19 @@ namespace ErogeHelper.Model.Service
             IMeCabService meCabService,
             ITextractorService textractorService, 
             EhConfigRepository ehConfigRepository,
-            ITranslatorFactory translatorFactory)
+            ITranslatorFactory translatorFactory,
+            ITermDataService termDataService,
+            IDanmakuService danmakuService,
+            IEventAggregator eventAggregator,
+            EhDbRepository ehDbRepository)
         {
             _meCabService = meCabService;
             _ehConfigRepository = ehConfigRepository;
             _translatorFactory = translatorFactory;
+            _termDataService = termDataService;
+            _danmakuService = danmakuService;
+            _eventAggregator = eventAggregator;
+            _pattern = ehDbRepository.GetGameInfo()?.RegExp ?? string.Empty;
 
             textractorService.SelectedDataEvent += ProcessDataText;
             var meCabDicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
@@ -80,10 +89,13 @@ namespace ErogeHelper.Model.Service
         private readonly IMeCabService _meCabService;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly ITranslatorFactory _translatorFactory;
+        private readonly ITermDataService _termDataService;
+        private readonly IDanmakuService _danmakuService;
+        private readonly IEventAggregator _eventAggregator;
 
         private string _currentText = string.Empty;
 
-        private string _pattern = string.Empty;
+        private string _pattern;
 
         private async void ProcessDataText(HookParam hp)
         {
@@ -118,6 +130,13 @@ namespace ErogeHelper.Model.Service
                     return;
                 }
 
+                //if (_ehConfigRepository.UseDanmaku)
+                //{
+                //    List<string> result = _danmakuService.QueryDanmaku(hp.Text);
+                //    if (result.Count != 0)
+                //        _eventAggregator.PublishOnUIThreadAsync(new DanmakuMessage { Danmaku = result});
+                //}
+
                 SourceTextReceived?.Invoke(hp.Text);
 
                 // DeepL Extension
@@ -134,6 +153,11 @@ namespace ErogeHelper.Model.Service
                         _ehConfigRepository.TextTemplateConfig));
                 }
 
+                //if (_ehConfigRepository.UseTermTable)
+                //{ 
+                //    hp.Text = _termDataService.ProcessText(hp.Text);
+                //}
+
                 // Process translations
                 foreach (var translator in _translatorFactory.GetEnabledTranslators())
                 {
@@ -144,6 +168,12 @@ namespace ErogeHelper.Model.Service
                         var result = await translator.TranslateAsync(hp.Text, _ehConfigRepository.SrcTransLanguage,
                             _ehConfigRepository.TargetTransLanguage);
                         sw.Stop();
+
+                        //if (_ehConfigRepository.UseTermTable)
+                        //{
+                        //    result = _termDataService.FinalText(result);
+                        //}
+
                         if (result != string.Empty)
                         {
                             Log.Debug($"{translator.Name}: {result}");
@@ -151,14 +181,6 @@ namespace ErogeHelper.Model.Service
                         }
                     });
                 }
-
-                // hard code for sakura no uta
-                //if (GameConfig.MD5.Equals("BAB61FB3BD98EF1F1538EE47A8A46A26"))
-                //{
-                //    string result = sakuraNoUtaHelper.QueryText(hp.Text);
-                //    if (!string.IsNullOrWhiteSpace(result))
-                //        AppendDataEvent?.Invoke(typeof(GameViewDataService), result, "人工字幕 by luki");
-                //}
             });
         }
 

@@ -83,6 +83,18 @@
                     </ItemsControl>
                 </StackPanel>
 
+                <Canvas cal:Message.Attach="[Loaded] = [DanmakuEngineInit($source)]" Loaded="DanmakuCanvas_Loaded">
+                    <Button 
+                        Canvas.Left="10" Canvas.Bottom="10" Content="弾" Visibility="{Binding DanmakuVisibility}"
+                        x:Name="DanmakuButton" Click="OpenDanmakuPopup"/>
+                    <Popup Name="DanmakuInputPopup" StaysOpen="False" Placement="Right">
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal" Background="White">
+                            <TextBox x:Name="DanmakuContent" Text="" MinWidth="200"/>
+                            <Button Content="Send" cal:Message.Attach="[Click] = [SendDanmaku(DanmakuContent.Text)]" />
+                        </ui:SimpleStackPanel>
+                    </Popup>
+                </Canvas>
+                
                 <!-- Interaction Button -->
                 <control:AssistiveTouch 
                     Width="{StaticResource AssistiveTouchSize}" Height="{StaticResource AssistiveTouchSize}" 
@@ -167,6 +179,9 @@
                                 <ui:AppBarButton 
                                     Icon="BrowsePhotos" Label="{x:Static resx:Strings.GameView_ResetTouchPos}" 
                                     cal:Message.Attach="[Click] = [ResetInsideView]"/>
+                                <!--<ui:AppBarButton 
+                                    Icon="BrowsePhotos" Label="Danmaku" 
+                                    cal:Message.Attach="[Click] = [OpenDanmaku]"/>-->
                                 
                                 <ui:AppBarSeparator/>
                                 <ui:AppBarButton 

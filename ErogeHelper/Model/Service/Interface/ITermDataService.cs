@@ -14,5 +14,9 @@ namespace ErogeHelper.Model.Service.Interface
         Dictionary<string, string> GetDictionary();
 
         Task DeleteTermInDatabaseAsync(TermItem termItem);
+
+        string ProcessText(string originalText);
+
+        string FinalText(string translatedResult);
     }
 }

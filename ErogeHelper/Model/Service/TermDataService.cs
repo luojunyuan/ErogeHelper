@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using Caliburn.Micro;
@@ -43,5 +44,55 @@ namespace ErogeHelper.Model.Service
 
         public async Task DeleteTermInDatabaseAsync(TermItem termItem) => 
             await _ehDbRepository.DeleteUserTermAsync(new UserTermTable(termItem.SourceWord, termItem.TargetWord));
+
+        private int count = 1234;
+        private Dictionary<int, string> countSourceWordDic = new();
+
+        public string ProcessText(string originalText)
+        {
+            throw new NotImplementedException();
+            //var tmpStr = originalText;
+            //var termDatas = GetDictionary().ToList();
+            //termDatas
+            //    .Where(term => tmpStr.Contains(term.SourceWord)).ToList()
+            //    .ForEach(term => 
+            //    {
+            //        tmpStr = tmpStr.Replace(term.SourceWord, $"{{{count}}}");
+            //        countSourceWordDic.Add(count, term.SourceWord);
+            //        count--;
+            //    });
+            
+            //var tmpStrTranslatedResult = await _translatorFactory.GetTranslator(SelectedTranslator.TranslatorName)
+            //    .TranslateAsync(tmpStr, _sourceLanguage, _targetLanguage);
+            
+            //return originalText;
+        }
+
+        public string FinalText(string translatedResult)
+        {
+            throw new NotImplementedException();
+            //var finalResult = string.Empty;
+            //try
+            //{
+            //    for(var i = 0; i < countSourceWordDic.Count; i++)
+            //    {
+            //        translatedResult = translatedResult.Replace(
+            //            $"{{{++count}}}", 
+            //            GetDictionary()[countSourceWordDic[count]]);
+            //    }
+            //    finalResult = translatedResult;
+            //}
+            //catch(Exception ex)
+            //{
+            //    Log.Error(ex);
+            //}
+            //finally
+            //{
+            //    count = 1234;
+            //    countSourceWordDic.Clear();
+            //}
+
+            //return finalResult;
+        }
     }
 }

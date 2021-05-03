@@ -111,7 +111,7 @@ namespace ErogeHelper.ViewModel.Window
                 var count = 1234;
                 Dictionary<int, string> countSourceWordDic = new();
                 var tmpStr = PendingToTranslateText;
-                // HACK: Bad string operator for terms
+                // HACK: Bad string operation for terms
                 var termDatas = TermList.ToList();
                 termDatas
                     .Where(term => tmpStr.Contains(term.SourceWord)).ToList()

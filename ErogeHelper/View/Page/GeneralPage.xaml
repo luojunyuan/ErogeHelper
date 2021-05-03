@@ -18,6 +18,7 @@
         <StackPanel Margin="20, 10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <!--<ui:ToggleSwitch Header="Danmaku(In Test)" IsOn="{Binding UseDanmaku}" />-->
                     <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_OutsideWindow}" IsOn="{Binding OutsideWindow}"/>
                     <ui:ToggleSwitch 
                         Header="{x:Static resx:Strings.GeneralPage_DeepL}" IsOn="{Binding DeepLExtention}" />

@@ -37,6 +37,23 @@ namespace ErogeHelper.ViewModel.Page
         private string _diskUsageProgressBarText = string.Empty;
         private double _diskUsageProgressBarValue;
 
+        public bool UseDanmaku
+        { 
+            get => _ehConfigRepository.UseDanmaku;
+            set
+            {
+                if (value)
+                {
+                    _eventAggregator.PublishOnUIThreadAsync(new DanmakuVisibleMessage {Status = true});
+                }
+                else
+                {
+                    _eventAggregator.PublishOnUIThreadAsync(new DanmakuVisibleMessage {Status = false});
+                }
+                _ehConfigRepository.UseDanmaku = value;
+            }
+        }
+
         public bool OutsideWindow
         {
             get => _ehConfigRepository.UseMoveableTextControl;

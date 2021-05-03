@@ -157,6 +157,12 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
+        public bool UseDanmaku
+        {
+            get => GetValue(DefaultConfigValuesStore.UseDanmaku);
+            set => SetValue(value);
+        }
+
         public bool UseMoveableTextControl
         {
             get => GetValue(DefaultConfigValuesStore.UseOutsideWindow);

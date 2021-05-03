@@ -13,6 +13,8 @@ namespace ErogeHelper.Common.Constraint
 
         public const bool EnableMeCab = false;
 
+        public const bool UseDanmaku = false;
+
         public const bool UseOutsideWindow = false;
 
         public const bool ShowAppendText = true;

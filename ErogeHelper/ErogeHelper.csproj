@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.136-rc" />
+    <PackageReference Include="Danmaku.DotNet" Version="5.0.0" />
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="FluentMigrator" Version="3.2.15" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />

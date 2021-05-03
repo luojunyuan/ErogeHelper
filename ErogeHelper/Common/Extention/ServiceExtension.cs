@@ -95,6 +95,7 @@ namespace ErogeHelper.Common.Extention
             services.TryAddSingleton<IGameDataService, GameDataService>();
             services.TryAddSingleton<IMeCabService, MeCabService>();
             services.TryAddSingleton<ITermDataService, TermDataService>();
+            services.TryAddSingleton<IDanmakuService, DanmakuService>();
 
             services.TryAddTransient<ISelectProcessDataService, SelectProcessDataService>();
             services.TryAddTransient<IHookDataService, HookDataService>();

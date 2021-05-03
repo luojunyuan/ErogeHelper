@@ -44,8 +44,8 @@
 
     <control:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Spacing="10" Margin="20 10">
-            <ui:ToggleSwitch Header="Use term" IsOn="{Binding UserTermStatus}"/>
-            <Button Content="Term list" cal:Message.Attach="[Click] = [OpenTermList]" MinWidth="{StaticResource MinButtonWidth}"/>
+            <!--<ui:ToggleSwitch Header="Use term" IsOn="{Binding UserTermStatus}"/>
+            <Button Content="Term list" cal:Message.Attach="[Click] = [OpenTermList]" MinWidth="{StaticResource MinButtonWidth}"/>-->
             <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
                 <TextBlock Text="{x:Static resx:Strings.TransPage_TransLabel}" VerticalAlignment="Center" />
                 <ComboBox 

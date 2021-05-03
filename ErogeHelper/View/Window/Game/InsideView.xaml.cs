@@ -160,6 +160,7 @@ namespace ErogeHelper.View.Window.Game
             {
                 case (int)NativeMethods.ABNotify.ABN_FULLSCREENAPP:
                     var foregroundHWnd = NativeMethods.GetForegroundWindow();
+                    // TODO: 并不准确，这只是判断最前端窗口，如果直接使用判断game handle的方式更稳定的话用后者更好
                     //判断当前全屏的应用是否是桌面
                     if (foregroundHWnd.Equals(_desktopHandle) || foregroundHWnd.Equals(_shellHandle))
                     {
@@ -221,5 +222,14 @@ namespace ErogeHelper.View.Window.Game
             _eventAggregator.Unsubscribe(this);
         }
 
+        private void DanmakuCanvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            DanmakuInputPopup.PlacementTarget = DanmakuButton;
+        }
+
+        private void OpenDanmakuPopup(object sender, RoutedEventArgs e)
+        {
+            DanmakuInputPopup.IsOpen = !DanmakuInputPopup.IsOpen;
+        }
     }
 }

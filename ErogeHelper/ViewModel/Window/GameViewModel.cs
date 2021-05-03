@@ -15,11 +15,14 @@ using System.Windows.Media;
 using WindowsInput.Events;
 using ErogeHelper.Model.Entity.Table;
 using ErogeHelper.Common.Enum;
+using System.Windows.Controls;
+using WPFDanmakuLib;
+using Utils = ErogeHelper.Common.Utils;
 
 namespace ErogeHelper.ViewModel.Window
 {
-    public class GameViewModel : PropertyChangedBase, 
-        IHandle<UseMoveableTextMessage>, IHandle<JapaneseVisibleMessage>, IHandle<FullScreenChangedMessage>
+    public class GameViewModel : PropertyChangedBase,
+        IHandle<UseMoveableTextMessage>, IHandle<JapaneseVisibleMessage>, IHandle<FullScreenChangedMessage>, IHandle<DanmakuVisibleMessage>, IHandle<DanmakuMessage>
     {
         public GameViewModel(
             IGameDataService dataService,
@@ -43,6 +46,7 @@ namespace ErogeHelper.ViewModel.Window
 
             _eventAggregator.SubscribeOnUIThread(this);
             _touchHooker.Init();
+            DanmakuVisibility = _ehConfigRepository.UseDanmaku ? Visibility.Visible : Visibility.Collapsed;
             if (_ehDbRepository.GetGameInfo()?.IsEnableTouchToMouse ?? false)
                 TouchToMouseToggle();
             _fontSize = _ehConfigRepository.FontSize;
@@ -65,6 +69,8 @@ namespace ErogeHelper.ViewModel.Window
         private readonly IGameWindowHooker _gameWindowHooker;
         private readonly EhDbRepository _ehDbRepository;
 
+        private bool _isSourceTextPined = true;
+        private Visibility _danmakuVisibility;
         private bool _assistiveTouchIsVisible = true;
         private double _fontSize;
         private Visibility _triggerBarVisibility = Visibility.Collapsed;
@@ -72,12 +78,45 @@ namespace ErogeHelper.ViewModel.Window
         private Visibility _insideTextVisibility;
         private Visibility _insideMoveableTextVisibility;
         private Visibility _outsideJapaneseVisible;
-
+        
         public TextViewModel TextControl { get; set; }
         public BindableCollection<AppendTextItem> AppendTextList { get; set; } = new();
 
         // Not much use for the moment
         public ConcurrentCircularBuffer<string> SourceTextArchiver = new(30);
+
+        private WPFDanmakuEngine? _damakuEngine;
+        private DanmakuStyle _danmaku = new();
+        private Canvas? _danmakuContainer;
+
+        public void DanmakuEngineInit(Canvas danmakuContainer)
+        {
+            _danmakuContainer = danmakuContainer;
+            var engineBehavior = new EngineBehavior(DrawMode.WPF, CollisionPrevention.Enabled);
+            _danmaku.FontSize = (int)FontSize;
+            _damakuEngine = new WPFDanmakuEngine(engineBehavior, _danmaku, danmakuContainer);
+        }
+
+        public Visibility DanmakuVisibility
+        {
+            get => _danmakuVisibility;
+            set { _danmakuVisibility = value; NotifyOfPropertyChange(() => DanmakuVisibility); }
+        }
+
+        public void SendDanmaku(string danmakuText)
+        {
+            if (_danmakuContainer is null || string.IsNullOrWhiteSpace(danmakuText))
+                return;
+
+            if (danmakuText.Length > 100)
+            {
+                ModernWpf.MessageBox.Show("Text length must lower than 100", "Eroge Helper");
+                return;
+            }
+
+            // TODO: Net submit, only return normal can toast danmaku
+            ToastDanmaku(danmakuText);
+        }
 
         public bool AssistiveTouchIsVisible
         {
@@ -136,8 +175,6 @@ namespace ErogeHelper.ViewModel.Window
                 NotifyOfPropertyChange(() => PinSourceTextToggleVisibility);
             }
         }
-
-        private bool _isSourceTextPined = true;
 
         public bool IsSourceTextPined
         {
@@ -266,6 +303,20 @@ namespace ErogeHelper.ViewModel.Window
 
         public void ResetInsideView() => _gameWindowHooker.ResetWindowHandler();
 
+        //public async void OpenDanmaku()
+        //{
+        //    var window = Application.Current.Windows.OfType<DanmakuWindow>().SingleOrDefault();
+        //    if (window is null)
+        //    {
+        //        // FIXME: Memory leak if add PreferenceViewModel as transition
+        //        await _windowManager.ShowWindowFromIoCAsync<PreferenceViewModel>().ConfigureAwait(false);
+        //    }
+        //    else
+        //    {
+        //        window.Activate();
+        //    }
+        //}
+
         public async void OpenPreference()
         {
             var window = Application.Current.Windows.OfType<PreferenceView>().SingleOrDefault();
@@ -294,7 +345,7 @@ namespace ErogeHelper.ViewModel.Window
         public Visibility InsideMoveableTextVisibility
         {
             get => _insideMoveableTextVisibility;
-            set { _insideMoveableTextVisibility = value; NotifyOfPropertyChange(() => InsideMoveableTextVisibility);}
+            set { _insideMoveableTextVisibility = value; NotifyOfPropertyChange(() => InsideMoveableTextVisibility); }
         }
 
         public async Task HandleAsync(UseMoveableTextMessage message, CancellationToken cancellationToken)
@@ -328,7 +379,7 @@ namespace ErogeHelper.ViewModel.Window
         public async Task HandleAsync(FullScreenChangedMessage message, CancellationToken cancellationToken)
         {
             if (_ehConfigRepository.UseMoveableTextControl)
-            { 
+            {
                 if (message.IsFullScreen)
                 {
                     InsideTextVisibility = Visibility.Collapsed;
@@ -337,7 +388,7 @@ namespace ErogeHelper.ViewModel.Window
                         new ViewActionMessage(typeof(GameViewModel), ViewAction.Hide, null, "OutsideView"));
                 }
                 else
-                { 
+                {
                     InsideTextVisibility = Visibility.Collapsed;
                     InsideMoveableTextVisibility = Visibility.Collapsed;
                     await _eventAggregator.PublishOnUIThreadAsync(
@@ -369,6 +420,33 @@ namespace ErogeHelper.ViewModel.Window
                 OutsideJapaneseVisible = Visibility.Collapsed;
             }
             return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(DanmakuVisibleMessage message, CancellationToken cancellationToken)
+        {
+            DanmakuVisibility = message.Status ? Visibility.Visible : Visibility.Collapsed;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(DanmakuMessage message, CancellationToken cancellationToken)
+        {
+            message.Danmaku.ForEach(d => ToastDanmaku(d));
+            return Task.CompletedTask;
+        }
+
+        private void ToastDanmaku(string danmakuText)
+        { 
+            if (_danmakuContainer is null || string.IsNullOrWhiteSpace(danmakuText))
+                return;
+
+            _danmaku.PositionX = _danmakuContainer.ActualWidth;
+            _danmaku.OutlineEnabled = false;
+            _danmaku.ShadowEnabled = true;
+            var kanjiLength = danmakuText.Length;
+            var duration = _danmakuContainer.ActualWidth / (120 + kanjiLength);
+            _danmaku.Duration = (int)duration;
+            // override default danmaku style
+            _damakuEngine?.DrawDanmaku(danmakuText, _danmaku);
         }
 
         ~GameViewModel() => _eventAggregator.Unsubscribe(this);
