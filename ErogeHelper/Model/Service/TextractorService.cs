@@ -116,6 +116,7 @@ namespace ErogeHelper.Model.Service
             var consoleParam = _threadHandleDict.First().Value;
             _threadHandleDict.Clear();
             _threadHandleDict.Add(0, consoleParam);
+            // May return `invalid process`
             _gameProcesses.ForEach(proc => _ = TextHostDll.DetachProcess((uint)proc.Id));
             DataEvent?.Invoke(new HookParam
             {
@@ -126,8 +127,9 @@ namespace ErogeHelper.Model.Service
                 Ctx2 = -1,
                 Name = "Console",
                 Hookcode = "HB0@0",
-                Text = "ErogeHelper: Detach Processes"
+                Text = "ErogeHelper: Detach Processes " + string.Join(',', _gameProcesses.Select(proc => proc.Id))
             });
+            
             // XXX: Too fast
             await Task.Run(async() => 
             {
@@ -144,8 +146,9 @@ namespace ErogeHelper.Model.Service
             _gameProcesses.ForEach(proc =>
             { 
                 _threadHandleDict.Values
-                    .Where(thread => !thread.Hookcode.Equals(Setting.Hookcode))
-                    .Select(thread => thread.Address).ToList()
+                    .Where(thread => !thread.Hookcode.Equals(Setting.Hookcode) && thread.Address != -1)
+                    .Select(thread => thread.Address)
+                    .Distinct().ToList()
                     .ForEach(address => _ = TextHostDll.RemoveHook((uint)proc.Id, (ulong)address));
             });
         }

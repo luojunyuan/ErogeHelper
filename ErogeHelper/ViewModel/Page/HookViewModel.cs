@@ -487,11 +487,17 @@ namespace ErogeHelper.ViewModel.Page
 
             _gameDataService.SendNewText(textPendingToSend);
 
-            _ = _ehConfigRepository.UseMoveableTextControl
-                ? _eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "OutsideView"))
-                : _eventAggregator.PublishOnUIThreadAsync(
-                    new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
+            if (_ehConfigRepository.UseMoveableTextControl)
+            {
+                await _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = true});
+            }
+            else
+            {
+                await _eventAggregator.PublishOnUIThreadAsync(new UseMoveableTextMessage {UseMove = false});
+            }
+            
+            await _eventAggregator.PublishOnUIThreadAsync(
+                new ViewActionMessage(typeof(GameViewModel), ViewAction.Show, null, "InsideView"));
 
             _ = _eventAggregator.PublishOnUIThreadAsync(new ViewActionMessage(typeof(HookConfigViewModel), ViewAction.Close));
 
