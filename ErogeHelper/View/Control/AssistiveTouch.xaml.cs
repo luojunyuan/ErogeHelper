@@ -52,6 +52,8 @@ namespace ErogeHelper.View.Control
         private int _newGameViewHeight;
         private int _newGameViewWidth;
 
+        public double Dpi { private get; set; } = 1;
+
         public AssistiveTouch()
         {
             InitializeComponent();
@@ -65,8 +67,8 @@ namespace ErogeHelper.View.Control
             {
                 _move = true;
                 _isFromUpdateButtonPosEvent = true;
-                _newGameViewHeight = (int)windowSize.Height;
-                _newGameViewWidth = (int)windowSize.Width;
+                _newGameViewHeight = (int)(windowSize.Height / Dpi);
+                _newGameViewWidth = (int)(windowSize.Width / Dpi);
                 ResetButtonPostion();
                 RaiseMouseUpEventInCode();
             };
@@ -267,8 +269,8 @@ namespace ErogeHelper.View.Control
             //double top = _parent.ActualHeight - ActualHeight - distanceNew;
 
             var gamePos = IoC.Get<IGameWindowHooker>().GetLastWindowSize();
-            _newGameViewHeight = (int)gamePos.Height;
-            _newGameViewWidth = (int)gamePos.Width;
+            _newGameViewHeight = (int)(gamePos.Height / Dpi);
+            _newGameViewWidth = (int)(gamePos.Width / Dpi);
             ResetButtonPostion();
             Margin = _immediateMargin;
             RaiseMouseUpEventInCode();

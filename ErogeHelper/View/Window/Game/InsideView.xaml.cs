@@ -36,6 +36,7 @@ namespace ErogeHelper.View.Window.Game
             _eventAggregator.SubscribeOnUIThread(this);
             Visibility = Visibility.Collapsed;
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            AssistiveTouch.Dpi = _dpi;
             _gameWindowHooker.GamePosArea += PositionChanged;
             Loaded += (_, _) =>
             {
@@ -71,6 +72,7 @@ namespace ErogeHelper.View.Window.Game
             base.OnDpiChanged(oldDpi, newDpi);
 
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            AssistiveTouch.Dpi = _dpi;
             Log.Debug($"Current screen dpi {_dpi * 100}%");
         }
 

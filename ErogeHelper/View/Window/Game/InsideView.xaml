@@ -99,7 +99,7 @@
                 </Canvas>
                 
                 <!-- Interaction Button -->
-                <control:AssistiveTouch 
+                <control:AssistiveTouch x:Name="AssistiveTouch"
                     Width="{StaticResource AssistiveTouchSize}" Height="{StaticResource AssistiveTouchSize}" 
                     Visibility="{Binding AssistiveTouchIsVisible, 
                         Converter={StaticResource TrueToVisibleConverter}}">
