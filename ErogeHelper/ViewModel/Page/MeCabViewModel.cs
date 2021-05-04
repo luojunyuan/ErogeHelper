@@ -6,6 +6,7 @@ using ErogeHelper.Model.Service.Interface;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ErogeHelper.ViewModel.Page
 {
@@ -73,12 +74,48 @@ namespace ErogeHelper.ViewModel.Page
             ChooseDicButtonEnabled = false;
             string filename = dlg.FileName;
             var dicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
-            // UNDONE: Unzip dic.eh may need progress dialog
+
+            #region Make Dialog
+            var progress = new ModernWpf.Controls.ProgressRing
+            {
+                IsActive = true,
+                Width = 80,
+                Height = 80,
+            };
+
+            var dialogCanClose = false;
+            var dialog = new ModernWpf.Controls.ContentDialog
+            {
+                Content = progress,
+            };
+            dialog.Closing += (sender, args) =>
+            {
+                // Block Enter key and PrimaryButton, SecondaryButton, Escape key
+                if (args.Result == ModernWpf.Controls.ContentDialogResult.Primary ||
+                    args.Result == ModernWpf.Controls.ContentDialogResult.Secondary ||
+                    args.Result == ModernWpf.Controls.ContentDialogResult.None && !dialogCanClose)
+                {
+                    args.Cancel = true;
+                }
+                // Only let CloseButton and dialog.Hide() method go
+                //if (args.Result == ContentDialogResult.None)
+            };
+            #endregion
+
+            var dialogTask = dialog.ShowAsync();
+
             await Task.Run(() => ZipFile.ExtractToDirectory(filename, dicPath)).ConfigureAwait(false);
             _meCabService.CreateTagger(dicPath);
             File.Delete(filename);
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            { 
+                progress.IsActive = false;
+                dialogCanClose = true;
+                dialog.Hide();
+            });
+
             CanEnableMecab = true;
-            // FIXME: Notify mecab status
             Log.Info("Loaded mecab-dic");
         }
 
