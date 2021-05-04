@@ -67,5 +67,7 @@ namespace ErogeHelper.Common.Constraint
         public const bool TencentApiEnable = false;
         public const string TencentApiSecretId = "";
         public const string TencentApiSecretKey = "";
+
+        public const bool CloudEnable = false;
     }
 }

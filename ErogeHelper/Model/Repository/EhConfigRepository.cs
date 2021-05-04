@@ -343,6 +343,12 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
+        public bool CloudEnable
+        {
+            get => GetValue(DefaultConfigValuesStore.CloudEnable);
+            set => SetValue(value);
+        }
+
         #endregion
     }
 }

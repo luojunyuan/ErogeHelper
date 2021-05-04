@@ -13,6 +13,7 @@
     
     <ui:SimpleStackPanel Spacing="10">
         <Separator />
+        <ui:HyperlinkButton NavigateUri="https://console.cloud.tencent.com/cam/capi" Content="Website"/>
         <TextBlock Text="SecretId" />
         <TextBox Name="SecretId" />
         <TextBlock Text="SecretKey" />

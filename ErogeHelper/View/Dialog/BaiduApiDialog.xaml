@@ -14,6 +14,7 @@
     
     <ui:SimpleStackPanel Spacing="10">
         <Separator />
+        <ui:HyperlinkButton NavigateUri="https://api.fanyi.baidu.com/api/trans/product/desktop?req=developer" Content="Website"/>
         <TextBlock Text="Appid" />
         <TextBox Name="Appid"/>
         <TextBlock Text="SecretKey"/>

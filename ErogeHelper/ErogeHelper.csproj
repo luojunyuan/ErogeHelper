@@ -48,8 +48,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="assets\image\yunyi-logo2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
+    <Resource Include="assets\image\yunyi-logo2.png" />
     <Resource Include="assets\site_icon\baidu.com.ico" />
     <Resource Include="assets\site_icon\caiyunapp.com.ico" />
     <Resource Include="assets\site_icon\tencent.com.ico" />

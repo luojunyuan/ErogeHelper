@@ -11,5 +11,6 @@
         TencentMt,// Has dialog
         Yeekit,
         Youdao,
+        Cloud,
     }
 }

@@ -45,8 +45,8 @@ namespace ErogeHelper.Model.Service
         public async Task DeleteTermInDatabaseAsync(TermItem termItem) => 
             await _ehDbRepository.DeleteUserTermAsync(new UserTermTable(termItem.SourceWord, termItem.TargetWord));
 
-        private int count = 1234;
-        private Dictionary<int, string> countSourceWordDic = new();
+        //private int _count = 1234;
+        //private Dictionary<int, string> countSourceWordDic = new();
 
         public string ProcessText(string originalText)
         {

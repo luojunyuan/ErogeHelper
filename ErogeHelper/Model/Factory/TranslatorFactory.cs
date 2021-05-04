@@ -18,6 +18,7 @@ namespace ErogeHelper.Model.Factory
                 new YeekitTranslator(ehConfigRepository),
                 new BaiduWebTranslator(ehConfigRepository),
                 new CaiyunTranslator(ehConfigRepository),
+                new CloudTranslator(ehConfigRepository),
                 //new AlapiTranslator(ehConfigRepository),
                 new YoudaoTranslator(ehConfigRepository),
                 new NiuTransTranslator(ehConfigRepository),

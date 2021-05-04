@@ -11,6 +11,7 @@ namespace ErogeHelper.Model.Factory.Translator
 {
     public class AlapiTranslator : ITranslator
     {
+        [Obsolete("翻译接口关闭")]
         public AlapiTranslator(EhConfigRepository ehConfigRepository)
         {
             _ehConfigRepository = ehConfigRepository;
