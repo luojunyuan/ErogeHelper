@@ -237,7 +237,7 @@ namespace ErogeHelper.View.Window.Game
 
         #region Moveable Text Control
 
-        private System.Windows.Controls.Control _control;
+        private System.Windows.Controls.Control? _control;
         
         const int Band = 10;
         const int BtnMinWidth = 100;
@@ -436,6 +436,8 @@ namespace ErogeHelper.View.Window.Game
 
         private void MoveableControl_MouseLeave(object sender, MouseEventArgs e)
         {
+            if (_control is null)
+                return;
             _enumMousePointPosition = MousePointPosition.MouseSizeNone;
             _control.Cursor = Cursors.Arrow;
         }
