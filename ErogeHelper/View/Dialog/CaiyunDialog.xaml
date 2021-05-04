@@ -13,8 +13,8 @@
                   PrimaryButtonText="{x:Static resx:Strings.Common_Save}" IsPrimaryButtonEnabled="False" DefaultButton="Primary">
     <ui:SimpleStackPanel Spacing="10">
         <Separator />
-        <ui:HyperlinkButton NavigateUri="https://dashboard.caiyunapp.com/v1/token/" Content="Website"/>
-        <Label Content="Token" />
+        <ui:HyperlinkButton NavigateUri="https://dashboard.caiyunapp.com/v1/token/" Content="{x:Static resx:Strings.Translator_Website}"/>
+        <Label Content="{x:Static resx:Strings.Common_Token}" />
         <TextBox Name="Token" TextChanged="Token_TextChanged"/>
         <Button Content="{x:Static resx:Strings.Common_RestoreDefault}" Click="Button_Click"/>
     </ui:SimpleStackPanel>

@@ -169,6 +169,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 None 的本地化字符串。
+        /// </summary>
+        public static string Common_None {
+            get {
+                return ResourceManager.GetString("Common.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 OK 的本地化字符串。
         /// </summary>
         public static string Common_OK {
@@ -201,6 +210,15 @@ namespace ErogeHelper.Language {
         public static string Common_Test {
             get {
                 return ResourceManager.GetString("Common.Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Token 的本地化字符串。
+        /// </summary>
+        public static string Common_Token {
+            get {
+                return ResourceManager.GetString("Common.Token", resourceCulture);
             }
         }
         
@@ -422,6 +440,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Adjust max length of received text 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_MaxLengthTextLabel {
+            get {
+                return ResourceManager.GetString("GeneralPage.MaxLengthTextLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 MISC 的本地化字符串。
         /// </summary>
         public static string GeneralPage_Misc {
@@ -517,6 +544,15 @@ namespace ErogeHelper.Language {
         public static string HookPage_HookCode {
             get {
                 return ResourceManager.GetString("HookPage.HookCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Hook current in use 的本地化字符串。
+        /// </summary>
+        public static string HookPage_HookCurrentInUse {
+            get {
+                return ResourceManager.GetString("HookPage.HookCurrentInUse", resourceCulture);
             }
         }
         
@@ -643,6 +679,24 @@ namespace ErogeHelper.Language {
         public static string HookPage_RegExpTip {
             get {
                 return ResourceManager.GetString("HookPage.RegExpTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Inject the game again 的本地化字符串。
+        /// </summary>
+        public static string HookPage_ReInject {
+            get {
+                return ResourceManager.GetString("HookPage.ReInject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select hook 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SelectedHook {
+            get {
+                return ResourceManager.GetString("HookPage.SelectedHook", resourceCulture);
             }
         }
         
@@ -1111,6 +1165,15 @@ namespace ErogeHelper.Language {
         public static string Translator_TencentMt {
             get {
                 return ResourceManager.GetString("Translator.TencentMt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Website 的本地化字符串。
+        /// </summary>
+        public static string Translator_Website {
+            get {
+                return ResourceManager.GetString("Translator.Website", resourceCulture);
             }
         }
         

@@ -14,7 +14,7 @@
     
     <ui:SimpleStackPanel Spacing="10">
         <Separator />
-        <ui:HyperlinkButton NavigateUri="https://niutrans.com/cloud/account_info/info" Content="Website"/>
+        <ui:HyperlinkButton NavigateUri="https://niutrans.com/cloud/account_info/info" Content="{x:Static resx:Strings.Translator_Website}"/>
         <Label Content="API-KEY" />
         <TextBox Name="ApiKey" />
     </ui:SimpleStackPanel>

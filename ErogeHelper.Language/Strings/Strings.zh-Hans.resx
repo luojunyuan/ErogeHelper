@@ -487,4 +487,25 @@
   <data name="SelectProcess.NoIconProc" xml:space="preserve">
     <value>包含没有图标的程序</value>
   </data>
+  <data name="GeneralPage.MaxLengthTextLabel" xml:space="preserve">
+    <value>调整最大文本接收长度</value>
+  </data>
+  <data name="HookPage.HookCurrentInUse" xml:space="preserve">
+    <value>当前正在使用的钩子</value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="HookPage.ReInject" xml:space="preserve">
+    <value>重新注入游戏</value>
+  </data>
+  <data name="HookPage.SelectedHook" xml:space="preserve">
+    <value>选择的钩子</value>
+  </data>
+  <data name="Translator.Website" xml:space="preserve">
+    <value>网站</value>
+  </data>
+  <data name="Common.Token" xml:space="preserve">
+    <value>令牌</value>
+  </data>
 </root>

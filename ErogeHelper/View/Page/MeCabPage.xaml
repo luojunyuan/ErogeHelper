@@ -37,7 +37,7 @@
                         <RadioButton 
                             Content="{x:Static resx:Strings.MeCabPage_FuriganaBottom}" 
                             IsChecked="{Binding KanaBottom}" />
-                        <RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MeCabPage_TextVertical}" />
+                        <!--<RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MeCabPage_TextVertical}" />-->
                     </ui:RadioButtons>
                     <ui:RadioButtons Header="{x:Static resx:Strings.MeCabPage_FuriganaType}">
                         <RadioButton Content="{x:Static resx:Strings.MeCabPage_Romaji}" IsChecked="{Binding Romaji}" />

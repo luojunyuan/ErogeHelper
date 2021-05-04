@@ -20,7 +20,7 @@
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:NumberBox 
                         x:Name="NumberBoxSpinButtonPlacementExample"
-                        Header="Adjust max length of recevied text"
+                        Header="{x:Static resx:Strings.GeneralPage_MaxLengthTextLabel}"
                         Value="{Binding ReceivedMaxTextLength}"
                         SpinButtonPlacementMode="Inline"
                         Minimum="60" Maximum="180" HorizontalAlignment="Left"/>

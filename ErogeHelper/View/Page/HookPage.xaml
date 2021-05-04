@@ -88,7 +88,7 @@
                     <!-- RegExp -->
                     <GroupBox Header="{x:Static resx:Strings.HookPage_SelectedText}">
                         <ui:SimpleStackPanel Spacing="10">
-                            <Label Content="Hook current in use" />
+                            <Label Content="{x:Static resx:Strings.HookPage_HookCurrentInUse}" />
                             <TextBlock Text="{Binding CurrentThreadsNames}" Foreground="red" />
                             
                             <Label Content="{x:Static resx:Strings.HookPage_RegExp}" />
@@ -188,8 +188,8 @@
                                     x:Name="RCodeDialog" cal:Message.Attach="[PrimaryButtonClick] = [SearchRCodeText($source)]"/>
                             </StackPanel>
                             
-                            <Button Content="Inject the game again" cal:Message.Attach="[Click] = [ReInjectProcesses]"/>
-                            <Label Content="Select hook" />
+                            <Button Content="{x:Static resx:Strings.HookPage_ReInject}" cal:Message.Attach="[Click] = [ReInjectProcesses]"/>
+                            <Label Content="{x:Static resx:Strings.HookPage_SelectedHook}" />
                             <ComboBox
                                 Width="{StaticResource ControllerWidth}" HorizontalAlignment="Left"
                                 ItemsSource="{Binding HookComboSource}"
