@@ -138,6 +138,12 @@ namespace ErogeHelper.Model.Repository
             set => SetValue(value);
         }
 
+        public bool MonitorClipboard
+            {
+            get => GetValue(DefaultConfigValuesStore.MonitorClipboard);
+            set => SetValue(value);
+        }
+
         public int MaxAcceptTextLength
         {
             get => GetValue(DefaultConfigValuesStore.MaxAcceptTextLength);

@@ -37,6 +37,12 @@ namespace ErogeHelper.ViewModel.Page
         private string _diskUsageProgressBarText = string.Empty;
         private double _diskUsageProgressBarValue;
 
+        public bool ClipboardMonitor
+        {
+            get => _ehConfigRepository.MonitorClipboard;
+            set => _ehConfigRepository.MonitorClipboard = value;
+        }
+
         public double ReceivedMaxTextLength
         { 
             get => _ehConfigRepository.MaxAcceptTextLength;

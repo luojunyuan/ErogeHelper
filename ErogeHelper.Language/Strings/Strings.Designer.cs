@@ -422,6 +422,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Clipboard monitor 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_ClipboardMonitor {
+            get {
+                return ResourceManager.GetString("GeneralPage.ClipboardMonitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 DeepL Client Extention 的本地化字符串。
         /// </summary>
         public static string GeneralPage_DeepL {

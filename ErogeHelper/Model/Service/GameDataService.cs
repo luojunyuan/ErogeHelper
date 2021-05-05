@@ -17,6 +17,7 @@ using ErogeHelper.Model.Factory.Interface;
 using ErogeHelper.Model.Repository;
 using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Entity.NotifyItem;
+using WK.Libraries.SharpClipboardNS;
 
 namespace ErogeHelper.Model.Service
 {
@@ -68,7 +69,8 @@ namespace ErogeHelper.Model.Service
             ITermDataService termDataService,
             IDanmakuService danmakuService,
             IEventAggregator eventAggregator,
-            EhDbRepository ehDbRepository)
+            EhDbRepository ehDbRepository,
+            SharpClipboard sharpClipboard)
         {
             _meCabService = meCabService;
             _ehConfigRepository = ehConfigRepository;
@@ -77,7 +79,13 @@ namespace ErogeHelper.Model.Service
             _danmakuService = danmakuService;
             _eventAggregator = eventAggregator;
             _pattern = ehDbRepository.GetGameInfo()?.RegExp ?? string.Empty;
+            _sharpClipboard = sharpClipboard;
 
+            _sharpClipboard.ClipboardChanged += (_, e) =>
+            {
+                if (_ehConfigRepository.MonitorClipboard && e.ContentType == SharpClipboard.ContentTypes.Text)
+                    ProcessDataText(new HookParam() {Text = _sharpClipboard.ClipboardText} );
+            };
             _eventAggregator.SubscribeOnUIThread(this);
             textractorService.SelectedDataEvent += ProcessDataText;
             var meCabDicPath = Path.Combine(_ehConfigRepository.AppDataDir, "dic");
@@ -87,12 +95,14 @@ namespace ErogeHelper.Model.Service
             }
         }
 
+
         private readonly IMeCabService _meCabService;
         private readonly EhConfigRepository _ehConfigRepository;
         private readonly ITranslatorFactory _translatorFactory;
         private readonly ITermDataService _termDataService;
         private readonly IDanmakuService _danmakuService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly SharpClipboard _sharpClipboard;
 
         private string _currentText = string.Empty;
 

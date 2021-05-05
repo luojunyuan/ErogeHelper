@@ -18,6 +18,7 @@
         <StackPanel Margin="20, 10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch Header="{x:Static resx:Strings.GeneralPage_ClipboardMonitor}" IsOn="{Binding ClipboardMonitor}"/>
                     <ui:NumberBox 
                         x:Name="NumberBoxSpinButtonPlacementExample"
                         Header="{x:Static resx:Strings.GeneralPage_MaxLengthTextLabel}"

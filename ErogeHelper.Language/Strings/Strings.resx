@@ -508,4 +508,7 @@
   <data name="Common.Token" xml:space="preserve">
     <value>Token</value>
   </data>
+  <data name="GeneralPage.ClipboardMonitor" xml:space="preserve">
+    <value>Clipboard monitor</value>
+  </data>
 </root>

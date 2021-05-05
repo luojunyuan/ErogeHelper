@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Serilog;
+using WK.Libraries.SharpClipboardNS;
 
 namespace ErogeHelper.Common.Extention
 {
@@ -102,6 +103,7 @@ namespace ErogeHelper.Common.Extention
             services.TryAddTransient<IDictionaryFactory, DictionaryFactory>();
             services.TryAddTransient<ITouchConversionHooker, TouchConversionHooker>();
             services.TryAddTransient<ITranslatorFactory, TranslatorFactory>();
+            services.TryAddTransient<SharpClipboard>();
 
             return services;
         }

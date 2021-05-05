@@ -508,4 +508,7 @@
   <data name="Common.Token" xml:space="preserve">
     <value>令牌</value>
   </data>
+  <data name="GeneralPage.ClipboardMonitor" xml:space="preserve">
+    <value>剪切板监视</value>
+  </data>
 </root>
