@@ -15,7 +15,7 @@
     Height="450" 
     Width="800">
     <StackPanel>
-        <TextBlock x:Name="ATextBlock" />
+        <TextBlock x:Name="ATextBlock" Style="{StaticResource BaseTextBlockStyle}" />
         <Button x:Name="AButton" Content="Button" />
         <TextBox x:Name="BindTextBox" />
     </StackPanel>

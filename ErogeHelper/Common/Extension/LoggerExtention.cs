@@ -10,7 +10,7 @@ namespace ErogeHelper.Common.Extension
     public static class LoggerExtention
     {
         private static bool _rxDllScanCalled = false;
-        public static void DebugCallOnce(this IFullLogger logger, string message)
+        public static void RxUiWarningTipOnce(this IFullLogger logger, string message)
         {
             if (_rxDllScanCalled)
             { 

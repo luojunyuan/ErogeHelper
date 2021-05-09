@@ -20,7 +20,7 @@ namespace ErogeHelper.View.Window
             ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();            
 
             // https://github.com/reactiveui/ReactiveUI/issues/2395
-            this.Log().DebugCallOnce("Fine exceptions FileNotFoundException " +
+            this.Log().RxUiWarningTipOnce("Fine exceptions FileNotFoundException " +
                     "reactiveUI is scanning for Drawing, XamForms, Winforms, etc");
             this.WhenActivated(disposableRegistration =>
             {

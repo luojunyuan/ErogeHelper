@@ -21,6 +21,10 @@ bin\Release\SharpShell.dll
 
 to `bin\Publish\`. Finally package the publish directory.
 
+##### X86
+
+`dotnet publish -c Release -r win-x86 --self-contained false -o ./bin/Publish`
+
 ### Install
 
 For users please run ErogeHelper.Installer.exe to register EH in windows context menu (right click menu).

@@ -11,14 +11,15 @@
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
-	  <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
-	  <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.18" />
-	  <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />
-	  <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
+    <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.18" />
+    <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Service\" />
+    <Content Include="libs\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
+  <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
+    <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
+  </Target>
+
+  <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
+    <Copy SourceFiles="$(OutDir)libs\texthost_x86.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
+    <Delete Files="$(OutDir)libs\texthost_x86.dll" /> 
+  </Target>
+  <Target Name="TextHostX86-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'" AfterTargets="Publish">
+    <Copy SourceFiles="$(PublishDir)libs\texthost_x86.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\texthost_x86.dll" /> 
+  </Target>
 </Project>

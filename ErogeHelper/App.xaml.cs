@@ -44,7 +44,7 @@ namespace ErogeHelper
             {
                 if (e.Args.Length != 0)
                 {
-                    _ = new MainGameWindow();
+                    DependencyInject.ShowView<MainGameViewModel>();
                 }
                 else
                 {
