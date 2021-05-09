@@ -2,7 +2,7 @@
 
 ### How to build
 
-Use VS2019 or Rider to clone `https://github.com/luojunyuan/Eroge-Helper` down.
+Use VS2019 or Rider to clone `https://github.com/Eroge-Helper/ErogeHelper` down.
 
 Just press F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
 
@@ -23,7 +23,14 @@ to `bin\Publish\`. Finally package the publish directory.
 
 ##### X86
 
-`dotnet publish -c Release -r win-x86 --self-contained false -o ./bin/Publish`
+Build ErogeHelper x86 `dotnet publish -c Release -r win-x86 --self-contained false -o ./bin/Publish`
+
+Open `x86 Native Tools Command Prompt for VS 2019`
+
+```cmd
+cd path_to\ErogeHelper\bin\Publish
+editbin /largeaddressaware ErogeHelper.exe
+```
 
 ### Install
 
