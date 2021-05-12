@@ -12,7 +12,7 @@
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
-    <Platforms>AnyCPU</Platforms>
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>

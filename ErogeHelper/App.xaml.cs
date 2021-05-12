@@ -1,5 +1,5 @@
-﻿using ErogeHelper.Common.Function;
-using ErogeHelper.View.Window;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
@@ -38,17 +38,25 @@ namespace ErogeHelper
             }
         }
 
-        private void OnStartup(object sender, StartupEventArgs e)
+        private async void OnStartup(object sender, StartupEventArgs e)
         {
             try
             {
+                //using var scope = _serviceProvider.CreateScope();
+                //var serviceProvider = scope.ServiceProvider;
+                //var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+                //// https://github.com/fluentmigrator/fluentmigrator/issues/1450
+                //this.Log().Debug("Fine FileNotFoundExceptions in CLR");
+                //runner.MigrateUp(); 
+
                 if (e.Args.Length != 0)
                 {
-                    DependencyInject.ShowView<MainGameViewModel>();
+                    await DependencyInject.GetService<IStartupService>().StartFromCommandLine(e).ConfigureAwait(false);
                 }
                 else
                 {
-                    DependencyInject.ShowView<MainGameViewModel>();
+                    throw new NotImplementedException();
+                    //DependencyInject.ShowView<SelectGameViewModel>();
                 }
             }
             catch (Exception ex)
@@ -151,7 +159,7 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
-            bool isMessageBoxShowed = false;
+            var isMessageBoxShowed = false;
             Observable.Create<bool>(observer =>
                 {
                     while (_eventWaitHandle.WaitOne())
@@ -162,10 +170,9 @@ namespace ErogeHelper
                 })
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .ObserveOnDispatcher()
-                .Where(opend => opend == false)
+                .Where(opened => opened == false)
                 .Subscribe(async _ =>
                 {
-                    this.Log().Debug(Environment.CurrentManagedThreadId);
                     isMessageBoxShowed = true;
                     await ModernWpf.MessageBox
                         .ShowAsync("ErogeHelper is running!", "Eroge Helper")

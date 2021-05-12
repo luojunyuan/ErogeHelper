@@ -11,10 +11,19 @@
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <Platforms>AnyCPU;x86</Platforms>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.1.422-beta">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.18" />
@@ -30,6 +39,14 @@
     <Content Include="libs\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\DAL\Entity\Table\" />
+    <Folder Include="Model\DAL\Entity\Payload\" />
+    <Folder Include="Model\DAL\Entity\Response\" />
+    <Folder Include="Model\DAL\Migration\" />
+    <Folder Include="Model\Repository" />
   </ItemGroup>
 
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">

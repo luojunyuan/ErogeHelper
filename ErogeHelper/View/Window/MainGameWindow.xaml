@@ -8,15 +8,18 @@
     xmlns:ui="http://schemas.modernwpf.com/2019"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
-    ui:WindowHelper.UseModernWindowStyle="True"
     mc:Ignorable="d"
-    WindowStartupLocation="CenterScreen"
-    Title="MainWindow" 
-    Height="450" 
-    Width="800">
-    <StackPanel>
-        <TextBlock x:Name="ATextBlock" Style="{StaticResource BaseTextBlockStyle}" />
-        <Button x:Name="AButton" Content="Button" />
-        <TextBox x:Name="BindTextBox" />
-    </StackPanel>
+    Top="-32000" Left="-32000" Width="0" Height="0"
+    Title="MainGameWindow" Topmost="True" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
+    
+    <Window.Background>
+        <SolidColorBrush />
+    </Window.Background>
+    
+    <!-- Layout of the whole game window -->
+    <Border>
+        <!-- Client area -->
+        <Border x:Name="ClientArea" BorderThickness="1" BorderBrush="Red">
+        </Border>
+    </Border>
 </reactiveUi:ReactiveWindow>

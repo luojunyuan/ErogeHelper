@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows;
+using ErogeHelper.Common.Function;
+using ErogeHelper.Model.DataService;
+using ErogeHelper.Model.DataService.Interface;
+using ErogeHelper.Model.Service;
+using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.View.Window;
 using ErogeHelper.ViewModel.Window;
 using ReactiveUI;
 using Splat;
 
-namespace ErogeHelper.Common.Function
+namespace ErogeHelper.Common
 {
     public static class DependencyInject
     {
@@ -16,9 +19,14 @@ namespace ErogeHelper.Common.Function
             // Locator.CurrentMutable.InitializeSplat();
             // Locator.CurrentMutable.InitializeReactiveUI(RegistrationNamespace.Wpf);
             Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
-            
+
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             
+            Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
+
+            Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
+            Locator.CurrentMutable.RegisterLazySingleton(() => new GameWindowHooker(), typeof(IGameWindowHooker));
+
             // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning
             Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
         }
@@ -33,6 +41,6 @@ namespace ErogeHelper.Common.Function
             if (view is not Window window)
                 throw new TypeAccessException("View not implement IViewFor");
             window.Show();
-        }    
+        }
     }
 }

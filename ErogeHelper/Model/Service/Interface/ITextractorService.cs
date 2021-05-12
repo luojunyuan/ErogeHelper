@@ -8,9 +8,9 @@ namespace ErogeHelper.Model.Service.Interface
 {
     public interface ITextractorService
     {
-        event EventHandler<object> TextEvent;
+        event EventHandler<HookParamEventArgs> TextEvent;
 
-        event EventHandler<object> SelectedTextEvent;
+        event EventHandler<HookParamEventArgs> SelectedTextEvent;
 
         TextractorSetting Setting { get; set; } 
 
@@ -31,6 +31,6 @@ namespace ErogeHelper.Model.Service.Interface
 
         void RemoveHook(long address);
 
-        void GetEngineName(long address);
+        string GetEngineName(long address);
     }
 }
