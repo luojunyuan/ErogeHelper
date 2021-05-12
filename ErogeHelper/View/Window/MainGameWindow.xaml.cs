@@ -111,20 +111,20 @@ namespace ErogeHelper.View.Window
         /// <param name="registered">false to enable</param>
         private void RegisterAppBar(bool registered)
         {
-            var abd = new APPBARDATA();
-            abd.cbSize = (uint)Marshal.SizeOf(abd);
-            abd.hWnd = _handler;
+            var appbarData = new APPBARDATA();
+            appbarData.cbSize = (uint)Marshal.SizeOf(appbarData);
+            appbarData.hWnd = _handler;
 
             _desktopHandle = PInvoke.GetDesktopWindow();
             _shellHandle = PInvoke.GetShellWindow();
             if (!registered)
             {
-                abd.uCallbackMessage = _ehAppbarMsg;
-                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_NEW, ref abd);
-            }
+                appbarData.uCallbackMessage = _ehAppbarMsg;
+                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_NEW, ref appbarData);
+            } 
             else
             {
-                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_REMOVE, ref abd);
+                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_REMOVE, ref appbarData);
             }
         }
 
@@ -166,6 +166,8 @@ namespace ErogeHelper.View.Window
 
             return IntPtr.Zero;
         }
+
+        protected override void OnClosed(EventArgs e) => RegisterAppBar(true);
 
         #endregion
     }
