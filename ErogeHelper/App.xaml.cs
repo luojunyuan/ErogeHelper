@@ -24,6 +24,7 @@ namespace ErogeHelper
             {
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
+                SetLanguageDictionary();
                 Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
                 var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
                 Directory.SetCurrentDirectory(currentDirectory ??
@@ -179,6 +180,20 @@ namespace ErogeHelper
                         .ConfigureAwait(false);
                     isMessageBoxShowed = false;
                 });
+        }
+
+        private static void SetLanguageDictionary()
+        {
+            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+            {
+                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
+                // Default english because there can be so many different system language, we rather fallback on 
+                // english in this case.
+                _ => new System.Globalization.CultureInfo(""),
+            };
         }
     }
 }

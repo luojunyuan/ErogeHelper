@@ -62,7 +62,8 @@ namespace ErogeHelper.View.Window
             // https://github.com/reactiveui/ReactiveUI/issues/2395
             this.Log().RxUIWarningTipOnce("Fine exceptions FileNotFoundException " +
                     "reactiveUI is scanning for Drawing, XamForms, Winforms, etc");
-            this.WhenActivated(disposableRegistration => { });
+            // bug?
+            //this.WhenActivated(disposableRegistration => { });
         }
 
         private double _dpi;
@@ -87,7 +88,9 @@ namespace ErogeHelper.View.Window
             _handler = new HWND(interopHelper.Handle);
 
             // Set fullscreen application listener
-            RegisterAppBar(false);
+            // Issue: TODO: report issue
+            //RegisterAppBar(false);
+            RegisterAppBarOld(false);
             var source = PresentationSource.FromVisual(this) as HwndSource;
             source?.AddHook(WndProc);
 
@@ -128,6 +131,26 @@ namespace ErogeHelper.View.Window
             }
         }
 
+        [Obsolete("see ...")]
+        private void RegisterAppBarOld(bool registered)
+        {
+            var abd = new NativeMethods.AppbarData();
+            abd.cbSize = Marshal.SizeOf(abd);
+            abd.hWnd = _handler;
+
+            _desktopHandle = new HWND(NativeMethods.GetDesktopWindow());
+            _shellHandle = new HWND(NativeMethods.GetShellWindow());
+            if (!registered)
+            {
+                abd.uCallbackMessage = (int)_ehAppbarMsg;
+                _ = NativeMethods.SHAppBarMessage(ABMsg_ABM_NEW, ref abd);
+            }
+            else
+            {
+                _ = NativeMethods.SHAppBarMessage(ABMsg_ABM_REMOVE, ref abd);
+            }
+        }
+
         private const uint ABMsg_ABM_NEW = 0;
         private const uint ABMsg_ABM_REMOVE = 1;
         private const uint ABNotify_ABN_FULLSCREENAPP = 2;
@@ -152,12 +175,12 @@ namespace ErogeHelper.View.Window
 
                     if ((int)lParam == 1)
                     {
-                        this.Log().Debug("The game is being maxsize");
+                        this.Log().Debug("Window maxsize");
                         _bringToTopTimer?.Start();
                     }
                     else
                     {
-                        this.Log().Debug("The game is being normalize or minimize");
+                        this.Log().Debug("Window normalize or fullscreen minimize");
                         _bringToTopTimer?.Stop();
                     }
                     _gameWindowHooker.ResetWindowHandler();
@@ -167,7 +190,7 @@ namespace ErogeHelper.View.Window
             return IntPtr.Zero;
         }
 
-        protected override void OnClosed(EventArgs e) => RegisterAppBar(true);
+        protected override void OnClosed(EventArgs e) => RegisterAppBarOld(true);
 
         #endregion
     }

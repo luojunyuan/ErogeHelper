@@ -1,17 +1,21 @@
-﻿GetWindowRect
+﻿// window locate
+GetWindowRect
 GetClientRect
 EnumChildWindows
 
+// for enum windows handle and get main thread
+GetWindowThreadProcessId
+
+// event hook for window follow
 SetWinEventHook
 UnhookWinEvent
 
-GetWindowThreadProcessId
-
+// hide window in Alt+Tab
 GetWindowLong
 SetWindowLong
 
+// fullscreen watcher
 BringWindowToTop
-
 RegisterWindowMessage
 SHAppBarMessage
 GetForegroundWindow

@@ -1,22 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <ApplicationManifest>assets\app.manifest</ApplicationManifest>
-    <Version>0.0.7</Version>
+    <Version>0.0.9</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
     <PublishReadyToRun>true</PublishReadyToRun>
     <Platforms>AnyCPU;x86</Platforms>
-    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +22,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
+    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.18" />
     <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />

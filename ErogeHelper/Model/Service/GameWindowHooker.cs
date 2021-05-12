@@ -111,7 +111,7 @@ namespace ErogeHelper.Model.Service
             if (hWnd.Equals(_realWindowHandle) &&
                 eventType == (uint)SWEHEvents.EventObjectFocus)
             {
-                UpdateLocation();
+                //UpdateLocation();
             }
 
             // When game window location changed
