@@ -50,17 +50,20 @@ namespace ErogeHelper.Model.Service
 
             HWND handle = FindRealHandle();
 
-            if (handle != IntPtr.Zero)
+            if (handle.Equals(_realWindowHandle))
+            {
+                UpdateLocation();
+            }
+            else if (handle != IntPtr.Zero)
             { 
                 _realWindowHandle = handle;
                 SetWindowHandler();
+                UpdateLocation();
             }
             else
             {
-                // gameHWnd still be last handle
                 throw new InvalidOperationException("Not found game window");
             }
-            UpdateLocation();
         }
 
         public void InvokeUpdatePosition() => UpdateLocation();
@@ -82,6 +85,9 @@ namespace ErogeHelper.Model.Service
             Width = 0,
         };
 
+        private const uint SWEH_Event_Object_Focus = 0x8005;
+        private const uint SWEH_Event_Object_LocationChange = 0x800B;
+
         private unsafe void SetWindowHandler()
         {
             this.Log().Debug($"Set handle to 0x{Convert.ToString(_realWindowHandle.Value, 16).ToUpper()} " +
@@ -91,10 +97,10 @@ namespace ErogeHelper.Model.Service
             // Hook must register in message loop thread
             Dispatcher.InvokeAsync(
                 () => _hWinEventHook = WinEventHookRange(
-                    SWEHEvents.EventObjectFocus,
-                    SWEHEvents.EventObjectLocationChange,
+                    SWEH_Event_Object_Focus,
+                    SWEH_Event_Object_LocationChange,
                     _winEventDelegate ?? throw new ArgumentNullException(nameof(_winEventDelegate)),
-                    (uint)_gameProc.Id,
+                    _gameProc.Id,
                     gameUIThreadId)
             );
         }
@@ -109,14 +115,14 @@ namespace ErogeHelper.Model.Service
         {
             // When game window get focus
             if (hWnd.Equals(_realWindowHandle) &&
-                eventType == (uint)SWEHEvents.EventObjectFocus)
+                eventType == SWEH_Event_Object_Focus)
             {
-                //UpdateLocation();
+                UpdateLocation();
             }
 
             // When game window location changed
             if (hWnd.Equals(_realWindowHandle) &&
-                eventType == (uint)SWEHEvents.EventObjectLocationChange &&
+                eventType == SWEH_Event_Object_LocationChange &&
                 idObject == SWEH_CHILDID_SELF)
             {
                 UpdateLocation();
@@ -170,12 +176,12 @@ namespace ErogeHelper.Model.Service
 
         #region SetWinEventHook Warpper
 
-        private static HWINEVENTHOOK WinEventHookRange(SWEHEvents eventFrom, SWEHEvents eventTo,
+        private static HWINEVENTHOOK WinEventHookRange(uint eventFrom, uint eventTo,
                                                 WINEVENTPROC @delegate,
-                                                uint idProcess, 
+                                                int idProcess, 
                                                 uint idThread)
         {
-            return PInvoke.SetWinEventHook((uint)eventFrom, (uint)eventTo, IntPtr.Zero, @delegate, idProcess, idThread,
+            return PInvoke.SetWinEventHook(eventFrom, eventTo, IntPtr.Zero, @delegate, (uint)idProcess, idThread,
                                             (uint)WinEventHookInternalFlags);
         }
 

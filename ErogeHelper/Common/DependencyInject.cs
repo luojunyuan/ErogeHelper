@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using ErogeHelper.Common.Function;
 using ErogeHelper.Model.DataService;
@@ -35,12 +36,13 @@ namespace ErogeHelper.Common
                                            throw new InvalidOperationException(
                                                $"No service for type {typeof(T)} has been registered.");
 
-        public static void ShowView<T>() where T : ReactiveObject
-        {
-            var view = GetService<IViewFor<T>>();
-            if (view is not Window window)
-                throw new TypeAccessException("View not implement IViewFor");
-            window.Show();
-        }
+        public static async Task ShowViewAsync<T>() where T : ReactiveObject => 
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+                {    
+                    var view = GetService<IViewFor<T>>();
+                    if (view is not Window window)
+                        throw new TypeAccessException("View not implement IViewFor");
+                    window.Show();
+                });
     }
 }

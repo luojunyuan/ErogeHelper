@@ -1,6 +1,6 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.ViewModel.Window;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Windows.UI.Notifications;
 
 namespace ErogeHelper
 {
@@ -52,6 +53,9 @@ namespace ErogeHelper
 
                 if (e.Args.Length != 0)
                 {
+                    if (e.Args[0].Equals("-ToastActivated"))
+                        AppExit(-1);
+
                     await DependencyInject.GetService<IStartupService>().StartFromCommandLine(e).ConfigureAwait(false);
                 }
                 else
@@ -115,10 +119,10 @@ namespace ErogeHelper
             using var dialog = new TaskDialog
             {
                 WindowTitle = $@"Eroge Helper - {errorLevel} Error",
-                MainInstruction = ex.Message,
+                MainInstruction = ex.GetType().FullName + ": " + ex.Message,
                 Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace)
                     ? string.Empty
-                    : "See detail error by click Detail information below.")}",
+                    : "See error stack by click Detail information below.")}",
                 ExpandedInformation = ex.StackTrace,
                 Width = 300,
             };
@@ -160,25 +164,35 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
-            var isMessageBoxShowed = false;
-            Observable.Create<bool>(observer =>
+            Observable.Create<object>(observer =>
                 {
                     while (_eventWaitHandle.WaitOne())
                     {
-                        observer.OnNext(isMessageBoxShowed);
+                        observer.OnNext(new object());
                     }
                     return Disposable.Empty;
                 })
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .ObserveOnDispatcher()
-                .Where(opened => opened == false)
-                .Subscribe(async _ =>
+                .Subscribe(_ =>
                 {
-                    isMessageBoxShowed = true;
-                    await ModernWpf.MessageBox
-                        .ShowAsync("ErogeHelper is running!", "Eroge Helper")
-                        .ConfigureAwait(false);
-                    isMessageBoxShowed = false;
+                    // Fine System.Runtime.InteropServices.COMException when toast first time
+                    new ToastContentBuilder()
+                        .AddText("ErogeHelper is running!")
+                        .Show(toast =>
+                        { 
+                            toast.Group = "eh";
+                            toast.Tag = "eh";
+                            //try
+                            //{ 
+                            //    // Issue TODO: bug
+                            //    //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
+                            //}
+                            //catch(InvalidCastException ex)
+                            //{ 
+                            //    this.Log().Debug(ex);    
+                            //}
+                        });
                 });
         }
 
@@ -190,8 +204,6 @@ namespace ErogeHelper
                 "zh" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
-                // Default english because there can be so many different system language, we rather fallback on 
-                // english in this case.
                 _ => new System.Globalization.CultureInfo(""),
             };
         }

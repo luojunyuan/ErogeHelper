@@ -7,7 +7,11 @@
 
         public const int TextractorReAttachBlockTime = 100;
 
+        public const int WaitNWJSGameStartDelay = 7000;
+
         public const int WaitGameStartTimeout = 20000;
+
+        public const int MinimumLagTime = 50;
 
         public const int GoodWindowSize = 140;
     }

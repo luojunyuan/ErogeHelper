@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.IO;
 using System;
 using System.Runtime.InteropServices;
+using ErogeHelper.Common.Contract;
 
 namespace ErogeHelper.View.Window
 {
@@ -60,14 +61,12 @@ namespace ErogeHelper.View.Window
             Loaded += (_, _) => Utils.HideWindowInAltTab(this);
 
             // https://github.com/reactiveui/ReactiveUI/issues/2395
-            this.Log().RxUIWarningTipOnce("Fine exceptions FileNotFoundException " +
-                    "reactiveUI is scanning for Drawing, XamForms, Winforms, etc");
-            // bug?
-            //this.WhenActivated(disposableRegistration => { });
+            // Fine exceptions FileNotFoundException reactiveUI is scanning for Drawing, XamForms, Winforms, etc
+            this.WhenActivated(disposableRegistration => { });
         }
 
         private double _dpi;
-        private IGameWindowHooker _gameWindowHooker;
+        private readonly IGameWindowHooker _gameWindowHooker;
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
@@ -97,7 +96,7 @@ namespace ErogeHelper.View.Window
             // Always make window front
             _bringToTopTimer = new DispatcherTimer()
             {
-                Interval = TimeSpan.FromMilliseconds(50),
+                Interval = TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime),
             };
             _bringToTopTimer.Tick += (_, _) => PInvoke.BringWindowToTop(_handler);
         }
@@ -156,7 +155,7 @@ namespace ErogeHelper.View.Window
         private const uint ABNotify_ABN_FULLSCREENAPP = 2;
 
         /// <summary>
-        /// Only use for checking game fullscreen status
+        /// Window message callback, only use for checking game fullscreen status
         /// </summary>
         private IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {

@@ -60,13 +60,11 @@ namespace ErogeHelper.Model.Service
                 // Wait for nw.js based game start multi-process
                 if (File.Exists(Path.Combine(gameDir, "nw.pak")))
                 {
-                    await Task.Delay(7000).ConfigureAwait(false);
+                    await Task.Delay(ConstantValues.WaitNWJSGameStartDelay).ConfigureAwait(false);
                 }
             }
 
-            _gameDataService.LoadData(gamePath);
-            _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
-
+            await _gameDataService.LoadDataAsync(gamePath).ConfigureAwait(false);
             if (!_gameDataService.GameProcesses.Any())
             {
                 await ModernWpf.MessageBox
@@ -75,7 +73,9 @@ namespace ErogeHelper.Model.Service
                 return;
             }
 
-            DependencyInject.ShowView<MainGameViewModel>();
+            _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
+
+            await DependencyInject.ShowViewAsync<MainGameViewModel>().ConfigureAwait(false);
         }
 
         public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)
