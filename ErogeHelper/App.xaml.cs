@@ -6,6 +6,7 @@ using ReactiveUI;
 using Splat;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -13,7 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Windows.UI.Notifications;
+//using Windows.UI.Notifications;
 
 namespace ErogeHelper
 {
@@ -53,7 +54,7 @@ namespace ErogeHelper
 
                 if (e.Args.Length != 0)
                 {
-                    if (e.Args[0].Equals("-ToastActivated"))
+                    if (e.Args.Contains("-ToastActivated"))
                         AppExit(-1);
 
                     await DependencyInject.GetService<IStartupService>().StartFromCommandLine(e).ConfigureAwait(false);
@@ -177,23 +178,23 @@ namespace ErogeHelper
                 .Subscribe(_ =>
                 {
                     // Fine System.Runtime.InteropServices.COMException when toast first time
-                    new ToastContentBuilder()
-                        .AddText("ErogeHelper is running!")
-                        .Show(toast =>
-                        { 
-                            toast.Group = "eh";
-                            toast.Tag = "eh";
-                            // TODO: Add Kill ErogeHelper immedieatly
-                            //try
-                            //{ 
-                            //    // Issue TODO: bug
-                            //    //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
-                            //}
-                            //catch(InvalidCastException ex)
-                            //{ 
-                            //    this.Log().Debug(ex);    
-                            //}
-                        });
+                    //new ToastContentBuilder()
+                    //    .AddText("ErogeHelper is running!")
+                    //    .Show(toast =>
+                    //    { 
+                    //        toast.Group = "eh";
+                    //        toast.Tag = "eh";
+                    //        // TODO: Add Kill ErogeHelper immedieatly
+                    //        //try
+                    //        //{ 
+                    //        //    // Issue TODO: bug
+                    //        //    //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
+                    //        //}
+                    //        //catch(InvalidCastException ex)
+                    //        //{ 
+                    //        //    this.Log().Debug(ex);    
+                    //        //}
+                    //    });
                 });
         }
 
