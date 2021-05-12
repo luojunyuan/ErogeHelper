@@ -183,6 +183,7 @@ namespace ErogeHelper
                         { 
                             toast.Group = "eh";
                             toast.Tag = "eh";
+                            // TODO: Add Kill ErogeHelper immedieatly
                             //try
                             //{ 
                             //    // Issue TODO: bug
