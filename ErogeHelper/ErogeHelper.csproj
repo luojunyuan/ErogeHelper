@@ -25,9 +25,9 @@
     </PackageReference>
     <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.18" />
-    <PackageReference Include="ReactiveUI.Fody" Version="13.2.18" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.Fody" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.3.2" />
   </ItemGroup>
 
   <ItemGroup>
