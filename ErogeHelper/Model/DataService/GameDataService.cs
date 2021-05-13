@@ -19,31 +19,19 @@ namespace ErogeHelper.Model.DataService
     {
         public async Task LoadDataAsync(string gamePath)
         {
-            _gamePath = gamePath;
-            _gameProcesses = await ProcessCollectAsync(Path.GetFileNameWithoutExtension(gamePath)).ConfigureAwait(false);
-            _md5 = GetFileMd5(gamePath);
-            _mainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new();
+            GamePath = gamePath;
+            GameProcesses = await ProcessCollectAsync(Path.GetFileNameWithoutExtension(gamePath)).ConfigureAwait(false);
+            Md5 = GetFileMd5(gamePath);
+            MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new();
         }
 
-        public IEnumerable<Process> GameProcesses => _gameProcesses;
+        public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
 
-        public string Md5 => _md5;
+        public string Md5 { get; private set; } = string.Empty;
 
-        public string GamePath => _gamePath;
+        public string GamePath { get; private set; } = string.Empty;
 
-        public Process MainProcess => _mainProcess;
-
-        #region Private Fields
-
-        private IEnumerable<Process> _gameProcesses = new List<Process>();
-
-        private string _md5 = string.Empty;
-
-        private string _gamePath = string.Empty;
-
-        private Process _mainProcess = new();
-
-        #endregion
+        public Process MainProcess { get; private set; } = new();
 
         /// <summary>
         /// Get all processes of the game (timeout 20s)

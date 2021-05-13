@@ -30,7 +30,7 @@ namespace ErogeHelper.View.Window
             InitializeComponent();
 
             ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();
-            var gameInfo = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
 
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
@@ -67,16 +67,23 @@ namespace ErogeHelper.View.Window
 
         private double _dpi;
         private readonly IGameWindowHooker _gameWindowHooker;
+        private readonly IGameDataService _gameDataService;
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {
             base.OnDpiChanged(oldDpi, newDpi);
 
-            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            _dpi = newDpi.DpiScaleX;
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
         }
 
         #region Fullscreen Watcher
+
+        private DispatcherTimer? _bringToTopTimer;
+        private HWND _desktopHandle;
+        private HWND _shellHandle;
+        private readonly uint _ehAppbarMsg = PInvoke.RegisterWindowMessage("APPBARMSG_EROGE_HELPER");
+        private HWND _handler;
 
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -100,12 +107,6 @@ namespace ErogeHelper.View.Window
             };
             _bringToTopTimer.Tick += (_, _) => PInvoke.BringWindowToTop(_handler);
         }
-
-        private DispatcherTimer? _bringToTopTimer;
-        private HWND _desktopHandle;
-        private HWND _shellHandle;
-        private readonly uint _ehAppbarMsg = PInvoke.RegisterWindowMessage("APPBARMSG_EROGE_HELPER");
-        private HWND _handler;
 
         /// <summary>
         /// Listening to ABNotify.ABN_FULLSCREENAPP message for checking game window handle
@@ -168,7 +169,12 @@ namespace ErogeHelper.View.Window
                     var foregroundHWnd = PInvoke.GetForegroundWindow();
                     if (foregroundHWnd.Equals(_desktopHandle) || foregroundHWnd.Equals(_shellHandle))
                     {
-                        this.Log().Debug("Foregroung is shell or desktop");
+                        this.Log().Debug("Fullscreen window is shell or desktop");
+                        break;
+                    }
+                    if (_gameDataService.MainProcess.Id != Utils.GetProcessIdByHandle(foregroundHWnd))
+                    {
+                        this.Log().Debug("Not game window");
                         break;
                     }
 
@@ -176,11 +182,13 @@ namespace ErogeHelper.View.Window
                     {
                         this.Log().Debug("Window maxsize");
                         _bringToTopTimer?.Start();
+                        ClientArea.BorderBrush = Brushes.Red;
                     }
                     else
                     {
                         this.Log().Debug("Window normalize or fullscreen minimize");
                         _bringToTopTimer?.Stop();
+                        ClientArea.BorderBrush = Brushes.Green;
                     }
                     _gameWindowHooker.ResetWindowHandler();
                     break;

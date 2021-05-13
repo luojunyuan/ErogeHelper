@@ -2,7 +2,7 @@
 
 ### How to build
 
-Use VS2019 to clone `https://github.com/Eroge-Helper/ErogeHelper` down.
+Use VS2019 or Rider to clone `https://github.com/Eroge-Helper/ErogeHelper` down.
 
 Just press F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
 

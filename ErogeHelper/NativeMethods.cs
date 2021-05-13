@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ErogeHelper.Common
+// ReSharper disable MemberHidesStaticFromOuterClass
+// ReSharper disable InconsistentNaming XXX: allowed uppercase naming
+// ReSharper disable IdentifierTypo XXX: allowed all (uppercase) naming
+
+namespace ErogeHelper
 {
     public static class NativeMethods
     {

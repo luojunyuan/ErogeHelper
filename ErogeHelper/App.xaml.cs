@@ -1,8 +1,6 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Model.Service.Interface;
-using Microsoft.Toolkit.Uwp.Notifications;
 using Ookii.Dialogs.Wpf;
-using ReactiveUI;
 using Splat;
 using System;
 using System.IO;
@@ -120,7 +118,7 @@ namespace ErogeHelper
             using var dialog = new TaskDialog
             {
                 WindowTitle = $@"Eroge Helper - {errorLevel} Error",
-                MainInstruction = ex.GetType().FullName + ": " + ex.Message,
+                MainInstruction = ex.GetType().FullName + @": " + ex.Message,
                 Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace)
                     ? string.Empty
                     : "See error stack by click Detail information below.")}",
@@ -184,10 +182,10 @@ namespace ErogeHelper
                     //    { 
                     //        toast.Group = "eh";
                     //        toast.Tag = "eh";
-                    //        // TODO: Add Kill ErogeHelper immedieatly
+                    //        // TODO: Add Kill ErogeHelper immediately
                     //        //try
                     //        //{ 
-                    //        //    // Issue TODO: bug
+                    //        //    // Issue TODO: report bug
                     //        //    //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
                     //        //}
                     //        //catch(InvalidCastException ex)
