@@ -10,13 +10,12 @@
     <Version>0.0.9</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
-    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
     <PublishReadyToRun>true</PublishReadyToRun>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ModernWpfUis.MessageBox" Version="0.4.5" />
+    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="13.3.2" />
     <PackageReference Include="ReactiveUI.Fody" Version="13.3.2" />
