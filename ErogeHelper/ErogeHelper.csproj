@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
@@ -13,8 +13,6 @@
     <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
     <PublishReadyToRun>true</PublishReadyToRun>
     <Platforms>AnyCPU;x86</Platforms>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
   </PropertyGroup>
 
   <ItemGroup>

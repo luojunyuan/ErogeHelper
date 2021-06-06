@@ -143,8 +143,15 @@ namespace ErogeHelper
             var clicked = dialog.ShowDialog();
             if (clicked == clipboardButton)
             {
-                await Current.Dispatcher.InvokeAsync(() => 
-                    Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace));
+                if (Current.Dispatcher.Thread == Thread.CurrentThread)
+                {
+                    Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace);
+                }
+                else
+                {
+                    await Current.Dispatcher.InvokeAsync(() => 
+                        Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace));
+                }
             }
         }
 
@@ -174,6 +181,8 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
+            // TODO: CustomNotification with enforce get over process
+            // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
             var notifier = new Notifier(cfg => 
             {
                 cfg.PositionProvider =

@@ -20,6 +20,7 @@ namespace ErogeHelper.Model.Service
 
         public void InvokeUpdatePosition()
         {
+            GamePosChanged?.Invoke(null, new());
             throw new NotImplementedException();
         }
 
