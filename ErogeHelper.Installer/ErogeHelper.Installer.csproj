@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ModernWpfUI" Version="0.9.4" />
+    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
   </ItemGroup>
 
 </Project>
