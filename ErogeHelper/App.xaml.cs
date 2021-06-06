@@ -216,7 +216,6 @@ namespace ErogeHelper
 
         private static void SetLanguageDictionary()
         {
-            System.Diagnostics.Trace.WriteLine(Thread.CurrentThread.CurrentCulture.ToString());
             Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
