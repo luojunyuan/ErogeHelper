@@ -1,10 +1,7 @@
-﻿using System.Reactive.Disposables;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Extension;
+﻿using ErogeHelper.Common;
 using ErogeHelper.ViewModel.Window;
 using ReactiveUI;
 using Splat;
-using Microsoft.Windows.Sdk;
 using System.Windows.Media;
 using System.Windows.Interop;
 using ErogeHelper.Model.DataService.Interface;
@@ -17,6 +14,8 @@ using System.IO;
 using System;
 using System.Runtime.InteropServices;
 using ErogeHelper.Common.Contract;
+using ErogeHelper.Common.Enum;
+using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Window
 {
@@ -56,7 +55,7 @@ namespace ErogeHelper.View.Window
                     });
                 });
 
-            _gameWindowHooker.InvokeUpdatePosition();
+            //_gameWindowHooker.InvokeUpdatePosition();
 
             Loaded += (_, _) => Utils.HideWindowInAltTab(this);
 
@@ -77,12 +76,9 @@ namespace ErogeHelper.View.Window
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
         }
 
-        #region Fullscreen Watcher
+        #region Game Window Status Watcher
 
         private DispatcherTimer? _bringToTopTimer;
-        private HWND _desktopHandle;
-        private HWND _shellHandle;
-        private readonly uint _ehAppbarMsg = PInvoke.RegisterWindowMessage("APPBARMSG_EROGE_HELPER");
         private HWND _handler;
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -93,111 +89,101 @@ namespace ErogeHelper.View.Window
             var interopHelper = new WindowInteropHelper(this);
             _handler = new HWND(interopHelper.Handle);
 
-            // Set fullscreen application listener
-            // Issue: TODO: report issue
-            //RegisterAppBar(false);
-            RegisterAppBarOld(false);
             var source = PresentationSource.FromVisual(this) as HwndSource;
-            source?.AddHook(WndProc);
 
-            // Always make window front
+            // Window top most timer
             _bringToTopTimer = new DispatcherTimer()
             {
                 Interval = TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime),
             };
-            _bringToTopTimer.Tick += (_, _) => PInvoke.BringWindowToTop(_handler);
+            _bringToTopTimer.Tick += (_, _) => User32.BringWindowToTop(_handler);
+
+            //if (IsGameForegroundFullScreen(_gameWindowHooker.GameRealHwnd))
+            //{
+            //    _bringToTopTimer.Start();
+            //    ClientArea.BorderBrush = Brushes.Red;
+            //}
+            
+            //if (User32.IsIconic(_gameWindowHooker.GameRealHwnd))
+            //{
+            //    _gameDataService.IsMinimized = true;
+            //}
+            //else
+            //{
+            //    _gameDataService.IsMinimized = false;
+            //}
+
+            Observable.Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
+                .Subscribe(_ =>
+                {
+                    // valid
+
+                    // visible
+
+                    // rect
+
+                        // state
+                    //WINDOWPLACEMENT ws = new();
+                    //PInvoke.GetWindowPlacement(_handler, ref ws);
+                    //switch(ws.showCmd)
+                    //{ 
+                    //    case SHOW_WINDOW_CMD.SW_SHOWNORMAL:
+                    //        this.Log().Debug(ws.showCmd);
+                    //        break;
+                    //    case SHOW_WINDOW_CMD.SW_SHOWMINIMIZED:
+                    //        this.Log().Debug(ws.showCmd);
+                    //        break;
+                    //    case SHOW_WINDOW_CMD.SW_SHOWMAXIMIZED:
+                    //        this.Log().Debug(ws.showCmd);
+                    //        break;
+                    // }
+                    //Vanara.PInvoke.Shell32.SHAppBarMessage(Vanara.PInvoke.Shell32.ABM.ABM_ACTIVATE,  );
+                    //if (PInvoke.IsZoomed(_gameWindowHooker.GameRealHwnd))
+                    //{
+                    //    currentStatus = WindowStatus.Fullscreen;
+                    //}
+                    //else if (PInvoke.IsIconic(_gameWindowHooker.GameRealHwnd))
+                    //{
+                    //    currentStatus = WindowStatus.Minimized;
+                    //}
+                    //else
+                    //{
+                    //    currentStatus = WindowStatus.Normal;
+                    //}
+
+                    //if (currentStatus != _gameDataService.WindowsPlacement)
+                    //{
+                    //    switch(currentStatus)
+                    //    {
+                    //        case WindowStatus.Normal:
+                    //            this.Log().Debug("normal");
+                    //            break;
+                    //        case WindowStatus.Fullscreen:
+                    //            this.Log().Debug("fullscreen");
+                    //            break;
+                    //        case WindowStatus.Minimized:
+                    //            this.Log().Debug("minimized");
+                    //            break;
+                    //    }
+
+                    //    _gameDataService.WindowsPlacement = currentStatus;
+                    //}
+                });
         }
 
-        /// <summary>
-        /// Listening to ABNotify.ABN_FULLSCREENAPP message for checking game window handle
-        /// </summary>
-        /// <param name="registered">false to enable</param>
-        private void RegisterAppBar(bool registered)
-        {
-            var appbarData = new APPBARDATA();
-            appbarData.cbSize = (uint)Marshal.SizeOf(appbarData);
-            appbarData.hWnd = _handler;
-
-            _desktopHandle = PInvoke.GetDesktopWindow();
-            _shellHandle = PInvoke.GetShellWindow();
-            if (!registered)
+        private static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
+        { 
+            foreach(var screen in WpfScreenHelper.Screen.AllScreens)
             {
-                appbarData.uCallbackMessage = _ehAppbarMsg;
-                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_NEW, ref appbarData);
-            } 
-            else
-            {
-                _ = PInvoke.SHAppBarMessage(ABMsg_ABM_REMOVE, ref appbarData);
+                User32.GetWindowRect(gameHwnd, out var rect);
+                var systemRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+                if (systemRect.Contains(screen.Bounds))
+                {
+                    return true;
+                }
             }
+            return false;
         }
-
-        [Obsolete("see ...")]
-        private void RegisterAppBarOld(bool registered)
-        {
-            var abd = new NativeMethods.AppbarData();
-            abd.cbSize = Marshal.SizeOf(abd);
-            abd.hWnd = _handler;
-
-            _desktopHandle = new HWND(NativeMethods.GetDesktopWindow());
-            _shellHandle = new HWND(NativeMethods.GetShellWindow());
-            if (!registered)
-            {
-                abd.uCallbackMessage = (int)_ehAppbarMsg;
-                _ = NativeMethods.SHAppBarMessage(ABMsg_ABM_NEW, ref abd);
-            }
-            else
-            {
-                _ = NativeMethods.SHAppBarMessage(ABMsg_ABM_REMOVE, ref abd);
-            }
-        }
-
-        private const uint ABMsg_ABM_NEW = 0;
-        private const uint ABMsg_ABM_REMOVE = 1;
-        private const uint ABNotify_ABN_FULLSCREENAPP = 2;
-
-        /// <summary>
-        /// Window message callback, only use for checking game fullscreen status
-        /// </summary>
-        private IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            if (msg != _ehAppbarMsg)
-                return IntPtr.Zero;
-
-            switch (wParam.ToInt32())
-            {
-                case (int)ABNotify_ABN_FULLSCREENAPP:
-                    var foregroundHWnd = PInvoke.GetForegroundWindow();
-                    if (foregroundHWnd.Equals(_desktopHandle) || foregroundHWnd.Equals(_shellHandle))
-                    {
-                        this.Log().Debug("Fullscreen window is shell or desktop");
-                        break;
-                    }
-                    if (_gameDataService.MainProcess.Id != Utils.GetProcessIdByHandle(foregroundHWnd))
-                    {
-                        this.Log().Debug("Not game window");
-                        break;
-                    }
-
-                    if ((int)lParam == 1)
-                    {
-                        this.Log().Debug("Window maxsize");
-                        _bringToTopTimer?.Start();
-                        ClientArea.BorderBrush = Brushes.Red;
-                    }
-                    else
-                    {
-                        this.Log().Debug("Window normalize or fullscreen minimize");
-                        _bringToTopTimer?.Stop();
-                        ClientArea.BorderBrush = Brushes.Green;
-                    }
-                    _gameWindowHooker.ResetWindowHandler();
-                    break;
-            }
-
-            return IntPtr.Zero;
-        }
-
-        protected override void OnClosed(EventArgs e) => RegisterAppBarOld(true);
 
         #endregion
     }

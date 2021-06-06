@@ -70,7 +70,8 @@ namespace ErogeHelper.Model.Service
                 await ModernWpf.MessageBox
                     .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
-                return;
+                App.AppExit();
+                return ;
             }
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
@@ -84,7 +85,7 @@ namespace ErogeHelper.Model.Service
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
         }
 
-        private IGameDataService _gameDataService;
-        private IGameWindowHooker _gameWindowHooker;
+        private readonly IGameDataService _gameDataService;
+        private readonly IGameWindowHooker _gameWindowHooker;
     }
 }

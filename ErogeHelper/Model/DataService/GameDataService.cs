@@ -1,6 +1,5 @@
 ﻿using ErogeHelper.Common.Contract;
 using ErogeHelper.Model.DataService.Interface;
-using Microsoft.Windows.Sdk;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -9,9 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ErogeHelper.Model.DataService
 {
@@ -20,9 +17,10 @@ namespace ErogeHelper.Model.DataService
         public async Task LoadDataAsync(string gamePath)
         {
             GamePath = gamePath;
-            GameProcesses = await ProcessCollectAsync(Path.GetFileNameWithoutExtension(gamePath)).ConfigureAwait(false);
+            GameProcesses = await ProcessCollectAsync(Path.GetFileNameWithoutExtension(gamePath))
+                .ConfigureAwait(false);
             Md5 = GetFileMd5(gamePath);
-            MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new();
+            MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new Process();
         }
 
         public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
@@ -32,6 +30,8 @@ namespace ErogeHelper.Model.DataService
         public string GamePath { get; private set; } = string.Empty;
 
         public Process MainProcess { get; private set; } = new();
+
+        public bool IsMinimized { get; set; }
 
         /// <summary>
         /// Get all processes of the game (timeout 20s)
@@ -44,15 +44,16 @@ namespace ErogeHelper.Model.DataService
             spendTime.Start();
             Process? mainProcess = null;
             var procList = new List<Process>();
-            
+
             while (mainProcess is null && spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
             {
                 await Task.Delay(ConstantValues.MinimumLagTime).ConfigureAwait(true);
                 procList.Clear();
                 procList.AddRange(Process.GetProcessesByName(friendlyName));
                 procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
-
-                // 进程找完却没有得到hWnd的可能也是存在的，所以以带hWnd的进程为主
+                if (!friendlyName.Equals("main.bin"))
+                    procList.AddRange(Process.GetProcessesByName("main.bin"));
+                
                 mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
             }
             spendTime.Stop();
@@ -60,13 +61,14 @@ namespace ErogeHelper.Model.DataService
             // log 👀
             if (mainProcess is null)
             {
-               this.Log().Debug("Timeout! Find MainWindowHandle Failed");
+                this.Log().Debug("Timeout! Find MainWindowHandle Failed");
             }
             else
             {
-                this.Log().Debug($"{procList.Count} Process(es) and window handle " +
-                         $"0x{Convert.ToString(mainProcess.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
-                         $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
+                this.Log().Debug(
+                    $"{procList.Count} Process(es) and window handle " +
+                    $"0x{Convert.ToString(mainProcess.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
+                    $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
             }
 
             return mainProcess is null ? new List<Process>() : procList;

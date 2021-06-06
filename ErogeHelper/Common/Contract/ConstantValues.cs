@@ -13,6 +13,10 @@
 
         public const int MinimumLagTime = 50;
 
-        public const int GoodWindowSize = 140;
+        public const int GameWindowStatusRefreshTime = 200;
+
+        public const int GoodWindowWidth = 300;
+
+        public const int GoodWindowHeight = 200;
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.Windows.Sdk;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Interop;
+using Vanara.PInvoke;
 
 namespace ErogeHelper.Common
 {
@@ -11,16 +11,10 @@ namespace ErogeHelper.Common
         public static void HideWindowInAltTab(Window window)
         {
             var windowInterop = new WindowInteropHelper(window);
-            var exStyle = PInvoke.GetWindowLong(new HWND(windowInterop.Handle), GetWindowLongPtr_nIndex.GWL_EXSTYLE);
+            var exStyle = User32.GetWindowLong(new HWND(windowInterop.Handle), 
+                                                   User32.WindowLongFlags.GWL_EXSTYLE);
             exStyle |= WsExToolWindow;
-            _ = PInvoke.SetWindowLong(new HWND(windowInterop.Handle), GetWindowLongPtr_nIndex.GWL_EXSTYLE, exStyle);
-        }
-
-        public static unsafe int GetProcessIdByHandle(HWND handle)
-        {
-            uint lpdwProcessId = 0;
-            _ = PInvoke.GetWindowThreadProcessId(handle, &lpdwProcessId);
-            return (int)lpdwProcessId;
+            _ = User32.SetWindowLong(new HWND(windowInterop.Handle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
         }
     }
 }

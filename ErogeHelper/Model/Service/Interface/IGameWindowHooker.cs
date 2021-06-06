@@ -12,10 +12,12 @@ namespace ErogeHelper.Model.Service.Interface
     {
         event EventHandler<GameWindowPositionEventArgs> GamePosChanged;
 
+        IntPtr GameRealHwnd { get; }
+
         void SetGameWindowHook(Process process);
 
         /// <summary>
-        /// Some games may change their handle when the window is switched full screen
+        /// Some games may change their handle when the window is switched to fullscreen
         /// </summary>
         /// <returns></returns>
         void ResetWindowHandler();

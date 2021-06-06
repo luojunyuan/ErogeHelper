@@ -12,7 +12,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-//using Windows.UI.Notifications;
+using ToastNotifications;
+using ToastNotifications.Core;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 
 namespace ErogeHelper
 {
@@ -43,6 +47,7 @@ namespace ErogeHelper
         {
             try
             {
+                var startupService = DependencyInject.GetService<IStartupService>();
                 //using var scope = _serviceProvider.CreateScope();
                 //var serviceProvider = scope.ServiceProvider;
                 //var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
@@ -53,14 +58,19 @@ namespace ErogeHelper
                 if (e.Args.Length != 0)
                 {
                     if (e.Args.Contains("-ToastActivated"))
+                    {
+                        this.Log().Debug("win10 toast activated");
                         AppExit(-1);
+                    }
 
-                    await DependencyInject.GetService<IStartupService>().StartFromCommandLine(e).ConfigureAwait(false);
+                    if (e.Args.Contains("-Debug"))
+                        throw new NotImplementedException();
+                            
+                    await startupService.StartFromCommandLine(e).ConfigureAwait(false);
                 }
                 else
                 {
                     throw new NotImplementedException();
-                    //DependencyInject.ShowView<SelectGameViewModel>();
                 }
             }
             catch (Exception ex)
@@ -113,7 +123,7 @@ namespace ErogeHelper
             };
         }
 
-        private static void ShowErrorDialog(string errorLevel, Exception ex)
+        private static async void ShowErrorDialog(string errorLevel, Exception ex)
         {
             using var dialog = new TaskDialog
             {
@@ -133,13 +143,14 @@ namespace ErogeHelper
             var clicked = dialog.ShowDialog();
             if (clicked == clipboardButton)
             {
-                Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace);
+                await Current.Dispatcher.InvokeAsync(() => 
+                    Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace));
             }
         }
 
-        private void AppExit(int exitCode = 0)
+        public static void AppExit(int exitCode = 0)
         {
-            Shutdown(exitCode);
+            Current.Dispatcher.InvokeAsync(() => Current.Shutdown(exitCode));
             if (exitCode != 0)
             {
                 Environment.Exit(exitCode);
@@ -163,37 +174,35 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
+            var notifier = new Notifier(cfg => 
+            {
+                cfg.PositionProvider =
+                    new PrimaryScreenPositionProvider( 
+                        corner: Corner.BottomRight, 
+                        offsetX: 16, 
+                        offsetY: 12); 
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(5),
+                    maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
+
+                cfg.DisplayOptions.TopMost = true;
+            });
+
             Observable.Create<object>(observer =>
                 {
                     while (_eventWaitHandle.WaitOne())
                     {
-                        observer.OnNext(new object());
+                        observer.OnNext(new ());
                     }
                     return Disposable.Empty;
                 })
                 .SubscribeOn(ThreadPoolScheduler.Instance)
                 .ObserveOnDispatcher()
-                .Subscribe(_ =>
-                {
-                    // Fine System.Runtime.InteropServices.COMException when toast first time
-                    //new ToastContentBuilder()
-                    //    .AddText("ErogeHelper is running!")
-                    //    .Show(toast =>
-                    //    { 
-                    //        toast.Group = "eh";
-                    //        toast.Tag = "eh";
-                    //        // TODO: Add Kill ErogeHelper immediately
-                    //        //try
-                    //        //{ 
-                    //        //    // Issue TODO: report bug
-                    //        //    //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
-                    //        //}
-                    //        //catch(InvalidCastException ex)
-                    //        //{ 
-                    //        //    this.Log().Debug(ex);    
-                    //        //}
-                    //    });
-                });
+                .Subscribe(_ => notifier.ShowInformation(
+                    "ErogeHelper is already running!", 
+                    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false })
+                );
         }
 
         private static void SetLanguageDictionary()
