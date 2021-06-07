@@ -8,7 +8,7 @@ Just press F5 to run or you can fill the command parameters in ErogeHelper's pro
 
 one is full path of game, '/le' or '-le' to start with Locate Emulator
 
-### Publish
+### Publish  (reactiveUI branch)
 
 Run `dotnet publish -c Release -r win-x64 -o ./bin/Publish` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
 
@@ -32,6 +32,8 @@ cd path_to\ErogeHelper\bin\Publish
 editbin /largeaddressaware ErogeHelper.exe
 ```
 
+ShellMenuHandler(x86) may not work in a 32 bit system (not tested yet).
+
 ### Install
 
-For users please run ErogeHelper.Installer.exe to register EH in windows context menu (right click menu).
+For users please run ErogeHelper.Installer.exe to register EH in windows context menu (aka right click menu).
