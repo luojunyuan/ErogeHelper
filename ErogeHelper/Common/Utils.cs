@@ -1,7 +1,11 @@
-﻿using System;
+﻿using ErogeHelper.Common.Contract;
+using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Interop;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.Common
@@ -30,5 +34,29 @@ namespace ErogeHelper.Common
             exStyle |= WsExToolWindow;
             _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
         }
+        
+        // Tip: CustomNotification with enforce get over process
+        // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
+        public static readonly Notifier DesktopNotifier = new(cfg =>
+            {
+                cfg.PositionProvider =
+                    new PrimaryScreenPositionProvider(
+                        corner: Corner.BottomRight,
+                        offsetX: 16,
+                        offsetY: 12);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromMilliseconds(ConstantValues.ToastLifetime),
+                    maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
+
+                cfg.DisplayOptions.TopMost = true;
+            });
+        // Usage
+        // Note: Would throw Exceptions if enforce getting over process
+        // System.Threading.Tasks.TaskCanceledException(In System.Private.CoreLib.dll)
+        // System.TimeoutException(In WindowsBase.dll)
+        //Utils.DesktopNotifier.ShowInformation(
+        //    "ErogeHelper is already running!",
+        //    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
     }
 }

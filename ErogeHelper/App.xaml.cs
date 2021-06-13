@@ -1,6 +1,7 @@
-﻿using ErogeHelper.Common;
+﻿using CommunityToolkit.WinUI.Notifications;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Contract;
 using ErogeHelper.Common.Function;
-using ErogeHelper.Language;
 using ErogeHelper.Model.Service.Interface;
 using Ookii.Dialogs.Wpf;
 using Splat;
@@ -13,11 +14,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using ToastNotifications;
-using ToastNotifications.Core;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Messages;
-using ToastNotifications.Position;
 
 namespace ErogeHelper
 {
@@ -42,13 +38,21 @@ namespace ErogeHelper
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(async args =>
                 {
+                    ToastNotificationManagerCompat.OnActivated += toastArgs =>
+                    {
+                        if (toastArgs.Argument.Length == 0)
+                        {
+                            this.Log().Debug("Toast Clicked");
+                            return;
+                        }
+                        var args = ToastArguments.Parse(toastArgs.Argument);
+                    };
                     var startupService = DependencyInject.GetService<IStartupService>();
 
                     if (args.Length != 0)
                     {
-                        if (args.Contains("-ToastActivated"))
+                        if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
-                            this.Log().Debug("win10 toast activated");
                             AppExit(-1);
                         }
 
@@ -80,6 +84,7 @@ namespace ErogeHelper
             Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
             if (exitCode != 0)
             {
+                ToastNotificationManagerCompat.History.Clear();
                 Environment.Exit(exitCode);
             }
         }
@@ -132,8 +137,8 @@ namespace ErogeHelper
             {
                 WindowTitle = $"ErogeHelper v{Utils.AppVersion} - {errorLevel} Error",
                 MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
-                Content = Strings.ErrorDialog_Content,
-                ExpandedInformation = $"Caused by {ex.Source}\n" +
+                Content = Language.Strings.ErrorDialog_Content,
+                ExpandedInformation = $"Caused by object `{ex.Source}`\n" +
                                       ex.StackTrace +
                                       (ex.InnerException is null ?
                                           string.Empty :
@@ -171,22 +176,7 @@ namespace ErogeHelper
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
-            // TODO: CustomNotification with enforce get over process
-            // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
-            var notifier = new Notifier(cfg =>
-            {
-                cfg.PositionProvider =
-                    new PrimaryScreenPositionProvider(
-                        corner: Corner.BottomRight,
-                        offsetX: 16,
-                        offsetY: 12);
-
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(5),
-                    maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
-
-                cfg.DisplayOptions.TopMost = true;
-            });
+            var toastLifetimeTimer = new System.Diagnostics.Stopwatch();
 
             Observable.Create<object>(observer =>
                 {
@@ -198,18 +188,34 @@ namespace ErogeHelper
                 })
                 .SubscribeOn(ReactiveUI.RxApp.TaskpoolScheduler)
                 //.ObserveOnDispatcher()
-                .Subscribe(_ =>
-                    // Note: Would throw Exceptions if enforce getting over process
-                    // System.Threading.Tasks.TaskCanceledException(In System.Private.CoreLib.dll)
-                    // System.TimeoutException(In WindowsBase.dll)
-                    notifier.ShowInformation(
-                        "ErogeHelper is already running!",
-                        new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false })
-                );
+                .Subscribe(async _ =>
+                {
+                    // Occurs System.Runtime.InteropServices.COMException when toast first time
+                    new ToastContentBuilder()
+                        .AddText("ErogeHelper is running!")
+                        .Show(toast =>
+                        {
+                            toast.Group = "eh";
+                            toast.Tag = "eh";
+                            // ExpirationTime bugged with InvalidCastException
+                            //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
+                        });
+
+                    toastLifetimeTimer.Restart();
+                    await Task.Delay(ConstantValues.ToastLifetime).ConfigureAwait(false);
+                    if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastLifetime)
+                    {
+                        ToastNotificationManagerCompat.History.Clear();
+                        toastLifetimeTimer.Stop();
+                    }
+
+                    // Note: Would not block running in main thread
+                    //await ModernWpf.MessageBox.ShowAsync("ErogeHeper is running! Do you like to exit it immediately?", "ErogeHelper", MessageBoxButton.YesNo, MessageBoxImage.Question).ConfigureAwait(false);
+                });
         }
 
         private static void SetLanguageDictionary() =>
-            Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh" => new System.Globalization.CultureInfo("zh-Hans"),
