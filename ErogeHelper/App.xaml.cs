@@ -1,11 +1,12 @@
 ﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Function;
+using ErogeHelper.Language;
 using ErogeHelper.Model.Service.Interface;
 using Ookii.Dialogs.Wpf;
 using Splat;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -27,57 +28,59 @@ namespace ErogeHelper
             try
             {
                 SetupExceptionHandling();
-                SingleInstanceWatcher();
                 SetLanguageDictionary();
-                Current.Events().Exit.Subscribe(args => AppExit(args.ApplicationExitCode));
+                SingleInstanceWatcher();
+
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
                 Directory.SetCurrentDirectory(currentDirectory ??
                     throw new ArgumentNullException(nameof(currentDirectory)));
+
                 DependencyInject.Register();
+
+                this.Events().Startup
+                    .Select(startupEvent => startupEvent.Args)
+                    .Subscribe(async args =>
+                {
+                    var startupService = DependencyInject.GetService<IStartupService>();
+
+                    if (args.Length != 0)
+                    {
+                        if (args.Contains("-ToastActivated"))
+                        {
+                            this.Log().Debug("win10 toast activated");
+                            AppExit(-1);
+                        }
+
+                        if (args.Contains("-Debug"))
+                            throw new NotImplementedException();
+
+                        await startupService.StartFromCommandLine(args.ToList()).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
+                    }
+                });
+            }
+            catch (AppAlreadyExistsException)
+            {
+                AppExit();
             }
             catch (Exception ex)
             {
                 this.Log().Error(ex);
-                ShowErrorDialog("App", ex);
+                ShowErrorDialog("AppCtor", ex);
                 AppExit(-1);
             }
         }
 
-        private async void OnStartup(object sender, StartupEventArgs e)
+        public static void AppExit(int exitCode = 0)
         {
-            try
+            Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
+            if (exitCode != 0)
             {
-                var startupService = DependencyInject.GetService<IStartupService>();
-                //using var scope = _serviceProvider.CreateScope();
-                //var serviceProvider = scope.ServiceProvider;
-                //var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-                //// https://github.com/fluentmigrator/fluentmigrator/issues/1450
-                //this.Log().Debug("Fine FileNotFoundExceptions in CLR");
-                //runner.MigrateUp(); 
-
-                if (e.Args.Length != 0)
-                {
-                    if (e.Args.Contains("-ToastActivated"))
-                    {
-                        this.Log().Debug("win10 toast activated");
-                        AppExit(-1);
-                    }
-
-                    if (e.Args.Contains("-Debug"))
-                        throw new NotImplementedException();
-                            
-                    await startupService.StartFromCommandLine(e).ConfigureAwait(false);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Log().Error(ex);
-                ShowErrorDialog("OnStartup", ex);
-                AppExit(-1);
+                Environment.Exit(exitCode);
             }
         }
 
@@ -97,7 +100,7 @@ namespace ErogeHelper
                 AppExit(-1);
             };
 
-            Current.Events().DispatcherUnhandledException.Subscribe(args =>
+            DispatcherUnhandledException += (_, args) =>
             {
                 var ex = args.Exception;
 
@@ -113,7 +116,7 @@ namespace ErogeHelper
                     ShowErrorDialog("UI-Fatal", ex);
                     AppExit(-1);
                 }
-            });
+            };
 
             TaskScheduler.UnobservedTaskException += (_, args) =>
             {
@@ -123,16 +126,18 @@ namespace ErogeHelper
             };
         }
 
-        private static async void ShowErrorDialog(string errorLevel, Exception ex)
+        private static void ShowErrorDialog(string errorLevel, Exception ex)
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = $@"Eroge Helper - {errorLevel} Error",
-                MainInstruction = ex.GetType().FullName + @": " + ex.Message,
-                Content = @$"Eroge Helper run into some trouble. {(string.IsNullOrWhiteSpace(ex.StackTrace)
-                    ? string.Empty
-                    : "See error stack by click Detail information below.")}",
-                ExpandedInformation = ex.StackTrace,
+                WindowTitle = $"ErogeHelper v{Utils.AppVersion} - {errorLevel} Error",
+                MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
+                Content = Strings.ErrorDialog_Content,
+                ExpandedInformation = $"Caused by {ex.Source}\n" +
+                                      ex.StackTrace +
+                                      (ex.InnerException is null ?
+                                          string.Empty :
+                                          $"\nThis Exception caused with in another Exception: {ex.InnerException}"),
                 Width = 300,
             };
 
@@ -143,24 +148,8 @@ namespace ErogeHelper
             var clicked = dialog.ShowDialog();
             if (clicked == clipboardButton)
             {
-                if (Current.Dispatcher.Thread == Thread.CurrentThread)
-                {
-                    Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace);
-                }
-                else
-                {
-                    await Current.Dispatcher.InvokeAsync(() => 
-                        Clipboard.SetText(dialog.WindowTitle + '\n' + ex.Message + '\n' + ex.StackTrace));
-                }
-            }
-        }
-
-        public static void AppExit(int exitCode = 0)
-        {
-            Current.Dispatcher.InvokeAsync(() => Current.Shutdown(exitCode));
-            if (exitCode != 0)
-            {
-                Environment.Exit(exitCode);
+                var errorInfo = dialog.WindowTitle + '\n' + dialog.MainInstruction + '\n' + dialog.ExpandedInformation;
+                Current.Dispatcher.Invoke(() => Clipboard.SetText(errorInfo));
             }
         }
 
@@ -173,7 +162,8 @@ namespace ErogeHelper
             {
                 _eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
                 _eventWaitHandle.Set();
-                AppExit(-1);
+
+                throw new AppAlreadyExistsException();
             }
             catch (WaitHandleCannotBeOpenedException)
             {
@@ -183,13 +173,13 @@ namespace ErogeHelper
 
             // TODO: CustomNotification with enforce get over process
             // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
-            var notifier = new Notifier(cfg => 
+            var notifier = new Notifier(cfg =>
             {
                 cfg.PositionProvider =
-                    new PrimaryScreenPositionProvider( 
-                        corner: Corner.BottomRight, 
-                        offsetX: 16, 
-                        offsetY: 12); 
+                    new PrimaryScreenPositionProvider(
+                        corner: Corner.BottomRight,
+                        offsetX: 16,
+                        offsetY: 12);
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
                     notificationLifetime: TimeSpan.FromSeconds(5),
@@ -202,21 +192,24 @@ namespace ErogeHelper
                 {
                     while (_eventWaitHandle.WaitOne())
                     {
-                        observer.OnNext(new ());
+                        observer.OnNext(new object());
                     }
                     return Disposable.Empty;
                 })
-                .SubscribeOn(ThreadPoolScheduler.Instance)
-                .ObserveOnDispatcher()
-                .Subscribe(_ => notifier.ShowInformation(
-                    "ErogeHelper is already running!", 
-                    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false })
+                .SubscribeOn(ReactiveUI.RxApp.TaskpoolScheduler)
+                //.ObserveOnDispatcher()
+                .Subscribe(_ =>
+                    // Note: Would throw Exceptions if enforce getting over process
+                    // System.Threading.Tasks.TaskCanceledException(In System.Private.CoreLib.dll)
+                    // System.TimeoutException(In WindowsBase.dll)
+                    notifier.ShowInformation(
+                        "ErogeHelper is already running!",
+                        new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false })
                 );
         }
 
-        private static void SetLanguageDictionary()
-        {
-            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+        private static void SetLanguageDictionary() =>
+            Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
                 "zh" => new System.Globalization.CultureInfo("zh-Hans"),
@@ -224,6 +217,5 @@ namespace ErogeHelper
                 "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
                 _ => new System.Globalization.CultureInfo(""),
             };
-        }
     }
 }

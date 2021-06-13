@@ -61,15 +61,6 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Eroge Helper 的本地化字符串。
-        /// </summary>
-        public static string About_AppName {
-            get {
-                return ResourceManager.GetString("About.AppName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Contributors 的本地化字符串。
         /// </summary>
         public static string About_Contributors {
@@ -210,6 +201,15 @@ namespace ErogeHelper.Language {
         public static string Common_Warn {
             get {
                 return ResourceManager.GetString("Common.Warn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ErogeHelper run into some trouble. See error stack by click Detail information below. 的本地化字符串。
+        /// </summary>
+        public static string ErrorDialog_Content {
+            get {
+                return ResourceManager.GetString("ErrorDialog.Content", resourceCulture);
             }
         }
         

@@ -132,9 +132,6 @@
   <data name="MessageBox.TimeoutInfo" xml:space="preserve">
     <value>Timeout! Game window not found</value>
   </data>
-  <data name="About.AppName" xml:space="preserve">
-    <value>Eroge Helper</value>
-  </data>
   <data name="About.FileABug" xml:space="preserve">
     <value>If you find any bugs, please open a new issue in the github repository.</value>
   </data>
@@ -489,5 +486,8 @@
   </data>
   <data name="OokiiDialog.ClipboardLabel" xml:space="preserve">
     <value>Confirm and copy error to clipboard</value>
+  </data>
+  <data name="ErrorDialog.Content" xml:space="preserve">
+    <value>ErogeHelper run into some trouble. See error stack by click Detail information below.</value>
   </data>
 </root>

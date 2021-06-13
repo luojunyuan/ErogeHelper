@@ -135,9 +135,6 @@
   <data name="About.Version" xml:space="preserve">
     <value>版本： </value>
   </data>
-  <data name="About.AppName" xml:space="preserve">
-    <value>Eroge Helper</value>
-  </data>
   <data name="About.Contributors" xml:space="preserve">
     <value>贡献者</value>
   </data>
@@ -296,7 +293,7 @@
     <value>亮度</value>
   </data>
   <data name="GeneralPage.BrightnessTip" xml:space="preserve">
-    <value>将会通过修改修改伽马值来调整亮度（如不使用请勿修改，建议保持最大）</value>
+    <value>将会通过修改修改伽马值来调整亮度（如不使用请勿修改，建议保持默认或最大）</value>
   </data>
   <data name="GeneralPage.DeepL" xml:space="preserve">
     <value>DeepL 客户端插件</value>
@@ -489,5 +486,8 @@
   </data>
   <data name="OokiiDialog.ClipboardLabel" xml:space="preserve">
     <value>确定并复制信息到粘贴板</value>
+  </data>
+  <data name="ErrorDialog.Content" xml:space="preserve">
+    <value>ErogeHelper 发生了错误，点击查看详细信息查看错误堆栈。</value>
   </data>
 </root>

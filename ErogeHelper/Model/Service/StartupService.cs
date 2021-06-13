@@ -23,19 +23,19 @@ namespace ErogeHelper.Model.Service
 {
     class StartupService : IStartupService, IEnableLogger
     {
-        public async Task StartFromCommandLine(StartupEventArgs e)
+        public async Task StartFromCommandLine(List<string> args)
         {
-            var gamePath = e.Args[0];
+            var gamePath = args[0];
             var gameDir = gamePath[..gamePath.LastIndexOf('\\')];
             if (!File.Exists(gamePath))
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
 
             this.Log().Debug($"Game's path: {gamePath}");
-            this.Log().Debug($"Locate Emulator status: {e.Args.Contains("/le") || e.Args.Contains("-le")}");
+            this.Log().Debug($"Locate Emulator status: {args.Contains("/le") || args.Contains("-le")}");
             
             if (!Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any())
             {
-                if (e.Args.Contains("/le") || e.Args.Contains("-le"))
+                if (args.Contains("/le") || args.Contains("-le"))
                 {
                     Process.Start(new ProcessStartInfo
                     {
