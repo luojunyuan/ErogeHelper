@@ -32,7 +32,7 @@ cd path_to\ErogeHelper\bin\Publish
 editbin /largeaddressaware ErogeHelper.exe
 ```
 
-ShellMenuHandler(x86) may not work in a 32 bit system (not tested yet).
+Build ErogeHelper.ShellMenuHandler(x86) as above.
 
 ### Install
 
