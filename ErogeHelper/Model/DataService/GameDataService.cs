@@ -66,8 +66,7 @@ namespace ErogeHelper.Model.DataService
             else
             {
                 this.Log().Debug(
-                    $"{procList.Count} Process(es) and window handle " +
-                    $"0x{Convert.ToString(mainProcess.MainWindowHandle.ToInt64(), 16).ToUpper()} Found. " +
+                    $"{procList.Count} Process(es) and window handle {mainProcess.MainWindowHandle:x} Found. " +
                     $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
             }
 

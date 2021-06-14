@@ -46,7 +46,8 @@ namespace ErogeHelper.Model.Service
             //_gcSafetyHandle.Free();
             //_hWinEventHook?.Dispose();
 
-            Dispatcher.InvokeShutdown();
+            App.AppExit();
+            //Dispatcher.InvokeShutdown();
         }
 
         // For running in the unit test

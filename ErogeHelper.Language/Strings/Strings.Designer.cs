@@ -998,6 +998,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Eroge Helper 的本地化字符串。
+        /// </summary>
+        public static string ShellMenu_AppName {
+            get {
+                return ResourceManager.GetString("ShellMenu.AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Start Game 的本地化字符串。
         /// </summary>
         public static string ShellMenu_DirectStart {

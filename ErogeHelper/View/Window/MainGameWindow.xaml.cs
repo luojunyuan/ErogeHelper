@@ -59,8 +59,6 @@ namespace ErogeHelper.View.Window
 
             Loaded += (_, _) => Utils.HideWindowInAltTab(this);
 
-            // https://github.com/reactiveui/ReactiveUI/issues/2395
-            // Fine exceptions FileNotFoundException reactiveUI is scanning for Drawing, XamForms, Winforms, etc
             this.WhenActivated(disposableRegistration => { });
         }
 

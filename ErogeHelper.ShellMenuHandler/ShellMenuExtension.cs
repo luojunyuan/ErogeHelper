@@ -89,7 +89,7 @@ namespace ErogeHelper.ShellMenuHandler
         {
             var mainMenu = new ToolStripMenuItem
             {
-                Text = Language.Strings.About_AppName,
+                Text = Language.Strings.ShellMenu_AppName,
                 Image = E
             };
 
@@ -132,12 +132,11 @@ namespace ErogeHelper.ShellMenuHandler
         {
             var startInfo = new ProcessStartInfo();
 
-            #region Get Path of dll (Same as project binary Path)
+            // Get Path of dll (Same as project binary Path)
             // https://stackoverflow.com/questions/52797/how-do-i-get-the-path-of-the-assembly-the-code-is-in
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);
             var path = Uri.UnescapeDataString(uri.Path);
-            #endregion
 
             var dirPath = Path.GetDirectoryName(path);
             var erogeHelperProc = dirPath + @"\ErogeHelper.exe";

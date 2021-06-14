@@ -490,4 +490,7 @@
   <data name="ErrorDialog.Content" xml:space="preserve">
     <value>ErogeHelper 发生了错误，点击查看详细信息查看错误堆栈。</value>
   </data>
+  <data name="ShellMenu.AppName" xml:space="preserve">
+    <value>Eroge Helper</value>
+  </data>
 </root>

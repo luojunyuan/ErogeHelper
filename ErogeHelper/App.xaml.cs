@@ -21,6 +21,11 @@ namespace ErogeHelper
     {
         public App()
         {
+            // Note: This application would throw some exceptions that wasn't bugs when initializing
+            // System.Threading.WaitHandleCannotBeOpenedException for active singleton app
+            // https://github.com/reactiveui/ReactiveUI/issues/2395
+            // System.IO.FileNotFoundException 5 times cause reactiveUI is scanning Drawing, XamForms, Winforms, etc
+            // System.Runtime.InteropServices.COMException when access ToastComponent first time
             try
             {
                 SetupExceptionHandling();
@@ -47,10 +52,12 @@ namespace ErogeHelper
                         }
                         var args = ToastArguments.Parse(toastArgs.Argument);
                     };
+
                     var startupService = DependencyInject.GetService<IStartupService>();
 
                     if (args.Length != 0)
                     {
+                        // EH already exit, but toast is clicked. This one shouldn't happend 
                         if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
                             AppExit(-1);
@@ -69,7 +76,7 @@ namespace ErogeHelper
             }
             catch (AppAlreadyExistsException)
             {
-                AppExit();
+                Current.Shutdown();
             }
             catch (Exception ex)
             {
@@ -82,9 +89,13 @@ namespace ErogeHelper
         public static void AppExit(int exitCode = 0)
         {
             Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-            if (exitCode != 0)
+            if (Utils.IsOSWindows8OrNewer)
             {
                 ToastNotificationManagerCompat.History.Clear();
+            }
+
+            if (exitCode != 0)
+            {
                 Environment.Exit(exitCode);
             }
         }
@@ -138,7 +149,8 @@ namespace ErogeHelper
                 WindowTitle = $"ErogeHelper v{Utils.AppVersion} - {errorLevel} Error",
                 MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
                 Content = Language.Strings.ErrorDialog_Content,
-                ExpandedInformation = $"Caused by object `{ex.Source}`\n" +
+                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\n" +
+                                      $"Caused by source `{ex.Source}`\n" +
                                       ex.StackTrace +
                                       (ex.InnerException is null ?
                                           string.Empty :
@@ -172,7 +184,6 @@ namespace ErogeHelper
             }
             catch (WaitHandleCannotBeOpenedException)
             {
-                this.Log().Debug("Fine exception WaitHandleCannotBeOpenedException for active singleton app");
                 _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
             }
 
@@ -187,30 +198,39 @@ namespace ErogeHelper
                     return Disposable.Empty;
                 })
                 .SubscribeOn(ReactiveUI.RxApp.TaskpoolScheduler)
-                //.ObserveOnDispatcher()
                 .Subscribe(async _ =>
                 {
-                    // Occurs System.Runtime.InteropServices.COMException when toast first time
-                    new ToastContentBuilder()
-                        .AddText("ErogeHelper is running!")
-                        .Show(toast =>
-                        {
-                            toast.Group = "eh";
-                            toast.Tag = "eh";
-                            // ExpirationTime bugged with InvalidCastException
-                            //toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(5);
+                    if (Utils.IsOSWindows8OrNewer)
+                    { 
+                        new ToastContentBuilder()
+                            .AddText("ErogeHelper is running!")
+                            .Show(toast =>
+                            {
+                                toast.Group = "eh";
+                                toast.Tag = "eh";
+                            // ExpirationTime bugged with InvalidCastException in .Net5
+                            //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
                         });
 
-                    toastLifetimeTimer.Restart();
-                    await Task.Delay(ConstantValues.ToastLifetime).ConfigureAwait(false);
-                    if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastLifetime)
-                    {
-                        ToastNotificationManagerCompat.History.Clear();
-                        toastLifetimeTimer.Stop();
+                        toastLifetimeTimer.Restart();
+                        await Task.Delay(ConstantValues.ToastLifetime).ConfigureAwait(false);
+                        if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastLifetime)
+                        {
+                            ToastNotificationManagerCompat.History.Clear();
+                            toastLifetimeTimer.Stop();
+                        }
                     }
-
-                    // Note: Would not block running in main thread
-                    //await ModernWpf.MessageBox.ShowAsync("ErogeHeper is running! Do you like to exit it immediately?", "ErogeHelper", MessageBoxButton.YesNo, MessageBoxImage.Question).ConfigureAwait(false);
+                    else
+                    { 
+                        // Note: Would not block if running in main thread
+                        // Note: Would throw Exceptions if enforce getting over process
+                        // System.Threading.Tasks.TaskCanceledException(In System.Private.CoreLib.dll)
+                        // System.TimeoutException(In WindowsBase.dll)
+                        await Dispatcher.InvokeAsync(async () =>
+                            await ModernWpf.MessageBox.ShowAsync(
+                                "ErogeHeper is running! Do you like to exit it immediately?", "ErogeHelper", 
+                                MessageBoxButton.YesNo, MessageBoxImage.Question).ConfigureAwait(false));
+                    }
                 });
         }
 
