@@ -15,7 +15,7 @@
 
         public const int GameWindowStatusRefreshTime = 200;
 
-        public const int ToastLifetime = 5000;
+        public const int ToastDuration = 5000;
 
         public const int GoodWindowWidth = 300;
 

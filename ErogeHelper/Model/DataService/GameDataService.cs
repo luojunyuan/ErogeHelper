@@ -8,17 +8,17 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.DataService
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
-        public async Task LoadDataAsync(string gamePath)
+        public void LoadData(string gamePath)
         {
             GamePath = gamePath;
-            GameProcesses = await ProcessCollectAsync(Path.GetFileNameWithoutExtension(gamePath))
-                .ConfigureAwait(false);
+            GameProcesses = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
             Md5 = GetFileMd5(gamePath);
             MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new Process();
         }
@@ -38,7 +38,7 @@ namespace ErogeHelper.Model.DataService
         /// </summary>
         /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
         /// <returns>if process with hWnd found, give all back, other wise return blank list</returns>
-        private async Task<List<Process>> ProcessCollectAsync(string friendlyName)
+        private List<Process> ProcessCollect(string friendlyName)
         {
             var spendTime = new Stopwatch();
             spendTime.Start();
@@ -47,7 +47,7 @@ namespace ErogeHelper.Model.DataService
 
             while (mainProcess is null && spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
             {
-                await Task.Delay(ConstantValues.MinimumLagTime).ConfigureAwait(true);
+                Thread.Sleep(ConstantValues.MinimumLagTime);
                 procList.Clear();
                 procList.AddRange(Process.GetProcessesByName(friendlyName));
                 procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));

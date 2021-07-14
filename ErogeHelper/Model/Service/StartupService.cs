@@ -1,9 +1,7 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Entity;
 using ErogeHelper.Model.DataService.Interface;
 using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.View.Window;
 using ErogeHelper.ViewModel.Window;
 using Splat;
 using System;
@@ -11,17 +9,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ErogeHelper.Model.Service
 {
-    class StartupService : IStartupService, IEnableLogger
+    public class StartupService : IStartupService, IEnableLogger
     {
         public async Task StartFromCommandLine(List<string> args)
         {
@@ -32,7 +24,7 @@ namespace ErogeHelper.Model.Service
 
             this.Log().Debug($"Game's path: {gamePath}");
             this.Log().Debug($"Locate Emulator status: {args.Contains("/le") || args.Contains("-le")}");
-            
+
             if (!Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any())
             {
                 if (args.Contains("/le") || args.Contains("-le"))
@@ -64,14 +56,14 @@ namespace ErogeHelper.Model.Service
                 }
             }
 
-            await _gameDataService.LoadDataAsync(gamePath).ConfigureAwait(false);
+            _gameDataService.LoadData(gamePath);
             if (!_gameDataService.GameProcesses.Any())
             {
                 await ModernWpf.MessageBox
                     .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
                 App.AppExit();
-                return ;
+                return;
             }
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);

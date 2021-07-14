@@ -19,12 +19,14 @@ namespace ErogeHelper.Common
         {
             // Locator.CurrentMutable.InitializeSplat();
             // Locator.CurrentMutable.InitializeReactiveUI(RegistrationNamespace.Wpf);
-            Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
-
-            Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             
+            // View
+            Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
+            // ViewModel
+            Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
+            // DataService
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
-
+            // Service
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new FakeGameWindowHooker(), typeof(IGameWindowHooker));
 
