@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ErogeHelper.Model.Service
 {
     public class StartupService : IStartupService, IEnableLogger
     {
-        public async Task StartFromCommandLine(List<string> args)
+        public void StartFromCommandLine(List<string> args)
         {
             var gamePath = args[0];
             var gameDir = gamePath[..gamePath.LastIndexOf('\\')];
@@ -52,23 +53,22 @@ namespace ErogeHelper.Model.Service
                 // Wait for nw.js based game start multi-process
                 if (File.Exists(Path.Combine(gameDir, "nw.pak")))
                 {
-                    await Task.Delay(ConstantValues.WaitNWJSGameStartDelay).ConfigureAwait(false);
+                    Thread.Sleep(ConstantValues.WaitNWJSGameStartDelay);
                 }
             }
 
             _gameDataService.LoadData(gamePath);
             if (!_gameDataService.GameProcesses.Any())
             {
-                await ModernWpf.MessageBox
-                    .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
-                    .ConfigureAwait(false);
+                ModernWpf.MessageBox
+                    .Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
                 App.AppExit();
                 return;
             }
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
-            await DependencyInject.ShowViewAsync<MainGameViewModel>().ConfigureAwait(false);
+            DependencyInject.ShowView<MainGameViewModel>();
         }
 
         public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)

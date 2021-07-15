@@ -9,6 +9,6 @@ namespace ErogeHelper.Model.Service.Interface
 {
     public interface IStartupService
     {
-        Task StartFromCommandLine(List<string> args);
+        void StartFromCommandLine(List<string> args);
     }
 }

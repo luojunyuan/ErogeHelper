@@ -46,7 +46,7 @@ namespace ErogeHelper
 
                 this.Events().Startup
                     .Select(startupEvent => startupEvent.Args)
-                    .Subscribe(async args =>
+                    .Subscribe(args =>
                 {
                     ToastNotificationManagerCompat.OnActivated += toastArgs =>
                     {
@@ -72,7 +72,7 @@ namespace ErogeHelper
                         if (args.Contains("-Debug"))
                             throw new NotImplementedException();
 
-                        await startupService.StartFromCommandLine(args.ToList()).ConfigureAwait(false);
+                        startupService.StartFromCommandLine(args.ToList());
                     }
                     else
                     {

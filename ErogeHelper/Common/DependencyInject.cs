@@ -46,5 +46,14 @@ namespace ErogeHelper.Common
                         throw new TypeAccessException("View not implement IViewFor");
                     window.Show();
                 });
+
+        public static void ShowView<T>() where T : ReactiveObject =>
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var view = GetService<IViewFor<T>>();
+                if (view is not Window window)
+                    throw new TypeAccessException("View not implement IViewFor");
+                window.Show();
+            });
     }
 }
