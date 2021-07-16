@@ -29,7 +29,7 @@ namespace ErogeHelper
             try
             {
                 SetupExceptionHandling();
-                SetLanguageDictionary();
+                SetI18NLanguageDictionary();
                 SingleInstanceWatcher();
 
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -41,7 +41,7 @@ namespace ErogeHelper
 
                 this.Events().Startup
                     .Select(startupEvent => startupEvent.Args)
-                    .Subscribe(async args =>
+                    .Subscribe(args =>
                 {
                     ToastNotificationManagerCompat.OnActivated += toastArgs =>
                     {
@@ -50,14 +50,15 @@ namespace ErogeHelper
                             this.Log().Debug("Toast Clicked");
                             return;
                         }
-                        var args = ToastArguments.Parse(toastArgs.Argument);
+                        var toastArguments = ToastArguments.Parse(toastArgs.Argument);
+                        this.Log().Debug(toastArguments);
                     };
 
                     var startupService = DependencyInject.GetService<IStartupService>();
 
                     if (args.Length != 0)
                     {
-                        // EH already exit, but toast is clicked. This one shouldn't happend 
+                        // EH already exit, but toast is clicked. This one shouldn't happen 
                         if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
                             Terminate(-1);
@@ -89,7 +90,7 @@ namespace ErogeHelper
         public static void Terminate(int exitCode = 0)
         {
             Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-            if (Utils.IsOSWindows8OrNewer)
+            if (Utils.IsOSWindows8OorNewer)
             {
                 ToastNotificationManagerCompat.History.Clear();
             }
@@ -208,8 +209,8 @@ namespace ErogeHelper
                             });
 
                         toastLifetimeTimer.Restart();
-                        await Task.Delay(ConstantValues.ToastLifetime).ConfigureAwait(false);
-                        if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastLifetime)
+                        await Task.Delay(ConstantValues.ToastDuration).ConfigureAwait(false);
+                        if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastDuration)
                         {
                             ToastNotificationManagerCompat.History.Clear();
                             toastLifetimeTimer.Stop();
@@ -217,19 +218,14 @@ namespace ErogeHelper
                     }
                     else
                     {
-                        // Note: Would not block if running in main thread
-                        // Note: Would throw Exceptions if enforce getting over process
-                        // System.Threading.Tasks.TaskCanceledException(In System.Private.CoreLib.dll)
-                        // System.TimeoutException(In WindowsBase.dll)
-                        await Dispatcher.InvokeAsync(async () =>
-                            await ModernWpf.MessageBox.ShowAsync(
-                                "ErogeHeper is running! Do you like to exit it immediately?", "ErogeHelper",
-                                MessageBoxButton.YesNo, MessageBoxImage.Question).ConfigureAwait(false));
+                        Utils.DesktopNotifier.ShowInformation(
+                            "ErogeHelper is running!",
+                            new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
                     }
                 });
         }
 
-        private static void SetLanguageDictionary() =>
+        private static void SetI18NLanguageDictionary() =>
             Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
                 "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),

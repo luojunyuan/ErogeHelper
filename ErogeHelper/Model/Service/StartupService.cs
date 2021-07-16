@@ -12,17 +12,8 @@ using Splat;
 
 namespace ErogeHelper.Model.Service
 {
-    class StartupService : IStartupService, IEnableLogger
+    public class StartupService : IStartupService, IEnableLogger
     {
-        private readonly IGameDataService _gameDataService;
-        private readonly IGameWindowHooker _gameWindowHooker;
-
-        public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)
-        {
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-        }
-
         public async Task StartFromCommandLine(string[] args)
         {
             string gamePath = args[0];
@@ -63,23 +54,22 @@ namespace ErogeHelper.Model.Service
                 // Wait for nw.js based game start multi-process
                 if (File.Exists(Path.Combine(gameDir, "nw.pak")))
                 {
-                    await Task.Delay(ConstantValues.WaitNWJSGameStartDelay).ConfigureAwait(false);
+                    Thread.Sleep(ConstantValues.WaitNWJSGameStartDelay);
                 }
             }
 
-            await _gameDataService.LoadDataAsync(gamePath).ConfigureAwait(false);
+            _gameDataService.LoadData(gamePath);
             if (!_gameDataService.GameProcesses.Any())
             {
                 await ModernWpf.MessageBox
-                    .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
-                    .ConfigureAwait(false);
+                    .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
                 App.Terminate();
                 return;
             }
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
-            await DependencyInject.ShowViewAsync<MainGameViewModel>().ConfigureAwait(false);
+            DependencyInject.ShowView<MainGameViewModel>();
         }
     }
 }

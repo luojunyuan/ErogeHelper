@@ -19,12 +19,14 @@ namespace ErogeHelper.Common
         {
             // Locator.CurrentMutable.InitializeSplat();
             // Locator.CurrentMutable.InitializeReactiveUI(RegistrationNamespace.Wpf);
+            
+            // View
             Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
-
+            // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
-
+            // DataService
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
-
+            // Service
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new FakeGameWindowHooker(), typeof(IGameWindowHooker));
 
@@ -44,5 +46,14 @@ namespace ErogeHelper.Common
                         throw new TypeAccessException("View not implement IViewFor");
                     window.Show();
                 });
+
+        public static void ShowView<T>() where T : ReactiveObject =>
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var view = GetService<IViewFor<T>>();
+                if (view is not Window window)
+                    throw new TypeAccessException("View not implement IViewFor");
+                window.Show();
+            });
     }
 }

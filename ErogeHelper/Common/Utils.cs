@@ -46,15 +46,11 @@ namespace ErogeHelper.Common
                         offsetY: 12);
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromMilliseconds(ConstantValues.ToastLifetime),
+                    notificationLifetime: TimeSpan.FromMilliseconds(ConstantValues.ToastDuration),
                     maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
 
                 cfg.DisplayOptions.TopMost = true;
             });
-        // Usage
-        //Utils.DesktopNotifier.ShowInformation(
-        //    "ErogeHelper is already running!",
-        //    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
 
         private static readonly Version OsVersion = Environment.OSVersion.Version;
 
@@ -62,7 +58,7 @@ namespace ErogeHelper.Common
 
         public static string GetOSInfo()
         {
-            Version windows7 = new(6, 1);
+            Version Windows7 = new(6, 1);
             Version Windows8 = new(6, 2);
             Version Windows81 = new(6, 3);
             Version Windows10 = new(10, 0);

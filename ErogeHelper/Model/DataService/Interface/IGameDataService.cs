@@ -6,7 +6,7 @@ namespace ErogeHelper.Model.DataService.Interface
 {
     public interface IGameDataService
     {
-        Task LoadDataAsync(string gamePath);
+        void LoadData(string gamePath);
 
         IEnumerable<Process> GameProcesses { get; }
 
