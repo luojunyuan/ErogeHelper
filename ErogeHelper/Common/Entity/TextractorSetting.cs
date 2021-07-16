@@ -7,7 +7,7 @@ namespace ErogeHelper.Common.Entity
     {
         public bool IsUserHook { get; set; }
         public string Hookcode { get; set; } = string.Empty;
-        public List<HookSetting> HookSettings { get; set; } = new ();
+        public List<HookSetting> HookSettings { get; set; } = new();
 
         public class HookSetting
         {

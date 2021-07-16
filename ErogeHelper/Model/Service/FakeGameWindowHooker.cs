@@ -1,14 +1,10 @@
-﻿using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Service.Interface;
-using Splat;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.Service.Interface;
+using Splat;
 
 namespace ErogeHelper.Model.Service
 {
@@ -46,7 +42,7 @@ namespace ErogeHelper.Model.Service
             //_gcSafetyHandle.Free();
             //_hWinEventHook?.Dispose();
 
-            App.AppExit();
+            App.Terminate();
             //Dispatcher.InvokeShutdown();
         }
 

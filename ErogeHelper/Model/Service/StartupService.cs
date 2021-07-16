@@ -1,45 +1,48 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.DataService.Interface;
-using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.View.Window;
-using ErogeHelper.ViewModel.Window;
-using Splat;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Contract;
+using ErogeHelper.Model.DataService.Interface;
+using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.ViewModel.Window;
+using Splat;
 
 namespace ErogeHelper.Model.Service
 {
     class StartupService : IStartupService, IEnableLogger
     {
-        public async Task StartFromCommandLine(List<string> args)
+        private readonly IGameDataService _gameDataService;
+        private readonly IGameWindowHooker _gameWindowHooker;
+
+        public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)
         {
-            var gamePath = args[0];
-            var gameDir = gamePath[..gamePath.LastIndexOf('\\')];
+            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
+        }
+
+        public async Task StartFromCommandLine(string[] args)
+        {
+            string gamePath = args[0];
+            string gameDir = Path.GetDirectoryName(gamePath)!;
+
             if (!File.Exists(gamePath))
-                throw new FileNotFoundException($"Not a valid game path \"{gamePath}\"", gamePath);
+            {
+                throw new FileNotFoundException($"Not a valid game path \"{gamePath}\".", gamePath);
+            }
 
             this.Log().Debug($"Game's path: {gamePath}");
             this.Log().Debug($"Locate Emulator status: {args.Contains("/le") || args.Contains("-le")}");
-            
+
             if (!Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any())
             {
-                if (args.Contains("/le") || args.Contains("-le"))
+                if (args.Any(arg => arg is "/le" or "-le"))
                 {
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = Directory.GetCurrentDirectory() + @"\libs\x86\LEProc.exe",
+                        FileName = Path.Combine(Directory.GetCurrentDirectory(), "libs", "x86", "LEProc.exe"),
                         UseShellExecute = false,
                         Arguments = File.Exists(gamePath + ".le.config")
                             ? $"-run \"{gamePath}\""
@@ -70,22 +73,13 @@ namespace ErogeHelper.Model.Service
                 await ModernWpf.MessageBox
                     .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper")
                     .ConfigureAwait(false);
-                App.AppExit();
-                return ;
+                App.Terminate();
+                return;
             }
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
             await DependencyInject.ShowViewAsync<MainGameViewModel>().ConfigureAwait(false);
         }
-
-        public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)
-        {
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-        }
-
-        private readonly IGameDataService _gameDataService;
-        private readonly IGameWindowHooker _gameWindowHooker;
     }
 }

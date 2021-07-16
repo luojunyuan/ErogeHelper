@@ -1,7 +1,4 @@
-﻿using ErogeHelper.Common.Contract;
-using ErogeHelper.Model.DataService.Interface;
-using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +6,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using ErogeHelper.Common.Contract;
+using ErogeHelper.Model.DataService.Interface;
+using Splat;
 
 namespace ErogeHelper.Model.DataService
 {
@@ -53,7 +53,7 @@ namespace ErogeHelper.Model.DataService
                 procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
                 if (!friendlyName.Equals("main.bin"))
                     procList.AddRange(Process.GetProcessesByName("main.bin"));
-                
+
                 mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
             }
             spendTime.Stop();

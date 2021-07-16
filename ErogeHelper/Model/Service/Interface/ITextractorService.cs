@@ -1,8 +1,8 @@
-﻿using ErogeHelper.Common.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using ErogeHelper.Common.Entity;
 
 namespace ErogeHelper.Model.Service.Interface
 {
@@ -12,7 +12,7 @@ namespace ErogeHelper.Model.Service.Interface
 
         event EventHandler<HookParamEventArgs> SelectedTextEvent;
 
-        TextractorSetting Setting { get; set; } 
+        TextractorSetting Setting { get; set; }
 
         /// <summary>
         /// Inject hooks into processes, also initialize Textractor service. This should be called only once

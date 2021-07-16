@@ -84,10 +84,10 @@ namespace ErogeHelper.Installer
                 Arguments = $"uninstall {shellMenuDllName} -codebase"
             });
             // restart all explore.exe
-            var helper = new ExplorerHelper();
-            helper.CollectDir();
-            helper.KillExplorer();
-            helper.ReOpenDirs();
+
+            var directories = ExplorerHelper.GetOpenedDirectories();
+            ExplorerHelper.KillExplorer();
+            ExplorerHelper.OpenDirectories(directories);
 
             InstallButton.IsEnabled = true;
             UninstallButton.IsEnabled = false;

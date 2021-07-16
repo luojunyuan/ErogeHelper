@@ -101,7 +101,7 @@
 //                    throw new InvalidOperationException("Install hook failed");
 //            });
 //        }
-        
+
 //        private const int SWEH_CHILDID_SELF = 0;
 
 //        private void WinEventCallback(IntPtr hWinEventHook,
@@ -136,7 +136,7 @@
 //                GamePosChanged?.Invoke(this, HiddenPos);
 //                return;
 //            }
-            
+
 //            User32.GetWindowRect(_realWindowHandle, out var rectWindow);
 //            User32.GetClientRect(_realWindowHandle, out var rectClient);
 
