@@ -94,7 +94,7 @@ namespace ErogeHelper.Common
             {
                 return $"Windows 8 {osBit}";
             }
-            else if (OsVersion >= windows7)
+            else if (OsVersion >= Windows7)
             {
                 return $"Windows 7 {Environment.OSVersion.ServicePack} {osBit}";
             }

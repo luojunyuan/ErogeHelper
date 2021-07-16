@@ -14,6 +14,8 @@ using ErogeHelper.Common.Function;
 using ErogeHelper.Model.Service.Interface;
 using Ookii.Dialogs.Wpf;
 using Splat;
+using ToastNotifications.Core;
+using ToastNotifications.Messages;
 
 namespace ErogeHelper
 {
@@ -41,7 +43,7 @@ namespace ErogeHelper
 
                 this.Events().Startup
                     .Select(startupEvent => startupEvent.Args)
-                    .Subscribe(args =>
+                    .Subscribe(async args =>
                 {
                     ToastNotificationManagerCompat.OnActivated += toastArgs =>
                     {
@@ -90,7 +92,8 @@ namespace ErogeHelper
         public static void Terminate(int exitCode = 0)
         {
             Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-            if (Utils.IsOSWindows8OorNewer)
+
+            if (Utils.IsOSWindows8OrNewer)
             {
                 ToastNotificationManagerCompat.History.Clear();
             }

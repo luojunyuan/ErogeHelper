@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contract;
@@ -14,6 +15,16 @@ namespace ErogeHelper.Model.Service
 {
     public class StartupService : IStartupService, IEnableLogger
     {
+        private readonly IGameDataService _gameDataService;
+        private readonly IGameWindowHooker _gameWindowHooker;
+
+        public StartupService(IGameDataService? gameDataService = null, IGameWindowHooker? gameWindowHooker = null)
+        {
+            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
+        }
+
+
         public async Task StartFromCommandLine(string[] args)
         {
             string gamePath = args[0];
