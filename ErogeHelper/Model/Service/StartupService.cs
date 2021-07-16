@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contract;
 using ErogeHelper.Model.DataService.Interface;
@@ -25,7 +24,7 @@ namespace ErogeHelper.Model.Service
         }
 
 
-        public async Task StartFromCommandLine(string[] args)
+        public void StartFromCommandLine(string[] args)
         {
             string gamePath = args[0];
             string gameDir = Path.GetDirectoryName(gamePath)!;
@@ -72,8 +71,8 @@ namespace ErogeHelper.Model.Service
             _gameDataService.LoadData(gamePath);
             if (!_gameDataService.GameProcesses.Any())
             {
-                await ModernWpf.MessageBox
-                    .ShowAsync($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
+                ModernWpf.MessageBox
+                    .Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
                 App.Terminate();
                 return;
             }
