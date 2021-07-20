@@ -5,6 +5,8 @@ namespace ErogeHelper.Common.Function
 {
     internal static class TextHostDll
     {
+        private const string DllName = @"libs\texthost.dll";
+
         #region 回调委托
         internal delegate void ProcessCallback(uint processId);
 
@@ -23,7 +25,7 @@ namespace ErogeHelper.Common.Function
         internal delegate void OnOutputText(long threadId, [MarshalAs(UnmanagedType.LPWStr)] string text, uint length);
         #endregion
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int TextHostInit(
             ProcessCallback onConnect,
             ProcessCallback onDisconnect,
@@ -32,29 +34,29 @@ namespace ErogeHelper.Common.Function
             OnOutputText onOutputText
             );
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int InsertHook(
             uint processId,
             [MarshalAs(UnmanagedType.LPWStr)] string hookCode
             );
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int RemoveHook(uint processId, ulong address);
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int InjectProcess(uint processId);
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int DetachProcess(uint processId);
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int SearchForText(
             uint processId,
             [MarshalAs(UnmanagedType.LPWStr)] string text,
             int codepage
         );
 
-        [DllImport(@"libs\texthost.dll")]
+        [DllImport(DllName)]
         internal static extern int AddClipboardThread(IntPtr handle);
     }
 }

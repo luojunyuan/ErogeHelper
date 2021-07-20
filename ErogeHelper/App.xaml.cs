@@ -1,11 +1,4 @@
-﻿using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Function;
-using ErogeHelper.Model.Service.Interface;
-using Ookii.Dialogs.Wpf;
-using Splat;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -14,11 +7,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using ToastNotifications;
+using CommunityToolkit.WinUI.Notifications;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Contract;
+using ErogeHelper.Common.Function;
+using ErogeHelper.Model.Service.Interface;
+using Ookii.Dialogs.Wpf;
+using Splat;
 using ToastNotifications.Core;
-using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
-using ToastNotifications.Position;
 
 namespace ErogeHelper
 {
@@ -66,13 +63,13 @@ namespace ErogeHelper
                         // EH already exit, but toast is clicked. This one shouldn't happen 
                         if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
-                            AppExit(-1);
+                            Terminate(-1);
                         }
 
                         if (args.Contains("-Debug"))
                             throw new NotImplementedException();
 
-                        startupService.StartFromCommandLine(args.ToList());
+                        startupService.StartFromCommandLine(args);
                     }
                     else
                     {
@@ -80,7 +77,7 @@ namespace ErogeHelper
                     }
                 });
             }
-            catch (AppAlreadyExistsException)
+            catch (AppExistedException)
             {
                 Current.Shutdown();
             }
@@ -88,14 +85,15 @@ namespace ErogeHelper
             {
                 this.Log().Error(ex);
                 ShowErrorDialog("AppCtor", ex);
-                AppExit(-1);
+                Terminate(-1);
             }
         }
 
-        public static void AppExit(int exitCode = 0)
+        public static void Terminate(int exitCode = 0)
         {
             Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-            if (Utils.IsOSWindows8OorNewer)
+
+            if (Utils.IsOSWindows8OrNewer)
             {
                 ToastNotificationManagerCompat.History.Clear();
             }
@@ -119,7 +117,7 @@ namespace ErogeHelper
 
                 this.Log().Fatal(ex);
                 ShowErrorDialog("Fatal", ex);
-                AppExit(-1);
+                Terminate(-1);
             };
 
             DispatcherUnhandledException += (_, args) =>
@@ -136,7 +134,7 @@ namespace ErogeHelper
                 else
                 {
                     ShowErrorDialog("UI-Fatal", ex);
-                    AppExit(-1);
+                    Terminate(-1);
                 }
             };
 
@@ -177,27 +175,22 @@ namespace ErogeHelper
         }
 
         private const string UniqueEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
-        private EventWaitHandle? _eventWaitHandle;
 
         private void SingleInstanceWatcher()
         {
-            try
-            {
-                _eventWaitHandle = EventWaitHandle.OpenExisting(UniqueEventName);
-                _eventWaitHandle.Set();
+            var eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName, out bool createdNew);
 
-                throw new AppAlreadyExistsException();
-            }
-            catch (WaitHandleCannotBeOpenedException)
+            if (!createdNew)
             {
-                _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
+                eventWaitHandle.Set();
+                throw new AppExistedException();
             }
 
             var toastLifetimeTimer = new System.Diagnostics.Stopwatch();
 
             Observable.Create<object>(observer =>
                 {
-                    while (_eventWaitHandle.WaitOne())
+                    while (eventWaitHandle.WaitOne())
                     {
                         observer.OnNext(new object());
                     }
@@ -206,17 +199,17 @@ namespace ErogeHelper
                 .SubscribeOn(ReactiveUI.RxApp.TaskpoolScheduler)
                 .Subscribe(async _ =>
                 {
-                    if (Utils.IsOSWindows8OorNewer)
-                    { 
+                    if (Utils.IsOSWindows8OrNewer)
+                    {
                         new ToastContentBuilder()
                             .AddText("ErogeHelper is running!")
                             .Show(toast =>
                             {
                                 toast.Group = "eh";
                                 toast.Tag = "eh";
-                            // ExpirationTime bugged with InvalidCastException in .Net5
-                            //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
-                        });
+                                // ExpirationTime bugged with InvalidCastException in .Net5
+                                //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
+                            });
 
                         toastLifetimeTimer.Restart();
                         await Task.Delay(ConstantValues.ToastDuration).ConfigureAwait(false);

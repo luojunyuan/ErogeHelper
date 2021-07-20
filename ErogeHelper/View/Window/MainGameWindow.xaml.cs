@@ -1,20 +1,17 @@
-﻿using ErogeHelper.Common;
+﻿using System;
+using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Threading;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Contract;
+using ErogeHelper.Common.Entity;
+using ErogeHelper.Model.DataService.Interface;
+using ErogeHelper.Model.Service.Interface;
 using ErogeHelper.ViewModel.Window;
 using ReactiveUI;
 using Splat;
-using System.Windows.Media;
-using System.Windows.Interop;
-using ErogeHelper.Model.DataService.Interface;
-using ErogeHelper.Model.Service.Interface;
-using System.Windows;
-using System.Reactive.Linq;
-using ErogeHelper.Common.Entity;
-using System.Windows.Threading;
-using System.IO;
-using System;
-using System.Runtime.InteropServices;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Enum;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Window
@@ -22,7 +19,7 @@ namespace ErogeHelper.View.Window
     public partial class MainGameWindow : IEnableLogger
     {
         public MainGameWindow(
-            MainGameViewModel? gameViewModel = null, 
+            MainGameViewModel? gameViewModel = null,
             IGameDataService? gameDataService = null,
             IGameWindowHooker? gameWindowHooker = null)
         {
@@ -39,7 +36,7 @@ namespace ErogeHelper.View.Window
                     h => _gameWindowHooker.GamePosChanged += h,
                     h => _gameWindowHooker.GamePosChanged -= h)
                 .Select(e => e.EventArgs)
-                .Subscribe(async pos => 
+                .Subscribe(async pos =>
                 {
                     await Application.Current.Dispatcher.InvokeAsync(() =>
                     {
@@ -101,7 +98,7 @@ namespace ErogeHelper.View.Window
             //    _bringToTopTimer.Start();
             //    ClientArea.BorderBrush = Brushes.Red;
             //}
-            
+
             //if (User32.IsIconic(_gameWindowHooker.GameRealHwnd))
             //{
             //    _gameDataService.IsMinimized = true;
@@ -120,13 +117,13 @@ namespace ErogeHelper.View.Window
 
                     // rect
 
-                        // state
+                    // state
                     //WINDOWPLACEMENT ws = new();
-                    //PInvoke.GetWindowPlacement(_handler, ref ws);
+                    //PInvoke.GetWindowPlacement(_handler, ref ws);
                     //switch(ws.showCmd)
                     //{ 
                     //    case SHOW_WINDOW_CMD.SW_SHOWNORMAL:
-                    //        this.Log().Debug(ws.showCmd);
+                    //        this.Log().Debug(ws.showCmd);
                     //        break;
                     //    case SHOW_WINDOW_CMD.SW_SHOWMINIMIZED:
                     //        this.Log().Debug(ws.showCmd);
@@ -170,8 +167,8 @@ namespace ErogeHelper.View.Window
         }
 
         private static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
-        { 
-            foreach(var screen in WpfScreenHelper.Screen.AllScreens)
+        {
+            foreach (var screen in WpfScreenHelper.Screen.AllScreens)
             {
                 User32.GetWindowRect(gameHwnd, out var rect);
                 var systemRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);

@@ -1,8 +1,8 @@
-﻿using ErogeHelper.Common.Contract;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Interop;
+using ErogeHelper.Common.Contract;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
@@ -19,7 +19,7 @@ namespace ErogeHelper.Common
             const int WsExToolWindow = 0x00000080;
 
             var windowInterop = new WindowInteropHelper(window);
-            var exStyle = User32.GetWindowLong(new HWND(windowInterop.Handle), 
+            var exStyle = User32.GetWindowLong(new HWND(windowInterop.Handle),
                                                User32.WindowLongFlags.GWL_EXSTYLE);
             exStyle |= WsExToolWindow;
             _ = User32.SetWindowLong(new HWND(windowInterop.Handle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
@@ -29,12 +29,12 @@ namespace ErogeHelper.Common
         {
             const int WsExToolWindow = 0x00000080;
 
-            var exStyle = User32.GetWindowLong(new HWND(windowHandle), 
+            var exStyle = User32.GetWindowLong(new HWND(windowHandle),
                                                User32.WindowLongFlags.GWL_EXSTYLE);
             exStyle |= WsExToolWindow;
             _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
         }
-        
+
         // Tip: CustomNotification with enforce get over process
         // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
         public static Notifier DesktopNotifier => new(cfg =>
@@ -52,9 +52,9 @@ namespace ErogeHelper.Common
                 cfg.DisplayOptions.TopMost = true;
             });
 
-        private static readonly Version _osVersion = Environment.OSVersion.Version;
+        private static readonly Version OsVersion = Environment.OSVersion.Version;
 
-        public static bool IsOSWindows8OorNewer => _osVersion >= new Version(6, 2);
+        public static bool IsOSWindows8OrNewer => OsVersion >= new Version(6, 2);
 
         public static string GetOSInfo()
         {
@@ -64,8 +64,8 @@ namespace ErogeHelper.Common
             Version Windows10 = new(10, 0);
 
             var osBit = Environment.Is64BitOperatingSystem ? "x64" : "x86";
-            
-            if (_osVersion >= Windows10)
+
+            if (OsVersion >= Windows10)
             {
                 var releaseId = Environment.OSVersion.Version.Build switch
                 {
@@ -86,15 +86,15 @@ namespace ErogeHelper.Common
 
                 return $"Windows 10 {releaseId} {osBit}";
             }
-            else if (_osVersion >= Windows81)
+            else if (OsVersion >= Windows81)
             {
                 return $"Windows 8.1 {osBit}";
             }
-            else if (_osVersion >= Windows8)
-            { 
+            else if (OsVersion >= Windows8)
+            {
                 return $"Windows 8 {osBit}";
             }
-            else if (_osVersion >= Windows7)
+            else if (OsVersion >= Windows7)
             {
                 return $"Windows 7 {Environment.OSVersion.ServicePack} {osBit}";
             }

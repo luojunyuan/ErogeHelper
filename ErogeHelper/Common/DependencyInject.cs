@@ -30,7 +30,7 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new FakeGameWindowHooker(), typeof(IGameWindowHooker));
 
-            // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning
+            // https://stackoverflow.com/a/31464255
             Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
         }
 
@@ -38,9 +38,9 @@ namespace ErogeHelper.Common
                                            throw new InvalidOperationException(
                                                $"No service for type {typeof(T)} has been registered.");
 
-        public static async Task ShowViewAsync<T>() where T : ReactiveObject => 
+        public static async Task ShowViewAsync<T>() where T : ReactiveObject =>
             await Application.Current.Dispatcher.InvokeAsync(() =>
-                {    
+                {
                     var view = GetService<IViewFor<T>>();
                     if (view is not Window window)
                         throw new TypeAccessException("View not implement IViewFor");
