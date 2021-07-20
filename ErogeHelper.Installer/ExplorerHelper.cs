@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ErogeHelper.Installer
 {
     static class ExplorerHelper
     {
-        public static IEnumerable<string> GetOpenedDirectories()
+        public static List<string> GetOpenedDirectories()
         {
-            var enumerator = new OpenedDirectoryEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                yield return enumerator.Current;
-            }
+            return new OpenedDirectoryGenerator().Paths;
         }
 
         public static void KillExplorer()
@@ -31,7 +22,8 @@ namespace ErogeHelper.Installer
                 process.Kill();
             }
         }
-        public static void OpenDirectories(IEnumerable<string> directories)
+
+        public static void OpenDirectories(List<string> directories)
         {
             foreach (string dir in directories)
             {
@@ -43,97 +35,60 @@ namespace ErogeHelper.Installer
             }
         }
 
-        [SuppressMessage("Globalization", "CA2101:指定对 P/Invoke 字符串参数进行封送处理", Justification = "<挂起>")]
-        private class OpenedDirectoryEnumerator : IEnumerator<string>
+        private class OpenedDirectoryGenerator
         {
-            private readonly EventWaitHandle _eventWaitHandle = new(false, EventResetMode.AutoReset);
-            private readonly Task? _enumeratingTask;
-            private string? _current;
-            private bool _completed;
-
-            public OpenedDirectoryEnumerator()
+            public OpenedDirectoryGenerator()
             {
-                _enumeratingTask = Enumerate();
+                EnumWindows(Report, 0);
             }
 
-            public string Current => _current ?? throw new InvalidOperationException();
+            public List<string> Paths { get; private set; } = new();
 
-            object IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _eventWaitHandle.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                return !_completed && _eventWaitHandle.WaitOne();
-            }
-
-            public void Reset() => throw new NotSupportedException();
+            #region Win32 Apis
+            private delegate bool CallBack(int hwnd, int y);
 
             [DllImport("user32.dll")]
-            private static extern int EnumWindows(CallBack lpEnumFunc, int lPararm);
-
-            [DllImport("user32.dll")]
-            private static extern int GetParent(int hwnd);
+            private static extern int EnumWindows(CallBack x, int y);
 
             [DllImport("user32.dll")]
             private static extern int GetWindowText(int hwnd, StringBuilder lptrString, int nMaxCount);
 
             [DllImport("user32.dll")]
+            private static extern int GetParent(int hwnd);
+
+            [DllImport("user32.dll")]
             private static extern bool IsWindowVisible(int hwnd);
 
-            [DllImport("user32.dll")]
-            private static extern int GetClassName(IntPtr hwnd, StringBuilder s, int nMaxCount);
+            [DllImport("user32.Dll")]
+            private static extern void GetClassName(IntPtr hwnd, StringBuilder s, int nMaxCount);
 
             [DllImport("user32.dll")]
-            private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr child, string strclass, string? frmText);
+            private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childe, string strclass, string? FrmText);
 
-            private Task Enumerate() => Task.Run(() =>
+            private static IntPtr FindWindowEx(IntPtr parent, string strClass)
+                => FindWindowEx(parent, IntPtr.Zero, strClass, null);
+
+            private string GetFormClassName(IntPtr ptr)
             {
-                _ = EnumWindows(Handle, 0).CheckError();
-                _completed = true;
-            });
-
-            private bool Handle(int hwnd, int lParam)
-            {
-                string? path = GetPath(hwnd);
-
-                if (path is not null)
-                {
-                    _current = path;
-                    while (!_eventWaitHandle.Set()) { }
-                }
-
-                return true;
+                StringBuilder nameBiulder = new StringBuilder(255);
+                GetClassName(ptr, nameBiulder, 255);
+                return nameBiulder.ToString();
             }
 
-            private static string GetFormClassName(IntPtr ptr)
+            private string GetFormTitle(IntPtr ptr)
             {
-                var builder = new StringBuilder(255);
-                _ = GetClassName(ptr, builder, 255).CheckError();
-
-                return builder.ToString();
+                StringBuilder titleBiulder = new StringBuilder(255);
+                GetWindowText((int)ptr, titleBiulder, 255);
+                return titleBiulder.ToString();
             }
 
-            private static string GetFormTitle(IntPtr ptr)
-            {
-                var builder = new StringBuilder(255);
-                _ = GetWindowText((int)ptr, builder, 255).CheckError();
-
-                return builder.ToString();
-            }
-
-            private static string? GetPath(int hwnd)
+            private bool Report(int hwnd, int lParam)
             {
                 int pHwnd = GetParent(hwnd);
-
-                if (pHwnd == 0 && IsWindowVisible(hwnd))
+                if (pHwnd == 0 && IsWindowVisible(hwnd) == true)
                 {
                     var cabinetWClassIntPtr = new IntPtr(hwnd);
                     string cabinetWClassName = GetFormClassName(cabinetWClassIntPtr);
-
                     if (cabinetWClassName.Equals("CabinetWClass", StringComparison.OrdinalIgnoreCase))
                     {
                         var workerWIntPtr = FindWindowEx(cabinetWClassIntPtr, "WorkerW");
@@ -144,19 +99,14 @@ namespace ErogeHelper.Installer
                         var toolbarWindow32IntPtr = FindWindowEx(breadcrumbParentIntPtr, "ToolbarWindow32");
 
                         string title = GetFormTitle(toolbarWindow32IntPtr);
-                        int index = title.IndexOf(':') + 1;
 
-                        return title[index..].Trim();
+                        int index = title.IndexOf(':') + 1;
+                        Paths.Add(title[index..]);
                     }
                 }
-
-                return null;
+                return true;
             }
-
-            private static IntPtr FindWindowEx(IntPtr parent, string strClass)
-                => FindWindowEx(parent, IntPtr.Zero, strClass, null);
-
-            private delegate bool CallBack(int hwnd, int lParam);
+            #endregion
         }
     }
 }

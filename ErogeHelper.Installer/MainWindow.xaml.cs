@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ModernWpf.Controls;
+using System;
 using System.IO;
+using System.Security.Principal;
 using System.Windows;
-using ModernWpf.Controls;
-using Path = System.IO.Path;
 
 namespace ErogeHelper.Installer
 {
@@ -35,6 +35,11 @@ namespace ErogeHelper.Installer
                 ModernWpf.MessageBox.Show($"Not found file {serverRegistrationManagerPath}", "Eroge Helper");
                 Close();
             }
+            else if (!IsAdministrator())
+            {
+                ModernWpf.MessageBox.Show($"Please run as Administrator", "Eroge Helper");
+                Close();
+            }
         }
 
         private readonly string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
@@ -53,6 +58,7 @@ namespace ErogeHelper.Installer
 
         private async void Unload(object sender, RoutedEventArgs e)
         {
+            UninstallButton.IsEnabled = false;
             if (DeleteCacheCheckBox.IsChecked ?? false)
             {
                 var deleteTipDialog = new ContentDialog
@@ -65,14 +71,17 @@ namespace ErogeHelper.Installer
                 };
                 var result = await deleteTipDialog.ShowAsync();
                 if (result == ContentDialogResult.None)
+                {
+                    UninstallButton.IsEnabled = true;
                     return;
+                }
                 if (result == ContentDialogResult.Primary)
                 {
-                    string roamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    var roamingDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                     var cacheDir = Path.Combine(roamingDir, "ErogeHelper");
                     if (Directory.Exists(cacheDir))
                     {
-                        Directory.Delete(cacheDir);
+                        Directory.Delete(cacheDir, true);
                     }
                 }
             }
@@ -83,8 +92,8 @@ namespace ErogeHelper.Installer
                 FileName = "ServerRegistrationManager.exe",
                 Arguments = $"uninstall {shellMenuDllName} -codebase"
             });
-            // restart all explore.exe
 
+            // restart all explore.exe
             var directories = ExplorerHelper.GetOpenedDirectories();
             ExplorerHelper.KillExplorer();
             ExplorerHelper.OpenDirectories(directories);
@@ -92,6 +101,13 @@ namespace ErogeHelper.Installer
             InstallButton.IsEnabled = true;
             UninstallButton.IsEnabled = false;
             DeleteCacheCheckBox.IsChecked = false;
+        }
+
+        private bool IsAdministrator()
+        {
+            var current = WindowsIdentity.GetCurrent();
+            var windowsPrincipal = new WindowsPrincipal(current);
+            return windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }
