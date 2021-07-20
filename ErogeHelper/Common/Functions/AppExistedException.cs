@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ErogeHelper.Common.Function
+namespace ErogeHelper.Common.Functions
 {
     internal class AppExistedException : Exception
     {

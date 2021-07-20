@@ -5,16 +5,16 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.DataService.Interface;
-using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.ViewModel.Window;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Entities;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using Splat;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.View.Window
+namespace ErogeHelper.View.Windows
 {
     public partial class MainGameWindow : IEnableLogger
     {

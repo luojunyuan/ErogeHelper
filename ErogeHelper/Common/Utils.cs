@@ -1,8 +1,7 @@
-﻿using System;
-using System.Reflection;
+﻿using ErogeHelper.Common.Contracts;
+using System;
 using System.Windows;
 using System.Windows.Interop;
-using ErogeHelper.Common.Contract;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
@@ -12,18 +11,8 @@ namespace ErogeHelper.Common
 {
     public static class Utils
     {
-        public static string AppVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "?.?.?.?";
-
         public static void HideWindowInAltTab(Window window)
-        {
-            const int WsExToolWindow = 0x00000080;
-
-            var windowInterop = new WindowInteropHelper(window);
-            var exStyle = User32.GetWindowLong(new HWND(windowInterop.Handle),
-                                               User32.WindowLongFlags.GWL_EXSTYLE);
-            exStyle |= WsExToolWindow;
-            _ = User32.SetWindowLong(new HWND(windowInterop.Handle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
-        }
+            => HideWindowInAltTab(new WindowInteropHelper(window).Handle);
 
         public static void HideWindowInAltTab(IntPtr windowHandle)
         {
@@ -37,7 +26,7 @@ namespace ErogeHelper.Common
 
         // Tip: CustomNotification with enforce get over process
         // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
-        public static Notifier DesktopNotifier => new(cfg =>
+        public static readonly Notifier DesktopNotifier = new(cfg =>
             {
                 cfg.PositionProvider =
                     new PrimaryScreenPositionProvider(
@@ -54,7 +43,7 @@ namespace ErogeHelper.Common
 
         private static readonly Version OsVersion = Environment.OSVersion.Version;
 
-        public static bool IsOSWindows8OrNewer => OsVersion >= new Version(6, 2);
+        public static readonly bool IsOSWindows8OrNewer = OsVersion >= new Version(6, 2);
 
         public static string GetOSInfo()
         {

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Windows;
 using ReactiveUI;
 
-namespace ErogeHelper.Common.Function
+namespace ErogeHelper.Common.Functions
 {
     public class CustomPropertyResolver : ICreatesObservableForProperty
     {

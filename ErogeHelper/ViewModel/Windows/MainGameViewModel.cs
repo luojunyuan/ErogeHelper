@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace ErogeHelper.ViewModel.Window
+namespace ErogeHelper.ViewModel.Windows
 {
     public class MainGameViewModel : ReactiveObject
     {

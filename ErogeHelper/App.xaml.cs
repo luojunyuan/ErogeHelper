@@ -9,9 +9,9 @@ using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.WinUI.Notifications;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Common.Function;
-using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Functions;
+using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
 using Splat;
 using ToastNotifications.Core;
@@ -150,15 +150,15 @@ namespace ErogeHelper
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = $"ErogeHelper v{Utils.AppVersion} - {errorLevel} Error",
+                WindowTitle = $"ErogeHelper v{EHContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
                 MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
                 Content = Language.Strings.ErrorDialog_Content,
-                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\n" +
-                                      $"Caused by source `{ex.Source}`\n" +
+                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\n" +
+                                      $"Caused by source `{ex.Source}`\r\n" +
                                       ex.StackTrace +
                                       (ex.InnerException is null ?
                                           string.Empty :
-                                          $"\nThis Exception caused with in another Exception: {ex.InnerException}"),
+                                          $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),
                 Width = 300,
             };
 
@@ -169,7 +169,7 @@ namespace ErogeHelper
             var clicked = dialog.ShowDialog();
             if (clicked == clipboardButton)
             {
-                var errorInfo = dialog.WindowTitle + '\n' + dialog.MainInstruction + '\n' + dialog.ExpandedInformation;
+                var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
                 Current.Dispatcher.Invoke(() => Clipboard.SetText(errorInfo));
             }
         }

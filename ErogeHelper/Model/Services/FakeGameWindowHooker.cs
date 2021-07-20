@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
-using ErogeHelper.Common.Entity;
-using ErogeHelper.Model.Service.Interface;
+using ErogeHelper.Common.Entities;
+using ErogeHelper.Model.Services.Interface;
 using Splat;
 
-namespace ErogeHelper.Model.Service
+namespace ErogeHelper.Model.Services
 {
     class FakeGameWindowHooker : IGameWindowHooker, IEnableLogger
     {

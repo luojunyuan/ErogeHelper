@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using ErogeHelper.Common.Function;
-using ErogeHelper.Model.DataService;
-using ErogeHelper.Model.DataService.Interface;
-using ErogeHelper.Model.Service;
-using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.View.Window;
-using ErogeHelper.ViewModel.Window;
+using ErogeHelper.Common.Functions;
+using ErogeHelper.Model.DataServices;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Services;
+using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.View.Windows;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using Splat;
 

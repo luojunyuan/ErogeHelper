@@ -1,5 +1,5 @@
 ﻿<reactiveUi:ReactiveWindow 
-    x:Class="ErogeHelper.View.Window.MainGameWindow"
+    x:Class="ErogeHelper.View.Windows.MainGameWindow"
     x:TypeArguments="vm:MainGameViewModel" 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Window"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
     mc:Ignorable="d"
     Top="-32000" Left="-32000" Width="0" Height="0"
     Title="MainGameWindow" Topmost="True" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">

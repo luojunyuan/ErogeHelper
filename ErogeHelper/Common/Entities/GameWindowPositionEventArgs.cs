@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ErogeHelper.Common.Entity
+namespace ErogeHelper.Common.Entities
 {
     public class GameWindowPositionEventArgs
     {

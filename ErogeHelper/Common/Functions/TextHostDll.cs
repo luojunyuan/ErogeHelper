@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace ErogeHelper.Common.Function
+namespace ErogeHelper.Common.Functions
 {
     internal static class TextHostDll
     {

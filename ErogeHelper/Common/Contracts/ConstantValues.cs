@@ -1,4 +1,4 @@
-﻿namespace ErogeHelper.Common.Contract
+﻿namespace ErogeHelper.Common.Contracts
 {
     public static class ConstantValues
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ErogeHelper.Common.Entity
+namespace ErogeHelper.Common.Entities
 {
     // Textractor minimum required information
     public class TextractorSetting

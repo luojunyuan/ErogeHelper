@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using ErogeHelper.Common.Entity;
+using ErogeHelper.Common.Entities;
 
-namespace ErogeHelper.Model.Service.Interface
+namespace ErogeHelper.Model.Services.Interface
 {
     public interface IGameWindowHooker
     {

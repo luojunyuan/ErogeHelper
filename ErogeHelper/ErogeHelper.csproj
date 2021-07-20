@@ -38,11 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Enums\" />
+    <Folder Include="Common\Extensions\" />
     <Folder Include="Model\DAL\Entity\Table\" />
     <Folder Include="Model\DAL\Entity\Payload\" />
     <Folder Include="Model\DAL\Entity\Response\" />
     <Folder Include="Model\DAL\Migration\" />
-    <Folder Include="Model\Repository" />
+    <Folder Include="Model\Repositories\" />
   </ItemGroup>
 
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">

@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using ErogeHelper.Common;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Model.DataService.Interface;
-using ErogeHelper.Model.Service.Interface;
-using ErogeHelper.ViewModel.Window;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.ViewModel.Windows;
+using ModernWpf;
 using Splat;
 
-namespace ErogeHelper.Model.Service
+namespace ErogeHelper.Model.Services
 {
     public class StartupService : IStartupService, IEnableLogger
     {
@@ -22,7 +23,6 @@ namespace ErogeHelper.Model.Service
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
         }
-
 
         public void StartFromCommandLine(string[] args)
         {
@@ -71,8 +71,7 @@ namespace ErogeHelper.Model.Service
             _gameDataService.LoadData(gamePath);
             if (!_gameDataService.GameProcesses.Any())
             {
-                ModernWpf.MessageBox
-                    .Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
+                MessageBox.Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
                 App.Terminate();
                 return;
             }

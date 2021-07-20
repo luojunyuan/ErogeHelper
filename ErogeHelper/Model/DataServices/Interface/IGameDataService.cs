@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace ErogeHelper.Model.DataService.Interface
+namespace ErogeHelper.Model.DataServices.Interface
 {
     public interface IGameDataService
     {

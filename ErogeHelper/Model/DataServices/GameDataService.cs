@@ -7,11 +7,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ErogeHelper.Common.Contract;
-using ErogeHelper.Model.DataService.Interface;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Model.DataServices.Interface;
 using Splat;
 
-namespace ErogeHelper.Model.DataService
+namespace ErogeHelper.Model.DataServices
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
