@@ -78,6 +78,14 @@ namespace ErogeHelper.Model.Services
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
+            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
+            {
+                throw new NotImplementedException();
+            }
+            else
+            { }
+
+            //
             DependencyInject.ShowView<MainGameViewModel>();
         }
     }

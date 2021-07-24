@@ -6,8 +6,6 @@ namespace ErogeHelper.Model.DataServices.Interface
 {
     public interface IGameDataService
     {
-        void LoadData(string gamePath);
-
         IEnumerable<Process> GameProcesses { get; }
 
         string Md5 { get; }
@@ -16,6 +14,6 @@ namespace ErogeHelper.Model.DataServices.Interface
 
         Process MainProcess { get; }
 
-        bool IsMinimized { get; set; }
+        void LoadData(string gamePath);
     }
 }

@@ -15,14 +15,6 @@ namespace ErogeHelper.Model.DataServices
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
-        public void LoadData(string gamePath)
-        {
-            GamePath = gamePath;
-            GameProcesses = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-            Md5 = GetFileMd5(gamePath);
-            MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new Process();
-        }
-
         public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
 
         public string Md5 { get; private set; } = string.Empty;
@@ -31,7 +23,13 @@ namespace ErogeHelper.Model.DataServices
 
         public Process MainProcess { get; private set; } = new();
 
-        public bool IsMinimized { get; set; }
+        public void LoadData(string gamePath)
+        {
+            GamePath = gamePath;
+            GameProcesses = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
+            Md5 = GetFileMd5(gamePath);
+            MainProcess = GameProcesses.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero) ?? new Process();
+        }
 
         /// <summary>
         /// Get all processes of the game (timeout 20s)

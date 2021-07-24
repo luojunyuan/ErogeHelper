@@ -30,7 +30,7 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new FakeGameWindowHooker(), typeof(IGameWindowHooker));
 
-            // https://stackoverflow.com/a/31464255
+            // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
             Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
         }
 

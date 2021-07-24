@@ -11,20 +11,9 @@ namespace ErogeHelper.Common
 {
     public static class Utils
     {
-        public static void HideWindowInAltTab(Window window)
-            => HideWindowInAltTab(new WindowInteropHelper(window).Handle);
+        private static readonly Version OsVersion = Environment.OSVersion.Version;
 
-        public static void HideWindowInAltTab(IntPtr windowHandle)
-        {
-            const int WsExToolWindow = 0x00000080;
-
-            var exStyle = User32.GetWindowLong(new HWND(windowHandle),
-                                               User32.WindowLongFlags.GWL_EXSTYLE);
-            exStyle |= WsExToolWindow;
-            _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
-        }
-
-        // Tip: CustomNotification with enforce get over process
+        // Tip: CustomNotification
         // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
         public static readonly Notifier DesktopNotifier = new(cfg =>
             {
@@ -41,9 +30,20 @@ namespace ErogeHelper.Common
                 cfg.DisplayOptions.TopMost = true;
             });
 
-        private static readonly Version OsVersion = Environment.OSVersion.Version;
+        public static bool IsOSWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
+        
+        public static void HideWindowInAltTab(Window window)
+            => HideWindowInAltTab(new WindowInteropHelper(window).Handle);
 
-        public static readonly bool IsOSWindows8OrNewer = OsVersion >= new Version(6, 2);
+        public static void HideWindowInAltTab(IntPtr windowHandle)
+        {
+            const int WsExToolWindow = 0x00000080;
+
+            var exStyle = User32.GetWindowLong(new HWND(windowHandle),
+                                               User32.WindowLongFlags.GWL_EXSTYLE);
+            exStyle |= WsExToolWindow;
+            _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
+        }
 
         public static string GetOSInfo()
         {

@@ -1,6 +1,6 @@
-﻿//using ErogeHelper.Common.Contract;
-//using ErogeHelper.Common.Entity;
-//using ErogeHelper.Model.Service.Interface;
+﻿//using ErogeHelper.Common.Contracts;
+//using ErogeHelper.Common.Entities;
+//using ErogeHelper.Model.Services.Interface;
 //using Splat;
 //using System;
 //using System.Collections.Generic;
@@ -15,6 +15,27 @@
 //{
 //    class GameWindowHooker : IGameWindowHooker, IEnableLogger
 //    {
+//        //private User32.WinEventProc? _winEventDelegate;
+//        //private User32.SafeEventHookHandle? _hWinEventHook;
+//        //private GCHandle _gcSafetyHandle;
+//        //private Process? _gameProc;
+//        //private IntPtr _realWindowHandle;
+//        //private static readonly RECT MinimizedPosition = new() 
+//        //{ 
+//        //    left = -32000, 
+//        //    top = -32000, 
+//        //    right = -31840, 
+//        //    bottom = -37972 
+//        //};
+//        //private static readonly GameWindowPositionEventArgs HiddenPos = new()
+//        //{
+//        //    ClientArea = new Thickness(),
+//        //    Left = -32000,
+//        //    Top = -32000,
+//        //    Height = 0,
+//        //    Width = 0,
+//        //};
+
 //        public event EventHandler<GameWindowPositionEventArgs>? GamePosChanged;
 
 //        public IntPtr GameRealHwnd => _realWindowHandle;
@@ -65,22 +86,6 @@
 
 //        public void InvokeUpdatePosition() => UpdateLocation();
 
-//        private User32.WinEventProc? _winEventDelegate;
-//        private User32.SafeEventHookHandle? _hWinEventHook;
-//        private GCHandle _gcSafetyHandle;
-//        private Process _gameProc = new();
-//        private IntPtr _realWindowHandle;
-
-//        private static RECT MinimizedPosition = new() { left = -32000, top = -32000, right = -31840, bottom = -37972 };
-//        private static readonly GameWindowPositionEventArgs HiddenPos = new()
-//        {
-//            ClientArea = new Thickness(),
-//            Left = -32000,
-//            Top = -32000,
-//            Height = 0,
-//            Width = 0,
-//        };
-
 //        private async void SetWindowHandler()
 //        {
 //            this.Log().Debug($"Set handle to 0x{Convert.ToString(_realWindowHandle.ToInt32(), 16).ToUpper()} " +
@@ -91,9 +96,9 @@
 //            await Dispatcher.InvokeAsync(() =>
 //            {
 //                _hWinEventHook = User32.SetWinEventHook(
-//                    User32.WindowsEventHookType.EVENT_OBJECT_FOCUS, 
-//                    User32.WindowsEventHookType.EVENT_OBJECT_LOCATIONCHANGE, 
-//                    IntPtr.Zero, _winEventDelegate, 
+//                    User32.WindowsEventHookType.EVENT_OBJECT_FOCUS,
+//                    User32.WindowsEventHookType.EVENT_OBJECT_LOCATIONCHANGE,
+//                    IntPtr.Zero, _winEventDelegate,
 //                    _gameProc.Id, gameUIThreadId,
 //                    User32.WindowsEventHookFlags.WINEVENT_INCONTEXT |
 //                    User32.WindowsEventHookFlags.WINEVENT_SKIPOWNPROCESS);
@@ -189,11 +194,11 @@
 //        private static bool IsGoodWindow(IntPtr handle)
 //        {
 //            if (User32.IsIconic(handle))
-//            { 
+//            {
 //                return true;
 //            }
 //            if (!User32.IsWindowVisible(handle))
-//            { 
+//            {
 //                return false;
 //            }
 //            User32.GetWindowRect(handle, out var windowRect);

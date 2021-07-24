@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using CommunityToolkit.WinUI.Notifications;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Functions;
+using ErogeHelper.Common.Exceptions;
 using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
 using Splat;
@@ -21,6 +21,23 @@ namespace ErogeHelper
 {
     public partial class App : IEnableLogger
     {
+        private const string UniqueAppEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
+
+        public static void Terminate(int exitCode = 0)
+        {
+            Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
+
+            if (Utils.IsOSWindows8OrNewer)
+            {
+                ToastNotificationManagerCompat.History.Clear();
+            }
+
+            if (exitCode != 0)
+            {
+                Environment.Exit(exitCode);
+            }
+        }
+
         public App()
         {
             // Note: This application would throw some exceptions that wasn't bugs when initializing
@@ -89,21 +106,6 @@ namespace ErogeHelper
             }
         }
 
-        public static void Terminate(int exitCode = 0)
-        {
-            Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-
-            if (Utils.IsOSWindows8OrNewer)
-            {
-                ToastNotificationManagerCompat.History.Clear();
-            }
-
-            if (exitCode != 0)
-            {
-                Environment.Exit(exitCode);
-            }
-        }
-
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, args) =>
@@ -146,39 +148,20 @@ namespace ErogeHelper
             };
         }
 
-        private static void ShowErrorDialog(string errorLevel, Exception ex)
-        {
-            using var dialog = new TaskDialog
+        private static void SetI18NLanguageDictionary() =>
+            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
-                WindowTitle = $"ErogeHelper v{EHContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
-                MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
-                Content = Language.Strings.ErrorDialog_Content,
-                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\n" +
-                                      $"Caused by source `{ex.Source}`\r\n" +
-                                      ex.StackTrace +
-                                      (ex.InnerException is null ?
-                                          string.Empty :
-                                          $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),
-                Width = 300,
+                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
+                "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
+                _ => new System.Globalization.CultureInfo(""),
             };
 
-            TaskDialogButton clipboardButton = new(Language.Strings.OokiiDialog_ClipboardLabel);
-            TaskDialogButton okButton = new(ButtonType.Ok);
-            dialog.Buttons.Add(clipboardButton);
-            dialog.Buttons.Add(okButton);
-            var clicked = dialog.ShowDialog();
-            if (clicked == clipboardButton)
-            {
-                var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
-                Current.Dispatcher.Invoke(() => Clipboard.SetText(errorInfo));
-            }
-        }
-
-        private const string UniqueEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
-
-        private void SingleInstanceWatcher()
+        private static void SingleInstanceWatcher()
         {
-            var eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName, out bool createdNew);
+            var eventWaitHandle = 
+                new EventWaitHandle(false, EventResetMode.AutoReset, UniqueAppEventName, out bool createdNew);
 
             if (!createdNew)
             {
@@ -228,14 +211,32 @@ namespace ErogeHelper
                 });
         }
 
-        private static void SetI18NLanguageDictionary() =>
-            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+        private static void ShowErrorDialog(string errorLevel, Exception ex)
+        {
+            using var dialog = new TaskDialog
             {
-                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
-                _ => new System.Globalization.CultureInfo(""),
+                WindowTitle = $"ErogeHelper v{EHContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
+                MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
+                Content = Language.Strings.ErrorDialog_Content,
+                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\n" +
+                                      $"Caused by source `{ex.Source}`\r\n" +
+                                      ex.StackTrace +
+                                      (ex.InnerException is null ?
+                                          string.Empty :
+                                          $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),
+                Width = 300,
             };
+
+            TaskDialogButton clipboardButton = new(Language.Strings.OokiiDialog_ClipboardLabel);
+            TaskDialogButton okButton = new(ButtonType.Ok);
+            dialog.Buttons.Add(clipboardButton);
+            dialog.Buttons.Add(okButton);
+            var clicked = dialog.ShowDialog();
+            if (clicked == clipboardButton)
+            {
+                var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
+                Current.Dispatcher.Invoke(() => Clipboard.SetText(errorInfo));
+            }
+        }
     }
 }

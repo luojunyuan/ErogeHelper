@@ -10,20 +10,17 @@ namespace ErogeHelper.Model.Services
 {
     class FakeGameWindowHooker : IGameWindowHooker, IEnableLogger
     {
-        public IntPtr GameRealHwnd => throw new NotImplementedException();
+        private Process _gameProc = new();
+        private static readonly GameWindowPositionEventArgs HiddenPos = new()
+        {
+            ClientArea = new Thickness(),
+            Left = -32000,
+            Top = -32000,
+            Height = 0,
+            Width = 0,
+        };
 
         public event EventHandler<GameWindowPositionEventArgs>? GamePosChanged;
-
-        public void InvokeUpdatePosition()
-        {
-            GamePosChanged?.Invoke(null, new());
-            throw new NotImplementedException();
-        }
-
-        public void ResetWindowHandler()
-        {
-            throw new NotImplementedException();
-        }
 
         public void SetGameWindowHook(Process process)
         {
@@ -33,20 +30,25 @@ namespace ErogeHelper.Model.Services
             _gameProc.Exited += ApplicationExit;
         }
 
-        private Process _gameProc = new();
+        public void ResetWindowHandler()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvokeUpdatePosition()
+        {
+            GamePosChanged?.Invoke(null, new());
+            throw new NotImplementedException();
+        }
 
         private void ApplicationExit(object? sender, EventArgs e)
         {
             this.Log().Debug("Detected game quit event");
-            //GamePosChanged?.Invoke(this, HiddenPos);
+            GamePosChanged?.Invoke(this, HiddenPos);
             //_gcSafetyHandle.Free();
             //_hWinEventHook?.Dispose();
 
             App.Terminate();
-            //Dispatcher.InvokeShutdown();
         }
-
-        // For running in the unit test
-        private static Dispatcher Dispatcher => Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
     }
 }

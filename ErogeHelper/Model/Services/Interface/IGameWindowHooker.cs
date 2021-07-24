@@ -8,8 +8,6 @@ namespace ErogeHelper.Model.Services.Interface
     {
         event EventHandler<GameWindowPositionEventArgs> GamePosChanged;
 
-        IntPtr GameRealHwnd { get; }
-
         void SetGameWindowHook(Process process);
 
         /// <summary>
