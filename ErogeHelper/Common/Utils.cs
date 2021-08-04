@@ -1,5 +1,7 @@
 ﻿using ErogeHelper.Common.Contracts;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Interop;
 using ToastNotifications;
@@ -91,6 +93,43 @@ namespace ErogeHelper.Common
             {
                 return Environment.OSVersion.VersionString;
             }
+        }
+
+        /// <summary>
+        /// Get MD5 hash
+        /// </summary>
+        public static string Md5Calculate(byte[] buffer, bool toUpper = false)
+        {
+            var md5 = MD5.Create();
+            byte[] hash = md5.ComputeHash(buffer);
+
+            var sb = new StringBuilder();
+
+            string format = toUpper ? "X2" : "x2";
+
+            foreach (byte byteItem in hash)
+            {
+                sb.Append(byteItem.ToString(format));
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Get MD5 hash
+        /// </summary>
+        public static string Md5Calculate(string str, Encoding encoding, bool toUpper = false)
+        {
+            byte[] buffer = encoding.GetBytes(str);
+            return Md5Calculate(buffer, toUpper);
+        }
+
+        /// <summary>
+        /// Get MD5 hash
+        /// </summary>
+        public static string Md5Calculate(string str, bool toUpper = false)
+        {
+            return Md5Calculate(str, Encoding.Default, toUpper);
         }
     }
 }

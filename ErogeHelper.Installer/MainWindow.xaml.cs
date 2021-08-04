@@ -103,7 +103,7 @@ namespace ErogeHelper.Installer
             DeleteCacheCheckBox.IsChecked = false;
         }
 
-        private bool IsAdministrator()
+        private static bool IsAdministrator()
         {
             var current = WindowsIdentity.GetCurrent();
             var windowsPrincipal = new WindowsPrincipal(current);

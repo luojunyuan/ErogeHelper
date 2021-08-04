@@ -45,7 +45,7 @@ namespace ErogeHelper.Installer
             {
                 while (_eventWaitHandle.WaitOne())
                 {
-                    Current.Dispatcher.InvokeAsync(() =>
+                    Current.Dispatcher.Invoke(() =>
                     {
                         // could be set or removed anytime
                         if (Current.MainWindow is not null)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Threading;
-using ErogeHelper.Common;
+﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
@@ -12,12 +6,23 @@ using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using Splat;
+using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Threading;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Windows
 {
     public partial class MainGameWindow : IEnableLogger
     {
+        private double _dpi;
+        private readonly IGameWindowHooker _gameWindowHooker;
+        private readonly IGameDataService _gameDataService;
+
         public MainGameWindow(
             MainGameViewModel? gameViewModel = null,
             IGameDataService? gameDataService = null,
@@ -36,32 +41,27 @@ namespace ErogeHelper.View.Windows
                     h => _gameWindowHooker.GamePosChanged += h,
                     h => _gameWindowHooker.GamePosChanged -= h)
                 .Select(e => e.EventArgs)
-                .Subscribe(async pos =>
+                .ObserveOnDispatcher()
+                .Subscribe(pos =>
                 {
-                    await Application.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        Height = pos.Height / _dpi;
-                        Width = pos.Width / _dpi;
-                        Left = pos.Left / _dpi;
-                        Top = pos.Top / _dpi;
-                        ClientArea.Margin = new Thickness(
-                            pos.ClientArea.Left / _dpi,
-                            pos.ClientArea.Top / _dpi,
-                            pos.ClientArea.Right / _dpi,
-                            pos.ClientArea.Bottom / _dpi);
-                    });
+                    Height = pos.Height / _dpi;
+                    Width = pos.Width / _dpi;
+                    Left = pos.Left / _dpi;
+                    Top = pos.Top / _dpi;
+                    ClientArea.Margin = new Thickness(
+                        pos.ClientArea.Left / _dpi,
+                        pos.ClientArea.Top / _dpi,
+                        pos.ClientArea.Right / _dpi,
+                        pos.ClientArea.Bottom / _dpi);
                 });
 
             //_gameWindowHooker.InvokeUpdatePosition();
 
-            Loaded += (_, _) => Utils.HideWindowInAltTab(this);
-
-            this.WhenActivated(disposableRegistration => { });
+            this.WhenActivated(d =>
+            {
+                this.Events().Loaded.Subscribe(_ => Utils.HideWindowInAltTab(this)).DisposeWith(d);
+            });
         }
-
-        private double _dpi;
-        private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IGameDataService _gameDataService;
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
         {

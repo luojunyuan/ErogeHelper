@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
@@ -15,15 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.0.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.0.3" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.3.2" />
-    <PackageReference Include="ReactiveUI.Fody" Version="13.3.2" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.3.2" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="14.2.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="14.2.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="14.2.1" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
-    <PackageReference Include="Vanara.PInvoke.Shell32" Version="3.3.10" />
-    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.10" />
+    <PackageReference Include="Vanara.PInvoke.Shell32" Version="3.3.11" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.11" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
 
@@ -38,13 +38,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Comparers\" />
     <Folder Include="Common\Enums\" />
     <Folder Include="Common\Extensions\" />
-    <Folder Include="Model\DAL\Entity\Table\" />
-    <Folder Include="Model\DAL\Entity\Payload\" />
-    <Folder Include="Model\DAL\Entity\Response\" />
+    <Folder Include="Model\DAL\Entity\Tables\" />
+    <Folder Include="Model\DAL\Entity\Payloads\" />
+    <Folder Include="Model\DAL\Entity\Responses\" />
     <Folder Include="Model\DAL\Migration\" />
     <Folder Include="Model\Repositories\" />
+    <Folder Include="ViewModel\Components\" />
   </ItemGroup>
 
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">

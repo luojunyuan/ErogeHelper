@@ -24,6 +24,11 @@ namespace ErogeHelper.Model.Services
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
         }
 
+        public void StartByInjectButton()
+        {
+            throw new NotImplementedException();
+        }
+
         public void StartFromCommandLine(string[] args)
         {
             string gamePath = args[0];
@@ -68,10 +73,13 @@ namespace ErogeHelper.Model.Services
                 }
             }
 
-            _gameDataService.LoadData(gamePath);
-            if (!_gameDataService.GameProcesses.Any())
+            try 
             {
-                MessageBox.Show($"{Language.Strings.MessageBox_TimeoutInfo}", "Eroge Helper");
+                _gameDataService.LoadData(gamePath);
+            }
+            catch (ArgumentNullException ex) when (ex.ParamName is not null && ex.ParamName.Equals("mainProcess"))
+            {
+                MessageBox.Show(Language.Strings.MessageBox_TimeoutInfo, Language.Strings.Common_AppName);
                 App.Terminate();
                 return;
             }

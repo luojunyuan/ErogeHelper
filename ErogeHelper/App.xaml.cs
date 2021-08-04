@@ -1,4 +1,13 @@
-﻿using System;
+﻿using CommunityToolkit.WinUI.Notifications;
+using ErogeHelper.Common;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Exceptions;
+using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.ViewModel.Windows;
+using Ookii.Dialogs.Wpf;
+using ReactiveUI;
+using Splat;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -7,13 +16,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Exceptions;
-using ErogeHelper.Model.Services.Interface;
-using Ookii.Dialogs.Wpf;
-using Splat;
 using ToastNotifications.Core;
 using ToastNotifications.Messages;
 
@@ -22,21 +24,6 @@ namespace ErogeHelper
     public partial class App : IEnableLogger
     {
         private const string UniqueAppEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";
-
-        public static void Terminate(int exitCode = 0)
-        {
-            Current.Dispatcher.Invoke(() => Current.Shutdown(exitCode));
-
-            if (Utils.IsOSWindows8OrNewer)
-            {
-                ToastNotificationManagerCompat.History.Clear();
-            }
-
-            if (exitCode != 0)
-            {
-                Environment.Exit(exitCode);
-            }
-        }
 
         public App()
         {
@@ -61,38 +48,38 @@ namespace ErogeHelper
                 this.Events().Startup
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(args =>
-                {
-                    ToastNotificationManagerCompat.OnActivated += toastArgs =>
                     {
-                        if (toastArgs.Argument.Length == 0)
+                        ToastNotificationManagerCompat.OnActivated += toastArgs =>
                         {
-                            this.Log().Debug("Toast Clicked");
-                            return;
-                        }
-                        var toastArguments = ToastArguments.Parse(toastArgs.Argument);
-                        this.Log().Debug(toastArguments);
-                    };
+                            if (toastArgs.Argument.Length == 0)
+                            {
+                                this.Log().Debug("Toast Clicked");
+                                return;
+                            }
+                            var toastArguments = ToastArguments.Parse(toastArgs.Argument);
+                            this.Log().Debug(toastArguments);
+                        };
 
-                    var startupService = DependencyInject.GetService<IStartupService>();
+                        var startupService = DependencyInject.GetService<IStartupService>();
 
-                    if (args.Length != 0)
-                    {
-                        // EH already exit, but toast is clicked. This one shouldn't happen 
-                        if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
+                        if (args.Length != 0)
                         {
-                            Terminate(-1);
+                            // EH already exit, but toast is clicked. This one shouldn't happen 
+                            if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
+                            {
+                                Terminate(-1);
+                            }
+
+                            if (args.Contains("-Debug"))
+                                throw new NotImplementedException();
+
+                            startupService.StartFromCommandLine(args);
                         }
-
-                        if (args.Contains("-Debug"))
-                            throw new NotImplementedException();
-
-                        startupService.StartFromCommandLine(args);
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                    }
-                });
+                        else
+                        {
+                            DependencyInject.ShowView<SelectProcessViewModel>();
+                        }
+                    });
             }
             catch (AppExistedException)
             {
@@ -106,7 +93,22 @@ namespace ErogeHelper
             }
         }
 
-        private void SetupExceptionHandling()
+        public static void Terminate(int exitCode = 0)
+        {
+            Current.Shutdown(exitCode);
+
+            if (Utils.IsOSWindows8OrNewer)
+            {
+                ToastNotificationManagerCompat.History.Clear();
+            }
+
+            if (exitCode != 0)
+            {
+                Environment.Exit(exitCode);
+            }
+        }
+
+        private static void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (_, args) =>
             {
@@ -115,26 +117,26 @@ namespace ErogeHelper
                     return;
 
                 var ex = args.ExceptionObject as Exception ??
-                         new Exception("AppDomain.CurrentDomain.UnhandledException");
+                         new ArgumentNullException("AppDomain.CurrentDomain.UnhandledException");
 
-                this.Log().Fatal(ex);
+                LogHost.Default.Fatal(ex, "non-UI thread error occurrent");
                 ShowErrorDialog("Fatal", ex);
                 Terminate(-1);
             };
 
-            DispatcherUnhandledException += (_, args) =>
+            Current.DispatcherUnhandledException += (_, args) =>
             {
                 var ex = args.Exception;
 
-                this.Log().Error(ex);
-
-                if (Windows.Count != 0)
+                if (Current.Windows.Count != 0)
                 {
                     args.Handled = true;
+                    LogHost.Default.Error(ex, "UI thread error occurrent");
                     ShowErrorDialog("UI", ex);
                 }
                 else
                 {
+                    LogHost.Default.Fatal(ex, "UI thread error occurrent");
                     ShowErrorDialog("UI-Fatal", ex);
                     Terminate(-1);
                 }
@@ -143,7 +145,7 @@ namespace ErogeHelper
             TaskScheduler.UnobservedTaskException += (_, args) =>
             {
                 args.SetObserved();
-                this.Log().Error(args.Exception);
+                LogHost.Default.Error(args.Exception, "TPL error occurrent");
                 ShowErrorDialog("Task", args.Exception);
             };
         }
@@ -160,7 +162,7 @@ namespace ErogeHelper
 
         private static void SingleInstanceWatcher()
         {
-            var eventWaitHandle = 
+            var eventWaitHandle =
                 new EventWaitHandle(false, EventResetMode.AutoReset, UniqueAppEventName, out bool createdNew);
 
             if (!createdNew)
@@ -179,7 +181,7 @@ namespace ErogeHelper
                     }
                     return Disposable.Empty;
                 })
-                .SubscribeOn(ReactiveUI.RxApp.TaskpoolScheduler)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
                 .Subscribe(async _ =>
                 {
                     if (Utils.IsOSWindows8OrNewer)
@@ -191,6 +193,8 @@ namespace ErogeHelper
                                 toast.Group = "eh";
                                 toast.Tag = "eh";
                                 // ExpirationTime bugged with InvalidCastException in .Net5
+                                // ExpirationTime can not work and bugged with using
+                                // ToastNotificationManagerCompat.History.Clear() in .Net6
                                 //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
                             });
 
@@ -235,7 +239,7 @@ namespace ErogeHelper
             if (clicked == clipboardButton)
             {
                 var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
-                Current.Dispatcher.Invoke(() => Clipboard.SetText(errorInfo));
+                Clipboard.SetText(errorInfo);
             }
         }
     }

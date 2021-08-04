@@ -8,7 +8,7 @@
         xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
         mc:Ignorable="d"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="Installer [Administrator]" SizeToContent="Height" Width="400" MinWidth="400" WindowStartupLocation="CenterScreen">
+        Title="{x:Static resx:Strings.Installer_Title}" SizeToContent="Height" Width="400" MinWidth="400" WindowStartupLocation="CenterScreen">
     
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20, 10">

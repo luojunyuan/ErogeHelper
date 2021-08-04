@@ -20,5 +20,9 @@
         public const int GoodWindowWidth = 300;
 
         public const int GoodWindowHeight = 200;
+
+        public const string UWPAppsTag = "WindowsApps";
+
+        public const string WindowsPath = @"C:\Windows\";
     }
 }

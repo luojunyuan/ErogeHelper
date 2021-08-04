@@ -89,7 +89,7 @@ namespace ErogeHelper.ShellMenuHandler
         {
             var mainMenu = new ToolStripMenuItem
             {
-                Text = Language.Strings.ShellMenu_AppName,
+                Text = Language.Strings.Common_AppName,
                 Image = E
             };
 

@@ -19,15 +19,18 @@ namespace ErogeHelper.Common
         {
             // Locator.CurrentMutable.InitializeSplat();
             // Locator.CurrentMutable.InitializeReactiveUI(RegistrationNamespace.Wpf);
-            
+
             // View
             Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
+            Locator.CurrentMutable.Register(() => new SelectProcessWindow(), typeof(IViewFor<SelectProcessViewModel>));
             // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
+            Locator.CurrentMutable.Register(() => new SelectProcessViewModel());
             // DataService
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
             // Service
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
+            Locator.CurrentMutable.Register(() => new FilterProcessService(), typeof(IFilterProcessService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new FakeGameWindowHooker(), typeof(IGameWindowHooker));
 
             // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -38,22 +41,12 @@ namespace ErogeHelper.Common
                                            throw new InvalidOperationException(
                                                $"No service for type {typeof(T)} has been registered.");
 
-        public static async Task ShowViewAsync<T>() where T : ReactiveObject =>
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    var view = GetService<IViewFor<T>>();
-                    if (view is not Window window)
-                        throw new TypeAccessException("View not implement IViewFor");
-                    window.Show();
-                });
-
-        public static void ShowView<T>() where T : ReactiveObject =>
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                var view = GetService<IViewFor<T>>();
-                if (view is not Window window)
-                    throw new TypeAccessException("View not implement IViewFor");
-                window.Show();
-            });
+        public static void ShowView<T>() where T : ReactiveObject
+        {
+            var view = GetService<IViewFor<T>>();
+            if (view is not Window window)
+                throw new TypeAccessException("View not implement IViewFor");
+            window.Show();
+        }
     }
 }
