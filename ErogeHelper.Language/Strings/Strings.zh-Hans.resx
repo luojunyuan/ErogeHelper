@@ -488,12 +488,18 @@
     <value>确定并复制信息到粘贴板</value>
   </data>
   <data name="ErrorDialog.Content" xml:space="preserve">
-    <value>ErogeHelper 发生了错误，点击查看详细信息查看错误堆栈。</value>
+    <value>ErogeHelper 发生了错误，点击查看详细信息查看错误堆栈。你可以使用 Ctrl + C 复制此信息。</value>
   </data>
   <data name="Common.AppName" xml:space="preserve">
     <value>Eroge Helper</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
     <value>安装器 [管理员]</value>
+  </data>
+  <data name="SelectProcess.AdminTip" xml:space="preserve">
+    <value>找不到正确的游戏？尝试使用管理员身份运行ErogeHelper</value>
+  </data>
+  <data name="ShellMenu.RunAdministrator" xml:space="preserve">
+    <value>以管理员身份运行</value>
   </data>
 </root>

@@ -1,11 +1,16 @@
-﻿using ErogeHelper.Common.Contracts;
+﻿using CommunityToolkit.WinUI.Notifications;
+using ErogeHelper.Common.Contracts;
 using System;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using ToastNotifications;
+using ToastNotifications.Core;
 using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
 using ToastNotifications.Position;
 using Vanara.PInvoke;
 
@@ -33,9 +38,9 @@ namespace ErogeHelper.Common
             });
 
         public static bool IsOSWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
-        
-        public static void HideWindowInAltTab(Window window)
-            => HideWindowInAltTab(new WindowInteropHelper(window).Handle);
+
+        public static void HideWindowInAltTab(Window window) =>
+            HideWindowInAltTab(new WindowInteropHelper(window).Handle);
 
         public static void HideWindowInAltTab(IntPtr windowHandle)
         {
@@ -95,9 +100,6 @@ namespace ErogeHelper.Common
             }
         }
 
-        /// <summary>
-        /// Get MD5 hash
-        /// </summary>
         public static string Md5Calculate(byte[] buffer, bool toUpper = false)
         {
             var md5 = MD5.Create();
@@ -115,21 +117,45 @@ namespace ErogeHelper.Common
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Get MD5 hash
-        /// </summary>
         public static string Md5Calculate(string str, Encoding encoding, bool toUpper = false)
         {
             byte[] buffer = encoding.GetBytes(str);
             return Md5Calculate(buffer, toUpper);
         }
 
-        /// <summary>
-        /// Get MD5 hash
-        /// </summary>
-        public static string Md5Calculate(string str, bool toUpper = false)
+        public static string Md5Calculate(string str, bool toUpper = false) =>
+            Md5Calculate(str, Encoding.Default, toUpper);
+
+        public static void AdministratorToast()
         {
-            return Md5Calculate(str, Encoding.Default, toUpper);
+            var current = WindowsIdentity.GetCurrent();
+            var windowsPrincipal = new WindowsPrincipal(current);
+            if (!windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator))
+                return;
+
+            if (IsOSWindows8OrNewer)
+            {
+                new ToastContentBuilder()
+                    .AddText("ErogeHelper is running in Admin")
+                    .Show(toast =>
+                    {
+                        toast.Group = "eh";
+                        toast.Tag = "eh";
+                        // ExpirationTime bugged with InvalidCastException in .Net5
+                        // ExpirationTime can not work and bugged with using
+                        // ToastNotificationManagerCompat.History.Clear() in .Net6
+                        //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
+                    });
+
+                Thread.Sleep(ConstantValues.ToastDuration);
+                ToastNotificationManagerCompat.History.Clear();
+            }
+            else
+            {
+                DesktopNotifier.ShowInformation(
+                    "ErogeHelper is running in Admin",
+                    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
+            }
         }
     }
 }

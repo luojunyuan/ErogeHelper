@@ -16,6 +16,8 @@ namespace ErogeHelper.Model.Services
 {
     public class FilterProcessService : IFilterProcessService, IEnableLogger
     {
+        public event Action<bool>? ShowAdminNeededTip;
+
         public IEnumerable<ProcessDataModel> Filter() =>
             Process.GetProcesses()
                 .Where(p => p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle != string.Empty)
@@ -30,7 +32,8 @@ namespace ErogeHelper.Model.Services
                     {
                         // Access Denied. 64bit -> 32bit module or need elevated permissions
                         this.Log().Info($"{p.MainWindowTitle} {ex.Message}");
-                        // TODO: Message to make tip icon show
+                        ShowAdminNeededTip?.Invoke(true);
+                        ShowAdminNeededTip = null;
                     }
 
                     return fileName is not null &&
@@ -42,7 +45,10 @@ namespace ErogeHelper.Model.Services
                 {
                     var fileName = p.MainModule?.FileName!;
                     var icon = PEIconToBitmapImage(fileName);
-                    return new ProcessDataModel(p, icon, p.MainWindowTitle);
+                    var descript = p.MainModule?.FileVersionInfo.FileDescription;
+                    if (string.IsNullOrWhiteSpace(descript))
+                        descript = p.MainWindowTitle;
+                    return new ProcessDataModel(p, icon, descript);
                 });
 
         private static BitmapImage PEIconToBitmapImage(string fullPath)

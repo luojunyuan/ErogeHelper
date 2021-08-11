@@ -9,12 +9,30 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
     xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:local="clr-namespace:ErogeHelper.View.Windows"
+    xmlns:contracts="clr-namespace:ErogeHelper.Common.Contracts"
     mc:Ignorable="d"
     ui:WindowHelper.UseModernWindowStyle="True"
     Title="{x:Static resx:Strings.SelectProcess_Title}" 
     MinWidth="{StaticResource MinWindowWidth}" Width="{StaticResource MinWindowWidth}" Topmost="True"
     Icon="pack://application:,,,/assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="TipFadeInTrigger" TargetType="{x:Type ui:FontIcon}">
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation 
+                                    Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">
             <GroupBox>
@@ -26,16 +44,22 @@
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ComboBox x:Name="ProcessComboBox" Width="{StaticResource ControllerWidth}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Title}">
-                                    <Image Source="{Binding Icon}" />
-                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                        <ComboBox x:Name="ProcessComboBox" Width="{StaticResource ControllerWidth}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Title}">
+                                        <Image Source="{Binding Icon}" />
+                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ui:FontIcon 
+                            Glyph="{x:Static contracts:CommonGlyphs.Info}" Style="{StaticResource TipFadeInTrigger}"
+                            x:Name="TipSymbol" ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}"/>
+                    </ui:SimpleStackPanel>
+                    
                     <Button
                         x:Name="InjectButton" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
                         Style="{StaticResource AccentButtonStyle}" 

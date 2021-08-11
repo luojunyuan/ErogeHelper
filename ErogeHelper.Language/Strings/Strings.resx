@@ -488,12 +488,18 @@
     <value>Confirm and copy error to clipboard</value>
   </data>
   <data name="ErrorDialog.Content" xml:space="preserve">
-    <value>ErogeHelper run into some trouble. See error stack by click Detail information below.</value>
+    <value>ErogeHelper run into some trouble. See error stack by click Detail information below. You can copy the message use Ctrl + C.</value>
   </data>
   <data name="Common.AppName" xml:space="preserve">
     <value>Eroge Helper</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
     <value>Installer [Administrator]</value>
+  </data>
+  <data name="SelectProcess.AdminTip" xml:space="preserve">
+    <value>Can not find the right game? Try restart ErogeHelper in Administrator</value>
+  </data>
+  <data name="ShellMenu.RunAdministrator" xml:space="preserve">
+    <value>Run as Administrator</value>
   </data>
 </root>

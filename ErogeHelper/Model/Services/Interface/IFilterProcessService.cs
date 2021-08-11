@@ -9,6 +9,8 @@ namespace ErogeHelper.Model.Services.Interface
 {
     public interface IFilterProcessService
     {
+        event Action<bool> ShowAdminNeededTip;
+
         IEnumerable<ProcessDataModel> Filter();
     }
 }

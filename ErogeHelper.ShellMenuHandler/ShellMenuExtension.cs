@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -71,15 +72,23 @@ namespace ErogeHelper.ShellMenuHandler
 
         private void MenuX64()
         {
-            var mainMenu = new ToolStripMenuItem
+            var directStartItem = new ToolStripMenuItem
             {
                 Text = Language.Strings.ShellMenu_DirectStart,
                 Image = E
             };
-            mainMenu.Click += (sender, args) => MainProcess(false);
+            directStartItem.Click += (sender, args) => MainProcess(false, false);
+
+            var adminStartItem = new ToolStripMenuItem
+            {
+                Text = Language.Strings.ShellMenu_RunAdministrator,
+                Image = E
+            };
+            adminStartItem.Click += (sender, args) => MainProcess(false, true);
 
             _menu.Items.Clear();
-            _menu.Items.Add(mainMenu);
+            _menu.Items.Add(directStartItem);
+            _menu.Items.Add(adminStartItem);
         }
 
         /// <summary>
@@ -105,8 +114,8 @@ namespace ErogeHelper.ShellMenuHandler
                 Image = E
             };
 
-            directStartItem.Click += (sender, args) => MainProcess(false);
-            leStartItem.Click += (sender, args) => MainProcess(true);
+            directStartItem.Click += (sender, args) => MainProcess(false, _isAdmin);
+            leStartItem.Click += (sender, args) => MainProcess(true, _isAdmin);
 
             mainMenu.DropDownItems.Add(directStartItem);
             mainMenu.DropDownItems.Add(leStartItem);
@@ -128,7 +137,7 @@ namespace ErogeHelper.ShellMenuHandler
 
         private static bool _isAdmin;
 
-        private void MainProcess(bool useLe)
+        private void MainProcess(bool useLe, bool isAdmin)
         {
             var startInfo = new ProcessStartInfo();
 
@@ -151,7 +160,7 @@ namespace ErogeHelper.ShellMenuHandler
                 startInfo.Arguments += " /le";
             }
 
-            if (_isAdmin)
+            if (isAdmin)
             {
                 //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.UseShellExecute = true;
@@ -162,9 +171,13 @@ namespace ErogeHelper.ShellMenuHandler
             {
                 Process.Start(startInfo);
             }
-            catch (System.ComponentModel.Win32Exception e)
+            catch (Win32Exception e) when (e.NativeErrorCode == 1223) // ERROR_CANCELLED 
             {
-                MessageBox.Show(e.ToString());
+                // The operation was canceled by the user.
+            }
+            catch (Win32Exception e)
+            {
+                MessageBox.Show($"{e} \nErrorCode: {e.ErrorCode}\nNativeErrorCode: {e.NativeErrorCode}");
             }
         }
 

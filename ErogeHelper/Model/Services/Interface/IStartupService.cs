@@ -5,8 +5,8 @@ namespace ErogeHelper.Model.Services.Interface
 {
     public interface IStartupService
     {
-        void StartFromCommandLine(string[] args);
+        void StartFromCommandLine(string gamePath, bool leEnable);
 
-        void StartByInjectButton();
+        void StartByInjectButton(string gamePath);
     }
 }

@@ -1,222 +1,217 @@
-﻿//using ErogeHelper.Common.Contracts;
-//using ErogeHelper.Common.Entities;
-//using ErogeHelper.Model.Services.Interface;
-//using Splat;
-//using System;
-//using System.Collections.Generic;
-//using System.Diagnostics;
-//using System.Linq;
-//using System.Runtime.InteropServices;
-//using System.Windows;
-//using System.Windows.Threading;
-//using Vanara.PInvoke;
+﻿using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Entities;
+using ErogeHelper.Model.Services.Interface;
+using ReactiveUI;
+using Splat;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using Vanara.PInvoke;
 
-//namespace ErogeHelper.Model.Service
-//{
-//    class GameWindowHooker : IGameWindowHooker, IEnableLogger
-//    {
-//        //private User32.WinEventProc? _winEventDelegate;
-//        //private User32.SafeEventHookHandle? _hWinEventHook;
-//        //private GCHandle _gcSafetyHandle;
-//        //private Process? _gameProc;
-//        //private IntPtr _realWindowHandle;
-//        //private static readonly RECT MinimizedPosition = new() 
-//        //{ 
-//        //    left = -32000, 
-//        //    top = -32000, 
-//        //    right = -31840, 
-//        //    bottom = -37972 
-//        //};
-//        //private static readonly GameWindowPositionEventArgs HiddenPos = new()
-//        //{
-//        //    ClientArea = new Thickness(),
-//        //    Left = -32000,
-//        //    Top = -32000,
-//        //    Height = 0,
-//        //    Width = 0,
-//        //};
+namespace ErogeHelper.Model.Services
+{
+    public class GameWindowHooker : IGameWindowHooker, IEnableLogger
+    {
+        private HWND _gameHwnd;
+        private Process _gameProc = new();
+        private static readonly GameWindowPositionEventArgs HiddenPos = new(0, 0, -32000, -32000, new Thickness());
 
-//        public event EventHandler<GameWindowPositionEventArgs>? GamePosChanged;
+        private User32.HWINEVENTHOOK _windowsEventHook = IntPtr.Zero;
+        private const uint EventObjectDestroy = 0x8001;
+        private const uint EventObjectShow = 0x8002;
+        private const uint EventObjectHide = 0x8003;
+        private const uint EventObjectLocationChange = 0x800B;
+        private GCHandle _gcSafetyHandle;
+        private User32.WinEventProc? _winEventDelegate;
+        // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
+        private static readonly User32.WINEVENT WinEventHookInternalFlags =
+                                User32.WINEVENT.WINEVENT_INCONTEXT |
+                                User32.WINEVENT.WINEVENT_SKIPOWNPROCESS;
+        private const long SWEH_CHILDID_SELF = 0;
 
-//        public IntPtr GameRealHwnd => _realWindowHandle;
+        public event EventHandler<GameWindowPositionEventArgs>? GamePosChanged;
 
-//        public void SetGameWindowHook(Process process)
-//        {
-//            _gameProc = process;
+        public void SetGameWindowHook(Process process)
+        {
+            _gameProc = process;
 
-//            _winEventDelegate = WinEventCallback;
-//            _gcSafetyHandle = GCHandle.Alloc(_winEventDelegate);
+            _gameProc.EnableRaisingEvents = true;
 
-//            _gameProc.EnableRaisingEvents = true;
-//            _gameProc.Exited += ApplicationExit;
+            _gameHwnd = CurrentWindowHandle(_gameProc);
 
-//            _realWindowHandle = FindRealHandle();
-//            SetWindowHandler();
-//        }
+            var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
 
-//        public void ResetWindowHandler()
-//        {
-//            //if (_realWindowHandle != IntPtr.Zero)
-//            //{
-//            //    User32.GetWindowRect(_realWindowHandle, out var windowRect);
-//            //    if (windowRect.Equals(MinimizedPosition))
-//            //    {
-//            //        this.Log().Debug("window minimized");
-//            //        return;
-//            //    }
-//            //}
+            _winEventDelegate = WinEventCallback;
+            _gcSafetyHandle = GCHandle.Alloc(_winEventDelegate);
 
-//            //HWND handle = FindRealHandle();
+            _windowsEventHook = User32.SetWinEventHook(
+                EventObjectDestroy, EventObjectLocationChange,
+                IntPtr.Zero, _winEventDelegate, processId, targetThreadId,
+                WinEventHookInternalFlags);
 
-//            //if (handle.Equals(_realWindowHandle))
-//            //{
-//            //    UpdateLocation();
-//            //}
-//            //else if (handle != IntPtr.Zero)
-//            //{
-//            //    _realWindowHandle = handle;
-//            //    SetWindowHandler();
-//            //    UpdateLocation();
-//            //}
-//            //else
-//            //{
-//            //    throw new InvalidOperationException("Not found game window");
-//            //}
-//        }
+            Observable
+                .FromEventPattern(
+                    h => _gameProc.Exited += h,
+                    h => _gameProc.Exited -= h)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ =>
+                {
+                    this.Log().Debug("Detected game quit event");
+                    GamePosChanged?.Invoke(this, HiddenPos);
+                    _gcSafetyHandle.Free();
+                    User32.UnhookWinEvent(_windowsEventHook);
 
-//        public void InvokeUpdatePosition() => UpdateLocation();
+                    App.Terminate();
+                });
+        }
 
-//        private async void SetWindowHandler()
-//        {
-//            this.Log().Debug($"Set handle to 0x{Convert.ToString(_realWindowHandle.ToInt32(), 16).ToUpper()} " +
-//                             $"Title: {_gameProc.MainWindowTitle}");
-//            var gameUIThreadId = User32.GetWindowThreadProcessId(_realWindowHandle, out _);
+        public void ResetWindowHandler()
+        {
+            throw new NotImplementedException();
+        }
 
-//            // Hook must register in message loop thread
-//            await Dispatcher.InvokeAsync(() =>
-//            {
-//                _hWinEventHook = User32.SetWinEventHook(
-//                    User32.WindowsEventHookType.EVENT_OBJECT_FOCUS,
-//                    User32.WindowsEventHookType.EVENT_OBJECT_LOCATIONCHANGE,
-//                    IntPtr.Zero, _winEventDelegate,
-//                    _gameProc.Id, gameUIThreadId,
-//                    User32.WindowsEventHookFlags.WINEVENT_INCONTEXT |
-//                    User32.WindowsEventHookFlags.WINEVENT_SKIPOWNPROCESS);
-//                if (!_hWinEventHook.IsInvalid)
-//                    throw new InvalidOperationException("Install hook failed");
-//            });
-//        }
+        public void InvokeUpdatePosition() => UpdateLocation();
 
-//        private const int SWEH_CHILDID_SELF = 0;
+        private static HWND CurrentWindowHandle(Process proc)
+        {
+            var gameHwnd = proc.MainWindowHandle;
+            User32.GetClientRect(gameHwnd, out var clientRect);
+            if (clientRect.bottom > 100 && clientRect.right > 100)
+            {
+                return gameHwnd;
+            }
+            else
+            {
+                var spendTime = new Stopwatch();
+                spendTime.Start();
+                while (spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
+                {
+                    if (proc.HasExited)
+                        return IntPtr.Zero;
 
-//        private void WinEventCallback(IntPtr hWinEventHook,
-//                                      User32.WindowsEventHookType @event,
-//                                      IntPtr hwnd,
-//                                      int idObject,
-//                                      int idChild,
-//                                      int dwEventThread,
-//                                      uint dwmsEventTime)
-//        {
-//            // When game window get focus
-//            if (hwnd.Equals(_realWindowHandle) &&
-//                @event == User32.WindowsEventHookType.EVENT_OBJECT_FOCUS &&
-//                idObject == SWEH_CHILDID_SELF)
-//            {
-//                UpdateLocation();
-//            }
+                    var handles = GetRootWindowsOfProcess(proc.Id);
+                    foreach (var handle in handles)
+                    {
+                        User32.GetClientRect(handle, out clientRect);
+                        if (clientRect.bottom > 100 && clientRect.right > 100)
+                        {
+                            LogHost.Default.Debug($"Set 0x{handle.DangerousGetHandle():X8}");
+                            return handle;
+                        }
+                    }
+                    Thread.Sleep(ConstantValues.MinimumLagTime);
+                }
+                throw new ArgumentException("Find window handle failed");
+            }
+        }
 
-//            // When game window location changed
-//            if (hwnd.Equals(_realWindowHandle) &&
-//                @event == User32.WindowsEventHookType.EVENT_OBJECT_FOCUS &&
-//                idObject == SWEH_CHILDID_SELF)
-//            {
-//                UpdateLocation();
-//            }
-//        }
+        private void WinEventCallback(
+            User32.HWINEVENTHOOK hWinEventHook,
+            uint eventType,
+            HWND handleWindow,
+            int idObject,
+            int idChild,
+            uint dwEventThread,
+            uint dwmsEventTime)
+        {
+            if (handleWindow == _gameHwnd &&
+                eventType == EventObjectDestroy)
+            {
+                _gameHwnd = CurrentWindowHandle(_gameProc);
+                this.Log().Debug("Game window show - recreate");
+                UpdateLocation();
+            }
 
-//        private void UpdateLocation()
-//        {
-//            if (_realWindowHandle == IntPtr.Zero)
-//            {
-//                GamePosChanged?.Invoke(this, HiddenPos);
-//                return;
-//            }
+            else if (_gameProc.MainWindowHandle != handleWindow &&
+                handleWindow == _gameHwnd &&
+                eventType == EventObjectShow)
+            {
+                this.Log().Debug("Game window show");
+                UpdateLocation();
+            }
 
-//            User32.GetWindowRect(_realWindowHandle, out var rectWindow);
-//            User32.GetClientRect(_realWindowHandle, out var rectClient);
+            else if (_gameProc.MainWindowHandle != handleWindow &&
+                handleWindow == _gameHwnd &&
+                eventType == EventObjectHide)
+            {
+                this.Log().Debug("Game window hide");
+            }
 
-//            var width = rectWindow.right - rectWindow.left;  // equal rectClient.Right + shadow*2
-//            var height = rectWindow.bottom - rectWindow.top; // equal rectClient.Bottom + shadow + title
+            //if (hWnd == GameInfoTable.Instance.hWnd &&
+            //    eventType == Hook.SWEH_Events.EVENT_OBJECT_FOCUS)
+            //{
+            //    log.Info("Game window get focus");
+            //}
 
-//            var winShadow = (width - rectClient.right) / 2;
+            // Update game's position information
+            else if (handleWindow == _gameHwnd &&
+                eventType == EventObjectLocationChange &&
+                idObject == SWEH_CHILDID_SELF)
+            {
+                UpdateLocation();
+            }
+        }
 
-//            var wholeHeight = rectWindow.bottom - rectWindow.top;
-//            var winTitleHeight = wholeHeight - rectClient.bottom - winShadow;
+        private void UpdateLocation()
+        {
+            User32.GetWindowRect(_gameHwnd, out var rect);
+            User32.GetClientRect(_gameHwnd, out var rectClient);
 
-//            var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
+            var width = rect.right - rect.left;  // equal rectClient.Right + shadow*2
+            var height = rect.bottom - rect.top; // equal rectClient.Bottom + shadow + title
 
-//            if (rectWindow.Equals(MinimizedPosition))
-//            {
-//                this.Log().Debug("window minimized");
-//                //return;
-//            }
+            var winShadow = (width - rectClient.right) / 2;
 
-//            GamePosChanged?.Invoke(this, new GameWindowPositionEventArgs
-//            {
-//                Height = height,
-//                Width = width,
-//                Left = rectWindow.left,
-//                Top = rectWindow.top,
-//                ClientArea = clientArea
-//            });
-//        }
+            var wholeHeight = rect.bottom - rect.top;
+            var winTitleHeight = wholeHeight - rectClient.bottom - winShadow;
 
-//        private IntPtr FindRealHandle()
-//        {
-//            IntPtr targetHandle = IntPtr.Zero;
+            var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
-//            User32.EnumWindows((handle, _) =>
-//            {
-//                User32.GetWindowRect(handle, out var windowRect);
-//                User32.GetWindowThreadProcessId(handle, out var processId);
-//                if (_gameProc.Id == processId &&
-//                    IsGoodWindow(handle))
-//                {
-//                    targetHandle = handle;
-//                    return false;
-//                }
-//                return true;
-//            }, IntPtr.Zero);
+            GamePosChanged?.Invoke(this, new GameWindowPositionEventArgs(height, width, rect.left, rect.top, clientArea));
+        }
 
-//            return targetHandle;
-//        }
+        private static IEnumerable<HWND> GetRootWindowsOfProcess(int pid)
+        {
+            IEnumerable<HWND> rootWindows = GetChildWindows(IntPtr.Zero);
+            List<HWND> dsProcRootWindows = new();
+            foreach (var hWnd in rootWindows)
+            {
+                _ = User32.GetWindowThreadProcessId(hWnd, out var lpdwProcessId);
+                if (lpdwProcessId == pid)
+                    dsProcRootWindows.Add(hWnd);
+            }
+            return dsProcRootWindows;
+        }
 
-//        private static bool IsGoodWindow(IntPtr handle)
-//        {
-//            if (User32.IsIconic(handle))
-//            {
-//                return true;
-//            }
-//            if (!User32.IsWindowVisible(handle))
-//            {
-//                return false;
-//            }
-//            User32.GetWindowRect(handle, out var windowRect);
-//            var (width, height) = (windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
-//            return width >= ConstantValues.GoodWindowWidth && height >= ConstantValues.GoodWindowHeight;
-//        }
-
-//        private void ApplicationExit(object? sender, EventArgs e)
-//        {
-//            this.Log().Debug("Detected game quit event");
-//            GamePosChanged?.Invoke(this, HiddenPos);
-//            _gcSafetyHandle.Free();
-//            _hWinEventHook?.Dispose();
-
-//            Dispatcher.InvokeShutdown();
-//        }
-
-//        // For running in the unit test
-//        private static Dispatcher Dispatcher => Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
-//    }
-//}
+        private static IEnumerable<HWND> GetChildWindows(HWND parent)
+        {
+            List<HWND> result = new();
+            var listHandle = GCHandle.Alloc(result);
+            try
+            {
+                static bool childProc(HWND handle, IntPtr pointer)
+                {
+                    var gch = GCHandle.FromIntPtr(pointer);
+                    if (gch.Target is not List<HWND> list)
+                    {
+                        throw new InvalidCastException("GCHandle Target could not be cast as List<HWND>");
+                    }
+                    list.Add(handle);
+                    return true;
+                }
+                User32.EnumChildWindows(parent, childProc, GCHandle.ToIntPtr(listHandle));
+            }
+            finally
+            {
+                if (listHandle.IsAllocated)
+                    listHandle.Free();
+            }
+            return result;
+        }
+    }
+}

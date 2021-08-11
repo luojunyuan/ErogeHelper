@@ -41,7 +41,6 @@ namespace ErogeHelper.View.Windows
                     h => _gameWindowHooker.GamePosChanged += h,
                     h => _gameWindowHooker.GamePosChanged -= h)
                 .Select(e => e.EventArgs)
-                .ObserveOnDispatcher()
                 .Subscribe(pos =>
                 {
                     Height = pos.Height / _dpi;
@@ -55,11 +54,11 @@ namespace ErogeHelper.View.Windows
                         pos.ClientArea.Bottom / _dpi);
                 });
 
-            //_gameWindowHooker.InvokeUpdatePosition();
+            _gameWindowHooker.InvokeUpdatePosition();
 
+            Loaded += (_, _) => Utils.HideWindowInAltTab(this);
             this.WhenActivated(d =>
             {
-                this.Events().Loaded.Subscribe(_ => Utils.HideWindowInAltTab(this)).DisposeWith(d);
             });
         }
 

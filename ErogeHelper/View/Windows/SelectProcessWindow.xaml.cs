@@ -37,6 +37,11 @@ namespace ErogeHelper.View.Windows
                     nameof(ProcessComboBox.DropDownOpened))
                     .DisposeWith(d);
 
+                this.OneWayBind(ViewModel,
+                    vm => vm.ShowTipSymbol,
+                    v => v.TipSymbol.Visibility)
+                    .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.Inject,
                     v => v.InjectButton)
@@ -44,6 +49,14 @@ namespace ErogeHelper.View.Windows
 
                 this.Events().Closing
                     .Subscribe(_ => App.Terminate())
+                    .DisposeWith(d);
+
+                ViewModel.CloseWindow
+                    .Subscribe(_ => Close())
+                    .DisposeWith(d);
+
+                ViewModel.HideWindow
+                    .Subscribe(_ => Hide())
                     .DisposeWith(d);
             });
         }

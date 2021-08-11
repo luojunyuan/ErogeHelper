@@ -214,7 +214,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 ErogeHelper run into some trouble. See error stack by click Detail information below. 的本地化字符串。
+        ///   查找类似 ErogeHelper run into some trouble. See error stack by click Detail information below. You can copy the message use Ctrl + C. 的本地化字符串。
         /// </summary>
         public static string ErrorDialog_Content {
             get {
@@ -944,6 +944,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Can not find the right game? Try restart ErogeHelper in Administrator 的本地化字符串。
+        /// </summary>
+        public static string SelectProcess_AdminTip {
+            get {
+                return ResourceManager.GetString("SelectProcess.AdminTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Inject 的本地化字符串。
         /// </summary>
         public static string SelectProcess_InjectButton {
@@ -1030,6 +1039,15 @@ namespace ErogeHelper.Language {
         public static string ShellMenu_LEStart {
             get {
                 return ResourceManager.GetString("ShellMenu.LEStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Run as Administrator 的本地化字符串。
+        /// </summary>
+        public static string ShellMenu_RunAdministrator {
+            get {
+                return ResourceManager.GetString("ShellMenu.RunAdministrator", resourceCulture);
             }
         }
         

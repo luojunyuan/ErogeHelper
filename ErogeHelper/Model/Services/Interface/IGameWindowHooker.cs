@@ -11,7 +11,7 @@ namespace ErogeHelper.Model.Services.Interface
         void SetGameWindowHook(Process process);
 
         /// <summary>
-        /// Some games may change their handle when the window is switched to fullscreen
+        /// Some games may recreate their windows
         /// </summary>
         /// <returns></returns>
         void ResetWindowHandler();

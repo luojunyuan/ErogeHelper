@@ -58,13 +58,12 @@ namespace ErogeHelper.Model.DataServices
             // log 👀
             if (mainProcess is null)
             {
-                this.Log().Debug("Timeout! Find MainWindowHandle Failed");
-                throw new ArgumentNullException(nameof(mainProcess), "Find MainWindowHandle Failed");
+                throw new TimeoutException("Timeout! Find MainWindowHandle Failed");
             }
             else
             {
                 this.Log().Debug(
-                    $"{procList.Count} Process(es) and window handle {mainProcess.MainWindowHandle:x} Found. " +
+                    $"{procList.Count} Process(es) and MainWindowHandle 0x{mainProcess.MainWindowHandle:X8} Found. " +
                     $"Spend time {spendTime.Elapsed.TotalSeconds:0.00}s");
             }
 

@@ -11,6 +11,7 @@
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRunUseCrossgen2>true</PublishReadyToRunUseCrossgen2>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 

@@ -49,16 +49,8 @@ namespace ErogeHelper
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(args =>
                     {
-                        ToastNotificationManagerCompat.OnActivated += toastArgs =>
-                        {
-                            if (toastArgs.Argument.Length == 0)
-                            {
-                                this.Log().Debug("Toast Clicked");
-                                return;
-                            }
-                            var toastArguments = ToastArguments.Parse(toastArgs.Argument);
-                            this.Log().Debug(toastArguments);
-                        };
+                        Task.Run(ToastRegister);
+                        Task.Run(Utils.AdministratorToast);
 
                         var startupService = DependencyInject.GetService<IStartupService>();
 
@@ -70,10 +62,14 @@ namespace ErogeHelper
                                 Terminate(-1);
                             }
 
-                            if (args.Contains("-Debug"))
-                                throw new NotImplementedException();
+                            if (args[0].Equals(Environment.ProcessPath, StringComparison.Ordinal))
+                            {
+                                ModernWpf.MessageBox.Show("Can't run EH itself", "Eroge Helper");
+                                Terminate();
+                                return;
+                            }
 
-                            startupService.StartFromCommandLine(args);
+                            startupService.StartFromCommandLine(args[0], args.Any(arg => arg is "/le" or "-le"));
                         }
                         else
                         {
@@ -107,6 +103,18 @@ namespace ErogeHelper
                 Environment.Exit(exitCode);
             }
         }
+
+        private static void ToastRegister() =>
+            ToastNotificationManagerCompat.OnActivated += toastArgs =>
+            {
+                if (toastArgs.Argument.Length == 0)
+                {
+                    LogHost.Default.Debug("Toast Clicked");
+                    return;
+                }
+                var toastArguments = ToastArguments.Parse(toastArgs.Argument);
+                LogHost.Default.Debug(toastArguments.ToString());
+            };
 
         private static void SetupExceptionHandling()
         {

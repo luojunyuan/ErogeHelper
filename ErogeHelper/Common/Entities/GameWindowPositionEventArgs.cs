@@ -1,14 +1,24 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace ErogeHelper.Common.Entities
 {
-    public class GameWindowPositionEventArgs
+    public class GameWindowPositionEventArgs : EventArgs
     {
-        public double Height;
-        public double Width;
-        public double Left;
-        public double Top;
-        public Thickness ClientArea;
+        public GameWindowPositionEventArgs(double height, double width, double left, double top, Thickness clientArea)
+        {
+            Height = height;
+            Width = width;
+            Left = left;
+            Top = top;
+            ClientArea = clientArea;
+        }
+
+        public double Height { get; }
+        public double Width { get; }
+        public double Left { get; }
+        public double Top { get; }
+        public Thickness ClientArea { get; }
 
         public override string ToString()
         {
