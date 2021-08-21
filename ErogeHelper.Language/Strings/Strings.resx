@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SelectProcess.Title" xml:space="preserve">
-    <value>Eroge Helper - Select Process</value>
+    <value>Select Process</value>
   </data>
   <data name="SelectProcess.Tips" xml:space="preserve">
     <value>You can use ErogeHelper.Installer.exe to install me~</value>
@@ -494,10 +494,10 @@
     <value>Eroge Helper</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>Installer [Administrator]</value>
+    <value>Installer</value>
   </data>
   <data name="SelectProcess.AdminTip" xml:space="preserve">
-    <value>Can not find the right game? Try restart ErogeHelper in Administrator</value>
+    <value>Can not find the right game? Try restart ErogeHelper.SelectProcess.exe in Administrator</value>
   </data>
   <data name="ShellMenu.RunAdministrator" xml:space="preserve">
     <value>Run as Administrator</value>

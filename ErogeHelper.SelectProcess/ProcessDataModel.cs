@@ -2,20 +2,23 @@
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 
-namespace ErogeHelper.Model.DataModels
+namespace ErogeHelper.SelectProcess
 {
     public class ProcessDataModel : IEquatable<ProcessDataModel>
     {
-        public ProcessDataModel(Process process, BitmapImage icon, string title)
+        public ProcessDataModel(Process process, BitmapImage icon, string descript, string title)
         {
             Proc = process;
             Icon = icon;
+            Descript = descript;
             Title = title;
         }
 
         public Process Proc { get; }
 
         public BitmapImage Icon { get; }
+
+        public string Descript { get; }
 
         public string Title { get; }
 
@@ -27,6 +30,6 @@ namespace ErogeHelper.Model.DataModels
             obj is not null &&
             (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals(other: (ProcessDataModel)obj)));
 
-        public override int GetHashCode() => Title.GetHashCode();
+        public override int GetHashCode() => Descript.GetHashCode();
     }
 }

@@ -4,13 +4,15 @@
 
 Use VS2019 or Rider to clone `https://github.com/Eroge-Helper/ErogeHelper` down.
 
-Just press F5 to run or you can fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le`
+Fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le` and press F5 to run.
 
 one is full path of game, '/le' or '-le' to start with Locate Emulator
 
-### Publish  (reactiveUI branch)
+`Ctrl+Shift+B` to compile all things, then you can check other parts.
 
-Run `dotnet publish -c Release -r win-x64 -o ./bin/Publish` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
+### Publish
+
+Run `dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
 
 ```
 bin\Release\ErogeHelper.ShellMenuHandler.dll 
@@ -23,7 +25,7 @@ to `bin\Publish\`. Finally package the publish directory.
 
 ##### X86
 
-Build ErogeHelper x86 `dotnet publish -c Release -r win-x86 -o ./bin/Publish`
+Build ErogeHelper x86 `dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained`
 
 Open `x86 Native Tools Command Prompt for VS 2019`
 

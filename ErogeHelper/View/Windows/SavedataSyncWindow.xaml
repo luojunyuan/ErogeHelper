@@ -1,0 +1,24 @@
+﻿<reactiveUi:ReactiveWindow 
+    x:Class="ErogeHelper.View.Windows.SavedataSyncWindow"
+    x:TypeArguments="vm:SavedataSyncViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    mc:Ignorable="d"
+    Title="SavedataSyncWindow" Height="450" Width="800"
+    ui:WindowHelper.UseModernWindowStyle="True">
+    <ui:SimpleStackPanel Spacing="10">
+        <!--<ui:ToggleSwitch x:Name="CloudSaveCheckBox" Header="Cloud Save"/>-->
+        <!-- Use select menu instead-->
+        <Button x:Name="ChooseUNCPath" Content="ChooseUNCPath" />
+        <TextBlock x:Name="UNCPath" />
+        <Button x:Name="ChooseSaveDataPath" Content="ChooseSaveDataPath"/>
+        <TextBlock x:Name="SaveDataPath" />
+        <!-- 专门拿个面板搞同步，显示最新的同步信息-->
+        <Button x:Name="KeyButton" Content="SaveInfo, Make cloud enable"/>
+    </ui:SimpleStackPanel>
+</reactiveUi:ReactiveWindow>

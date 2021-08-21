@@ -2,8 +2,8 @@
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Exceptions;
+using ErogeHelper.Common.Functions;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.ViewModel.Windows;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
@@ -16,8 +16,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using ToastNotifications.Core;
-using ToastNotifications.Messages;
 
 namespace ErogeHelper
 {
@@ -49,32 +47,33 @@ namespace ErogeHelper
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(args =>
                     {
-                        Task.Run(ToastRegister);
-                        Task.Run(Utils.AdministratorToast);
+                        ToastManagement.Register();
+                        ToastManagement.AdminModeTipToast();
+                        DependencyInject.UpdateEhDatabase();
 
                         var startupService = DependencyInject.GetService<IStartupService>();
 
-                        if (args.Length != 0)
+                        if (args.Length == 0)
                         {
-                            // EH already exit, but toast is clicked. This one shouldn't happen 
-                            if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
-                            {
-                                Terminate(-1);
-                            }
-
-                            if (args[0].Equals(Environment.ProcessPath, StringComparison.Ordinal))
-                            {
-                                ModernWpf.MessageBox.Show("Can't run EH itself", "Eroge Helper");
-                                Terminate();
-                                return;
-                            }
-
-                            startupService.StartFromCommandLine(args[0], args.Any(arg => arg is "/le" or "-le"));
+                            ModernWpf.MessageBox.Show("Can't run ErogeHelper directly", "Eroge Helper");
+                            Terminate();
+                            return;
                         }
-                        else
+
+                        // EH already exit, but toast is clicked. This one shouldn't happen 
+                        if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
-                            DependencyInject.ShowView<SelectProcessViewModel>();
+                            Terminate(-1);
                         }
+
+                        if (args[0].Equals(Environment.ProcessPath, StringComparison.Ordinal))
+                        {
+                            ModernWpf.MessageBox.Show("Can't run ErogeHelper itself", "Eroge Helper");
+                            Terminate();
+                            return;
+                        }
+
+                        startupService.StartFromCommandLine(args[0], args.Any(arg => arg is "/le" or "-le"));
                     });
             }
             catch (AppExistedException)
@@ -103,18 +102,6 @@ namespace ErogeHelper
                 Environment.Exit(exitCode);
             }
         }
-
-        private static void ToastRegister() =>
-            ToastNotificationManagerCompat.OnActivated += toastArgs =>
-            {
-                if (toastArgs.Argument.Length == 0)
-                {
-                    LogHost.Default.Debug("Toast Clicked");
-                    return;
-                }
-                var toastArguments = ToastArguments.Parse(toastArgs.Argument);
-                LogHost.Default.Debug(toastArguments.ToString());
-            };
 
         private static void SetupExceptionHandling()
         {
@@ -192,34 +179,9 @@ namespace ErogeHelper
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .Subscribe(async _ =>
                 {
-                    if (Utils.IsOSWindows8OrNewer)
-                    {
-                        new ToastContentBuilder()
-                            .AddText("ErogeHelper is running!")
-                            .Show(toast =>
-                            {
-                                toast.Group = "eh";
-                                toast.Tag = "eh";
-                                // ExpirationTime bugged with InvalidCastException in .Net5
-                                // ExpirationTime can not work and bugged with using
-                                // ToastNotificationManagerCompat.History.Clear() in .Net6
-                                //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
-                            });
-
-                        toastLifetimeTimer.Restart();
-                        await Task.Delay(ConstantValues.ToastDuration).ConfigureAwait(false);
-                        if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValues.ToastDuration)
-                        {
-                            ToastNotificationManagerCompat.History.Clear();
-                            toastLifetimeTimer.Stop();
-                        }
-                    }
-                    else
-                    {
-                        Utils.DesktopNotifier.ShowInformation(
-                            "ErogeHelper is running!",
-                            new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
-                    }
+                    await ToastManagement
+                        .ShowAsync("ErogeHelper is running!", toastLifetimeTimer)
+                        .ConfigureAwait(false);
                 });
         }
 
@@ -230,8 +192,7 @@ namespace ErogeHelper
                 WindowTitle = $"ErogeHelper v{EHContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
                 MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
                 Content = Language.Strings.ErrorDialog_Content,
-                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\n" +
-                                      $"Caused by source `{ex.Source}`\r\n" +
+                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\nCaused by source `{ex.Source}`\r\n" +
                                       ex.StackTrace +
                                       (ex.InnerException is null ?
                                           string.Empty :

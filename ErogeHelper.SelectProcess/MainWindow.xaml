@@ -1,21 +1,17 @@
-﻿<reactiveUi:ReactiveWindow 
-    x:Class="ErogeHelper.View.Windows.SelectProcessWindow"
-    x:TypeArguments="vm:SelectProcessViewModel" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
-    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:contracts="clr-namespace:ErogeHelper.Common.Contracts"
-    mc:Ignorable="d"
-    ui:WindowHelper.UseModernWindowStyle="True"
-    Title="{x:Static resx:Strings.SelectProcess_Title}" 
-    MinWidth="{StaticResource MinWindowWidth}" Width="{StaticResource MinWindowWidth}" Topmost="True"
-    Icon="pack://application:,,,/assets/app.ico" SizeToContent="Height" WindowStartupLocation="CenterScreen">
-
+﻿<Window x:Class="ErogeHelper.SelectProcess.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+        d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="{x:Static resx:Strings.SelectProcess_Title}" 
+        MinWidth="400" Width="400" Topmost="True"
+        SizeToContent="Height" WindowStartupLocation="CenterScreen">
+    
     <Window.Resources>
         <Style x:Key="TipFadeInTrigger" TargetType="{x:Type ui:FontIcon}">
             <Style.Triggers>
@@ -32,7 +28,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <ScrollViewer PanningMode="Both">
         <StackPanel Margin="20,10">
             <GroupBox>
@@ -45,27 +41,30 @@
             <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-                        <ComboBox x:Name="ProcessComboBox" Width="{StaticResource ControllerWidth}">
+                        <ComboBox 
+                            x:Name="ProcessComboBox" DropDownOpened="ProcessComboBoxOnDropDownOpened" Width="240"
+                            ItemsSource="{Binding Processes}" SelectionChanged="ProcessComboBoxOnSelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Title}">
                                         <Image Source="{Binding Icon}" />
-                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0" />
+                                        <TextBlock 
+                                            Text="{Binding Descript}" VerticalAlignment="Center" Margin="10 0 0 0"
+                                            TextWrapping="Wrap" MaxWidth="180"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <ui:FontIcon 
-                            Glyph="{x:Static contracts:CommonGlyphs.Info}" Style="{StaticResource TipFadeInTrigger}"
-                            x:Name="TipSymbol" ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}"/>
+                            x:Name="TipSymbol" Glyph="&#xE946;" Style="{StaticResource TipFadeInTrigger}"
+                            ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}" Visibility="Collapsed"/>
                     </ui:SimpleStackPanel>
-                    
+
                     <Button
                         x:Name="InjectButton" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
-                        Style="{StaticResource AccentButtonStyle}" 
-                        Width="{StaticResource ControllerWidth}" />
+                        Style="{StaticResource AccentButtonStyle}" Width="240" Click="InjectButtonOnClick" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>
     </ScrollViewer>
-</reactiveUi:ReactiveWindow>
+</Window>

@@ -773,7 +773,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Installer [Administrator] 的本地化字符串。
+        ///   查找类似 Installer 的本地化字符串。
         /// </summary>
         public static string Installer_Title {
             get {
@@ -944,7 +944,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Can not find the right game? Try restart ErogeHelper in Administrator 的本地化字符串。
+        ///   查找类似 Can not find the right game? Try restart ErogeHelper.SelectProcess.exe in Administrator 的本地化字符串。
         /// </summary>
         public static string SelectProcess_AdminTip {
             get {
@@ -1007,7 +1007,7 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Eroge Helper - Select Process 的本地化字符串。
+        ///   查找类似 Select Process 的本地化字符串。
         /// </summary>
         public static string SelectProcess_Title {
             get {

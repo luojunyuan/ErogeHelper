@@ -1,8 +1,4 @@
-﻿using ErogeHelper.Common.Contracts;
-using ErogeHelper.Model.DataModels;
-using ErogeHelper.Model.Services.Interface;
-using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,10 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
-namespace ErogeHelper.Model.Services
+namespace ErogeHelper.SelectProcess
 {
-    public class FilterProcessService : IFilterProcessService, IEnableLogger
+    internal class FilterProcessService
     {
+        private const string UWPAppsTag = "WindowsApps";
+        private const string WindowsPath = @"C:\Windows\";
+
         public event Action<bool>? ShowAdminNeededTip;
 
         public IEnumerable<ProcessDataModel> Filter() =>
@@ -31,14 +30,14 @@ namespace ErogeHelper.Model.Services
                     catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
                     {
                         // Access Denied. 64bit -> 32bit module or need elevated permissions
-                        this.Log().Info($"{p.MainWindowTitle} {ex.Message}");
+                        Debug.WriteLine($"{p.MainWindowTitle} {ex.Message}");
                         ShowAdminNeededTip?.Invoke(true);
                         ShowAdminNeededTip = null;
                     }
 
                     return fileName is not null &&
-                        !fileName.Contains(ConstantValues.UWPAppsTag) &&
-                        !fileName.Contains(ConstantValues.WindowsPath) &&
+                        !fileName.Contains(UWPAppsTag) &&
+                        !fileName.Contains(WindowsPath) &&
                         p.Id != Environment.ProcessId;
                 })
                 .Select(p =>
@@ -48,7 +47,7 @@ namespace ErogeHelper.Model.Services
                     var descript = p.MainModule?.FileVersionInfo.FileDescription;
                     if (string.IsNullOrWhiteSpace(descript))
                         descript = p.MainWindowTitle;
-                    return new ProcessDataModel(p, icon, descript);
+                    return new ProcessDataModel(p, icon, descript, p.MainWindowTitle);
                 });
 
         private static BitmapImage PEIconToBitmapImage(string fullPath)

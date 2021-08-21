@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Vanara.PInvoke;
 
@@ -20,6 +19,7 @@ namespace ErogeHelper.Model.Services
         private HWND _gameHwnd;
         private Process _gameProc = new();
         private static readonly GameWindowPositionEventArgs HiddenPos = new(0, 0, -32000, -32000, new Thickness());
+        private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -37972);
 
         private User32.HWINEVENTHOOK _windowsEventHook = IntPtr.Zero;
         private const uint EventObjectDestroy = 0x8001;
@@ -66,19 +66,19 @@ namespace ErogeHelper.Model.Services
                     _gcSafetyHandle.Free();
                     User32.UnhookWinEvent(_windowsEventHook);
 
+                    // TODO: if (true )结束了之后检查存档文件夹日期和云的同步时间
+                    // 通过构造器注入云服务
+                    // 检查数据 只有本地比云新的情况下才上传。? 需多次试验
+
                     App.Terminate();
                 });
-        }
-
-        public void ResetWindowHandler()
-        {
-            throw new NotImplementedException();
         }
 
         public void InvokeUpdatePosition() => UpdateLocation();
 
         private static HWND CurrentWindowHandle(Process proc)
         {
+            proc.Refresh();
             var gameHwnd = proc.MainWindowHandle;
             User32.GetClientRect(gameHwnd, out var clientRect);
             if (clientRect.bottom > 100 && clientRect.right > 100)
@@ -113,47 +113,52 @@ namespace ErogeHelper.Model.Services
         private void WinEventCallback(
             User32.HWINEVENTHOOK hWinEventHook,
             uint eventType,
-            HWND handleWindow,
+            HWND hWnd,
             int idObject,
             int idChild,
             uint dwEventThread,
             uint dwmsEventTime)
         {
-            if (handleWindow == _gameHwnd &&
-                eventType == EventObjectDestroy)
+            switch (eventType)
             {
-                _gameHwnd = CurrentWindowHandle(_gameProc);
-                this.Log().Debug("Game window show - recreate");
-                UpdateLocation();
-            }
-
-            else if (_gameProc.MainWindowHandle != handleWindow &&
-                handleWindow == _gameHwnd &&
-                eventType == EventObjectShow)
-            {
-                this.Log().Debug("Game window show");
-                UpdateLocation();
-            }
-
-            else if (_gameProc.MainWindowHandle != handleWindow &&
-                handleWindow == _gameHwnd &&
-                eventType == EventObjectHide)
-            {
-                this.Log().Debug("Game window hide");
-            }
-
-            //if (hWnd == GameInfoTable.Instance.hWnd &&
-            //    eventType == Hook.SWEH_Events.EVENT_OBJECT_FOCUS)
-            //{
-            //    log.Info("Game window get focus");
-            //}
-
-            // Update game's position information
-            else if (handleWindow == _gameHwnd &&
-                eventType == EventObjectLocationChange &&
-                idObject == SWEH_CHILDID_SELF)
-            {
-                UpdateLocation();
+                case EventObjectDestroy:
+                    {
+                        if (hWnd == _gameHwnd)
+                        {
+                            _gameHwnd = CurrentWindowHandle(_gameProc);
+                            this.Log().Debug("Game window show - recreate");
+                            UpdateLocation();
+                        }
+                    }
+                    break;
+                case EventObjectShow:
+                    {
+                        if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
+                        {
+                            this.Log().Debug("Game window show");
+                            UpdateLocation();
+                        }
+                    }
+                    break;
+                case EventObjectHide:
+                    {
+                        if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
+                        {
+                            this.Log().Debug("Game window hide");
+                        }
+                    }
+                    break;
+                case EventObjectLocationChange:
+                    {
+                        // Update game's position information
+                        if (hWnd == _gameHwnd && idObject == SWEH_CHILDID_SELF)
+                        {
+                            UpdateLocation();
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 

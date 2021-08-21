@@ -10,12 +10,6 @@ namespace ErogeHelper.Model.Services.Interface
 
         void SetGameWindowHook(Process process);
 
-        /// <summary>
-        /// Some games may recreate their windows
-        /// </summary>
-        /// <returns></returns>
-        void ResetWindowHandler();
-
         void InvokeUpdatePosition();
     }
 }

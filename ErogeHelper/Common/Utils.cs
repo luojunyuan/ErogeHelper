@@ -1,17 +1,8 @@
-﻿using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Common.Contracts;
-using System;
+﻿using System;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
-using ToastNotifications;
-using ToastNotifications.Core;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Messages;
-using ToastNotifications.Position;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.Common
@@ -19,23 +10,6 @@ namespace ErogeHelper.Common
     public static class Utils
     {
         private static readonly Version OsVersion = Environment.OSVersion.Version;
-
-        // Tip: CustomNotification
-        // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
-        public static readonly Notifier DesktopNotifier = new(cfg =>
-            {
-                cfg.PositionProvider =
-                    new PrimaryScreenPositionProvider(
-                        corner: Corner.BottomRight,
-                        offsetX: 16,
-                        offsetY: 12);
-
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromMilliseconds(ConstantValues.ToastDuration),
-                    maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
-
-                cfg.DisplayOptions.TopMost = true;
-            });
 
         public static bool IsOSWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
@@ -65,6 +39,7 @@ namespace ErogeHelper.Common
             {
                 var releaseId = Environment.OSVersion.Version.Build switch
                 {
+                    20348 => "21H2",
                     19043 => "21H1",
                     19042 => "20H2",
                     19041 => "2004",
@@ -77,7 +52,7 @@ namespace ErogeHelper.Common
                     14393 => "1607",
                     10586 => "1511",
                     10240 => "1507",
-                    _ => Environment.OSVersion.Version.Build.ToString(),
+                    _ => $"{Environment.OSVersion.Version.Build}",
                 };
 
                 return $"Windows 10 {releaseId} {osBit}";
@@ -103,13 +78,13 @@ namespace ErogeHelper.Common
         public static string Md5Calculate(byte[] buffer, bool toUpper = false)
         {
             var md5 = MD5.Create();
-            byte[] hash = md5.ComputeHash(buffer);
+            var hash = md5.ComputeHash(buffer);
 
             var sb = new StringBuilder();
 
-            string format = toUpper ? "X2" : "x2";
+            var format = toUpper ? "X2" : "x2";
 
-            foreach (byte byteItem in hash)
+            foreach (var byteItem in hash)
             {
                 sb.Append(byteItem.ToString(format));
             }
@@ -119,43 +94,11 @@ namespace ErogeHelper.Common
 
         public static string Md5Calculate(string str, Encoding encoding, bool toUpper = false)
         {
-            byte[] buffer = encoding.GetBytes(str);
+            var buffer = encoding.GetBytes(str);
             return Md5Calculate(buffer, toUpper);
         }
 
         public static string Md5Calculate(string str, bool toUpper = false) =>
             Md5Calculate(str, Encoding.Default, toUpper);
-
-        public static void AdministratorToast()
-        {
-            var current = WindowsIdentity.GetCurrent();
-            var windowsPrincipal = new WindowsPrincipal(current);
-            if (!windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator))
-                return;
-
-            if (IsOSWindows8OrNewer)
-            {
-                new ToastContentBuilder()
-                    .AddText("ErogeHelper is running in Admin")
-                    .Show(toast =>
-                    {
-                        toast.Group = "eh";
-                        toast.Tag = "eh";
-                        // ExpirationTime bugged with InvalidCastException in .Net5
-                        // ExpirationTime can not work and bugged with using
-                        // ToastNotificationManagerCompat.History.Clear() in .Net6
-                        //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
-                    });
-
-                Thread.Sleep(ConstantValues.ToastDuration);
-                ToastNotificationManagerCompat.History.Clear();
-            }
-            else
-            {
-                DesktopNotifier.ShowInformation(
-                    "ErogeHelper is running in Admin",
-                    new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
-            }
-        }
     }
 }
