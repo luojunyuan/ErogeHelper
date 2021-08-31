@@ -1,11 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <TargetFramework>net48</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Checkbox14.png" />
+    <EmbeddedResource Include="Resources\Checkbox@200.png" />
+    <EmbeddedResource Include="Resources\CheckboxComposite14.png" />
+    <EmbeddedResource Include="Resources\CheckboxComposite@200.png" />
+    <EmbeddedResource Include="Resources\E.bmp" />
+    <EmbeddedResource Include="Resources\E@200.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SharpShell" Version="2.7.2" />

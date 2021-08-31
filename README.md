@@ -12,20 +12,21 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 
 ### Publish
 
-Run `dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained` in the repository directory. Compile ErogeHelper.ShellMenuHandler (Release) separately in Visual Studio. Move 
+x86_64 `dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained`
+
+x86_32 `dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained`
+
+Arm64 `dotnet publish -c Release -r win-arm64 -o ./bin/Publish --self-contained`
+
+You may face some link bugs. Use old unlink one to replace the dll in publish/
 
 ```
-bin\Release\ErogeHelper.ShellMenuHandler.dll 
-bin\Release\ErogeHelper.ShellMenuHandler.pdb 
-bin\Release\SharpShell.xml 
-bin\Release\SharpShell.dll
+DirectWriteForwarder.dll
+Vanara.PInvoke.Shared.dll
+Vanara.PInvoke.User32.dll
 ```
 
-to `bin\Publish\`. Finally package the publish directory.
-
-##### X86
-
-Build ErogeHelper x86 `dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained`
+##### X86 Addition Operation
 
 Open `x86 Native Tools Command Prompt for VS 2019`
 
@@ -33,8 +34,6 @@ Open `x86 Native Tools Command Prompt for VS 2019`
 cd path_to\ErogeHelper\bin\Publish
 editbin /largeaddressaware ErogeHelper.exe
 ```
-
-Build ErogeHelper.ShellMenuHandler(x86) as above.
 
 ### Install
 

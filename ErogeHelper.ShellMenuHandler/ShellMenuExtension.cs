@@ -1,5 +1,4 @@
-﻿using ErogeHelper.ShellMenuHandler.Properties;
-using SharpShell.Attributes;
+﻿using SharpShell.Attributes;
 using SharpShell.SharpContextMenu;
 using System;
 using System.ComponentModel;
@@ -64,11 +63,12 @@ namespace ErogeHelper.ShellMenuHandler
 
         private static readonly bool Is4K = SystemHelper.Is4KDisplay();
 
-        private static readonly Image E = Is4K ? Resource.E_200 : Resource.E;
+        private static readonly Image E = Is4K ? EmbeddedImage("E@200.png") : EmbeddedImage("E.bmp");
 
         private static readonly Image CheckboxComposite =
-            Is4K ? Resource.CheckboxComposite_200 : Resource.CheckboxComposite;
-        private static readonly Image Checkbox = Is4K ? Resource.Checkbox_200 : Resource.Checkbox;
+            Is4K ? EmbeddedImage("CheckboxComposite@200.png") : EmbeddedImage("CheckboxComposite14.png");
+        private static readonly Image Checkbox =
+            Is4K ? EmbeddedImage("Checkbox@200.png") : EmbeddedImage("Checkbox14.png");
 
         private void MenuX64()
         {
@@ -190,5 +190,10 @@ namespace ErogeHelper.ShellMenuHandler
             _menu.Dispose();
             _menu = CreateMenu();
         }
+
+        private static Bitmap EmbeddedImage(string filename) =>
+            new Bitmap(
+                Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                    "ErogeHelper.ShellMenuHandler.Resources." + filename));
     }
 }

@@ -9,9 +9,9 @@
     <Authors>k1mlka</Authors>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PublishReadyToRun>true</PublishReadyToRun>
-	<PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+	  <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   

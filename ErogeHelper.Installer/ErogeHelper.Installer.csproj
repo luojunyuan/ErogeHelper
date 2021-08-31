@@ -10,9 +10,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishReadyToRunUseCrossgen2>true</PublishReadyToRunUseCrossgen2>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -21,13 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ServerRegistrationManager.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
+    <PackageReference Include="ServerRegistrationManager" Version="2.7.2" />
+    <PackageReference Include="SharpShell" Version="2.7.2" />
   </ItemGroup>
 
 </Project>
