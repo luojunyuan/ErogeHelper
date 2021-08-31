@@ -1,4 +1,5 @@
-﻿using ModernWpf.Controls;
+﻿using ErogeHelper.Language;
+using ModernWpf.Controls;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,6 +17,18 @@ namespace ErogeHelper.SelectProcess
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static ContentDialog ProcessExitTipDialog => new()
+        {
+            Title = Strings.SelectProcess_ProcessExit,
+            CloseButtonText = Strings.Common_OK,
+        };
+        private static ContentDialog EhExistTipDialog => new()
+        {
+            Title = Strings.SelectProcess_EhNotExist,
+            CloseButtonText = Strings.Common_OK,
+            Content = Strings.SelectProcess_CheckPath +
+                '"' + Path.Combine(Environment.CurrentDirectory, "ErogeHelper.exe") + '"',
+        };
         private readonly FilterProcessService _filterProcessService;
 
         public MainWindow()
@@ -40,36 +53,26 @@ namespace ErogeHelper.SelectProcess
         private void InjectButtonOnClick(object sender, RoutedEventArgs e)
         {
             var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
-            if (selectedProcess.Proc.HasExited)
-            {
-                Processes.Remove(selectedProcess);
-                var processExitTipDialog = new ContentDialog
-                {
-                    Title = ErogeHelper.Language.Strings.SelectProcess_ProcessExit,
-                    CloseButtonText = ErogeHelper.Language.Strings.Common_OK,
-                };
-                processExitTipDialog.ShowAsync().ConfigureAwait(false);
-                return;
-            }
-
             var selectedPath = selectedProcess.Proc.MainModule?.FileName;
             if (selectedPath is null)
                 throw new ArgumentNullException(nameof(selectedPath), "Can not find the process's path");
+            selectedPath = '"' + selectedPath + '"';
 
-            if (!File.Exists("ErogeHelper.exe"))
+            if (selectedProcess.Proc.HasExited)
             {
-                var noEHTipDialog = new ContentDialog
-                {
-                    Title = "Not find the ErogeHelper.exe main executable. Please make sure it exists",
-                    CloseButtonText = ErogeHelper.Language.Strings.Common_OK,
-                    Content = Path.Combine(Environment.CurrentDirectory, "ErogeHelper.exe"),
-                };
-                noEHTipDialog.ShowAsync().ConfigureAwait(false);
-                return;
+                Processes.Remove(selectedProcess);
+                ProcessExitTipDialog.ShowAsync().ConfigureAwait(false);
             }
-
-            Process.Start("ErogeHelper.exe", selectedPath);
-            Close();
+            else if (!File.Exists("ErogeHelper.exe"))
+            {
+                EhExistTipDialog.ShowAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                Hide();
+                Process.Start("ErogeHelper.exe", selectedPath);
+                Close();
+            }
         }
 
         private void ProcessComboBoxOnSelectionChanged(object sender, SelectionChangedEventArgs e) =>

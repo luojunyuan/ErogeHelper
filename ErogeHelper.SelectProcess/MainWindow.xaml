@@ -46,10 +46,11 @@
                             ItemsSource="{Binding Processes}" SelectionChanged="ProcessComboBoxOnSelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Title}">
+                                    <!-- UPSTREAM: ToolTip bugged with .Net 6 preview 7 -->
+                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Descript}">
                                         <Image Source="{Binding Icon}" />
                                         <TextBlock 
-                                            Text="{Binding Descript}" VerticalAlignment="Center" Margin="10 0 0 0"
+                                            Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0"
                                             TextWrapping="Wrap" MaxWidth="180"/>
                                     </StackPanel>
                                 </DataTemplate>

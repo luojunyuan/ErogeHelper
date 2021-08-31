@@ -502,4 +502,10 @@
   <data name="ShellMenu.RunAdministrator" xml:space="preserve">
     <value>以管理员身份运行</value>
   </data>
+  <data name="SelectProcess.EhNotExist" xml:space="preserve">
+    <value>没有找到 ErogeHelper.exe 主程序</value>
+  </data>
+  <data name="SelectProcess.CheckPath" xml:space="preserve">
+    <value>请检查路径 </value>
+  </data>
 </root>

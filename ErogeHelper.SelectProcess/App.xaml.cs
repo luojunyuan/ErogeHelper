@@ -9,12 +9,18 @@ namespace ErogeHelper.SelectProcess
     /// </summary>
     public partial class App : Application
     {
+        private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
+
         public App()
         {
+            Current.DispatcherUnhandledException += (_, args) =>
+            {
+                var ex = args.Exception;
+                MessageBox.Show(ex.ToString());
+            };
+
             SingleInstanceWatcher();
         }
-
-        private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
 
         // http://stackoverflow.com/a/23730146/1644202"
         private static void SingleInstanceWatcher()
@@ -37,8 +43,8 @@ namespace ErogeHelper.SelectProcess
                             {
                                 var mainWindow = Current.MainWindow;
 
-                                if (mainWindow.WindowState == WindowState.Minimized
-                                    || mainWindow.Visibility != Visibility.Visible)
+                                if (mainWindow.WindowState == WindowState.Minimized ||
+                                    mainWindow.Visibility != Visibility.Visible)
                                 {
                                     mainWindow.Show();
                                     mainWindow.WindowState = WindowState.Normal;

@@ -953,6 +953,24 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Please Check path  的本地化字符串。
+        /// </summary>
+        public static string SelectProcess_CheckPath {
+            get {
+                return ResourceManager.GetString("SelectProcess.CheckPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Not found the ErogeHelper.exe main executable 的本地化字符串。
+        /// </summary>
+        public static string SelectProcess_EhNotExist {
+            get {
+                return ResourceManager.GetString("SelectProcess.EhNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Inject 的本地化字符串。
         /// </summary>
         public static string SelectProcess_InjectButton {

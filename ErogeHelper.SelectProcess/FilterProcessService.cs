@@ -14,6 +14,7 @@ namespace ErogeHelper.SelectProcess
     {
         private const string UWPAppsTag = "WindowsApps";
         private const string WindowsPath = @"C:\Windows\";
+        private const int MaxTitleLenth = 40;
 
         public event Action<bool>? ShowAdminNeededTip;
 
@@ -27,9 +28,9 @@ namespace ErogeHelper.SelectProcess
                     {
                         fileName = p.MainModule?.FileName;
                     }
-                    catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
+                    catch (Win32Exception ex) when (ex.NativeErrorCode == 5) // Access is denied.
                     {
-                        // Access Denied. 64bit -> 32bit module or need elevated permissions
+                        // 64bit -> 32bit module or need elevated permissions
                         Debug.WriteLine($"{p.MainWindowTitle} {ex.Message}");
                         ShowAdminNeededTip?.Invoke(true);
                         ShowAdminNeededTip = null;
@@ -44,10 +45,9 @@ namespace ErogeHelper.SelectProcess
                 {
                     var fileName = p.MainModule?.FileName!;
                     var icon = PEIconToBitmapImage(fileName);
-                    var descript = p.MainModule?.FileVersionInfo.FileDescription;
-                    if (string.IsNullOrWhiteSpace(descript))
-                        descript = p.MainWindowTitle;
-                    return new ProcessDataModel(p, icon, descript, p.MainWindowTitle);
+                    var descript = p.MainModule?.FileVersionInfo.FileDescription ?? string.Empty;
+                    var title = p.MainWindowTitle.Length > MaxTitleLenth ? descript : p.MainWindowTitle;
+                    return new ProcessDataModel(p, icon, descript, title);
                 });
 
         private static BitmapImage PEIconToBitmapImage(string fullPath)

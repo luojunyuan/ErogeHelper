@@ -26,10 +26,12 @@ namespace ErogeHelper.SelectProcess
             other is not null &&
             (ReferenceEquals(this, other) || Proc.Id == other.Proc.Id);
 
+        #region Override
         public override bool Equals(object? obj) =>
             obj is not null &&
             (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals(other: (ProcessDataModel)obj)));
 
-        public override int GetHashCode() => Descript.GetHashCode();
+        public override int GetHashCode() => Proc.Id.GetHashCode();
+        #endregion
     }
 }
