@@ -8,7 +8,7 @@ Fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - c
 
 one is full path of game, '/le' or '-le' to start with Locate Emulator
 
-`Ctrl+Shift+B` to compile all things, then you can check other parts.
+`Ctrl+Shift+B` to compile all things, then check other parts.
 
 ### Publish
 

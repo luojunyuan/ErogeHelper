@@ -11,7 +11,7 @@
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PublishReadyToRun>true</PublishReadyToRun>
-	  <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   

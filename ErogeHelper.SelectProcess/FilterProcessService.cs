@@ -30,10 +30,15 @@ namespace ErogeHelper.SelectProcess
                     }
                     catch (Win32Exception ex) when (ex.NativeErrorCode == 5) // Access is denied.
                     {
-                        // 64bit -> 32bit module or need elevated permissions
+                        // need elevated permissions
                         Debug.WriteLine($"{p.MainWindowTitle} {ex.Message}");
                         ShowAdminNeededTip?.Invoke(true);
                         ShowAdminNeededTip = null;
+                    }
+                    catch (Win32Exception ex) when (ex.NativeErrorCode == 299)
+                    {
+                        // 32bit -> 64bit
+                        Debug.WriteLine($"{p.MainWindowTitle} {ex.Message}");
                     }
 
                     return fileName is not null &&

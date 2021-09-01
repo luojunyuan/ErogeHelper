@@ -1,5 +1,4 @@
 ﻿using ModernWpf.Controls;
-using ServerRegistrationManager.OutputService;
 using System;
 using System.IO;
 using System.Security.Principal;
@@ -12,8 +11,8 @@ namespace ErogeHelper.Installer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly static IOutputService _consoleService = new ConsoleOutputService();
-        private readonly ServerRegistrationManager.Application SRM = new(_consoleService);
+        private const string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,9 +26,15 @@ namespace ErogeHelper.Installer
         private void CheckNecessaryFile(object sender, RoutedEventArgs e)
         {
             var shellMenuDllPath = Path.Combine(Environment.CurrentDirectory, "ErogeHelper.ShellMenuHandler.dll");
+            var serverRegistrationManagerPath = Path.Combine(Environment.CurrentDirectory, "ServerRegistrationManager.exe");
             if (!File.Exists(shellMenuDllPath))
             {
                 ModernWpf.MessageBox.Show($"Not found file {shellMenuDllPath}", "Eroge Helper");
+                Close();
+            }
+            else if (!File.Exists(serverRegistrationManagerPath))
+            {
+                ModernWpf.MessageBox.Show($"Not found file {serverRegistrationManagerPath}", "Eroge Helper");
                 Close();
             }
             else if (!IsAdministrator())
@@ -39,12 +44,14 @@ namespace ErogeHelper.Installer
             }
         }
 
-        private readonly string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
 
         private void Register(object sender, RoutedEventArgs e)
         {
-            var parameters = new string[] { "install", shellMenuDllName, "-codebase" };
-            SRM.Run(parameters);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+            {
+                FileName = "ServerRegistrationManager.exe",
+                Arguments = $"install {shellMenuDllName} -codebase"
+            });
 
             InstallButton.IsEnabled = false;
             UninstallButton.IsEnabled = true;
@@ -80,9 +87,12 @@ namespace ErogeHelper.Installer
                 }
             }
 
-            // unload dll first
-            var parameters = new string[] { "uninstall", shellMenuDllName, "-codebase" };
-            SRM.Run(parameters);
+            // unload ShellHandle.dll first
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+            {
+                FileName = "ServerRegistrationManager.exe",
+                Arguments = $"uninstall {shellMenuDllName} -codebase"
+            });
 
             // restart all explore.exe
             var directories = ExplorerHelper.GetOpenedDirectories();
