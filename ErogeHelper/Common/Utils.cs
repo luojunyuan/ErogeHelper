@@ -33,29 +33,30 @@ namespace ErogeHelper.Common
             Version Windows81 = new(6, 3);
             Version Windows10 = new(10, 0);
 
-            var osBit = Environment.Is64BitOperatingSystem ? "x64" : "x86";
+            var osBit = Environment.Is64BitOperatingSystem ? "64" : "32";
 
             if (OsVersion >= Windows10)
             {
                 var releaseId = Environment.OSVersion.Version.Build switch
                 {
-                    20348 => "21H2",
-                    19043 => "21H1",
-                    19042 => "20H2",
-                    19041 => "2004",
-                    18363 => "1909",
-                    18362 => "1903",
-                    17763 => "1809",
-                    17134 => "1803",
-                    16299 => "1709",
-                    15063 => "1703",
-                    14393 => "1607",
-                    10586 => "1511",
-                    10240 => "1507",
+                    22000 => "21H2 arm",
+                    20348 => "21H2 x86_",
+                    19043 => "21H1 x86_",
+                    19042 => "20H2 x86_",
+                    19041 => "2004 x86_", // Current target WinRT-SDK version
+                    18363 => "1909 x86_",
+                    18362 => "1903 x86_",
+                    17763 => "1809 x86_",
+                    17134 => "1803 x86_",
+                    16299 => "1709 x86_",
+                    15063 => "1703 x86_",
+                    14393 => "1607 x86_",
+                    10586 => "1511 x86_",
+                    10240 => "1507 x86_",
                     _ => $"{Environment.OSVersion.Version.Build}",
                 };
 
-                return $"Windows 10 {releaseId} {osBit}";
+                return $"Windows 10 {releaseId}{osBit}";
             }
             else if (OsVersion >= Windows81)
             {

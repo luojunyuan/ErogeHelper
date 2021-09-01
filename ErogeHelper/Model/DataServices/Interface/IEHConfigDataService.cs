@@ -3,7 +3,7 @@ using ErogeHelper.Common.Enums;
 
 namespace ErogeHelper.Model.DataServices.Interface
 {
-    public interface IEHConfigDataService
+    public interface IEhConfigDataService
     {
         [Option(DefaultValue = "https://eh.nya.run")]
         public string EhServerBaseUrl { get; set; }

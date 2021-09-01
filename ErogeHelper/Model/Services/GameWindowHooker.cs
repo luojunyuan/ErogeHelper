@@ -1,5 +1,7 @@
-﻿using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
+using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ReactiveUI;
 using Splat;
@@ -66,9 +68,14 @@ namespace ErogeHelper.Model.Services
                     _gcSafetyHandle.Free();
                     User32.UnhookWinEvent(_windowsEventHook);
 
-                    // TODO: if (true )结束了之后检查存档文件夹日期和云的同步时间
-                    // 通过构造器注入云服务
-                    // 检查数据 只有本地比云新的情况下才上传。? 需多次试验
+                    foreach (Window window in Application.Current.Windows)
+                        window.Close();
+
+                    var gameInfo = DependencyInject.GetService<IEhDbRepository>().GameInfo;
+                    if (gameInfo is not null && gameInfo.UseCloudSave)
+                    {
+                        DependencyInject.GetService<ISavedataSyncService>().UpdateSync();
+                    }
 
                     App.Terminate();
                 });

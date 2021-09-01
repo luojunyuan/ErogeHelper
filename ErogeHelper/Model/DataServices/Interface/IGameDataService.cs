@@ -6,14 +6,16 @@ namespace ErogeHelper.Model.DataServices.Interface
 {
     public interface IGameDataService
     {
-        IEnumerable<Process> GameProcesses { get; }
+        void Init(string md5, string gamePath);
 
         string Md5 { get; }
 
         string GamePath { get; }
 
+        IEnumerable<Process> GameProcesses { get; }
+
         Process MainProcess { get; }
 
-        void LoadData(string gamePath);
+        void SearchingProcesses(string gamePath);
     }
 }

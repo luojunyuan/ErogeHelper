@@ -3,6 +3,7 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Exceptions;
 using ErogeHelper.Common.Functions;
+using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
@@ -32,8 +33,8 @@ namespace ErogeHelper
             // System.Runtime.InteropServices.COMException when access ToastComponent first time
             try
             {
-                SetupExceptionHandling();
                 SetI18NLanguageDictionary();
+                SetupExceptionHandling();
                 SingleInstanceWatcher();
 
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -47,15 +48,9 @@ namespace ErogeHelper
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(args =>
                     {
-                        ToastManagement.Register();
-                        ToastManagement.AdminModeTipToast();
-                        DependencyInject.UpdateEhDatabase();
-
-                        var startupService = DependencyInject.GetService<IStartupService>();
-
                         if (args.Length == 0)
                         {
-                            ModernWpf.MessageBox.Show("Can't run ErogeHelper directly", "Eroge Helper");
+                            ModernWpf.MessageBox.Show("Can't run ErogeHelper directly", Language.Strings.Common_AppName);
                             Terminate();
                             return;
                         }
@@ -66,14 +61,21 @@ namespace ErogeHelper
                             Terminate(-1);
                         }
 
-                        if (args[0].Equals(Environment.ProcessPath, StringComparison.Ordinal))
+                        var fullPath = Path.GetFullPath(args[0]);
+                        if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                         {
-                            ModernWpf.MessageBox.Show("Can't run ErogeHelper itself", "Eroge Helper");
+                            ModernWpf.MessageBox.Show("Can't run ErogeHelper itself", Language.Strings.Common_AppName);
                             Terminate();
                             return;
                         }
 
-                        startupService.StartFromCommandLine(args[0], args.Any(arg => arg is "/le" or "-le"));
+                        ToastManagement.Register();
+                        ToastManagement.AdminModeTipToast();
+                        EhDbRepository.UpdateEhDatabase();
+
+                        var startupService = DependencyInject.GetService<IStartupService>();
+
+                        startupService.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
                     });
             }
             catch (AppExistedException)
@@ -109,7 +111,9 @@ namespace ErogeHelper
             {
                 if (Dispatcher.FromThread(Thread.CurrentThread) is null ||
                     Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
+                {
                     return;
+                }
 
                 var ex = args.ExceptionObject as Exception ??
                          new ArgumentNullException("AppDomain.CurrentDomain.UnhandledException");
@@ -123,18 +127,26 @@ namespace ErogeHelper
             {
                 var ex = args.Exception;
 
-                if (Current.Windows.Count != 0)
+                foreach (Window window in Current.Windows)
                 {
-                    args.Handled = true;
-                    LogHost.Default.Error(ex, "UI thread error occurrent");
-                    ShowErrorDialog("UI", ex);
+                    if (window.Title.Equals("MainGameWindows"))
+                    {
+                        args.Handled = true;
+                        LogHost.Default.Error(ex, "UI thread error occurrent");
+                        ShowErrorDialog("UI", ex);
+                        return;
+                    }
                 }
-                else
+
+                var additionInfo = string.Empty;
+                if (ex.HResult == -2003303418) // 0x88980406 WPF render thread failures
                 {
-                    LogHost.Default.Fatal(ex, "UI thread error occurrent");
-                    ShowErrorDialog("UI-Fatal", ex);
-                    Terminate(-1);
+                    additionInfo = "Try disable windows transparency effects in Settings-Personalization-Color";
                 }
+
+                LogHost.Default.Fatal(ex, "UI thread error occurrent");
+                ShowErrorDialog("UI-Fatal", ex, additionInfo);
+                Terminate(-1);
             };
 
             TaskScheduler.UnobservedTaskException += (_, args) =>
@@ -185,13 +197,14 @@ namespace ErogeHelper
                 });
         }
 
-        private static void ShowErrorDialog(string errorLevel, Exception ex)
+        private static void ShowErrorDialog(string errorLevel, Exception ex, string additionInfo = "")
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = $"ErogeHelper v{EHContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
+                WindowTitle = $"ErogeHelper v{EhContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
                 MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
-                Content = Language.Strings.ErrorDialog_Content,
+                Content = Language.Strings.ErrorDialog_Content + additionInfo == string.Empty ? string.Empty :
+                                                                                                "\r\n" + additionInfo,
                 ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\nCaused by source `{ex.Source}`\r\n" +
                                       ex.StackTrace +
                                       (ex.InnerException is null ?

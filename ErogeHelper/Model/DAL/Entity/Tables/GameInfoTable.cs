@@ -1,11 +1,11 @@
-﻿using Dapper;
+﻿using Dapper.Contrib.Extensions;
 
 namespace ErogeHelper.Model.DAL.Entity.Tables
 {
     [Table("GameInfo")]
-    public class GameInfoTable
+    public record GameInfoTable
     {
-        [Key]
+        [ExplicitKey]
         public string Md5 { get; set; } = string.Empty;
 
         // Saved as "186,143,123"
@@ -21,7 +21,6 @@ namespace ErogeHelper.Model.DAL.Entity.Tables
 
         public bool UseCloudSave { get; set; }
 
-        // Infact SavedataPath 
-        public string CloudPath { get; set; } = string.Empty;
+        public string SavedataPath { get; set; } = string.Empty;
     }
 }

@@ -1,0 +1,26 @@
+﻿<ui:ContentDialog x:Class="ErogeHelper.View.Dialogs.SavedataSyncDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:ui="http://schemas.modernwpf.com/2019"
+                  xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+                  mc:Ignorable="d" 
+                  Title="Cloud Savedata" CloseButtonText="{x:Static resx:Strings.Common_OK}">
+
+    <ui:SimpleStackPanel Spacing="10">
+        <Label Content="UNC Path" />
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Set" Click="UNCSetButtonOnClick"/>
+            <TextBox x:Name="UNCPath" Margin="10 0 0 0" MinWidth="200" IsReadOnly="True"/>
+        </StackPanel>
+        
+        <Label Content="Savedata Path" />
+        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+            <Button Content="Roaming" Click="SavedataRomingSetButtonOnClick"/>
+            <Button Content="Documents" Click="SavedataDocumentsSetButtonOnClick"/>
+            <Button Content="Game Directory" Click="SavedataGameDirectorySetButtonOnClick"/>
+        </ui:SimpleStackPanel>
+        <TextBox x:Name="SavedataPath" IsReadOnly="True" MaxWidth="315" MinWidth="250" HorizontalAlignment="Left" />
+    </ui:SimpleStackPanel>
+</ui:ContentDialog>

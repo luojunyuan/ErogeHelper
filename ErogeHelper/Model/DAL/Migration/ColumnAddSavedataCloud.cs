@@ -8,12 +8,12 @@ namespace ErogeHelper.Model.DAL.Migration
         public override void Up() =>
             Alter.Table("GameInfo")
                 .AddColumn("UseCloudSave").AsBoolean().WithDefaultValue(false)
-                .AddColumn("CloudPath").AsString();
+                .AddColumn("SavedataPath").AsString().WithDefaultValue(string.Empty);
 
         public override void Down() =>
             Delete
                 .Column("UseCloudSave")
-                .Column("CloudPath")
+                .Column("SavedataPath")
                 .FromTable("GameInfo");
     }
 }

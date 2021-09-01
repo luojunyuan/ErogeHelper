@@ -4,12 +4,14 @@ namespace ErogeHelper.Model.Repositories.Interface
 {
     public interface IEhDbRepository
     {
-        public GameInfoTable? GetGameInfo(string md5);
+        public GameInfoTable? GameInfo { get; }
 
-        public void SetGameInfo(GameInfoTable gameInfoTable);
-
-        public void UpdateCloudStatus(string md5, bool useCloudSavedata);
+        public void AddGameInfo(GameInfoTable gameInfoTable);
 
         public void UpdateGameInfo(GameInfoTable gameInfoTable);
+
+        public void UpdateCloudStatus(bool useCloudSavedata);
+
+        public void UpdateSavedataPath(string path);
     }
 }

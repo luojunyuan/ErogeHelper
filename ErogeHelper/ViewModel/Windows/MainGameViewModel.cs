@@ -10,7 +10,7 @@ namespace ErogeHelper.ViewModel.Windows
         {
             Interact = ReactiveCommand.Create(() =>
             {
-                DependencyInject.ShowView<SavedataSyncViewModel>();
+                DependencyInject.ShowView<PreferenceViewModel>();
             });
         }
 

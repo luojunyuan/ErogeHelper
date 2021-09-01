@@ -20,5 +20,9 @@
         public const string UWPAppsTag = "WindowsApps";
 
         public const string WindowsPath = @"C:\Windows\";
+
+        public const string EhCloudSavedataTag = "eh-savedata-cloud";
+
+        public const string EhCloudDbFilename = "gamelist.json";
     }
 }

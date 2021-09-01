@@ -5,29 +5,29 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
-    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationManifest>assets\app.manifest</ApplicationManifest>
     <Version>0.0.9</Version>
     <Authors>k1mlka</Authors>
-    <MeCabUseDefaultDictionary>False</MeCabUseDefaultDictionary>
+    <MeCabUseDefaultDictionary>false</MeCabUseDefaultDictionary>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishReadyToRunUseCrossgen2>true</PublishReadyToRunUseCrossgen2>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.0.3" />
     <PackageReference Include="Config.Net.Json" Version="4.15.0" />
-    <PackageReference Include="Dapper.SimpleCRUD" Version="2.3.0" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.2.17" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.9" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="15.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="16.2.1" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
-    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.11" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.12" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
 
@@ -47,7 +47,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Comparers\" />
-    <Folder Include="Common\Extensions\" />
     <Folder Include="Model\DAL\Entity\Payloads\" />
     <Folder Include="Model\DAL\Entity\Responses\" />
     <Folder Include="Model\DataModels\" />

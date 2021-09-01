@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
+using ErogeHelper.Model.DAL.Entity.Tables;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
@@ -18,24 +19,22 @@ namespace ErogeHelper.Model.Services
     {
         private readonly IGameDataService _gameDataService;
         private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IEHConfigDataService _ehConfigDataService;
+        private readonly IEhConfigDataService _ehConfigDataService;
         private readonly IEhDbRepository _ehDbRepository;
+        private readonly ISavedataSyncService _savedataSyncService;
 
         public StartupService(
             IGameDataService? gameDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
-            IEHConfigDataService? ehConfigDataService = null,
-            IEhDbRepository? ehDbRepository = null)
+            IEhConfigDataService? ehConfigDataService = null,
+            IEhDbRepository? ehDbRepository = null,
+            ISavedataSyncService? savedataSyncService = null)
         {
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEHConfigDataService>();
+            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigDataService>();
             _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-        }
-
-        public void StartByInjectButton(string gamePath)
-        {
-            throw new NotImplementedException();
+            _savedataSyncService = savedataSyncService ?? DependencyInject.GetService<ISavedataSyncService>();
         }
 
         public void StartFromCommandLine(string gamePath, bool leEnable)
@@ -48,24 +47,20 @@ namespace ErogeHelper.Model.Services
             this.Log().Debug($"Game's path: {gamePath}");
             this.Log().Debug($"Locate Emulator status: {leEnable}");
 
-            var gameDir = Path.GetDirectoryName(gamePath)!;
+            var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
 
-            // TODO: Refactor
-            var gameInfo = _ehDbRepository.GetGameInfo(Utils.Md5Calculate(File.ReadAllBytes(gamePath)));
+            var md5 = Utils.Md5Calculate(File.ReadAllBytes(gamePath));
+            _gameDataService.Init(md5, gamePath);
+
+            var gameInfo = _ehDbRepository.GameInfo;
+            if (gameInfo is null)
+            {
+                _ehDbRepository.AddGameInfo(new GameInfoTable() { Md5 = md5, });
+            }
+
             if (gameInfo is not null && gameInfo.UseCloudSave)
             {
-                // 能进来说明需要的信息都具备了
-                this.Log().Debug("Game use cloud savedata");
-                // 几种有限的情境，不会产生其他情形
-                // 如果本地的档与云的一致，什么也不做。（上次退出游戏时已经更新到最新了）（标识肯是相同计算机不考虑其他情况）
-                // 如果云的档比本地的旧，并且标识是相同计算机（说明上次退出游戏时没能成功更新到云），该。。。立即上传同步或者不管
-                // 如果云的档比本地的旧，并且标识是不同计算机（说明断网情况下在本地游玩），需要弹窗提示用户手动替换。
-                // 如果云的档比本地的新，并且标识是不同计算机，下载同步
-                // 以上 断网 和“没有使用eh”意义是相同的
-                // Exceptions
-                // 云的档比本地的新，并且标识相同计算机（说明用户手动删除了存档），弹窗提示用户。
-                // 断网情况，onedrive或nas有不同情境
-                // 考虑游戏路径改变的情况，需要检查存档目录的存在状况
+                _savedataSyncService.DownloadSync(gameInfo);
             }
 
             // TODO: 更全面的进程检测
@@ -100,9 +95,14 @@ namespace ErogeHelper.Model.Services
                 }
             }
 
+            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
+            {
+                throw new NotImplementedException("Not Support Unity game yet");
+            }
+
             try
             {
-                _gameDataService.LoadData(gamePath);
+                _gameDataService.SearchingProcesses(gamePath);
             }
             catch (TimeoutException)
             {
@@ -113,17 +113,6 @@ namespace ErogeHelper.Model.Services
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
-            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
-            {
-                throw new NotImplementedException("Not Support Unity game yet");
-            }
-
-            if (gameInfo is null)
-            {
-                _ehDbRepository.SetGameInfo(new() { Md5 = _gameDataService.Md5 });
-            }
-
-            //
             DependencyInject.ShowView<MainGameViewModel>();
         }
     }

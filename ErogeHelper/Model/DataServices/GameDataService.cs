@@ -1,5 +1,4 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using Splat;
 using System;
@@ -13,27 +12,25 @@ namespace ErogeHelper.Model.DataServices
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
-        public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
+        public void Init(string md5, string gamePath) => (Md5, GamePath) = (md5, gamePath);
 
         public string Md5 { get; private set; } = string.Empty;
 
         public string GamePath { get; private set; } = string.Empty;
 
+        public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
+
         public Process MainProcess { get; private set; } = new();
 
-        public void LoadData(string gamePath)
-        {
-            GamePath = gamePath;
+        public void SearchingProcesses(string gamePath) =>
             (MainProcess, GameProcesses) = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-            Md5 = Utils.Md5Calculate(File.ReadAllBytes(GamePath));
-        }
 
         /// <summary>
         /// Get all processes of the game (timeout 20s)
         /// </summary>
         /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
         /// <returns>if process with hWnd found, give all back, other wise return blank list</returns>
-        private (Process, List<Process>) ProcessCollect(string friendlyName)
+        private static (Process, List<Process>) ProcessCollect(string friendlyName)
         {
             var spendTime = new Stopwatch();
             spendTime.Start();
@@ -60,7 +57,7 @@ namespace ErogeHelper.Model.DataServices
                 throw new TimeoutException("Timeout! Find MainWindowHandle Failed");
             }
 
-            this.Log().Debug(
+            LogHost.Default.Debug(
                 $"{procList.Count} Process(es) and MainWindowHandle 0x{mainProcess.MainWindowHandle:X8} Found.");
 
             return (mainProcess, procList);
