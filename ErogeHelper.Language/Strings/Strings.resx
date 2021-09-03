@@ -150,15 +150,6 @@
   <data name="About.OpenNewIssue" xml:space="preserve">
     <value>Open a new issue</value>
   </data>
-  <data name="ShellMenu.DirectStart" xml:space="preserve">
-    <value>Start Game</value>
-  </data>
-  <data name="ShellMenu.LEStart" xml:space="preserve">
-    <value>Use Locate Emulator Start</value>
-  </data>
-  <data name="ShellMenu.Administrator" xml:space="preserve">
-    <value>Set Run as Administrator</value>
-  </data>
   <data name="Installer.Info" xml:space="preserve">
     <value>This will register Eroge Helper to the window context menu for ".exe" suffix programs. Please uninstall me before move or delete.</value>
   </data>
@@ -490,22 +481,24 @@
   <data name="ErrorDialog.Content" xml:space="preserve">
     <value>ErogeHelper run into some trouble. See error stack by click Detail information below. You can copy the message use Ctrl + C.</value>
   </data>
-  <data name="Common.AppName" xml:space="preserve">
-    <value>Eroge Helper</value>
-  </data>
   <data name="Installer.Title" xml:space="preserve">
     <value>Installer</value>
   </data>
   <data name="SelectProcess.AdminTip" xml:space="preserve">
     <value>Can not find the right game? Try restart ErogeHelper.SelectProcess.exe in Administrator</value>
   </data>
-  <data name="ShellMenu.RunAdministrator" xml:space="preserve">
-    <value>Run as Administrator</value>
-  </data>
   <data name="SelectProcess.EhNotExist" xml:space="preserve">
     <value>Not found the ErogeHelper.exe main executable</value>
   </data>
   <data name="SelectProcess.CheckPath" xml:space="preserve">
     <value>Please Check path </value>
+  </data>
+  <data name="App.ErrorDialog" xml:space="preserve">
+    <value>ErogeHelper v{0} - {1} Error</value>
+  </data>
+  <data name="App.ErrorDialogExInfo" xml:space="preserve">
+    <value>OS Version: {0}
+Caused by source `{1}`
+</value>
   </data>
 </root>

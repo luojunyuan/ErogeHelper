@@ -12,17 +12,11 @@ namespace ErogeHelper.Model.Services.Interface
     {
         void InitGameData();
 
-        CloudGameDataEntity CreateGameData();
+        CloudSaveDataEntity CreateGameData();
 
-        CloudGameDataEntity? GetCurrentGameData();
+        CloudSaveDataEntity? GetCurrentGameData();
 
-        void UpdateSaveInfo(DateTime time);
-
-        void UploadFiles();
-    
-        void DownloadFiles();
-
-        void DownloadSync(GameInfoTable gameInfo);
+        void DownloadSync();
 
         void UpdateSync();
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
@@ -10,6 +11,8 @@ namespace ErogeHelper.Common
     public static class Utils
     {
         private static readonly Version OsVersion = Environment.OSVersion.Version;
+
+        public static readonly string MachineGUID = GetMachineGUID();
 
         public static bool IsOSWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
@@ -101,5 +104,35 @@ namespace ErogeHelper.Common
 
         public static string Md5Calculate(string str, bool toUpper = false) =>
             Md5Calculate(str, Encoding.Default, toUpper);
+
+        private static string GetMachineGUID()
+        {
+            if (Environment.Is64BitOperatingSystem)
+            {
+                var keyBaseX64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+                var keyX64 = keyBaseX64.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Cryptography", RegistryKeyPermissionCheck.ReadSubTree);
+                var resultObjX64 = keyX64?.GetValue("MachineGuid", string.Empty);
+
+                if (resultObjX64 is not null)
+                {
+                    return resultObjX64.ToString() ?? string.Empty;
+                }
+            }
+            else
+            {
+                var keyBaseX86 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+                var keyX86 = keyBaseX86.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Cryptography", RegistryKeyPermissionCheck.ReadSubTree);
+                var resultObjX86 = keyX86?.GetValue("MachineGuid", string.Empty);
+
+                if (resultObjX86 != null)
+                {
+                    return resultObjX86.ToString() ?? string.Empty;
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }

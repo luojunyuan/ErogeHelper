@@ -124,6 +124,26 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 ErogeHelper v{0} - {1} Error 的本地化字符串。
+        /// </summary>
+        public static string App_ErrorDialog {
+            get {
+                return ResourceManager.GetString("App.ErrorDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 OS Version: {0}
+        ///Caused by source `{1}`
+        /// 的本地化字符串。
+        /// </summary>
+        public static string App_ErrorDialogExInfo {
+            get {
+                return ResourceManager.GetString("App.ErrorDialogExInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close Card 的本地化字符串。
         /// </summary>
         public static string CardControl_CloseTip {
@@ -138,15 +158,6 @@ namespace ErogeHelper.Language {
         public static string CardControl_SelectTextTip {
             get {
                 return ResourceManager.GetString("CardControl.SelectTextTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Eroge Helper 的本地化字符串。
-        /// </summary>
-        public static string Common_AppName {
-            get {
-                return ResourceManager.GetString("Common.AppName", resourceCulture);
             }
         }
         
@@ -1030,42 +1041,6 @@ namespace ErogeHelper.Language {
         public static string SelectProcess_Title {
             get {
                 return ResourceManager.GetString("SelectProcess.Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Set Run as Administrator 的本地化字符串。
-        /// </summary>
-        public static string ShellMenu_Administrator {
-            get {
-                return ResourceManager.GetString("ShellMenu.Administrator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Start Game 的本地化字符串。
-        /// </summary>
-        public static string ShellMenu_DirectStart {
-            get {
-                return ResourceManager.GetString("ShellMenu.DirectStart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Use Locate Emulator Start 的本地化字符串。
-        /// </summary>
-        public static string ShellMenu_LEStart {
-            get {
-                return ResourceManager.GetString("ShellMenu.LEStart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Run as Administrator 的本地化字符串。
-        /// </summary>
-        public static string ShellMenu_RunAdministrator {
-            get {
-                return ResourceManager.GetString("ShellMenu.RunAdministrator", resourceCulture);
             }
         }
         

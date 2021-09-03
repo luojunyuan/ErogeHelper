@@ -3,12 +3,15 @@ using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Exceptions;
 using ErogeHelper.Common.Functions;
+using ErogeHelper.Language;
 using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -17,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper
 {
@@ -40,7 +44,7 @@ namespace ErogeHelper
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
                 Directory.SetCurrentDirectory(currentDirectory ??
-                    throw new ArgumentNullException(nameof(currentDirectory)));
+                                              throw new ArgumentNullException(nameof(currentDirectory)));
 
                 DependencyInject.Register();
 
@@ -50,7 +54,7 @@ namespace ErogeHelper
                     {
                         if (args.Length == 0)
                         {
-                            ModernWpf.MessageBox.Show("Can't run ErogeHelper directly", Language.Strings.Common_AppName);
+                            MessageBox.Show("Can't run ErogeHelper directly", "Eroge Helper");
                             Terminate();
                             return;
                         }
@@ -64,7 +68,7 @@ namespace ErogeHelper
                         var fullPath = Path.GetFullPath(args[0]);
                         if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                         {
-                            ModernWpf.MessageBox.Show("Can't run ErogeHelper itself", Language.Strings.Common_AppName);
+                            MessageBox.Show("Can't run ErogeHelper itself", "Eroge Helper");
                             Terminate();
                             return;
                         }
@@ -116,7 +120,7 @@ namespace ErogeHelper
                 }
 
                 var ex = args.ExceptionObject as Exception ??
-                         new ArgumentNullException("AppDomain.CurrentDomain.UnhandledException");
+                         new ArgumentNullException();
 
                 LogHost.Default.Fatal(ex, "non-UI thread error occurrent");
                 ShowErrorDialog("Fatal", ex);
@@ -127,15 +131,13 @@ namespace ErogeHelper
             {
                 var ex = args.Exception;
 
-                foreach (Window window in Current.Windows)
+                if (Current.Windows.Cast<Window>()
+                    .Any(window => window.Title.Equals("MainGameWindows")))
                 {
-                    if (window.Title.Equals("MainGameWindows"))
-                    {
-                        args.Handled = true;
-                        LogHost.Default.Error(ex, "UI thread error occurrent");
-                        ShowErrorDialog("UI", ex);
-                        return;
-                    }
+                    args.Handled = true;
+                    LogHost.Default.Error(ex, "UI thread error occurrent");
+                    ShowErrorDialog("UI", ex);
+                    return;
                 }
 
                 var additionInfo = string.Empty;
@@ -158,13 +160,13 @@ namespace ErogeHelper
         }
 
         private static void SetI18NLanguageDictionary() =>
-            Language.Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
+            Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {
-                "zh-Hans" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-CN" => new System.Globalization.CultureInfo("zh-Hans"),
-                "zh-SG" => new System.Globalization.CultureInfo("zh-Hans"),
-                _ => new System.Globalization.CultureInfo(""),
+                "zh-Hans" => new CultureInfo("zh-Hans"),
+                "zh" => new CultureInfo("zh-Hans"),
+                "zh-CN" => new CultureInfo("zh-Hans"),
+                "zh-SG" => new CultureInfo("zh-Hans"),
+                _ => new CultureInfo("")
             };
 
         private static void SingleInstanceWatcher()
@@ -178,7 +180,7 @@ namespace ErogeHelper
                 throw new AppExistedException();
             }
 
-            var toastLifetimeTimer = new System.Diagnostics.Stopwatch();
+            var toastLifetimeTimer = new Stopwatch();
 
             Observable.Create<object>(observer =>
                 {
@@ -186,43 +188,41 @@ namespace ErogeHelper
                     {
                         observer.OnNext(new object());
                     }
+
                     return Disposable.Empty;
                 })
                 .SubscribeOn(RxApp.TaskpoolScheduler)
-                .Subscribe(async _ =>
-                {
-                    await ToastManagement
-                        .ShowAsync("ErogeHelper is running!", toastLifetimeTimer)
-                        .ConfigureAwait(false);
-                });
+                .Subscribe(_ => ToastManagement
+                    .ShowAsync("ErogeHelper is running!", toastLifetimeTimer)
+                    .ConfigureAwait(false)
+                );
         }
 
         private static void ShowErrorDialog(string errorLevel, Exception ex, string additionInfo = "")
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = $"ErogeHelper v{EhContext.AppVersion ?? "?.?.?.?"} - {errorLevel} Error",
-                MainInstruction = $"{ex.GetType().FullName}: {ex.Message}",
-                Content = Language.Strings.ErrorDialog_Content + additionInfo == string.Empty ? string.Empty :
-                                                                                                "\r\n" + additionInfo,
-                ExpandedInformation = $"OS Version: {Utils.GetOSInfo()}\r\nCaused by source `{ex.Source}`\r\n" +
+                WindowTitle = string.Format(Strings.App_ErrorDialog, EhContext.AppVersion ?? "?.?.?.?", errorLevel),
+                MainInstruction = $@"{ex.GetType().FullName}: {ex.Message}",
+                Content = Strings.ErrorDialog_Content + (additionInfo == string.Empty ? string.Empty :
+                                                                                        "\r\n" + additionInfo),
+                ExpandedInformation = string.Format(Strings.App_ErrorDialogExInfo, Utils.GetOSInfo(), ex.Source) +
                                       ex.StackTrace +
-                                      (ex.InnerException is null ?
-                                          string.Empty :
-                                          $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),
+                                      (ex.InnerException is null ? string.Empty :
+                                      $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),
                 Width = 300,
             };
 
-            TaskDialogButton clipboardButton = new(Language.Strings.OokiiDialog_ClipboardLabel);
+            TaskDialogButton clipboardButton = new(Strings.OokiiDialog_ClipboardLabel);
             TaskDialogButton okButton = new(ButtonType.Ok);
             dialog.Buttons.Add(clipboardButton);
             dialog.Buttons.Add(okButton);
             var clicked = dialog.ShowDialog();
-            if (clicked == clipboardButton)
-            {
-                var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
-                Clipboard.SetText(errorInfo);
-            }
+            if (clicked != clipboardButton)
+                return;
+
+            var errorInfo = dialog.WindowTitle + "\r\n" + dialog.MainInstruction + "\r\n" + dialog.ExpandedInformation;
+            Clipboard.SetText(errorInfo);
         }
     }
 }

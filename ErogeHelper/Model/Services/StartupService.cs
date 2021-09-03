@@ -60,7 +60,7 @@ namespace ErogeHelper.Model.Services
 
             if (gameInfo is not null && gameInfo.UseCloudSave)
             {
-                _savedataSyncService.DownloadSync(gameInfo);
+                _savedataSyncService.DownloadSync();
             }
 
             // TODO: 更全面的进程检测
@@ -106,7 +106,7 @@ namespace ErogeHelper.Model.Services
             }
             catch (TimeoutException)
             {
-                MessageBox.Show(Language.Strings.MessageBox_TimeoutInfo, Language.Strings.Common_AppName);
+                MessageBox.Show(Language.Strings.MessageBox_TimeoutInfo, "Eroge Helper");
                 App.Terminate();
                 return;
             }

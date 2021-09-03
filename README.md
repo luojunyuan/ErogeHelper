@@ -12,27 +12,30 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 
 ### Publish
 
-x86_64 `dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained`
-
-x86_32 `dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained`
-
-Arm64 `dotnet publish -c Release -r win-arm64 -o ./bin/Publish --self-contained`
-
-You may face some link bugs. Use old unlink one to replace the dll in publish/
+- x86_64 
 
 ```
-DirectWriteForwarder.dll
-Vanara.PInvoke.Shared.dll
-Vanara.PInvoke.User32.dll
+dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained
 ```
 
-##### X86 Addition Operation
+- x86_32 
+
+```
+dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained
+```
 
 Open `x86 Native Tools Command Prompt for VS 2019`
 
 ```cmd
 cd path_to\ErogeHelper\bin\Publish
 editbin /largeaddressaware ErogeHelper.exe
+```
+
+- Arm64 
+
+```
+dotnet publish -c Release -r win-arm64 -o ./bin/Publish --self-contained`
+dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish --self-contained
 ```
 
 ### Install

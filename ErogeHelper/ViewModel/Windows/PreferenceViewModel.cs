@@ -61,41 +61,23 @@ namespace ErogeHelper.ViewModel.Windows
 
                 if (value)
                 {
-                    // first time
                     var savedataInfo = _savedataSyncService.GetCurrentGameData();
-                    if (savedataInfo == null)
+                    if (savedataInfo is null)
                     {
                         _savedataSyncService.InitGameData();
-                        Task.Run(_savedataSyncService.UploadFiles);
+                    }
+                    else if (!savedataInfo.PCId.Equals(Utils.MachineGUID, System.StringComparison.Ordinal))
+                    {
+                        var result = ModernWpf.MessageBox.Show("Sync savedata", "Warning", System.Windows.MessageBoxButton.YesNo);
+                        if (result == System.Windows.MessageBoxResult.Yes)
+                        {
+                            _savedataSyncService.DownloadSync();
+                        }
                     }
                 }
             }
         }
 
         public ReactiveCommand<Unit, Unit> OpenCloudEditDialog { get; set; }
-
-        //public SavedataSyncViewModel()
-        //{
-        //    KeyAction = ReactiveCommand.Create(() => 
-        //    {
-        //        var md5 = DependencyInject.GetService<IGameDataService>().Md5;
-        //        var repo = DependencyInject.GetService<IEhDbRepository>();
-
-        //        var config = DependencyInject.GetService<IEHConfigDataService>();
-        //        config.ExternalSharedDrivePath = CloudPath;
-
-        //        var newInfo = repo.GetGameInfo(md5)!;
-        //        newInfo.CloudPath = SaveDataPath;
-        //        newInfo.UseCloudSave = true;
-        //        repo.UpdateGameInfo(newInfo);
-        //        var nucDic = Path.Combine(CloudPath, "eh-cloud-savedata", Path.GetFileName(SaveDataPath));
-        //        DirectoryCopy(SaveDataPath, nucDic, true, true);
-
-        //        // 写入很多相关的文件
-        //        // 打开文件检测的服务
-        //    });
-
-
-   
     }
 }

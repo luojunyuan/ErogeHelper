@@ -91,6 +91,8 @@ namespace ErogeHelper.ShellMenuHandler
             _menu.Items.Add(adminStartItem);
         }
 
+        private const string AppName = "Eroge Helper";
+
         /// <summary>
         /// Creates the context menu when the selected .exe is 32 bit.
         /// </summary>
@@ -98,7 +100,7 @@ namespace ErogeHelper.ShellMenuHandler
         {
             var mainMenu = new ToolStripMenuItem
             {
-                Text = Language.Strings.Common_AppName,
+                Text = AppName,
                 Image = E
             };
 
