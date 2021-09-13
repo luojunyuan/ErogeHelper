@@ -32,9 +32,5 @@ namespace ErogeHelper.Common.Contracts
         public const int GoodWindowWidth = 100; // 320;
 
         public const string DefaultAssistiveTouchPositionStr = "{\"Corner\":0,\"Scale\":0.5}";
-
-        public const double DefatultAssistiveTouchSize = 55;
-
-        public const double AssistiveTouchBigSize = 65;
     }
 }

@@ -6,11 +6,13 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
+using System.Windows.Controls;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Controllers
@@ -29,7 +31,7 @@ namespace ErogeHelper.ViewModel.Controllers
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
 
-            //UpdateAssistiveTouchSize(_ehConfigRepositoy.AssistiveTouchSize);
+            AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepositoy.UseBigAssistiveTouchSize);
 
             var interval = Observable
                 .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
@@ -41,24 +43,26 @@ namespace ErogeHelper.ViewModel.Controllers
                 .SelectMany(interval)
                 .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
 
+            _mainWindowDataService.AssistiveTouchBigSizeSubject
+                .Subscribe(v => AssistiveTouchTemplate = GetAssistiveTouchStyle(v));
+
             TestCommand = ReactiveCommand.Create(() =>
             {
-                //UpdateAssistiveTouchSize(ConstantValues.AssistiveTouchBigSize);
+                var value = true;
+                _ehConfigRepositoy.UseBigAssistiveTouchSize = value;
+                _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(value);
             });
         }
 
-        //[Reactive]
-        //public double AssistiveTouchSize { get; private set; }
+        private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
+            useBigSize ? Application.Current.Resources["BigAssistiveTouchTemplate"] as ControlTemplate
+                            ?? throw new IOException("Cannot locate resource 'BigAssistiveTouchTemplate'")
+                       : Application.Current.Resources["NormalAssistiveTouchTemplate"] as ControlTemplate
+                            ?? throw new IOException("Cannot locate resource 'NormalAssistiveTouchTemplate'");
+
+        [Reactive]
+        public ControlTemplate AssistiveTouchTemplate { get; private set; }
 
         public ReactiveCommand<Unit, Unit> TestCommand { get; }
-
-        private void UpdateAssistiveTouchSize(double size)
-        {
-            //AssistiveTouchSize = size;
-            //Application.Current.Resources["AssistiveTouchLayerZeroCornerRadius"] = new CornerRadius(size / 4);
-            //Application.Current.Resources["AssistiveTouchLayerOneMargin"] = new Thickness(size / 8);
-            //Application.Current.Resources["AssistiveTouchLayerTwoMargin"] = new Thickness((size / 8) + (size / 16));
-            //Application.Current.Resources["AssistiveTouchLayerThreeMargin"] = new Thickness(size / 4);
-        }
     }
 }

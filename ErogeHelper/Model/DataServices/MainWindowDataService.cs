@@ -1,9 +1,5 @@
 ﻿using ErogeHelper.Model.DataServices.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Subjects;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.DataServices
@@ -12,8 +8,12 @@ namespace ErogeHelper.Model.DataServices
     {
         public double Dpi { get; set; }
 
+        public ReplaySubject<double> DpiSubject { get; init; } = new(1);
+
         public HWND Handle { get; private set; }
 
         public void SetHandle(HWND handle) => Handle = handle;
+
+        public Subject<bool> AssistiveTouchBigSizeSubject { get; init; } = new();
     }
 }

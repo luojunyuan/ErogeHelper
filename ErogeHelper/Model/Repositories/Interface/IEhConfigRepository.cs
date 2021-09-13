@@ -28,9 +28,8 @@ namespace ErogeHelper.Model.Repositories.Interface
         [Option(DefaultValue = ConstantValues.DefaultAssistiveTouchPositionStr)]
         public string AssistiveTouchPosition { get; set; }
 
-        // Do not use in future
-        [Option(DefaultValue = ConstantValues.DefatultAssistiveTouchSize)]
-        public double AssistiveTouchSize { get; set; }
+        [Option(DefaultValue = false)]
+        public bool UseBigAssistiveTouchSize { get; set; }
 
         [Option(DefaultValue = false)]
         public bool MonitorClipboard { get; set; }
