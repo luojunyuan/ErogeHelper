@@ -3,9 +3,9 @@ using System.Windows;
 
 namespace ErogeHelper.Common.Entities
 {
-    public class GameWindowPositionEventArgs : EventArgs
+    public class GameWindowPositionPacket : EventArgs
     {
-        public GameWindowPositionEventArgs(double height, double width, double left, double top, Thickness clientArea)
+        public GameWindowPositionPacket(double height, double width, double left, double top, Thickness clientArea)
         {
             Height = height;
             Width = width;

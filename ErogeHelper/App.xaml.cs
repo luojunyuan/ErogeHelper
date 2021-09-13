@@ -7,6 +7,7 @@ using ErogeHelper.Language;
 using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 using System;
@@ -30,7 +31,7 @@ namespace ErogeHelper
 
         public App()
         {
-            // Note: This application would throw some exceptions that wasn't bugs when initializing
+            // Note: This application may throw some exceptions that wasn't bugs when initializing
             // System.Threading.WaitHandleCannotBeOpenedException for active singleton app
             // https://github.com/reactiveui/ReactiveUI/issues/2395
             // System.IO.FileNotFoundException 5 times cause reactiveUI is scanning Drawing, XamForms, Winforms, etc
@@ -54,7 +55,7 @@ namespace ErogeHelper
                     {
                         if (args.Length == 0)
                         {
-                            MessageBox.Show("Can't run ErogeHelper directly", "Eroge Helper");
+                            MessageBox.Show("Can not run ErogeHelper directly", "Eroge Helper");
                             Terminate();
                             return;
                         }
@@ -63,6 +64,7 @@ namespace ErogeHelper
                         if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
                             Terminate(-1);
+                            return;
                         }
 
                         var fullPath = Path.GetFullPath(args[0]);
@@ -78,7 +80,6 @@ namespace ErogeHelper
                         EhDbRepository.UpdateEhDatabase();
 
                         var startupService = DependencyInject.GetService<IStartupService>();
-
                         startupService.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
                     });
             }
@@ -98,7 +99,7 @@ namespace ErogeHelper
         {
             Current.Shutdown(exitCode);
 
-            if (Utils.IsOSWindows8OrNewer)
+            if (Utils.IsOsWindows8OrNewer)
             {
                 ToastNotificationManagerCompat.History.Clear();
             }
@@ -132,7 +133,7 @@ namespace ErogeHelper
                 var ex = args.Exception;
 
                 if (Current.Windows.Cast<Window>()
-                    .Any(window => window.Title.Equals("MainGameWindows")))
+                    .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
                 {
                     args.Handled = true;
                     LogHost.Default.Error(ex, "UI thread error occurrent");
@@ -143,7 +144,7 @@ namespace ErogeHelper
                 var additionInfo = string.Empty;
                 if (ex.HResult == -2003303418) // 0x88980406 WPF render thread failures
                 {
-                    additionInfo = "Try disable windows transparency effects in Settings-Personalization-Color";
+                    additionInfo = "Please try disable windows transparency effects in Settings-Personalization-Color";
                 }
 
                 LogHost.Default.Fatal(ex, "UI thread error occurrent");
@@ -202,11 +203,13 @@ namespace ErogeHelper
         {
             using var dialog = new TaskDialog
             {
-                WindowTitle = string.Format(Strings.App_ErrorDialog, EhContext.AppVersion ?? "?.?.?.?", errorLevel),
+                WindowTitle = string.Format(
+                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhContext.AppVersion ?? "?.?.?.?", errorLevel),
                 MainInstruction = $@"{ex.GetType().FullName}: {ex.Message}",
                 Content = Strings.ErrorDialog_Content + (additionInfo == string.Empty ? string.Empty :
                                                                                         "\r\n" + additionInfo),
-                ExpandedInformation = string.Format(Strings.App_ErrorDialogExInfo, Utils.GetOSInfo(), ex.Source) +
+                ExpandedInformation = string.Format(
+                    CultureInfo.CurrentCulture, Strings.App_ErrorDialogExInfo, Utils.GetOsInfo(), ex.Source) +
                                       ex.StackTrace +
                                       (ex.InnerException is null ? string.Empty :
                                       $"\r\nThis Exception caused with in another Exception: {ex.InnerException}"),

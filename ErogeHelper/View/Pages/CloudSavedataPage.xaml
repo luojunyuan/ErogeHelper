@@ -1,0 +1,17 @@
+﻿<reactiveUi:ReactiveUserControl 
+    x:Class="ErogeHelper.View.Pages.CloudSavedataPage"
+    x:TypeArguments="vm:CloudSavedataViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    mc:Ignorable="d">
+    
+    <ui:SimpleStackPanel Spacing="10" Margin="20, 10">
+        <ui:ToggleSwitch x:Name="CloudSaveSwitch" Header="Cloud Save"/>
+        <Button x:Name="CloudEditButton" Content="Edit" />
+    </ui:SimpleStackPanel>
+</reactiveUi:ReactiveUserControl>

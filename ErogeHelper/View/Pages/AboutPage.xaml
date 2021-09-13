@@ -1,0 +1,60 @@
+﻿<reactiveUi:ReactiveUserControl  
+    x:Class="ErogeHelper.View.Pages.AboutPage"
+    x:TypeArguments="vm:AboutViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages"
+    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="400">
+    
+    <control:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
+        <ui:SimpleStackPanel Spacing="10" Margin="20, 10">
+            <TextBlock 
+                FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" 
+                Text="Eroge Helper" />
+            <Image Source="pack://application:,,,/assets/app.png" HorizontalAlignment="Left" Height="128" />
+            <TextBlock TextWrapping="Wrap" Text="it's eroge helper!" />
+            <TextBlock 
+                TextWrapping="Wrap" FontWeight="Bold" FontStyle="Italic" 
+                Text="{x:Static resx:Strings.About_FileABug}" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>
+                    <Run Text="{x:Static resx:Strings.About_Version}" />
+                    <Bold>
+                        <!--<Run Text="{x:Static common:Utils.AppVersion}" />-->
+                    </Bold>
+                </TextBlock>
+                <Border 
+                    BorderThickness="1" BorderBrush="{Binding BrushColor}" IsEnabled="{Binding CanJumpRelease}"
+                    Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10">
+                    <ui:HyperlinkButton 
+                        Padding="0" Margin="5 0 5 0" Foreground="{Binding BrushColor}" 
+                        ToolTip="Click me jump to release page"
+                        NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases">
+                        <TextBlock Text="{Binding CheckUpdateStatus}" />
+                    </ui:HyperlinkButton>
+                </Border>
+            </StackPanel>
+
+            <ui:HyperlinkButton 
+                Content="{x:Static resx:Strings.About_GitHub}" 
+                NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
+            <ui:HyperlinkButton 
+                Content="{x:Static resx:Strings.About_Contributors}" 
+                NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />
+            <ui:HyperlinkButton 
+                Content="{x:Static resx:Strings.About_Dependencies}" 
+                NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" Cursor="Hand" />
+            <ui:HyperlinkButton 
+                Content="{x:Static resx:Strings.About_OpenNewIssue}" 
+                NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
+        </ui:SimpleStackPanel>
+    </control:ScrollViewerSmooth>
+</reactiveUi:ReactiveUserControl>

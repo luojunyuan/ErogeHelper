@@ -8,14 +8,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace ErogeHelper.SelectProcess
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private static ContentDialog ProcessExitTipDialog => new()
         {
@@ -55,7 +54,7 @@ namespace ErogeHelper.SelectProcess
             var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
             var selectedPath = selectedProcess.Proc.MainModule?.FileName;
             if (selectedPath is null)
-                throw new ArgumentNullException(nameof(selectedPath), "Can not find the process's path");
+                throw new ArgumentNullException(nameof(selectedPath), @"Can not find the process's path");
             selectedPath = '"' + selectedPath + '"';
 
             if (selectedProcess.Proc.HasExited)

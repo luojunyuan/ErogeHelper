@@ -1,7 +1,7 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
-using ErogeHelper.Model.DAL.Entity.Tables;
 using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.DTO.Entity.Tables;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
@@ -19,25 +19,49 @@ namespace ErogeHelper.Model.Services
     {
         private readonly IGameDataService _gameDataService;
         private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IEhConfigDataService _ehConfigDataService;
+        private readonly IEhConfigRepository _ehConfigDataService;
         private readonly IEhDbRepository _ehDbRepository;
-        private readonly ISavedataSyncService _savedataSyncService;
+        //private readonly ISavedataSyncService _savedataSyncService;
 
         public StartupService(
             IGameDataService? gameDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
-            IEhConfigDataService? ehConfigDataService = null,
-            IEhDbRepository? ehDbRepository = null,
-            ISavedataSyncService? savedataSyncService = null)
+            IEhConfigRepository? ehConfigDataService = null,
+            //ISavedataSyncService? savedataSyncService = null,
+            IEhDbRepository? ehDbRepository = null)
         {
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigDataService>();
+            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            _savedataSyncService = savedataSyncService ?? DependencyInject.GetService<ISavedataSyncService>();
+            //_savedataSyncService = savedataSyncService ?? DependencyInject.GetService<ISavedataSyncService>();
         }
 
         public void StartFromCommandLine(string gamePath, bool leEnable)
+        {
+            var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
+
+            InitializeGameDatas(gamePath, leEnable, gameDir);
+
+            RunGame(gamePath, leEnable, gameDir);
+
+            try
+            {
+                _gameDataService.SearchingProcesses(gamePath);
+            }
+            catch (TimeoutException)
+            {
+                MessageBox.Show(Language.Strings.MessageBox_TimeoutInfo, "Eroge Helper");
+                App.Terminate();
+                return;
+            }
+
+            _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
+
+            DependencyInject.ShowView<MainGameViewModel>();
+        }
+
+        private void InitializeGameDatas(string gamePath, bool leEnable, string gameDir)
         {
             if (!File.Exists(gamePath))
             {
@@ -47,9 +71,23 @@ namespace ErogeHelper.Model.Services
             this.Log().Debug($"Game's path: {gamePath}");
             this.Log().Debug($"Locate Emulator status: {leEnable}");
 
-            var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
+            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
+            {
+                throw new NotImplementedException("Not Support Unity game yet");
+            }
 
-            var md5 = Utils.Md5Calculate(File.ReadAllBytes(gamePath));
+            string md5;
+            try
+            {
+                md5 = Utils.Md5Calculate(File.ReadAllBytes(gamePath));
+            }
+            catch (IOException ex) // game with suffix ".log"
+            {
+                this.Log().Debug(ex.Message);
+                md5 = Utils.Md5Calculate(File.ReadAllBytes(
+                    Path.Combine(gameDir, Path.GetFileNameWithoutExtension(gamePath) + ".exe")));
+            }
+
             _gameDataService.Init(md5, gamePath);
 
             var gameInfo = _ehDbRepository.GameInfo;
@@ -57,14 +95,13 @@ namespace ErogeHelper.Model.Services
             {
                 _ehDbRepository.AddGameInfo(new GameInfoTable() { Md5 = md5, });
             }
+        }
 
-            if (gameInfo is not null && gameInfo.UseCloudSave)
-            {
-                _savedataSyncService.DownloadSync();
-            }
+        private static void RunGame(string gamePath, bool leEnable, string gameDir)
+        {
+            var gameAlreadyStart = Utils.GetProcessesByfriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 
-            // TODO: 更全面的进程检测
-            if (!Process.GetProcessesByName(Path.GetFileNameWithoutExtension(gamePath)).Any())
+            if (!gameAlreadyStart)
             {
                 if (leEnable)
                 {
@@ -94,26 +131,6 @@ namespace ErogeHelper.Model.Services
                     Thread.Sleep(ConstantValues.WaitNWJSGameStartDelay);
                 }
             }
-
-            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
-            {
-                throw new NotImplementedException("Not Support Unity game yet");
-            }
-
-            try
-            {
-                _gameDataService.SearchingProcesses(gamePath);
-            }
-            catch (TimeoutException)
-            {
-                MessageBox.Show(Language.Strings.MessageBox_TimeoutInfo, "Eroge Helper");
-                App.Terminate();
-                return;
-            }
-
-            _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
-
-            DependencyInject.ShowView<MainGameViewModel>();
         }
     }
 }

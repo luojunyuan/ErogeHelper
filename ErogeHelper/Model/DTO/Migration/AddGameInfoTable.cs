@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace ErogeHelper.Model.DAL.Migration
+namespace ErogeHelper.Model.DTO.Migration
 {
     [Migration(20210325151400)]
     public class AddGameInfoTable : FluentMigrator.Migration

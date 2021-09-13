@@ -1,9 +1,8 @@
 ﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 using System;
@@ -12,7 +11,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Windows
@@ -21,29 +19,23 @@ namespace ErogeHelper.View.Windows
     {
         private double _dpi;
         private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IGameDataService _gameDataService;
-
-        // TODO: Use EHWindowDataService ? 东西多了再用
-        private HWND _handler;
+        private readonly IMainWindowDataService _mainWindowDataService;
 
         public MainGameWindow(
             MainGameViewModel? gameViewModel = null,
-            IGameDataService? gameDataService = null,
+            IMainWindowDataService? mainWindowDataService = null,
             IGameWindowHooker? gameWindowHooker = null)
         {
             InitializeComponent();
 
             ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
+            _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
 
-            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            _mainWindowDataService.Dpi = _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
 
-            Observable
-                .FromEventPattern<GameWindowPositionEventArgs>(
-                    h => _gameWindowHooker.GamePosChanged += h,
-                    h => _gameWindowHooker.GamePosChanged -= h)
-                .Select(e => e.EventArgs)
+            // QUESTION: This can be used in WhenActivated() with dispose, but should I?
+            _gameWindowHooker.GamePosUpdated
                 .Subscribe(pos =>
                 {
                     Height = pos.Height / _dpi;
@@ -57,14 +49,18 @@ namespace ErogeHelper.View.Windows
                         pos.ClientArea.Bottom / _dpi);
                 });
 
-            _gameWindowHooker.InvokeUpdatePosition();
+            this.Events().Loaded
+                .Subscribe(_ =>
+                {
+                    Utils.HideWindowInAltTab(this);
+                    _gameWindowHooker.InvokeUpdatePosition();
+                });
 
-            Loaded += (_, _) => Utils.HideWindowInAltTab(this);
             this.WhenActivated(d =>
             {
-                this.BindCommand(ViewModel,
-                    vm => vm.Interact,
-                    v => v.InteractButton)
+                this.Bind(ViewModel,
+                    vm => vm.AssistiveTouchViewModel,
+                    v => v.AssistiveTouchHost.ViewModel)
                     .DisposeWith(d);
             });
         }
@@ -73,7 +69,7 @@ namespace ErogeHelper.View.Windows
         {
             base.OnDpiChanged(oldDpi, newDpi);
 
-            _dpi = newDpi.DpiScaleX;
+            _mainWindowDataService.Dpi = _dpi = newDpi.DpiScaleX;
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
         }
 
@@ -81,35 +77,7 @@ namespace ErogeHelper.View.Windows
         {
             base.OnSourceInitialized(e);
 
-            // Get GameView window handle
-            var interopHelper = new WindowInteropHelper(this);
-            _handler = new HWND(interopHelper.Handle);
-
-            var source = PresentationSource.FromVisual(this) as HwndSource;
-
-            // Window top most timer
-            var _bringToTopTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime),
-            };
-            _bringToTopTimer.Tick += (_, _) => User32.BringWindowToTop(_handler);
-            // TODO: 是在VM中绑定过来 还是定义在VM中 还是把Timer放到那边 应该用rx此处
-            //_bringToTopTimer.Start();
-            //_bringToTopTimer.Stop();
-        }
-
-        private static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
-        {
-            foreach (var screen in WpfScreenHelper.Screen.AllScreens)
-            {
-                User32.GetWindowRect(gameHwnd, out var rect);
-                var systemRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-                if (systemRect.Contains(screen.Bounds))
-                {
-                    return true;
-                }
-            }
-            return false;
+            _mainWindowDataService.SetHandle(new HWND(new WindowInteropHelper(this).Handle));
         }
     }
 }

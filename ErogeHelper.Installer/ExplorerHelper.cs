@@ -39,57 +39,57 @@ namespace ErogeHelper.Installer
             public List<string> Paths { get; private set; } = new();
 
             #region Win32 Apis
-            private delegate bool CallBack(int hwnd, int y);
+            private delegate bool CallBack(int hWnd, int y);
 
             [DllImport("user32.dll")]
             private static extern int EnumWindows(CallBack x, int y);
 
             [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-            private static extern int GetWindowText(int hwnd, StringBuilder lptrString, int nMaxCount);
+            private static extern int GetWindowText(int hWnd, StringBuilder lPtrString, int nMaxCount);
 
             [DllImport("user32.dll")]
-            private static extern int GetParent(int hwnd);
+            private static extern int GetParent(int hWnd);
 
             [DllImport("user32.dll")]
-            private static extern bool IsWindowVisible(int hwnd);
+            private static extern bool IsWindowVisible(int hWnd);
 
             [DllImport("user32.Dll", CharSet = CharSet.Unicode)]
-            private static extern void GetClassName(IntPtr hwnd, StringBuilder s, int nMaxCount);
+            private static extern void GetClassName(IntPtr hWnd, StringBuilder s, int nMaxCount);
 
             [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-            private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childe, string strclass, string? FrmText);
+            private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr child, string strClass, string? frmText);
 
             private static IntPtr FindWindowEx(IntPtr parent, string strClass)
                 => FindWindowEx(parent, IntPtr.Zero, strClass, null);
 
             private static string GetFormClassName(IntPtr ptr)
             {
-                var nameBiulder = new StringBuilder(255);
-                GetClassName(ptr, nameBiulder, 255);
-                return nameBiulder.ToString();
+                var nameBuilder = new StringBuilder(255);
+                GetClassName(ptr, nameBuilder, 255);
+                return nameBuilder.ToString();
             }
 
             private static string GetFormTitle(IntPtr ptr)
             {
-                var titleBiulder = new StringBuilder(255);
-                _ = GetWindowText((int)ptr, titleBiulder, 255);
-                return titleBiulder.ToString();
+                var titleBuilder = new StringBuilder(255);
+                _ = GetWindowText((int)ptr, titleBuilder, 255);
+                return titleBuilder.ToString();
             }
 
-            private bool Report(int hwnd, int lParam)
+            private bool Report(int hWnd, int lParam)
             {
-                var pHwnd = GetParent(hwnd);
-                if (pHwnd == 0 && IsWindowVisible(hwnd))
+                var pHWnd = GetParent(hWnd);
+                if (pHWnd == 0 && IsWindowVisible(hWnd))
                 {
-                    var cabinetWClassIntPtr = new IntPtr(hwnd);
+                    var cabinetWClassIntPtr = new IntPtr(hWnd);
                     var cabinetWClassName = GetFormClassName(cabinetWClassIntPtr);
                     if (cabinetWClassName.Equals("CabinetWClass", StringComparison.OrdinalIgnoreCase))
                     {
                         var workerWIntPtr = FindWindowEx(cabinetWClassIntPtr, "WorkerW");
                         var reBarWindow32IntPtr = FindWindowEx(workerWIntPtr, "ReBarWindow32");
                         var addressBandRootIntPtr = FindWindowEx(reBarWindow32IntPtr, "Address Band Root");
-                        var msctls_progress32IntPtr = FindWindowEx(addressBandRootIntPtr, "msctls_progress32");
-                        var breadcrumbParentIntPtr = FindWindowEx(msctls_progress32IntPtr, "Breadcrumb Parent");
+                        var msctlsProgress32IntPtr = FindWindowEx(addressBandRootIntPtr, "msctls_progress32");
+                        var breadcrumbParentIntPtr = FindWindowEx(msctlsProgress32IntPtr, "Breadcrumb Parent");
                         var toolbarWindow32IntPtr = FindWindowEx(breadcrumbParentIntPtr, "ToolbarWindow32");
 
                         var title = GetFormTitle(toolbarWindow32IntPtr);

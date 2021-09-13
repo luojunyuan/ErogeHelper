@@ -6,7 +6,7 @@ namespace ErogeHelper.Model.Services.Interface
 {
     public interface IGameWindowHooker
     {
-        event EventHandler<GameWindowPositionEventArgs> GamePosChanged;
+        IObservable<GameWindowPositionPacket> GamePosUpdated { get; }
 
         void SetGameWindowHook(Process process);
 

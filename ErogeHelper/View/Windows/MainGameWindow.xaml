@@ -19,7 +19,7 @@
     <Border>
         <!-- Client area -->
         <Border x:Name="ClientArea" BorderThickness="0" BorderBrush="red">
-            <Button x:Name="InteractButton" Content="Interact" Width="50" Height="50"/>
+            <reactiveUi:ViewModelViewHost x:Name="AssistiveTouchHost" />
         </Border>
     </Border>
 </reactiveUi:ReactiveWindow>

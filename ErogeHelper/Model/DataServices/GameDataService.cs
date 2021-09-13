@@ -1,4 +1,5 @@
-﻿using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using Splat;
 using System;
@@ -18,9 +19,9 @@ namespace ErogeHelper.Model.DataServices
 
         public string GamePath { get; private set; } = string.Empty;
 
-        public IEnumerable<Process> GameProcesses { get; private set; } = new List<Process>();
+        public IEnumerable<Process> GameProcesses { get; private set; } = null!;
 
-        public Process MainProcess { get; private set; } = new();
+        public Process MainProcess { get; private set; } = null!;
 
         public void SearchingProcesses(string gamePath) =>
             (MainProcess, GameProcesses) = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
@@ -40,13 +41,7 @@ namespace ErogeHelper.Model.DataServices
             while (mainProcess is null && spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
             {
                 Thread.Sleep(ConstantValues.MinimumLagTime);
-                procList.Clear();
-                procList.AddRange(Process.GetProcessesByName(friendlyName));
-                procList.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
-                if (!friendlyName.Equals("main.bin", StringComparison.Ordinal))
-                {
-                    procList.AddRange(Process.GetProcessesByName("main.bin"));
-                }
+                procList = Utils.GetProcessesByfriendlyName(friendlyName);
 
                 mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
             }

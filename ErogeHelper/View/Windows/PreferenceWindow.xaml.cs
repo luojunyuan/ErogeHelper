@@ -1,50 +1,66 @@
 ﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.ViewModel.Pages;
 using ErogeHelper.ViewModel.Windows;
+using ModernWpf.Controls;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ErogeHelper.View.Windows
 {
     /// <summary>
-    /// SavedataSyncWindow.xaml 的交互逻辑
+    /// PreferenceWindow.xaml 的交互逻辑
     /// </summary>
     public partial class PreferenceWindow
     {
-        public PreferenceWindow(PreferenceViewModel? preferenceViewModel = null)
+        public PreferenceWindow(
+            PreferenceViewModel? gameViewModel = null,
+            CloudSavedataViewModel? cloudSavedataViewModel = null,
+            AboutViewModel? aboutViewModel = null)
         {
             InitializeComponent();
 
-            ViewModel = preferenceViewModel ?? DependencyInject.GetService<PreferenceViewModel>();
+            ViewModel = gameViewModel ?? DependencyInject.GetService<PreferenceViewModel>();
+            cloudSavedataViewModel ??= DependencyInject.GetService<CloudSavedataViewModel>();
+            aboutViewModel ??= DependencyInject.GetService<AboutViewModel>();
 
             this.WhenActivated(d =>
             {
-                this.BindCommand(ViewModel,
-                    vm => vm.OpenCloudEditDialog,
-                    v => v.CloudEditButton)
-                    .DisposeWith(d);
-
                 this.OneWayBind(ViewModel,
-                    vm => vm.CloudSwitchCanBeSet,
-                    v => v.CloudSaveSwitch.IsEnabled)
+                    vm => vm.PageHeader,
+                    v => v.HeaderBlock.Text)
                     .DisposeWith(d);
 
                 this.Bind(ViewModel,
-                    vm => vm.CloudSwitchIsOn,
-                    v => v.CloudSaveSwitch.IsOn)
+                    vm => vm.Router,
+                    v => v.RoutedViewHost.Router)
                     .DisposeWith(d);
+
+                NavigationView.Events().SelectionChanged
+                    .Subscribe(parameter =>
+                    {
+                        if (parameter.args.SelectedItem is not NavigationViewItem { Tag: string tag })
+                        {
+                            return;
+                        }
+
+                        switch (tag)
+                        {
+                            case PageTags.General:
+                                ViewModel.Router.NavigateAndReset.Execute(cloudSavedataViewModel);
+                                break;
+                            case PageTags.About:
+                                ViewModel.Router.NavigateAndReset.Execute(aboutViewModel);
+                                break;
+                            default:
+                                break;
+                        }
+                    }).DisposeWith(d);
+
+                NavigationView.SelectedItem = NavigationView.MenuItems.OfType<NavigationViewItem>().First();
             });
         }
     }

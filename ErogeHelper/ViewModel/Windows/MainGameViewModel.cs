@@ -1,19 +1,17 @@
 ﻿using ErogeHelper.Common;
+using ErogeHelper.ViewModel.Controllers;
 using ReactiveUI;
-using System.Reactive;
+using Splat;
 
 namespace ErogeHelper.ViewModel.Windows
 {
-    public class MainGameViewModel : ReactiveObject
+    public class MainGameViewModel : ReactiveObject, IEnableLogger
     {
-        public MainGameViewModel()
+        public MainGameViewModel(AssistiveTouchViewModel? assistiveTouchViewModel = null)
         {
-            Interact = ReactiveCommand.Create(() =>
-            {
-                DependencyInject.ShowView<PreferenceViewModel>();
-            });
+            AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyInject.GetService<AssistiveTouchViewModel>();
         }
 
-        public ReactiveCommand<Unit, Unit> Interact { get; }
+        public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
     }
 }

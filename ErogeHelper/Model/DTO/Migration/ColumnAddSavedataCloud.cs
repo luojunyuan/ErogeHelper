@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace ErogeHelper.Model.DAL.Migration
+namespace ErogeHelper.Model.DTO.Migration
 {
     [Migration(20210819071700)]
     public class ColumnAddSavedataCloud : FluentMigrator.Migration

@@ -47,7 +47,7 @@ namespace ErogeHelper.Common.Functions
 
         public static void Show(string mainText)
         {
-            if (Utils.IsOSWindows8OrNewer)
+            if (Utils.IsOsWindows8OrNewer)
             {
                 new ToastContentBuilder()
                     .AddText("ErogeHelper is running in Admin")
@@ -74,7 +74,7 @@ namespace ErogeHelper.Common.Functions
 
         public static async Task ShowAsync(string mainText, Stopwatch toastLifetimeTimer)
         {
-            if (Utils.IsOSWindows8OrNewer)
+            if (Utils.IsOsWindows8OrNewer)
             {
                 new ToastContentBuilder()
                     .AddText(mainText)

@@ -1,9 +1,12 @@
 ﻿using Config.Net;
+using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Entities;
 using ErogeHelper.Common.Enums;
+using System.Text.Json;
 
-namespace ErogeHelper.Model.DataServices.Interface
+namespace ErogeHelper.Model.Repositories.Interface
 {
-    public interface IEhConfigDataService
+    public interface IEhConfigRepository
     {
         [Option(DefaultValue = "https://eh.nya.run")]
         public string EhServerBaseUrl { get; set; }
@@ -22,7 +25,12 @@ namespace ErogeHelper.Model.DataServices.Interface
         public bool EnableMeCab { get; set; }
 
         // MISC
-        public string? AssistiveTouchPostion { get; set; }
+        [Option(DefaultValue = ConstantValues.DefaultAssistiveTouchPositionStr)]
+        public string AssistiveTouchPosition { get; set; }
+
+        // Do not use in future
+        [Option(DefaultValue = ConstantValues.DefatultAssistiveTouchSize)]
+        public double AssistiveTouchSize { get; set; }
 
         [Option(DefaultValue = false)]
         public bool MonitorClipboard { get; set; }
@@ -58,7 +66,7 @@ namespace ErogeHelper.Model.DataServices.Interface
         [Option(DefaultValue = false)]
         public bool JishoDictEnable { get; set; }
 
-        
+
         public TransLanguage SrcTransLanguage { get; set; }
 
         public TransLanguage TargetTransLanguage { get; set; }

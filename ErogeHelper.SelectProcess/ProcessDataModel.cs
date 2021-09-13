@@ -6,11 +6,11 @@ namespace ErogeHelper.SelectProcess
 {
     public class ProcessDataModel : IEquatable<ProcessDataModel>
     {
-        public ProcessDataModel(Process process, BitmapImage icon, string descript, string title)
+        public ProcessDataModel(Process process, BitmapImage icon, string describe, string title)
         {
             Proc = process;
             Icon = icon;
-            Descript = descript;
+            Describe = describe;
             Title = title;
         }
 
@@ -18,7 +18,7 @@ namespace ErogeHelper.SelectProcess
 
         public BitmapImage Icon { get; }
 
-        public string Descript { get; }
+        public string Describe { get; }
 
         public string Title { get; }
 

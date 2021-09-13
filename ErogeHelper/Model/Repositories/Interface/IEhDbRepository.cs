@@ -1,4 +1,4 @@
-﻿using ErogeHelper.Model.DAL.Entity.Tables;
+﻿using ErogeHelper.Model.DTO.Entity.Tables;
 
 namespace ErogeHelper.Model.Repositories.Interface
 {

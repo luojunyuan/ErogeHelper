@@ -47,7 +47,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <!-- UPSTREAM: ToolTip bugged with .Net 6 preview 7 -->
-                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Descript}">
+                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Describe}">
                                         <Image Source="{Binding Icon}" />
                                         <TextBlock 
                                             Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0"

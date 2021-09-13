@@ -1,14 +1,15 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
-using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -20,13 +21,16 @@ namespace ErogeHelper.Model.Services
     {
         private HWND _gameHwnd;
         private Process _gameProc = new();
-        private static readonly GameWindowPositionEventArgs HiddenPos = new(0, 0, -32000, -32000, new Thickness());
-        private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -37972);
+        private static readonly GameWindowPositionPacket HiddenPos = new(0, 0, -32000, -32000, new Thickness());
+        private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -31972);
+        private static readonly RECT MinimizedPosition4K = new(-64000, -64000, -63680, -63944);
 
         private User32.HWINEVENTHOOK _windowsEventHook = IntPtr.Zero;
         private const uint EventObjectDestroy = 0x8001;
         private const uint EventObjectShow = 0x8002;
         private const uint EventObjectHide = 0x8003;
+        private const uint EventObjectReorder = 0x8004;
+        private const uint EventObjectFocus = 0x8005;
         private const uint EventObjectLocationChange = 0x800B;
         private GCHandle _gcSafetyHandle;
         private User32.WinEventProc? _winEventDelegate;
@@ -36,7 +40,8 @@ namespace ErogeHelper.Model.Services
                                 User32.WINEVENT.WINEVENT_SKIPOWNPROCESS;
         private const long SWEH_CHILDID_SELF = 0;
 
-        public event EventHandler<GameWindowPositionEventArgs>? GamePosChanged;
+        private readonly ReplaySubject<GameWindowPositionPacket> _gamePositionSubject = new(1);
+        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gamePositionSubject.AsObservable();
 
         public void SetGameWindowHook(Process process)
         {
@@ -56,26 +61,25 @@ namespace ErogeHelper.Model.Services
                 IntPtr.Zero, _winEventDelegate, processId, targetThreadId,
                 WinEventHookInternalFlags);
 
-            Observable
-                .FromEventPattern(
-                    h => _gameProc.Exited += h,
-                    h => _gameProc.Exited -= h)
+            _gameProc.Events().Exited
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ =>
                 {
                     this.Log().Debug("Detected game quit event");
-                    GamePosChanged?.Invoke(this, HiddenPos);
+                    _gamePositionSubject.OnNext(HiddenPos);
+                    _gamePositionSubject.OnCompleted();
                     _gcSafetyHandle.Free();
                     User32.UnhookWinEvent(_windowsEventHook);
 
-                    foreach (Window window in Application.Current.Windows)
-                        window.Close();
+                    Application.Current.Windows
+                        .Cast<Window>().ToList()
+                        .ForEach(w => w.Close());
 
-                    var gameInfo = DependencyInject.GetService<IEhDbRepository>().GameInfo;
-                    if (gameInfo is not null && gameInfo.UseCloudSave)
-                    {
-                        DependencyInject.GetService<ISavedataSyncService>().UpdateSync();
-                    }
+                    //var gameInfo = DependencyInject.GetService<IEhDbRepository>().GameInfo;
+                    //if (gameInfo is not null && gameInfo.UseCloudSave)
+                    //{
+                    //    DependencyInject.GetService<ISavedataSyncService>().UpdateSync();
+                    //}
 
                     App.Terminate();
                 });
@@ -85,10 +89,17 @@ namespace ErogeHelper.Model.Services
 
         private static HWND CurrentWindowHandle(Process proc)
         {
+            proc.WaitForInputIdle(ConstantValues.WaitGameStartTimeout);
             proc.Refresh();
             var gameHwnd = proc.MainWindowHandle;
+            if (User32.IsIconic(proc.MainWindowHandle))
+            {
+                return gameHwnd;
+            }
+
             User32.GetClientRect(gameHwnd, out var clientRect);
-            if (clientRect.bottom > 100 && clientRect.right > 100)
+            if (clientRect.bottom > ConstantValues.GoodWindowHeight &&
+                clientRect.right > ConstantValues.GoodWindowWidth)
             {
                 return gameHwnd;
             }
@@ -105,9 +116,10 @@ namespace ErogeHelper.Model.Services
                     foreach (var handle in handles)
                     {
                         User32.GetClientRect(handle, out clientRect);
-                        if (clientRect.bottom > 100 && clientRect.right > 100)
+                        if (clientRect.bottom > ConstantValues.GoodWindowHeight &&
+                            clientRect.right > ConstantValues.GoodWindowWidth)
                         {
-                            LogHost.Default.Debug($"Set 0x{handle.DangerousGetHandle():X8}");
+                            LogHost.Default.Debug($"Set new handle 0x{handle.DangerousGetHandle():X8}");
                             return handle;
                         }
                     }
@@ -132,9 +144,17 @@ namespace ErogeHelper.Model.Services
                     {
                         if (hWnd == _gameHwnd)
                         {
-                            _gameHwnd = CurrentWindowHandle(_gameProc);
-                            this.Log().Debug("Game window show - recreate");
-                            UpdateLocation();
+                            try
+                            {
+                                _gameHwnd = CurrentWindowHandle(_gameProc);
+                                this.Log().Debug("Game window show - recreate");
+                                UpdateLocation();
+                            }
+                            catch (InvalidOperationException ex)
+                            {
+                                // game process may get already exit
+                                this.Log().Debug(ex.Message);
+                            }
                         }
                     }
                     break;
@@ -184,7 +204,7 @@ namespace ErogeHelper.Model.Services
 
             var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
-            GamePosChanged?.Invoke(this, new GameWindowPositionEventArgs(height, width, rect.left, rect.top, clientArea));
+            _gamePositionSubject.OnNext(new GameWindowPositionPacket(height, width, rect.left, rect.top, clientArea));
         }
 
         private static IEnumerable<HWND> GetRootWindowsOfProcess(int pid)

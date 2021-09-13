@@ -1,4 +1,6 @@
-﻿namespace ErogeHelper.Common.Contracts
+﻿using ErogeHelper.Common.Entities;
+
+namespace ErogeHelper.Common.Contracts
 {
     public static class ConstantValues
     {
@@ -24,5 +26,15 @@
         public const string EhCloudSavedataTag = "eh-savedata-cloud";
 
         public const string EhCloudDbFilename = "gamelist.json";
+
+        public const int GoodWindowHeight = 100; // 240;
+
+        public const int GoodWindowWidth = 100; // 320;
+
+        public const string DefaultAssistiveTouchPositionStr = "{\"Corner\":0,\"Scale\":0.5}";
+
+        public const double DefatultAssistiveTouchSize = 55;
+
+        public const double AssistiveTouchBigSize = 65;
     }
 }

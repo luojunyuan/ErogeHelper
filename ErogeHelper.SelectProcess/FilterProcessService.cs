@@ -12,9 +12,9 @@ namespace ErogeHelper.SelectProcess
 {
     internal class FilterProcessService
     {
-        private const string UWPAppsTag = "WindowsApps";
+        private const string UwpAppsTag = "WindowsApps";
         private const string WindowsPath = @"C:\Windows\";
-        private const int MaxTitleLenth = 40;
+        private const int MaxTitleLength = 40;
 
         public event Action<bool>? ShowAdminNeededTip;
 
@@ -42,20 +42,20 @@ namespace ErogeHelper.SelectProcess
                     }
 
                     return fileName is not null &&
-                        !fileName.Contains(UWPAppsTag) &&
+                        !fileName.Contains(UwpAppsTag) &&
                         !fileName.Contains(WindowsPath) &&
                         p.Id != Environment.ProcessId;
                 })
                 .Select(p =>
                 {
                     var fileName = p.MainModule?.FileName!;
-                    var icon = PEIconToBitmapImage(fileName);
-                    var descript = p.MainModule?.FileVersionInfo.FileDescription ?? string.Empty;
-                    var title = p.MainWindowTitle.Length > MaxTitleLenth ? descript : p.MainWindowTitle;
-                    return new ProcessDataModel(p, icon, descript, title);
+                    var icon = PeIconToBitmapImage(fileName);
+                    var describe = p.MainModule?.FileVersionInfo.FileDescription ?? string.Empty;
+                    var title = p.MainWindowTitle.Length > MaxTitleLength ? describe : p.MainWindowTitle;
+                    return new ProcessDataModel(p, icon, describe, title);
                 });
 
-        private static BitmapImage PEIconToBitmapImage(string fullPath)
+        private static BitmapImage PeIconToBitmapImage(string fullPath)
         {
             var result = new BitmapImage();
 

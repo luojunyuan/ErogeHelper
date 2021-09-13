@@ -13,6 +13,7 @@
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
     <Platforms>AnyCPU;x86</Platforms>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,13 +21,19 @@
     <PackageReference Include="Config.Net.Json" Version="4.15.0" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.3.0" />
+    <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.9" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+    <PackageReference Include="NullGuard.Fody" Version="3.0.0" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="4.0.0" />
+    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="ReactiveUI.Fody" Version="16.2.1" />
     <PackageReference Include="ReactiveUI.WPF" Version="16.2.1" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
+    <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.3.12" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.12" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>
@@ -43,12 +50,13 @@
 
   <ItemGroup>
     <Resource Include="assets\app.ico" />
+    <Resource Include="assets\app.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Common\Comparers\" />
-    <Folder Include="Model\DAL\Entity\Payloads\" />
-    <Folder Include="Model\DAL\Entity\Responses\" />
+    <Folder Include="Model\DTO\Entity\Payloads\" />
+    <Folder Include="Model\DTO\Entity\Responses\" />
     <Folder Include="Model\DataModels\" />
     <Folder Include="ViewModel\Components\" />
   </ItemGroup>
@@ -65,4 +73,5 @@
     <Copy SourceFiles="$(PublishDir)libs\texthost_x86.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
     <Delete Files="$(PublishDir)libs\texthost_x86.dll" /> 
   </Target>
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

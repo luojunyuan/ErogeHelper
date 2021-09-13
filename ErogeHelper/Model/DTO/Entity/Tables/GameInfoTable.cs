@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace ErogeHelper.Model.DAL.Entity.Tables
+namespace ErogeHelper.Model.DTO.Entity.Tables
 {
     [Table("GameInfo")]
     public record GameInfoTable

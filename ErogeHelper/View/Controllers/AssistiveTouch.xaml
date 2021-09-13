@@ -1,0 +1,49 @@
+﻿<reactiveUi:ReactiveUserControl
+    x:Class="ErogeHelper.View.Controllers.AssistiveTouch"
+    x:TypeArguments="vm:AssistiveTouchViewModel" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
+    mc:Ignorable="d">
+
+    <Button
+        x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}">
+
+        <!-- TODO: 使用两个大小不同的模板感觉会更好，等待将来重构。不再设定Button的Width，只读取 -->
+        <!--<Button.Template>
+            <ControlTemplate>
+                <Border
+                    Background="{StaticResource AssistiveTouchBackground}"
+                    CornerRadius="{DynamicResource AssistiveTouchLayerZeroCornerRadius}">
+                    <Grid>
+                        <Border 
+                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerOneBackground}" 
+                            BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="1" 
+                            Margin="{DynamicResource AssistiveTouchLayerOneMargin}" />
+                        <Border 
+                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerTwoBackground}" 
+                            BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="1"
+                            Margin="{DynamicResource AssistiveTouchLayerTwoMargin}" />
+                        <Border 
+                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerThreeBackground}" 
+                            BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="1"
+                            Margin="{DynamicResource AssistiveTouchLayerThreeMargin}" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Button.Template>-->
+
+        <ui:FlyoutService.Flyout>
+            <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
+                <ui:AppBarButton x:Name="TestButton" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
+            </ui:CommandBarFlyout>
+        </ui:FlyoutService.Flyout>
+
+    </Button>
+
+</reactiveUi:ReactiveUserControl>

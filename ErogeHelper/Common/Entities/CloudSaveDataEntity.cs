@@ -10,13 +10,15 @@ namespace ErogeHelper.Common.Entities
             string md5,
             string localPath,
             DateTime lastTimeModified,
+            string[] excludeFiles,
             string pcName,
             string pcId)
         {
             Md5 = md5;
-            FolderName = Path.GetDirectoryName(localPath) ?? string.Empty;
+            FolderName = Path.GetFileNameWithoutExtension(localPath) ?? string.Empty;
             LocalPath = localPath;
             LastTimeModified = lastTimeModified;
+            ExcludeFiles = excludeFiles;
             PCName = pcName;
             PCId = pcId;
         }
@@ -33,6 +35,6 @@ namespace ErogeHelper.Common.Entities
 
         public string PCId { get; }
 
-        public List<string> SplitFiles { get; } = new();
+        public string[] ExcludeFiles { get; }
     }
 }

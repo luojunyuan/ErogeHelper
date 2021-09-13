@@ -8,6 +8,7 @@ namespace ErogeHelper.Model.Services.Interface
 {
     public interface ITextractorService
     {
+        // TODO
         event EventHandler<HookParamEventArgs> TextEvent;
 
         event EventHandler<HookParamEventArgs> SelectedTextEvent;

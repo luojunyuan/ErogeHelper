@@ -1,8 +1,8 @@
 ﻿using Dapper.Contrib.Extensions;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
-using ErogeHelper.Model.DAL.Entity.Tables;
-using ErogeHelper.Model.DAL.Migration;
+using ErogeHelper.Model.DTO.Entity.Tables;
+using ErogeHelper.Model.DTO.Migration;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using FluentMigrator.Runner;

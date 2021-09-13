@@ -7,7 +7,7 @@ namespace ErogeHelper.SelectProcess
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
 

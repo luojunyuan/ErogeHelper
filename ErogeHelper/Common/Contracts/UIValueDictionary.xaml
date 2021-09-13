@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:x2009="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
     
     <system:Double x:Key="ControllerWidth">240</system:Double>
@@ -7,5 +8,38 @@
     <system:Double x:Key="MinWindowWidth">400</system:Double>
     <system:Double x:Key="ExpandedModeThresholdWidth">500</system:Double>
     <system:Double x:Key="SidePaneLength">160</system:Double>
+    <SolidColorBrush x:Key="AssistiveTouchBackground" Color="#262626"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerOneLine" Color="#232323"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerOneBackground" Color="#505050"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerTwoLine" Color="#434343"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerTwoBackground" Color="#939393"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerThreeLine" Color="#686868"></SolidColorBrush>
+    <SolidColorBrush x:Key="AssistiveTouchLayerThreeBackground" Color="#FFFFFF"></SolidColorBrush>
     <system:Double x:Key="AssistiveTouchSize">55</system:Double>
+    <CornerRadius x:Key="Circle" TopLeft="360" TopRight="360" BottomRight="360" BottomLeft="360" />
+    <CornerRadius x:Key="AssistiveTouchLayerZeroCornerRadius" TopLeft="13.75" TopRight="13.75" BottomRight="13.75" BottomLeft="13.75" />
+    <Thickness x:Key="AssistiveTouchLayerOneMargin">6.875</Thickness>
+    <Thickness x:Key="AssistiveTouchLayerTwoMargin">10.3125</Thickness>
+    <Thickness x:Key="AssistiveTouchLayerThreeMargin">13.75</Thickness>
+
+    <ControlTemplate x:Key="NormalAssistiveTouchTemplate">
+        <Border 
+            Background="{StaticResource AssistiveTouchBackground}" CornerRadius="{StaticResource AssistiveTouchLayerZeroCornerRadius}"
+            Width="{StaticResource AssistiveTouchSize}" Height="{StaticResource AssistiveTouchSize}">
+            <Grid>
+                <Border 
+                    CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerOneBackground}" 
+                    BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="1" 
+                    Margin="{StaticResource AssistiveTouchLayerOneMargin}" />
+                <Border 
+                    CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerTwoBackground}" 
+                    BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="1"
+                    Margin="{StaticResource AssistiveTouchLayerTwoMargin}" />
+                <Border 
+                    CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerThreeBackground}" 
+                    BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="1"
+                    Margin="{StaticResource AssistiveTouchLayerThreeMargin}" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
 </ResourceDictionary>

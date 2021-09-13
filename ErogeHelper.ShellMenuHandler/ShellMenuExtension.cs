@@ -179,7 +179,7 @@ namespace ErogeHelper.ShellMenuHandler
             }
             catch (Win32Exception e)
             {
-                MessageBox.Show($"{e} \nErrorCode: {e.ErrorCode}\nNativeErrorCode: {e.NativeErrorCode}");
+                MessageBox.Show($@"{e} \nErrorCode: {e.ErrorCode}\nNativeErrorCode: {e.NativeErrorCode}");
             }
         }
 
@@ -196,6 +196,6 @@ namespace ErogeHelper.ShellMenuHandler
         private static Bitmap EmbeddedImage(string filename) =>
             new Bitmap(
                 Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                    "ErogeHelper.ShellMenuHandler.Resources." + filename));
+                    "ErogeHelper.ShellMenuHandler.Resources." + filename) ?? throw new InvalidOperationException());
     }
 }

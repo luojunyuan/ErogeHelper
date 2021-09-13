@@ -9,9 +9,9 @@ namespace ErogeHelper.Installer
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private const string shellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
+        private const string ShellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";
 
         public MainWindow()
         {
@@ -50,7 +50,7 @@ namespace ErogeHelper.Installer
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
                 FileName = "ServerRegistrationManager.exe",
-                Arguments = $"install {shellMenuDllName} -codebase"
+                Arguments = $"install {ShellMenuDllName} -codebase"
             });
 
             InstallButton.IsEnabled = false;
@@ -91,7 +91,7 @@ namespace ErogeHelper.Installer
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
                 FileName = "ServerRegistrationManager.exe",
-                Arguments = $"uninstall {shellMenuDllName} -codebase"
+                Arguments = $"uninstall {ShellMenuDllName} -codebase"
             });
 
             // restart all explore.exe
