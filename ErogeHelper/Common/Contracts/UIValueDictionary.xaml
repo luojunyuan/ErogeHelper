@@ -19,6 +19,7 @@
     
     <system:Double x:Key="AssistiveTouchSize">55</system:Double>
     <CornerRadius x:Key="AssistiveTouchLayerZeroCornerRadius" TopLeft="13.75" TopRight="13.75" BottomRight="13.75" BottomLeft="13.75" />
+    <Thickness x:Key="AssistiveTouchCircleLinear">1.5</Thickness>
     <Thickness x:Key="AssistiveTouchLayerOneMargin">6.875</Thickness>
     <Thickness x:Key="AssistiveTouchLayerTwoMargin">10.3125</Thickness>
     <Thickness x:Key="AssistiveTouchLayerThreeMargin">13.75</Thickness>
@@ -29,25 +30,26 @@
             <Grid>
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerOneBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="1" 
+                    BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="{StaticResource AssistiveTouchCircleLinear}" 
                     Margin="{StaticResource AssistiveTouchLayerOneMargin}" />
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerTwoBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="1"
+                    BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="{StaticResource AssistiveTouchCircleLinear}"
                     Margin="{StaticResource AssistiveTouchLayerTwoMargin}" />
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerThreeBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="1"
+                    BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="{StaticResource AssistiveTouchCircleLinear}"
                     Margin="{StaticResource AssistiveTouchLayerThreeMargin}" />
             </Grid>
         </Border>
     </ControlTemplate>
     
-    <system:Double x:Key="BigAssistiveTouchSize">80</system:Double>
-    <CornerRadius x:Key="BigAssistiveTouchLayerZeroCornerRadius" TopLeft="20" TopRight="20" BottomRight="20" BottomLeft="20" />
-    <Thickness x:Key="BigAssistiveTouchLayerOneMargin">10</Thickness>
-    <Thickness x:Key="BigAssistiveTouchLayerTwoMargin">15</Thickness>
-    <Thickness x:Key="BigAssistiveTouchLayerThreeMargin">20</Thickness>
+    <system:Double x:Key="BigAssistiveTouchSize">100</system:Double>
+    <CornerRadius x:Key="BigAssistiveTouchLayerZeroCornerRadius" TopLeft="25" TopRight="25" BottomRight="25" BottomLeft="25" />
+    <Thickness x:Key="BigAssistiveTouchCircleLinear">2</Thickness>
+    <Thickness x:Key="BigAssistiveTouchLayerOneMargin">12.5</Thickness>
+    <Thickness x:Key="BigAssistiveTouchLayerTwoMargin">18.75</Thickness>
+    <Thickness x:Key="BigAssistiveTouchLayerThreeMargin">25</Thickness>
     <ControlTemplate x:Key="BigAssistiveTouchTemplate">
         <Border 
             Background="{StaticResource AssistiveTouchBackground}" CornerRadius="{StaticResource BigAssistiveTouchLayerZeroCornerRadius}"
@@ -55,15 +57,15 @@
             <Grid>
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerOneBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="1" 
+                    BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="{StaticResource BigAssistiveTouchCircleLinear}" 
                     Margin="{StaticResource BigAssistiveTouchLayerOneMargin}" />
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerTwoBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="1"
+                    BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="{StaticResource BigAssistiveTouchCircleLinear}"
                     Margin="{StaticResource BigAssistiveTouchLayerTwoMargin}" />
                 <Border 
                     CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerThreeBackground}" 
-                    BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="1"
+                    BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="{StaticResource BigAssistiveTouchCircleLinear}"
                     Margin="{StaticResource BigAssistiveTouchLayerThreeMargin}" />
             </Grid>
         </Border>

@@ -14,30 +14,6 @@
     <Button
         x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}">
 
-        <!-- TODO: 使用两个大小不同的模板感觉会更好，等待将来重构。不再设定Button的Width，只读取 -->
-        <!--<Button.Template>
-            <ControlTemplate>
-                <Border
-                    Background="{StaticResource AssistiveTouchBackground}"
-                    CornerRadius="{DynamicResource AssistiveTouchLayerZeroCornerRadius}">
-                    <Grid>
-                        <Border 
-                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerOneBackground}" 
-                            BorderBrush="{StaticResource AssistiveTouchLayerOneLine}" BorderThickness="1" 
-                            Margin="{DynamicResource AssistiveTouchLayerOneMargin}" />
-                        <Border 
-                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerTwoBackground}" 
-                            BorderBrush="{StaticResource AssistiveTouchLayerTwoLine}" BorderThickness="1"
-                            Margin="{DynamicResource AssistiveTouchLayerTwoMargin}" />
-                        <Border 
-                            CornerRadius="{StaticResource Circle}" Background="{StaticResource AssistiveTouchLayerThreeBackground}" 
-                            BorderBrush="{StaticResource AssistiveTouchLayerThreeLine}" BorderThickness="1"
-                            Margin="{DynamicResource AssistiveTouchLayerThreeMargin}" />
-                    </Grid>
-                </Border>
-            </ControlTemplate>
-        </Button.Template>-->
-
         <ui:FlyoutService.Flyout>
             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
                 <ui:AppBarButton x:Name="TestButton" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>

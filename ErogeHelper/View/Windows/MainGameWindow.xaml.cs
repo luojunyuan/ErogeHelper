@@ -32,11 +32,11 @@ namespace ErogeHelper.View.Windows
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
 
-            _mainWindowDataService.Dpi = _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
             _mainWindowDataService.DpiSubject.OnNext(_dpi);
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
 
-            // QUESTION: This can be used in WhenActivated() with dispose, but should I?
+            // QUESTION: This can be used in WhenActivated() with dispose, should I?
             _gameWindowHooker.GamePosUpdated
                 .Subscribe(pos =>
                 {
@@ -71,9 +71,8 @@ namespace ErogeHelper.View.Windows
         {
             base.OnDpiChanged(oldDpi, newDpi);
 
-            _mainWindowDataService.Dpi = _dpi = newDpi.DpiScaleX;
+            _dpi = newDpi.DpiScaleX;
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
-            _gameWindowHooker.InvokeUpdatePosition();
             _mainWindowDataService.DpiSubject.OnNext(_dpi);
         }
 

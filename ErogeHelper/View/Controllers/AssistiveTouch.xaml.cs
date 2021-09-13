@@ -3,6 +3,7 @@ using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
@@ -29,31 +30,20 @@ namespace ErogeHelper.View.Controllers
         private readonly IMainWindowDataService _mainWindowDataService;
         private readonly IEhConfigRepository _ehConfigRepository;
 
-        private FrameworkElement _parent = null!;
-
-        /// <summary>
-        /// The diameter of button
-        /// </summary>
-        private double _distance;
-        private double _halfDistance;
-        private double _oneThirdDistance;
-        private double _twoThirdDistance;
-
-        private double Dpi => _mainWindowDataService.Dpi;
         private double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
             DefaultValues.AssistiveTouchBigSize :
             DefaultValues.AssistiveTouchSize;
 
         public AssistiveTouch(
             IMainWindowDataService? mainWindowDataService = null,
-            IEhConfigRepository? ehConfigRepository = null)
+            IEhConfigRepository? ehConfigRepository = null,
+            IGameWindowHooker? gameWindowHooker = null)
         {
             InitializeComponent();
 
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepository = ehConfigRepository ?? DependencyInject.GetService<IEhConfigRepository>();
-
-            // 不仅需要考虑窗口大小改变后，手动重置button位置，通过上次记忆的位置来重置
+            gameWindowHooker ??= DependencyInject.GetService<IGameWindowHooker>();
 
             var _touchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
                                 ?? DefaultValues.TouchPosition;
@@ -64,31 +54,57 @@ namespace ErogeHelper.View.Controllers
                 this.Log().Debug("Save touch position succeed");
             });
 
+            FrameworkElement? _parent = null;
+
+            gameWindowHooker.GamePosUpdated
+                .Where(_ => _parent is not null)
+                .Select(pos => new { pos.Width, pos.Height })
+                .DistinctUntilChanged()
+                .Subscribe(_ =>
+                {
+                    AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!);
+                });
+
+            // The diameter of button
+            double _distance = 0;
+            double _halfDistance = 0;
+            double _oneThirdDistance = 0;
+            double _twoThirdDistance = 0;
+
+            void UpdateButtonProperties(double width)
+            {
+                _distance = width;
+                _halfDistance = _distance / 2;
+                _oneThirdDistance = _distance / 3;
+                _twoThirdDistance = _oneThirdDistance * 2;
+            }
+
             _mainWindowDataService.AssistiveTouchBigSizeSubject
+                .Where(_ => _parent is not null)
                 .Subscribe(_ =>
                 {
                     UpdateButtonProperties(ButtonSize);
-                    // Set DefaultPosition or RasieMouseRelease
+                    AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!);
                 });
 
             _mainWindowDataService.DpiSubject
                 .Where(_ => _parent is not null)
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
                 .ObserveOnDispatcher()
-                .Subscribe(_ => AssistiveButton.Margin = ResetButtonEdgeMargin(ButtonSize, _touchPosition, _parent));
+                .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
 
             AssistiveButton.Events().Loaded
                 .Subscribe(_ =>
                 {
-                    if (Parent is null and not FrameworkElement)
+                    if (Parent is not FrameworkElement tmp)
                     {
                         throw new InvalidOperationException("Control's parent must be FrameworkElement type");
                     }
 
-                    _parent = (Parent as FrameworkElement)!;
+                    _parent = tmp;
 
                     UpdateButtonProperties(ButtonSize);
-                    AssistiveButton.Margin = ResetButtonEdgeMargin(ButtonSize, _touchPosition, _parent);
+                    AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent);
                 });
 
             Point _lastPos;
@@ -112,7 +128,7 @@ namespace ErogeHelper.View.Controllers
 
             mouseMove.Subscribe(evt =>
             {
-                if (!_isMoving)
+                if (!_isMoving || _parent is null)
                     return;
 
                 var pos = evt.GetPosition(_parent);
@@ -142,7 +158,7 @@ namespace ErogeHelper.View.Controllers
 
             mouseUp.Subscribe(evt =>
             {
-                if (!_isMoving)
+                if (!_isMoving || _parent is null)
                     return;
 
                 double parentActualWidth;
@@ -242,15 +258,9 @@ namespace ErogeHelper.View.Controllers
                     vm => vm.TestCommand,
                     v => v.TestButton)
                     .DisposeWith(d);
-            });
-        }
 
-        private void UpdateButtonProperties(double width)
-        {
-            _distance = width;
-            _halfDistance = _distance / 2;
-            _oneThirdDistance = _distance / 3;
-            _twoThirdDistance = _oneThirdDistance * 2;
+                // TODO: 在右侧三个点改变Flyout弹出方向
+            });
         }
 
         private static void RaiseMouseUpEventInCode(Button button, UIElement father)
@@ -288,7 +298,7 @@ namespace ErogeHelper.View.Controllers
             button.Margin = new Thickness(left, top, 0, 0);
         }
 
-        private static Thickness ResetButtonEdgeMargin(
+        private static Thickness GetButtonEdgeMargin(
             double buttonSize, AssistiveTouchPosition pos, FrameworkElement parent)
         {
             var rightLineMargin = parent.ActualWidth - buttonSize - ButtonSpace;
