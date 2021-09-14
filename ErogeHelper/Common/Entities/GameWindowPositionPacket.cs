@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace ErogeHelper.Common.Entities
 {
-    public class GameWindowPositionPacket : EventArgs
+    public record GameWindowPositionPacket
     {
         public GameWindowPositionPacket(double height, double width, double left, double top, Thickness clientArea)
         {
@@ -14,11 +14,11 @@ namespace ErogeHelper.Common.Entities
             ClientArea = clientArea;
         }
 
-        public double Height { get; }
-        public double Width { get; }
-        public double Left { get; }
-        public double Top { get; }
-        public Thickness ClientArea { get; }
+        public double Height { get; init; }
+        public double Width { get; init; }
+        public double Left { get; init; }
+        public double Top { get; init; }
+        public Thickness ClientArea { get; init; }
 
         public override string ToString()
         {

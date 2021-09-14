@@ -2,7 +2,5 @@
 
 namespace ErogeHelper.Common.Exceptions
 {
-    internal class AppExistedException : Exception
-    {
-    }
+    internal class AppExistedException : Exception { }
 }

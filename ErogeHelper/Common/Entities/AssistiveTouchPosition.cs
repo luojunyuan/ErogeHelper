@@ -12,7 +12,7 @@
         LowerRight
     }
 
-    public class AssistiveTouchPosition
+    public record AssistiveTouchPosition
     {
         public AssistiveTouchPosition(TouchButtonCorner corner, double scale = 0)
         {
@@ -20,7 +20,7 @@
             Scale = scale;
         }
 
-        public TouchButtonCorner Corner { get; }
-        public double Scale { get; }
+        public TouchButtonCorner Corner { get; init; }
+        public double Scale { get; init; }
     }
 }

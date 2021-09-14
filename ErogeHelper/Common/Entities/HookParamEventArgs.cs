@@ -19,13 +19,13 @@ namespace ErogeHelper.Common.Entities
             Text = text;
         }
 
-        public long Handle { get; }
-        public uint Pid { get; }
-        public ulong Address { get; }
-        public ulong Ctx { get; }
-        public ulong Ctx2 { get; }
-        public string Name { get; }
-        public string Hookcode { get; }
-        public string Text { get; }
+        public long Handle { get; init; }
+        public uint Pid { get; init; }
+        public ulong Address { get; init; }
+        public ulong Ctx { get; init; }
+        public ulong Ctx2 { get; init; }
+        public string Name { get; init; }
+        public string Hookcode { get; init; }
+        public string Text { get; init; }
     }
 }

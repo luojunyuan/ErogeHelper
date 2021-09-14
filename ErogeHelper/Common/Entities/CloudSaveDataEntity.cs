@@ -23,18 +23,18 @@ namespace ErogeHelper.Common.Entities
             PCId = pcId;
         }
 
-        public string Md5 { get; }
+        public string Md5 { get; init; }
 
-        public string FolderName { get; }
+        public string FolderName { get; init; }
 
-        public string LocalPath { get; }
+        public string LocalPath { get; init; }
 
-        public DateTime LastTimeModified { get; set; }
+        public DateTime LastTimeModified { get; init; }
 
-        public string PCName { get; }
+        public string PCName { get; init; }
 
-        public string PCId { get; }
+        public string PCId { get; init; }
 
-        public string[] ExcludeFiles { get; }
+        public string[] ExcludeFiles { get; init; }
     }
 }

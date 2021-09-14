@@ -18,9 +18,6 @@ using System.Windows.Media.Animation;
 
 namespace ErogeHelper.View.Controllers
 {
-    /// <summary>
-    /// AssistiveTouch.xaml 的交互逻辑
-    /// </summary>
     public partial class AssistiveTouch : IEnableLogger
     {
         private const double OpacityValue = 0.4;
@@ -58,7 +55,7 @@ namespace ErogeHelper.View.Controllers
 
             gameWindowHooker.GamePosUpdated
                 .Where(_ => _parent is not null)
-                .Select(pos => new { pos.Width, pos.Height })
+                .Select(pos => (pos.Width, pos.Height))
                 .DistinctUntilChanged()
                 .Subscribe(_ =>
                 {
@@ -260,6 +257,7 @@ namespace ErogeHelper.View.Controllers
                     .DisposeWith(d);
 
                 // TODO: 在右侧三个点改变Flyout弹出方向
+                // TODO: 透明度改变
             });
         }
 
