@@ -11,15 +11,13 @@
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
     mc:Ignorable="d">
 
-    <Button
-        x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}">
+    <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}">
 
         <ui:FlyoutService.Flyout>
             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
                 <ui:AppBarButton x:Name="TestButton" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
             </ui:CommandBarFlyout>
         </ui:FlyoutService.Flyout>
-
     </Button>
 
 </reactiveUi:ReactiveUserControl>
