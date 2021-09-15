@@ -71,8 +71,7 @@ namespace ErogeHelper.Common
             var releaseId = buildVersion switch
             {
                 22000 => "21H2",
-                
-                20348 => "21H2",
+                19044 => "21H2",
                 19043 => "21H1",
                 19042 => "20H2",
                 19041 => "2004", // Current target WinRT-SDK version

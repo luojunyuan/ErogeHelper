@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ErogeHelper.Common.Entities
 {
@@ -20,9 +19,6 @@ namespace ErogeHelper.Common.Entities
         public double Top { get; init; }
         public Thickness ClientArea { get; init; }
 
-        public override string ToString()
-        {
-            return $"({Left}, {Top}), width={Width} height={Height}";
-        }
+        public override string ToString() => $"({Left}, {Top}), width={Width} height={Height}";
     }
 }

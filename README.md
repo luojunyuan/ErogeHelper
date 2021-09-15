@@ -18,6 +18,8 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained
 ```
 
+> For windows 7 use Release version. (win7 may not support R2R image)
+
 - x86_32 
 
 ```

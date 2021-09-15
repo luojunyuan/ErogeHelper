@@ -256,8 +256,8 @@ namespace ErogeHelper.View.Controllers
                     v => v.TestButton)
                     .DisposeWith(d);
 
-                // TODO: 在右侧三个点改变Flyout弹出方向
-                // TODO: 透明度改变
+                // TODO: 在右侧三个点改变Flyout弹出方向, 透明度改变
+                // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }
 
