@@ -9,9 +9,9 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
-    mc:Ignorable="d">
+    mc:Ignorable="d" >
 
-    <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}">
+    <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}" Click="DisableFlyoutPopup">
 
         <ui:FlyoutService.Flyout>
             <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >

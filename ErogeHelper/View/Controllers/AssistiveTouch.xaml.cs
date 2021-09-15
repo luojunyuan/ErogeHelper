@@ -10,6 +10,7 @@ using Splat;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -105,17 +106,20 @@ namespace ErogeHelper.View.Controllers
                 });
 
             Point _lastPos;
-            Point _newPos; // The position of the button after the left mouse button is released
-            Point _oldPos; // The position of the button
-            bool _isMoving = false;
+            var _isMoving = false;
+            BehaviorSubject<bool> movingSubj = new(false);
+            movingSubj
+                .Where(v => v == false)
+                .Throttle(TimeSpan.FromMilliseconds(ConstantValues.AssistiveTouchOpacityChangedTimeout))
+                .Where(_ => _isMoving == false)
+                .ObserveOnDispatcher()
+                .Subscribe(_ => AssistiveButton.Opacity = OpacityValue);
 
-            var buttonDown = AssistiveButton.Events().PreviewMouseLeftButtonDown;
-            var disableFlyoutPopup = this.Events().PreviewMouseUp;
+            var initializeStatusWhenMouseDown = AssistiveButton.Events().PreviewMouseLeftButtonDown;
+            var mouseMoveAndCheckEdge = this.Events().PreviewMouseMove;
+            var mouseRelease = this.Events().PreviewMouseUp;
 
-            var mouseMove = this.Events().PreviewMouseMove;
-            var mouseUp = this.Events().PreviewMouseUp;
-
-            buttonDown.Subscribe(evt =>
+            initializeStatusWhenMouseDown.Subscribe(evt =>
             {
                 AssistiveButton.Opacity = OpacityNormal;
                 _isMoving = true;
@@ -123,7 +127,7 @@ namespace ErogeHelper.View.Controllers
                 _oldPos = _lastPos;
             });
 
-            mouseMove.Subscribe(evt =>
+            mouseMoveAndCheckEdge.Subscribe(evt =>
             {
                 if (!_isMoving || _parent is null)
                     return;
@@ -153,7 +157,7 @@ namespace ErogeHelper.View.Controllers
                 }
             });
 
-            mouseUp.Subscribe(evt =>
+            mouseRelease.Subscribe(evt =>
             {
                 if (!_isMoving || _parent is null)
                     return;
@@ -234,14 +238,7 @@ namespace ErogeHelper.View.Controllers
 
                 SmoothMoveAnimation(AssistiveButton, left, top);
                 _isMoving = false;
-            });
-
-            disableFlyoutPopup.Subscribe(evt =>
-            {
-                if (!_newPos.Equals(_oldPos) && evt is not null)
-                {
-                    evt.Handled = true;
-                }
+                movingSubj.OnNext(false);
             });
 
             this.WhenActivated(d =>
@@ -256,7 +253,7 @@ namespace ErogeHelper.View.Controllers
                     v => v.TestButton)
                     .DisposeWith(d);
 
-                // TODO: 在右侧三个点改变Flyout弹出方向, 透明度改变
+                // TODO: 在右侧三个点改变Flyout弹出方向
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }
@@ -315,6 +312,18 @@ namespace ErogeHelper.View.Controllers
                 TouchButtonCorner.Bottom => new Thickness(horizontalScaleMargin, bottomLineMargin, 0, 0),
                 _ => throw new InvalidOperationException(),
             };
+        }
+
+        private Point _newPos; // The position of the button after the left mouse button is released
+        private Point _oldPos; // The position of the button
+
+        // NOTE: The OnButtonClick() in FlyoutService is happend between this delegate and lambda expression
+        private void DisableFlyoutPopup(object _, RoutedEventArgs e)
+        {
+            if (!_newPos.Equals(_oldPos) && e is not null)
+            {
+                e.Handled = true;
+            }
         }
     }
 }
