@@ -53,13 +53,6 @@ namespace ErogeHelper
                     .Select(startupEvent => startupEvent.Args)
                     .Subscribe(args =>
                     {
-                        if (args.Length == 0)
-                        {
-                            MessageBox.Show("Can not run ErogeHelper directly", "Eroge Helper");
-                            Terminate();
-                            return;
-                        }
-
                         // EH already exit, but toast is clicked. This one shouldn't happen 
                         if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                         {
@@ -67,10 +60,17 @@ namespace ErogeHelper
                             return;
                         }
 
+                        if (args.Length == 0)
+                        {
+                            MessageBox.Show(Strings.App_StartNoParameter, "Eroge Helper");
+                            Terminate();
+                            return;
+                        }
+
                         var fullPath = Path.GetFullPath(args[0]);
                         if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                         {
-                            MessageBox.Show("Can't run ErogeHelper itself", "Eroge Helper");
+                            MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
                             Terminate();
                             return;
                         }

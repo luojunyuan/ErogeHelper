@@ -501,4 +501,10 @@
 Caused by source `{1}`
 </value>
   </data>
+  <data name="App.StartNoParameter" xml:space="preserve">
+    <value>Can not run ErogeHelper directly</value>
+  </data>
+  <data name="App.StartItself" xml:space="preserve">
+    <value>Can not run ErogeHelper itself</value>
+  </data>
 </root>

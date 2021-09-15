@@ -501,4 +501,10 @@
 由 `{1}` 造成
 </value>
   </data>
+  <data name="App.StartNoParameter" xml:space="preserve">
+    <value>不可以直接运行ErogeHelper</value>
+  </data>
+  <data name="App.StartItself" xml:space="preserve">
+    <value>不可以启动ErogeHelper自身</value>
+  </data>
 </root>

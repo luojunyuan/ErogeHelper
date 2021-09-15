@@ -144,6 +144,24 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Can not run ErogeHelper itself 的本地化字符串。
+        /// </summary>
+        public static string App_StartItself {
+            get {
+                return ResourceManager.GetString("App.StartItself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Can not run ErogeHelper directly 的本地化字符串。
+        /// </summary>
+        public static string App_StartNoParameter {
+            get {
+                return ResourceManager.GetString("App.StartNoParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close Card 的本地化字符串。
         /// </summary>
         public static string CardControl_CloseTip {
