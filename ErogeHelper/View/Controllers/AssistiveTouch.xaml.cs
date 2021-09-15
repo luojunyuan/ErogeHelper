@@ -4,6 +4,7 @@ using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
+using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
@@ -103,6 +104,7 @@ namespace ErogeHelper.View.Controllers
 
                     UpdateButtonProperties(ButtonSize);
                     AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent);
+                    AssistiveTouchFlyout.Placement = GetFlyoutPlacement(_touchPosition);
                 });
 
             Point _lastPos;
@@ -239,6 +241,7 @@ namespace ErogeHelper.View.Controllers
                 SmoothMoveAnimation(AssistiveButton, left, top);
                 _isMoving = false;
                 movingSubj.OnNext(false);
+                AssistiveTouchFlyout.Placement = GetFlyoutPlacement(_touchPosition);
             });
 
             this.WhenActivated(d =>
@@ -253,7 +256,6 @@ namespace ErogeHelper.View.Controllers
                     v => v.TestButton)
                     .DisposeWith(d);
 
-                // TODO: 在右侧三个点改变Flyout弹出方向
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }
@@ -313,6 +315,12 @@ namespace ErogeHelper.View.Controllers
                 _ => throw new InvalidOperationException(),
             };
         }
+
+        private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition _touchPosition) =>
+            _touchPosition.Corner is
+            TouchButtonCorner.Right or TouchButtonCorner.UpperRight or TouchButtonCorner.LowerRight
+            ? FlyoutPlacementMode.LeftEdgeAlignedTop
+            : FlyoutPlacementMode.RightEdgeAlignedTop;
 
         private Point _newPos; // The position of the button after the left mouse button is released
         private Point _oldPos; // The position of the button

@@ -14,7 +14,7 @@
     <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}" Click="DisableFlyoutPopup">
 
         <ui:FlyoutService.Flyout>
-            <ui:CommandBarFlyout Placement="RightEdgeAlignedTop" ShowMode="Standard" >
+            <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard" >
                 <ui:AppBarButton x:Name="TestButton" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
             </ui:CommandBarFlyout>
         </ui:FlyoutService.Flyout>
