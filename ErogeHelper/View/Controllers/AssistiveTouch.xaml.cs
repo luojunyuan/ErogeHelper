@@ -4,6 +4,7 @@ using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
+using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -36,13 +37,15 @@ namespace ErogeHelper.View.Controllers
         public AssistiveTouch(
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigRepository = null,
-            IGameWindowHooker? gameWindowHooker = null)
+            IGameWindowHooker? gameWindowHooker = null,
+            IGameDataService? gameDataService = null)
         {
             InitializeComponent();
 
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepository = ehConfigRepository ?? DependencyInject.GetService<IEhConfigRepository>();
             gameWindowHooker ??= DependencyInject.GetService<IGameWindowHooker>();
+            gameDataService ??= DependencyInject.GetService<IGameDataService>();
 
             var _touchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
                                 ?? DefaultValues.TouchPosition;
@@ -55,10 +58,21 @@ namespace ErogeHelper.View.Controllers
 
             FrameworkElement? _parent = null;
 
-            gameWindowHooker.GamePosUpdated
+            var boolSubj = new Subject<bool>();
+            var SetButtonSteram = gameWindowHooker.GamePosUpdated
                 .Where(_ => _parent is not null)
                 .Select(pos => (pos.Width, pos.Height))
                 .DistinctUntilChanged()
+                .Select(_ => Utils.IsGameForegroundFullScreen(gameDataService.MainProcess.MainWindowHandle))
+                .Do(isfullScreen => this.Log().Debug($"FullScreen: {isfullScreen}"));
+
+            SetButtonSteram
+                .Skip(1)
+                .Subscribe(v => boolSubj.OnNext(v));
+            SetButtonSteram
+                .Zip(boolSubj, (v1, v2) => v1 == v2)
+                .Where(v => v)
+                .Do(_ => this.Log().Debug("There coms same value. Reset button position"))
                 .Subscribe(_ =>
                 {
                     AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!);
@@ -109,22 +123,25 @@ namespace ErogeHelper.View.Controllers
 
             Point _lastPos;
             var _isMoving = false;
-            BehaviorSubject<bool> movingSubj = new(false);
-            movingSubj
-                .Where(v => v == false)
+            BehaviorSubject<bool> tryTransparentizeSubj = new(true);
+            tryTransparentizeSubj
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.AssistiveTouchOpacityChangedTimeout))
-                .Where(_ => _isMoving == false)
                 .ObserveOnDispatcher()
+                .Where(on => on && _isMoving == false && AssistiveTouchFlyout.IsOpen == false)
                 .Subscribe(_ => AssistiveButton.Opacity = OpacityValue);
 
-            var initializeStatusWhenMouseDown = AssistiveButton.Events().PreviewMouseLeftButtonDown;
+            AssistiveTouchFlyout.Events().Closed
+                .Subscribe(_ => tryTransparentizeSubj.OnNext(true));
+
+            var updateStatusWhenMouseDown = AssistiveButton.Events().PreviewMouseLeftButtonDown;
             var mouseMoveAndCheckEdge = this.Events().PreviewMouseMove;
             var mouseRelease = this.Events().PreviewMouseUp;
 
-            initializeStatusWhenMouseDown.Subscribe(evt =>
+            updateStatusWhenMouseDown.Subscribe(evt =>
             {
                 AssistiveButton.Opacity = OpacityNormal;
                 _isMoving = true;
+                tryTransparentizeSubj.OnNext(true);
                 _lastPos = evt.GetPosition(_parent);
                 _oldPos = _lastPos;
             });
@@ -240,7 +257,7 @@ namespace ErogeHelper.View.Controllers
 
                 SmoothMoveAnimation(AssistiveButton, left, top);
                 _isMoving = false;
-                movingSubj.OnNext(false);
+                tryTransparentizeSubj.OnNext(true);
                 AssistiveTouchFlyout.Placement = GetFlyoutPlacement(_touchPosition);
             });
 
@@ -251,9 +268,35 @@ namespace ErogeHelper.View.Controllers
                     v => v.AssistiveButton.Template)
                     .DisposeWith(d);
 
+                this.OneWayBind(ViewModel,
+                    vm => vm.AssistiveTouchVisibility,
+                    v => v.AssistiveButton.Visibility)
+                    .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
-                    vm => vm.TestCommand,
-                    v => v.TestButton)
+                    vm => vm.VolumeDown,
+                    v => v.VolumeDown)
+                    .DisposeWith(d);
+                this.BindCommand(ViewModel,
+                    vm => vm.VolumeUp,
+                    v => v.VolumeUp)
+                    .DisposeWith(d);
+                this.BindCommand(ViewModel,
+                    vm => vm.SwitchFullScreen,
+                    v => v.FullScreenSwitcher)
+                    .DisposeWith(d);
+
+                this.BindCommand(ViewModel,
+                    vm => vm.TaskbarNotifyArea,
+                    v => v.ActionCenter)
+                    .DisposeWith(d);
+                this.BindCommand(ViewModel,
+                    vm => vm.TaskView,
+                    v => v.TaskView)
+                    .DisposeWith(d);
+                this.BindCommand(ViewModel,
+                    vm => vm.ScreenShot,
+                    v => v.ScreenShot)
                     .DisposeWith(d);
 
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
@@ -316,6 +359,7 @@ namespace ErogeHelper.View.Controllers
             };
         }
 
+        // TODO: Check screen edge instead of AssistiveTouchPosition.Corner
         private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition _touchPosition) =>
             _touchPosition.Corner is
             TouchButtonCorner.Right or TouchButtonCorner.UpperRight or TouchButtonCorner.LowerRight
@@ -332,6 +376,14 @@ namespace ErogeHelper.View.Controllers
             {
                 e.Handled = true;
             }
+        }
+
+        private AppBarButton? _fullScreenButton;
+
+        private void FullScreenButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            var appbarButton = sender as AppBarButton;
+            _fullScreenButton = appbarButton;
         }
     }
 }

@@ -19,6 +19,7 @@ namespace ErogeHelper.Common
 
         public static bool IsOsWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
+        // Not so immediately
         public static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
         {
             foreach (var screen in WpfScreenHelper.Screen.AllScreens)

@@ -48,7 +48,7 @@ namespace ErogeHelper.Model.Services
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
-
+            // TODO: may use true handle instead
             _gameHwnd = CurrentWindowHandle(_gameProc);
 
             var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
