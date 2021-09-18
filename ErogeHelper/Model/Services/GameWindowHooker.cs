@@ -1,5 +1,7 @@
-﻿using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -43,13 +45,15 @@ namespace ErogeHelper.Model.Services
         private readonly ReplaySubject<GameWindowPositionPacket> _gamePositionSubject = new(1);
         public IObservable<GameWindowPositionPacket> GamePosUpdated => _gamePositionSubject.AsObservable();
 
+        private IGameDataService? _gameDataService;
+
         public void SetGameWindowHook(Process process)
         {
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
-            // TODO: may use true handle instead
-            _gameHwnd = CurrentWindowHandle(_gameProc);
+            _gameDataService = DependencyInject.GetService<IGameDataService>(); 
+            _gameDataService.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
 
             var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
 
@@ -92,12 +96,9 @@ namespace ErogeHelper.Model.Services
             proc.WaitForInputIdle(ConstantValues.WaitGameStartTimeout);
             proc.Refresh();
             var gameHwnd = proc.MainWindowHandle;
-            if (User32.IsIconic(proc.MainWindowHandle))
-            {
-                return gameHwnd;
-            }
 
             User32.GetClientRect(gameHwnd, out var clientRect);
+
             if (clientRect.bottom > ConstantValues.GoodWindowHeight &&
                 clientRect.right > ConstantValues.GoodWindowWidth)
             {
@@ -105,6 +106,12 @@ namespace ErogeHelper.Model.Services
             }
             else
             {
+                // TODO: Improve finding handle when game minimized 
+                if (User32.IsIconic(proc.MainWindowHandle))
+                {
+                    throw new InvalidOperationException("make sure game is in front");
+                }
+
                 var spendTime = new Stopwatch();
                 spendTime.Start();
                 while (spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
@@ -140,13 +147,14 @@ namespace ErogeHelper.Model.Services
         {
             switch (eventType)
             {
+                // TODO: Show and Hide MainGameWindow with these three events
                 case EventObjectDestroy:
                     {
                         if (hWnd == _gameHwnd)
                         {
                             try
                             {
-                                _gameHwnd = CurrentWindowHandle(_gameProc);
+                                _gameDataService!.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
                                 this.Log().Debug("Game window show - recreate");
                                 UpdateLocation();
                             }

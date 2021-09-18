@@ -229,8 +229,8 @@
     <value>Full Screen (Alt+Enter)</value>
   </data>
   <data name="GameView.FocusTip" xml:space="preserve">
-    <value>Lost Focus
-(If you can't click when play game full screen. Turn on this)</value>
+    <value>Lose Focus
+(If you can't use when play game full screen. Turn on this)</value>
   </data>
   <data name="GameView.ActionCenter" xml:space="preserve">
     <value>Action Center</value>

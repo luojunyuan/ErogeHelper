@@ -12,6 +12,8 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 
 ### Publish
 
+Publish may take few minutes.
+
 - x86_64 
 
 ```

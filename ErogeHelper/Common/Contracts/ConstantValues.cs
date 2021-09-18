@@ -34,5 +34,7 @@ namespace ErogeHelper.Common.Contracts
         public const string DefaultAssistiveTouchPositionStr = "{\"Corner\":0,\"Scale\":0.5}";
 
         public const int AssistiveTouchOpacityChangedTimeout = 5000;
+
+        public const int ScreenShotHideButtonTime = 3000;
     }
 }

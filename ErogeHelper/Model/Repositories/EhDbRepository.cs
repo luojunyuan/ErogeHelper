@@ -1,9 +1,9 @@
 ﻿using Dapper.Contrib.Extensions;
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.DTO.Entity.Tables;
 using ErogeHelper.Model.DTO.Migration;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using FluentMigrator.Runner;
 using Microsoft.Data.Sqlite;
@@ -88,6 +88,14 @@ namespace ErogeHelper.Model.Repositories
             if (GameInfo is null)
                 throw new ArgumentException("Couldn't find GameInfoTable in database");
             connection.Update(GameInfo with { SavedataPath = path });
+        }
+
+        public void UpdateLostFocusStatus(bool status)
+        {
+            using var connection = GetOpenConnection();
+            if (GameInfo is null)
+                throw new ArgumentException("Couldn't find GameInfoTable in database");
+            connection.Update(GameInfo with { IsLoseFocus = status });
         }
     }
 }

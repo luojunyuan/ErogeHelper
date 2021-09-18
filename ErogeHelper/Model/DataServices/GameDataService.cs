@@ -8,11 +8,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.DataServices
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
+        public HWND MainWindowHandle { get; set; }
+
         public void Init(string md5, string gamePath) => (Md5, GamePath) = (md5, gamePath);
 
         public string Md5 { get; private set; } = string.Empty;

@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
 using ReactiveMarbles.ObservableEvents;
@@ -20,20 +21,22 @@ namespace ErogeHelper.View.Windows
         private double _dpi;
         private readonly IGameWindowHooker _gameWindowHooker;
         private readonly IMainWindowDataService _mainWindowDataService;
+        private readonly IEhDbRepository _ehDbRepository;
 
         public MainGameWindow(
             MainGameViewModel? gameViewModel = null,
             IMainWindowDataService? mainWindowDataService = null,
-            IGameWindowHooker? gameWindowHooker = null)
+            IGameWindowHooker? gameWindowHooker = null,
+            IEhDbRepository? ehDbRepository = null)
         {
             InitializeComponent();
 
             ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
+            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
 
             _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            _mainWindowDataService.DpiSubject.OnNext(_dpi);
             this.Log().Debug($"Current screen dpi {_dpi * 100}%");
 
             // QUESTION: This can be used in WhenActivated() with dispose, should I?
@@ -81,6 +84,7 @@ namespace ErogeHelper.View.Windows
             base.OnSourceInitialized(e);
 
             _mainWindowDataService.SetHandle(new HWND(new WindowInteropHelper(this).Handle));
+            Utils.WindowLostFocus(_mainWindowDataService.Handle, _ehDbRepository.GameInfo!.IsLoseFocus);
         }
     }
 }

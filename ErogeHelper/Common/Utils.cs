@@ -20,7 +20,7 @@ namespace ErogeHelper.Common
         public static bool IsOsWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
         // Not so immediately
-        public static bool IsGameForegroundFullScreen(IntPtr gameHwnd)
+        public static bool IsGameForegroundFullscreen(HWND gameHwnd)
         {
             foreach (var screen in WpfScreenHelper.Screen.AllScreens)
             {
@@ -57,6 +57,24 @@ namespace ErogeHelper.Common
                                                User32.WindowLongFlags.GWL_EXSTYLE);
             exStyle |= wsExToolWindow;
             _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
+        }
+
+        public static void WindowLostFocus(HWND windowHandle, bool lostFocus)
+        {
+            var exStyle = User32.GetWindowLong(windowHandle, User32.WindowLongFlags.GWL_EXSTYLE);
+            if (lostFocus)
+            {
+                User32.SetWindowLong(windowHandle,
+                    User32.WindowLongFlags.GWL_EXSTYLE,
+                    exStyle | (int)User32.WindowStylesEx.WS_EX_NOACTIVATE);
+            }
+            else
+            {
+                User32.SetWindowLong(windowHandle,
+                    User32.WindowLongFlags.GWL_EXSTYLE,
+                    exStyle & ~(int)User32.WindowStylesEx.WS_EX_NOACTIVATE);
+            }
+
         }
 
         public static string GetOsInfo()

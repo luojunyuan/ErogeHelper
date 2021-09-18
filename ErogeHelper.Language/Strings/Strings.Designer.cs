@@ -261,8 +261,8 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
-        ///   查找类似 Lost Focus
-        ///(If you can&apos;t click when play game full screen. Turn on this) 的本地化字符串。
+        ///   查找类似 Lose Focus
+        ///(If you can&apos;t use when play game full screen. Turn on this) 的本地化字符串。
         /// </summary>
         public static string GameView_FocusTip {
             get {

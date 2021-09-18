@@ -13,5 +13,7 @@ namespace ErogeHelper.Model.DataServices
         public void SetHandle(HWND handle) => Handle = handle;
 
         public Subject<bool> AssistiveTouchBigSizeSubject { get; init; } = new();
+
+        public ReplaySubject<HWND> HandleSubj { get; init; } = new(1);
     }
 }

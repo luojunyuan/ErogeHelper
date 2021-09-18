@@ -38,7 +38,7 @@ namespace ErogeHelper
             // System.Runtime.InteropServices.COMException when access ToastComponent first time
             try
             {
-                SetI18NLanguageDictionary();
+                //SetI18NLanguageDictionary();
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
 
@@ -160,6 +160,9 @@ namespace ErogeHelper
             };
         }
 
+        /// <summary>
+        /// CurrentCulture is based on Setting-Region-RegionalFormat
+        /// </summary>
         private static void SetI18NLanguageDictionary() =>
             Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
             {

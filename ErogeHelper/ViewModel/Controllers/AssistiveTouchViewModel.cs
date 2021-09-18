@@ -7,7 +7,6 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -24,33 +23,37 @@ namespace ErogeHelper.ViewModel.Controllers
         private readonly IMainWindowDataService _mainWindowDataService;
         private readonly IEhConfigRepository _ehConfigRepositoy;
         private readonly IGameDataService _gameDataService;
+        private readonly IEhDbRepository _ehDbRepository;
+
+        private readonly Subject<bool> _hideFlyoutSubj = new();
+        public IObservable<bool> HideFlyoutSubj => _hideFlyoutSubj.AsObservable();
+
         private HWND MainWindowHandle => _mainWindowDataService.Handle;
-        private readonly BehaviorSubject<bool> StayTopSubject = new(false);
 
         public AssistiveTouchViewModel(
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
-            IGameDataService? gameDataService = null)
+            IGameDataService? gameDataService = null,
+            IEhDbRepository? ehDbRepository = null)
         {
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
 
             AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepositoy.UseBigAssistiveTouchSize);
 
-            var interval = Observable
-                .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
-                .TakeUntil(StayTopSubject.Where(on => !on));
-
-            StayTopSubject
-                .DistinctUntilChanged()
-                .Where(on => on && !MainWindowHandle.IsNull)
-                .SelectMany(interval)
-                .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
+            LoseFocusIsOn = _ehDbRepository.GameInfo!.IsLoseFocus;
+            this.WhenAnyValue(x => x.LoseFocusIsOn)
+                .Skip(1)
+                .Subscribe(v =>
+                {
+                    Utils.WindowLostFocus(MainWindowHandle, v);
+                    _ehDbRepository.UpdateLostFocusStatus(v);
+                });
 
             _mainWindowDataService.AssistiveTouchBigSizeSubject
                 .Subscribe(v => AssistiveTouchTemplate = GetAssistiveTouchStyle(v));
-
 
             VolumeDown = ReactiveCommand.CreateFromTask(async () =>
                 await WindowsInput.Simulate.Events()
@@ -62,7 +65,7 @@ namespace ErogeHelper.ViewModel.Controllers
                         .Invoke().ConfigureAwait(false));
             SwitchFullScreen = ReactiveCommand.CreateFromTask(async () =>
             {
-                // TODO: may use true handle instead
+                // Tip: If a window's main handle not the Process.MainWindowHandle, so the Alt+Enter also not work
                 User32.BringWindowToTop(_gameDataService.MainProcess.MainWindowHandle);
                 await WindowsInput.Simulate.Events()
                         .ClickChord(KeyCode.Alt, KeyCode.Enter)
@@ -79,20 +82,14 @@ namespace ErogeHelper.ViewModel.Controllers
                         .Invoke().ConfigureAwait(false));
             ScreenShot = ReactiveCommand.CreateFromTask(async () =>
             {
+                _hideFlyoutSubj.OnNext(true);
                 AssistiveTouchVisibility = Visibility.Collapsed;
-
-                await WindowsInput.Simulate.Events()
-                    .Click(KeyCode.Escape)
-                    .Invoke().ConfigureAwait(false);
-
-                // Wait for CommandBarFlyout hide
-                await Task.Delay(500).ConfigureAwait(false);
 
                 await WindowsInput.Simulate.Events()
                     .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
                     .Invoke().ConfigureAwait(false);
 
-                await Task.Delay(3000).ConfigureAwait(false);
+                await Task.Delay(ConstantValues.ScreenShotHideButtonTime).ConfigureAwait(true);
 
                 AssistiveTouchVisibility = Visibility.Visible;
             });
@@ -110,6 +107,9 @@ namespace ErogeHelper.ViewModel.Controllers
         [Reactive]
         public Visibility AssistiveTouchVisibility { get; private set; }
 
+        [Reactive]
+        public bool LoseFocusIsOn { get; set; }
+
         public ReactiveCommand<Unit, Unit> ZoomOut { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> ZoomIn { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, bool> VolumeDown { get; }
@@ -126,11 +126,10 @@ namespace ErogeHelper.ViewModel.Controllers
         public ReactiveCommand<Unit, Unit> PressSkip { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> PressSkipRelease { get; } = ReactiveCommand.Create(() => { });
 
-        private void ChangeAssistiveTouchSize()
+        private void ChangeAssistiveTouchSize(bool bigStyle)
         {
-            var value = true;
-            _ehConfigRepositoy.UseBigAssistiveTouchSize = value;
-            _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(value);
+            _ehConfigRepositoy.UseBigAssistiveTouchSize = bigStyle;
+            _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(bigStyle);
         }
     }
 }

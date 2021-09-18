@@ -42,7 +42,7 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.Register(() => new CloudSavedataViewModel());
             Locator.CurrentMutable.Register(() => new PreferenceViewModel());
             Locator.CurrentMutable.Register(() => new AboutViewModel());
-            Locator.CurrentMutable.Register(() => new AssistiveTouchViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
             // DataService
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
             Locator.CurrentMutable.RegisterLazySingleton(

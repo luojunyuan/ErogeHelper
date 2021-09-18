@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
+using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.DataServices.Interface
 {
     public interface IGameDataService
     {
+        HWND MainWindowHandle { get; set; }
+
         void Init(string md5, string gamePath);
 
         string Md5 { get; }

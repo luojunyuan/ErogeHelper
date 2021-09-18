@@ -27,14 +27,12 @@ namespace ErogeHelper.Model.Services
             IGameDataService? gameDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
             IEhConfigRepository? ehConfigDataService = null,
-            //ISavedataSyncService? savedataSyncService = null,
             IEhDbRepository? ehDbRepository = null)
         {
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
             _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            //_savedataSyncService = savedataSyncService ?? DependencyInject.GetService<ISavedataSyncService>();
         }
 
         public void StartFromCommandLine(string gamePath, bool leEnable)
@@ -70,11 +68,6 @@ namespace ErogeHelper.Model.Services
 
             this.Log().Debug($"Game's path: {gamePath}");
             this.Log().Debug($"Locate Emulator status: {leEnable}");
-
-            if (File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
-            {
-                throw new NotImplementedException("Not Support Unity game yet");
-            }
 
             string md5;
             try

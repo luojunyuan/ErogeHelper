@@ -13,5 +13,7 @@ namespace ErogeHelper.Model.Repositories.Interface
         public void UpdateCloudStatus(bool useCloudSavedata);
 
         public void UpdateSavedataPath(string path);
+
+        public void UpdateLostFocusStatus(bool status);
     }
 }

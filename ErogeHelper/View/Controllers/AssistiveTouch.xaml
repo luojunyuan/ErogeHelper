@@ -10,14 +10,14 @@
     xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
     xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
-    mc:Ignorable="d" >
+    mc:Ignorable="d">
 
     <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}" Click="DisableFlyoutPopup">
 
         <ui:FlyoutService.Flyout>
             <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard" >
-                <ui:AppBarButton x:Name="FontDecrease" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
-                <ui:AppBarButton x:Name="FontIncrease" Icon="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}"/>
+                <ui:AppBarButton IsEnabled="False" x:Name="FontDecrease" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
+                <ui:AppBarButton IsEnabled="False" x:Name="FontIncrease" Icon="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}"/>
                 <ui:AppBarButton x:Name="VolumeDown" ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
                     <ui:AppBarButton.Icon>
                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Volume1}" />
@@ -25,8 +25,9 @@
                 </ui:AppBarButton>
                 <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}"/>
                 <ui:AppBarButton x:Name="FullScreenSwitcher" Loaded="FullScreenButton_Loaded" Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
-                <!----><ui:AppBarToggleButton Icon="Trim" IsChecked="{Binding IsLoseFocus}" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
-                <!----><ui:AppBarToggleButton Icon="TouchPointer" IsChecked="{Binding IsTouchToMouse}" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
+                <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
+                <!--IsTouchToMouse-->
+                <ui:AppBarToggleButton IsEnabled="False" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 
                 <ui:CommandBarFlyout.SecondaryCommands>
                     <ui:AppBarButton x:Name="ActionCenter" Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" InputGestureText="Win+A"/>
@@ -38,7 +39,7 @@
                     <ui:AppBarButton x:Name="ScreenShot" Icon="Pictures" Label="{x:Static resx:Strings.GameView_ScreenShot}" InputGestureText="Win+Shift+S" />
 
                     <ui:AppBarSeparator />
-                    <ui:AppBarButton Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />
+                    <ui:AppBarButton IsEnabled="False" Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />
                 </ui:CommandBarFlyout.SecondaryCommands>
             </ui:CommandBarFlyout>
         </ui:FlyoutService.Flyout>

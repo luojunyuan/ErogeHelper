@@ -230,7 +230,7 @@
   </data>
   <data name="GameView.FocusTip" xml:space="preserve">
     <value>使EH交互窗口失去焦点
-(如果你无法在全屏游戏时点击就请打开这个)</value>
+(如果你无法在全屏游戏时使用就请打开这个)</value>
   </data>
   <data name="GameView.ActionCenter" xml:space="preserve">
     <value>通知中心</value>
