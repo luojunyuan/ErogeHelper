@@ -54,6 +54,7 @@ namespace ErogeHelper.Common
             // Service
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameWindowHooker(), typeof(IGameWindowHooker));
+            Locator.CurrentMutable.RegisterLazySingleton(() => new TouchConversionHooker(), typeof(ITouchConversionHooker));
             Locator.CurrentMutable.RegisterLazySingleton(() => new SavedataSyncService(), typeof(ISavedataSyncService));
 
             Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));

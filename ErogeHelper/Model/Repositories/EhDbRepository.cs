@@ -97,5 +97,13 @@ namespace ErogeHelper.Model.Repositories
                 throw new ArgumentException("Couldn't find GameInfoTable in database");
             connection.Update(GameInfo with { IsLoseFocus = status });
         }
+
+        public void UpdateTouchEnable(bool status)
+        {
+            using var connection = GetOpenConnection();
+            if (GameInfo is null)
+                throw new ArgumentException("Couldn't find GameInfoTable in database");
+            connection.Update(GameInfo with { IsEnableTouchToMouse = status });
+        }
     }
 }

@@ -26,8 +26,7 @@
                 <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}"/>
                 <ui:AppBarButton x:Name="FullScreenSwitcher" Loaded="FullScreenButton_Loaded" Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
                 <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
-                <!--IsTouchToMouse-->
-                <ui:AppBarToggleButton IsEnabled="False" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
+                <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 
                 <ui:CommandBarFlyout.SecondaryCommands>
                     <ui:AppBarButton x:Name="ActionCenter" Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" InputGestureText="Win+A"/>

@@ -291,9 +291,15 @@ namespace ErogeHelper.View.Controllers
                     v => v.AssistiveButton.Visibility)
                     .DisposeWith(d);
 
+                // Flyout Commands
                 this.Bind(ViewModel,
                     vm => vm.LoseFocusIsOn,
                     v => v.LoseFocusToggle.IsChecked)
+                    .DisposeWith(d);
+                
+                this.Bind(ViewModel,
+                    vm => vm.IsTouchToMouse,
+                    v => v.TouchConversionToggle.IsChecked)
                     .DisposeWith(d);
 
                 this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)

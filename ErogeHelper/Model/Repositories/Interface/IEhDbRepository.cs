@@ -15,5 +15,7 @@ namespace ErogeHelper.Model.Repositories.Interface
         public void UpdateSavedataPath(string path);
 
         public void UpdateLostFocusStatus(bool status);
+
+        public void UpdateTouchEnable(bool status);
     }
 }

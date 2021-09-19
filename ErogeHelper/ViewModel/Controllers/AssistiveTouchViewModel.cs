@@ -2,6 +2,7 @@
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -34,12 +35,16 @@ namespace ErogeHelper.ViewModel.Controllers
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
             IGameDataService? gameDataService = null,
-            IEhDbRepository? ehDbRepository = null)
+            IEhDbRepository? ehDbRepository = null,
+            ITouchConversionHooker? touchConversionHooker = null)
         {
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
+            touchConversionHooker ??= DependencyInject.GetService<ITouchConversionHooker>();
+
+            touchConversionHooker.Init();
 
             AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepositoy.UseBigAssistiveTouchSize);
 
@@ -50,6 +55,15 @@ namespace ErogeHelper.ViewModel.Controllers
                 {
                     Utils.WindowLostFocus(MainWindowHandle, v);
                     _ehDbRepository.UpdateLostFocusStatus(v);
+                });
+
+            IsTouchToMouse = _ehDbRepository.GameInfo!.IsEnableTouchToMouse;
+            this.WhenAnyValue(x => x.IsTouchToMouse)
+                .Skip(1)
+                .Subscribe(v =>
+                {
+                    touchConversionHooker.Enable = v;
+                    _ehDbRepository.UpdateTouchEnable(v);
                 });
 
             _mainWindowDataService.AssistiveTouchBigSizeSubject
@@ -110,6 +124,9 @@ namespace ErogeHelper.ViewModel.Controllers
         [Reactive]
         public bool LoseFocusIsOn { get; set; }
 
+        [Reactive]
+        public bool IsTouchToMouse { get; set; }
+        
         public ReactiveCommand<Unit, Unit> ZoomOut { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> ZoomIn { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, bool> VolumeDown { get; }

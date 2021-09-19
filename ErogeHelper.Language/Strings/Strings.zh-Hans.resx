@@ -380,7 +380,7 @@
     <value>尝试重新定位按钮位置</value>
   </data>
   <data name="GameView.TouchToMouse" xml:space="preserve">
-    <value>触控转鼠标</value>
+    <value>添加触控模拟鼠标层</value>
   </data>
   <data name="GeneralPage.OutsideWindow" xml:space="preserve">
     <value>使用外部文本窗口</value>
