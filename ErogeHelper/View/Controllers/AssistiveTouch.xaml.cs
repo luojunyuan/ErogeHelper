@@ -62,7 +62,7 @@ namespace ErogeHelper.View.Controllers
             });
 
             #region Updates of Fullscreen, WindowSize, DPI Changed 
-            BehaviorSubject<bool> _stayTopSubject = new(false);
+            BehaviorSubject<bool> _stayTopSubject = new(Utils.IsGameForegroundFullscreen(gameDataService.MainWindowHandle));
 
             var interval = Observable
                 .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
@@ -72,7 +72,6 @@ namespace ErogeHelper.View.Controllers
                 .DistinctUntilChanged()
                 .Where(on => on && !MainWindowHandle.IsNull)
                 .SelectMany(interval)
-                // 邪淫のいけにえ: 修好了，但没完全修好
                 .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
 
             FrameworkElement? _parent = null;

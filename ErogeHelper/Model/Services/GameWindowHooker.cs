@@ -97,6 +97,11 @@ namespace ErogeHelper.Model.Services
             proc.Refresh();
             var gameHwnd = proc.MainWindowHandle;
 
+            if (User32.IsIconic(proc.MainWindowHandle))
+            {
+                User32.ShowWindow(proc.MainWindowHandle, ShowWindowCommand.SW_RESTORE);
+            }
+
             User32.GetClientRect(gameHwnd, out var clientRect);
 
             if (clientRect.bottom > ConstantValues.GoodWindowHeight &&
@@ -106,12 +111,6 @@ namespace ErogeHelper.Model.Services
             }
             else
             {
-                // TODO: Improve finding handle when game minimized 
-                if (User32.IsIconic(proc.MainWindowHandle))
-                {
-                    throw new InvalidOperationException("make sure game is in front");
-                }
-
                 var spendTime = new Stopwatch();
                 spendTime.Start();
                 while (spendTime.Elapsed.TotalMilliseconds < ConstantValues.WaitGameStartTimeout)
