@@ -18,12 +18,14 @@ namespace ErogeHelper.View.Windows
     {
         public PreferenceWindow(
             PreferenceViewModel? gameViewModel = null,
+            GeneralViewModel? generalViewModel = null,
             CloudSavedataViewModel? cloudSavedataViewModel = null,
             AboutViewModel? aboutViewModel = null)
         {
             InitializeComponent();
 
             ViewModel = gameViewModel ?? DependencyInject.GetService<PreferenceViewModel>();
+            generalViewModel ??= DependencyInject.GetService<GeneralViewModel>();
             cloudSavedataViewModel ??= DependencyInject.GetService<CloudSavedataViewModel>();
             aboutViewModel ??= DependencyInject.GetService<AboutViewModel>();
 
@@ -50,7 +52,7 @@ namespace ErogeHelper.View.Windows
                         switch (tag)
                         {
                             case PageTags.General:
-                                ViewModel.Router.NavigateAndReset.Execute(cloudSavedataViewModel);
+                                ViewModel.Router.NavigateAndReset.Execute(generalViewModel);
                                 break;
                             case PageTags.About:
                                 ViewModel.Router.NavigateAndReset.Execute(aboutViewModel);

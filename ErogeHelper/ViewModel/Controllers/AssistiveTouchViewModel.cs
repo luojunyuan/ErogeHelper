@@ -3,11 +3,14 @@ using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.View.Windows;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -107,6 +110,21 @@ namespace ErogeHelper.ViewModel.Controllers
 
                 AssistiveTouchVisibility = Visibility.Visible;
             });
+
+            OpenPreference = ReactiveCommand.Create(() =>
+            {
+                var window = Application.Current.Windows
+                    .OfType<PreferenceWindow>()
+                    .SingleOrDefault();
+                if (window is null)
+                {
+                    DependencyInject.ShowView<PreferenceViewModel>();
+                }
+                else
+                {
+                    window.Activate();
+                }
+            });
         }
 
         private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
@@ -142,11 +160,5 @@ namespace ErogeHelper.ViewModel.Controllers
         public ReactiveCommand<Unit, Unit> OpenPreference { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> PressSkip { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> PressSkipRelease { get; } = ReactiveCommand.Create(() => { });
-
-        private void ChangeAssistiveTouchSize(bool bigStyle)
-        {
-            _ehConfigRepositoy.UseBigAssistiveTouchSize = bigStyle;
-            _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(bigStyle);
-        }
     }
 }

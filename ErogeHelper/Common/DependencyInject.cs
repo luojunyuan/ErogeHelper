@@ -32,17 +32,19 @@ namespace ErogeHelper.Common
 
             // View
             Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
+            Locator.CurrentMutable.Register(() => new AssistiveTouch(), typeof(IViewFor<AssistiveTouchViewModel>));
             Locator.CurrentMutable.Register(() => new PreferenceWindow(), typeof(IViewFor<PreferenceViewModel>));
+            Locator.CurrentMutable.Register(() => new GeneralPage(), typeof(IViewFor<GeneralViewModel>));
             Locator.CurrentMutable.Register(() => new CloudSavedataPage(), typeof(IViewFor<CloudSavedataViewModel>));
             Locator.CurrentMutable.Register(() => new AboutPage(), typeof(IViewFor<AboutViewModel>));
-            Locator.CurrentMutable.Register(() => new AssistiveTouch(), typeof(IViewFor<AssistiveTouchViewModel>));
             // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
-            Locator.CurrentMutable.Register(() => GetService<PreferenceViewModel>(), typeof(IPreferenceScreen));
-            Locator.CurrentMutable.Register(() => new CloudSavedataViewModel());
-            Locator.CurrentMutable.Register(() => new PreferenceViewModel());
-            Locator.CurrentMutable.Register(() => new AboutViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
+            Locator.CurrentMutable.Register(() => new PreferenceViewModel());
+            Locator.CurrentMutable.Register(() => new GeneralViewModel());
+            Locator.CurrentMutable.Register(() => new CloudSavedataViewModel());
+            Locator.CurrentMutable.Register(() => new AboutViewModel());
+            Locator.CurrentMutable.Register(() => GetService<PreferenceViewModel>(), typeof(IPreferenceScreen));
             // DataService
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
             Locator.CurrentMutable.RegisterLazySingleton(

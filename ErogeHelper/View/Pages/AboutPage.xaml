@@ -5,11 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages"
-    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+    xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts"
+    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="400">
     
@@ -28,19 +29,9 @@
                 <TextBlock>
                     <Run Text="{x:Static resx:Strings.About_Version}" />
                     <Bold>
-                        <!--<Run Text="{x:Static common:Utils.AppVersion}" />-->
+                        <Run Text="{x:Static contract:EhContext.AppVersion}" />
                     </Bold>
                 </TextBlock>
-                <Border 
-                    BorderThickness="1" BorderBrush="{Binding BrushColor}" IsEnabled="{Binding CanJumpRelease}"
-                    Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10">
-                    <ui:HyperlinkButton 
-                        Padding="0" Margin="5 0 5 0" Foreground="{Binding BrushColor}" 
-                        ToolTip="Click me jump to release page"
-                        NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases">
-                        <TextBlock Text="{Binding CheckUpdateStatus}" />
-                    </ui:HyperlinkButton>
-                </Border>
             </StackPanel>
 
             <ui:HyperlinkButton 

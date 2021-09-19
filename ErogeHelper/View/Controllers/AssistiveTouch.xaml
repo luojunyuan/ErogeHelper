@@ -38,7 +38,7 @@
                     <ui:AppBarButton x:Name="ScreenShot" Icon="Pictures" Label="{x:Static resx:Strings.GameView_ScreenShot}" InputGestureText="Win+Shift+S" />
 
                     <ui:AppBarSeparator />
-                    <ui:AppBarButton IsEnabled="False" Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />
+                    <ui:AppBarButton x:Name="Preference" Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />
                 </ui:CommandBarFlyout.SecondaryCommands>
             </ui:CommandBarFlyout>
         </ui:FlyoutService.Flyout>

@@ -415,6 +415,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Assistive Touch 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_AssistiveTouch {
+            get {
+                return ResourceManager.GetString("GeneralPage.AssistiveTouch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Brightness 的本地化字符串。
         /// </summary>
         public static string GeneralPage_Brightness {
@@ -429,6 +438,15 @@ namespace ErogeHelper.Language {
         public static string GeneralPage_BrightnessTip {
             get {
                 return ResourceManager.GetString("GeneralPage.BrightnessTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Bigger Size 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_ButtonBiggerSize {
+            get {
+                return ResourceManager.GetString("GeneralPage.ButtonBiggerSize", resourceCulture);
             }
         }
         

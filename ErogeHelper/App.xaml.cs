@@ -207,7 +207,7 @@ namespace ErogeHelper
             using var dialog = new TaskDialog
             {
                 WindowTitle = string.Format(
-                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhContext.AppVersion ?? "?.?.?.?", errorLevel),
+                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhContext.AppVersion, errorLevel),
                 MainInstruction = $@"{ex.GetType().FullName}: {ex.Message}",
                 Content = Strings.ErrorDialog_Content + (additionInfo == string.Empty ? string.Empty :
                                                                                         "\r\n" + additionInfo),

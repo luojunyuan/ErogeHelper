@@ -29,7 +29,7 @@
         </ui:NavigationView.MenuItems>
 
         <ui:NavigationView.FooterMenuItems>
-            <ui:NavigationViewItem Content="Account" Icon="Contact" />
+            <!--<ui:NavigationViewItem Content="Account" Icon="Contact" />-->
             <ui:NavigationViewItem Content="{x:Static resx:Strings.About_Title}" Tag="{x:Static contract:PageTags.About}">
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Info}" />

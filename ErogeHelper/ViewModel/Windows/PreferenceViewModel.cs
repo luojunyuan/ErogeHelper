@@ -20,6 +20,6 @@ namespace ErogeHelper.ViewModel.Windows
         }
 
         [Reactive]
-        public string PageHeader { get; set; } = "asdas";
+        public string PageHeader { get; set; } = "Untitled";
     }
 }

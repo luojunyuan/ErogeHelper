@@ -6,7 +6,7 @@ namespace ErogeHelper.Common.Contracts
 {
     internal static class EhContext
     {
-        public static readonly string? AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+        public static readonly string AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "?.?.?.?";
 
         public static readonly string RoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 

@@ -4,7 +4,6 @@ using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.ViewModel.Controllers;
 using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
@@ -291,28 +290,30 @@ namespace ErogeHelper.View.Controllers
                     v => v.AssistiveButton.Visibility)
                     .DisposeWith(d);
 
+                this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)
+                    .Subscribe(_ => AssistiveTouchFlyout.Hide());
+
                 // Flyout Commands
                 this.Bind(ViewModel,
                     vm => vm.LoseFocusIsOn,
                     v => v.LoseFocusToggle.IsChecked)
                     .DisposeWith(d);
-                
+
                 this.Bind(ViewModel,
                     vm => vm.IsTouchToMouse,
                     v => v.TouchConversionToggle.IsChecked)
                     .DisposeWith(d);
 
-                this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)
-                    .Subscribe(_ => AssistiveTouchFlyout.Hide());
-
                 this.BindCommand(ViewModel,
                     vm => vm.VolumeDown,
                     v => v.VolumeDown)
                     .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.VolumeUp,
                     v => v.VolumeUp)
                     .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.SwitchFullScreen,
                     v => v.FullScreenSwitcher)
@@ -322,15 +323,21 @@ namespace ErogeHelper.View.Controllers
                     vm => vm.TaskbarNotifyArea,
                     v => v.ActionCenter)
                     .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.TaskView,
                     v => v.TaskView)
                     .DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.ScreenShot,
                     v => v.ScreenShot)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel,
+                    vm => vm.OpenPreference,
+                    v => v.Preference)
+                    .DisposeWith(d);
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }

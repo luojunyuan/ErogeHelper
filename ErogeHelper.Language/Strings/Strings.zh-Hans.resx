@@ -507,4 +507,10 @@
   <data name="App.StartItself" xml:space="preserve">
     <value>不可以启动ErogeHelper自身</value>
   </data>
+  <data name="GeneralPage.ButtonBiggerSize" xml:space="preserve">
+    <value>更大</value>
+  </data>
+  <data name="GeneralPage.AssistiveTouch" xml:space="preserve">
+    <value>小白点</value>
+  </data>
 </root>

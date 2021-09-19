@@ -507,4 +507,10 @@ Caused by source `{1}`
   <data name="App.StartItself" xml:space="preserve">
     <value>Can not run ErogeHelper itself</value>
   </data>
+  <data name="GeneralPage.ButtonBiggerSize" xml:space="preserve">
+    <value>Bigger Size</value>
+  </data>
+  <data name="GeneralPage.AssistiveTouch" xml:space="preserve">
+    <value>Assistive Touch</value>
+  </data>
 </root>
