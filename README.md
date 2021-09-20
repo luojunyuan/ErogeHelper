@@ -17,27 +17,27 @@ Publish may take few minutes.
 - x86_64 
 
 ```
-dotnet publish -c Release -r win-x64 -o ./bin/Publish --self-contained
+dotnet publish -c Release -r win-x64 -o ./bin/Publish/win-x64 --self-contained
 ```
 
 - x86_32 
 
 ```
-dotnet publish -c Release -r win-x86 -o ./bin/Publish --self-contained
+dotnet publish -c Release -r win-x86 -o ./bin/Publish/win-x86 --self-contained
 ```
 
-Open `x86 Native Tools Command Prompt for VS 2019`
+Open `x86 Native Tools Command Prompt for VS 20XX`
 
 ```cmd
-cd path_to\ErogeHelper\bin\Publish
+cd path_to\ErogeHelper\bin\Publish\win-x86
 editbin /largeaddressaware ErogeHelper.exe
 ```
 
 - Arm64 
 
 ```
-dotnet publish -c Release -r win-arm64 -o ./bin/Publish --self-contained`
-dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish --self-contained
+dotnet publish -c Release -r win-arm64 -o ./bin/Publish/win-arm64 --self-contained`
+dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish/win-arm64 --self-contained
 ```
 
 ### Install

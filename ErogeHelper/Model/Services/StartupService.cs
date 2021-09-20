@@ -88,6 +88,11 @@ namespace ErogeHelper.Model.Services
             {
                 _ehDbRepository.AddGameInfo(new GameInfoTable() { Md5 = md5, });
             }
+
+            if (_ehConfigDataService.DPIByApplication && !Utils.AlreadyHasDpiCompatibilitySetting(gamePath))
+            {
+                Utils.SetDPICompatibilityAsApplication(gamePath);
+            }
         }
 
         private static void RunGame(string gamePath, bool leEnable, string gameDir)

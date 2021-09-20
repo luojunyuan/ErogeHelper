@@ -7,6 +7,8 @@ namespace ErogeHelper.Common.Contracts
         public const string SerilogOutputTemplate =
             "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
+        public const string ApplicationCompatibilityRegistryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+
         public const int TextractorReAttachBlockTime = 100;
 
         public const int WaitNWJSGameStartDelay = 7000;

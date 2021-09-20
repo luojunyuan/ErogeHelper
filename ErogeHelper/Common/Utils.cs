@@ -1,7 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using ErogeHelper.Common.Contracts;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
@@ -18,6 +20,47 @@ namespace ErogeHelper.Common
         public static readonly string MachineGuid = GetMachineGuid();
 
         public static bool IsOsWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
+
+        public static void SetDPICompatibilityAsApplication(string exeFilePath)
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
+            if (key is null)
+            {
+                throw new InvalidOperationException(
+                    @$"Cannot open registry key HKCU\{ConstantValues.ApplicationCompatibilityRegistryPath}.");
+            }
+
+            var currentValue = key.GetValue(exeFilePath) as string;
+            if (string.IsNullOrEmpty(currentValue))
+            {
+                key.SetValue(exeFilePath, "~ HIGHDPIAWARE");
+            }
+            else
+            {
+                key.SetValue(exeFilePath, currentValue + " HIGHDPIAWARE");
+            }
+        }
+
+        public static bool AlreadyHasDpiCompatibilitySetting(string exeFilePath)
+        {
+            // TODO: Pending to test on windows 7
+            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
+            if (key is null)
+            {
+                throw new InvalidOperationException(
+                    @$"Cannot open registry key HKCU\{ConstantValues.ApplicationCompatibilityRegistryPath}.");
+            }
+
+            var currentValue = key.GetValue(exeFilePath) as string;
+            if (string.IsNullOrEmpty(currentValue))
+            {
+                return false;
+            }
+
+            var DpiSettings = new List<string>() { "HIGHDPIAWARE", "DPIUNAWARE", "GDIDPISCALING DPIUNAWARE" };
+            var currentValueList = currentValue.Split(' ').ToList();
+            return DpiSettings.Any(v => currentValueList.Contains(v));
+        }
 
         // Not so immediately
         public static bool IsGameForegroundFullscreen(HWND gameHwnd)

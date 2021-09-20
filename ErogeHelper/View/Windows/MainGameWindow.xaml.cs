@@ -52,6 +52,7 @@ namespace ErogeHelper.View.Windows
                         pos.ClientArea.Top / _dpi,
                         pos.ClientArea.Right / _dpi,
                         pos.ClientArea.Bottom / _dpi);
+                    this.Log().Debug(pos);
                 });
 
             this.Events().Loaded

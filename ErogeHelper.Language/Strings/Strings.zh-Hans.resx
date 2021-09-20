@@ -513,4 +513,7 @@
   <data name="GeneralPage.AssistiveTouch" xml:space="preserve">
     <value>小白点</value>
   </data>
+  <data name="GeneralPage.DpiCompatibility" xml:space="preserve">
+    <value>启动游戏时自动禁用DPI缩放（设置DPI缩放兼容性为“应用程序”）</value>
+  </data>
 </root>

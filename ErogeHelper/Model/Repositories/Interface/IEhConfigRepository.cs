@@ -41,7 +41,10 @@ namespace ErogeHelper.Model.Repositories.Interface
         public bool UseDanmaku { get; set; }
 
         [Option(DefaultValue = "")]
-        string ExternalSharedDrivePath { get; set; }
+        public string ExternalSharedDrivePath { get; set; }
+
+        [Option(DefaultValue = false)]
+        public bool DPIByApplication { get; set; }
 
         // Text 模様
         [Option(DefaultValue = TextTemplateType.OutLineKanaTop)]

@@ -29,14 +29,22 @@ namespace ErogeHelper.ViewModel.Pages
             _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
 
+            // Refactor
             UseBigSizeAssistiveTouch = _ehConfigRepositoy.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)
                 .Subscribe(v => ChangeAssistiveTouchSize(v));
+            UseDPIDpiCompatibility = _ehConfigRepositoy.DPIByApplication;
+            this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
+                .Skip(1)
+                .Subscribe(v => _ehConfigRepositoy.DPIByApplication = v);
         }
 
         [Reactive]
         public bool UseBigSizeAssistiveTouch { get; set; }
+
+        [Reactive]
+        public bool UseDPIDpiCompatibility { get; set; }
 
         private void ChangeAssistiveTouchSize(bool bigStyle)
         {

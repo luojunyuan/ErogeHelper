@@ -18,6 +18,9 @@
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_AssistiveTouch}">
                 <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}"/>
             </GroupBox>
+            <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
+                <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}"/>
+            </GroupBox>
         </ui:SimpleStackPanel>
     </control:ScrollViewerSmooth>
 </reactiveUi:ReactiveUserControl>

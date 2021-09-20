@@ -18,6 +18,10 @@ namespace ErogeHelper.View.Pages
                     vm => vm.UseBigSizeAssistiveTouch,
                     v => v.BigSizeAssistiveTouch.IsOn)
                     .DisposeWith(d);
+                this.Bind(ViewModel,
+                    vm => vm.UseDPIDpiCompatibility,
+                    v => v.DpiCompatibility.IsChecked)
+                    .DisposeWith(d);
             });
         }
     }

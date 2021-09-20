@@ -478,6 +478,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Set DPI compatibility to &apos;Application&apos; automatically when starting game 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_DpiCompatibility {
+            get {
+                return ResourceManager.GetString("GeneralPage.DpiCompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 MISC 的本地化字符串。
         /// </summary>
         public static string GeneralPage_Misc {
