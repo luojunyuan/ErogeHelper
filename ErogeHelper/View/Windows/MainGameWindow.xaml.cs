@@ -52,8 +52,9 @@ namespace ErogeHelper.View.Windows
                         pos.ClientArea.Top / _dpi,
                         pos.ClientArea.Right / _dpi,
                         pos.ClientArea.Bottom / _dpi);
-                    this.Log().Debug(pos);
                 });
+
+            _gameWindowHooker.InvokeUpdatePosition();
 
             this.Events().Loaded
                 .Subscribe(_ =>
@@ -68,6 +69,12 @@ namespace ErogeHelper.View.Windows
                     vm => vm.AssistiveTouchViewModel,
                     v => v.AssistiveTouchHost.ViewModel)
                     .DisposeWith(d);
+
+                this.Bind(ViewModel,
+                    vm => vm.UseEdgeTouchMask,
+                    v => v.PreventFalseTouchMask.Visibility,
+                    value => value ? Visibility.Visible : Visibility.Collapsed,
+                    visibility => visibility == Visibility.Visible);
             });
         }
 
@@ -85,7 +92,10 @@ namespace ErogeHelper.View.Windows
             base.OnSourceInitialized(e);
 
             _mainWindowDataService.SetHandle(new HWND(new WindowInteropHelper(this).Handle));
-            Utils.WindowLostFocus(_mainWindowDataService.Handle, _ehDbRepository.GameInfo!.IsLoseFocus);
+            if (_ehDbRepository.GameInfo!.IsLoseFocus)
+            {
+                Utils.WindowLostFocus(_mainWindowDataService.Handle, _ehDbRepository.GameInfo!.IsLoseFocus);
+            }
         }
     }
 }

@@ -43,7 +43,7 @@ namespace ErogeHelper.Common
 
         public static bool AlreadyHasDpiCompatibilitySetting(string exeFilePath)
         {
-            // TODO: Pending to test on windows 7
+            // TEST: Pending to run on windows 7
             using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
             if (key is null)
             {

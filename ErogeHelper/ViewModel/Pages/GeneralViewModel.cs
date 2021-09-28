@@ -3,6 +3,7 @@ using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.ViewModel.Routing;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
@@ -14,7 +15,7 @@ namespace ErogeHelper.ViewModel.Pages
     public class GeneralViewModel : ReactiveObject, IRoutableViewModel
     {
         private readonly IMainWindowDataService _mainWindowDataService;
-        private readonly IEhConfigRepository _ehConfigRepositoy;
+        private readonly IEhConfigRepository _ehConfigRepository;
 
         public IScreen HostScreen { get; }
 
@@ -23,21 +24,36 @@ namespace ErogeHelper.ViewModel.Pages
         public GeneralViewModel(
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
-            IPreferenceScreen? hostScreen = null)
+            IPreferenceScreen? hostScreen = null,
+            MainGameViewModel? mainGameViewModel = null)
         {
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
+            _ehConfigRepository = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
+            mainGameViewModel ??= DependencyInject.GetService<MainGameViewModel>();
 
-            // Refactor
-            UseBigSizeAssistiveTouch = _ehConfigRepositoy.UseBigAssistiveTouchSize;
+            // Learn WhenAnyValue first
+            UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)
                 .Subscribe(v => ChangeAssistiveTouchSize(v));
-            UseDPIDpiCompatibility = _ehConfigRepositoy.DPIByApplication;
+            UseDPIDpiCompatibility = _ehConfigRepository.DPIByApplication;
             this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
                 .Skip(1)
-                .Subscribe(v => _ehConfigRepositoy.DPIByApplication = v);
+                .Throttle(TimeSpan.FromMilliseconds(ConstantValues.UserOperationDelay))
+                .DistinctUntilChanged()
+                .Subscribe(v => _ehConfigRepository.DPIByApplication = v);
+            UseEdgeTouchMask = _ehConfigRepository.UseEdgeTouchMask;
+            this.WhenAnyValue(x => x.UseEdgeTouchMask)
+                .Skip(1)
+                .Throttle(TimeSpan.FromMilliseconds(ConstantValues.UserOperationDelay))
+                .DistinctUntilChanged()
+                .ObserveOnDispatcher()
+                .Subscribe(v =>
+                {
+                    mainGameViewModel.UseEdgeTouchMask = v;
+                    _ehConfigRepository.UseEdgeTouchMask = v;
+                });
         }
 
         [Reactive]
@@ -46,9 +62,12 @@ namespace ErogeHelper.ViewModel.Pages
         [Reactive]
         public bool UseDPIDpiCompatibility { get; set; }
 
+        [Reactive]
+        public bool UseEdgeTouchMask { get; set; }
+
         private void ChangeAssistiveTouchSize(bool bigStyle)
         {
-            _ehConfigRepositoy.UseBigAssistiveTouchSize = bigStyle;
+            _ehConfigRepository.UseBigAssistiveTouchSize = bigStyle;
             _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(bigStyle);
         }
     }

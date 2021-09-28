@@ -36,7 +36,7 @@ editbin /largeaddressaware ErogeHelper.exe
 - Arm64 
 
 ```
-dotnet publish -c Release -r win-arm64 -o ./bin/Publish/win-arm64 --self-contained`
+dotnet publish -c Release -r win-arm64 -o ./bin/Publish/win-arm64 --self-contained
 dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish/win-arm64 --self-contained
 ```
 

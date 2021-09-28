@@ -91,6 +91,19 @@ namespace ErogeHelper.Model.Services
 
         public void InvokeUpdatePosition() => UpdateLocation();
 
+        public void InvokePositionAsMainFullscreen()
+        {
+            var mainScreenBounds = WpfScreenHelper.Screen.PrimaryScreen.Bounds;
+
+            _gamePositionSubject.OnNext(
+                new GameWindowPositionPacket(
+                    mainScreenBounds.Height, 
+                    mainScreenBounds.Width, 
+                    mainScreenBounds.Left, 
+                    mainScreenBounds.Top, 
+                    new()));
+        }
+
         private static HWND CurrentWindowHandle(Process proc)
         {
             proc.WaitForInputIdle(ConstantValues.WaitGameStartTimeout);

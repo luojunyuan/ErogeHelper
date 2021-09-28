@@ -516,4 +516,7 @@ Caused by source `{1}`
   <data name="GeneralPage.DpiCompatibility" xml:space="preserve">
     <value>Set DPI compatibility to 'Application' automatically when starting game</value>
   </data>
+  <data name="GeneralPage.FalseTouchMask" xml:space="preserve">
+    <value>Use edge false touch mask</value>
+  </data>
 </root>

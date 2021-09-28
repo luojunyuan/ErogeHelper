@@ -21,6 +21,8 @@ namespace ErogeHelper.Common.Contracts
 
         public const int ToastDuration = 5000;
 
+        public const int UserOperationDelay = 500;
+
         public const string UWPAppsTag = "WindowsApps";
 
         public const string WindowsPath = @"C:\Windows\";

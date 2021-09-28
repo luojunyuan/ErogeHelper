@@ -60,7 +60,7 @@ namespace ErogeHelper.View.Controllers
                 this.Log().Debug("Save touch position succeed");
             });
 
-            #region Updates of Fullscreen, WindowSize, DPI Changed 
+            #region Updates When Fullscreen, WindowSize, DPI Changed 
             BehaviorSubject<bool> _stayTopSubject = new(Utils.IsGameForegroundFullscreen(gameDataService.MainWindowHandle));
 
             var interval = Observable
@@ -75,7 +75,6 @@ namespace ErogeHelper.View.Controllers
 
             FrameworkElement? _parent = null;
 
-            // TODO: Hide button when game window size changed
             gameWindowHooker.GamePosUpdated
                 .Where(_ => _parent is not null)
                 .Select(pos => (pos.Width, pos.Height))
@@ -401,6 +400,9 @@ namespace ErogeHelper.View.Controllers
         private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition _touchPosition) =>
             _touchPosition.Corner is
             TouchButtonCorner.Right or TouchButtonCorner.UpperRight or TouchButtonCorner.LowerRight
+            ? FlyoutPlacementMode.LeftEdgeAlignedTop
+            : ((_touchPosition.Corner == TouchButtonCorner.Top && _touchPosition.Scale > 0.5) ||
+               (_touchPosition.Corner == TouchButtonCorner.Bottom && _touchPosition.Scale > 0.5))
             ? FlyoutPlacementMode.LeftEdgeAlignedTop
             : FlyoutPlacementMode.RightEdgeAlignedTop;
 

@@ -11,5 +11,7 @@ namespace ErogeHelper.Model.Services.Interface
         void SetGameWindowHook(Process process);
 
         void InvokeUpdatePosition();
+
+        void InvokePositionAsMainFullscreen();
     }
 }

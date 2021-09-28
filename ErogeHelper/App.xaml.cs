@@ -25,7 +25,6 @@ using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper
 {
-    // TODO: 对 Magpie 的支持，Alt+F12 保证Magpie的存在。手动把MainGameWindow窗口映射转化到整个屏幕，启动失去焦点，提前到top一次
     public partial class App : IEnableLogger
     {
         private const string UniqueAppEventName = "{d3bcc592-a3bb-4c26-99c4-23c750ddcf77}";

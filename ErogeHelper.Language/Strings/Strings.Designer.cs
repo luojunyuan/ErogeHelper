@@ -487,6 +487,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Use edge false touch mask 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_FalseTouchMask {
+            get {
+                return ResourceManager.GetString("GeneralPage.FalseTouchMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 MISC 的本地化字符串。
         /// </summary>
         public static string GeneralPage_Misc {

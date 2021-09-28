@@ -8,6 +8,9 @@
     <system:Double x:Key="MinWindowWidth">400</system:Double>
     <system:Double x:Key="ExpandedModeThresholdWidth">500</system:Double>
     <system:Double x:Key="SidePaneLength">160</system:Double>
+    <system:Double x:Key="MinimalOpacity">0.002</system:Double>
+    
+    
     <SolidColorBrush x:Key="AssistiveTouchBackground" Color="#262626"></SolidColorBrush>
     <SolidColorBrush x:Key="AssistiveTouchLayerOneLine" Color="#232323"></SolidColorBrush>
     <SolidColorBrush x:Key="AssistiveTouchLayerOneBackground" Color="#505050"></SolidColorBrush>

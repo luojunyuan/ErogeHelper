@@ -19,7 +19,10 @@
                 <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}"/>
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
-                <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}"/>
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}"/>
+                    <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}"/>
+                </ui:SimpleStackPanel>
             </GroupBox>
         </ui:SimpleStackPanel>
     </control:ScrollViewerSmooth>

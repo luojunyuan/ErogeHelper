@@ -516,4 +516,7 @@
   <data name="GeneralPage.DpiCompatibility" xml:space="preserve">
     <value>启动游戏时自动禁用DPI缩放（设置DPI缩放兼容性为“应用程序”）</value>
   </data>
+  <data name="GeneralPage.FalseTouchMask" xml:space="preserve">
+    <value>使能边缘误触控遮盖层</value>
+  </data>
 </root>

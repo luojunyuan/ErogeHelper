@@ -1,8 +1,6 @@
 ﻿using Config.Net;
 using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Entities;
 using ErogeHelper.Common.Enums;
-using System.Text.Json;
 
 namespace ErogeHelper.Model.Repositories.Interface
 {
@@ -45,6 +43,9 @@ namespace ErogeHelper.Model.Repositories.Interface
 
         [Option(DefaultValue = false)]
         public bool DPIByApplication { get; set; }
+
+        [Option(DefaultValue = false)]
+        public bool UseEdgeTouchMask { get; set; }
 
         // Text 模様
         [Option(DefaultValue = TextTemplateType.OutLineKanaTop)]

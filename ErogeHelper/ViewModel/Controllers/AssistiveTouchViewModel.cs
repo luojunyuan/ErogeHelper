@@ -54,6 +54,7 @@ namespace ErogeHelper.ViewModel.Controllers
             LoseFocusIsOn = _ehDbRepository.GameInfo!.IsLoseFocus;
             this.WhenAnyValue(x => x.LoseFocusIsOn)
                 .Skip(1)
+                .DistinctUntilChanged()
                 .Subscribe(v =>
                 {
                     Utils.WindowLostFocus(MainWindowHandle, v);
@@ -157,7 +158,7 @@ namespace ErogeHelper.ViewModel.Controllers
         public ReactiveCommand<Unit, bool> TaskView { get; }
         public ReactiveCommand<Unit, Unit> ScreenShot { get; }
 
-        public ReactiveCommand<Unit, Unit> OpenPreference { get; } = ReactiveCommand.Create(() => { });
+        public ReactiveCommand<Unit, Unit> OpenPreference { get; }
         public ReactiveCommand<Unit, Unit> PressSkip { get; } = ReactiveCommand.Create(() => { });
         public ReactiveCommand<Unit, Unit> PressSkipRelease { get; } = ReactiveCommand.Create(() => { });
     }
