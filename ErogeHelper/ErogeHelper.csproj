@@ -10,12 +10,9 @@
     <Version>0.0.9.1</Version>
     <Authors>k1mlka</Authors>
     <MeCabUseDefaultDictionary>false</MeCabUseDefaultDictionary>
-    <!-- Bugs with R2R: https://github.com/dotnet/wpf/issues/5316 -->
+    <!-- Bugs of R2R: https://github.com/dotnet/wpf/issues/5316 -->
     <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
-    <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <Platforms>AnyCPU;x86</Platforms>
-    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
