@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace ErogeHelper.Common.Contracts
 {
-    public class DefaultValues
+    public static class DefaultValues
     {
         public static readonly AssistiveTouchPosition TouchPosition = new(TouchButtonCorner.Left, 0.5);
 

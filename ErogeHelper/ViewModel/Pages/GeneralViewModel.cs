@@ -36,7 +36,11 @@ namespace ErogeHelper.ViewModel.Pages
             UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)
-                .Subscribe(v => ChangeAssistiveTouchSize(v));
+                .Subscribe(v => 
+                {
+                    _ehConfigRepository.UseBigAssistiveTouchSize = v;
+                    _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(v);
+                });
             UseDPIDpiCompatibility = _ehConfigRepository.DPIByApplication;
             this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
                 .Skip(1)
@@ -64,11 +68,5 @@ namespace ErogeHelper.ViewModel.Pages
 
         [Reactive]
         public bool UseEdgeTouchMask { get; set; }
-
-        private void ChangeAssistiveTouchSize(bool bigStyle)
-        {
-            _ehConfigRepository.UseBigAssistiveTouchSize = bigStyle;
-            _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(bigStyle);
-        }
     }
 }

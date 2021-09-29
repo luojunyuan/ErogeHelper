@@ -1,21 +1,23 @@
-﻿using ErogeHelper.ViewModel.Routing;
+﻿using ErogeHelper.Common;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.ViewModel.Routing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ErogeHelper.ViewModel.Windows
 {
     public class PreferenceViewModel : ReactiveObject, IPreferenceScreen, IEnableLogger
     {
+        private readonly IWindowDataService _windowDataService;
+
+        public bool LoseFocus => _windowDataService.LoseFocus;
+
         public RoutingState Router { get; } = new();
 
-        public PreferenceViewModel()
+        public PreferenceViewModel(IWindowDataService? windowDataService = null)
         {
+            _windowDataService = windowDataService ?? DependencyInject.GetService<IWindowDataService>();
             //Router.NavigationChanged.Subscribe(x => this.Log().Debug(x));
         }
 

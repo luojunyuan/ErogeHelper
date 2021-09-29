@@ -6,6 +6,8 @@ namespace ErogeHelper.ShellMenuHandler
     {
         X32,
         X64,
+        Arm,
+        Arm64,
         Unknown
     }
 
@@ -41,6 +43,10 @@ namespace ErogeHelper.ShellMenuHandler
                             return PeType.X32;
                         case 0x8664:
                             return PeType.X64;
+                        case 0x01C4:
+                            return PeType.Arm;
+                        case 0xAA64:
+                            return PeType.Arm64;
                         default:
                             return PeType.Unknown;
                     }

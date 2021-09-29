@@ -21,6 +21,8 @@ namespace ErogeHelper.Common
 
         public static bool IsOsWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
+        public static HWND GetWpfWindowHandle(Window window) => new(new WindowInteropHelper(window).EnsureHandle());
+
         public static void SetDPICompatibilityAsApplication(string exeFilePath)
         {
             using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
@@ -92,14 +94,14 @@ namespace ErogeHelper.Common
         public static void HideWindowInAltTab(Window window) =>
             HideWindowInAltTab(new WindowInteropHelper(window).Handle);
 
-        public static void HideWindowInAltTab(IntPtr windowHandle)
+        public static void HideWindowInAltTab(HWND windowHandle)
         {
             const int wsExToolWindow = 0x00000080;
 
-            var exStyle = User32.GetWindowLong(new HWND(windowHandle),
+            var exStyle = User32.GetWindowLong(windowHandle,
                                                User32.WindowLongFlags.GWL_EXSTYLE);
             exStyle |= wsExToolWindow;
-            _ = User32.SetWindowLong(new HWND(windowHandle), User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
+            _ = User32.SetWindowLong(windowHandle, User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
         }
 
         public static void WindowLostFocus(HWND windowHandle, bool lostFocus)

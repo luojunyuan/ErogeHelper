@@ -1,9 +1,7 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
-using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.ViewModel.Controllers;
 using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
@@ -13,7 +11,6 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,40 +25,27 @@ namespace ErogeHelper.View.Controllers
         private const double OpacityNormal = 1;
         private const double ButtonSpace = 2;
 
-        private readonly IMainWindowDataService _mainWindowDataService;
-        private readonly IEhConfigRepository _ehConfigRepository;
+        private HWND MainWindowHandle => ViewModel!.MainWindowHandle;
 
-        private HWND MainWindowHandle => _mainWindowDataService.Handle;
+        private double ButtonSize => ViewModel!.ButtonSize;
 
-        private double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
-            DefaultValues.AssistiveTouchBigSize :
-            DefaultValues.AssistiveTouchSize;
-
-        public AssistiveTouch(
-            IMainWindowDataService? mainWindowDataService = null,
-            IEhConfigRepository? ehConfigRepository = null,
-            IGameWindowHooker? gameWindowHooker = null,
-            IGameDataService? gameDataService = null)
+        public AssistiveTouch(AssistiveTouchViewModel? assistiveTouchViewModel = null)
         {
             InitializeComponent();
 
-            _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehConfigRepository = ehConfigRepository ?? DependencyInject.GetService<IEhConfigRepository>();
-            gameWindowHooker ??= DependencyInject.GetService<IGameWindowHooker>();
-            gameDataService ??= DependencyInject.GetService<IGameDataService>();
+            ViewModel = assistiveTouchViewModel ?? DependencyInject.GetService<AssistiveTouchViewModel>();
 
             // ANNOYING: Constructor is too long
-            var _touchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
-                                ?? DefaultValues.TouchPosition;
+            var _touchPosition = ViewModel!.AssistiveTouchPosition;
 
             Dispatcher.Events().ShutdownStarted.Subscribe(_ =>
             {
-                _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(_touchPosition);
+                ViewModel!.AssistiveTouchPosition = _touchPosition;
                 this.Log().Debug("Save touch position succeed");
             });
 
             #region Updates When Fullscreen, WindowSize, DPI Changed 
-            BehaviorSubject<bool> _stayTopSubject = new(Utils.IsGameForegroundFullscreen(gameDataService.MainWindowHandle));
+            BehaviorSubject<bool> _stayTopSubject = new(Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle));
 
             var interval = Observable
                 .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
@@ -71,21 +55,22 @@ namespace ErogeHelper.View.Controllers
                 .DistinctUntilChanged()
                 .Where(on => on && !MainWindowHandle.IsNull)
                 .SelectMany(interval)
+                .ObserveOnDispatcher()
                 .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
 
             FrameworkElement? _parent = null;
 
-            gameWindowHooker.GamePosUpdated
+            ViewModel!.GamePosUpdated
                 .Where(_ => _parent is not null)
                 .Select(pos => (pos.Width, pos.Height))
                 .DistinctUntilChanged()
-                .Select(_ => Utils.IsGameForegroundFullscreen(gameDataService.MainWindowHandle))
+                .Select(_ => Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle))
                 .Do(isFullscreen => _stayTopSubject.OnNext(isFullscreen))
                 .Delay(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
                 .ObserveOnDispatcher()
                 .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
 
-            _mainWindowDataService.DpiSubject
+            ViewModel!.DpiSubject
                 .Where(_ => _parent is not null)
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
                 .ObserveOnDispatcher()
@@ -107,7 +92,7 @@ namespace ErogeHelper.View.Controllers
                 _twoThirdDistance = _oneThirdDistance * 2;
             }
 
-            _mainWindowDataService.AssistiveTouchBigSizeSubject
+            ViewModel!.AssistiveTouchBigSizeSubject
                 .Where(_ => _parent is not null)
                 .Subscribe(_ =>
                 {

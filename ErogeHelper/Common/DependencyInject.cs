@@ -53,6 +53,7 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.RegisterLazySingleton(
                 () => new EhDbRepository(EhContext.DbConnectString), typeof(IEhDbRepository));
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindowDataService(), typeof(IMainWindowDataService));
+            Locator.CurrentMutable.RegisterLazySingleton(() => new WindowDataService(), typeof(IWindowDataService));
             // Service
             Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
             Locator.CurrentMutable.RegisterLazySingleton(() => new GameWindowHooker(), typeof(IGameWindowHooker));

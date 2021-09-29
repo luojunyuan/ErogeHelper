@@ -46,13 +46,13 @@ namespace ErogeHelper.ShellMenuHandler
         {
             _menu.Items.Clear();
 
-            var is64Bit = PeFileReader.GetPeType(SelectedItemPaths.First()) == PeType.X64;
+            var peType = PeFileReader.GetPeType(SelectedItemPaths.First());
             // check if the selected executable is 64 bit
-            if (is64Bit)
+            if (peType == PeType.X64)
             {
                 MenuX64();
             }
-            else
+            else if (peType == PeType.X32)
             {
                 MenuX86();
             }

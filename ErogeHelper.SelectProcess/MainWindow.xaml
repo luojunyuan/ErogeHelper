@@ -1,17 +1,18 @@
-﻿<Window x:Class="ErogeHelper.SelectProcess.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-        d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        mc:Ignorable="d"
-        ui:WindowHelper.UseModernWindowStyle="True"
-        Title="{x:Static resx:Strings.SelectProcess_Title}" 
-        MinWidth="400" Width="400" Topmost="True"
-        SizeToContent="Height" WindowStartupLocation="CenterScreen">
-    
+﻿<Window
+    x:Class="ErogeHelper.SelectProcess.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    mc:Ignorable="d"
+    d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Width="400"
+    MinWidth="400"
+    Title="{x:Static resx:Strings.SelectProcess_Title}"
+    ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height" Topmost="True" WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <Style x:Key="TipFadeInTrigger" TargetType="{x:Type ui:FontIcon}">
             <Style.Triggers>
@@ -19,8 +20,7 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation 
-                                    Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -33,37 +33,42 @@
         <StackPanel Margin="20,10">
             <GroupBox>
                 <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock 
-                        Text="{x:Static resx:Strings.SelectProcess_Tips}" 
-                        Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Static resx:Strings.SelectProcess_Tips}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
-            <GroupBox Header="{x:Static resx:Strings.SelectProcess_Label}"  Margin="0 20 0 0">
+            <GroupBox Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">
                 <ui:SimpleStackPanel Spacing="10">
-                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
-                        <ComboBox 
-                            x:Name="ProcessComboBox" DropDownOpened="ProcessComboBoxOnDropDownOpened" Width="240"
-                            ItemsSource="{Binding Processes}" SelectionChanged="ProcessComboBoxOnSelectionChanged">
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <ComboBox x:Name="ProcessComboBox"
+                            Width="240"
+                            DropDownOpened="ProcessComboBoxOnDropDownOpened"
+                            ItemsSource="{Binding Processes}"
+                            SelectionChanged="ProcessComboBoxOnSelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <!-- UPSTREAM: ToolTip bugged with .Net 6 preview 7 -->
-                                    <StackPanel Orientation="Horizontal" Width="210" ToolTip="{Binding Describe}">
+                                    <StackPanel Width="210" Orientation="Horizontal" ToolTip="{Binding Describe}">
                                         <Image Source="{Binding Icon}" />
-                                        <TextBlock 
-                                            Text="{Binding Title}" VerticalAlignment="Center" Margin="10 0 0 0"
-                                            TextWrapping="Wrap" MaxWidth="180"/>
+                                        <TextBlock
+                                            MaxWidth="180"
+                                            Margin="10,0,0,0" VerticalAlignment="Center"
+                                            Text="{Binding Title}"
+                                            TextWrapping="Wrap" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <ui:FontIcon 
-                            x:Name="TipSymbol" Glyph="&#xE946;" Style="{StaticResource TipFadeInTrigger}"
-                            ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}" Visibility="Collapsed"/>
+                        <ui:FontIcon x:Name="TipSymbol"
+                            Glyph="&#xE946;"
+                            Style="{StaticResource TipFadeInTrigger}"
+                            ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}"
+                            Visibility="Collapsed" />
                     </ui:SimpleStackPanel>
 
-                    <Button
-                        x:Name="InjectButton" Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
-                        Style="{StaticResource AccentButtonStyle}" Width="240" Click="InjectButtonOnClick" />
+                    <Button x:Name="InjectButton"
+                        Width="240"
+                        Click="InjectButtonOnClick"
+                        Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
+                        Style="{StaticResource AccentButtonStyle}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </StackPanel>

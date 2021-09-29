@@ -1,101 +1,70 @@
 ﻿using ErogeHelper.Common;
-using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
-using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Windows
 {
     public partial class MainGameWindow : IEnableLogger
     {
-        private double _dpi;
-        private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IMainWindowDataService _mainWindowDataService;
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly HWND _handle;
 
-        public MainGameWindow(
-            MainGameViewModel? gameViewModel = null,
-            IMainWindowDataService? mainWindowDataService = null,
-            IGameWindowHooker? gameWindowHooker = null,
-            IEhDbRepository? ehDbRepository = null)
+        public MainGameWindow(MainGameViewModel? gameViewModel = null)
         {
             InitializeComponent();
 
             ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-            _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
 
-            _dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
-            this.Log().Debug($"Current screen dpi {_dpi * 100}%");
-
-            // QUESTION: This can be used in WhenActivated() with dispose, should I?
-            _gameWindowHooker.GamePosUpdated
-                .Subscribe(pos =>
-                {
-                    Height = pos.Height / _dpi;
-                    Width = pos.Width / _dpi;
-                    Left = pos.Left / _dpi;
-                    Top = pos.Top / _dpi;
-                    ClientArea.Margin = new Thickness(
-                        pos.ClientArea.Left / _dpi,
-                        pos.ClientArea.Top / _dpi,
-                        pos.ClientArea.Right / _dpi,
-                        pos.ClientArea.Bottom / _dpi);
-                });
-
-            _gameWindowHooker.InvokeUpdatePosition();
+            _handle = Utils.GetWpfWindowHandle(this);
+            this.WhenAnyValue(x => x._handle)
+                .BindTo(this, x => x.ViewModel!.MainWindowHandle);
 
             this.Events().Loaded
-                .Subscribe(_ =>
-                {
-                    Utils.HideWindowInAltTab(this);
-                    _gameWindowHooker.InvokeUpdatePosition();
-                });
+                .Select(_ => Unit.Default)
+                .InvokeCommand(this, x => x.ViewModel!.Loaded);
+
+            this.Events().DpiChanged
+                .Select(arg => arg.NewDpi.DpiScaleX)
+                .InvokeCommand(this, x => x.ViewModel!.DpiChanged);
 
             this.WhenActivated(d =>
             {
+                this.OneWayBind(ViewModel,
+                    vm => vm.Height,
+                    v => v.Height).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Width,
+                    v => v.Width).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Left,
+                    v => v.Left).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Top,
+                    v => v.Top).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.ClientAreaMargin,
+                    v => v.ClientArea.Margin).DisposeWith(d);
+
                 this.Bind(ViewModel,
                     vm => vm.AssistiveTouchViewModel,
-                    v => v.AssistiveTouchHost.ViewModel)
-                    .DisposeWith(d);
+                    v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.UseEdgeTouchMask,
                     v => v.PreventFalseTouchMask.Visibility,
                     value => value ? Visibility.Visible : Visibility.Collapsed,
-                    visibility => visibility == Visibility.Visible);
+                    visibility => visibility == Visibility.Visible).DisposeWith(d);
             });
-        }
-
-        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
-        {
-            base.OnDpiChanged(oldDpi, newDpi);
-
-            _dpi = newDpi.DpiScaleX;
-            this.Log().Debug($"Current screen dpi {_dpi * 100}%");
-            _mainWindowDataService.DpiSubject.OnNext(_dpi);
-        }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-
-            _mainWindowDataService.SetHandle(new HWND(new WindowInteropHelper(this).Handle));
-            if (_ehDbRepository.GameInfo!.IsLoseFocus)
-            {
-                Utils.WindowLostFocus(_mainWindowDataService.Handle, _ehDbRepository.GameInfo!.IsLoseFocus);
-            }
         }
     }
 }

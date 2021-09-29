@@ -12,8 +12,6 @@ one is full path of game, '/le' or '-le' to start with Locate Emulator
 
 ### Publish
 
-Publish may take few minutes.
-
 - x86_64 
 
 ```
@@ -37,6 +35,8 @@ editbin /largeaddressaware ErogeHelper.exe
 
 ```
 dotnet publish -c Release -r win-arm64 -o ./bin/Publish/win-arm64 --no-self-contained
+rm .\bin\Publish\win-arm64\ErogeHelper.ShellMenuHandler.dll
+rm .\bin\Publish\win-arm64\ErogeHelper.ShellMenuHandler.pdb
 dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish/win-arm64 --self-contained
 ```
 

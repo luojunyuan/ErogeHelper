@@ -1,28 +1,30 @@
-﻿<reactiveUi:ReactiveWindow 
+﻿<reactiveUi:ReactiveWindow
     x:Class="ErogeHelper.View.Windows.MainGameWindow"
-    x:TypeArguments="vm:MainGameViewModel" 
+    x:TypeArguments="vm:MainGameViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
+    xmlns:reactiveUi="http://reactiveui.net" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
     mc:Ignorable="d"
-    Top="-32000" Left="-32000" Width="0" Height="0"
-    Title="MainGameWindow" Topmost="True" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
-    
+    Left="-32000" Top="-32000" Width="0" Height="0"
+    Title="MainGameWindow"
+    AllowsTransparency="True" ShowInTaskbar="False" Topmost="True" WindowStyle="None">
+
     <Window.Background>
         <SolidColorBrush />
     </Window.Background>
-    
-    <!-- Layout of the whole game window -->
+
+    <!--  Layout of the whole game window  -->
     <Border>
         <Grid>
-            <!-- Client area -->
+            <!--  Client area  -->
             <Border x:Name="ClientArea">
                 <reactiveUi:ViewModelViewHost x:Name="AssistiveTouchHost" />
             </Border>
-            <Border x:Name="PreventFalseTouchMask" BorderBrush="Black" BorderThickness="5" Opacity="{StaticResource MinimalOpacity}" />
+            <Border x:Name="PreventFalseTouchMask"
+                BorderBrush="Black" BorderThickness="5"
+                Opacity="{StaticResource MinimalOpacity}" />
         </Grid>
     </Border>
 </reactiveUi:ReactiveWindow>

@@ -1,41 +1,46 @@
 ﻿<reactiveUi:ReactiveUserControl
     x:Class="ErogeHelper.View.Controllers.AssistiveTouch"
-    x:TypeArguments="vm:AssistiveTouchViewModel" 
+    x:TypeArguments="vm:AssistiveTouchViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts" xmlns:reactiveUi="http://reactiveui.net"
     xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
-    mc:Ignorable="d">
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:AssistiveTouchViewModel}">
 
-    <Button x:Name="AssistiveButton" Focusable="False" Template="{StaticResource NormalAssistiveTouchTemplate}" Click="DisableFlyoutPopup">
+    <Button x:Name="AssistiveButton"
+        Click="DisableFlyoutPopup" Focusable="False"
+        Template="{StaticResource NormalAssistiveTouchTemplate}">
 
         <ui:FlyoutService.Flyout>
-            <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard" >
-                <ui:AppBarButton IsEnabled="False" x:Name="FontDecrease" Icon="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}"/>
-                <ui:AppBarButton IsEnabled="False" x:Name="FontIncrease" Icon="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}"/>
+            <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard">
                 <ui:AppBarButton x:Name="VolumeDown" ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
                     <ui:AppBarButton.Icon>
                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Volume1}" />
                     </ui:AppBarButton.Icon>
                 </ui:AppBarButton>
-                <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}"/>
-                <ui:AppBarButton x:Name="FullScreenSwitcher" Loaded="FullScreenButton_Loaded" Icon="FullScreen" ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}"/>
+                <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}" />
+                <ui:AppBarButton x:Name="FullScreenSwitcher"
+                    Icon="FullScreen" Loaded="FullScreenButton_Loaded"
+                    ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}" />
                 <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
                 <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 
                 <ui:CommandBarFlyout.SecondaryCommands>
-                    <ui:AppBarButton x:Name="ActionCenter" Icon="DockRight" Label="{x:Static resx:Strings.GameView_ActionCenter}" InputGestureText="Win+A"/>
-                    <ui:AppBarButton x:Name="TaskView" Label="{x:Static resx:Strings.GameView_TaskView}" InputGestureText="Win+Tab">
+                    <ui:AppBarButton x:Name="ActionCenter"
+                        Icon="DockRight" InputGestureText="Win+A"
+                        Label="{x:Static resx:Strings.GameView_ActionCenter}" />
+                    <ui:AppBarButton x:Name="TaskView" InputGestureText="Win+Tab" Label="{x:Static resx:Strings.GameView_TaskView}">
                         <ui:AppBarButton.Icon>
                             <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.TaskView}" />
                         </ui:AppBarButton.Icon>
                     </ui:AppBarButton>
-                    <ui:AppBarButton x:Name="ScreenShot" Icon="Pictures" Label="{x:Static resx:Strings.GameView_ScreenShot}" InputGestureText="Win+Shift+S" />
+                    <ui:AppBarButton x:Name="ScreenShot"
+                        Icon="Pictures" InputGestureText="Win+Shift+S"
+                        Label="{x:Static resx:Strings.GameView_ScreenShot}" />
 
                     <ui:AppBarSeparator />
                     <ui:AppBarButton x:Name="Preference" Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />

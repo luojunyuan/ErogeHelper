@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
+using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,31 +27,54 @@ namespace ErogeHelper.ViewModel.Controllers
     public class AssistiveTouchViewModel : ReactiveObject, IEnableLogger
     {
         private readonly IMainWindowDataService _mainWindowDataService;
-        private readonly IEhConfigRepository _ehConfigRepositoy;
+        private readonly IEhConfigRepository _ehConfigRepository;
         private readonly IGameDataService _gameDataService;
         private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameWindowHooker _gameWindowHooker;
 
         private readonly Subject<bool> _hideFlyoutSubj = new();
         public IObservable<bool> HideFlyoutSubj => _hideFlyoutSubj.AsObservable();
 
-        private HWND MainWindowHandle => _mainWindowDataService.Handle;
+        public double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
+            DefaultValues.AssistiveTouchBigSize :
+            DefaultValues.AssistiveTouchSize;
+
+        public AssistiveTouchPosition AssistiveTouchPosition
+        {
+            get => JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
+                ?? DefaultValues.TouchPosition;
+            set => _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(value);
+        }
+
+        public HWND MainWindowHandle => _mainWindowDataService.Handle;
+
+        public ReplaySubject<double> DpiSubject => _mainWindowDataService.DpiSubject;
+
+        public Subject<bool> AssistiveTouchBigSizeSubject => _mainWindowDataService.AssistiveTouchBigSizeSubject;
+
+        public HWND GameWindowHandle => _gameDataService.MainWindowHandle;
+
+        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gameWindowHooker.GamePosUpdated;
 
         public AssistiveTouchViewModel(
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
             IGameDataService? gameDataService = null,
             IEhDbRepository? ehDbRepository = null,
-            ITouchConversionHooker? touchConversionHooker = null)
+            ITouchConversionHooker? touchConversionHooker = null,
+            IGameWindowHooker? gameWindowHooker = null)
         {
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehConfigRepositoy = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
+            _ehConfigRepository = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
             _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
             _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
             touchConversionHooker ??= DependencyInject.GetService<ITouchConversionHooker>();
+            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
 
+#if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
             touchConversionHooker.Init();
-
-            AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepositoy.UseBigAssistiveTouchSize);
+#endif
+            AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepository.UseBigAssistiveTouchSize);
 
             LoseFocusIsOn = _ehDbRepository.GameInfo!.IsLoseFocus;
             this.WhenAnyValue(x => x.LoseFocusIsOn)
@@ -57,7 +82,11 @@ namespace ErogeHelper.ViewModel.Controllers
                 .DistinctUntilChanged()
                 .Subscribe(v =>
                 {
-                    Utils.WindowLostFocus(MainWindowHandle, v);
+                    Application.Current.Windows
+                        .Cast<Window>()
+                        .Where(w => w.ActualWidth != 0)
+                        .ToList()
+                        .ForEach(w => Utils.WindowLostFocus(Utils.GetWpfWindowHandle(w), v));
                     _ehDbRepository.UpdateLostFocusStatus(v);
                 });
 
@@ -145,21 +174,15 @@ namespace ErogeHelper.ViewModel.Controllers
 
         [Reactive]
         public bool IsTouchToMouse { get; set; }
-        
-        public ReactiveCommand<Unit, Unit> ZoomOut { get; } = ReactiveCommand.Create(() => { });
-        public ReactiveCommand<Unit, Unit> ZoomIn { get; } = ReactiveCommand.Create(() => { });
+
         public ReactiveCommand<Unit, bool> VolumeDown { get; }
         public ReactiveCommand<Unit, bool> VolumeUp { get; }
         public ReactiveCommand<Unit, Unit> SwitchFullScreen { get; }
-        public ReactiveCommand<Unit, Unit> FocusToggle { get; } = ReactiveCommand.Create(() => { });
-        public ReactiveCommand<Unit, Unit> TouchToMouseToggle { get; } = ReactiveCommand.Create(() => { });
 
         public ReactiveCommand<Unit, bool> TaskbarNotifyArea { get; }
         public ReactiveCommand<Unit, bool> TaskView { get; }
         public ReactiveCommand<Unit, Unit> ScreenShot { get; }
 
         public ReactiveCommand<Unit, Unit> OpenPreference { get; }
-        public ReactiveCommand<Unit, Unit> PressSkip { get; } = ReactiveCommand.Create(() => { });
-        public ReactiveCommand<Unit, Unit> PressSkipRelease { get; } = ReactiveCommand.Create(() => { });
     }
 }
