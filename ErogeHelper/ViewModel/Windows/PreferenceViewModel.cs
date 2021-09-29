@@ -9,15 +9,10 @@ namespace ErogeHelper.ViewModel.Windows
 {
     public class PreferenceViewModel : ReactiveObject, IPreferenceScreen, IEnableLogger
     {
-        private readonly IWindowDataService _windowDataService;
-
-        public bool LoseFocus => _windowDataService.LoseFocus;
-
         public RoutingState Router { get; } = new();
 
-        public PreferenceViewModel(IWindowDataService? windowDataService = null)
+        public PreferenceViewModel()
         {
-            _windowDataService = windowDataService ?? DependencyInject.GetService<IWindowDataService>();
             //Router.NavigationChanged.Subscribe(x => this.Log().Debug(x));
         }
 
