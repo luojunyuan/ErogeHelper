@@ -78,12 +78,5 @@ namespace ErogeHelper.View.Windows
                 NavigationView.SelectedItem = NavigationView.MenuItems.OfType<NavigationViewItem>().First();
             });
         }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-
-            
-        }
     }
 }
