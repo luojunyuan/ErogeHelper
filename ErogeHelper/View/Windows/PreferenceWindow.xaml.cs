@@ -42,17 +42,31 @@ namespace ErogeHelper.View.Windows
                 .Select(_ => Unit.Default)
                 .InvokeCommand(this, x => x.ViewModel!.Loaded);
 
+            this.Events().Closed
+                .Select(_ => Unit.Default)
+                .InvokeCommand(this, x => x.ViewModel!.Closed);
+
             this.WhenActivated(d =>
             {
+                this.Bind(ViewModel,
+                    vm => vm.Height,
+                    v => v.Height).DisposeWith(d);
+
+                this.Bind(ViewModel,
+                    vm => vm.Width,
+                    v => v.Width).DisposeWith(d);
+
+                //this.BindCommand(ViewModel,
+                //    vm => vm.OnNavigated,
+                //    v => v.RoutedViewHost.Router.Changed)
+
                 this.OneWayBind(ViewModel,
                     vm => vm.PageHeader,
-                    v => v.HeaderBlock.Text)
-                    .DisposeWith(d);
+                    v => v.HeaderBlock.Text).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.Router,
-                    v => v.RoutedViewHost.Router)
-                    .DisposeWith(d);
+                    v => v.RoutedViewHost.Router).DisposeWith(d);
 
                 NavigationView.Events().SelectionChanged
                     .Subscribe(parameter =>

@@ -52,7 +52,7 @@ namespace ErogeHelper.Model.Services
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
-            _gameDataService = DependencyInject.GetService<IGameDataService>(); 
+            _gameDataService = DependencyInject.GetService<IGameDataService>();
             _gameDataService.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
 
             var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
@@ -97,10 +97,10 @@ namespace ErogeHelper.Model.Services
 
             _gamePositionSubject.OnNext(
                 new GameWindowPositionPacket(
-                    mainScreenBounds.Height, 
-                    mainScreenBounds.Width, 
-                    mainScreenBounds.Left, 
-                    mainScreenBounds.Top, 
+                    mainScreenBounds.Height,
+                    mainScreenBounds.Width,
+                    mainScreenBounds.Left,
+                    mainScreenBounds.Top,
                     new()));
         }
 
@@ -167,6 +167,7 @@ namespace ErogeHelper.Model.Services
                             try
                             {
                                 _gameDataService!.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
+                                Application.Current.MainWindow.Show();
                                 this.Log().Debug("Game window show - recreate");
                                 UpdateLocation();
                             }
@@ -182,6 +183,7 @@ namespace ErogeHelper.Model.Services
                     {
                         if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
                         {
+                            Application.Current.MainWindow.Show();
                             this.Log().Debug("Game window show");
                             UpdateLocation();
                         }
@@ -191,6 +193,7 @@ namespace ErogeHelper.Model.Services
                     {
                         if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
                         {
+                            Application.Current.MainWindow.Hide();
                             this.Log().Debug("Game window hide");
                         }
                     }

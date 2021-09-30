@@ -34,6 +34,7 @@
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
     <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.3.12" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.12" />
+    <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
     <PackageReference Include="WindowsInput" Version="6.3.0" />
     <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
   </ItemGroup>

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
     Left="-32000" Top="-32000" Width="0" Height="0"
     Title="MainGameWindow"
     AllowsTransparency="True" ShowInTaskbar="False" Topmost="True" WindowStyle="None">

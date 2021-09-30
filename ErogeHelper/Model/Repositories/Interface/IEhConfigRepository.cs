@@ -23,6 +23,13 @@ namespace ErogeHelper.Model.Repositories.Interface
         public bool EnableMeCab { get; set; }
 
         // MISC
+        [Option(DefaultValue = 600.0)]
+        public double PreferenceWindowHeight { get; set; }
+
+        [Option(DefaultValue = 600.0)]
+        public double PreferenceWindowWidth { get; set; }
+
+
         [Option(DefaultValue = ConstantValues.DefaultAssistiveTouchPositionStr)]
         public string AssistiveTouchPosition { get; set; }
 
@@ -74,7 +81,8 @@ namespace ErogeHelper.Model.Repositories.Interface
 
         public TransLanguage TargetTransLanguage { get; set; }
 
-        // Translators
+        #region Translators
+
         [Option(Alias = "Translators.BaiduApiEnable", DefaultValue = false)]
         public bool BaiduApiEnable { get; set; }
 
@@ -122,5 +130,7 @@ namespace ErogeHelper.Model.Repositories.Interface
 
         [Option(Alias = "Translators.CloudEnable", DefaultValue = false)]
         public bool CloudEnable { get; set; }
+
+        #endregion
     }
 }

@@ -64,7 +64,11 @@ namespace ErogeHelper.Common
             return DpiSettings.Any(v => currentValueList.Contains(v));
         }
 
-        // Not so immediately
+        /// <summary>
+        /// Not so immediately
+        /// </summary>
+        /// <param name="gameHwnd">game real window handle</param>
+        /// <returns>true if game is in fullscreen status</returns>
         public static bool IsGameForegroundFullscreen(HWND gameHwnd)
         {
             foreach (var screen in WpfScreenHelper.Screen.AllScreens)

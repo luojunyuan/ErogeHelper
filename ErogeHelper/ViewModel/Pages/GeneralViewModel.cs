@@ -29,8 +29,9 @@ namespace ErogeHelper.ViewModel.Pages
         {
             _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
             _ehConfigRepository = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
             mainGameViewModel ??= DependencyInject.GetService<MainGameViewModel>();
+            
+            HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
 
             // Learn WhenAnyValue first
             UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;
