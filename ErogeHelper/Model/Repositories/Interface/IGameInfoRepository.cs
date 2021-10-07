@@ -1,10 +1,10 @@
-﻿using ErogeHelper.Model.DTO.Entity.Tables;
+﻿using ErogeHelper.Model.DataModel.Entity.Tables;
 
 namespace ErogeHelper.Model.Repositories.Interface
 {
-    public interface IEhDbRepository
+    public interface IGameInfoRepository
     {
-        public GameInfoTable? GameInfo { get; }
+        public GameInfoTable GameInfo { get; }
 
         public void AddGameInfo(GameInfoTable gameInfoTable);
 

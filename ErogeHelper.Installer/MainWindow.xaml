@@ -19,7 +19,7 @@
                 <ui:SimpleStackPanel Spacing="10">
                     <TextBlock Text="{x:Static resx:Strings.Installer_Info}" TextWrapping="Wrap" />
                     <Button x:Name="InstallButton" MinWidth="90" Click="Register" Content="{x:Static resx:Strings.Installer_Register}" />
-                    <Button x:Name="UninstallButton" MinWidth="90" Click="Unload" Content="{x:Static resx:Strings.Installer_Unload}" />
+                    <Button x:Name="UninstallButton" MinWidth="90" Click="UnInstall" Content="{x:Static resx:Strings.Installer_Unload}" />
                     <CheckBox x:Name="DeleteCacheCheckBox" Content="{x:Static resx:Strings.Installer_DeleteCheckBox}" IsEnabled="{Binding ElementName=UninstallButton, Path=IsEnabled}" />
                 </ui:SimpleStackPanel>
             </GroupBox>

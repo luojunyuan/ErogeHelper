@@ -8,6 +8,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using System;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -26,13 +27,13 @@ namespace ErogeHelper.ViewModel.Windows
             IEhConfigRepository? ehConfigRepository = null,
             IMainWindowDataService? mainWindowDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
-            IEhDbRepository? ehDbRepository = null)
+            IGameInfoRepository? ehDbRepository = null)
         {
-            AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyInject.GetService<AssistiveTouchViewModel>();
-            gameWindowHooker ??= DependencyInject.GetService<IGameWindowHooker>();
-            mainWindowDataService ??= DependencyInject.GetService<IMainWindowDataService>();
-            ehConfigRepository ??= DependencyInject.GetService<IEhConfigRepository>();
-            ehDbRepository ??= DependencyInject.GetService<IEhDbRepository>();
+            AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
+            gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
+            mainWindowDataService ??= DependencyResolver.GetService<IMainWindowDataService>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
             _dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow).DpiScaleX;
 
@@ -53,7 +54,7 @@ namespace ErogeHelper.ViewModel.Windows
 
             UseEdgeTouchMask = ehConfigRepository.UseEdgeTouchMask;
 
-            Loaded = ReactiveCommand.Create(() =>
+            LoadedCommand = ReactiveCommand.Create(() =>
             {
                 mainWindowDataService.SetHandle(MainWindowHandle);
                 Utils.HideWindowInAltTab(MainWindowHandle);
@@ -65,22 +66,33 @@ namespace ErogeHelper.ViewModel.Windows
                 }
             });
 
-            DpiChanged = ReactiveCommand.Create<double>(dpi =>
+            DpiChangedCommand = ReactiveCommand.Create<double>(dpi =>
             {
                 this.Log().Debug($"Current screen dpi {dpi * 100}%");
                 _dpi = dpi;
-                mainWindowDataService.DpiSubject.OnNext(dpi);
-                gameWindowHooker.InvokeUpdatePosition();
+
+                Observable.Create<Unit>(observer =>
+                {
+                    observer.OnNext(Unit.Default);
+                    return Disposable.Empty;
+                })
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOnDispatcher()
+                .Subscribe(_ =>
+                {
+                    mainWindowDataService.DpiSubject.OnNext(dpi);
+                    gameWindowHooker.InvokeUpdatePosition();
+                });
             });
         }
 
         public HWND MainWindowHandle { get; set; }
 
         [Reactive]
-        public double Height { get; private set; }
+        public double Height { get; set; }
 
         [Reactive]
-        public double Width { get; private set; }
+        public double Width { get; set; }
 
         [Reactive]
         public double Left { get; private set; }
@@ -94,8 +106,8 @@ namespace ErogeHelper.ViewModel.Windows
         [Reactive]
         public bool UseEdgeTouchMask { get; set; }
 
-        public ReactiveCommand<Unit, Unit> Loaded { get; init; }
+        public ReactiveCommand<Unit, Unit> LoadedCommand { get; init; }
 
-        public ReactiveCommand<double, Unit> DpiChanged { get; init; }
+        public ReactiveCommand<double, Unit> DpiChangedCommand { get; init; }
     }
 }

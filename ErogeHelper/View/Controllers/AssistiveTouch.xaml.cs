@@ -33,7 +33,7 @@ namespace ErogeHelper.View.Controllers
         {
             InitializeComponent();
 
-            ViewModel = assistiveTouchViewModel ?? DependencyInject.GetService<AssistiveTouchViewModel>();
+            ViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
 
             // ANNOYING: Constructor is too long
             var _touchPosition = ViewModel!.AssistiveTouchPosition;
@@ -105,12 +105,9 @@ namespace ErogeHelper.View.Controllers
             AssistiveButton.Events().Loaded
                 .Subscribe(_ =>
                 {
-                    if (Parent is not FrameworkElement tmp)
-                    {
-                        throw new InvalidOperationException("Control's parent must be FrameworkElement type");
-                    }
-
-                    _parent = tmp;
+                    _parent ??= Parent is not FrameworkElement reactiveViewModelViewHost
+                        ? throw new InvalidOperationException("Control's parent must be FrameworkElement type")
+                        : reactiveViewModelViewHost;
 
                     UpdateButtonProperties(ButtonSize);
                     AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent);

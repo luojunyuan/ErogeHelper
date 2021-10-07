@@ -18,10 +18,10 @@ namespace ErogeHelper.Model.Services
         // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
         private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
 
-        public TouchConversionHooker(IEhDbRepository? ehDbRepository = null)
+        public TouchConversionHooker(IGameInfoRepository? ehDbRepository = null)
         {
             _hookCallback = HookCallback;
-            Enable = (ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>()).GameInfo!.IsEnableTouchToMouse;
+            Enable = (ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>()).GameInfo!.IsEnableTouchToMouse;
         }
 
         public bool Enable { get; set; }
@@ -56,18 +56,18 @@ namespace ErogeHelper.Model.Services
                             Task.Run(async () =>
                             {
                                 var (X, Y) = GetCursorPosition();
-                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN, X, Y, 0, UIntPtr.Zero);
+                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN, X, Y, 0, IntPtr.Zero);
                                 await Task.Delay(50);
-                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTUP, X, Y, 0, UIntPtr.Zero);
+                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTUP, X, Y, 0, IntPtr.Zero);
                             });
                             break;
                         case 0x205:
                             Task.Run(async () =>
                             {
                                 var (X, Y) = GetCursorPosition();
-                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTDOWN, X, Y, 0, UIntPtr.Zero);
+                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTDOWN, X, Y, 0, IntPtr.Zero);
                                 await Task.Delay(50);
-                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTUP, X, Y, 0, UIntPtr.Zero);
+                                User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTUP, X, Y, 0, IntPtr.Zero);
                             });
                             break;
                     }
@@ -79,14 +79,14 @@ namespace ErogeHelper.Model.Services
             return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
-        private static (uint X, uint Y) GetCursorPosition()
+        private static (int X, int Y) GetCursorPosition()
         {
             var gotPoint = User32.GetCursorPos(out var currentMousePoint);
             if (!gotPoint)
             {
                 currentMousePoint = new Point(0, 0);
             }
-            return ((uint)currentMousePoint.X, (uint)currentMousePoint.Y);
+            return (currentMousePoint.X, currentMousePoint.Y);
         }
     }
 }

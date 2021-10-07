@@ -28,9 +28,9 @@ namespace ErogeHelper.Model.Services
                 if (magpie.Any())
                 {
                     // Tip: When the focus changed recover status
-                    DependencyInject.GetService<IGameWindowHooker>().InvokePositionAsMainFullscreen();
-                    DependencyInject.GetService<AssistiveTouchViewModel>().LoseFocusIsOn = true;
-                    User32.BringWindowToTop(DependencyInject.GetService<IMainWindowDataService>().Handle);
+                    DependencyResolver.GetService<IGameWindowHooker>().InvokePositionAsMainFullscreen();
+                    DependencyResolver.GetService<AssistiveTouchViewModel>().LoseFocusIsOn = true;
+                    User32.BringWindowToTop(DependencyResolver.GetService<IMainWindowDataService>().Handle);
                 }
                 else
                 {

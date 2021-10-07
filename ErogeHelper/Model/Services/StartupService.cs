@@ -1,7 +1,7 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Model.DTO.Entity.Tables;
+using ErogeHelper.Model.DataModel.Entity.Tables;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
@@ -20,19 +20,19 @@ namespace ErogeHelper.Model.Services
         private readonly IGameDataService _gameDataService;
         private readonly IGameWindowHooker _gameWindowHooker;
         private readonly IEhConfigRepository _ehConfigDataService;
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameInfoRepository _ehDbRepository;
         //private readonly ISavedataSyncService _savedataSyncService;
 
         public StartupService(
             IGameDataService? gameDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
             IEhConfigRepository? ehConfigDataService = null,
-            IEhDbRepository? ehDbRepository = null)
+            IGameInfoRepository? ehDbRepository = null)
         {
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
+            _gameWindowHooker = gameWindowHooker ?? DependencyResolver.GetService<IGameWindowHooker>();
+            _ehConfigDataService = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
         }
 
         public void StartFromCommandLine(string gamePath, bool leEnable)
@@ -56,7 +56,7 @@ namespace ErogeHelper.Model.Services
 
             _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
 
-            DependencyInject.ShowView<MainGameViewModel>();
+            DependencyResolver.ShowView<MainGameViewModel>();
         }
 
         private void InitializeGameDatas(string gamePath, bool leEnable, string gameDir)

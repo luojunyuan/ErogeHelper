@@ -1,6 +1,7 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.ViewModel.Routing;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using Splat;
 
@@ -12,9 +13,9 @@ namespace ErogeHelper.ViewModel.Pages
 
         public string? UrlPathSegment => PageTags.About;
 
-        public AboutViewModel(IPreferenceScreen? hostScreen = null)
+        public AboutViewModel(IScreen? hostScreen = null)
         {
-            HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
+            HostScreen = hostScreen!;
         }
     }
 }

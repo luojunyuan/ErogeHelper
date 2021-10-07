@@ -13,5 +13,7 @@ namespace ErogeHelper.Model.Services.Interface
         void InvokeUpdatePosition();
 
         void InvokePositionAsMainFullscreen();
+
+        GameWindowPositionPacket GetCurrentGamePosition();
     }
 }

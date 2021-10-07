@@ -29,11 +29,11 @@ namespace ErogeHelper.ViewModel.Controllers
         private readonly IMainWindowDataService _mainWindowDataService;
         private readonly IEhConfigRepository _ehConfigRepository;
         private readonly IGameDataService _gameDataService;
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameInfoRepository _ehDbRepository;
         private readonly IGameWindowHooker _gameWindowHooker;
 
-        private readonly Subject<bool> _hideFlyoutSubj = new();
-        public IObservable<bool> HideFlyoutSubj => _hideFlyoutSubj.AsObservable();
+        private readonly Subject<Unit> _hideFlyoutSubj = new();
+        public IObservable<Unit> HideFlyoutSubj => _hideFlyoutSubj.AsObservable();
 
         public double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
             DefaultValues.AssistiveTouchBigSize :
@@ -60,16 +60,16 @@ namespace ErogeHelper.ViewModel.Controllers
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
             IGameDataService? gameDataService = null,
-            IEhDbRepository? ehDbRepository = null,
+            IGameInfoRepository? ehDbRepository = null,
             ITouchConversionHooker? touchConversionHooker = null,
             IGameWindowHooker? gameWindowHooker = null)
         {
-            _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehConfigRepository = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            touchConversionHooker ??= DependencyInject.GetService<ITouchConversionHooker>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyInject.GetService<IGameWindowHooker>();
+            _mainWindowDataService = mainWindowDataService ?? DependencyResolver.GetService<IMainWindowDataService>();
+            _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
+            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
+            touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
+            _gameWindowHooker = gameWindowHooker ?? DependencyResolver.GetService<IGameWindowHooker>();
 
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
             touchConversionHooker.Init();
@@ -129,7 +129,7 @@ namespace ErogeHelper.ViewModel.Controllers
                         .Invoke().ConfigureAwait(false));
             ScreenShot = ReactiveCommand.CreateFromTask(async () =>
             {
-                _hideFlyoutSubj.OnNext(true);
+                _hideFlyoutSubj.OnNext(Unit.Default);
                 AssistiveTouchVisibility = Visibility.Collapsed;
 
                 await WindowsInput.Simulate.Events()
@@ -148,7 +148,7 @@ namespace ErogeHelper.ViewModel.Controllers
                     .SingleOrDefault();
                 if (window is null)
                 {
-                    DependencyInject.ShowView<PreferenceViewModel>();
+                    DependencyResolver.ShowView<PreferenceViewModel>();
                 }
                 else
                 {

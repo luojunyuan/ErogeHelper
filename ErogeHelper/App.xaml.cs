@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -47,7 +48,7 @@ namespace ErogeHelper
                 Directory.SetCurrentDirectory(currentDirectory ??
                                               throw new ArgumentNullException(nameof(currentDirectory)));
 
-                DependencyInject.Register();
+                DependencyResolver.Register();
 
                 this.Events().Startup
                     .Select(startupEvent => startupEvent.Args)
@@ -77,9 +78,9 @@ namespace ErogeHelper
 
                         ToastManagement.Register();
                         ToastManagement.AdminModeTipToast();
-                        EhDbRepository.UpdateEhDatabase();
+                        GameInfoRepository.UpdateEhDatabase();
 
-                        var startupService = DependencyInject.GetService<IStartupService>();
+                        var startupService = DependencyResolver.GetService<IStartupService>();
                         startupService.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
                     });
             }
@@ -186,11 +187,11 @@ namespace ErogeHelper
 
             var toastLifetimeTimer = new Stopwatch();
 
-            Observable.Create<object>(observer =>
+            Observable.Create<Unit>(observer =>
                 {
                     while (eventWaitHandle.WaitOne())
                     {
-                        observer.OnNext(new object());
+                        observer.OnNext(Unit.Default);
                     }
 
                     return Disposable.Empty;

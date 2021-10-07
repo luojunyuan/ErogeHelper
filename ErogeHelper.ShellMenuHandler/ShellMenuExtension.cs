@@ -146,13 +146,20 @@ namespace ErogeHelper.ShellMenuHandler
             // Get Path of dll (Same as project binary Path)
             // https://stackoverflow.com/questions/52797/how-do-i-get-the-path-of-the-assembly-the-code-is-in
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            var uri = new UriBuilder(codeBase);
-            var path = Uri.UnescapeDataString(uri.Path);
-
-            var dirPath = Path.GetDirectoryName(path);
-            var erogeHelperProc = dirPath + @"\ErogeHelper.exe";
+            string shellMenuDllPath;
+            if (codeBase.StartsWith("file:///"))
+            {
+                var uri = new UriBuilder(codeBase);
+                shellMenuDllPath = Uri.UnescapeDataString(uri.Path);
+            }
+            // EH in Shared Folder
+            else
+            {
+                shellMenuDllPath = codeBase.Replace("file:", string.Empty);
+            }
+            var erogeHelperProcPath = Path.GetDirectoryName(shellMenuDllPath) + @"\ErogeHelper.exe";
             var gamePath = SelectedItemPaths.First();
-            startInfo.FileName = erogeHelperProc;
+            startInfo.FileName = erogeHelperProcPath;
             startInfo.Arguments = $"\"{gamePath}\"";
             startInfo.UseShellExecute = false;
 
@@ -177,9 +184,18 @@ namespace ErogeHelper.ShellMenuHandler
             {
                 // The operation was canceled by the user.
             }
+            catch (Win32Exception e) when (e.NativeErrorCode == 2) // AccessDenied
+            {
+                MessageBox.Show($@"Please make sure ""{erogeHelperProcPath}"" exists", "ErogeHelper");
+            }
             catch (Win32Exception e)
             {
-                MessageBox.Show($@"{e} \nErrorCode: {e.ErrorCode}\nNativeErrorCode: {e.NativeErrorCode}");
+                MessageBox.Show(
+                    $"{e} \n" +
+                    $"ErrorCode: {e.ErrorCode}\n" +
+                    $"NativeErrorCode: {e.NativeErrorCode}\n" +
+                    $"ErogeHelper path: {erogeHelperProcPath}\n" +
+                    $"Codebase: {codeBase}", "ErogeHelper");
             }
         }
 

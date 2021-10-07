@@ -3,6 +3,7 @@ using ErogeHelper.ViewModel.Windows;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -19,7 +20,7 @@ namespace ErogeHelper.View.Windows
         {
             InitializeComponent();
 
-            ViewModel = gameViewModel ?? DependencyInject.GetService<MainGameViewModel>();
+            ViewModel = gameViewModel ?? DependencyResolver.GetService<MainGameViewModel>();
 
             _handle = Utils.GetWpfWindowHandle(this);
             this.WhenAnyValue(x => x._handle)
@@ -27,19 +28,19 @@ namespace ErogeHelper.View.Windows
 
             this.Events().Loaded
                 .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.Loaded);
+                .InvokeCommand(this, x => x.ViewModel!.LoadedCommand);
 
             this.Events().DpiChanged
                 .Select(arg => arg.NewDpi.DpiScaleX)
-                .InvokeCommand(this, x => x.ViewModel!.DpiChanged);
+                .InvokeCommand(this, x => x.ViewModel!.DpiChangedCommand);
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel,
+                this.Bind(ViewModel,
                     vm => vm.Height,
                     v => v.Height).DisposeWith(d);
 
-                this.OneWayBind(ViewModel,
+                this.Bind(ViewModel,
                     vm => vm.Width,
                     v => v.Width).DisposeWith(d);
 

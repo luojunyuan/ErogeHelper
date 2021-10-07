@@ -22,16 +22,16 @@ namespace ErogeHelper.ViewModel.Pages
         public string? UrlPathSegment => PageTags.General;
 
         public GeneralViewModel(
+            IScreen? hostScreen = null,
             IMainWindowDataService? mainWindowDataService = null,
             IEhConfigRepository? ehConfigDataService = null,
-            IPreferenceScreen? hostScreen = null,
             MainGameViewModel? mainGameViewModel = null)
         {
-            _mainWindowDataService = mainWindowDataService ?? DependencyInject.GetService<IMainWindowDataService>();
-            _ehConfigRepository = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            mainGameViewModel ??= DependencyInject.GetService<MainGameViewModel>();
-            
-            HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
+            _mainWindowDataService = mainWindowDataService ?? DependencyResolver.GetService<IMainWindowDataService>();
+            _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            mainGameViewModel ??= DependencyResolver.GetService<MainGameViewModel>();
+
+            HostScreen = hostScreen!;
 
             // Learn WhenAnyValue first
             UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;

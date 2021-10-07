@@ -7,7 +7,10 @@ namespace ErogeHelper.Common.Contracts
         public const string SerilogOutputTemplate =
             "[{Timestamp:MM-dd-yyyy HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-        public const string ApplicationCompatibilityRegistryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+        public const string ApplicationCompatibilityRegistryPath = 
+            @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+        
+        public const string HKLMWinNTCurrent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion";
 
         public const int TextractorReAttachBlockTime = 100;
 
@@ -40,5 +43,7 @@ namespace ErogeHelper.Common.Contracts
         public const int AssistiveTouchOpacityChangedTimeout = 5000;
 
         public const int ScreenShotHideButtonTime = 3000;
+  
+        public const string TaskQueueContentDialogKey = "ContentDialog";
     }
 }

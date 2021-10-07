@@ -52,7 +52,7 @@ namespace ErogeHelper.Model.Services
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
-            _gameDataService = DependencyInject.GetService<IGameDataService>();
+            _gameDataService = DependencyResolver.GetService<IGameDataService>();
             _gameDataService.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
 
             var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
@@ -103,6 +103,8 @@ namespace ErogeHelper.Model.Services
                     mainScreenBounds.Top,
                     new()));
         }
+
+        public GameWindowPositionPacket GetCurrentGamePosition() => UpdateLocation();
 
         private static HWND CurrentWindowHandle(Process proc)
         {
@@ -212,7 +214,7 @@ namespace ErogeHelper.Model.Services
             }
         }
 
-        private void UpdateLocation()
+        private GameWindowPositionPacket UpdateLocation()
         {
             User32.GetWindowRect(_gameHwnd, out var rect);
             User32.GetClientRect(_gameHwnd, out var rectClient);
@@ -227,7 +229,9 @@ namespace ErogeHelper.Model.Services
 
             var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
-            _gamePositionSubject.OnNext(new GameWindowPositionPacket(height, width, rect.left, rect.top, clientArea));
+            var gameWindowPositionPacket = new GameWindowPositionPacket(height, width, rect.left, rect.top, clientArea);
+            _gamePositionSubject.OnNext(gameWindowPositionPacket);
+            return gameWindowPositionPacket;
         }
 
         private static IEnumerable<HWND> GetRootWindowsOfProcess(int pid)

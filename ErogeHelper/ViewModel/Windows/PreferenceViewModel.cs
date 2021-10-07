@@ -1,6 +1,8 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Routing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -16,8 +18,17 @@ namespace ErogeHelper.ViewModel.Windows
     {
         public RoutingState Router { get; } = new();
 
-        public PreferenceViewModel(IEhDbRepository? ehDbRepository = null, IEhConfigRepository? ehConfigRepository = null)
+        public PreferenceViewModel(
+            IGameInfoRepository? ehDbRepository = null, 
+            IEhConfigRepository? ehConfigRepository = null,
+            IGameWindowHooker? gameWindowHooker = null,
+            IMainWindowDataService? mainWindowDataService = null)
         {
+            ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
+            mainWindowDataService ??= DependencyResolver.GetService<IMainWindowDataService>();
+
             Router.CurrentViewModel
                 .WhereNotNull()
                 .Select(x => x.UrlPathSegment)
@@ -29,11 +40,12 @@ namespace ErogeHelper.ViewModel.Windows
                     _ => string.Empty
                 });
 
-            ehDbRepository ??= DependencyInject.GetService<IEhDbRepository>();
-            ehConfigRepository ??= DependencyInject.GetService<IEhConfigRepository>();
-
             Height = ehConfigRepository.PreferenceWindowHeight;
             Width = ehConfigRepository.PreferenceWindowWidth;
+
+            var currentScreen = WpfScreenHelper.Screen.FromHandle(mainWindowDataService.Handle.DangerousGetHandle());
+            Left = currentScreen.PixelBounds.Left + ((currentScreen.PixelBounds.Width - (Width * currentScreen.ScaleFactor)) / 2);
+            Top = currentScreen.PixelBounds.Top + ((currentScreen.PixelBounds.Height - (Height * currentScreen.ScaleFactor)) / 2);
 
             Loaded = ReactiveCommand.Create(() =>
             {
@@ -59,6 +71,12 @@ namespace ErogeHelper.ViewModel.Windows
 
         [Reactive]
         public double Width { get; set; }
+
+        [Reactive]
+        public double Left { get; set; }
+
+        [Reactive]
+        public double Top { get; set; }
 
         public ReactiveCommand<Unit, Unit> Loaded { get; init; }
         public ReactiveCommand<Unit, Unit> Closed { get; init; }

@@ -16,27 +16,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.0.3" />
-    <PackageReference Include="Config.Net.Json" Version="4.15.0" />
+    <PackageReference Include="Config.Net.Json" Version="4.17.0" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.3.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.1" />
     <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.10" />
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
     <PackageReference Include="NullGuard.Fody" Version="3.0.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="4.0.0" />
+    <PackageReference Include="Punchclock" Version="3.4.3" />
     <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ReactiveUI.Fody" Version="16.2.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.2.6" />
+    <PackageReference Include="ReactiveUI.WPF" Version="16.2.6" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
-    <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.3.12" />
-    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.12" />
+    <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.3.13" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.13" />
     <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
     <PackageReference Include="WindowsInput" Version="6.3.0" />
-    <PackageReference Include="WpfScreenHelper" Version="1.0.0" />
+    <PackageReference Include="WpfScreenHelper" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,15 +52,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\DataModels\**" />
+    <Compile Remove="Model\DataModel\Entity\**" />
+    <EmbeddedResource Remove="Model\DataModels\**" />
+    <EmbeddedResource Remove="Model\DataModel\Entity\**" />
+    <None Remove="Model\DataModels\**" />
+    <None Remove="Model\DataModel\Entity\**" />
+    <Page Remove="Model\DataModels\**" />
+    <Page Remove="Model\DataModel\Entity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Common\Comparers\" />
-    <Folder Include="Model\DTO\Entity\Payloads\" />
-    <Folder Include="Model\DTO\Entity\Responses\" />
-    <Folder Include="Model\DataModels\" />
+    <Folder Include="Model\DataModel\Payloads\" />
+    <Folder Include="Model\DataModel\Responses\" />
     <Folder Include="ViewModel\Components\" />
   </ItemGroup>
 

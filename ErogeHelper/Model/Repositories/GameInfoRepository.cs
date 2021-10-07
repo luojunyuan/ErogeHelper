@@ -2,8 +2,7 @@
 using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Model.DTO.Entity.Tables;
-using ErogeHelper.Model.DTO.Migration;
+using ErogeHelper.Model.DataModel.Entity.Tables;
 using ErogeHelper.Model.Repositories.Interface;
 using FluentMigrator.Runner;
 using Microsoft.Data.Sqlite;
@@ -11,18 +10,21 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Data;
 using System.IO;
+using ErogeHelper.Model.Repositories.Migration;
 
 namespace ErogeHelper.Model.Repositories
 {
-    public class EhDbRepository : IEhDbRepository
+    public class GameInfoRepository : IGameInfoRepository
     {
         private readonly string _connectString;
         private readonly IGameDataService _gameDataService;
+        private GameInfoTable? _gameInfo;
+
         private string GameMd5 => _gameDataService.Md5;
 
-        public EhDbRepository(string connectString, IGameDataService? gameDataService = null)
+        public GameInfoRepository(string connectString, IGameDataService? gameDataService = null)
         {
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
             _connectString = connectString;
         }
 
@@ -44,7 +46,7 @@ namespace ErogeHelper.Model.Repositories
                     .WithGlobalConnectionString(EhContext.DbConnectString)
                     .ScanIn(typeof(AddGameInfoTable).Assembly)
                     .ScanIn(typeof(AddUserTermTable).Assembly)
-                    .ScanIn(typeof(ColumnAddSavedataCloud).Assembly)
+                    .ScanIn(typeof(AddSavedataCloudColumn).Assembly)
                     .For.Migrations())
                 .BuildServiceProvider(false);
 
@@ -57,8 +59,13 @@ namespace ErogeHelper.Model.Repositories
         {
             get
             {
-                using var connection = GetOpenConnection();
-                return connection.Get<GameInfoTable>(GameMd5);
+                if (_gameInfo is null)
+                {
+                    using var connection = GetOpenConnection();
+                    _gameInfo = connection.Get<GameInfoTable>(GameMd5);
+                }
+
+                return _gameInfo;
             }
         }
 
@@ -77,33 +84,25 @@ namespace ErogeHelper.Model.Repositories
         public void UpdateCloudStatus(bool useCloudSavedata)
         {
             using var connection = GetOpenConnection();
-            if (GameInfo is null)
-                throw new ArgumentException("Couldn't find GameInfoTable in database");
-            connection.Update(GameInfo with { UseCloudSave = useCloudSavedata });
+            connection.Update(_gameInfo! with { UseCloudSave = useCloudSavedata });
         }
 
         public void UpdateSavedataPath(string path)
         {
             using var connection = GetOpenConnection();
-            if (GameInfo is null)
-                throw new ArgumentException("Couldn't find GameInfoTable in database");
-            connection.Update(GameInfo with { SavedataPath = path });
+            connection.Update(_gameInfo! with { SavedataPath = path });
         }
 
         public void UpdateLostFocusStatus(bool status)
         {
             using var connection = GetOpenConnection();
-            if (GameInfo is null)
-                throw new ArgumentException("Couldn't find GameInfoTable in database");
-            connection.Update(GameInfo with { IsLoseFocus = status });
+            connection.Update(_gameInfo! with { IsLoseFocus = status });
         }
 
         public void UpdateTouchEnable(bool status)
         {
             using var connection = GetOpenConnection();
-            if (GameInfo is null)
-                throw new ArgumentException("Couldn't find GameInfoTable in database");
-            connection.Update(GameInfo with { IsEnableTouchToMouse = status });
+            connection.Update(_gameInfo! with { IsEnableTouchToMouse = status });
         }
     }
 }

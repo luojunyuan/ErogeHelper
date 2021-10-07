@@ -25,12 +25,8 @@ namespace ErogeHelper.Common
 
         public static void SetDPICompatibilityAsApplication(string exeFilePath)
         {
-            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
-            if (key is null)
-            {
-                throw new InvalidOperationException(
-                    @$"Cannot open registry key HKCU\{ConstantValues.ApplicationCompatibilityRegistryPath}.");
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true)
+                ?? Registry.CurrentUser.CreateSubKey(ConstantValues.ApplicationCompatibilityRegistryPath);
 
             var currentValue = key.GetValue(exeFilePath) as string;
             if (string.IsNullOrEmpty(currentValue))
@@ -45,13 +41,8 @@ namespace ErogeHelper.Common
 
         public static bool AlreadyHasDpiCompatibilitySetting(string exeFilePath)
         {
-            // TEST: Pending to run on windows 7
-            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true);
-            if (key is null)
-            {
-                throw new InvalidOperationException(
-                    @$"Cannot open registry key HKCU\{ConstantValues.ApplicationCompatibilityRegistryPath}.");
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(ConstantValues.ApplicationCompatibilityRegistryPath, true)
+                ?? Registry.CurrentUser.CreateSubKey(ConstantValues.ApplicationCompatibilityRegistryPath);
 
             var currentValue = key.GetValue(exeFilePath) as string;
             if (string.IsNullOrEmpty(currentValue))
@@ -128,16 +119,12 @@ namespace ErogeHelper.Common
 
         public static string GetOsInfo()
         {
-            var windows7 = new Version(6, 1);
-            var windows8 = new Version(6, 2);
-            var windows81 = new Version(6, 3);
-            var windows10 = new Version(10, 0);
-            var windows11 = new Version(11, 0);
-
             var architecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
             var buildVersion = Environment.OSVersion.Version.Build;
             var releaseId = buildVersion switch
             {
+                22471 => "Insider Preview",
+                22454 => "Insider Preview",
                 22000 => "21H2",
                 19044 => "21H2",
                 19043 => "21H1",
@@ -154,16 +141,10 @@ namespace ErogeHelper.Common
                 10240 => "1507",
                 _ => buildVersion.ToString()
             };
-            var windowVersionString =
-                OsVersion == windows11 ? $"Windows 11 {releaseId}" :
-                OsVersion == windows10 && buildVersion == 22000 ? $"Windows 11 preview {releaseId}" :
-                OsVersion == windows10 ? $"Windows 10 {releaseId}" :
-                OsVersion == windows81 ? "Windows 8.1" :
-                OsVersion == windows7 ? "Windows 8" :
-                OsVersion == windows8 ? $"Windows 7 {Environment.OSVersion.ServicePack}" :
-                Environment.OSVersion.VersionString;
 
-            return windowVersionString + ' ' + architecture;
+            string osName = Registry.GetValue(ConstantValues.HKLMWinNTCurrent, "productName", "")?.ToString() ?? string.Empty;
+            
+            return $"{osName} {releaseId} {architecture}";
         }
 
         public static string Md5Calculate(byte[] buffer, bool toUpper = false)

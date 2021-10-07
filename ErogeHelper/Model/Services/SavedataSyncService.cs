@@ -20,7 +20,7 @@ namespace ErogeHelper.Model.Services
     public class SavedataSyncService : ISavedataSyncService, IEnableLogger
     {
         private readonly IGameDataService _gameDataService;
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameInfoRepository _ehDbRepository;
         private readonly IEhConfigRepository _ehConfigDataService;
         private readonly INetworkListManager _networkListManager;
         private bool IsNetConnected => _networkListManager.IsConnectedToInternet;
@@ -35,14 +35,14 @@ namespace ErogeHelper.Model.Services
 
         public SavedataSyncService(
             IGameDataService? gameDataService = null,
-            IEhDbRepository? ehDbRepository = null,
+            IGameInfoRepository? ehDbRepository = null,
             IEhConfigRepository? ehConfigDataService = null,
             INetworkListManager? networkListManager = null)
         {
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            _networkListManager = networkListManager ?? DependencyInject.GetService<INetworkListManager>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
+            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
+            _ehConfigDataService = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _networkListManager = networkListManager ?? DependencyResolver.GetService<INetworkListManager>();
 
             ExcludeFiles = GetCurrentGameData()?.ExcludeFiles ?? Array.Empty<string>();
         }

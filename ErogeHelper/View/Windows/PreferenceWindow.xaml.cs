@@ -1,10 +1,12 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.ViewModel.Pages;
+using ErogeHelper.ViewModel.Routing;
 using ErogeHelper.ViewModel.Windows;
 using ModernWpf.Controls;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Linq;
 using System.Reactive;
@@ -22,17 +24,17 @@ namespace ErogeHelper.View.Windows
         private readonly HWND _handle;
 
         public PreferenceWindow(
-            PreferenceViewModel? gameViewModel = null,
+            PreferenceViewModel? preferenceViewModel = null,
             GeneralViewModel? generalViewModel = null,
             CloudSavedataViewModel? cloudSavedataViewModel = null,
             AboutViewModel? aboutViewModel = null)
         {
             InitializeComponent();
 
-            ViewModel = gameViewModel ?? DependencyInject.GetService<PreferenceViewModel>();
-            generalViewModel ??= DependencyInject.GetService<GeneralViewModel>();
-            cloudSavedataViewModel ??= DependencyInject.GetService<CloudSavedataViewModel>();
-            aboutViewModel ??= DependencyInject.GetService<AboutViewModel>();
+            ViewModel = preferenceViewModel ?? DependencyResolver.GetService<PreferenceViewModel>();
+            generalViewModel ??= new GeneralViewModel(hostScreen: ViewModel);
+            cloudSavedataViewModel ??= new CloudSavedataViewModel(hostScreen: ViewModel);
+            aboutViewModel ??= new AboutViewModel(hostScreen: ViewModel);
 
             _handle = Utils.GetWpfWindowHandle(this);
             this.WhenAnyValue(x => x._handle)
@@ -56,9 +58,13 @@ namespace ErogeHelper.View.Windows
                     vm => vm.Width,
                     v => v.Width).DisposeWith(d);
 
-                //this.BindCommand(ViewModel,
-                //    vm => vm.OnNavigated,
-                //    v => v.RoutedViewHost.Router.Changed)
+                this.OneWayBind(ViewModel,
+                    vm => vm.Left,
+                    v => v.Left).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Top,
+                    v => v.Top).DisposeWith(d);
 
                 this.OneWayBind(ViewModel,
                     vm => vm.PageHeader,

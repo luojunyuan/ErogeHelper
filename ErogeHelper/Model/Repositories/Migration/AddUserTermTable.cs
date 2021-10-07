@@ -1,15 +1,13 @@
 ﻿using FluentMigrator;
 
-namespace ErogeHelper.Model.DTO.Migration
+namespace ErogeHelper.Model.Repositories.Migration
 {
     [Migration(20210421201800)]
-    public class AddUserTermTable : FluentMigrator.Migration
+    public class AddUserTermTable : AutoReversingMigration
     {
         public override void Up() =>
             Create.Table("UserTerm")
                 .WithColumn("From").AsString()
                 .WithColumn("To").AsString();
-
-        public override void Down() => Delete.Table("UserTerm");
     }
 }

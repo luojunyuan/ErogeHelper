@@ -18,19 +18,19 @@ namespace ErogeHelper.View.Dialogs
         private const string SavedataPathTip = @"Please select game savedata folder. for example ""E:\k1mlka\Documents\AliceSoft\ドーナドーナ いっしょにわるいことをしよう""";
 
         private readonly IEhConfigRepository _eHConfigDataService;
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameInfoRepository _ehDbRepository;
         private readonly IGameDataService _gameDataService;
 
         public SavedataSyncDialog(
             IEhConfigRepository? ehConfigDataService = null,
-            IEhDbRepository? ehDbRepository = null,
+            IGameInfoRepository? ehDbRepository = null,
             IGameDataService? gameDataService = null)
         {
             InitializeComponent();
 
-            _eHConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
+            _eHConfigDataService = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
 
             UNCPath.Text = _eHConfigDataService.ExternalSharedDrivePath;
             SavedataPath.Text = _ehDbRepository.GameInfo?.SavedataPath ?? string.Empty;

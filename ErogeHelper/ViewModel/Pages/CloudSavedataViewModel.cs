@@ -13,21 +13,21 @@ namespace ErogeHelper.ViewModel.Pages
 {
     public class CloudSavedataViewModel : ReactiveObject, IRoutableViewModel, IEnableLogger
     {
-        private readonly IEhDbRepository _ehDbRepository;
+        private readonly IGameInfoRepository _ehDbRepository;
         private readonly IEhConfigRepository _ehConfigDataService;
         private readonly ISavedataSyncService _savedataSyncService;
         private bool _cloudSwitchIsOn;
 
         public CloudSavedataViewModel(
-            IPreferenceScreen? hostScreen = null,
-            IEhDbRepository? ehDbRepository = null,
+            IScreen? hostScreen = null,
+            IGameInfoRepository? ehDbRepository = null,
             IEhConfigRepository? ehConfigDataService = null,
             ISavedataSyncService? savedataSyncService = null)
         {
-            HostScreen = hostScreen ?? DependencyInject.GetService<IPreferenceScreen>();
-            _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-            _savedataSyncService = savedataSyncService ?? DependencyInject.GetService<ISavedataSyncService>();
+            HostScreen = hostScreen!;
+            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
+            _ehConfigDataService = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _savedataSyncService = savedataSyncService ?? DependencyResolver.GetService<ISavedataSyncService>();
 
             var savedataSyncDialog = new SavedataSyncDialog(_ehConfigDataService, ehDbRepository);
             if (savedataSyncDialog.UNCPath.Text != string.Empty &&

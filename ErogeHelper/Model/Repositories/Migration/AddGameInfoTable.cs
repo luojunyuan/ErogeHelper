@@ -1,9 +1,9 @@
 ﻿using FluentMigrator;
 
-namespace ErogeHelper.Model.DTO.Migration
+namespace ErogeHelper.Model.Repositories.Migration
 {
     [Migration(20210325151400)]
-    public class AddGameInfoTable : FluentMigrator.Migration
+    public class AddGameInfoTable : AutoReversingMigration
     {
         public override void Up() =>
             Create.Table("GameInfo")
@@ -13,7 +13,5 @@ namespace ErogeHelper.Model.DTO.Migration
                 .WithColumn("TextractorSettingJson").AsString()
                 .WithColumn("IsLoseFocus").AsBoolean()
                 .WithColumn("IsEnableTouchToMouse").AsBoolean();
-
-        public override void Down() => Delete.Table("GameInfo");
     }
 }

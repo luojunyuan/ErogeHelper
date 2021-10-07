@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Windows;
 
@@ -92,7 +93,7 @@ namespace ErogeHelper.Installer
             _srm.BeginOutputReadLine();
         }
 
-        private async void Unload(object sender, RoutedEventArgs e)
+        private async void UnInstall(object sender, RoutedEventArgs e)
         {
             InstallButton.IsEnabled = false;
             UninstallButton.IsEnabled = false;
@@ -149,6 +150,13 @@ namespace ErogeHelper.Installer
                     var directories = ExplorerHelper.GetOpenedDirectories();
                     ExplorerHelper.KillExplorer();
                     ExplorerHelper.OpenDirectories(directories);
+
+                    if (typeof(string).Assembly.GetName().ProcessorArchitecture is
+                        System.Reflection.ProcessorArchitecture.Amd64)
+                    {
+                        Process.GetProcessesByName("dllhost").ToList()
+                            .ForEach(p => p.Kill());
+                    }
 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
