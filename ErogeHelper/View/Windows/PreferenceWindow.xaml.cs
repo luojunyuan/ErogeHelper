@@ -1,12 +1,10 @@
 ﻿using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.ViewModel.Pages;
-using ErogeHelper.ViewModel.Routing;
 using ErogeHelper.ViewModel.Windows;
 using ModernWpf.Controls;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
-using Splat;
 using System;
 using System.Linq;
 using System.Reactive;
@@ -42,11 +40,11 @@ namespace ErogeHelper.View.Windows
 
             this.Events().Loaded
                 .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.Loaded);
+                .InvokeCommand(this, x => x.ViewModel!.LoadedCommand);
 
             this.Events().Closed
                 .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.Closed);
+                .InvokeCommand(this, x => x.ViewModel!.ClosedCommand);
 
             this.WhenActivated(d =>
             {

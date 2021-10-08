@@ -72,6 +72,7 @@
     <Folder Include="Model\DataModel\Payloads\" />
     <Folder Include="Model\DataModel\Responses\" />
     <Folder Include="ViewModel\Components\" />
+    <Folder Include="ViewModel\Routing\" />
   </ItemGroup>
 
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">

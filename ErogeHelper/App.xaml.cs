@@ -32,11 +32,6 @@ namespace ErogeHelper
 
         public App()
         {
-            // Note: This application may throw some exceptions that wasn't bugs when initializing
-            // System.Threading.WaitHandleCannotBeOpenedException for active singleton app
-            // https://github.com/reactiveui/ReactiveUI/issues/2395
-            // System.IO.FileNotFoundException 5 times cause reactiveUI is scanning Drawing, XamForms, Winforms, etc
-            // System.Runtime.InteropServices.COMException when access ToastComponent first time
             try
             {
                 //SetI18NLanguageDictionary();

@@ -10,16 +10,12 @@ using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows;
-using System.Windows.Media;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Windows
 {
     public class MainGameViewModel : ReactiveObject, IEnableLogger
     {
-        private double _dpi;
-
         public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
 
         public MainGameViewModel(
@@ -27,28 +23,31 @@ namespace ErogeHelper.ViewModel.Windows
             IEhConfigRepository? ehConfigRepository = null,
             IMainWindowDataService? mainWindowDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
-            IGameInfoRepository? ehDbRepository = null)
+            IGameInfoRepository? ehDbRepository = null,
+            IGameDataService? gameDataService = null)
         {
             AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
             gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
             mainWindowDataService ??= DependencyResolver.GetService<IMainWindowDataService>();
             ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
             ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
+            gameDataService ??= DependencyResolver.GetService<IGameDataService>();
 
-            _dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow).DpiScaleX;
+            var currentScreen = WpfScreenHelper.Screen.FromHandle(gameDataService.MainWindowHandle.DangerousGetHandle());
+            var dpi = currentScreen.ScaleFactor;
 
             gameWindowHooker.GamePosUpdated
                 .Subscribe(pos =>
                 {
-                    Height = pos.Height / _dpi;
-                    Width = pos.Width / _dpi;
-                    Left = pos.Left / _dpi;
-                    Top = pos.Top / _dpi;
-                    ClientAreaMargin = new Thickness(
-                        pos.ClientArea.Left / _dpi,
-                        pos.ClientArea.Top / _dpi,
-                        pos.ClientArea.Right / _dpi,
-                        pos.ClientArea.Bottom / _dpi);
+                    Height = pos.Height / dpi;
+                    Width = pos.Width / dpi;
+                    Left = pos.Left / dpi;
+                    Top = pos.Top / dpi;
+                    ClientAreaMargin = new System.Windows.Thickness(
+                        pos.ClientArea.Left / dpi,
+                        pos.ClientArea.Top / dpi,
+                        pos.ClientArea.Right / dpi,
+                        pos.ClientArea.Bottom / dpi);
                 });
             gameWindowHooker.InvokeUpdatePosition();
 
@@ -66,10 +65,10 @@ namespace ErogeHelper.ViewModel.Windows
                 }
             });
 
-            DpiChangedCommand = ReactiveCommand.Create<double>(dpi =>
+            DpiChangedCommand = ReactiveCommand.Create<double>(newDpi =>
             {
-                this.Log().Debug($"Current screen dpi {dpi * 100}%");
-                _dpi = dpi;
+                this.Log().Debug($"Current screen dpi {newDpi * 100}%");
+                dpi = newDpi;
 
                 Observable.Create<Unit>(observer =>
                 {
@@ -80,7 +79,7 @@ namespace ErogeHelper.ViewModel.Windows
                 .ObserveOnDispatcher()
                 .Subscribe(_ =>
                 {
-                    mainWindowDataService.DpiSubject.OnNext(dpi);
+                    mainWindowDataService.DpiSubject.OnNext(newDpi);
                     gameWindowHooker.InvokeUpdatePosition();
                 });
             });
@@ -101,7 +100,7 @@ namespace ErogeHelper.ViewModel.Windows
         public double Top { get; private set; }
 
         [Reactive]
-        public Thickness ClientAreaMargin { get; private set; }
+        public System.Windows.Thickness ClientAreaMargin { get; private set; }
 
         [Reactive]
         public bool UseEdgeTouchMask { get; set; }

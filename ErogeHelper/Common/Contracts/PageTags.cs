@@ -8,7 +8,7 @@ namespace ErogeHelper.Common.Contracts
 {
     public static class PageTags
     {
-        public const string General = "general";
-        public const string About = "about";
+        public const string General = "/general";
+        public const string About = "/about";
     }
 }

@@ -3,7 +3,6 @@ using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.View.Dialogs;
-using ErogeHelper.ViewModel.Routing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;

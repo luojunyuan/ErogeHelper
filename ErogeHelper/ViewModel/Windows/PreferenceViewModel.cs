@@ -3,7 +3,6 @@ using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.ViewModel.Routing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -14,12 +13,12 @@ using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Windows
 {
-    public class PreferenceViewModel : ReactiveObject, IPreferenceScreen, IEnableLogger
+    public class PreferenceViewModel : ReactiveObject, IScreen, IEnableLogger
     {
         public RoutingState Router { get; } = new();
 
         public PreferenceViewModel(
-            IGameInfoRepository? ehDbRepository = null, 
+            IGameInfoRepository? ehDbRepository = null,
             IEhConfigRepository? ehConfigRepository = null,
             IGameWindowHooker? gameWindowHooker = null,
             IMainWindowDataService? mainWindowDataService = null)
@@ -47,14 +46,14 @@ namespace ErogeHelper.ViewModel.Windows
             Left = currentScreen.PixelBounds.Left + ((currentScreen.PixelBounds.Width - (Width * currentScreen.ScaleFactor)) / 2);
             Top = currentScreen.PixelBounds.Top + ((currentScreen.PixelBounds.Height - (Height * currentScreen.ScaleFactor)) / 2);
 
-            Loaded = ReactiveCommand.Create(() =>
+            LoadedCommand = ReactiveCommand.Create(() =>
             {
                 if (ehDbRepository.GameInfo!.IsLoseFocus)
                 {
                     Utils.WindowLostFocus(PreferenceWindowHandle, ehDbRepository.GameInfo!.IsLoseFocus);
                 }
             });
-            Closed = ReactiveCommand.Create(() =>
+            ClosedCommand = ReactiveCommand.Create(() =>
             {
                 ehConfigRepository.PreferenceWindowHeight = Height;
                 ehConfigRepository.PreferenceWindowWidth = Width;
@@ -78,7 +77,7 @@ namespace ErogeHelper.ViewModel.Windows
         [Reactive]
         public double Top { get; set; }
 
-        public ReactiveCommand<Unit, Unit> Loaded { get; init; }
-        public ReactiveCommand<Unit, Unit> Closed { get; init; }
+        public ReactiveCommand<Unit, Unit> LoadedCommand { get; init; }
+        public ReactiveCommand<Unit, Unit> ClosedCommand { get; init; }
     }
 }

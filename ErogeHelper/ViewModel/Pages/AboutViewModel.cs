@@ -1,7 +1,4 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
-using ErogeHelper.ViewModel.Routing;
-using ErogeHelper.ViewModel.Windows;
+﻿using ErogeHelper.Common.Contracts;
 using ReactiveUI;
 using Splat;
 

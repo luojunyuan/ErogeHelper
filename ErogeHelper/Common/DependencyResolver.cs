@@ -12,9 +12,7 @@ using ErogeHelper.View.Pages;
 using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel.Controllers;
 using ErogeHelper.ViewModel.Pages;
-using ErogeHelper.ViewModel.Routing;
 using ErogeHelper.ViewModel.Windows;
-using Microsoft.Extensions.DependencyInjection;
 using Punchclock;
 using ReactiveUI;
 using Splat;
@@ -30,14 +28,14 @@ namespace ErogeHelper.Common
         {
             // Locator.CurrentMutable.InitializeSplat();
             // Locator.CurrentMutable.InitializeReactiveUI(RegistrationNamespace.Wpf);
-            
+
             // View
-            Locator.CurrentMutable.Register(() => new MainGameWindow(), typeof(IViewFor<MainGameViewModel>));
-            Locator.CurrentMutable.Register(() => new AssistiveTouch(), typeof(IViewFor<AssistiveTouchViewModel>));
-            Locator.CurrentMutable.Register(() => new PreferenceWindow(), typeof(IViewFor<PreferenceViewModel>));
-            Locator.CurrentMutable.Register(() => new GeneralPage(), typeof(IViewFor<GeneralViewModel>));
-            Locator.CurrentMutable.Register(() => new CloudSavedataPage(), typeof(IViewFor<CloudSavedataViewModel>));
-            Locator.CurrentMutable.Register(() => new AboutPage(), typeof(IViewFor<AboutViewModel>));
+            Locator.CurrentMutable.Register<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
+            Locator.CurrentMutable.Register<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
+            Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
+            Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());
+            Locator.CurrentMutable.Register<IViewFor<CloudSavedataViewModel>>(() => new CloudSavedataPage());
+            Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
             // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
@@ -45,20 +43,18 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.Register(() => new GeneralViewModel());
             Locator.CurrentMutable.Register(() => new CloudSavedataViewModel());
             Locator.CurrentMutable.Register(() => new AboutViewModel());
-            Locator.CurrentMutable.RegisterLazySingleton(() => GetService<PreferenceViewModel>(), typeof(IPreferenceScreen));
             // DataService
-            Locator.CurrentMutable.RegisterLazySingleton(() => new GameDataService(), typeof(IGameDataService));
+            Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
             Locator.CurrentMutable.RegisterLazySingleton(
-                () => new ConfigurationBuilder<IEhConfigRepository>().UseJsonFile(EhContext.EhConfigFilePath).Build(),
-                typeof(IEhConfigRepository));
-            Locator.CurrentMutable.RegisterLazySingleton(
-                () => new GameInfoRepository(EhContext.DbConnectString), typeof(IGameInfoRepository));
-            Locator.CurrentMutable.RegisterLazySingleton(() => new MainWindowDataService(), typeof(IMainWindowDataService));
+                () => new ConfigurationBuilder<IEhConfigRepository>().UseJsonFile(EhContext.EhConfigFilePath).Build());
+            Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
+                () => new GameInfoRepository(EhContext.DbConnectString));
+            Locator.CurrentMutable.RegisterLazySingleton<IMainWindowDataService>(() => new MainWindowDataService());
             // Service
-            Locator.CurrentMutable.Register(() => new StartupService(), typeof(IStartupService));
-            Locator.CurrentMutable.RegisterLazySingleton(() => new GameWindowHooker(), typeof(IGameWindowHooker));
-            Locator.CurrentMutable.RegisterLazySingleton(() => new TouchConversionHooker(), typeof(ITouchConversionHooker));
-            Locator.CurrentMutable.RegisterLazySingleton(() => new SavedataSyncService(), typeof(ISavedataSyncService));
+            Locator.CurrentMutable.Register<IStartupService>(() => new StartupService());
+            Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
+            Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
+            Locator.CurrentMutable.RegisterLazySingleton<ISavedataSyncService>(() => new SavedataSyncService());
 
             Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
 
@@ -66,7 +62,7 @@ namespace ErogeHelper.Common
 
             // MISC
             // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
-            Locator.CurrentMutable.Register(() => new CustomPropertyResolver(), typeof(ICreatesObservableForProperty));
+            Locator.CurrentMutable.Register<ICreatesObservableForProperty>(() => new CustomPropertyResolver());
         }
 
         public static T GetService<T>() => Locator.Current.GetService<T>() ??

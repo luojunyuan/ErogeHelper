@@ -2,7 +2,6 @@
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.ViewModel.Routing;
 using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -37,7 +36,7 @@ namespace ErogeHelper.ViewModel.Pages
             UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)
-                .Subscribe(v => 
+                .Subscribe(v =>
                 {
                     _ehConfigRepository.UseBigAssistiveTouchSize = v;
                     _mainWindowDataService.AssistiveTouchBigSizeSubject.OnNext(v);
