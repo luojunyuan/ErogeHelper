@@ -10,9 +10,8 @@
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:PreferenceViewModel}" d:Width="600" d:Height="500"
-    Left="-32000" Top="-32000" Width="0" Height="0"
     MinWidth="400"
-    Title="PreferenceView"
+    Title="PreferenceView" WindowStartupLocation="CenterScreen"
     ui:TitleBar.ExtendViewIntoTitleBar="True" ui:WindowHelper.UseModernWindowStyle="True"
     Icon="pack://application:,,,/assets/app.ico" ResizeMode="CanResizeWithGrip" Topmost="True">
 

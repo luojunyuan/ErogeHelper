@@ -9,6 +9,7 @@ using Splat;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Windows
@@ -42,10 +43,6 @@ namespace ErogeHelper.ViewModel.Windows
             Height = ehConfigRepository.PreferenceWindowHeight;
             Width = ehConfigRepository.PreferenceWindowWidth;
 
-            var currentScreen = WpfScreenHelper.Screen.FromHandle(mainWindowDataService.Handle.DangerousGetHandle());
-            Left = currentScreen.PixelBounds.Left + ((currentScreen.PixelBounds.Width - (Width * currentScreen.ScaleFactor)) / 2);
-            Top = currentScreen.PixelBounds.Top + ((currentScreen.PixelBounds.Height - (Height * currentScreen.ScaleFactor)) / 2);
-
             LoadedCommand = ReactiveCommand.Create(() =>
             {
                 if (ehDbRepository.GameInfo!.IsLoseFocus)
@@ -71,13 +68,8 @@ namespace ErogeHelper.ViewModel.Windows
         [Reactive]
         public double Width { get; set; }
 
-        [Reactive]
-        public double Left { get; set; }
-
-        [Reactive]
-        public double Top { get; set; }
-
         public ReactiveCommand<Unit, Unit> LoadedCommand { get; init; }
+
         public ReactiveCommand<Unit, Unit> ClosedCommand { get; init; }
     }
 }

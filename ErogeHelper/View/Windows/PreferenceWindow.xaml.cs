@@ -34,6 +34,9 @@ namespace ErogeHelper.View.Windows
             cloudSavedataViewModel ??= new CloudSavedataViewModel(hostScreen: ViewModel);
             aboutViewModel ??= new AboutViewModel(hostScreen: ViewModel);
 
+            Width = ViewModel!.Width;
+            Height = ViewModel!.Height;
+
             _handle = Utils.GetWpfWindowHandle(this);
             this.WhenAnyValue(x => x._handle)
                 .BindTo(this, x => x.ViewModel!.PreferenceWindowHandle);
@@ -55,14 +58,6 @@ namespace ErogeHelper.View.Windows
                 this.Bind(ViewModel,
                     vm => vm.Width,
                     v => v.Width).DisposeWith(d);
-
-                this.OneWayBind(ViewModel,
-                    vm => vm.Left,
-                    v => v.Left).DisposeWith(d);
-
-                this.OneWayBind(ViewModel,
-                    vm => vm.Top,
-                    v => v.Top).DisposeWith(d);
 
                 this.OneWayBind(ViewModel,
                     vm => vm.PageHeader,
