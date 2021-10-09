@@ -4,7 +4,7 @@ namespace ErogeHelper.Model.Repositories.Interface
 {
     public interface IGameInfoRepository
     {
-        public GameInfoTable GameInfo { get; }
+        public GameInfoTable? GameInfo { get; }
 
         public void AddGameInfo(GameInfoTable gameInfoTable);
 

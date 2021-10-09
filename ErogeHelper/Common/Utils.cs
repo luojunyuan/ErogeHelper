@@ -15,7 +15,8 @@ namespace ErogeHelper.Common
     public static class Utils
     {
         private static readonly Version OsVersion = new(Environment.OSVersion.Version.Major,
-                                                        Environment.OSVersion.Version.Minor);
+                                                        Environment.OSVersion.Version.Minor,
+                                                        Environment.OSVersion.Version.Build);
 
         public static readonly string MachineGuid = GetMachineGuid();
 
@@ -119,6 +120,12 @@ namespace ErogeHelper.Common
 
         public static string GetOsInfo()
         {
+            var windows7 = new Version(6, 1);
+            var windows8 = new Version(6, 2);
+            var windows81 = new Version(6, 3);
+            var windows10 = new Version(10, 0);
+            var windows11 = new Version(10, 0, 22000);
+
             var architecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
             var buildVersion = Environment.OSVersion.Version.Build;
             var releaseId = buildVersion switch
@@ -142,9 +149,18 @@ namespace ErogeHelper.Common
                 _ => buildVersion.ToString()
             };
 
-            string osName = Registry.GetValue(ConstantValues.HKLMWinNTCurrent, "productName", "")?.ToString() ?? string.Empty;
-            
-            return $"{osName} {releaseId} {architecture}";
+            // Not reliable
+            // string osName = Registry.GetValue(ConstantValues.HKLMWinNTCurrent, "productName", "")?.ToString() ?? string.Empty;
+
+            var windowVersionString =
+                OsVersion >= windows11 ? $"Windows 11 {releaseId}" :
+                OsVersion == windows10 ? $"Windows 10 {releaseId}" :
+                OsVersion == windows81 ? "Windows 8.1" :
+                OsVersion == windows7 ? "Windows 8" :
+                OsVersion == windows8 ? $"Windows 7 {Environment.OSVersion.ServicePack}" :
+                Environment.OSVersion.VersionString;
+
+            return $"{windowVersionString} {architecture}";
         }
 
         public static string Md5Calculate(byte[] buffer, bool toUpper = false)
