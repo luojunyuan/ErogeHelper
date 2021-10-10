@@ -1,6 +1,6 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
+using ErogeHelper.Common.Enums;
 using ErogeHelper.ViewModel.Controllers;
 using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
@@ -45,17 +45,17 @@ namespace ErogeHelper.View.Controllers
             });
 
             #region Updates When Fullscreen, WindowSize, DPI Changed 
-            BehaviorSubject<bool> _stayTopSubject = new(Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle));
+            BehaviorSubject<bool> _stayTopSubj = new(Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle));
 
             var interval = Observable
                 .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
-                .TakeUntil(_stayTopSubject.Where(on => !on));
+                .TakeUntil(_stayTopSubj.Where(on => !on));
 
-            _stayTopSubject
+            _stayTopSubj
                 .DistinctUntilChanged()
                 .Where(on => on && !MainWindowHandle.IsNull)
                 .SelectMany(interval)
-                .ObserveOnDispatcher()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
 
             FrameworkElement? _parent = null;
@@ -65,15 +65,15 @@ namespace ErogeHelper.View.Controllers
                 .Select(pos => (pos.Width, pos.Height))
                 .DistinctUntilChanged()
                 .Select(_ => Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle))
-                .Do(isFullscreen => _stayTopSubject.OnNext(isFullscreen))
+                .Do(isFullscreen => _stayTopSubj.OnNext(isFullscreen))
                 .Delay(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
-                .ObserveOnDispatcher()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
 
-            ViewModel!.DpiSubject
+            ViewModel!.DpiSubj
                 .Where(_ => _parent is not null)
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
-                .ObserveOnDispatcher()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
             #endregion
 
@@ -121,7 +121,7 @@ namespace ErogeHelper.View.Controllers
             BehaviorSubject<bool> tryTransparentizeSubj = new(true);
             tryTransparentizeSubj
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.AssistiveTouchOpacityChangedTimeout))
-                .ObserveOnDispatcher()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Where(on => on && _isMoving == false && AssistiveTouchFlyout.IsOpen == false)
                 .Subscribe(_ => AssistiveButton.Opacity = OpacityValue);
 
@@ -263,62 +263,51 @@ namespace ErogeHelper.View.Controllers
             {
                 this.OneWayBind(ViewModel,
                     vm => vm.AssistiveTouchTemplate,
-                    v => v.AssistiveButton.Template)
-                    .DisposeWith(d);
+                    v => v.AssistiveButton.Template).DisposeWith(d);
 
                 this.OneWayBind(ViewModel,
                     vm => vm.AssistiveTouchVisibility,
-                    v => v.AssistiveButton.Visibility)
-                    .DisposeWith(d);
+                    v => v.AssistiveButton.Visibility).DisposeWith(d);
 
                 this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)
-                    .Subscribe(_ => AssistiveTouchFlyout.Hide());
+                    .Subscribe(_ => AssistiveTouchFlyout.Hide()).DisposeWith(d);
 
                 // Flyout Commands
                 this.Bind(ViewModel,
                     vm => vm.LoseFocusIsOn,
-                    v => v.LoseFocusToggle.IsChecked)
-                    .DisposeWith(d);
+                    v => v.LoseFocusToggle.IsChecked).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.IsTouchToMouse,
-                    v => v.TouchConversionToggle.IsChecked)
-                    .DisposeWith(d);
+                    v => v.TouchConversionToggle.IsChecked).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.VolumeDown,
-                    v => v.VolumeDown)
-                    .DisposeWith(d);
+                    v => v.VolumeDown).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.VolumeUp,
-                    v => v.VolumeUp)
-                    .DisposeWith(d);
+                    v => v.VolumeUp).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.SwitchFullScreen,
-                    v => v.FullScreenSwitcher)
-                    .DisposeWith(d);
+                    v => v.FullScreenSwitcher).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.TaskbarNotifyArea,
-                    v => v.ActionCenter)
-                    .DisposeWith(d);
+                    v => v.ActionCenter).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.TaskView,
-                    v => v.TaskView)
-                    .DisposeWith(d);
+                    v => v.TaskView).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.ScreenShot,
-                    v => v.ScreenShot)
-                    .DisposeWith(d);
+                    v => v.ScreenShot).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.OpenPreference,
-                    v => v.Preference)
-                    .DisposeWith(d);
+                    v => v.Preference).DisposeWith(d);
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }
@@ -379,12 +368,12 @@ namespace ErogeHelper.View.Controllers
             };
         }
 
-        private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition _touchPosition) =>
-            _touchPosition.Corner is
+        private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition touchPosition) =>
+            touchPosition.Corner is
             TouchButtonCorner.Right or TouchButtonCorner.UpperRight or TouchButtonCorner.LowerRight
             ? FlyoutPlacementMode.LeftEdgeAlignedTop
-            : ((_touchPosition.Corner == TouchButtonCorner.Top && _touchPosition.Scale > 0.5) ||
-               (_touchPosition.Corner == TouchButtonCorner.Bottom && _touchPosition.Scale > 0.5))
+            : ((touchPosition.Corner == TouchButtonCorner.Top && touchPosition.Scale > 0.5) ||
+               (touchPosition.Corner == TouchButtonCorner.Bottom && touchPosition.Scale > 0.5))
             ? FlyoutPlacementMode.LeftEdgeAlignedTop
             : FlyoutPlacementMode.RightEdgeAlignedTop;
 

@@ -1,4 +1,5 @@
 ﻿using ErogeHelper.Common.Entities;
+using ErogeHelper.Common.Enums;
 using System.Windows;
 
 namespace ErogeHelper.Common.Contracts

@@ -1,7 +1,6 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
-using ErogeHelper.Model.DataServices.Interface;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataModel.Entity.Tables;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.ViewModel.Windows;
@@ -13,39 +12,26 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace ErogeHelper.Model.Services
+namespace ErogeHelper
 {
-    public class StartupService : IStartupService, IEnableLogger
+    public class AppLauncher
     {
-        private readonly IGameDataService _gameDataService;
-        private readonly IGameWindowHooker _gameWindowHooker;
-        private readonly IEhConfigRepository _ehConfigDataService;
-        private readonly IGameInfoRepository _ehDbRepository;
-        //private readonly ISavedataSyncService _savedataSyncService;
-
-        public StartupService(
-            IGameDataService? gameDataService = null,
-            IGameWindowHooker? gameWindowHooker = null,
-            IEhConfigRepository? ehConfigDataService = null,
-            IGameInfoRepository? ehDbRepository = null)
+        public static void StartFromCommandLine(string gamePath, bool leEnable)
         {
-            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
-            _gameWindowHooker = gameWindowHooker ?? DependencyResolver.GetService<IGameWindowHooker>();
-            _ehConfigDataService = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
-            _ehDbRepository = ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>();
-        }
+            var gameDataService = DependencyResolver.GetService<IGameDataService>();
+            var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
+            var ehConfigRepository = DependencyResolver.GetService<IEhConfigRepository>();
+            var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
-        public void StartFromCommandLine(string gamePath, bool leEnable)
-        {
             var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
 
-            InitializeGameDatas(gamePath, leEnable, gameDir);
+            InitializeGameDatas(gameDataService, gameInfoRepository, ehConfigRepository, gamePath, leEnable, gameDir);
 
             RunGame(gamePath, leEnable, gameDir);
 
             try
             {
-                _gameDataService.SearchingProcesses(gamePath);
+                gameDataService.SearchingProcesses(gamePath);
             }
             catch (TimeoutException)
             {
@@ -54,20 +40,24 @@ namespace ErogeHelper.Model.Services
                 return;
             }
 
-            _gameWindowHooker.SetGameWindowHook(_gameDataService.MainProcess);
+            gameWindowHooker.SetGameWindowHook(gameDataService.MainProcess);
 
             DependencyResolver.ShowView<MainGameViewModel>();
         }
 
-        private void InitializeGameDatas(string gamePath, bool leEnable, string gameDir)
+        private static void InitializeGameDatas(
+            IGameDataService gameDataService,
+            IGameInfoRepository gameInfoRepository,
+            IEhConfigRepository ehConfigRepository,
+            string gamePath, bool leEnable, string gameDir)
         {
             if (!File.Exists(gamePath))
             {
                 throw new FileNotFoundException($"Not a valid game path \"{gamePath}\".", gamePath);
             }
 
-            this.Log().Debug($"Game's path: {gamePath}");
-            this.Log().Debug($"Locate Emulator status: {leEnable}");
+            LogHost.Default.Debug($"Game's path: {gamePath}");
+            LogHost.Default.Debug($"Locate Emulator status: {leEnable}");
 
             string md5;
             try
@@ -76,20 +66,20 @@ namespace ErogeHelper.Model.Services
             }
             catch (IOException ex) // game with suffix ".log"
             {
-                this.Log().Debug(ex.Message);
+                LogHost.Default.Debug(ex.Message);
                 md5 = Utils.Md5Calculate(File.ReadAllBytes(
                     Path.Combine(gameDir, Path.GetFileNameWithoutExtension(gamePath) + ".exe")));
             }
 
-            _gameDataService.Init(md5, gamePath);
+            gameDataService.Init(md5, gamePath);
 
-            var gameInfo = _ehDbRepository.GameInfo;
+            var gameInfo = gameInfoRepository.GameInfo;
             if (gameInfo is null)
             {
-                _ehDbRepository.AddGameInfo(new GameInfoTable() { Md5 = md5, });
+                gameInfoRepository.AddGameInfo(new GameInfoTable() { Md5 = md5, });
             }
 
-            if (_ehConfigDataService.DPIByApplication && !Utils.AlreadyHasDpiCompatibilitySetting(gamePath))
+            if (ehConfigRepository.DPIByApplication && !Utils.AlreadyHasDpiCompatibilitySetting(gamePath))
             {
                 Utils.SetDPICompatibilityAsApplication(gamePath);
             }

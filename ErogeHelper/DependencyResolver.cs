@@ -13,14 +13,14 @@ using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel.Controllers;
 using ErogeHelper.ViewModel.Pages;
 using ErogeHelper.ViewModel.Windows;
-using Punchclock;
 using ReactiveUI;
 using Splat;
 using System;
+using System.Linq;
 using System.Windows;
 using Vanara.PInvoke.NetListMgr;
 
-namespace ErogeHelper.Common
+namespace ErogeHelper
 {
     public static class DependencyResolver
     {
@@ -34,14 +34,12 @@ namespace ErogeHelper.Common
             Locator.CurrentMutable.Register<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
             Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
             Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());
-            Locator.CurrentMutable.Register<IViewFor<CloudSavedataViewModel>>(() => new CloudSavedataPage());
             Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
             // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
             Locator.CurrentMutable.Register(() => new PreferenceViewModel());
             Locator.CurrentMutable.Register(() => new GeneralViewModel());
-            Locator.CurrentMutable.Register(() => new CloudSavedataViewModel());
             Locator.CurrentMutable.Register(() => new AboutViewModel());
             // DataService
             Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
@@ -51,14 +49,10 @@ namespace ErogeHelper.Common
                 () => new GameInfoRepository(EhContext.DbConnectString));
             Locator.CurrentMutable.RegisterLazySingleton<IMainWindowDataService>(() => new MainWindowDataService());
             // Service
-            Locator.CurrentMutable.Register<IStartupService>(() => new StartupService());
             Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
             Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
-            Locator.CurrentMutable.RegisterLazySingleton<ISavedataSyncService>(() => new SavedataSyncService());
 
             Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
-
-            Locator.CurrentMutable.RegisterLazySingleton(() => new OperationQueue(int.MaxValue));
 
             // MISC
             // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -71,10 +65,31 @@ namespace ErogeHelper.Common
 
         public static void ShowView<T>() where T : ReactiveObject
         {
-            var view = GetService<IViewFor<T>>();
-            if (view is not Window window)
-                throw new TypeAccessException("View not implement IViewFor");
-            window.Show();
+            var viewName = typeof(T).ToString()[..^9].Replace("Model", string.Empty) + "Window";
+            var windowType = Type.GetType(viewName) ?? throw new InvalidCastException(viewName);
+
+            Window? targetWindow = null;
+            Application.Current.Windows
+                .Cast<Window>().ToList()
+                .ForEach(w =>
+                {
+                    if (w.GetType() == windowType)
+                    {
+                        targetWindow = w;
+                    }
+                });
+
+            if (targetWindow is not null)
+            {
+                targetWindow.Activate();
+            }
+            else
+            {
+                var view = GetService<IViewFor<T>>();
+                if (view is not Window window)
+                    throw new TypeAccessException("View not implement IViewFor");
+                window.Show();
+            }
         }
     }
 }

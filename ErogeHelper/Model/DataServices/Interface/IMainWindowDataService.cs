@@ -5,14 +5,12 @@ namespace ErogeHelper.Model.DataServices.Interface
 {
     public interface IMainWindowDataService
     {
-        ReplaySubject<double> DpiSubject { get; }
+        Subject<bool> AssistiveTouchBigSizeSubj { get; }
+
+        ReplaySubject<HWND> HandleSubj { get; }
 
         HWND Handle { get; }
 
         void SetHandle(HWND handle);
-
-        ReplaySubject<HWND> HandleSubj { get; }
-
-        Subject<bool> AssistiveTouchBigSizeSubject { get; }
     }
 }

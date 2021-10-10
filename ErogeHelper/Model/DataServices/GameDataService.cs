@@ -1,5 +1,4 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using Splat;
 using System;
@@ -14,7 +13,7 @@ namespace ErogeHelper.Model.DataServices
 {
     public class GameDataService : IGameDataService, IEnableLogger
     {
-        public HWND MainWindowHandle { get; set; }
+        public HWND GameRealWindowHandle { get; private set; }
 
         public void Init(string md5, string gamePath) => (Md5, GamePath) = (md5, gamePath);
 
@@ -60,5 +59,7 @@ namespace ErogeHelper.Model.DataServices
 
             return (mainProcess, procList);
         }
+
+        public void SetGameRealWindowHandle(HWND handle) => GameRealWindowHandle = handle;
     }
 }

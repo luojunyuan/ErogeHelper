@@ -6,7 +6,6 @@ using System.Windows.Input;
 
 namespace ErogeHelper.View.Controllers
 {
-    // XXX: When I reference this, my xaml designer could not resolve StaticResource or DynamicResource UI style anymore
     public class ScrollViewerSmooth : ScrollViewer
     {
         protected override void OnInitialized(EventArgs e)

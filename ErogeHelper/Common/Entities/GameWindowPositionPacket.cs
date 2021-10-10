@@ -1,10 +1,8 @@
-﻿using System.Windows;
-
-namespace ErogeHelper.Common.Entities
+﻿namespace ErogeHelper.Common.Entities
 {
     public record GameWindowPositionPacket
     {
-        public GameWindowPositionPacket(double height, double width, double left, double top, Thickness clientArea)
+        public GameWindowPositionPacket(double height, double width, double left, double top, System.Windows.Thickness clientArea)
         {
             Height = height;
             Width = width;
@@ -17,7 +15,7 @@ namespace ErogeHelper.Common.Entities
         public double Width { get; init; }
         public double Left { get; init; }
         public double Top { get; init; }
-        public Thickness ClientArea { get; init; }
+        public System.Windows.Thickness ClientArea { get; init; }
 
         public override string ToString() => $"({Left}, {Top}), width={Width} height={Height}";
     }

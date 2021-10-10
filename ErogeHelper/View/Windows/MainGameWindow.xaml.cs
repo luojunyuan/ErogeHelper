@@ -1,8 +1,8 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.ViewModel.Windows;
+﻿using ErogeHelper.ViewModel.Windows;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -28,14 +28,29 @@ namespace ErogeHelper.View.Windows
 
             this.Events().Loaded
                 .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.LoadedCommand);
+                .InvokeCommand(this, x => x.ViewModel!.Loaded);
 
             this.Events().DpiChanged
                 .Select(arg => arg.NewDpi.DpiScaleX)
-                .InvokeCommand(this, x => x.ViewModel!.DpiChangedCommand);
+                .InvokeCommand(this, x => x.ViewModel!.DpiChanged);
 
             this.WhenActivated(d =>
             {
+                this.WhenAnyObservable(x => x.ViewModel!.HideSubj)
+                    .Subscribe(_ => Hide()).DisposeWith(d);
+
+                this.WhenAnyObservable(x => x.ViewModel!.ShowSubj)
+                    .Subscribe(_ => Show()).DisposeWith(d);
+
+                this.WhenAnyObservable(x => x.ViewModel!.TerminateAppSubj)
+                    .Subscribe(_ =>
+                    {
+                        Application.Current.Windows
+                            .Cast<Window>().ToList()
+                            .ForEach(w => w.Close());
+                        App.Terminate();
+                    }).DisposeWith(d);
+
                 this.Bind(ViewModel,
                     vm => vm.Height,
                     v => v.Height).DisposeWith(d);

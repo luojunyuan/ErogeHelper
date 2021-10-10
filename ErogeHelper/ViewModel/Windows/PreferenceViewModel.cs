@@ -1,5 +1,4 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
@@ -9,8 +8,6 @@ using Splat;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows;
-using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Windows
 {
@@ -43,10 +40,15 @@ namespace ErogeHelper.ViewModel.Windows
             Height = ehConfigRepository.PreferenceWindowHeight;
             Width = ehConfigRepository.PreferenceWindowWidth;
 
-            ClosedCommand = ReactiveCommand.Create(() =>
+            Closed = ReactiveCommand.CreateFromObservable(() =>
             {
-                ehConfigRepository.PreferenceWindowHeight = Height;
-                ehConfigRepository.PreferenceWindowWidth = Width;
+                return Observable
+                    .Start(() =>
+                    {
+                        ehConfigRepository.PreferenceWindowHeight = Height;
+                        ehConfigRepository.PreferenceWindowWidth = Width;
+                        return Unit.Default;
+                    });
             });
         }
 
@@ -59,6 +61,6 @@ namespace ErogeHelper.ViewModel.Windows
         [Reactive]
         public double Width { get; set; }
 
-        public ReactiveCommand<Unit, Unit> ClosedCommand { get; init; }
+        public ReactiveCommand<Unit, Unit> Closed { get; init; }
     }
 }

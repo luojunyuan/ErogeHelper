@@ -16,17 +16,15 @@ namespace ErogeHelper.View.Pages
             {
                 this.Bind(ViewModel,
                     vm => vm.UseBigSizeAssistiveTouch,
-                    v => v.BigSizeAssistiveTouch.IsOn)
-                    .DisposeWith(d);
+                    v => v.BigSizeAssistiveTouch.IsOn).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.UseDPIDpiCompatibility,
-                    v => v.DpiCompatibility.IsChecked)
-                    .DisposeWith(d);
+                    v => v.DpiCompatibility.IsChecked).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.UseEdgeTouchMask,
-                    v => v.EdgeTouchMask.IsOn);
+                    v => v.EdgeTouchMask.IsOn).DisposeWith(d);
             });
         }
     }

@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Interop;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.Common
+namespace ErogeHelper
 {
     public static class Utils
     {
@@ -31,9 +31,7 @@ namespace ErogeHelper.Common
 
             var currentValue = key.GetValue(exeFilePath) as string;
             if (string.IsNullOrEmpty(currentValue))
-            {
                 key.SetValue(exeFilePath, "~ HIGHDPIAWARE");
-            }
             else
             {
                 key.SetValue(exeFilePath, currentValue + " HIGHDPIAWARE");
@@ -47,9 +45,7 @@ namespace ErogeHelper.Common
 
             var currentValue = key.GetValue(exeFilePath) as string;
             if (string.IsNullOrEmpty(currentValue))
-            {
                 return false;
-            }
 
             var DpiSettings = new List<string>() { "HIGHDPIAWARE", "DPIUNAWARE", "GDIDPISCALING DPIUNAWARE" };
             var currentValueList = currentValue.Split(' ').ToList();
@@ -68,9 +64,7 @@ namespace ErogeHelper.Common
                 User32.GetWindowRect(gameHwnd, out var rect);
                 var systemRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
                 if (systemRect.Contains(screen.Bounds))
-                {
                     return true;
-                }
             }
             return false;
         }
@@ -81,9 +75,7 @@ namespace ErogeHelper.Common
             processes.AddRange(Process.GetProcessesByName(friendlyName));
             processes.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
             if (!friendlyName.Equals("main.bin", StringComparison.Ordinal))
-            {
                 processes.AddRange(Process.GetProcessesByName("main.bin"));
-            }
             return processes;
         }
 
@@ -199,9 +191,7 @@ namespace ErogeHelper.Common
                 var resultObjX64 = keyX64?.GetValue("MachineGuid", string.Empty);
 
                 if (resultObjX64 is not null)
-                {
                     return resultObjX64.ToString() ?? string.Empty;
-                }
             }
             else
             {
@@ -211,9 +201,7 @@ namespace ErogeHelper.Common
                 var resultObjX86 = keyX86?.GetValue("MachineGuid", string.Empty);
 
                 if (resultObjX86 != null)
-                {
                     return resultObjX86.ToString() ?? string.Empty;
-                }
             }
 
             return string.Empty;

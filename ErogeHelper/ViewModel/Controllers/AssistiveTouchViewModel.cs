@@ -1,10 +1,8 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -17,8 +15,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using Vanara.PInvoke;
 using WindowsInput.Events;
 
@@ -31,30 +27,6 @@ namespace ErogeHelper.ViewModel.Controllers
         private readonly IGameDataService _gameDataService;
         private readonly IGameInfoRepository _ehDbRepository;
         private readonly IGameWindowHooker _gameWindowHooker;
-
-        private readonly Subject<Unit> _hideFlyoutSubj = new();
-        public IObservable<Unit> HideFlyoutSubj => _hideFlyoutSubj.AsObservable();
-
-        public double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
-            DefaultValues.AssistiveTouchBigSize :
-            DefaultValues.AssistiveTouchSize;
-
-        public AssistiveTouchPosition AssistiveTouchPosition
-        {
-            get => JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
-                ?? DefaultValues.TouchPosition;
-            set => _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(value);
-        }
-
-        public HWND MainWindowHandle => _mainWindowDataService.Handle;
-
-        public ReplaySubject<double> DpiSubject => _mainWindowDataService.DpiSubject;
-
-        public Subject<bool> AssistiveTouchBigSizeSubject => _mainWindowDataService.AssistiveTouchBigSizeSubject;
-
-        public HWND GameWindowHandle => _gameDataService.MainWindowHandle;
-
-        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gameWindowHooker.GamePosUpdated;
 
         public AssistiveTouchViewModel(
             IMainWindowDataService? mainWindowDataService = null,
@@ -76,6 +48,37 @@ namespace ErogeHelper.ViewModel.Controllers
 #endif
             AssistiveTouchTemplate = GetAssistiveTouchStyle(_ehConfigRepository.UseBigAssistiveTouchSize);
 
+            #region Updates When Fullscreen, WindowSize, DPI Changed 
+            //BehaviorSubject<bool> _stayTopSubj = new(Utils.IsGameForegroundFullscreen(GameWindowHandle));
+
+            //var interval = Observable
+            //    .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
+            //    .TakeUntil(_stayTopSubj.Where(on => !on));
+
+            //_stayTopSubj
+            //    .DistinctUntilChanged()
+            //    .Where(on => on && !MainWindowHandle.IsNull)
+            //    .SelectMany(interval)
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
+
+            //_gameWindowHooker.GamePosUpdated
+            //    .Where(_ => ParentFrameWorkElementLoaded)
+            //    .Select(pos => (pos.Width, pos.Height))
+            //    .DistinctUntilChanged()
+            //    .Select(_ => Utils.IsGameForegroundFullscreen(GameWindowHandle))
+            //    .Do(isFullscreen => _stayTopSubj.OnNext(isFullscreen))
+            //    .Delay(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Subscribe(_ => _setButtonDockPosSubj.OnNext(Unit.Default)); 
+
+            //DpiSubj
+            //    .Where(_ => ParentFrameWorkElementLoaded)
+            //    .Throttle(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Subscribe(_ => _setButtonDockPosSubj.OnNext(Unit.Default));
+            #endregion
+
             LoseFocusIsOn = _ehDbRepository.GameInfo!.IsLoseFocus;
             this.WhenAnyValue(x => x.LoseFocusIsOn)
                 .Skip(1)
@@ -95,7 +98,7 @@ namespace ErogeHelper.ViewModel.Controllers
                     _ehDbRepository.UpdateTouchEnable(v);
                 });
 
-            _mainWindowDataService.AssistiveTouchBigSizeSubject
+            _mainWindowDataService.AssistiveTouchBigSizeSubj
                 .Subscribe(v => AssistiveTouchTemplate = GetAssistiveTouchStyle(v));
 
             VolumeDown = ReactiveCommand.CreateFromTask(async () =>
@@ -126,7 +129,7 @@ namespace ErogeHelper.ViewModel.Controllers
             ScreenShot = ReactiveCommand.CreateFromTask(async () =>
             {
                 _hideFlyoutSubj.OnNext(Unit.Default);
-                AssistiveTouchVisibility = Visibility.Collapsed;
+                AssistiveTouchVisibility = System.Windows.Visibility.Collapsed;
 
                 await WindowsInput.Simulate.Events()
                     .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
@@ -134,36 +137,56 @@ namespace ErogeHelper.ViewModel.Controllers
 
                 await Task.Delay(ConstantValues.ScreenShotHideButtonTime).ConfigureAwait(true);
 
-                AssistiveTouchVisibility = Visibility.Visible;
+                AssistiveTouchVisibility = System.Windows.Visibility.Visible;
             });
 
-            OpenPreference = ReactiveCommand.Create(() =>
-            {
-                var window = Application.Current.Windows
-                    .OfType<PreferenceWindow>()
-                    .SingleOrDefault();
-                if (window is null)
-                {
-                    DependencyResolver.ShowView<PreferenceViewModel>();
-                }
-                else
-                {
-                    window.Activate();
-                }
-            });
+            OpenPreference = ReactiveCommand.Create(() => DependencyResolver.ShowView<PreferenceViewModel>());
         }
 
-        private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
-            useBigSize ? Application.Current.Resources["BigAssistiveTouchTemplate"] as ControlTemplate
+        private readonly Subject<Unit> _setButtonDockPosSubj = new();
+        public IObservable<Unit> SetButtonDockPosSubj => _setButtonDockPosSubj;
+
+        private readonly Subject<Unit> _hideFlyoutSubj = new();
+        public IObservable<Unit> HideFlyoutSubj => _hideFlyoutSubj;
+
+        public double ButtonSize => _ehConfigRepository.UseBigAssistiveTouchSize ?
+            DefaultValues.AssistiveTouchBigSize :
+            DefaultValues.AssistiveTouchSize;
+
+        public AssistiveTouchPosition AssistiveTouchPosition
+        {
+            get => JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
+                ?? DefaultValues.TouchPosition;
+            set => _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(value);
+        }
+
+        public HWND MainWindowHandle => _mainWindowDataService.Handle;
+
+        public ReplaySubject<double> DpiSubj { get; init; } = new(1);
+
+        public Subject<bool> AssistiveTouchBigSizeSubject => _mainWindowDataService.AssistiveTouchBigSizeSubj;
+
+        public HWND GameWindowHandle => _gameDataService.GameRealWindowHandle;
+
+        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gameWindowHooker.GamePosUpdated;
+
+        public bool ParentFrameWorkElementLoaded { private get; set; }
+
+
+        private static System.Windows.Controls.ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
+            useBigSize ? System.Windows.Application.Current.Resources["BigAssistiveTouchTemplate"] 
+                            as System.Windows.Controls.ControlTemplate
                             ?? throw new IOException("Cannot locate resource 'BigAssistiveTouchTemplate'")
-                       : Application.Current.Resources["NormalAssistiveTouchTemplate"] as ControlTemplate
+                       : System.Windows.Application.Current.Resources["NormalAssistiveTouchTemplate"] 
+                            as System.Windows.Controls.ControlTemplate
                             ?? throw new IOException("Cannot locate resource 'NormalAssistiveTouchTemplate'");
 
         [Reactive]
-        public ControlTemplate AssistiveTouchTemplate { get; private set; }
+        public System.Windows.Controls.ControlTemplate AssistiveTouchTemplate { get; private set; }
 
         [Reactive]
-        public Visibility AssistiveTouchVisibility { get; private set; }
+        public System.Windows.Visibility AssistiveTouchVisibility { get; private set; }
+
 
         [Reactive]
         public bool LoseFocusIsOn { get; set; }

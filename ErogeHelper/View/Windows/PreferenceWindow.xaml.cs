@@ -1,5 +1,4 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.ViewModel.Pages;
 using ErogeHelper.ViewModel.Windows;
 using ModernWpf.Controls;
@@ -21,14 +20,12 @@ namespace ErogeHelper.View.Windows
         public PreferenceWindow(
             PreferenceViewModel? preferenceViewModel = null,
             GeneralViewModel? generalViewModel = null,
-            CloudSavedataViewModel? cloudSavedataViewModel = null,
             AboutViewModel? aboutViewModel = null)
         {
             InitializeComponent();
 
             ViewModel = preferenceViewModel ?? DependencyResolver.GetService<PreferenceViewModel>();
             generalViewModel ??= new GeneralViewModel(hostScreen: ViewModel);
-            cloudSavedataViewModel ??= new CloudSavedataViewModel(hostScreen: ViewModel);
             aboutViewModel ??= new AboutViewModel(hostScreen: ViewModel);
 
             Width = ViewModel!.Width;
@@ -36,7 +33,7 @@ namespace ErogeHelper.View.Windows
 
             this.Events().Closed
                 .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.ClosedCommand);
+                .InvokeCommand(this, x => x.ViewModel!.Closed);
 
             this.WhenActivated(d =>
             {

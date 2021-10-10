@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Common;
 using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Exceptions;
 using ErogeHelper.Common.Functions;
 using ErogeHelper.Language;
 using ErogeHelper.Model.Repositories;
-using ErogeHelper.Model.Services.Interface;
 using Ookii.Dialogs.Wpf;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -34,7 +32,6 @@ namespace ErogeHelper
         {
             try
             {
-                //SetI18NLanguageDictionary();
                 SetupExceptionHandling();
                 SingleInstanceWatcher();
 
@@ -75,8 +72,7 @@ namespace ErogeHelper
                         ToastManagement.AdminModeTipToast();
                         GameInfoRepository.UpdateEhDatabase();
 
-                        var startupService = DependencyResolver.GetService<IStartupService>();
-                        startupService.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
+                        AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
                     });
             }
             catch (AppExistedException)
@@ -155,19 +151,6 @@ namespace ErogeHelper
                 ShowErrorDialog("Task", args.Exception);
             };
         }
-
-        /// <summary>
-        /// CurrentCulture is based on Setting-Region-RegionalFormat
-        /// </summary>
-        private static void SetI18NLanguageDictionary() =>
-            Strings.Culture = Thread.CurrentThread.CurrentCulture.ToString() switch
-            {
-                "zh-Hans" => new CultureInfo("zh-Hans"),
-                "zh" => new CultureInfo("zh-Hans"),
-                "zh-CN" => new CultureInfo("zh-Hans"),
-                "zh-SG" => new CultureInfo("zh-Hans"),
-                _ => new CultureInfo("")
-            };
 
         private static void SingleInstanceWatcher()
         {

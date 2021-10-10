@@ -19,13 +19,13 @@
     <!--  Layout of the whole game window  -->
     <Border>
         <Grid>
+            <Border x:Name="PreventFalseTouchMask"
+                BorderBrush="Black" BorderThickness="5"
+                Opacity="{StaticResource MinimalOpacity}" />
             <!--  Client area  -->
             <Border x:Name="ClientArea">
                 <reactiveUi:ViewModelViewHost x:Name="AssistiveTouchHost" />
             </Border>
-            <Border x:Name="PreventFalseTouchMask"
-                BorderBrush="Black" BorderThickness="5"
-                Opacity="{StaticResource MinimalOpacity}" />
         </Grid>
     </Border>
 </reactiveUi:ReactiveWindow>

@@ -1,4 +1,3 @@
-using ErogeHelper.Common;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using System;
@@ -69,6 +68,8 @@ namespace ErogeHelper.Model.Services
                                 await Task.Delay(50);
                                 User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTUP, X, Y, 0, IntPtr.Zero);
                             });
+                            break;
+                        default:
                             break;
                     }
 

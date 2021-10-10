@@ -1,6 +1,6 @@
-﻿using ErogeHelper.Common;
-using ErogeHelper.Common.Contracts;
+﻿using ErogeHelper.Common.Contracts;
 using ErogeHelper.Common.Entities;
+using ErogeHelper.Common.Enums;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ReactiveMarbles.ObservableEvents;
@@ -9,12 +9,10 @@ using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.Services
@@ -23,16 +21,16 @@ namespace ErogeHelper.Model.Services
     {
         private HWND _gameHwnd;
         private Process _gameProc = new();
-        private static readonly GameWindowPositionPacket HiddenPos = new(0, 0, -32000, -32000, new Thickness());
-        private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -31972);
-        private static readonly RECT MinimizedPosition4K = new(-64000, -64000, -63680, -63944);
+        private static readonly GameWindowPositionPacket HiddenPos = new(0, 0, -32000, -32000, new System.Windows.Thickness());
+        //private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -31972);
+        //private static readonly RECT MinimizedPosition4K = new(-64000, -64000, -63680, -63944);
 
         private User32.HWINEVENTHOOK _windowsEventHook = IntPtr.Zero;
         private const uint EventObjectDestroy = 0x8001;
         private const uint EventObjectShow = 0x8002;
         private const uint EventObjectHide = 0x8003;
-        private const uint EventObjectReorder = 0x8004;
-        private const uint EventObjectFocus = 0x8005;
+        //private const uint EventObjectReorder = 0x8004;
+        //private const uint EventObjectFocus = 0x8005;
         private const uint EventObjectLocationChange = 0x800B;
         private GCHandle _gcSafetyHandle;
         private User32.WinEventProc? _winEventDelegate;
@@ -42,18 +40,21 @@ namespace ErogeHelper.Model.Services
                                 User32.WINEVENT.WINEVENT_SKIPOWNPROCESS;
         private const long SWEH_CHILDID_SELF = 0;
 
-        private readonly ReplaySubject<GameWindowPositionPacket> _gamePositionSubject = new(1);
-        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gamePositionSubject.AsObservable();
+        private readonly ReplaySubject<GameWindowPositionPacket> _gamePositionSubj = new(1);
+        public IObservable<GameWindowPositionPacket> GamePosUpdated => _gamePositionSubj.AsObservable();
+
+        private readonly Subject<WindowOperation> _windowOperationSubj = new();
+        public IObservable<WindowOperation> WindowOperationSubj => _windowOperationSubj;
 
         private IGameDataService? _gameDataService;
-
         public void SetGameWindowHook(Process process)
         {
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
             _gameDataService = DependencyResolver.GetService<IGameDataService>();
-            _gameDataService.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
+            _gameHwnd = CurrentWindowHandle(_gameProc);
+            _gameDataService.SetGameRealWindowHandle(_gameHwnd);
 
             var targetThreadId = User32.GetWindowThreadProcessId(_gameHwnd, out var processId);
 
@@ -70,41 +71,17 @@ namespace ErogeHelper.Model.Services
                 .Subscribe(_ =>
                 {
                     this.Log().Debug("Detected game quit event");
-                    _gamePositionSubject.OnNext(HiddenPos);
-                    _gamePositionSubject.OnCompleted();
+                    _gamePositionSubj.OnNext(HiddenPos);
+                    _gamePositionSubj.OnCompleted();
                     _gcSafetyHandle.Free();
                     User32.UnhookWinEvent(_windowsEventHook);
 
-                    Application.Current.Windows
-                        .Cast<Window>().ToList()
-                        .ForEach(w => w.Close());
-
-                    //var gameInfo = DependencyInject.GetService<IEhDbRepository>().GameInfo;
-                    //if (gameInfo is not null && gameInfo.UseCloudSave)
-                    //{
-                    //    DependencyInject.GetService<ISavedataSyncService>().UpdateSync();
-                    //}
-
-                    App.Terminate();
+                    _windowOperationSubj.OnNext(WindowOperation.TerminateApp);
+                    _windowOperationSubj.OnCompleted();
                 });
         }
 
-        public void InvokeUpdatePosition() => UpdateLocation();
-
-        public void InvokePositionAsMainFullscreen()
-        {
-            var mainScreenBounds = WpfScreenHelper.Screen.PrimaryScreen.Bounds;
-
-            _gamePositionSubject.OnNext(
-                new GameWindowPositionPacket(
-                    mainScreenBounds.Height,
-                    mainScreenBounds.Width,
-                    mainScreenBounds.Left,
-                    mainScreenBounds.Top,
-                    new()));
-        }
-
-        public GameWindowPositionPacket GetCurrentGamePosition() => UpdateLocation();
+        public GameWindowPositionPacket InvokeUpdatePosition() => UpdateLocation();
 
         private static HWND CurrentWindowHandle(Process proc)
         {
@@ -168,8 +145,9 @@ namespace ErogeHelper.Model.Services
                         {
                             try
                             {
-                                _gameDataService!.MainWindowHandle = _gameHwnd = CurrentWindowHandle(_gameProc);
-                                Application.Current.MainWindow.Show();
+                                _gameHwnd = CurrentWindowHandle(_gameProc);
+                                _gameDataService!.SetGameRealWindowHandle(_gameHwnd);
+                                _windowOperationSubj.OnNext(WindowOperation.Show);
                                 this.Log().Debug("Game window show - recreate");
                                 UpdateLocation();
                             }
@@ -185,7 +163,7 @@ namespace ErogeHelper.Model.Services
                     {
                         if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
                         {
-                            Application.Current.MainWindow.Show();
+                            _windowOperationSubj.OnNext(WindowOperation.Show);
                             this.Log().Debug("Game window show");
                             UpdateLocation();
                         }
@@ -195,7 +173,7 @@ namespace ErogeHelper.Model.Services
                     {
                         if (_gameProc.MainWindowHandle != hWnd && hWnd == _gameHwnd)
                         {
-                            Application.Current.MainWindow.Hide();
+                            _windowOperationSubj.OnNext(WindowOperation.Hide);
                             this.Log().Debug("Game window hide");
                         }
                     }
@@ -227,16 +205,16 @@ namespace ErogeHelper.Model.Services
             var wholeHeight = rect.bottom - rect.top;
             var winTitleHeight = wholeHeight - rectClient.bottom - winShadow;
 
-            var clientArea = new Thickness(winShadow, winTitleHeight, winShadow, winShadow);
+            var clientArea = new System.Windows.Thickness(winShadow, winTitleHeight, winShadow, winShadow);
 
             var gameWindowPositionPacket = new GameWindowPositionPacket(height, width, rect.left, rect.top, clientArea);
-            _gamePositionSubject.OnNext(gameWindowPositionPacket);
+            _gamePositionSubj.OnNext(gameWindowPositionPacket);
             return gameWindowPositionPacket;
         }
 
         private static IEnumerable<HWND> GetRootWindowsOfProcess(int pid)
         {
-            IEnumerable<HWND> rootWindows = GetChildWindows(IntPtr.Zero);
+            var rootWindows = GetChildWindows(IntPtr.Zero);
             List<HWND> dsProcRootWindows = new();
             foreach (var hWnd in rootWindows)
             {

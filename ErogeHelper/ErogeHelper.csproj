@@ -52,27 +52,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Comparers\**" />
     <Compile Remove="Model\DataModels\**" />
     <Compile Remove="Model\DataModel\Entity\**" />
+    <Compile Remove="ViewModel\Components\**" />
+    <Compile Remove="ViewModel\Routing\**" />
+    <EmbeddedResource Remove="Common\Comparers\**" />
     <EmbeddedResource Remove="Model\DataModels\**" />
     <EmbeddedResource Remove="Model\DataModel\Entity\**" />
+    <EmbeddedResource Remove="ViewModel\Components\**" />
+    <EmbeddedResource Remove="ViewModel\Routing\**" />
+    <None Remove="Common\Comparers\**" />
     <None Remove="Model\DataModels\**" />
     <None Remove="Model\DataModel\Entity\**" />
+    <None Remove="ViewModel\Components\**" />
+    <None Remove="ViewModel\Routing\**" />
+    <Page Remove="Common\Comparers\**" />
     <Page Remove="Model\DataModels\**" />
     <Page Remove="Model\DataModel\Entity\**" />
+    <Page Remove="ViewModel\Components\**" />
+    <Page Remove="ViewModel\Routing\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="assets\app.ico" />
     <Resource Include="assets\app.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Comparers\" />
-    <Folder Include="Model\DataModel\Payloads\" />
-    <Folder Include="Model\DataModel\Responses\" />
-    <Folder Include="ViewModel\Components\" />
-    <Folder Include="ViewModel\Routing\" />
   </ItemGroup>
 
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">

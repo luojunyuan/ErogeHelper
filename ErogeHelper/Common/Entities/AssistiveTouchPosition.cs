@@ -1,17 +1,7 @@
-﻿namespace ErogeHelper.Common.Entities
-{
-    public enum TouchButtonCorner
-    {
-        Left,
-        Top,
-        Right,
-        Bottom,
-        UpperLeft,
-        UpperRight,
-        LowerLeft,
-        LowerRight
-    }
+﻿using ErogeHelper.Common.Enums;
 
+namespace ErogeHelper.Common.Entities
+{
     public record AssistiveTouchPosition
     {
         public AssistiveTouchPosition(TouchButtonCorner corner, double scale = 0)
