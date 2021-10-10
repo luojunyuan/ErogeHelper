@@ -31,10 +31,11 @@ namespace ErogeHelper.ViewModel.Pages
             UseBigSizeAssistiveTouch = ehConfigRepository.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)
-                .ObserveOn(RxApp.TaskpoolScheduler)
-                .Do(v => ehConfigRepository.UseBigAssistiveTouchSize = v)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(v => mainWindowDataService.AssistiveTouchBigSizeSubj.OnNext(v));
+                .Subscribe(v =>
+                {
+                    ehConfigRepository.UseBigAssistiveTouchSize = v;
+                    mainWindowDataService.AssistiveTouchBigSizeSubj.OnNext(v);
+                });
 
             UseDPIDpiCompatibility = ehConfigRepository.DPIByApplication;
             this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
@@ -48,6 +49,7 @@ namespace ErogeHelper.ViewModel.Pages
                 .Skip(1)
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.UserOperationDelay))
                 .DistinctUntilChanged()
+                // XXX: Infact we don't need use another scheduler in such perioed lower than 10ms
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .Do(v => ehConfigRepository.UseEdgeTouchMask = v)
                 .ObserveOn(RxApp.MainThreadScheduler)

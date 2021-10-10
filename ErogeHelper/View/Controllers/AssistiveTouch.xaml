@@ -23,9 +23,7 @@
                     </ui:AppBarButton.Icon>
                 </ui:AppBarButton>
                 <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}" />
-                <ui:AppBarButton x:Name="FullScreenSwitcher"
-                    Icon="FullScreen" Loaded="FullScreenButton_Loaded"
-                    ToolTip="{x:Static resx:Strings.GameView_SwitchFullScreen}" />
+                <ui:AppBarButton x:Name="FullScreenSwitcher" />
                 <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
                 <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 

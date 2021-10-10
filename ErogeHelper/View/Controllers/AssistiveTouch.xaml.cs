@@ -2,7 +2,6 @@
 using ErogeHelper.Common.Entities;
 using ErogeHelper.Common.Enums;
 using ErogeHelper.ViewModel.Controllers;
-using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -15,7 +14,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Controllers
 {
@@ -25,9 +23,15 @@ namespace ErogeHelper.View.Controllers
         private const double OpacityNormal = 1;
         private const double ButtonSpace = 2;
 
-        private HWND MainWindowHandle => ViewModel!.MainWindowHandle;
+        // The diameter of button use for orienting input interaction
+        private double _distance;
+        private double _halfDistance;
+        private double _oneThirdDistance;
+        private double _twoThirdDistance;
 
-        private double ButtonSize => ViewModel!.ButtonSize;
+        // XXX: readonly can also be bind reactive
+#pragma warning disable CS0649
+        private readonly double _buttonSize;
 
         public AssistiveTouch(AssistiveTouchViewModel? assistiveTouchViewModel = null)
         {
@@ -35,94 +39,37 @@ namespace ErogeHelper.View.Controllers
 
             ViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
 
-            // ANNOYING: Constructor is too long
-            var _touchPosition = ViewModel!.AssistiveTouchPosition;
-
+            var touchPosition = ViewModel!.AssistiveTouchPosition;
             Dispatcher.Events().ShutdownStarted.Subscribe(_ =>
             {
-                ViewModel!.AssistiveTouchPosition = _touchPosition;
+                ViewModel!.AssistiveTouchPosition = touchPosition;
                 this.Log().Debug("Save touch position succeed");
             });
 
-            #region Updates When Fullscreen, WindowSize, DPI Changed 
-            BehaviorSubject<bool> _stayTopSubj = new(Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle));
 
-            var interval = Observable
-                .Interval(TimeSpan.FromMilliseconds(ConstantValues.GameWindowStatusRefreshTime))
-                .TakeUntil(_stayTopSubj.Where(on => !on));
+            FrameworkElement? parent = null;
 
-            _stayTopSubj
-                .DistinctUntilChanged()
-                .Where(on => on && !MainWindowHandle.IsNull)
-                .SelectMany(interval)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
-
-            FrameworkElement? _parent = null;
-
-            ViewModel!.GamePosUpdated
-                .Where(_ => _parent is not null)
-                .Select(pos => (pos.Width, pos.Height))
-                .DistinctUntilChanged()
-                .Select(_ => Utils.IsGameForegroundFullscreen(ViewModel!.GameWindowHandle))
-                .Do(isFullscreen => _stayTopSubj.OnNext(isFullscreen))
-                .Delay(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
-
-            ViewModel!.DpiSubj
-                .Where(_ => _parent is not null)
-                .Throttle(TimeSpan.FromMilliseconds(ConstantValues.MinimumLagTime))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!));
-            #endregion
-
-            #region Surface
-            // The diameter of button
-            double _distance = 0;
-            double _halfDistance = 0;
-            double _oneThirdDistance = 0;
-            double _twoThirdDistance = 0;
-
-            void UpdateButtonProperties(double width)
-            {
-                _distance = width;
-                _halfDistance = _distance / 2;
-                _oneThirdDistance = _distance / 3;
-                _twoThirdDistance = _oneThirdDistance * 2;
-            }
-
-            ViewModel!.AssistiveTouchBigSizeSubject
-                .Where(_ => _parent is not null)
-                .Subscribe(_ =>
-                {
-                    UpdateButtonProperties(ButtonSize);
-                    AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent!);
-                });
-            #endregion
-
-            #region Initialize
             AssistiveButton.Events().Loaded
                 .Subscribe(_ =>
                 {
-                    _parent ??= Parent is not FrameworkElement reactiveViewModelViewHost
+                    parent ??= Parent is not FrameworkElement reactiveViewModelViewHost
                         ? throw new InvalidOperationException("Control's parent must be FrameworkElement type")
                         : reactiveViewModelViewHost;
 
-                    UpdateButtonProperties(ButtonSize);
-                    AssistiveButton.Margin = GetButtonEdgeMargin(ButtonSize, _touchPosition, _parent);
-                    AssistiveTouchFlyout.Placement = GetFlyoutPlacement(_touchPosition);
+                    ViewModel!.ParentFrameWorkElementLoaded = true;
+                    UpdateButtonDiameterProperties(_buttonSize);
+                    AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent);
+                    AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
                 });
-            #endregion
 
             #region Opacity Adjust
-            Point _lastPos;
-            var _isMoving = false;
+            Point lastPos;
+            var isMoving = false;
             BehaviorSubject<bool> tryTransparentizeSubj = new(true);
             tryTransparentizeSubj
                 .Throttle(TimeSpan.FromMilliseconds(ConstantValues.AssistiveTouchOpacityChangedTimeout))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Where(on => on && _isMoving == false && AssistiveTouchFlyout.IsOpen == false)
+                .Where(on => on && isMoving == false && AssistiveTouchFlyout.IsOpen == false)
                 .Subscribe(_ => AssistiveButton.Opacity = OpacityValue);
 
             AssistiveTouchFlyout.Events().Closed
@@ -137,37 +84,37 @@ namespace ErogeHelper.View.Controllers
             updateStatusWhenMouseDown.Subscribe(evt =>
             {
                 AssistiveButton.Opacity = OpacityNormal;
-                _isMoving = true;
+                isMoving = true;
                 tryTransparentizeSubj.OnNext(true);
-                _lastPos = evt.GetPosition(_parent);
-                _oldPos = _lastPos;
+                lastPos = evt.GetPosition(parent);
+                _oldPos = lastPos;
             });
 
             mouseMoveAndCheckEdge.Subscribe(evt =>
             {
-                if (!_isMoving || _parent is null)
+                if (!isMoving || parent is null)
                     return;
 
-                var pos = evt.GetPosition(_parent);
+                var pos = evt.GetPosition(parent);
                 // 相对左上坐标 + 新位置与旧位置的差值 = 新坐标
-                var left = AssistiveButton.Margin.Left + pos.X - _lastPos.X;
-                var top = AssistiveButton.Margin.Top + pos.Y - _lastPos.Y;
+                var left = AssistiveButton.Margin.Left + pos.X - lastPos.X;
+                var top = AssistiveButton.Margin.Top + pos.Y - lastPos.Y;
 
                 // dummy problem UserControl would clip if Button get out of the bottom of window
                 var workaround = 0.0;
-                var outerBounds = top + ButtonSize;
-                if (outerBounds > _parent.ActualHeight)
+                var outerBounds = top + _buttonSize;
+                if (outerBounds > parent.ActualHeight)
                 {
-                    workaround = _parent.ActualHeight - outerBounds;
+                    workaround = parent.ActualHeight - outerBounds;
                 }
 
                 AssistiveButton.Margin = new Thickness(left, top, 0, workaround);
 
-                _lastPos = pos;
+                lastPos = pos;
 
                 // When mouse out the edge
                 if (left < -_oneThirdDistance || top < -_oneThirdDistance ||
-                    left > _parent.ActualWidth - _twoThirdDistance || top > _parent.ActualHeight - _twoThirdDistance)
+                    left > parent.ActualWidth - _twoThirdDistance || top > parent.ActualHeight - _twoThirdDistance)
                 {
                     RaiseMouseUpEventInCode(AssistiveButton, this);
                 }
@@ -175,7 +122,7 @@ namespace ErogeHelper.View.Controllers
 
             mouseRelease.Subscribe(evt =>
             {
-                if (!_isMoving || _parent is null)
+                if (!isMoving || parent is null)
                     return;
 
                 double parentActualWidth;
@@ -183,19 +130,19 @@ namespace ErogeHelper.View.Controllers
                 double curMarginLeft;
                 double curMarginTop;
 
-                var pos = evt.GetPosition(_parent);
+                var pos = evt.GetPosition(parent);
                 _newPos = pos;
-                parentActualHeight = _parent.ActualHeight;
-                parentActualWidth = _parent.ActualWidth;
+                parentActualHeight = parent.ActualHeight;
+                parentActualWidth = parent.ActualWidth;
                 curMarginLeft = AssistiveButton.Margin.Left;
                 curMarginTop = AssistiveButton.Margin.Top;
 
-                var left = curMarginLeft + _newPos.X - _lastPos.X;
-                var top = curMarginTop + _newPos.Y - _lastPos.Y;
+                var left = curMarginLeft + _newPos.X - lastPos.X;
+                var top = curMarginTop + _newPos.Y - lastPos.Y;
                 // button 距离右边缘距离
-                var right = parentActualWidth - left - ButtonSize;
+                var right = parentActualWidth - left - _buttonSize;
                 // button 距离下边缘距离
-                var bottom = parentActualHeight - top - ButtonSize;
+                var bottom = parentActualHeight - top - _buttonSize;
                 var verticalMiddleLine = parentActualWidth / 2;
 
                 // 根据button所处屏幕位置来确定button之后应该动画移动到的位置
@@ -203,59 +150,59 @@ namespace ErogeHelper.View.Controllers
                 {
                     left = ButtonSpace;
                     top = ButtonSpace;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.UpperLeft);
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.UpperLeft);
                 }
                 else if (left < _halfDistance && bottom < _twoThirdDistance) // bottom-left
                 {
                     left = ButtonSpace;
-                    top = parentActualHeight - ButtonSize - ButtonSpace;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.LowerLeft);
+                    top = parentActualHeight - _buttonSize - ButtonSpace;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.LowerLeft);
                 }
                 else if (right < _halfDistance && top < _twoThirdDistance) // top-right
                 {
-                    left = parentActualWidth - ButtonSize - ButtonSpace;
+                    left = parentActualWidth - _buttonSize - ButtonSpace;
                     top = ButtonSpace;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.UpperRight);
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.UpperRight);
                 }
                 else if (right < _halfDistance && bottom < _twoThirdDistance) // bottom-right
                 {
-                    left = parentActualWidth - ButtonSize - ButtonSpace;
-                    top = parentActualHeight - ButtonSize - ButtonSpace;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.LowerRight);
+                    left = parentActualWidth - _buttonSize - ButtonSpace;
+                    top = parentActualHeight - _buttonSize - ButtonSpace;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.LowerRight);
                 }
                 else if (top < _twoThirdDistance) // top
                 {
                     left = curMarginLeft;
                     top = ButtonSpace;
-                    var scale = (curMarginLeft + ButtonSpace + (ButtonSize / 2)) / parentActualWidth;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Top, scale);
+                    var scale = (curMarginLeft + ButtonSpace + (_buttonSize / 2)) / parentActualWidth;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Top, scale);
                 }
                 else if (bottom < _twoThirdDistance) // bottom
                 {
                     left = curMarginLeft;
-                    top = parentActualHeight - ButtonSize - ButtonSpace;
-                    var scale = (curMarginLeft + ButtonSpace + (ButtonSize / 2)) / parentActualWidth;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Bottom, scale);
+                    top = parentActualHeight - _buttonSize - ButtonSpace;
+                    var scale = (curMarginLeft + ButtonSpace + (_buttonSize / 2)) / parentActualWidth;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Bottom, scale);
                 }
-                else if (left + (ButtonSize / 2) < verticalMiddleLine) // left
+                else if (left + (_buttonSize / 2) < verticalMiddleLine) // left
                 {
                     left = ButtonSpace;
                     top = curMarginTop;
-                    var scale = (curMarginTop + ButtonSpace + (ButtonSize / 2)) / parentActualHeight;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Left, scale);
+                    var scale = (curMarginTop + ButtonSpace + (_buttonSize / 2)) / parentActualHeight;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Left, scale);
                 }
                 else // right
                 {
-                    left = parentActualWidth - ButtonSize - ButtonSpace;
+                    left = parentActualWidth - _buttonSize - ButtonSpace;
                     top = curMarginTop;
-                    var scale = (curMarginTop + ButtonSpace + ButtonSize / 2) / parentActualHeight;
-                    _touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Right, scale);
+                    var scale = (curMarginTop + ButtonSpace + _buttonSize / 2) / parentActualHeight;
+                    touchPosition = new AssistiveTouchPosition(TouchButtonCorner.Right, scale);
                 }
 
                 SmoothMoveAnimation(AssistiveButton, left, top);
-                _isMoving = false;
+                isMoving = false;
                 tryTransparentizeSubj.OnNext(true);
-                AssistiveTouchFlyout.Placement = GetFlyoutPlacement(_touchPosition);
+                AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
             });
             #endregion
 
@@ -268,6 +215,16 @@ namespace ErogeHelper.View.Controllers
                 this.OneWayBind(ViewModel,
                     vm => vm.AssistiveTouchVisibility,
                     v => v.AssistiveButton.Visibility).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.ButtonSize,
+                    v => v._buttonSize).DisposeWith(d);
+
+                this.WhenAnyObservable(x => x.ViewModel!.UpdateButtonDiameterSubj)
+                    .Subscribe(buttonSize => UpdateButtonDiameterProperties(buttonSize)).DisposeWith(d);
+
+                this.WhenAnyObservable(x => x.ViewModel!.SetButtonDockPosSubj)
+                    .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent!)).DisposeWith(d);
 
                 this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)
                     .Subscribe(_ => AssistiveTouchFlyout.Hide()).DisposeWith(d);
@@ -292,6 +249,12 @@ namespace ErogeHelper.View.Controllers
                 this.BindCommand(ViewModel,
                     vm => vm.SwitchFullScreen,
                     v => v.FullScreenSwitcher).DisposeWith(d);
+                this.OneWayBind(ViewModel,
+                  vm => vm.SwitchFullScreenIcon,
+                  v => v.FullScreenSwitcher.Icon).DisposeWith(d);
+                this.OneWayBind(ViewModel,
+                  vm => vm.SwitchFullScreenToolTip,
+                  v => v.FullScreenSwitcher.ToolTip).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.TaskbarNotifyArea,
@@ -310,6 +273,14 @@ namespace ErogeHelper.View.Controllers
                     v => v.Preference).DisposeWith(d);
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
+        }
+
+        private void UpdateButtonDiameterProperties(double width)
+        {
+            _distance = width;
+            _halfDistance = _distance / 2;
+            _oneThirdDistance = _distance / 3;
+            _twoThirdDistance = _oneThirdDistance * 2;
         }
 
         private static void RaiseMouseUpEventInCode(Button button, UIElement father)
@@ -387,14 +358,6 @@ namespace ErogeHelper.View.Controllers
             {
                 e.Handled = true;
             }
-        }
-
-        private AppBarButton? _fullScreenButton;
-
-        private void FullScreenButton_Loaded(object sender, RoutedEventArgs e)
-        {
-            var appbarButton = sender as AppBarButton;
-            _fullScreenButton = appbarButton;
         }
     }
 }
