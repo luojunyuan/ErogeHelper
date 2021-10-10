@@ -32,7 +32,6 @@ namespace ErogeHelper.ViewModel.Pages
 
             HostScreen = hostScreen!;
 
-            // Learn WhenAnyValue first
             UseBigSizeAssistiveTouch = _ehConfigRepository.UseBigAssistiveTouchSize;
             this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
                 .Skip(1)

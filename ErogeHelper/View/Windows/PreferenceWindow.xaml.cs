@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Vanara.PInvoke;
 
 namespace ErogeHelper.View.Windows
 {
@@ -19,8 +18,6 @@ namespace ErogeHelper.View.Windows
     /// </summary>
     public partial class PreferenceWindow
     {
-        private readonly HWND _handle;
-
         public PreferenceWindow(
             PreferenceViewModel? preferenceViewModel = null,
             GeneralViewModel? generalViewModel = null,
@@ -36,14 +33,6 @@ namespace ErogeHelper.View.Windows
 
             Width = ViewModel!.Width;
             Height = ViewModel!.Height;
-
-            _handle = Utils.GetWpfWindowHandle(this);
-            this.WhenAnyValue(x => x._handle)
-                .BindTo(this, x => x.ViewModel!.PreferenceWindowHandle);
-
-            this.Events().Loaded
-                .Select(_ => Unit.Default)
-                .InvokeCommand(this, x => x.ViewModel!.LoadedCommand);
 
             this.Events().Closed
                 .Select(_ => Unit.Default)

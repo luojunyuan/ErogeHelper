@@ -43,21 +43,12 @@ namespace ErogeHelper.ViewModel.Windows
             Height = ehConfigRepository.PreferenceWindowHeight;
             Width = ehConfigRepository.PreferenceWindowWidth;
 
-            LoadedCommand = ReactiveCommand.Create(() =>
-            {
-                if (ehDbRepository.GameInfo!.IsLoseFocus)
-                {
-                    Utils.WindowLostFocus(PreferenceWindowHandle, ehDbRepository.GameInfo!.IsLoseFocus);
-                }
-            });
             ClosedCommand = ReactiveCommand.Create(() =>
             {
                 ehConfigRepository.PreferenceWindowHeight = Height;
                 ehConfigRepository.PreferenceWindowWidth = Width;
             });
         }
-
-        public HWND PreferenceWindowHandle { get; set; }
 
         [Reactive]
         public string PageHeader { get; set; } = string.Empty;
@@ -67,8 +58,6 @@ namespace ErogeHelper.ViewModel.Windows
 
         [Reactive]
         public double Width { get; set; }
-
-        public ReactiveCommand<Unit, Unit> LoadedCommand { get; init; }
 
         public ReactiveCommand<Unit, Unit> ClosedCommand { get; init; }
     }

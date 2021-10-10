@@ -82,11 +82,7 @@ namespace ErogeHelper.ViewModel.Controllers
                 .DistinctUntilChanged()
                 .Subscribe(v =>
                 {
-                    Application.Current.Windows
-                        .Cast<Window>()
-                        .Where(w => w.ActualWidth != 0)
-                        .ToList()
-                        .ForEach(w => Utils.WindowLostFocus(Utils.GetWpfWindowHandle(w), v));
+                    Utils.WindowLostFocus(MainWindowHandle, v);
                     _ehDbRepository.UpdateLostFocusStatus(v);
                 });
 

@@ -154,10 +154,10 @@ namespace ErogeHelper.Common
 
             var windowVersionString =
                 OsVersion >= windows11 ? $"Windows 11 {releaseId}" :
-                OsVersion == windows10 ? $"Windows 10 {releaseId}" :
-                OsVersion == windows81 ? "Windows 8.1" :
-                OsVersion == windows7 ? "Windows 8" :
-                OsVersion == windows8 ? $"Windows 7 {Environment.OSVersion.ServicePack}" :
+                OsVersion >= windows10 ? $"Windows 10 {releaseId}" :
+                OsVersion >= windows81 ? "Windows 8.1" :
+                OsVersion >= windows8 ? "Windows 8" :
+                OsVersion >= windows7 ? $"Windows 7 {Environment.OSVersion.ServicePack}" :
                 Environment.OSVersion.VersionString;
 
             return $"{windowVersionString} {architecture}";
