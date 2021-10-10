@@ -59,11 +59,11 @@ namespace ErogeHelper
         /// <returns>true if game is in fullscreen status</returns>
         public static bool IsGameForegroundFullscreen(HWND gameHwnd)
         {
+            User32.GetWindowRect(gameHwnd, out var rect);
             foreach (var screen in WpfScreenHelper.Screen.AllScreens)
             {
-                User32.GetWindowRect(gameHwnd, out var rect);
-                var systemRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-                if (systemRect.Contains(screen.Bounds))
+                var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+                if (fullScreenGameRect.Contains(screen.PixelBounds))
                     return true;
             }
             return false;
