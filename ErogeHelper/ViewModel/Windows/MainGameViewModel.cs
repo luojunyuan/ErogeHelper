@@ -72,6 +72,7 @@ namespace ErogeHelper.ViewModel.Windows
             Loaded = ReactiveCommand.Create(() =>
             {
                 mainWindowDataService.SetHandle(MainWindowHandle);
+                Utils.HideWindowInAltTab(MainWindowHandle);
                 gameWindowHooker.InvokeUpdatePosition();
 
                 if (ehDbRepository.GameInfo!.IsLoseFocus)
