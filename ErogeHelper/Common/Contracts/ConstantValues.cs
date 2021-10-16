@@ -1,6 +1,4 @@
-﻿using ErogeHelper.Common.Entities;
-
-namespace ErogeHelper.Common.Contracts
+﻿namespace ErogeHelper.Common.Contracts
 {
     public static class ConstantValues
     {
@@ -19,6 +17,10 @@ namespace ErogeHelper.Common.Contracts
         public const int WaitGameStartTimeout = 20000;
 
         public const int MinimumLagTime = 50;
+
+        public const int KeyboardLagTime = 25;
+
+        public const int PressFirstKeyLagTime = 500;
 
         public const int GameWindowStatusRefreshTime = 200;
 

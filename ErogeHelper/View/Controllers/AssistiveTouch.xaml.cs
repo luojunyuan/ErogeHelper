@@ -235,6 +235,15 @@ namespace ErogeHelper.View.Controllers
                     v => v.LoseFocusToggle.IsChecked).DisposeWith(d);
 
                 this.Bind(ViewModel,
+                    vm => vm.TouchBoxIsOn,
+                    v => v.TouchBoxToggle.IsChecked).DisposeWith(d);
+                this.Bind(ViewModel,
+                    vm => vm.TouchBoxVisible,
+                    v => v.TouchBoxToggle.Visibility,
+                    on => on ? Visibility.Visible : Visibility.Collapsed,
+                    visible => visible == Visibility.Visible).DisposeWith(d);
+
+                this.Bind(ViewModel,
                     vm => vm.IsTouchToMouse,
                     v => v.TouchConversionToggle.IsChecked).DisposeWith(d);
 

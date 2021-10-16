@@ -72,14 +72,18 @@ namespace ErogeHelper.View.Windows
                     v => v.ClientArea.Margin).DisposeWith(d);
 
                 this.Bind(ViewModel,
-                    vm => vm.AssistiveTouchViewModel,
-                    v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
-
-                this.Bind(ViewModel,
                     vm => vm.UseEdgeTouchMask,
                     v => v.PreventFalseTouchMask.Visibility,
                     value => value ? Visibility.Visible : Visibility.Collapsed,
                     visibility => visibility == Visibility.Visible).DisposeWith(d);
+
+                this.Bind(ViewModel,
+                    vm => vm.TouchToolBoxViewModel,
+                    v => v.TouchToolBoxHost.ViewModel).DisposeWith(d);
+
+                this.Bind(ViewModel,
+                    vm => vm.AssistiveTouchViewModel,
+                    v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
             });
         }
     }

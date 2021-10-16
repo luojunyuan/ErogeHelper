@@ -18,12 +18,14 @@ namespace ErogeHelper.ViewModel.Windows
     {
         public MainGameViewModel(
             AssistiveTouchViewModel? assistiveTouchViewModel = null,
+            TouchToolBoxViewModel? touchToolBoxViewModel = null,
             IEhConfigRepository? ehConfigRepository = null,
             IMainWindowDataService? mainWindowDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
             IGameInfoRepository? ehDbRepository = null,
             IGameDataService? gameDataService = null)
         {
+            TouchToolBoxViewModel = touchToolBoxViewModel ?? DependencyResolver.GetService<TouchToolBoxViewModel>();
             AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
             gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
             mainWindowDataService ??= DependencyResolver.GetService<IMainWindowDataService>();
@@ -98,6 +100,8 @@ namespace ErogeHelper.ViewModel.Windows
                     });
             });
         }
+
+        public TouchToolBoxViewModel TouchToolBoxViewModel { get; }
 
         public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
 

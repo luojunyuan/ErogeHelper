@@ -32,12 +32,14 @@ namespace ErogeHelper
             // View
             Locator.CurrentMutable.Register<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
             Locator.CurrentMutable.Register<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
+            Locator.CurrentMutable.Register<IViewFor<TouchToolBoxViewModel>>(() => new TouchToolBox());
             Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
             Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());
             Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
             // ViewModel
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton(() => new TouchToolBoxViewModel());
             Locator.CurrentMutable.Register(() => new PreferenceViewModel());
             Locator.CurrentMutable.Register(() => new GeneralViewModel());
             Locator.CurrentMutable.Register(() => new AboutViewModel());

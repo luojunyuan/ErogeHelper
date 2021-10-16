@@ -361,6 +361,15 @@ namespace ErogeHelper.Language {
         }
         
         /// <summary>
+        ///   查找类似 Touch keyboard keys 的本地化字符串。
+        /// </summary>
+        public static string GameView_TouchKeyboard {
+            get {
+                return ResourceManager.GetString("GameView.TouchKeyboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Touch to mouse 的本地化字符串。
         /// </summary>
         public static string GameView_TouchToMouse {

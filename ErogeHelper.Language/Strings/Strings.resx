@@ -519,4 +519,7 @@ Caused by source `{1}`
   <data name="GeneralPage.FalseTouchMask" xml:space="preserve">
     <value>Use edge false touch mask</value>
   </data>
+  <data name="GameView.TouchKeyboard" xml:space="preserve">
+    <value>Touch keyboard keys</value>
+  </data>
 </root>

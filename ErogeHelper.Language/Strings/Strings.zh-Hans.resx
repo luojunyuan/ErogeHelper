@@ -519,4 +519,7 @@
   <data name="GeneralPage.FalseTouchMask" xml:space="preserve">
     <value>使能屏幕边缘误触控遮掩层</value>
   </data>
+  <data name="GameView.TouchKeyboard" xml:space="preserve">
+    <value>触控键盘按键</value>
+  </data>
 </root>

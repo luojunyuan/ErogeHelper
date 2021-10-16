@@ -30,6 +30,8 @@ namespace ErogeHelper.Common.Contracts
 
         public const string Component = "\uE950";
 
+        public const string KeyboardClassic = "\uE765";
+
         public static readonly SymbolIcon LangJPN = new() { Symbol = (Symbol)59358 };
     }
 }

@@ -22,6 +22,7 @@
             <Border x:Name="PreventFalseTouchMask"
                 BorderBrush="Black" BorderThickness="5"
                 Opacity="{StaticResource MinimalOpacity}" />
+            <reactiveUi:ViewModelViewHost Margin="5 50 0 0" x:Name="TouchToolBoxHost" />
             <!--  Client area  -->
             <Border x:Name="ClientArea">
                 <reactiveUi:ViewModelViewHost x:Name="AssistiveTouchHost" />

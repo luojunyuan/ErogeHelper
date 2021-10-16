@@ -25,6 +25,11 @@
                 <ui:AppBarButton x:Name="VolumeUp" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}" />
                 <ui:AppBarButton x:Name="FullScreenSwitcher" />
                 <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
+                <ui:AppBarToggleButton x:Name="TouchBoxToggle" ToolTip="{x:Static resx:Strings.GameView_TouchKeyboard}">
+                    <ui:AppBarToggleButton.Icon>
+                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.KeyboardClassic}" />
+                    </ui:AppBarToggleButton.Icon>
+                </ui:AppBarToggleButton>
                 <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 
                 <ui:CommandBarFlyout.SecondaryCommands>

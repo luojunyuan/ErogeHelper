@@ -31,7 +31,8 @@ namespace ErogeHelper.ViewModel.Controllers
             IGameDataService? gameDataService = null,
             IGameInfoRepository? ehDbRepository = null,
             ITouchConversionHooker? touchConversionHooker = null,
-            IGameWindowHooker? gameWindowHooker = null)
+            IGameWindowHooker? gameWindowHooker = null,
+            TouchToolBoxViewModel? touchToolBoxViewModel = null)
         {
             mainWindowDataService ??= DependencyResolver.GetService<IMainWindowDataService>();
             _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
@@ -39,6 +40,7 @@ namespace ErogeHelper.ViewModel.Controllers
             ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
             touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
             gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
+            touchToolBoxViewModel ??= DependencyResolver.GetService<TouchToolBoxViewModel>();
 
             #region Initialize Datas
             ButtonSize = _ehConfigRepository.UseBigAssistiveTouchSize ? DefaultValues.AssistiveTouchBigSize : DefaultValues.AssistiveTouchSize;
@@ -117,11 +119,23 @@ namespace ErogeHelper.ViewModel.Controllers
             this.WhenAnyValue(x => x.LoseFocusIsOn)
                 .Skip(1)
                 .DistinctUntilChanged()
+                .Do(v => TouchBoxVisible = v)
                 .Subscribe(v =>
                 {
                     Utils.WindowLostFocus(mainWindowDataService.Handle, v);
                     ehDbRepository.UpdateLostFocusStatus(v);
                 });
+
+            TouchBoxVisible = LoseFocusIsOn;
+            TouchBoxIsOn = _ehConfigRepository.UseTouchToolBox;
+            this.WhenAnyValue(x => x.TouchBoxIsOn)
+                .Skip(1)
+                .DistinctUntilChanged()
+                .Subscribe(v => _ehConfigRepository.UseTouchToolBox = v);
+
+            this.WhenAnyValue(x => x.LoseFocusIsOn, x => x.TouchBoxIsOn, (a, b) => a && b)
+                .Skip(1)
+                .Subscribe(v => touchToolBoxViewModel.TouchToolBoxVisible = v);
 
             IsTouchToMouse = ehDbRepository.GameInfo!.IsEnableTouchToMouse;
             this.WhenAnyValue(x => x.IsTouchToMouse)
@@ -134,29 +148,29 @@ namespace ErogeHelper.ViewModel.Controllers
 
             VolumeDown = ReactiveCommand.CreateFromTask(async () =>
                 await WindowsInput.Simulate.Events()
-                        .Click(KeyCode.VolumeDown)
-                        .Invoke().ConfigureAwait(false));
+                    .Click(KeyCode.VolumeDown)
+                    .Invoke().ConfigureAwait(false));
             VolumeUp = ReactiveCommand.CreateFromTask(async () =>
                 await WindowsInput.Simulate.Events()
-                        .Click(KeyCode.VolumeUp)
-                        .Invoke().ConfigureAwait(false));
+                    .Click(KeyCode.VolumeUp)
+                    .Invoke().ConfigureAwait(false));
             SwitchFullScreen = ReactiveCommand.CreateFromTask(async () =>
             {
-                // Tip: If a window's main handle not the Process.MainWindowHandle, so the Alt+Enter also not work
                 User32.BringWindowToTop(gameDataService.MainProcess.MainWindowHandle);
+                // アインシュタイン not work
                 await WindowsInput.Simulate.Events()
-                        .ClickChord(KeyCode.Alt, KeyCode.Enter)
-                        .Invoke().ConfigureAwait(false);
+                    .ClickChord(KeyCode.Alt, KeyCode.Enter)
+                    .Invoke().ConfigureAwait(false);
             });
 
             TaskbarNotifyArea = ReactiveCommand.CreateFromTask(async () =>
                 await WindowsInput.Simulate.Events()
-                        .ClickChord(KeyCode.LWin, KeyCode.A)
-                        .Invoke().ConfigureAwait(false));
+                    .ClickChord(KeyCode.LWin, KeyCode.A)
+                    .Invoke().ConfigureAwait(false));
             TaskView = ReactiveCommand.CreateFromTask(async () =>
                 await WindowsInput.Simulate.Events()
-                        .ClickChord(KeyCode.LWin, KeyCode.Tab)
-                        .Invoke().ConfigureAwait(false));
+                    .ClickChord(KeyCode.LWin, KeyCode.Tab)
+                    .Invoke().ConfigureAwait(false));
             ScreenShot = ReactiveCommand.CreateFromTask(async () =>
             {
                 _hideFlyoutSubj.OnNext(Unit.Default);
@@ -218,6 +232,12 @@ namespace ErogeHelper.ViewModel.Controllers
 
         [Reactive]
         public bool LoseFocusIsOn { get; set; }
+
+        [Reactive]
+        public bool TouchBoxVisible { get; set; }
+
+        [Reactive]
+        public bool TouchBoxIsOn { get; set; }
 
         [Reactive]
         public bool IsTouchToMouse { get; set; }

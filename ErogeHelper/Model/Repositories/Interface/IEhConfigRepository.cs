@@ -54,6 +54,9 @@ namespace ErogeHelper.Model.Repositories.Interface
         [Option(DefaultValue = false)]
         public bool UseEdgeTouchMask { get; set; }
 
+        [Option(DefaultValue = false)]
+        public bool UseTouchToolBox { get; set; }
+
         // Text 模様
         [Option(DefaultValue = TextTemplateType.OutLineKanaTop)]
         public TextTemplateType TextTemplateConfig { get; set; }
