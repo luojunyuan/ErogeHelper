@@ -73,6 +73,8 @@ namespace ErogeHelper
 
             gameDataService.Init(md5, gamePath);
 
+
+            // TODO: Add try block to catch the error from new db version back to old one. Tip user the db would be rebuild and the old one would be deleted.
             var gameInfo = gameInfoRepository.GameInfo;
             if (gameInfo is null)
             {

@@ -138,7 +138,6 @@ namespace ErogeHelper.Model.Services
         {
             switch (eventType)
             {
-                // TODO: Show and Hide MainGameWindow with these three events
                 case EventObjectDestroy:
                     {
                         if (hWnd == _gameHwnd)
