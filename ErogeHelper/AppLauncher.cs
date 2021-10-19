@@ -40,7 +40,7 @@ namespace ErogeHelper
                 return;
             }
 
-            gameWindowHooker.SetGameWindowHook(gameDataService.MainProcess);
+            gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess);
 
             DependencyResolver.ShowView<MainGameViewModel>();
         }

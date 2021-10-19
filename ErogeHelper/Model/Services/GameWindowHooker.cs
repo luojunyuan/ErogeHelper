@@ -47,12 +47,12 @@ namespace ErogeHelper.Model.Services
         public IObservable<WindowOperation> WindowOperationSubj => _windowOperationSubj;
 
         private IGameDataService? _gameDataService;
-        public void SetGameWindowHook(Process process)
+        public void SetupGameWindowHook(Process process, IGameDataService? gameDataService = null)
         {
             _gameProc = process;
 
             _gameProc.EnableRaisingEvents = true;
-            _gameDataService = DependencyResolver.GetService<IGameDataService>();
+            _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
             _gameHwnd = CurrentWindowHandle(_gameProc);
             _gameDataService.SetGameRealWindowHandle(_gameHwnd);
 
@@ -61,10 +61,11 @@ namespace ErogeHelper.Model.Services
             _winEventDelegate = WinEventCallback;
             _gcSafetyHandle = GCHandle.Alloc(_winEventDelegate);
 
-            _windowsEventHook = User32.SetWinEventHook(
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+           _windowsEventHook = User32.SetWinEventHook(
                 EventObjectDestroy, EventObjectLocationChange,
                 IntPtr.Zero, _winEventDelegate, processId, targetThreadId,
-                WinEventHookInternalFlags);
+                WinEventHookInternalFlags));
 
             _gameProc.Events().Exited
                 .ObserveOn(RxApp.MainThreadScheduler)

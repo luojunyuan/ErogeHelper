@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using ErogeHelper.Common.Entities;
 using ErogeHelper.Common.Enums;
+using ErogeHelper.Model.DataServices.Interface;
 
 namespace ErogeHelper.Model.Services.Interface
 {
@@ -11,7 +12,7 @@ namespace ErogeHelper.Model.Services.Interface
 
         IObservable<WindowOperation> WindowOperationSubj { get; }
 
-        void SetGameWindowHook(Process process);
+        void SetupGameWindowHook(Process process, IGameDataService? gameDataService = null);
 
         GameWindowPositionPacket InvokeUpdatePosition();
     }
