@@ -152,10 +152,18 @@ namespace ErogeHelper.Installer
                     ExplorerHelper.OpenDirectories(directories);
 
                     if (typeof(string).Assembly.GetName().ProcessorArchitecture is
-                        System.Reflection.ProcessorArchitecture.Amd64)
+                        System.Reflection.ProcessorArchitecture.Arm)
                     {
                         Process.GetProcessesByName("dllhost").ToList()
-                            .ForEach(p => p.Kill());
+                            .ForEach(p => 
+                            {
+                                try
+                                {
+                                    var accessMainModule = p.MainModule!.BaseAddress;
+                                    p.Kill();
+                                }
+                                catch { }
+                            });
                     }
 
                     Application.Current.Dispatcher.Invoke(() =>
