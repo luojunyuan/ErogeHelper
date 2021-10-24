@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,6 +20,27 @@ namespace ErogeHelper
                                                         Environment.OSVersion.Version.Build);
 
         public static readonly string MachineGuid = GetMachineGuid();
+
+        public static bool IsFileInUse(string fileName)
+        {
+            bool inUse = true;
+
+            FileStream? fs = null;
+            try
+            {
+                fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+                inUse = false;
+            }
+            catch { }
+            finally
+            {
+                if (fs != null)
+                {
+                    fs.Close();
+                }
+            }
+            return inUse;
+        }
 
         public static bool IsOsWindows8OrNewer { get; } = OsVersion >= new Version(6, 2);
 
@@ -125,7 +147,6 @@ namespace ErogeHelper
                 22471 => "Insider Preview",
                 22454 => "Insider Preview",
                 22000 => "21H2",
-                19044 => "21H2",
                 19043 => "21H1",
                 19042 => "20H2",
                 19041 => "2004", // Current target WinRT-SDK version

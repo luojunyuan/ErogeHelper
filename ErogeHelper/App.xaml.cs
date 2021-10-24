@@ -124,7 +124,7 @@ namespace ErogeHelper
             {
                 var ex = args.Exception;
 
-                if (Current.Windows.Cast<Window>()
+                if (Current is not null && Current.Windows.Cast<Window>()
                     .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
                 {
                     args.Handled = true;

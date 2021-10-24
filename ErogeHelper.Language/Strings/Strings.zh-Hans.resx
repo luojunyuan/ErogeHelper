@@ -229,8 +229,8 @@
     <value>全屏 (Alt + Enter)</value>
   </data>
   <data name="GameView.FocusTip" xml:space="preserve">
-    <value>使EH所有窗口失去焦点
-(如果你无法在全屏游戏时使用就请打开这个)</value>
+    <value>使EH失去焦点
+(如果你无法在全屏游戏时使用就请打开这个，打开独立窗口仍会弹回桌面)</value>
   </data>
   <data name="GameView.ActionCenter" xml:space="preserve">
     <value>通知中心</value>

@@ -84,6 +84,10 @@ namespace ErogeHelper
             if (targetWindow is not null)
             {
                 targetWindow.Activate();
+                if (targetWindow.WindowState == WindowState.Minimized)
+                {
+                    targetWindow.WindowState = WindowState.Normal;
+                }
             }
             else
             {
@@ -91,6 +95,7 @@ namespace ErogeHelper
                 if (view is not Window window)
                     throw new TypeAccessException("View not implement IViewFor");
                 window.Show();
+                window.Activate();
             }
         }
     }

@@ -37,6 +37,8 @@ namespace ErogeHelper.View.Windows
 
             this.WhenActivated(d =>
             {
+                aboutViewModel.DisposeWith(d);
+
                 this.Bind(ViewModel,
                     vm => vm.Height,
                     v => v.Height).DisposeWith(d);

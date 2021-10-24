@@ -23,6 +23,7 @@ namespace ErogeHelper.View.Windows
             ViewModel = gameViewModel ?? DependencyResolver.GetService<MainGameViewModel>();
 
             _handle = Utils.GetWpfWindowHandle(this);
+            // XXX: This works only once, which definitely what I want
             this.WhenAnyValue(x => x._handle)
                 .BindTo(this, x => x.ViewModel!.MainWindowHandle);
 

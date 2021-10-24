@@ -24,11 +24,7 @@ namespace ErogeHelper.Installer
         {
             foreach (var dir in directories)
             {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = "explorer",
-                    Arguments = dir
-                });
+                Process.Start("explorer", dir);
             }
         }
 

@@ -13,7 +13,7 @@
     MinWidth="400"
     Title="PreferenceView"
     d:Height="500" d:Width="600" ui:TitleBar.ExtendViewIntoTitleBar="True" ui:WindowHelper.UseModernWindowStyle="True"
-    Icon="pack://application:,,,/assets/app.ico" ResizeMode="CanResizeWithGrip" Topmost="True"
+    Icon="pack://application:,,,/assets/app.ico" ResizeMode="CanResizeWithGrip" Topmost="False"
     WindowStartupLocation="CenterScreen">
 
     <ui:NavigationView x:Name="NavigationView"

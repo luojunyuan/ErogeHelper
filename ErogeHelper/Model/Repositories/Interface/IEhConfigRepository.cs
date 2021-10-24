@@ -57,6 +57,9 @@ namespace ErogeHelper.Model.Repositories.Interface
         [Option(DefaultValue = false)]
         public bool UseTouchToolBox { get; set; }
 
+        [Option(DefaultValue = false)]
+        public bool UpdatePreviewVersion { get; set; }
+
         // Text 模様
         [Option(DefaultValue = TextTemplateType.OutLineKanaTop)]
         public TextTemplateType TextTemplateConfig { get; set; }
