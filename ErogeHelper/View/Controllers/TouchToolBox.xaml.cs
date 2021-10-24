@@ -24,6 +24,17 @@ namespace ErogeHelper.View.Controllers
                    value => value ? Visibility.Visible : Visibility.Collapsed,
                    visibility => visibility == Visibility.Visible).DisposeWith(d);
 
+                this.Bind(ViewModel,
+                   vm => vm.ScrollUpVisible,
+                   v => v.ScrollUp.Visibility,
+                   value => value ? Visibility.Visible : Visibility.Collapsed,
+                   visibility => visibility == Visibility.Visible).DisposeWith(d);
+                this.Bind(ViewModel,
+                   vm => vm.ScrollDownVisible,
+                   v => v.ScrollDown.Visibility,
+                   value => value ? Visibility.Visible : Visibility.Collapsed,
+                   visibility => visibility == Visibility.Visible).DisposeWith(d);
+
                 this.BindCommand(ViewModel,
                     vm => vm.Esc,
                     v => v.Esc).DisposeWith(d);
@@ -73,6 +84,14 @@ namespace ErogeHelper.View.Controllers
                 this.BindCommand(ViewModel,
                     vm => vm.RightArrow,
                     v => v.RightArrow).DisposeWith(d);
+
+                this.BindCommand(ViewModel,
+                    vm => vm.ScrollUp,
+                    v => v.ScrollUp).DisposeWith(d);
+
+                this.BindCommand(ViewModel,
+                    vm => vm.ScrollDown,
+                    v => v.ScrollDown).DisposeWith(d);
             });
         }
 

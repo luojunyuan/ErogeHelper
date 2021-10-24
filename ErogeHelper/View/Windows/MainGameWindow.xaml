@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
     Left="-32000" Top="-32000" Width="0" Height="0"
-    Title="MainGameWindow"
+    Title="MainGameWindow" IsTabStop="False" TabIndex="0"
     AllowsTransparency="True" ShowInTaskbar="False" Topmost="True" WindowStyle="None">
 
     <Window.Background>

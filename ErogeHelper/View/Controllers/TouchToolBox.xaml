@@ -31,6 +31,8 @@
             <Button x:Name="LeftArrow" Content="←" Height="100" Width="100" FontSize="18" />
             <Button x:Name="DownArrow" Content="↓" Height="100" Width="100" FontSize="18" />
             <Button x:Name="RightArrow" Content="→" Height="100" Width="100" FontSize="18" />
+            <Button x:Name="ScrollUp" Content="Scroll Up" Height="100" Width="100" />
+            <Button x:Name="ScrollDown" Content="Scroll Down" Height="100" Width="100" />
             
         </WrapPanel>
 
