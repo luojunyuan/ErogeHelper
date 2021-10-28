@@ -13,6 +13,14 @@
 
 Eroge Helper 面向用户友好进行开发。
 
+### 下载
+
+见 [Release](https://github.com/ErogeHelper/ErogeHelper/releases) 页面，选择最新的latest版本下载。
+
+### 安装（用户）
+
+对于用户来说建议使用ErogeHelper.Installer.exe 将EH注册到游戏程序的上下文菜单（也叫右键菜单），这是EH设计的初衷——像LE一样便于使用。你也可以直接运行没有图标的ErogeHelper.exe 来载入正在运行的游戏。
+
 ##### 目前的功能
 
 - 借助Mecab阅读不认识的日文汉字（并不能保证分词与标注的汉字读音准确性，请勿以EH为准）
@@ -36,17 +44,17 @@ EH支持 windows 7 sp1 至最新版本的 windows 10 系统
 
 ### 构建生成（开发者）
 
-可以使用 VS2019 或 Rider 克隆仓库 `https://github.com/Eroge-Helper/ErogeHelper` 
+见 [Wiki](https://github.com/ErogeHelper/ErogeHelper/wiki/Build-and-Publish)
 
-1. 直接F5跑起来
+stable 版本的EH项目在分支 [Caliburn.Micro-Archive](https://github.com/ErogeHelper/ErogeHelper/tree/Caliburn.Micro-Archive) 中
 
-2. 在ErogeHelper的属性-调试 页面，增加游戏目录的参数与 '/le' 标识（如果需要），这样可以通过命令行直接启动游戏。
+当前仓库main分支即 Preview 版本去掉了核心功能，使用reactiveUI完全重构，并且也在学习中。
 
-作者是萌新开发，代码有很多奇怪的表达，以及很多反模式。计划先多做些内容，以后再尽量做业务和功能上的重构和测试。
+计划等 winui3 推出了，确保提取功能 texthost 能在arm系统上运行后，再将主要功能从stable移植到main分支。
 
-### 安装（用户）
+想法很多，还需要还原vnr的大部分功能，前路漫漫。。
 
-对于用户来说建议使用ErogeHelper.Installer.exe 将EH注册到游戏程序的上下文菜单（也叫右键菜单），这是EH设计的初衷——像LE一样便于使用。你也可以直接运行没有图标的ErogeHelper.exe 来载入正在运行的游戏。
+> 作者是萌新开发，代码有很多奇怪的表达，以及很多反模式。今后会尽量弄代码模块文档，如果你对EH有兴趣希望可以得到指导意见与代码优化。
 
 **EH的许多功能建立在之前已有的项目基础之上**
 
