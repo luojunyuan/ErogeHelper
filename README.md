@@ -1,45 +1,9 @@
-[简体中文](https://github.com/luojunyuan/Eroge-Helper/blob/master/README_zh-cn.md)
+[简体中文](https://github.com/ErogeHelper/ErogeHelper/blob/master/README_zh-cn.md)
 
-### How to build
+### Download
 
-Use VS2019 or Rider to clone `https://github.com/Eroge-Helper/ErogeHelper` down.
-
-Fill the command parameters in ErogeHelper's properties like `"D:\Ra-se-n\C' - can't live without you\c.exe" /le` and press F5 to run.
-
-one is full path of game, '/le' or '-le' to start with Locate Emulator
-
-`Ctrl+Shift+B` to compile all things, then check other parts.
-
-### Publish
-
-- x86_64 
-
-```
-dotnet publish -c Release -r win-x64 -o ./bin/Publish/win-x64 --no-self-contained
-```
-
-- x86_32 
-
-```
-dotnet publish -c Release -r win-x86 -o ./bin/Publish/win-x86 --no-self-contained
-```
-
-Open `x86 Native Tools Command Prompt for VS 20XX`
-
-```cmd
-cd path_to\ErogeHelper\bin\Publish\win-x86
-editbin /largeaddressaware ErogeHelper.exe
-```
-
-- Arm64 
-
-```
-dotnet publish -c Release -r win-arm64 -o ./bin/Publish/win-arm64 --no-self-contained
-rm .\bin\Publish\win-arm64\ErogeHelper.ShellMenuHandler.dll
-rm .\bin\Publish\win-arm64\ErogeHelper.ShellMenuHandler.pdb
-dotnet publish .\ErogeHelper.ShellMenuHandler\ErogeHelper.ShellMenuHandler.csproj -c Release -r win-x64 -o ./bin/Publish/win-arm64 --self-contained
-```
+See [release page](https://github.com/ErogeHelper/ErogeHelper/releases)
 
 ### Install
 
-For users please run ErogeHelper.Installer.exe to register EH in windows context menu (aka right click menu).
+For users please run ErogeHelper.Installer.exe to register ErogeHelper in windows context menu (aka right click menu).
