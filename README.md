@@ -1,4 +1,4 @@
-[简体中文](https://github.com/ErogeHelper/ErogeHelper/blob/master/README_zh-cn.md)
+[简体中文](https://github.com/ErogeHelper/ErogeHelper/blob/main/README_zh-cn.md)
 
 ### Download
 
