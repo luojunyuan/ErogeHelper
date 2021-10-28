@@ -9,36 +9,56 @@
   <br>
 </p>
 
-### 下载地址
-ErogeHelper v?.?.?.?:
-显示日文所需字典：
+帮助日语学习者轻松阅读不认识的汉字读音，以及查询游戏中的单词！现仅支持在线的Moji辞书。
+
+Eroge Helper 面向用户友好进行开发。
+
+### 下载
+
+见 [Release](https://github.com/ErogeHelper/ErogeHelper/releases) 页面，选择最新的latest版本下载。
 
 ### 安装（用户）
 
-建议使用 `ErogeHelper.Installer.exe` 将EH注册到游戏程序的上下文菜单（也叫右键菜单），这是EH设计的初衷——像LE一样便于使用。你也可以直接运行 `ErogeHelper.SelectProcess.exe` 来载入正在运行的游戏。
+对于用户来说建议使用ErogeHelper.Installer.exe 将EH注册到游戏程序的上下文菜单（也叫右键菜单），这是EH设计的初衷——像LE一样便于使用。你也可以直接运行没有图标的ErogeHelper.exe 来载入正在运行的游戏。
 
-##### 操作系统支持情况
+---
 
-EH支持 windows 7 sp1 with ESU 至最新版本的 windows 10 系统。
+##### 目前的功能
 
-若在 `ErogeHelper.Installer` 中点击“注册”提示先安装 `.Net Framework`，请于[微软官方](https://go.microsoft.com/fwlink/?LinkId=2085155)安装 `.Net Framework 4.8`。（若安装.Net Framework出现证书问题，请先安装KB2813430 [32位](https://www.microsoft.com/zh-CN/download/details.aspx?id=39110) [64位](https://www.microsoft.com/zh-CN/download/details.aspx?id=39115) 补丁）
+- 借助Mecab阅读不认识的日文汉字（并不能保证分词与标注的汉字读音准确性，请勿以EH为准）
+- 使用Moji辞书或Jisho查单词
+- 下载DeepL windows客户端，EH可以把提取到的文本传递到DeepL上翻译！（可能需要在DeepL中按Tab键使焦点聚集在源文本框中）
+- 一些机器翻译的聚合
+
+##### 支持的操作系统
+
+EH支持 windows 7 sp1 至最新版本的 windows 10 系统
+
+初次运行EH很可能会遇上一个红框，提醒先安装 **.Net 5 运行时**，请跟随微软的提示，下载 .Net 5 Desktop Runtime x64 字眼的运行库。 
 
 - win 7
 
-  对于纯净的 windows 7 sp1 系统，若双击 `ErogeHelper.exe` 或 `ErogeHelper.Installer.exe` 运行程序没有任何反应，请安装安全更新补丁 [KB2533623](https://wws.lanzoui.com/i6ZFzq6w0aj)。
+  windows 7 sp1 安装.Net 5 运行时之后，如果双击运行程序没有反应，可能还需要 KB2533623 KB2999226 等安全更新补丁[提取密码:gben](https://wws.lanzous.com/ihMiulenk6j)。在成功运行软件后若图标显示不正常需要安装 Segoe UI 字体文件 [提取密码:1p43](https://wws.lanzous.com/isjBWlenkqj)。 
 
-  在成功运行软件后若图标显示不正常（文字前显示方框）需要安装 Segoe UI 字体文件 [提取密码:1p43](https://wws.lanzous.com/isjBWlenkqj)。 
+> win 10 1909 (os version 18363.1049) 可能会遇上窗口渲染错误，启动EH后导致其他窗口变成高对比度，截图显示正常，重启计算机可以恢复。
 
-- win 11 arm
-
-  程序需要拖动窗口边缘或放大改变窗口大小人为强制渲染刷新，控件才可以正常显示。
-
-目前已知 win 10 1909 (os version 18363.1049) 可能会遇上窗口渲染错误，启动EH后导致其他窗口变成高对比度，截图显示正常，重启计算机可以恢复。
-
-如果你遇到了其他无法启动软件、安装相关的问题欢迎到上方issue 反馈问题。
+欢迎到上方issue 反馈问题。
 
 ### 构建生成（开发者）
 
+见 [Wiki](https://github.com/ErogeHelper/ErogeHelper/wiki/Build-and-Publish)
+
+stable 版本的EH项目在分支 [Caliburn.Micro-Archive](https://github.com/ErogeHelper/ErogeHelper/tree/Caliburn.Micro-Archive) 中
+
+当前仓库main分支即 Preview 版本去掉了核心功能，使用reactiveUI完全重构，并且也在学习中。
+
+计划等 winui3 推出了，确保提取功能 texthost 能在arm系统上运行后，再将主要功能从stable移植到main分支。
+
+想法很多，还需要还原vnr的大部分功能，前路漫漫。。
+
+> 作者是萌新开发，代码有很多奇怪的表达，以及很多反模式。今后会尽量弄代码模块文档，如果你对EH有兴趣希望可以得到指导意见与代码优化。
+
+**EH的许多功能建立在之前已有的项目基础之上**
 
 ### 证书
 
