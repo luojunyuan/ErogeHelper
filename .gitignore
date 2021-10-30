@@ -342,3 +342,6 @@ healthchecksdb
 
 # Remove launchSettings.json
 launchSettings.json
+
+# Folder info on Mac
+.DS_Store
