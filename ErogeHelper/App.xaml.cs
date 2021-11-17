@@ -20,6 +20,7 @@ using ErogeHelper.Share.Languages;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
+using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper
 {

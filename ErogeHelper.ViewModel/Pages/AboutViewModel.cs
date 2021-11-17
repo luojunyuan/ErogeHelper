@@ -123,6 +123,7 @@ namespace ErogeHelper.ViewModel.Pages
         {
             AutoUpdater.Proxy = WebRequest.DefaultWebProxy;
             AutoUpdater.RunUpdateAsAdmin = false;
+            AutoUpdater.InstallationPath = Directory.GetParent(AppContext.BaseDirectory)!.Parent!.FullName;
             var architecture = RuntimeInformation.ProcessArchitecture;
             
             if (!previewVersion)
