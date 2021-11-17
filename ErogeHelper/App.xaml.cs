@@ -1,14 +1,4 @@
-﻿using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Exceptions;
-using ErogeHelper.Common.Functions;
-using ErogeHelper.Language;
-using ErogeHelper.Model.Repositories;
-using Ookii.Dialogs.Wpf;
-using ReactiveMarbles.ObservableEvents;
-using ReactiveUI;
-using Splat;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -16,11 +6,20 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using MessageBox = ModernWpf.MessageBox;
+using CommunityToolkit.WinUI.Notifications;
+using ErogeHelper.Functions;
+using ErogeHelper.Model.Repositories;
+using ErogeHelper.Share;
+using ErogeHelper.Share.Exceptions;
+using ErogeHelper.Share.Languages;
+using Ookii.Dialogs.Wpf;
+using ReactiveUI;
+using Splat;
 
 namespace ErogeHelper
 {
@@ -39,45 +38,43 @@ namespace ErogeHelper
                 var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
                 Directory.SetCurrentDirectory(currentDirectory ??
                                               throw new ArgumentNullException(nameof(currentDirectory)));
+                DI.RegisterServices();
 
-                DependencyResolver.Register();
-
-                this.Events().Startup
-                    .Select(startupEvent => startupEvent.Args)
-                    .Subscribe(args =>
+                Startup += (_, startupEvent) =>
+                {
+                    var args = startupEvent.Args;
+                    // EH already exit, but toast is clicked. This one shouldn't happen 
+                    if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                     {
-                        // EH already exit, but toast is clicked. This one shouldn't happen 
-                        if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
-                        {
-                            Terminate(-1);
-                            return;
-                        }
+                        Terminate(-1);
+                        return;
+                    }
 
-                        if (args.Length == 0)
-                        {
-                            MessageBox.Show(Strings.App_StartNoParameter, "Eroge Helper");
-                            Terminate();
-                            return;
-                        }
+                    if (args.Length == 0)
+                    {
+                        MessageBox.Show(Strings.App_StartNoParameter, "Eroge Helper");
+                        Terminate();
+                        return;
+                    }
 
-                        var fullPath = Path.GetFullPath(args[0]);
-                        if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
-                        {
-                            MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
-                            Terminate();
-                            return;
-                        }
+                    var fullPath = Path.GetFullPath(args[0]);
+                    if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
+                    {
+                        MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
+                        Terminate();
+                        return;
+                    }
 
-                        ToastManagement.Register();
-                        ToastManagement.AdminModeTipToast();
-                        GameInfoRepository.UpdateEhDatabase();
+                    ToastManagement.Register();
+                    ToastManagement.AdminModeTipToast();
+                    GameInfoRepository.UpdateEhDatabase();
 
-                        AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
-                    });
+                    AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
+                };
             }
             catch (AppExistedException)
             {
-                Current.Shutdown();
+                Terminate();
             }
             catch (Exception ex)
             {
@@ -87,8 +84,15 @@ namespace ErogeHelper
             }
         }
 
+        public static readonly string EhVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString()
+            ?? "?.?.?.?";
+
         public static void Terminate(int exitCode = 0)
         {
+            Current.Windows
+                .Cast<Window>().ToList()
+                .ForEach(w => w.Close());
+
             Current.Shutdown(exitCode);
 
             if (Utils.IsOsWindows8OrNewer)
@@ -124,10 +128,10 @@ namespace ErogeHelper
             {
                 var ex = args.Exception;
 
-                if (Current is not null && Current.Windows.Cast<Window>()
+                if (Current.Windows.Cast<Window>()
                     .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
                 {
-                    args.Handled = true;
+                    //args.Handled = true;
                     LogHost.Default.Error(ex, "UI thread error occurrent");
                     ShowErrorDialog("UI", ex);
                     return;
@@ -186,7 +190,7 @@ namespace ErogeHelper
             using var dialog = new TaskDialog
             {
                 WindowTitle = string.Format(
-                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhContext.AppVersion, errorLevel),
+                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhVersion, errorLevel),
                 MainInstruction = $@"{ex.GetType().FullName}: {ex.Message}",
                 Content = Strings.ErrorDialog_Content + (additionInfo == string.Empty ? string.Empty :
                                                                                         "\r\n" + additionInfo),

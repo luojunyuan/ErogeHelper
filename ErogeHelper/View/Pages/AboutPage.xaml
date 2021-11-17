@@ -5,9 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts" xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
-    xmlns:reactiveUi="http://reactiveui.net" xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages"
+    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
+    xmlns:contract="clr-namespace:ErogeHelper.Share.Contracts;assembly=ErogeHelper.Share" 
+    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
+    xmlns:local="clr-namespace:ErogeHelper"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
+    xmlns:reactiveUi="http://reactiveui.net" 
+    xmlns:ui="http://schemas.modernwpf.com/2019" 
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:AboutViewModel}"
     d:DesignHeight="450" d:DesignWidth="400">
@@ -26,11 +30,11 @@
                 <TextBlock>
                     <Run Text="{x:Static resx:Strings.About_Version}" />
                     <Bold>
-                        <Run Text="{x:Static contract:EhContext.AppVersion}" />
+                        <Run x:Name="AppVersion" />
                     </Bold>
                 </TextBlock>
                 <Border x:Name="VersionBorder" BorderThickness="1" Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10">
-                    <ui:HyperlinkButton x:Name="VersionForground"
+                    <ui:HyperlinkButton x:Name="VersionForeground"
                         Padding="0" Margin="5 0 5 0" ToolTip="Click me jump to release page"
                         NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases">
                         <TextBlock x:Name="UpdateStatusTip" />
@@ -38,9 +42,9 @@
                 </Border>
             </StackPanel>
 
-            <Button x:Name="UpdateButton" Content="Update" />
+            <Button x:Name="UpdateButton" Content="{x:Static resx:Strings.Common_Update}" />
 
-            <CheckBox x:Name="PreviewCheckBox" Content="Receive nightly build" />
+            <CheckBox x:Name="PreviewCheckBox" Content="{x:Static resx:Strings.About_NightlyBuild}" />
 
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_GitHub}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Contributors}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />

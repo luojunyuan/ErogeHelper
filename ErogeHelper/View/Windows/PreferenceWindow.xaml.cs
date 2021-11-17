@@ -1,35 +1,29 @@
-﻿using ErogeHelper.Common.Contracts;
-using ErogeHelper.ViewModel.Pages;
-using ErogeHelper.ViewModel.Windows;
-using ModernWpf.Controls;
-using ReactiveMarbles.ObservableEvents;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using ErogeHelper.Share;
+using ErogeHelper.Share.Contracts;
+using ErogeHelper.ViewModel.Windows;
+using ModernWpf.Controls;
+using ReactiveMarbles.ObservableEvents;
+using ReactiveUI;
 
 namespace ErogeHelper.View.Windows
 {
-    /// <summary>
-    /// PreferenceWindow.xaml 的交互逻辑
-    /// </summary>
     public partial class PreferenceWindow
     {
-        public PreferenceWindow(
-            PreferenceViewModel? preferenceViewModel = null,
-            GeneralViewModel? generalViewModel = null,
-            AboutViewModel? aboutViewModel = null)
+        // XXX: Using static to avoid memory leak?
+        //private static readonly PreferenceNavigationView NavigationView = new();
+
+        public PreferenceWindow()
         {
             InitializeComponent();
 
-            ViewModel = preferenceViewModel ?? DependencyResolver.GetService<PreferenceViewModel>();
-            generalViewModel ??= new GeneralViewModel(hostScreen: ViewModel);
-            aboutViewModel ??= new AboutViewModel(hostScreen: ViewModel);
-
-            Width = ViewModel!.Width;
-            Height = ViewModel!.Height;
+            ViewModel ??= DependencyResolver.GetService<PreferenceViewModel>();
+            Height = ViewModel.Height;
+            Width = ViewModel.Width;
 
             this.Events().Closed
                 .Select(_ => Unit.Default)
@@ -37,8 +31,6 @@ namespace ErogeHelper.View.Windows
 
             this.WhenActivated(d =>
             {
-                aboutViewModel.DisposeWith(d);
-
                 this.Bind(ViewModel,
                     vm => vm.Height,
                     v => v.Height).DisposeWith(d);
@@ -51,7 +43,7 @@ namespace ErogeHelper.View.Windows
                     vm => vm.PageHeader,
                     v => v.HeaderBlock.Text).DisposeWith(d);
 
-                this.Bind(ViewModel,
+                this.OneWayBind(ViewModel,
                     vm => vm.Router,
                     v => v.RoutedViewHost.Router).DisposeWith(d);
 
@@ -65,17 +57,18 @@ namespace ErogeHelper.View.Windows
 
                         switch (tag)
                         {
-                            case PageTags.General:
-                                ViewModel.Router.NavigateAndReset.Execute(generalViewModel);
+                            case PageTag.General:
+                                ViewModel!.Router.NavigateAndReset.Execute(ViewModel.GeneralViewModel);
                                 break;
-                            case PageTags.About:
-                                ViewModel.Router.NavigateAndReset.Execute(aboutViewModel);
+                            case PageTag.About:
+                                ViewModel!.Router.NavigateAndReset.Execute(ViewModel.AboutViewModel);
                                 break;
                             default:
                                 break;
                         }
                     }).DisposeWith(d);
 
+                NavigationView.SelectedItem = null;
                 NavigationView.SelectedItem = NavigationView.MenuItems.OfType<NavigationViewItem>().First();
             });
         }

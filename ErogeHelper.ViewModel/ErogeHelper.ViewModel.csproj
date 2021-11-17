@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.Model\ErogeHelper.Model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Windows\" />
+    <None Remove="Pages\" />
+    <None Remove="Controllers\" />
+    <None Remove="ReactiveUI.Fody" />
+    <None Remove="WindowsInput" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
+    <PackageReference Include="NullGuard.Fody" Version="3.0.0" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.3.10" />
+  </ItemGroup>
+</Project>

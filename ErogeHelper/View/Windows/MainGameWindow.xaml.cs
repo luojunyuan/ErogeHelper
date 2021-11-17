@@ -1,4 +1,6 @@
-﻿using ErogeHelper.ViewModel.Windows;
+﻿using ErogeHelper.Functions;
+using ErogeHelper.Share;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Vanara.PInvoke;
 
@@ -14,18 +17,19 @@ namespace ErogeHelper.View.Windows
 {
     public partial class MainGameWindow : IEnableLogger
     {
-        private readonly HWND _handle;
-
-        public MainGameWindow(MainGameViewModel? gameViewModel = null)
+        public MainGameWindow()
         {
             InitializeComponent();
 
-            ViewModel = gameViewModel ?? DependencyResolver.GetService<MainGameViewModel>();
+            ViewModel ??= DependencyResolver.GetService<MainGameViewModel>();
 
-            _handle = Utils.GetWpfWindowHandle(this);
-            // XXX: This works only once, which definitely what I want
-            this.WhenAnyValue(x => x._handle)
-                .BindTo(this, x => x.ViewModel!.MainWindowHandle);
+            var handle = WpfHelper.GetWpfWindowHandle(this);
+
+            ViewModel.MainWindowHandle = handle;
+                
+            ViewModel.Dpi = WpfScreenHelper.Screen
+                    .FromHandle(handle.DangerousGetHandle())
+                    .ScaleFactor;
 
             this.Events().Loaded
                 .Select(_ => Unit.Default)
@@ -37,20 +41,11 @@ namespace ErogeHelper.View.Windows
 
             this.WhenActivated(d =>
             {
-                this.WhenAnyObservable(x => x.ViewModel!.HideSubj)
-                    .Subscribe(_ => Hide()).DisposeWith(d);
-
-                this.WhenAnyObservable(x => x.ViewModel!.ShowSubj)
-                    .Subscribe(_ => Show()).DisposeWith(d);
-
-                this.WhenAnyObservable(x => x.ViewModel!.TerminateAppSubj)
-                    .Subscribe(_ =>
-                    {
-                        Application.Current.Windows
-                            .Cast<Window>().ToList()
-                            .ForEach(w => w.Close());
-                        App.Terminate();
-                    }).DisposeWith(d);
+                ViewModel.HideMainWindow
+                    .RegisterHandler(context => { Hide(); context.SetOutput(Unit.Default);}).DisposeWith(d);
+                
+                ViewModel.ShowMainWindow
+                    .RegisterHandler(context => { Show(); context.SetOutput(Unit.Default);}).DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.Height,
@@ -70,21 +65,23 @@ namespace ErogeHelper.View.Windows
 
                 this.OneWayBind(ViewModel,
                     vm => vm.ClientAreaMargin,
-                    v => v.ClientArea.Margin).DisposeWith(d);
+                    v => v.ClientArea.Margin,
+                    margin => new Thickness(margin.Left, margin.Top, margin.Right, margin.Bottom)).DisposeWith(d);
 
                 this.Bind(ViewModel,
-                    vm => vm.UseEdgeTouchMask,
+                    vm => vm.ShowEdgeTouchMask,
                     v => v.PreventFalseTouchMask.Visibility,
                     value => value ? Visibility.Visible : Visibility.Collapsed,
                     visibility => visibility == Visibility.Visible).DisposeWith(d);
+                    
 
                 this.Bind(ViewModel,
                     vm => vm.TouchToolBoxViewModel,
                     v => v.TouchToolBoxHost.ViewModel).DisposeWith(d);
 
                 this.Bind(ViewModel,
-                    vm => vm.AssistiveTouchViewModel,
-                    v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
+                   vm => vm.AssistiveTouchViewModel,
+                   v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
             });
         }
     }

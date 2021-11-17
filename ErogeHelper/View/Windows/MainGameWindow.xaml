@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:reactiveUi="http://reactiveui.net" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
+    xmlns:reactiveUi="http://reactiveui.net" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
     Left="-32000" Top="-32000" Width="0" Height="0"
@@ -22,7 +22,9 @@
             <Border x:Name="PreventFalseTouchMask"
                 BorderBrush="Black" BorderThickness="5"
                 Opacity="{StaticResource MinimalOpacity}" />
+            
             <reactiveUi:ViewModelViewHost Margin="5 50 0 0" x:Name="TouchToolBoxHost" />
+            
             <!--  Client area  -->
             <Border x:Name="ClientArea">
                 <reactiveUi:ViewModelViewHost x:Name="AssistiveTouchHost" />

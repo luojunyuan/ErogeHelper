@@ -1,19 +1,26 @@
-﻿using ErogeHelper.Common.Contracts;
-using ErogeHelper.Common.Entities;
-using ErogeHelper.Common.Enums;
-using ErogeHelper.ViewModel.Controllers;
-using ModernWpf.Controls.Primitives;
-using ReactiveMarbles.ObservableEvents;
-using ReactiveUI;
-using Splat;
 using System;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using ErogeHelper.Functions;
+using ErogeHelper.Share;
+using ErogeHelper.Share.Contracts;
+using ErogeHelper.Share.Entities;
+using ErogeHelper.Share.Enums;
+using ErogeHelper.ViewModel.Controllers;
+using ErogeHelper.ViewModel.Windows;
+using ModernWpf.Controls;
+using ModernWpf.Controls.Primitives;
+using ReactiveMarbles.ObservableEvents;
+using ReactiveUI;
+using Splat;
+using WindowsInput.Events;
 
 namespace ErogeHelper.View.Controllers
 {
@@ -23,51 +30,44 @@ namespace ErogeHelper.View.Controllers
         private const double OpacityNormal = 1;
         private const double ButtonSpace = 2;
 
-        // The diameter of button use for orienting input interaction
+        // The diameter of button use for mouse releasing
         private double _distance;
         private double _halfDistance;
         private double _oneThirdDistance;
         private double _twoThirdDistance;
 
-        // XXX: readonly can also be bind reactive
-#pragma warning disable CS0649
-        private readonly double _buttonSize;
+        private double _buttonSize;
 
-        public AssistiveTouch(AssistiveTouchViewModel? assistiveTouchViewModel = null)
+        public AssistiveTouch()
         {
             InitializeComponent();
 
-            ViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
+            ViewModel ??= DependencyResolver.GetService<AssistiveTouchViewModel>();
 
             var touchPosition = ViewModel!.AssistiveTouchPosition;
-            Dispatcher.Events().ShutdownStarted.Subscribe(_ =>
-            {
-                ViewModel!.AssistiveTouchPosition = touchPosition;
-                this.Log().Debug("Save touch position succeed");
-            });
+            var touchSize = ViewModel!.BigSize;
 
 
             FrameworkElement? parent = null;
 
-            AssistiveButton.Events().Loaded
-                .Subscribe(_ =>
-                {
-                    parent ??= Parent is not FrameworkElement reactiveViewModelViewHost
+            AssistiveButton.Loaded += (_, _) =>
+            {
+                parent ??= Parent is not FrameworkElement reactiveViewModelViewHost
                         ? throw new InvalidOperationException("Control's parent must be FrameworkElement type")
                         : reactiveViewModelViewHost;
 
-                    ViewModel!.ParentFrameWorkElementLoaded = true;
-                    UpdateButtonDiameterProperties(_buttonSize);
-                    AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent);
-                    AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
-                });
+                UpdateButtonDiameterProperties(touchSize, touchPosition, parent);
+
+                parent.Events().SizeChanged
+                    .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent));
+            };
 
             #region Opacity Adjust
             Point lastPos;
             var isMoving = false;
             BehaviorSubject<bool> tryTransparentizeSubj = new(true);
             tryTransparentizeSubj
-                .Throttle(TimeSpan.FromMilliseconds(ConstantValues.AssistiveTouchOpacityChangedTimeout))
+                .Throttle(TimeSpan.FromMilliseconds(ConstantValue.AssistiveTouchOpacityChangedTime))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Where(on => on && isMoving == false && AssistiveTouchFlyout.IsOpen == false)
                 .Subscribe(_ => AssistiveButton.Opacity = OpacityValue);
@@ -208,37 +208,43 @@ namespace ErogeHelper.View.Controllers
 
             this.WhenActivated(d =>
             {
+                Dispatcher.Events().ShutdownStarted.Subscribe(_ =>
+                {
+                    ViewModel!.AssistiveTouchPosition = touchPosition;
+                    this.Log().Debug("Save touch position succeed");
+                });
+
+                this.WhenAnyObservable(x => x.ViewModel!.UseBigSize)
+                    .Subscribe(isBigSize =>
+                        UpdateButtonDiameterProperties(isBigSize, touchPosition, parent!)).DisposeWith(d);
+
+                var backToWindowIcon = new SymbolIcon { Symbol = Symbol.BackToWindow };
+                var fullScreenIcon = new SymbolIcon { Symbol = Symbol.FullScreen };
+                this.BindCommand(ViewModel,
+                    vm => vm.SwitchFullScreen,
+                    v => v.FullScreenSwitcher).DisposeWith(d);
                 this.OneWayBind(ViewModel,
-                    vm => vm.AssistiveTouchTemplate,
-                    v => v.AssistiveButton.Template).DisposeWith(d);
-
+                  vm => vm.SwitchFullScreenIcon,
+                  v => v.FullScreenSwitcher.Icon,
+                  iconEnum => iconEnum switch
+                  {
+                      SymbolName.BackToWindow => backToWindowIcon,
+                      SymbolName.FullScreen => fullScreenIcon,
+                      _ => throw new InvalidCastException(),
+                  }).DisposeWith(d);
                 this.OneWayBind(ViewModel,
-                    vm => vm.AssistiveTouchVisibility,
-                    v => v.AssistiveButton.Visibility).DisposeWith(d);
+                  vm => vm.SwitchFullScreenToolTip,
+                  v => v.FullScreenSwitcher.ToolTip).DisposeWith(d);
 
-                this.OneWayBind(ViewModel,
-                    vm => vm.ButtonSize,
-                    v => v._buttonSize).DisposeWith(d);
-
-                this.WhenAnyObservable(x => x.ViewModel!.UpdateButtonDiameterSubj)
-                    .Subscribe(buttonSize => UpdateButtonDiameterProperties(buttonSize)).DisposeWith(d);
-
-                this.WhenAnyObservable(x => x.ViewModel!.SetButtonDockPosSubj)
-                    .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent!)).DisposeWith(d);
-
-                this.WhenAnyObservable(x => x.ViewModel!.HideFlyoutSubj)
-                    .Subscribe(_ => AssistiveTouchFlyout.Hide()).DisposeWith(d);
-
-                // Flyout Commands
                 this.Bind(ViewModel,
-                    vm => vm.LoseFocusIsOn,
+                    vm => vm.LoseFocusEnable,
                     v => v.LoseFocusToggle.IsChecked).DisposeWith(d);
 
                 this.Bind(ViewModel,
-                    vm => vm.TouchBoxIsOn,
+                    vm => vm.TouchBoxEnable,
                     v => v.TouchBoxToggle.IsChecked).DisposeWith(d);
                 this.Bind(ViewModel,
-                    vm => vm.TouchBoxVisible,
+                    vm => vm.TouchBoxSwitcherVisible,
                     v => v.TouchBoxToggle.Visibility,
                     on => on ? Visibility.Visible : Visibility.Collapsed,
                     visible => visible == Visibility.Visible).DisposeWith(d);
@@ -247,50 +253,36 @@ namespace ErogeHelper.View.Controllers
                     vm => vm.IsTouchToMouse,
                     v => v.TouchConversionToggle.IsChecked).DisposeWith(d);
 
-                this.BindCommand(ViewModel,
-                    vm => vm.VolumeDown,
-                    v => v.VolumeDown).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.VolumeUp,
-                    v => v.VolumeUp).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.SwitchFullScreen,
-                    v => v.FullScreenSwitcher).DisposeWith(d);
-                this.OneWayBind(ViewModel,
-                  vm => vm.SwitchFullScreenIcon,
-                  v => v.FullScreenSwitcher.Icon).DisposeWith(d);
-                this.OneWayBind(ViewModel,
-                  vm => vm.SwitchFullScreenToolTip,
-                  v => v.FullScreenSwitcher.ToolTip).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.TaskbarNotifyArea,
-                    v => v.ActionCenter).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.TaskView,
-                    v => v.TaskView).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.ScreenShot,
-                    v => v.ScreenShot).DisposeWith(d);
-
-                this.BindCommand(ViewModel,
-                    vm => vm.OpenPreference,
-                    v => v.Preference).DisposeWith(d);
                 // Custom apearrence: ButtonSpace, square to circle, size of the square 
             });
         }
 
-        private void UpdateButtonDiameterProperties(double width)
+        private static readonly double AssistiveTouchSize =
+            (double)Application.Current.Resources["AssistiveTouchSize"];
+        private static readonly double AssistiveTouchBigSize =
+            (double)Application.Current.Resources["BigAssistiveTouchSize"];
+
+        private void UpdateButtonDiameterProperties
+            (bool isBigSize, AssistiveTouchPosition touchPosition, FrameworkElement parent)
         {
-            _distance = width;
+            AssistiveButton.Template = GetAssistiveTouchStyle(isBigSize);
+            _buttonSize = isBigSize ? AssistiveTouchBigSize : AssistiveTouchSize;
+            _distance = _buttonSize;
             _halfDistance = _distance / 2;
             _oneThirdDistance = _distance / 3;
             _twoThirdDistance = _oneThirdDistance * 2;
+
+            AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent);
+            AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
         }
+
+        private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
+           useBigSize ? Application.Current.Resources["BigAssistiveTouchTemplate"]
+                           as ControlTemplate
+                           ?? throw new IOException("Cannot locate resource 'BigAssistiveTouchTemplate'")
+                      : Application.Current.Resources["NormalAssistiveTouchTemplate"]
+                           as ControlTemplate
+                           ?? throw new IOException("Cannot locate resource 'NormalAssistiveTouchTemplate'");
 
         private static void RaiseMouseUpEventInCode(Button button, UIElement father)
         {
@@ -368,5 +360,48 @@ namespace ErogeHelper.View.Controllers
                 e.Handled = true;
             }
         }
+
+        private async void VolumeDownOnClick(object sender, RoutedEventArgs e) =>
+             await WindowsInput.Simulate.Events()
+                .Click(KeyCode.VolumeDown)
+                .Invoke().ConfigureAwait(false);
+
+        private async void VolumeUpOnClick(object sender, RoutedEventArgs e) =>
+            await WindowsInput.Simulate.Events()
+                .Click(KeyCode.VolumeUp)
+                .Invoke().ConfigureAwait(false);
+
+        private async void FullScreenSwitcherOnClick(object sender, RoutedEventArgs e) =>
+            // アインシュタイン not work
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.Alt, KeyCode.Enter)
+                .Invoke().ConfigureAwait(false);
+
+        private async void ActionCenterOnClick(object sender, RoutedEventArgs e) =>
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.LWin, KeyCode.A)
+                .Invoke().ConfigureAwait(false);
+
+        private async void TaskViewOnClick(object sender, RoutedEventArgs e) =>
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.LWin, KeyCode.Tab)
+                .Invoke().ConfigureAwait(false);
+
+        private async void ScreenShotOnClick(object sender, RoutedEventArgs e)
+        {
+            AssistiveTouchFlyout.Hide();
+            Visibility = Visibility.Collapsed;
+
+            await WindowsInput.Simulate.Events()
+                .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
+                .Invoke().ConfigureAwait(false);
+
+            await Task.Delay(ConstantValue.ScreenShotHideButtonTime).ConfigureAwait(true);
+
+            Visibility = Visibility.Visible;
+        }
+
+        private void PreferenceOnClick(object sender, RoutedEventArgs e) =>
+            DI.ShowView<PreferenceViewModel>();
     }
 }

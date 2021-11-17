@@ -102,10 +102,10 @@ namespace ErogeHelper.Installer
             {
                 var deleteTipDialog = new ContentDialog
                 {
-                    Title = ErogeHelper.Language.Strings.Common_Warn,
-                    Content = ErogeHelper.Language.Strings.Installer_DeleteTip,
-                    PrimaryButtonText = ErogeHelper.Language.Strings.Common_OK,
-                    CloseButtonText = ErogeHelper.Language.Strings.Common_Cancel,
+                    Title = Share.Languages.Strings.Common_Warn,
+                    Content = Share.Languages.Strings.Installer_DeleteTip,
+                    PrimaryButtonText = Share.Languages.Strings.Common_OK,
+                    CloseButtonText = Share.Languages.Strings.Common_Cancel,
                     DefaultButton = ContentDialogButton.Close
                 };
                 var result = await deleteTipDialog.ShowAsync();

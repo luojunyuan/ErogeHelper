@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErogeHelper.Language\ErogeHelper.Language.csproj" />
+    <ProjectReference Include="..\ErogeHelper.Share\ErogeHelper.Share.csproj" />
   </ItemGroup>
 
   <ItemGroup>

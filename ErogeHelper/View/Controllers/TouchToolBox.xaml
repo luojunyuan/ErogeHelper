@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800" Margin="5">
 
@@ -21,18 +21,18 @@
 
         <WrapPanel x:Name="TheButtonBox" Margin="5 0 5 0" Grid.Column="1"  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
 
-            <Button x:Name="Esc" Content="Esc" Height="100" Width="100" />
-            <Button x:Name="Ctrl" Content="Ctrl" Height="100" Width="100" />
-            <Button x:Name="Enter" Content="Enter" Height="100" Width="100" />
-            <Button x:Name="Space" Content="Space" Height="100" Width="100" />
-            <Button x:Name="PageUp" Content="Page Up" Height="100" Width="100" />
-            <Button x:Name="PageDown" Content="Page Down" Height="100" Width="100" />
-            <Button x:Name="UpArrow" Content="↑" Height="100" Width="100" FontSize="18" />
-            <Button x:Name="LeftArrow" Content="←" Height="100" Width="100" FontSize="18" />
-            <Button x:Name="DownArrow" Content="↓" Height="100" Width="100" FontSize="18" />
-            <Button x:Name="RightArrow" Content="→" Height="100" Width="100" FontSize="18" />
-            <Button x:Name="ScrollUp" Content="Scroll Up" Height="100" Width="100" />
-            <Button x:Name="ScrollDown" Content="Scroll Down" Height="100" Width="100" />
+            <Button Click="Esc"  Content="Esc" Height="100" Width="100" />
+            <Button PreviewMouseDown="Ctrl" PreviewMouseUp="CtrlRelease" Content="Ctrl" Height="100" Width="100" />
+            <Button PreviewMouseDown="Enter" PreviewMouseUp="EnterRelease" Content="Enter" Height="100" Width="100" />
+            <Button Click="Space" Content="Space" Height="100" Width="100" />
+            <Button Click="PageUp" Content="Page Up" Height="100" Width="100" />
+            <Button Click="PageDown" Content="Page Down" Height="100" Width="100" />
+            <Button Click="UpArrow" Content="↑" Height="100" Width="100" FontSize="18" />
+            <Button Click="LeftArrow" Content="←" Height="100" Width="100" FontSize="18" />
+            <Button Click="DownArrow" Content="↓" Height="100" Width="100" FontSize="18" />
+            <Button Click="RightArrow" Content="→" Height="100" Width="100" FontSize="18" />
+            <Button x:Name="ScrollUp" Click="ScrollUpOnClick" Content="Scroll Up" Height="100" Width="100" />
+            <Button x:Name="ScrollDown" Click="ScrollDownOnClick" Content="Scroll Down" Height="100" Width="100" />
             
         </WrapPanel>
 

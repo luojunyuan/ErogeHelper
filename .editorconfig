@@ -23,3 +23,16 @@ csharp_prefer_braces = when_multiline
 
 # CA1816: Dispose 方法应调用 SuppressFinalize
 dotnet_diagnostic.CA1816.severity = none
+
+###############################
+# Core EditorConfig Options   #
+###############################
+
+insert_final_newline = true
+
+###############################
+# .NET Coding Conventions     #
+###############################
+
+# Organize usings
+dotnet_sort_system_directives_first = true

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Media;
+using Color = System.Drawing.Color;
 
 namespace ErogeHelper.View.Pages
 {
@@ -16,33 +18,33 @@ namespace ErogeHelper.View.Pages
         {
             InitializeComponent();
 
+            AppVersion.Text = App.EhVersion;
+
             this.WhenActivated(d =>
             {
-                ViewModel!.CheckUpdateCommand.Execute();
+                this.WhenAnyValue(x => x.AppVersion.Text)
+                    .BindTo(this, x => x.ViewModel!.AppVersion);
 
-                this.WhenAnyObservable(x => x.ViewModel!.TerminateAppSubj)
-                   .Subscribe(_ =>
-                   {
-                       Application.Current.Windows
-                           .Cast<Window>().ToList()
-                           .ForEach(w => w.Close());
-                       App.Terminate();
-                   }).DisposeWith(d);
+                ViewModel!.CheckUpdate.Execute().Subscribe().DisposeWith(d);
 
                 this.Bind(ViewModel,
                     vm => vm.VersionBrushColor,
-                    v => v.VersionBorder.BorderBrush).DisposeWith(d);
+                    v => v.VersionBorder.BorderBrush,
+                    DrawingColorToBrush,
+                    BrushToDrawingColor).DisposeWith(d);
                 this.Bind(ViewModel,
                     vm => vm.CanJumpRelease,
                     v => v.VersionBorder.IsEnabled).DisposeWith(d);
                 this.Bind(ViewModel,
                     vm => vm.VersionBrushColor,
-                    v => v.VersionForground.Foreground).DisposeWith(d);
+                    v => v.VersionForeground.Foreground,
+                    DrawingColorToBrush,
+                    BrushToDrawingColor).DisposeWith(d);
                 this.Bind(ViewModel,
                     vm => vm.UpdateStatusTip,
                     v => v.UpdateStatusTip.Text).DisposeWith(d);
                 this.Bind(ViewModel,
-                    vm => vm.AcceptPreviewVersion,
+                    vm => vm.AcceptedPreviewVersion,
                     v => v.PreviewCheckBox.IsChecked).DisposeWith(d);
 
                 this.Bind(ViewModel,
@@ -51,9 +53,26 @@ namespace ErogeHelper.View.Pages
                     value => value ? Visibility.Visible : Visibility.Collapsed,
                     visibility => visibility == Visibility.Visible).DisposeWith(d);
                 this.BindCommand(ViewModel,
-                    vm => vm.UpdateCommand,
+                    vm => vm.Update,
                     v => v.UpdateButton).DisposeWith(d);
             });
+        }
+
+        private Brush DrawingColorToBrush(Color color)
+        {
+            var brush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+            if (brush.CanFreeze) 
+            {
+                brush.Freeze();
+            }
+
+            return brush;
+        }
+
+        private Color BrushToDrawingColor(Brush brush)
+        {
+            var color = ((SolidColorBrush)brush).Color;
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
     }
 }

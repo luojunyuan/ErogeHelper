@@ -5,9 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:contract="clr-namespace:ErogeHelper.Common.Contracts" xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:resx="clr-namespace:ErogeHelper.Language;assembly=ErogeHelper.Language"
-    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
+    xmlns:contract="clr-namespace:ErogeHelper.Share.Contracts;assembly=ErogeHelper.Share"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:PreferenceViewModel}"
     MinWidth="400"
@@ -21,19 +22,20 @@
         ExpandedModeThresholdWidth="{StaticResource ExpandedModeThresholdWidth}"
         IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False" IsSettingsVisible="False" IsTabStop="False"
         OpenPaneLength="{StaticResource SidePaneLength}"
-        PaneDisplayMode="Auto">
+        PaneDisplayMode="Auto" 
+        d:DesignHeight="450" d:DesignWidth="800">
         <ui:NavigationView.MenuItems>
             <ui:NavigationViewItemSeparator Margin="0,30,0,0" />
             <ui:NavigationViewItem
                 Content="{x:Static resx:Strings.GeneralPage_Title}"
                 Icon="AllApps"
-                Tag="{x:Static contract:PageTags.General}"
+                Tag="{x:Static contract:PageTag.General}"
                 ToolTip="{x:Static resx:Strings.GeneralPage_Title}" />
         </ui:NavigationView.MenuItems>
 
         <ui:NavigationView.FooterMenuItems>
             <!--<ui:NavigationViewItem Content="Account" Icon="Contact" />-->
-            <ui:NavigationViewItem Content="{x:Static resx:Strings.About_Title}" Tag="{x:Static contract:PageTags.About}">
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.About_Title}" Tag="{x:Static contract:PageTag.About}" >
                 <ui:NavigationViewItem.Icon>
                     <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Info}" />
                 </ui:NavigationViewItem.Icon>

@@ -3,9 +3,6 @@ using System.Reactive.Disposables;
 
 namespace ErogeHelper.View.Pages
 {
-    /// <summary>
-    /// GeneralPage.xaml 的交互逻辑
-    /// </summary>
     public partial class GeneralPage
     {
         public GeneralPage()
