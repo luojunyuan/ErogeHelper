@@ -29,6 +29,8 @@
         public const string Component = "\uE950";
 
         public const string KeyboardClassic = "\uE765";
+        
+        public const string Share = "\uE72D";
     }
 
     public enum SymbolName

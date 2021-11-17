@@ -849,6 +849,18 @@ namespace ErogeHelper.Share.Languages {
             }
         }
         
+        public static string GameView_Functions {
+            get {
+                return ResourceManager.GetString("GameView.Functions", resourceCulture);
+            }
+        }
+        
+        public static string GameView_VirtualKeyboard {
+            get {
+                return ResourceManager.GetString("GameView.VirtualKeyboard", resourceCulture);
+            }
+        }
+        
         public static string About_Update_CloseGameTip {
             get {
                 return ResourceManager.GetString("About.Update.CloseGameTip", resourceCulture);

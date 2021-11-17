@@ -522,6 +522,12 @@
   <data name="GameView.TouchKeyboard" xml:space="preserve">
     <value>触控键盘按键</value>
   </data>
+  <data name="GameView.Functions" xml:space="preserve">
+    <value>功能...</value>
+  </data>
+  <data name="GameView.VirtualKeyboard" xml:space="preserve">
+    <value>虚拟键盘</value>
+  </data>
   <data name="About.Update.CloseGameTip" xml:space="preserve">
     <value>请保存并关闭当前游戏以完成EH更新</value>
   </data>

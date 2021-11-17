@@ -522,6 +522,12 @@ Caused by source `{1}`
   <data name="GameView.TouchKeyboard" xml:space="preserve">
     <value>Touch keyboard keys</value>
   </data>
+  <data name="GameView.Functions" xml:space="preserve">
+    <value>Functions...</value>
+  </data>
+  <data name="GameView.VirtualKeyboard" xml:space="preserve">
+    <value>Virtual Keyboard</value>
+  </data>
   <data name="About.Update.CloseGameTip" xml:space="preserve">
     <value>Please save and close your game in purpose to finish the update</value>
   </data>
