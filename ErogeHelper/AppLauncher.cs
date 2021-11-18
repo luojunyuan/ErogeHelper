@@ -130,6 +130,7 @@ namespace ErogeHelper
                         MessageBoxResult.No => false,
                         MessageBoxResult.Cancel => false,
                         MessageBoxResult.None => false,
+                        null => false,
                         _ => throw new InvalidOperationException(),
                     };
                     context.SetOutput(yesOrNo);

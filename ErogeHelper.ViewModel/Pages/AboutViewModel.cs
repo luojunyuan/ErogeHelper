@@ -69,9 +69,15 @@ namespace ErogeHelper.ViewModel.Pages
                 .FromEvent<AutoUpdater.CheckForUpdateEventHandler, UpdateInfoEventArgs>(
                     e => AutoUpdater.CheckForUpdateEvent += e,
                     e => AutoUpdater.CheckForUpdateEvent -= e)
-                .Where(updateInfo => updateInfo.Error is null && updateInfo.IsUpdateAvailable)
+                .Where(updateInfo => updateInfo.Error is null)
                 .SelectMany(updateInfo =>
                 {
+                    if (!updateInfo.IsUpdateAvailable)
+                    {
+                        return Interactions.MessageBoxConfirm.Handle("Update not availble now. Please try later, or you can update from release page.")
+                            .Where(_ => false)
+                            .Select(_ => updateInfo);
+                    }
                     var updateTip = currentPreviewFlag
                         ? string.Format(Strings.About_Update_Tip, updateInfo.CurrentVersion)
                           + Strings.About_Update_PreviewWarning
@@ -125,7 +131,7 @@ namespace ErogeHelper.ViewModel.Pages
             AutoUpdater.RunUpdateAsAdmin = false;
             AutoUpdater.InstallationPath = Directory.GetParent(AppContext.BaseDirectory)!.Parent!.FullName;
             var architecture = RuntimeInformation.ProcessArchitecture;
-            
+
             if (!previewVersion)
             {
                 if (architecture == Architecture.X86)

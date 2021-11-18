@@ -27,7 +27,6 @@ namespace ErogeHelper.Functions
         public static void RegisterServices()
         {
             // View
-            // XXX: Wanna use singleton to avoid any memory issue. But this may not suit for windows
             Locator.CurrentMutable.Register<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
             Locator.CurrentMutable.Register<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
             Locator.CurrentMutable.Register<IViewFor<TouchToolBoxViewModel>>(() => new TouchToolBox());
@@ -37,7 +36,7 @@ namespace ErogeHelper.Functions
             Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
 
             // ViewModel
-            // XXX: There is no need to dispose in WhenActivated cause they all singleton
+            // XXX: These viewmodel no need to dispose in WhenActivated cause they all singleton
             Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new TouchToolBoxViewModel());
