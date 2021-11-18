@@ -66,6 +66,7 @@ namespace ErogeHelper.Model.Services
 
             _gameProc.Exited += (_, _) =>
             {
+                _gamePositionSubj.OnNext(HiddenPos);
                 this.Log().Debug("Detected game quit event");
                 _gcSafetyHandle.Free();
                 // Produce EventObjectDestroy
