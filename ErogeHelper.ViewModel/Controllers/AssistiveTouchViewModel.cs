@@ -22,11 +22,11 @@ namespace ErogeHelper.ViewModel.Controllers
 {
     public class AssistiveTouchViewModel : ReactiveObject
     { 
-        private readonly IEhConfigRepository _ehConfigRepository;
+        private readonly IEHConfigRepository _ehConfigRepository;
 
         public AssistiveTouchViewModel(
             IWindowDataService? windowDataService = null,
-            IEhConfigRepository? ehConfigDataService = null,
+            IEHConfigRepository? ehConfigDataService = null,
             IGameDataService? gameDataService = null,
             IGameInfoRepository? ehDbRepository = null,
             ITouchConversionHooker? touchConversionHooker = null,
@@ -34,7 +34,7 @@ namespace ErogeHelper.ViewModel.Controllers
             TouchToolBoxViewModel? touchToolBoxViewModel = null)
         {
             windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
-            _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEhConfigRepository>();
+            _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEHConfigRepository>();
             gameDataService ??= DependencyResolver.GetService<IGameDataService>();
             ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
             touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
@@ -112,7 +112,7 @@ namespace ErogeHelper.ViewModel.Controllers
         public AssistiveTouchPosition AssistiveTouchPosition
         {
             get => JsonSerializer.Deserialize<AssistiveTouchPosition>(_ehConfigRepository.AssistiveTouchPosition)
-                ?? EhContext.TouchPosition;
+                ?? EHContext.TouchPosition;
             set => _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(value);
         }
 

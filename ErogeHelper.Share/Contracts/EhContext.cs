@@ -5,13 +5,13 @@ using ErogeHelper.Share.Enums;
 
 namespace ErogeHelper.Share.Contracts
 {
-    public static class EhContext
+    public static class EHContext
     {
         public static readonly string RoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         public static readonly string EhDataDir = Path.Combine(RoamingPath, "ErogeHelper");
 
-        public static readonly string EhConfigFilePath = Path.Combine(EhDataDir, "EhSettings.json");
+        public static readonly string EHConfigFilePath = Path.Combine(EhDataDir, "EHSettings.json");
 
         public static readonly string EhDbFilePath = Path.Combine(EhDataDir, "eh.db");
 

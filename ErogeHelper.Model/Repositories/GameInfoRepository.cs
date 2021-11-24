@@ -37,13 +37,13 @@ namespace ErogeHelper.Model.Repositories
 
         public static void UpdateEhDatabase()
         {
-            Directory.CreateDirectory(EhContext.EhDataDir);
+            Directory.CreateDirectory(EHContext.EhDataDir);
 
             var microsoftServiceProvider = new ServiceCollection()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
-                    .WithGlobalConnectionString(EhContext.DbConnectString)
+                    .WithGlobalConnectionString(EHContext.DbConnectString)
                     .ScanIn(typeof(AddGameInfoTable).Assembly)
                     .ScanIn(typeof(AddUserTermTable).Assembly)
                     .ScanIn(typeof(AddSaveDataCloudColumn).Assembly)

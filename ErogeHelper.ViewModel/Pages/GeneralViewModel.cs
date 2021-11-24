@@ -16,9 +16,9 @@ namespace ErogeHelper.ViewModel.Pages
 
         public GeneralViewModel(
             IScreen? hostScreen = null,
-            IEhConfigRepository? ehConfigRepository = null)
+            IEHConfigRepository? ehConfigRepository = null)
         {
-            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
 
             HostScreen = hostScreen!;
 

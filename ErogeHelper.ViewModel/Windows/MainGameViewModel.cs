@@ -29,7 +29,7 @@ namespace ErogeHelper.ViewModel.Windows
         public MainGameViewModel(
             AssistiveTouchViewModel? assistiveTouchViewModel = null,
             TouchToolBoxViewModel? touchToolBoxViewModel = null,
-            IEhConfigRepository? ehConfigRepository = null,
+            IEHConfigRepository? ehConfigRepository = null,
             IWindowDataService? windowDataService = null,
             IGameWindowHooker? gameWindowHooker = null,
             IGameInfoRepository? ehDbRepository = null,
@@ -39,7 +39,7 @@ namespace ErogeHelper.ViewModel.Windows
             AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
             gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
             windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
-            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
             ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
             gameDataService ??= DependencyResolver.GetService<IGameDataService>();
 

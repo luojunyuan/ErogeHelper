@@ -45,10 +45,17 @@ namespace ErogeHelper.Functions
             Locator.CurrentMutable.RegisterLazySingleton(() => new AboutViewModel());
 
             // DataService
+            // UPSTREAM: Bug waits for updating https://github.com/aloneguid/config/pull/124
+            if (!System.IO.File.Exists(EHContext.EHConfigFilePath))
+            {
+                var file = System.IO.File.CreateText(EHContext.EHConfigFilePath);
+                file.WriteLine("{}");
+                file.Close();
+            }
             Locator.CurrentMutable.RegisterLazySingleton(
-                () => new ConfigurationBuilder<IEhConfigRepository>().UseJsonFile(EhContext.EhConfigFilePath).Build());
+                () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.EHConfigFilePath).Build());
             Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
-                () => new GameInfoRepository(EhContext.DbConnectString));
+                () => new GameInfoRepository(EHContext.DbConnectString));
             Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
             Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
 

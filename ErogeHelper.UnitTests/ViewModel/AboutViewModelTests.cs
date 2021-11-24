@@ -23,7 +23,7 @@ namespace ErogeHelper.UnitTests.ViewModel
         [SetUp]
         public void Setup()
         {
-            var configRepo = new ConfigurationBuilder<IEhConfigRepository>()
+            var configRepo = new ConfigurationBuilder<IEHConfigRepository>()
                 .UseInMemoryDictionary()
                 .Build();
             var updateService = new UpdateService();

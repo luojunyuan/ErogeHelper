@@ -10,10 +10,10 @@ namespace ErogeHelper.ViewModel.Controllers
     {
         public TouchToolBoxViewModel(
             IGameInfoRepository? gameInfoRepository = null,
-            IEhConfigRepository? ehConfigRepository = null)
+            IEHConfigRepository? ehConfigRepository = null)
         {
             gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
-            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
 
             TouchToolBoxVisible = ehConfigRepository.UseTouchToolBox && gameInfoRepository.GameInfo.IsLoseFocus;
         }

@@ -5,7 +5,7 @@ using ErogeHelper.Share.Enums;
 
 namespace ErogeHelper.Model.Repositories.Interface
 {
-    public interface IEhConfigRepository : INotifyPropertyChanged
+    public interface IEHConfigRepository : INotifyPropertyChanged
     {
         [Option(DefaultValue = "https://eh.nya.run")]
         public string EhServerBaseUrl { get; set; }

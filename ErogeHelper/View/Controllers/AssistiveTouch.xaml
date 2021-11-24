@@ -47,7 +47,7 @@
                                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.KeyboardClassic}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem x:Name="Placehoder" Header="Placeholder" />
+                                <MenuItem x:Name="Placehoder" Header="Placeholder" IsEnabled="False" />
                             </ui:MenuFlyout>
                         </ui:AppBarButton.Flyout>
                     </ui:AppBarButton>

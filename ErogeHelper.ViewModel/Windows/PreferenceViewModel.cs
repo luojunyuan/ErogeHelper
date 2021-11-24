@@ -18,11 +18,11 @@ namespace ErogeHelper.ViewModel.Windows
         public Pages.AboutViewModel AboutViewModel { get; }
 
         public PreferenceViewModel(
-            IEhConfigRepository? ehConfigRepository = null)
+            IEHConfigRepository? ehConfigRepository = null)
         {
             GeneralViewModel = DependencyResolver.GetService<Pages.GeneralViewModel>();
             AboutViewModel = DependencyResolver.GetService<Pages.AboutViewModel>();
-            ehConfigRepository ??= DependencyResolver.GetService<IEhConfigRepository>();
+            ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
 
             PageHeader = string.Empty;
             Height = ehConfigRepository.PreferenceWindowHeight;
@@ -53,7 +53,7 @@ namespace ErogeHelper.ViewModel.Windows
 
         public ReactiveCommand<Unit, Unit> Closed { get; }
 
-        private IObservable<Unit> SaveWindowSize(IEhConfigRepository ehConfigRepository)
+        private IObservable<Unit> SaveWindowSize(IEHConfigRepository ehConfigRepository)
         {
             return Observable.Start(() =>
             {

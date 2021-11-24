@@ -28,7 +28,7 @@ namespace ErogeHelper
         {
             var gameDataService = DependencyResolver.GetService<IGameDataService>();
             var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
-            var ehConfigRepository = DependencyResolver.GetService<IEhConfigRepository>();
+            var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
             var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
             var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
@@ -67,7 +67,7 @@ namespace ErogeHelper
         private static void InitializeGameDatas(
             IGameDataService gameDataService,
             IGameInfoRepository gameInfoRepository,
-            IEhConfigRepository ehConfigRepository,
+            IEHConfigRepository ehConfigRepository,
             string gamePath, bool leEnable, string gameDir)
         {
             if (!File.Exists(gamePath))
