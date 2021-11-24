@@ -48,6 +48,7 @@ namespace ErogeHelper.Functions
             // UPSTREAM: Bug waits for updating https://github.com/aloneguid/config/pull/124
             if (!System.IO.File.Exists(EHContext.EHConfigFilePath))
             {
+                System.IO.Directory.CreateDirectory(EHContext.EHDataFolder);
                 var file = System.IO.File.CreateText(EHContext.EHConfigFilePath);
                 file.WriteLine("{}");
                 file.Close();
