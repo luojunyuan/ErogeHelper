@@ -18,7 +18,7 @@ namespace ErogeHelper.View.Pages
         {
             InitializeComponent();
 
-            AppVersion.Text = App.EhVersion;
+            AppVersion.Text = App.EHVersion;
 
             this.WhenActivated(d =>
             {

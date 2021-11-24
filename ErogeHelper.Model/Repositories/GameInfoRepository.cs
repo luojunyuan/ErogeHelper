@@ -35,9 +35,9 @@ namespace ErogeHelper.Model.Repositories
             return connection;
         }
 
-        public static void UpdateEhDatabase()
+        public static void UpdateDatabase()
         {
-            Directory.CreateDirectory(EHContext.EHDataFolder);
+            Directory.CreateDirectory(EHContext.RoamingEHFolder);
 
             var microsoftServiceProvider = new ServiceCollection()
                 .AddFluentMigratorCore()

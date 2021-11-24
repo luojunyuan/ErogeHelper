@@ -46,15 +46,15 @@ namespace ErogeHelper.Functions
 
             // DataService
             // UPSTREAM: Bug waits for updating https://github.com/aloneguid/config/pull/124
-            if (!System.IO.File.Exists(EHContext.EHConfigFilePath))
+            if (!System.IO.File.Exists(EHContext.ConfigFilePath))
             {
-                System.IO.Directory.CreateDirectory(EHContext.EHDataFolder);
-                var file = System.IO.File.CreateText(EHContext.EHConfigFilePath);
+                System.IO.Directory.CreateDirectory(EHContext.RoamingEHFolder);
+                var file = System.IO.File.CreateText(EHContext.ConfigFilePath);
                 file.WriteLine("{}");
                 file.Close();
             }
             Locator.CurrentMutable.RegisterLazySingleton(
-                () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.EHConfigFilePath).Build());
+                () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build());
             Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
                 () => new GameInfoRepository(EHContext.DbConnectString));
             Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());

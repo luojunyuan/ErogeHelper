@@ -68,7 +68,7 @@ namespace ErogeHelper
 
                     ToastManagement.Register();
                     ToastManagement.AdminModeTipToast();
-                    GameInfoRepository.UpdateEhDatabase();
+                    GameInfoRepository.UpdateDatabase();
 
                     AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
                 };
@@ -85,7 +85,7 @@ namespace ErogeHelper
             }
         }
 
-        public static readonly string EhVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString()
+        public static readonly string EHVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString()
             ?? "?.?.?.?";
 
         public static void Terminate(int exitCode = 0)
@@ -191,7 +191,7 @@ namespace ErogeHelper
             using var dialog = new TaskDialog
             {
                 WindowTitle = string.Format(
-                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EhVersion, errorLevel),
+                    CultureInfo.CurrentCulture, Strings.App_ErrorDialog, EHVersion, errorLevel),
                 MainInstruction = $@"{ex.GetType().FullName}: {ex.Message}",
                 Content = Strings.ErrorDialog_Content + (additionInfo == string.Empty ? string.Empty :
                                                                                         "\r\n" + additionInfo),

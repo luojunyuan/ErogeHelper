@@ -44,9 +44,9 @@
 
         public const string WindowsPath = @"C:\Windows\";
 
-        public const string EhCloudSaveDataTag = "eh-savedata-cloud";
+        public const string CloudSaveDataTag = "eh-savedata-cloud";
 
-        public const string EhCloudDbFilename = "gamelist.json";
+        public const string CloudDbFilename = "gamelist.json";
 
         public const int GoodWindowHeight = 100; // 240;
 

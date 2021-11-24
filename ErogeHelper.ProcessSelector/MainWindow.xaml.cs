@@ -21,9 +21,9 @@ namespace ErogeHelper.ProcessSelector
             Title = Strings.SelectProcess_ProcessExit,
             CloseButtonText = Strings.Common_OK,
         };
-        private static ContentDialog EhExistTipDialog => new()
+        private static ContentDialog ExistTipDialog => new()
         {
-            Title = Strings.SelectProcess_EhNotExist,
+            Title = Strings.SelectProcess_EHNotExist,
             CloseButtonText = Strings.Common_OK,
             Content = Strings.SelectProcess_CheckPath +
                 '"' + Path.Combine(Environment.CurrentDirectory, "ErogeHelper.exe") + '"',
@@ -64,7 +64,7 @@ namespace ErogeHelper.ProcessSelector
             }
             else if (!File.Exists("ErogeHelper.exe"))
             {
-                EhExistTipDialog.ShowAsync().ConfigureAwait(false);
+                ExistTipDialog.ShowAsync().ConfigureAwait(false);
             }
             else
             {

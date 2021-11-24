@@ -8,7 +8,7 @@ namespace ErogeHelper.Model.Repositories.Interface
     public interface IEHConfigRepository : INotifyPropertyChanged
     {
         [Option(DefaultValue = "https://eh.nya.run")]
-        public string EhServerBaseUrl { get; set; }
+        public string ServerBaseUrl { get; set; }
 
         // Text 関する
         [Option(DefaultValue = false)]
