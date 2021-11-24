@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,6 +22,9 @@ namespace ErogeHelper.ProcessSelector
             };
 
             SingleInstanceWatcher();
+            var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
+            Directory.SetCurrentDirectory(currentDirectory ??
+                                          throw new ArgumentNullException(nameof(currentDirectory)));
         }
 
         // http://stackoverflow.com/a/23730146/1644202"

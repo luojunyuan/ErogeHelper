@@ -52,10 +52,10 @@ namespace ErogeHelper.ProcessSelector
         private void InjectButtonOnClick(object sender, RoutedEventArgs e)
         {
             var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
-            var selectedPath = selectedProcess.Proc.MainModule?.FileName;
-            if (selectedPath is null)
-                throw new ArgumentNullException(nameof(selectedPath), @"Can not find the process's path");
-            selectedPath = '"' + selectedPath + '"';
+            var selectedGamePath = selectedProcess.Proc.MainModule?.FileName;
+            if (selectedGamePath is null)
+                throw new ArgumentNullException(nameof(selectedGamePath), @"Can not find the process's path");
+            selectedGamePath = '"' + selectedGamePath + '"';
 
             if (selectedProcess.Proc.HasExited)
             {
@@ -69,7 +69,7 @@ namespace ErogeHelper.ProcessSelector
             else
             {
                 Hide();
-                Process.Start("ErogeHelper.exe", selectedPath);
+                Process.Start("ErogeHelper.exe", selectedGamePath);
                 Close();
             }
         }

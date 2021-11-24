@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -12,6 +14,9 @@ namespace ErogeHelper.Installer
         public App()
         {
             SingleInstanceWatcher();
+            var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
+            Directory.SetCurrentDirectory(currentDirectory ??
+                                          throw new ArgumentNullException(nameof(currentDirectory)));
         }
 
         private const string UniqueEventName = "{2d0ccd54-f861-46be-9804-43aff3775111}";
