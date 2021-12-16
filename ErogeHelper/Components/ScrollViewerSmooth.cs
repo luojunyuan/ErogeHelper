@@ -4,6 +4,9 @@ using System.Windows.Input;
 
 namespace ErogeHelper.Components;
 
+/// <summary>
+/// Smooth move animation for ScrollViewer
+/// </summary>
 public class ScrollViewerSmooth : ScrollViewer
 {
     protected override void OnInitialized(EventArgs e)
