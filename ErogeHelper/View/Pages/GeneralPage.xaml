@@ -1,28 +1,29 @@
-﻿<reactiveUi:ReactiveUserControl
+﻿<rxui:ReactiveUserControl
     x:Class="ErogeHelper.View.Pages.GeneralPage"
     x:TypeArguments="vm:GeneralViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:control="clr-namespace:ErogeHelper.View.Controllers" xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
+    xmlns:component="clr-namespace:ErogeHelper.Components" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:GeneralViewModel}"
     d:DesignHeight="450" d:DesignWidth="800">
 
-    <control:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
+    <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_AssistiveTouch}">
                 <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}" />
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="HideTextWindow" Header="{x:Static resx:Strings.GeneralPage_HideTextWindow}" />
                     <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}" />
                     <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </ui:SimpleStackPanel>
-    </control:ScrollViewerSmooth>
-</reactiveUi:ReactiveUserControl>
+    </component:ScrollViewerSmooth>
+</rxui:ReactiveUserControl>

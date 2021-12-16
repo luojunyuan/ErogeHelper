@@ -1,20 +1,20 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reactive.Concurrency;
 using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Share.Enums;
-using ErogeHelper.Share.Structs;
+using ErogeHelper.Shared.Enums;
+using ErogeHelper.Shared.Structs;
 
-namespace ErogeHelper.Model.Services.Interface
+namespace ErogeHelper.Model.Services.Interface;
+
+public interface IGameWindowHooker
 {
-    public interface IGameWindowHooker
-    {
-        IObservable<WindowPosition> GamePosUpdated { get; }
+    IObservable<WindowPosition> GamePosUpdated { get; }
 
-        IObservable<ViewOperation> WhenViewOperated { get; }
+    IObservable<WindowPositionChange> GamePosChanged { get; }
 
-        void SetupGameWindowHook(Process process, IGameDataService? gameDataService, IScheduler scheduler);
+    IObservable<ViewOperation> WhenViewOperated { get; }
 
-        WindowPosition InvokeUpdatePosition();
-    }
+    void SetupGameWindowHook(Process process, IGameDataService? gameDataService, IScheduler scheduler);
+
+    WindowPosition InvokeUpdatePosition();
 }

@@ -1,6 +1,4 @@
-﻿using SharpShell.Attributes;
-using SharpShell.SharpContextMenu;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,6 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using SharpShell.Attributes;
+using SharpShell.SharpContextMenu;
 
 namespace ErogeHelper.ShellMenuHandler
 {

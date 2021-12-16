@@ -1,10 +1,12 @@
-﻿using ModernWpf.Controls;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
+using ErogeHelper.Shared;
+using ModernWpf.Controls;
 
 namespace ErogeHelper.Installer
 {
@@ -102,10 +104,10 @@ namespace ErogeHelper.Installer
             {
                 var deleteTipDialog = new ContentDialog
                 {
-                    Title = Share.Languages.Strings.Common_Warn,
-                    Content = Share.Languages.Strings.Installer_DeleteTip,
-                    PrimaryButtonText = Share.Languages.Strings.Common_OK,
-                    CloseButtonText = Share.Languages.Strings.Common_Cancel,
+                    Title = Shared.Languages.Strings.Common_Warn,
+                    Content = Shared.Languages.Strings.Installer_DeleteTip,
+                    PrimaryButtonText = Shared.Languages.Strings.Common_OK,
+                    CloseButtonText = Shared.Languages.Strings.Common_Cancel,
                     DefaultButton = ContentDialogButton.Close
                 };
                 var result = await deleteTipDialog.ShowAsync();
@@ -151,11 +153,11 @@ namespace ErogeHelper.Installer
                     ExplorerHelper.KillExplorer();
                     ExplorerHelper.OpenDirectories(directories);
 
-                    if (typeof(string).Assembly.GetName().ProcessorArchitecture is
-                        System.Reflection.ProcessorArchitecture.Arm)
+                    // TODO: Arm64 installer unload dll progress
+                    if (Utils.IsArm)
                     {
                         Process.GetProcessesByName("dllhost").ToList()
-                            .ForEach(p => 
+                            .ForEach(p =>
                             {
                                 try
                                 {
@@ -194,6 +196,33 @@ namespace ErogeHelper.Installer
             var current = WindowsIdentity.GetCurrent();
             var windowsPrincipal = new WindowsPrincipal(current);
             return windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        // https://stackoverflow.com/questions/21566528/what-happens-if-i-remove-the-auto-added-supportedruntime-element
+        /// <summary>
+        /// Throws an exception if the current version of the .NET Framework is smaller than the specified
+        /// <see cref="supportedVersion"/>.
+        /// </summary>
+        /// <param name="supportedVersion">The minimum supported version of the .NET Framework on which the current
+        /// program can run.
+        /// The version to use is not the marketing version, but the file version of mscorlib.dll.
+        /// See <see href="https://blogs.msdn.microsoft.com/dougste/2016/03/17/file-version-history-for-clr-4-x/">File 
+        /// version history for CLR 4.x</see> and/or <see href="https://it.wikipedia.org/wiki/.NET_Framework#Versioni">
+        /// .NET Framework Versioni (Build pubblicata)</see> for the version to use.
+        /// </param>
+        /// <exception cref="NotSupportedException">The current version of the .NET Framework is smaller than the 
+        /// specified <see cref="supportedVersion"/>.</exception>
+        /// <returns>The version of the .NET Framework on which the current program is running.</returns>
+        public static Version EnsureSupportedDotNetFrameworkVersion(Version supportedVersion)
+        {
+            var fileVersion = typeof(int).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            var currentVersion = new Version(fileVersion!.Version);
+            MessageBox.Show(currentVersion.ToString());
+            if (currentVersion < supportedVersion)
+                throw new NotSupportedException(
+                    $"Microsoft .NET Framework {supportedVersion} or newer is required. " +
+                    $"Current version ({currentVersion}) is not supported.");
+            return currentVersion;
         }
     }
 }

@@ -1,17 +1,20 @@
-<reactiveUi:ReactiveUserControl
+<rxui:ReactiveUserControl
     x:Class="ErogeHelper.View.Controllers.AssistiveTouch"
     x:TypeArguments="vm:AssistiveTouchViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:contract="clr-namespace:ErogeHelper.Share.Contracts;assembly=ErogeHelper.Share" xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
-    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers;assembly=ErogeHelper.ViewModel"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:AssistiveTouchViewModel}">
 
-    <Button x:Name="AssistiveButton" Click="DisableFlyoutPopup" Focusable="False">
+    <Button x:Name="AssistiveButton"
+        d:Template="{StaticResource NormalAssistiveTouchTemplate}"
+        Click="DisableFlyoutPopup" Focusable="False">
 
         <ui:FlyoutService.Flyout>
             <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard">
@@ -26,16 +29,16 @@
                 <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
 
                 <ui:CommandBarFlyout.SecondaryCommands>
-                    <ui:AppBarButton Click="ActionCenterOnClick"
-                        Icon="DockRight" InputGestureText="Win+A"
+                    <ui:AppBarButton
+                        Click="ActionCenterOnClick" Icon="DockRight" InputGestureText="Win+A"
                         Label="{x:Static resx:Strings.GameView_ActionCenter}" />
                     <ui:AppBarButton Click="TaskViewOnClick" InputGestureText="Win+Tab" Label="{x:Static resx:Strings.GameView_TaskView}">
                         <ui:AppBarButton.Icon>
                             <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.TaskView}" />
                         </ui:AppBarButton.Icon>
                     </ui:AppBarButton>
-                    <ui:AppBarButton Click="ScreenShotOnClick"
-                        Icon="Pictures" InputGestureText="Win+Shift+S"
+                    <ui:AppBarButton
+                        Click="ScreenShotOnClick" Icon="Pictures" InputGestureText="Win+Shift+S"
                         Label="{x:Static resx:Strings.GameView_ScreenShot}" />
 
                     <ui:AppBarSeparator />
@@ -47,7 +50,11 @@
                                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.KeyboardClassic}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem x:Name="Placehoder" Header="Placeholder" IsEnabled="False" />
+                                <MenuItem Click="HookSettingOnClick" Header="{x:Static resx:Strings.HookPage_Title}">
+                                    <MenuItem.Icon>
+                                        <ui:SymbolIcon Symbol="Attach" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ui:MenuFlyout>
                         </ui:AppBarButton.Flyout>
                     </ui:AppBarButton>
@@ -58,4 +65,4 @@
         </ui:FlyoutService.Flyout>
     </Button>
 
-</reactiveUi:ReactiveUserControl>
+</rxui:ReactiveUserControl>

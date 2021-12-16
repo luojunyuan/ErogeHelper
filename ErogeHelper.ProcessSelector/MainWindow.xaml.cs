@@ -1,6 +1,4 @@
-﻿using ErogeHelper.Share.Languages;
-using ModernWpf.Controls;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ErogeHelper.Shared.Languages;
+using ModernWpf.Controls;
 
 namespace ErogeHelper.ProcessSelector
 {

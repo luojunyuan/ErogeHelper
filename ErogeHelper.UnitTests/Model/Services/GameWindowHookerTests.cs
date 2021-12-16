@@ -5,7 +5,7 @@ using System.Threading;
 using ErogeHelper.Model.DataServices;
 using ErogeHelper.Model.Services;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.Share.Structs;
+using ErogeHelper.Shared.Structs;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
 
@@ -27,6 +27,7 @@ namespace ErogeHelper.UnitTests.Model.Services
             var notepad = Process.Start("notepad");
             var posCollect = new List<WindowPosition>();
             IGameWindowHooker hooker = new GameWindowHooker();
+            var scheduler = new TestScheduler();
 
             // Act
             hooker.GamePosUpdated.Subscribe(pos =>
@@ -37,9 +38,6 @@ namespace ErogeHelper.UnitTests.Model.Services
                 if (pos.Width == 0 && pos.Height == 0 && pos.Top < 0 && pos.Left < 0)
                     _single.Set();
             });
-            // Depend on MainProcess
-            var scheduler = new TestScheduler();
-            scheduler.AdvanceBy(1);
             hooker.SetupGameWindowHook(notepad, new GameDataService(), scheduler);
             hooker.InvokeUpdatePosition();
 

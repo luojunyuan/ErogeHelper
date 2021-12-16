@@ -1,22 +1,19 @@
-﻿<reactiveUi:ReactiveUserControl
+﻿<rxui:ReactiveUserControl
     x:Class="ErogeHelper.View.Pages.AboutPage"
     x:TypeArguments="vm:AboutViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
-    xmlns:contract="clr-namespace:ErogeHelper.Share.Contracts;assembly=ErogeHelper.Share" 
-    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
-    xmlns:local="clr-namespace:ErogeHelper"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:component="clr-namespace:ErogeHelper.Components"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
-    xmlns:reactiveUi="http://reactiveui.net" 
-    xmlns:ui="http://schemas.modernwpf.com/2019" 
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:AboutViewModel}"
     d:DesignHeight="450" d:DesignWidth="400">
 
-    <control:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
+    <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
             <TextBlock FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" Text="Eroge Helper" />
             <Image Height="128" HorizontalAlignment="Left" Source="pack://application:,,,/assets/app.png" />
@@ -33,10 +30,13 @@
                         <Run x:Name="AppVersion" />
                     </Bold>
                 </TextBlock>
-                <Border x:Name="VersionBorder" BorderThickness="1" Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10">
+                <Border x:Name="VersionBorder"
+                    Margin="10,-1,0,0" Padding="5,0,5,0"
+                    BorderThickness="1" CornerRadius="10">
                     <ui:HyperlinkButton x:Name="VersionForeground"
-                        Padding="0" Margin="5 0 5 0" ToolTip="Click me jump to release page"
-                        NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases">
+                        Margin="5,0,5,0" Padding="0"
+                        Cursor="Hand" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases"
+                        ToolTip="Click me jump to release page">
                         <TextBlock x:Name="UpdateStatusTip" />
                     </ui:HyperlinkButton>
                 </Border>
@@ -51,5 +51,5 @@
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Dependencies}" Cursor="Hand" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_OpenNewIssue}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
         </ui:SimpleStackPanel>
-    </control:ScrollViewerSmooth>
-</reactiveUi:ReactiveUserControl>
+    </component:ScrollViewerSmooth>
+</rxui:ReactiveUserControl>

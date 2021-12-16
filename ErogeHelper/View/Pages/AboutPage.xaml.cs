@@ -1,78 +1,54 @@
-﻿using ReactiveUI;
-using System;
-using System.Linq;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Media;
-using Color = System.Drawing.Color;
+using ReactiveUI;
+using Splat;
 
-namespace ErogeHelper.View.Pages
+namespace ErogeHelper.View.Pages;
+
+public partial class AboutPage
 {
-    /// <summary>
-    /// AboutPage.xaml 的交互逻辑
-    /// </summary>
-    public partial class AboutPage
+    public AboutPage()
     {
-        public AboutPage()
+        InitializeComponent();
+
+        AppVersion.Text = App.EHVersion;
+
+        this.WhenActivated(d =>
         {
-            InitializeComponent();
+            HandleActivation();
 
-            AppVersion.Text = App.EHVersion;
+            this.OneWayBind(ViewModel,
+                vm => vm.VersionBrushColor,
+                v => v.VersionBorder.BorderBrush,
+                color => color.ToNativeBrush()).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+                vm => vm.VersionBrushColor,
+                v => v.VersionForeground.Foreground,
+                color => color.ToNativeBrush()).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+                vm => vm.CanJumpRelease,
+                v => v.VersionBorder.IsEnabled).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+                vm => vm.UpdateStatusTip,
+                v => v.UpdateStatusTip.Text).DisposeWith(d);
+            this.Bind(ViewModel,
+                vm => vm.AcceptedPreviewVersion,
+                v => v.PreviewCheckBox.IsChecked).DisposeWith(d);
 
-            this.WhenActivated(d =>
-            {
-                this.WhenAnyValue(x => x.AppVersion.Text)
-                    .BindTo(this, x => x.ViewModel!.AppVersion);
+            this.OneWayBind(ViewModel,
+                vm => vm.ShowUpdateButton,
+                v => v.UpdateButton.Visibility,
+                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.Update,
+                v => v.UpdateButton).DisposeWith(d);
+        });
+    }
 
-                ViewModel!.CheckUpdate.Execute().Subscribe().DisposeWith(d);
-
-                this.Bind(ViewModel,
-                    vm => vm.VersionBrushColor,
-                    v => v.VersionBorder.BorderBrush,
-                    DrawingColorToBrush,
-                    BrushToDrawingColor).DisposeWith(d);
-                this.Bind(ViewModel,
-                    vm => vm.CanJumpRelease,
-                    v => v.VersionBorder.IsEnabled).DisposeWith(d);
-                this.Bind(ViewModel,
-                    vm => vm.VersionBrushColor,
-                    v => v.VersionForeground.Foreground,
-                    DrawingColorToBrush,
-                    BrushToDrawingColor).DisposeWith(d);
-                this.Bind(ViewModel,
-                    vm => vm.UpdateStatusTip,
-                    v => v.UpdateStatusTip.Text).DisposeWith(d);
-                this.Bind(ViewModel,
-                    vm => vm.AcceptedPreviewVersion,
-                    v => v.PreviewCheckBox.IsChecked).DisposeWith(d);
-
-                this.Bind(ViewModel,
-                    vm => vm.ShowUpdateButton,
-                    v => v.UpdateButton.Visibility,
-                    value => value ? Visibility.Visible : Visibility.Collapsed,
-                    visibility => visibility == Visibility.Visible).DisposeWith(d);
-                this.BindCommand(ViewModel,
-                    vm => vm.Update,
-                    v => v.UpdateButton).DisposeWith(d);
-            });
-        }
-
-        private Brush DrawingColorToBrush(Color color)
-        {
-            var brush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
-            if (brush.CanFreeze) 
-            {
-                brush.Freeze();
-            }
-
-            return brush;
-        }
-
-        private Color BrushToDrawingColor(Brush brush)
-        {
-            var color = ((SolidColorBrush)brush).Color;
-            return Color.FromArgb(color.A, color.R, color.G, color.B);
-        }
+    private void HandleActivation()
+    {
+        ViewModel!.AppVersion = AppVersion.Text;
+        ViewModel!.CheckUpdate.Execute().Subscribe();
     }
 }

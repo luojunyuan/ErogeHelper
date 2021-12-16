@@ -4,14 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
     d:DataContext="{Binding RelativeSource={RelativeSource Self}}"
     Width="400"
     MinWidth="400"
     Title="{x:Static resx:Strings.SelectProcess_Title}"
-    ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height" Topmost="True" WindowStartupLocation="CenterScreen">
+    ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height"
+    Topmost="True" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style x:Key="TipFadeInTrigger" TargetType="{x:Type ui:FontIcon}">

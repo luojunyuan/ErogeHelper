@@ -7,6 +7,7 @@
     <system:Double x:Key="MinButtonWidth">90</system:Double>
     <system:Double x:Key="MinWindowWidth">400</system:Double>
     <system:Double x:Key="ExpandedModeThresholdWidth">500</system:Double>
+    <system:Double x:Key="ColumnInfoThresholdWidth">850</system:Double>
     <system:Double x:Key="SidePaneLength">160</system:Double>
     <system:Double x:Key="MinimalOpacity">0.002</system:Double>
 

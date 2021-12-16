@@ -1,54 +1,54 @@
-﻿using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Share;
-using ErogeHelper.Share.Contracts;
+﻿using System.Reactive.Linq;
+using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Shared;
+using ErogeHelper.Shared.Contracts;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using System;
-using System.Reactive.Linq;
 
-namespace ErogeHelper.ViewModel.Pages
+namespace ErogeHelper.ViewModel.Pages;
+
+public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 {
-    public class GeneralViewModel : ReactiveObject, IRoutableViewModel
+    public IScreen HostScreen => throw new NotImplementedException();
+
+    public string? UrlPathSegment => PageTag.General;
+
+    public GeneralViewModel(IEHConfigRepository? ehConfigRepository = null)
     {
-        public IScreen HostScreen { get; }
+        ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
 
-        public string? UrlPathSegment => PageTag.General;
+        UseBigSizeAssistiveTouch = ehConfigRepository.UseBigAssistiveTouchSize;
+        this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.UseBigAssistiveTouchSize = v);
 
-        public GeneralViewModel(
-            IScreen? hostScreen = null,
-            IEHConfigRepository? ehConfigRepository = null)
-        {
-            ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
+        HideTextWindow = ehConfigRepository.HideTextWindow;
+        this.WhenAnyValue(x => x.HideTextWindow)
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.HideTextWindow = v);
 
-            HostScreen = hostScreen!;
+        UseDPIDpiCompatibility = ehConfigRepository.DPIByApplication;
+        this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
+            .Skip(1)
+            .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
+            .DistinctUntilChanged()
+            .Subscribe(v => ehConfigRepository.DPIByApplication = v);
 
-            UseBigSizeAssistiveTouch = ehConfigRepository.UseBigAssistiveTouchSize;
-            this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
-                .Skip(1)
-                .Subscribe(v => ehConfigRepository.UseBigAssistiveTouchSize = v);
-
-            UseDPIDpiCompatibility = ehConfigRepository.DPIByApplication;
-            this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
-                .Skip(1)
-                .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
-                .DistinctUntilChanged()
-                .Subscribe(v => ehConfigRepository.DPIByApplication = v);
-
-            UseEdgeTouchMask = ehConfigRepository.UseEdgeTouchMask;
-            this.WhenAnyValue(x => x.UseEdgeTouchMask)
-                .Skip(1)
-                .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
-                .DistinctUntilChanged()
-                .Subscribe(v => ehConfigRepository.UseEdgeTouchMask = v);
-        }
-
-        [Reactive]
-        public bool UseBigSizeAssistiveTouch { get; set; }
-
-        [Reactive]
-        public bool UseDPIDpiCompatibility { get; set; }
-
-        [Reactive]
-        public bool UseEdgeTouchMask { get; set; }
+        UseEdgeTouchMask = ehConfigRepository.UseEdgeTouchMask;
+        this.WhenAnyValue(x => x.UseEdgeTouchMask)
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.UseEdgeTouchMask = v);
     }
+
+    [Reactive]
+    public bool UseBigSizeAssistiveTouch { get; set; }
+
+    [Reactive]
+    public bool HideTextWindow { get; set; }
+
+    [Reactive]
+    public bool UseDPIDpiCompatibility { get; set; }
+
+    [Reactive]
+    public bool UseEdgeTouchMask { get; set; }
 }

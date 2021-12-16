@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Reactive.Subjects;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.Model.DataServices.Interface
+namespace ErogeHelper.Model.DataServices.Interface;
+
+public interface IGameDataService : IDisposable
 {
-    public interface IGameDataService
-    {
-        void InitGameMd5AndPath(string md5, string gamePath);
-        string Md5 { get; }
-        string GamePath { get; }
+    void InitGameMd5AndPath(string md5, string gamePath);
+    string Md5 { get; }
+    string GamePath { get; }
 
-        void InitFullscreenChanged(IObservable<bool> observable);
-        IObservable<bool> GameFullscreenChanged { get; }
+    void InitFullscreenChanged(IConnectableObservable<bool> observable);
+    IConnectableObservable<bool> GameFullscreenChanged { get; }
 
-        void SearchingProcesses(string gamePath);
-        IEnumerable<Process> GameProcesses { get; }
-        Process MainProcess { get; }
+    void SearchingProcesses(string gamePath);
+    List<Process> GameProcesses { get; }
+    Process MainProcess { get; }
 
-        HWND GameRealWindowHandle { get; }
-        void SetGameRealWindowHandle(HWND handle);
-    }
+    HWND GameRealWindowHandle { get; }
+    void SetGameRealWindowHandle(HWND handle);
 }
 

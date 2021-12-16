@@ -1,24 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <MeCabUseDefaultDictionary>false</MeCabUseDefaultDictionary>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
-    <PackageReference Include="Config.Net.Json" Version="4.17.0" />
+    <PackageReference Include="Config.Net.Json" Version="4.19.0" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.3.1" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.14" />
-    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="HMBSbige.UpdateChecker" Version="5.0.1" />
+    <PackageReference Include="HMBSbige.UpdateChecker" Version="6.0.0" />
+    <PackageReference Include="WanaKana-net" Version="1.0.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ErogeHelper.Share\ErogeHelper.Share.csproj" />
+    <ProjectReference Include="..\ErogeHelper.Shared\ErogeHelper.Shared.csproj" />
   </ItemGroup>
 </Project>

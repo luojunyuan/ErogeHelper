@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,12 +18,9 @@
     <None Remove="WindowsInput" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\" />
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
+    <PackageReference Include="DynamicData" Version="7.4.3" />
     <PackageReference Include="NullGuard.Fody" Version="3.0.0" />
-    <PackageReference Include="ReactiveUI.Fody" Version="16.3.10" />
+    <PackageReference Include="ReactiveUI.Fody" Version="17.1.9" />
   </ItemGroup>
 </Project>

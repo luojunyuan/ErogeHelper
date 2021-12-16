@@ -17,20 +17,15 @@ namespace ErogeHelper.UnitTests.Model.Services
         [Test]
         public async Task CheckUpdateTest()
         {
-            const string version = "0.0.9.1";
+            const string version = "9.9.9.9";
             var updateService = new UpdateService();
-            (string, Color, bool) result = new();
-            
+
             updateService.CheckUpdate(version, false)
-                .Subscribe(package =>
-                {
-                    result = package;
-                    TestContext.Progress.WriteLine(package);
-                });
+                .Subscribe(package => TestContext.Progress.WriteLine(package));
             // do not care parameter previewVersion here 
-            await updateService.CheckUpdate(version, default);
-            
-            Assert.AreEqual(("Preview version", Color.Purple, false), result);
+            var result = await updateService.CheckUpdate(version, default);
+
+            Assert.AreEqual((Shared.Languages.Strings.About_PreviewVersion, Color.Purple, false), result);
         }
     }
 }

@@ -1,0 +1,51 @@
+﻿<rxui:ReactiveUserControl   
+    x:Class="ErogeHelper.View.Pages.MeCabPage"
+    x:TypeArguments="vm:MeCabViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:rxui="http://reactiveui.net"
+    xmlns:component="clr-namespace:ErogeHelper.Components"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
+    mc:Ignorable="d" 
+    d:DesignHeight="650" d:DesignWidth="800">
+
+    <component:ScrollViewerSmooth PanningMode="Both">
+        <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+            <Button x:Name="SelectMeCabDictButton"
+                Content="{x:Static resx:Strings.MeCabPage_SelectDict}" 
+                ToolTip="{x:Static resx:Strings.MeCabPage_SelectDictTip}" />
+
+            <ui:ToggleSwitch x:Name="ShowJapaneseSwitch" Header="{x:Static resx:Strings.MeCabPage_JapaneseText}" />
+            <GroupBox
+                Header="{x:Static resx:Strings.MeCabPage_TextFlyout}" 
+                IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:RadioButtons x:Name="KanaPosButtons" Header="{x:Static resx:Strings.MeCabPage_PositionFormat}">
+                        <RadioButton x:Name="KanaDefault" Content="{x:Static resx:Strings.MeCabPage_FuriganaDefault}" />
+                        <RadioButton x:Name="KanaTop" Content="{x:Static resx:Strings.MeCabPage_FuriganaTop}" />
+                        <RadioButton x:Name="KanaBottom" Content="{x:Static resx:Strings.MeCabPage_FuriganaBottom}" />
+                        <!--<RadioButton IsEnabled="False" Content="{x:Static resx:Strings.MeCabPage_TextVertical}" />-->
+                    </ui:RadioButtons>
+                    <ui:RadioButtons x:Name="KanaRubyButtons" Header="{x:Static resx:Strings.MeCabPage_FuriganaType}">
+                        <RadioButton x:Name="Romaji" Content="{x:Static resx:Strings.MeCabPage_Romaji}" />
+                        <RadioButton x:Name="Hiragana" Content="{x:Static resx:Strings.MeCabPage_Hiragana}" />
+                        <RadioButton x:Name="Katakana" Content="{x:Static resx:Strings.MeCabPage_Katakana}" />
+                    </ui:RadioButtons>
+                </ui:SimpleStackPanel>
+            </GroupBox>
+
+            <GroupBox 
+                Header="{x:Static resx:Strings.MeCabPage_Dict}" 
+                IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="MojiDictToggle" Header="Moji辞書" IsEnabled="False" />
+                    <ui:ToggleSwitch x:Name="JishoDictToggle" Header="Jisho" IsEnabled="False" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+        </ui:SimpleStackPanel>
+    </component:ScrollViewerSmooth>
+</rxui:ReactiveUserControl>

@@ -16,10 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErogeHelper.Share\ErogeHelper.Share.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="ServerRegistrationManager.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -27,6 +23,10 @@
 
   <ItemGroup>
     <PackageReference Include="ModernWpf.MessageBox" Version="0.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.Shared\ErogeHelper.Shared.csproj" />
   </ItemGroup>
 
 </Project>
