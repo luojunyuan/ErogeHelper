@@ -18,6 +18,11 @@ public static class HwndTools
 
     internal static void WindowLostFocus(HWND windowHandle, bool lostFocus)
     {
+        if (windowHandle.IsNull)
+        {
+            return;
+        }
+
         var exStyle = User32.GetWindowLong(windowHandle, User32.WindowLongFlags.GWL_EXSTYLE);
         if (lostFocus)
         {
