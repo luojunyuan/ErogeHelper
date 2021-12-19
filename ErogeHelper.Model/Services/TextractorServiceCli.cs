@@ -79,7 +79,7 @@ public class TextractorServiceCli : ITextractorService, IEnableLogger
     {
         foreach (Process p in _gameProcesses)
         {
-            _textractorCli.StandardInput.WriteLine("hookcode -P" + p.Id);
+            _textractorCli.StandardInput.WriteLine($"{hookcode} -P{p.Id}");
             _textractorCli.StandardInput.Flush();
             this.Log().Debug($"Insert code {hookcode} to PID {p.Id}.");
         }

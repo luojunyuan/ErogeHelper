@@ -12,6 +12,10 @@ public partial class HookThreadItem
 
         this.WhenActivated(d =>
         {
+            this.OneWayBind(ViewModel,
+                vm => vm.Index,
+                v => v.ThreadIndex.Text).DisposeWith(d);
+
             this.Bind(ViewModel,
                 vm => vm.IsTextThread,
                 v => v.TextRadioButton.IsChecked).DisposeWith(d);

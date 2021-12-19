@@ -13,7 +13,6 @@ public partial class AboutPage
     public AboutPage()
     {
         InitializeComponent();
-        AppVersion.Text = App.EHVersion;
 
         this.WhenActivated(d =>
         {

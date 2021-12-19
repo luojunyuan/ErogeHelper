@@ -103,7 +103,7 @@
                                 <!--  Refresh  -->
                                 <ui:AppBarButton Icon="Refresh" Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}" ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" />
                                 <!--  Hook Code  -->
-                                <ui:AppBarButton Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}" ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}">
+                                <ui:AppBarButton x:Name="HCodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}" ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}">
                                     <ui:AppBarButton.Icon>
                                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Component}" />
                                     </ui:AppBarButton.Icon>
@@ -111,6 +111,7 @@
                                 <!--  Read Code  -->
                                 <ui:AppBarButton Icon="Find" Label="{x:Static resx:Strings.HookPage_RCodeLabel}" ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" />
 
+                                <rxui:ViewModelViewHost x:Name="HcodeDialogHost" />
                             </StackPanel>
 
                             <!--  Thread Select  -->

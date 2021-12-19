@@ -34,6 +34,10 @@ public partial class HookWindow : IEnableLogger
                 vm => vm.ReInject,
                 v => v.ReInject).DisposeWith(d);
 
+            this.BindCommand(ViewModel,
+                vm => vm.OpenHCodeDialog,
+                v => v.HCodeButton).DisposeWith(d);
+
             this.OneWayBind(ViewModel,
                 vm => vm.HookEngineNames,
                 v => v.HookThreadsComboBox.ItemsSource).DisposeWith(d);
@@ -51,6 +55,10 @@ public partial class HookWindow : IEnableLogger
             this.BindCommand(ViewModel,
                 vm => vm.Submit,
                 v => v.SubmitButton).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.HCodeViewModel,
+                v => v.HcodeDialogHost.ViewModel).DisposeWith(d);
         });
     }
 }

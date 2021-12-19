@@ -14,11 +14,13 @@ using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
 using ErogeHelper.View.Controllers;
+using ErogeHelper.View.Dialogs;
 using ErogeHelper.View.Items;
 using ErogeHelper.View.Pages;
 using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Controllers;
+using ErogeHelper.ViewModel.Dialogs;
 using ErogeHelper.ViewModel.Items;
 using ErogeHelper.ViewModel.Pages;
 using ErogeHelper.ViewModel.Windows;
@@ -87,6 +89,7 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton(() => new TextViewModel());
 
         Locator.CurrentMutable.Register(() => new HookViewModel());
+        Locator.CurrentMutable.Register(() => new HCodeViewModel());
 
         Locator.CurrentMutable.Register(() => new PreferenceViewModel());
         Locator.CurrentMutable.Register(() => new GeneralViewModel());
@@ -107,6 +110,7 @@ internal static class DI
 
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());
+        Locator.CurrentMutable.Register<IViewFor<HCodeViewModel>>(() => new HCodeDialog());
 
         Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
         Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());

@@ -28,6 +28,9 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
     public long Handle { get; set; }
 
     [Reactive]
+    public int Index { get; set; }
+
+    [Reactive]
     public bool IsTextThread { get; set; }
 
     [Reactive]

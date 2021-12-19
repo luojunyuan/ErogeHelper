@@ -15,12 +15,17 @@
         Width="250" Height="auto"
         Margin="0,0,20,0">
         <StackPanel>
-
-            <ui:RadioButtons MaxColumns="2">
-                <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="Text" />
-                <RadioButton x:Name="CharacterRadioButton" Click="OptionalRadioButtonCheck" Content="Character" />
-            </ui:RadioButtons>
-
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ThreadIndex"
+                    Margin="2,2,20,0" VerticalAlignment="Center"
+                    d:Text="1" FontWeight="Bold" />
+                <ui:RadioButtons MaxColumns="2">
+                    <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="Text" />
+                    <RadioButton x:Name="CharacterRadioButton"
+                        Margin="-25,0,0,0" HorizontalAlignment="Left"
+                        Click="OptionalRadioButtonCheck" Content="Character" />
+                </ui:RadioButtons>
+            </StackPanel>
             <TextBox x:Name="TotalText"
                 MaxHeight="150"
                 behavior:ScrollToEndBehavior.OnTextChanged="True"
