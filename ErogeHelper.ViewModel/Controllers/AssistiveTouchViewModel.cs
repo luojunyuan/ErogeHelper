@@ -103,8 +103,8 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
             .DistinctUntilChanged()
             .Subscribe(v => _ehConfigRepository.UseTouchToolBox = v);
         this.WhenAnyValue(x => x.LoseFocusEnable, x => x.TouchBoxEnable, (a, b) => a && b)
-            .Skip(1)
-            .Subscribe(v => touchToolBoxViewModel.TouchToolBoxVisible = v);
+            .ToPropertyEx(touchToolBoxViewModel, x => x.TouchToolBoxVisible)
+            .DisposeWith(_disposables);
 
         this.WhenAnyValue(x => x.IsTouchToMouse)
             .Skip(1)

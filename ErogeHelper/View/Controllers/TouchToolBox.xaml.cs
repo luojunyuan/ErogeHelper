@@ -16,11 +16,10 @@ public partial class TouchToolBox
 
         this.WhenActivated(d =>
         {
-            this.Bind(ViewModel,
+            this.OneWayBind(ViewModel,
                vm => vm.TouchToolBoxVisible,
                v => v.TouchToolBoxView.Visibility,
-               value => value ? Visibility.Visible : Visibility.Collapsed,
-               visibility => visibility == Visibility.Visible).DisposeWith(d);
+               value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
         });
 
         _enterHolder = new DispatcherTimer
