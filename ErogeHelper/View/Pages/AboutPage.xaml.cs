@@ -8,6 +8,8 @@ namespace ErogeHelper.View.Pages;
 
 public partial class AboutPage
 {
+    private new ViewModel.Pages.AboutViewModel ViewModel => base.ViewModel!;
+
     public AboutPage()
     {
         InitializeComponent();
@@ -16,7 +18,7 @@ public partial class AboutPage
         this.WhenActivated(d =>
         {
             this.WhenAnyValue(x => x.AppVersion.Text)
-                .BindTo(this, x => x.ViewModel!.AppVersion);
+                .BindTo(this, x => x.ViewModel.AppVersion);
 
             HandleActivation();
 
@@ -48,5 +50,5 @@ public partial class AboutPage
         });
     }
 
-    private void HandleActivation() => ViewModel!.CheckUpdate.Execute().Subscribe();
+    private void HandleActivation() => ViewModel.CheckUpdate.Execute().Subscribe();
 }
