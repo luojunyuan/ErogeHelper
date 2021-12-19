@@ -49,15 +49,13 @@ public class PreferenceViewModel : ReactiveObject, IScreen, IDisposable
 
     public ReactiveCommand<Unit, Unit> Closed { get; }
 
-    private IObservable<Unit> SaveWindowSize(IEHConfigRepository ehConfigRepository)
-    {
-        return Observable.Start(() =>
+    private IObservable<Unit> SaveWindowSize(IEHConfigRepository ehConfigRepository) =>
+        Observable.Start(() =>
         {
             ehConfigRepository.PreferenceWindowHeight = Height;
             ehConfigRepository.PreferenceWindowWidth = Width;
             return Unit.Default;
         });
-    }
 
     private readonly CompositeDisposable _disposables = new();
     public void Dispose() => _disposables.Dispose();

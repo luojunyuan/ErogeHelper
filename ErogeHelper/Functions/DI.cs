@@ -104,7 +104,6 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<TouchToolBoxViewModel>>(() => new TouchToolBox());
 
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<TextViewModel>>(() => new TextWindow());
-        //Locator.CurrentMutable.Register<IViewFor<FuriganaItemViewModel>>(() => new FuriganaItem());
 
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());

@@ -23,11 +23,11 @@ public partial class TouchToolBox
                visibility => visibility == Visibility.Visible).DisposeWith(d);
         });
 
-        _enterHoder = new DispatcherTimer
+        _enterHolder = new DispatcherTimer
         {
             Interval = TimeSpan.FromMilliseconds(ConstantValue.PressEnterKeyIntervalTime)
         };
-        _enterHoder.Tick += async (_, _) =>
+        _enterHolder.Tick += async (_, _) =>
             await WindowsInput.Simulate.Events()
                 .Click(KeyCode.Enter)
                 .Invoke().ConfigureAwait(false);
@@ -54,7 +54,7 @@ public partial class TouchToolBox
             .Release(KeyCode.Control)
             .Invoke().ConfigureAwait(false);
 
-    private readonly DispatcherTimer _enterHoder;
+    private readonly DispatcherTimer _enterHolder;
 
     private bool _enterIsHolded = false;
 
@@ -67,13 +67,13 @@ public partial class TouchToolBox
             .Invoke().ConfigureAwait(false);
         if (_enterIsHolded)
         {
-            _enterHoder.Start();
+            _enterHolder.Start();
         }
     }
 
     private void EnterRelease(object sender, MouseButtonEventArgs e)
     {
-        _enterHoder.Stop();
+        _enterHolder.Stop();
         _enterIsHolded = false;
     }
 
