@@ -457,7 +457,7 @@
   <data name="TransPage.TranslatorDetail" xml:space="preserve">
     <value>详情</value>
   </data>
-  <data name="Common.Warn" xml:space="preserve">
+  <data name="Common.Warning" xml:space="preserve">
     <value>警告</value>
   </data>
   <data name="Common.Cancel" xml:space="preserve">
@@ -573,5 +573,11 @@
   </data>
   <data name="GeneralPage.HideTextWindow" xml:space="preserve">
     <value>不显示文本窗口</value>
+  </data>
+  <data name="HookPage.HookNameLabel" xml:space="preserve">
+    <value>当前使用的钩子： </value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>无</value>
   </data>
 </root>

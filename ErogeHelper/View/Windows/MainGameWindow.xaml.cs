@@ -28,7 +28,7 @@ public partial class MainGameWindow : IEnableLogger
 
         ViewModel ??= DependencyResolver.GetService<MainGameViewModel>();
 
-        ViewModel!.MainWindowHandle = handle;
+        ViewModel.MainWindowHandle = handle;
         ViewModel.Dpi = WpfScreenHelper.Screen
                 .FromHandle(handle.DangerousGetHandle())
                 .ScaleFactor;

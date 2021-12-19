@@ -289,6 +289,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 None 的本地化字符串。
+        /// </summary>
+        public static string Common_None {
+            get {
+                return ResourceManager.GetString("Common.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 OK 的本地化字符串。
         /// </summary>
         public static string Common_OK {
@@ -334,11 +343,11 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Warn 的本地化字符串。
+        ///   查找类似 Warning 的本地化字符串。
         /// </summary>
-        public static string Common_Warn {
+        public static string Common_Warning {
             get {
-                return ResourceManager.GetString("Common.Warn", resourceCulture);
+                return ResourceManager.GetString("Common.Warning", resourceCulture);
             }
         }
         
@@ -727,6 +736,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string HookPage_HookCode {
             get {
                 return ResourceManager.GetString("HookPage.HookCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Current use hook:  的本地化字符串。
+        /// </summary>
+        public static string HookPage_HookNameLabel {
+            get {
+                return ResourceManager.GetString("HookPage.HookNameLabel", resourceCulture);
             }
         }
         

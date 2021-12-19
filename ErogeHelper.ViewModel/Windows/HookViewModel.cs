@@ -28,7 +28,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
         CurrentInUseHookName = textractorService.Setting.HookCode == string.Empty ?
-            "None" : textractorService.Setting.HookName;
+            Strings.Common_None : textractorService.Setting.HookName;
         ConsoleInfo = string.Join('\n', textractorService.GetConsoleOutputInfo());
         var hookThreads = new SourceCache<HookThreadParam, long>(p => p.Handle);
 
@@ -112,7 +112,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ToCollection()
             .Select(vms => vms.Any(m => m.IsTextThread) == true);
 
-        Submit = ReactiveCommand.Create(() =>
+        Submit = ReactiveCommand.Create(() => CurrentInUseHookName =
             SubmitSetting(textractorService, gameInfoRepository, hookThreadItemsList.Items), canSubmit);
     }
 
@@ -139,9 +139,10 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     private readonly ReadOnlyObservableCollection<HookThreadItemViewModel> _hookThreadItems;
     public ReadOnlyObservableCollection<HookThreadItemViewModel> HookThreadItems => _hookThreadItems;
 
-    public ReactiveCommand<Unit, Unit> Submit { get; private set; }
+    public ReactiveCommand<Unit, string> Submit { get; private set; }
 
-    private static void SubmitSetting(
+    /// <returns>HookName</returns>
+    private static string SubmitSetting(
         ITextractorService textractorService,
         IGameInfoRepository gameInfoRepository,
         IEnumerable<HookThreadItemViewModel> hookThreadItemViewModels)
@@ -181,6 +182,8 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         Interactions.ContentDialog
             .Handle(Strings.HookPage_SubmitDialogMessage)
             .Subscribe();
+
+        return textractorSetting.HookName;
     }
 
     private static TextractorSetting.TextThread SelectThreadType(HookThreadItemViewModel vm)

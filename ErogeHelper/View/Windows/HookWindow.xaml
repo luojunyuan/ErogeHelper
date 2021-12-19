@@ -47,7 +47,7 @@
 
                     <!--  Current Hook In Using  -->
                     <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
-                        <Label Content="Current use hook: " />
+                        <Label Content="{x:Static resx:Strings.HookPage_HookNameLabel}" />
                         <Label x:Name="CurrentInUseHook" />
                     </StackPanel>
 

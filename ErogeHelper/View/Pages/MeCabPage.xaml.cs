@@ -1,8 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using System.Windows;
-using ErogeHelper.Shared;
 using ErogeHelper.Shared.Enums;
-using ErogeHelper.ViewModel.Pages;
 using ReactiveUI;
 
 namespace ErogeHelper.View.Pages;
@@ -12,8 +10,6 @@ public partial class MeCabPage
     public MeCabPage()
     {
         InitializeComponent();
-
-        ViewModel = DependencyResolver.GetService<MeCabViewModel>();
 
         this.WhenActivated(d =>
         {

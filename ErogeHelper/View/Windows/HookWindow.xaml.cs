@@ -12,7 +12,7 @@ public partial class HookWindow : IEnableLogger
     {
         InitializeComponent();
 
-        ViewModel = DependencyResolver.GetService<HookViewModel>();
+        ViewModel ??= DependencyResolver.GetService<HookViewModel>();
 
         this.WhenActivated(d =>
         {

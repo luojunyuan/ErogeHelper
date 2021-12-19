@@ -457,8 +457,8 @@
   <data name="TransPage.TranslatorDetail" xml:space="preserve">
     <value>Detail</value>
   </data>
-  <data name="Common.Warn" xml:space="preserve">
-    <value>Warn</value>
+  <data name="Common.Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -573,5 +573,11 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="GeneralPage.HideTextWindow" xml:space="preserve">
     <value>Don't display text window</value>
+  </data>
+  <data name="HookPage.HookNameLabel" xml:space="preserve">
+    <value>Current use hook: </value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>None</value>
   </data>
 </root>
