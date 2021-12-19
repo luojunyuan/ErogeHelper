@@ -75,7 +75,16 @@ public class TextractorServiceCli : ITextractorService, IEnableLogger
         Injected = true;
     }
 
-    public void InsertHook(string hookcode) => throw new NotImplementedException();
+    public void InsertHook(string hookcode)
+    {
+        foreach (Process p in _gameProcesses)
+        {
+            _textractorCli.StandardInput.WriteLine("hookcode -P" + p.Id);
+            _textractorCli.StandardInput.Flush();
+            this.Log().Debug($"Insert code {hookcode} to PID {p.Id}.");
+        }
+    }
+
     public void ReAttachProcesses()
     {
         foreach (Process p in _gameProcesses)

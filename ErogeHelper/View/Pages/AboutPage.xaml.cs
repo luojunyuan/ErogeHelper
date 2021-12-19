@@ -11,11 +11,13 @@ public partial class AboutPage
     public AboutPage()
     {
         InitializeComponent();
-
         AppVersion.Text = App.EHVersion;
 
         this.WhenActivated(d =>
         {
+            this.WhenAnyValue(x => x.AppVersion.Text)
+                .BindTo(this, x => x.ViewModel!.AppVersion);
+
             HandleActivation();
 
             this.OneWayBind(ViewModel,
@@ -46,9 +48,5 @@ public partial class AboutPage
         });
     }
 
-    private void HandleActivation()
-    {
-        ViewModel!.AppVersion = AppVersion.Text;
-        ViewModel!.CheckUpdate.Execute().Subscribe();
-    }
+    private void HandleActivation() => ViewModel!.CheckUpdate.Execute().Subscribe();
 }

@@ -105,7 +105,7 @@ public partial class App : IEnableLogger
             ToastNotificationManagerCompat.History.Clear();
         }
 
-        if (exitCode != 0)
+        if (exitCode == -1)
         {
             Environment.Exit(exitCode);
         }

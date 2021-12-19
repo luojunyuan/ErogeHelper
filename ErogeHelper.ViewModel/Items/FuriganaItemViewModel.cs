@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -18,6 +17,4 @@ public class FuriganaItemViewModel : ReactiveObject
 
     [Reactive]
     public Color BackgroundColor { get; set; }
-
-    public ReactiveCommand<Unit, Unit> LayoutUpdated { get; set; } = ReactiveCommand.Create(() => { });
 }

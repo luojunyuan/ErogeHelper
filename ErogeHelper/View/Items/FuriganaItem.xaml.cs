@@ -1,8 +1,5 @@
-﻿using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
+﻿using System.Reactive.Disposables;
 using ErogeHelper.XamlTool;
-using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace ErogeHelper.View.Items;
@@ -12,11 +9,6 @@ public partial class FuriganaItem
     public FuriganaItem()
     {
         InitializeComponent();
-
-        var layoutUpdatedEvent = this.Events()
-            .LayoutUpdated
-            .Select(_ => Unit.Default)
-            .InvokeCommand(this, x => x.ViewModel!.LayoutUpdated);
 
         this.WhenActivated(d =>
         {
@@ -36,8 +28,6 @@ public partial class FuriganaItem
                 vm => vm.BackgroundColor,
                 v => v.MojiBackgroundColor.ImageSource,
                 color => color.ToBitmapImage()).DisposeWith(d);
-
-            layoutUpdatedEvent.DisposeWith(d);
         });
     }
 }

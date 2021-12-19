@@ -58,7 +58,7 @@ public class AppLauncher
         // Optional functions
         if (ehConfigRepository.InjectProcessByDefalut)
         {
-            //textractorService.InjectProcesses(gameDataService.GameProcesses);
+            textractorService.InjectProcesses(gameDataService.GameProcesses);
         }
 
         if (!ehConfigRepository.HideTextWindow)

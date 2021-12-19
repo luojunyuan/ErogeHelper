@@ -254,7 +254,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 _furiganaItemViewModel[i].Text = vms[i].Text;
                 _furiganaItemViewModel[i].FontSize = vms[i].FontSize;
                 _furiganaItemViewModel[i].BackgroundColor = vms[i].BackgroundColor;
-                _furiganaItemViewModel[i].LayoutUpdated = vms[i].LayoutUpdated;
             }
             for (; i < vms.Count; i++)
             {
@@ -270,7 +269,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 _furiganaItemViewModel[i].Text = vms[i].Text;
                 _furiganaItemViewModel[i].FontSize = vms[i].FontSize;
                 _furiganaItemViewModel[i].BackgroundColor = vms[i].BackgroundColor;
-                _furiganaItemViewModel[i].LayoutUpdated = vms[i].LayoutUpdated;
             }
             for (; i < _furiganaItemViewModel.Count; i++)
             {

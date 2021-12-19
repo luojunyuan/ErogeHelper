@@ -42,7 +42,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .DisposeWith(_disposables);
 
         var canReInject = Utils.IsArm ? Observable.Return(false) : Observable.Return(true);
-        ReInject = ReactiveCommand.Create(() => { }, canReInject);
+        ReInject = ReactiveCommand.Create(textractorService.ReAttachProcesses, canReInject);
 
         textractorService.Data
             .Where(hp => hp.Handle != 0)
@@ -61,7 +61,8 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             this.WhenAnyValue<HookViewModel, bool, HookEngineLabel?>(
                 x => x.SelectedHookEngine,
                 v => v != null);
-        RemoveHook = ReactiveCommand.Create(() => { }, canRemoveHook);
+        RemoveHook = ReactiveCommand.Create(
+            () => textractorService.RemoveHook(SelectedHookEngine!.Value.Address), canRemoveHook);
 
         #region Hook Thread Items
         var hookThreadItemsList = new SourceCache<HookThreadItemViewModel, long>(vm => vm.Handle);

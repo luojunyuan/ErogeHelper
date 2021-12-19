@@ -4,6 +4,7 @@ using System.Net;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using AutoUpdaterDotNET;
 using ErogeHelper.Model.Repositories.Interface;
@@ -29,30 +30,27 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         updateService ??= DependencyResolver.GetService<IUpdateService>();
 
-        VersionBrushColor = Color.Gray;
-        UpdateStatusTip = Strings.About_CheckingVersion;
-        ShowUpdateButton = false;
-
-        this.WhenAnyValue(x => x.ShowUpdateButton)
-            .ToPropertyEx(this, x => x.CanJumpRelease);
-
         var currentPreviewFlag = AcceptedPreviewVersion = ehConfigRepository.UpdatePreviewVersion;
         this.WhenAnyValue(x => x.AcceptedPreviewVersion)
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UpdatePreviewVersion = v);
 
+        var updateVMSubj = new Subject<(string tip, Color versionColor, bool canUpdate)>();
+        updateVMSubj.Select(pack => pack.tip).ToPropertyEx(this, x => x.UpdateStatusTip);
+        updateVMSubj.Select(pack => pack.versionColor).ToPropertyEx(this, x => x.VersionBrushColor);
+        updateVMSubj.Select(pack => pack.canUpdate).ToPropertyEx(this, x => x.ShowUpdateButton);
+
+        this.WhenAnyValue(x => x.ShowUpdateButton)
+            .ToPropertyEx(this, x => x.CanJumpRelease);
+
         CheckUpdate = ReactiveCommand.CreateFromObservable(() =>
         {
-            VersionBrushColor = Color.Gray;
-            UpdateStatusTip = Strings.About_CheckingVersion;
-            ShowUpdateButton = false;
+            updateVMSubj.OnNext((Strings.About_CheckingVersion, Color.Gray, false));
 
             currentPreviewFlag = AcceptedPreviewVersion;
             return updateService.CheckUpdate(AppVersion, currentPreviewFlag);
         });
-        CheckUpdate
-            .Subscribe(package => (UpdateStatusTip, VersionBrushColor, ShowUpdateButton) = package)
-            .DisposeWith(_disposables);
+        CheckUpdate.Subscribe(pack => updateVMSubj.OnNext(pack)).DisposeWith(_disposables);
 
         Update = ReactiveCommand.Create(() => DoUpdate(currentPreviewFlag));
 
@@ -75,9 +73,8 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
                     : string.Format(Strings.About_Update_Tip, updateInfo.CurrentVersion);
                 // PREFERENCE: better surface with update log info
                 return Interactions.MessageBoxConfirm.Handle(updateTip)
-                .Where(continueUpdate => continueUpdate)
-                .Select(_ => updateInfo);
-
+                    .Where(continueUpdate => continueUpdate)
+                    .Select(_ => updateInfo);
             })
             .Select(AutoUpdater.DownloadUpdate)
             .Where(downloadFinished => downloadFinished)
@@ -98,17 +95,17 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
 
     public string AppVersion { get; set; } = string.Empty;
 
-    [Reactive]
+    [ObservableAsProperty]
     public Color VersionBrushColor { get; set; }
 
-    [Reactive]
-    public string UpdateStatusTip { get; set; }
+    [ObservableAsProperty]
+    public string? UpdateStatusTip { get; set; }
 
-    [Reactive]
+    [ObservableAsProperty]
     public bool ShowUpdateButton { get; set; }
 
     [ObservableAsProperty]
-    public bool CanJumpRelease { get; } = default;
+    public bool CanJumpRelease { get; }
 
     [Reactive]
     public bool AcceptedPreviewVersion { get; set; }

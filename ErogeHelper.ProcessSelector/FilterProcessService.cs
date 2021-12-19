@@ -53,7 +53,8 @@ namespace ErogeHelper.ProcessSelector
                     var fileName = p.MainModule?.FileName!;
                     var icon = PeIconToBitmapImage(fileName);
                     var describe = p.MainModule?.FileVersionInfo.FileDescription ?? string.Empty;
-                    var title = p.MainWindowTitle.Length > MaxTitleLength ? describe : p.MainWindowTitle;
+                    var title = (p.MainWindowTitle.Length > MaxTitleLength && describe != string.Empty) ?
+                        describe : p.MainWindowTitle;
                     return new ProcessDataModel(p, icon, describe, title);
                 });
 
