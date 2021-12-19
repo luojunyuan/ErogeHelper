@@ -8,10 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using ErogeHelper.Functions;
-using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
-using ErogeHelper.ViewModel.Controllers;
 using ErogeHelper.ViewModel.Windows;
 using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
@@ -40,14 +38,9 @@ public partial class AssistiveTouch : IEnableLogger
     {
         InitializeComponent();
 
-        ViewModel ??= DependencyResolver.GetService<AssistiveTouchViewModel>();
-
-        var touchPosition = ViewModel!.AssistiveTouchPosition;
-        var isTouchBigSize = ViewModel!.IsTouchBigSize;
-
-
         FrameworkElement? parent = null;
         CompositeDisposable disposables = new();
+        AssistiveTouchPosition touchPosition = null!;
 
         AssistiveButton.Loaded += (_, _) =>
         {
@@ -55,7 +48,9 @@ public partial class AssistiveTouch : IEnableLogger
                     ? throw new InvalidOperationException("Control's parent must be FrameworkElement type")
                     : reactiveViewModelViewHost;
 
-            UpdateButtonDiameterProperties(isTouchBigSize, touchPosition, parent);
+            touchPosition = ViewModel!.AssistiveTouchPosition;
+
+            UpdateButtonDiameterProperties(ViewModel.IsTouchBigSize, touchPosition, parent);
 
             parent.Events().SizeChanged
                 .Subscribe(_ => AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent))
@@ -209,7 +204,7 @@ public partial class AssistiveTouch : IEnableLogger
             isMoving = false;
             tryTransparentizeSubj.OnNext(true);
             AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
-            ViewModel.AssistiveTouchPositionChanged.OnNext(touchPosition);
+            ViewModel!.AssistiveTouchPositionChanged.OnNext(touchPosition);
         });
 
         #endregion Core Logic of Moving
@@ -217,7 +212,7 @@ public partial class AssistiveTouch : IEnableLogger
         this.WhenActivated(d =>
         {
             disposables.DisposeWith(d);
-            ViewModel.DisposeWith(d);
+            ViewModel!.DisposeWith(d);
 
             this.WhenAnyObservable(x => x.ViewModel!.UseBigSize)
                 .Subscribe(isBigSize =>
@@ -265,7 +260,7 @@ public partial class AssistiveTouch : IEnableLogger
         (double)Application.Current.Resources["BigAssistiveTouchSize"];
 
     private void UpdateButtonDiameterProperties
-        (bool isBigSize, AssistiveTouchPosition touchPosition, FrameworkElement parent)
+        (bool isBigSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
     {
         AssistiveButton.Template = GetAssistiveTouchStyle(isBigSize);
         _buttonSize = isBigSize ? AssistiveTouchBigSize : AssistiveTouchSize;
@@ -274,8 +269,8 @@ public partial class AssistiveTouch : IEnableLogger
         _oneThirdDistance = _distance / 3;
         _twoThirdDistance = _oneThirdDistance * 2;
 
-        AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPosition, parent);
-        AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPosition);
+        AssistiveButton.Margin = GetButtonEdgeMargin(_buttonSize, touchPos, parent);
+        AssistiveTouchFlyout.Placement = GetFlyoutPlacement(touchPos);
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
@@ -322,13 +317,13 @@ public partial class AssistiveTouch : IEnableLogger
     }
 
     private static Thickness GetButtonEdgeMargin(
-        double buttonSize, AssistiveTouchPosition pos, FrameworkElement parent)
+        double buttonSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
     {
         var rightLineMargin = parent.ActualWidth - buttonSize - ButtonSpace;
         var bottomLineMargin = parent.ActualHeight - buttonSize - ButtonSpace;
-        var verticalScaleMargin = (pos.Scale * parent.ActualHeight) - (buttonSize / 2) - ButtonSpace;
-        var horizontalScaleMargin = (pos.Scale * parent.ActualWidth) - buttonSize / 2 - ButtonSpace;
-        return pos.Corner switch
+        var verticalScaleMargin = (touchPos.Scale * parent.ActualHeight) - (buttonSize / 2) - ButtonSpace;
+        var horizontalScaleMargin = (touchPos.Scale * parent.ActualWidth) - buttonSize / 2 - ButtonSpace;
+        return touchPos.Corner switch
         {
             TouchButtonCorner.UpperLeft => new Thickness(ButtonSpace, ButtonSpace, 0, 0),
             TouchButtonCorner.UpperRight => new Thickness(rightLineMargin, ButtonSpace, 0, 0),
@@ -342,12 +337,12 @@ public partial class AssistiveTouch : IEnableLogger
         };
     }
 
-    private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition touchPosition) =>
-        touchPosition.Corner is
+    private static FlyoutPlacementMode GetFlyoutPlacement(AssistiveTouchPosition touchPos) =>
+        touchPos.Corner is
         TouchButtonCorner.Right or TouchButtonCorner.UpperRight or TouchButtonCorner.LowerRight
         ? FlyoutPlacementMode.LeftEdgeAlignedTop
-        : ((touchPosition.Corner == TouchButtonCorner.Top && touchPosition.Scale > 0.5) ||
-           (touchPosition.Corner == TouchButtonCorner.Bottom && touchPosition.Scale > 0.5))
+        : ((touchPos.Corner == TouchButtonCorner.Top && touchPos.Scale > 0.5) ||
+           (touchPos.Corner == TouchButtonCorner.Bottom && touchPos.Scale > 0.5))
         ? FlyoutPlacementMode.LeftEdgeAlignedTop
         : FlyoutPlacementMode.RightEdgeAlignedTop;
 

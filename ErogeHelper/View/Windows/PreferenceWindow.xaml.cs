@@ -75,6 +75,7 @@ public partial class PreferenceWindow
             NavigationView.SelectedItem = NavigationView.MenuItems.OfType<NavigationViewItem>().First();
 
             closedEvent.DisposeWith(d);
+            aboutViewModel.DisposeWith(d);
             ViewModel.DisposeWith(d);
         });
     }
