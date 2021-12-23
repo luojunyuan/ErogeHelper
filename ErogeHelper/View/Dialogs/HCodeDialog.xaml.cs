@@ -4,6 +4,7 @@ using System.Windows.Input;
 using ModernWpf.Controls;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
 
 namespace ErogeHelper.View.Dialogs
 {
@@ -14,9 +15,6 @@ namespace ErogeHelper.View.Dialogs
             InitializeComponent();
 
             var disposable = new CompositeDisposable();
-            ContentDialog.Events().PrimaryButtonClick
-                .Where(_ => ContentDialog.IsPrimaryButtonEnabled)
-                .Subscribe().DisposeWith(disposable);
 
             // If the PrimaryButton is disabled, block the "Enter" key
             ContentDialog.Events().Closing
@@ -30,11 +28,18 @@ namespace ErogeHelper.View.Dialogs
 
             this.WhenActivated(d =>
             {
+                this.WhenAnyValue(x => x.ViewModel)
+                    .BindTo(this, x => x.DataContext).DisposeWith(d);
+
                 disposable.DisposeWith(d);
 
-                this.Bind(ViewModel,
+                this.BindValidation(ViewModel,
                     vm => vm.HookCode,
-                    v => v.CodeTextBox.Text).DisposeWith(d);
+                    v => v.CodeValidation.Text).DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.CanInsertCode,
+                    v => v.ContentDialog.IsPrimaryButtonEnabled).DisposeWith(d);
 
                 this.BindCommand(ViewModel,
                     vm => vm.SearchCode,

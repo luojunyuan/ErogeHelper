@@ -18,10 +18,12 @@
         DefaultButton="Primary"
         PrimaryButtonText="{x:Static resx:Strings.HookPage_Insert}">
 
-        <ui:SimpleStackPanel Spacing="10">
+        <ui:SimpleStackPanel>
             <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
-                <!--  Alternative binding if you do not want use the x:Name of TextBox  -->
-                <TextBox x:Name="CodeTextBox" Width="240" HorizontalAlignment="Left" />
+                <TextBox x:Name="CodeTextBox"
+                    Width="240"
+                    HorizontalAlignment="Left"
+                    Text="{Binding HookCode, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--  TODO: Make a wait button for searching code  -->
                 <ui:AppBarButton x:Name="SearchCodeButton"
@@ -32,6 +34,8 @@
                     </ui:AppBarButton.Icon>
                 </ui:AppBarButton>
             </ui:SimpleStackPanel>
+
+            <TextBlock x:Name="CodeValidation" Foreground="Red" />
         </ui:SimpleStackPanel>
 
     </ui:ContentDialog>
