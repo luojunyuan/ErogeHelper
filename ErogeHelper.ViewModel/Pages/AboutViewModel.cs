@@ -8,7 +8,6 @@ using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
 using AutoUpdaterDotNET;
 using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;

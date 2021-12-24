@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ErogeHelper.Model.Services.Interface;
+namespace ErogeHelper.Model.Repositories.Interface;
 
 public interface IUpdateService
 {

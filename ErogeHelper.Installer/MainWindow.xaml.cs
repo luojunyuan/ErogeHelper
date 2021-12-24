@@ -104,7 +104,7 @@ namespace ErogeHelper.Installer
             {
                 var deleteTipDialog = new ContentDialog
                 {
-                    Title = Shared.Languages.Strings.Common_Warn,
+                    Title = Shared.Languages.Strings.Common_Warning,
                     Content = Shared.Languages.Strings.Installer_DeleteTip,
                     PrimaryButtonText = Shared.Languages.Strings.Common_OK,
                     CloseButtonText = Shared.Languages.Strings.Common_Cancel,

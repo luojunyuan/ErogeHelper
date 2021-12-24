@@ -1,6 +1,6 @@
 using Config.Net;
+using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Model.Services;
 using ErogeHelper.ViewModel.Pages;
 using NUnit.Framework;
 

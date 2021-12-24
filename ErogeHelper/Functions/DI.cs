@@ -28,6 +28,7 @@ using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using ModernWpf.Controls;
 using ReactiveUI;
+using Refit;
 using Splat;
 using MessageBox = ModernWpf.MessageBox;
 
@@ -49,6 +50,8 @@ internal static class DI
             () => new GameInfoRepository(EHContext.DbConnectString));
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
         Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
+        Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
+            new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
 
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());

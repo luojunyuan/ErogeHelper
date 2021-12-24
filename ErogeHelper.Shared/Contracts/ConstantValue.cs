@@ -59,4 +59,6 @@ public static class ConstantValue
     public const string MeCabUniDicMD5 = "92C3E76ABBB89274EE95A9B8698E691E";
 
     public const string CodeRegExp = @"/?H\S+@[A-Fa-f0-9]+(:\S+)?|/?RS@[A-Fa-f0-9]+";
+
+    public const string AniclanBaseUrl = "http://vnr.aniclan.com";
 }

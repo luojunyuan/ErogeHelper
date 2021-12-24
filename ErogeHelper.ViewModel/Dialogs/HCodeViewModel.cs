@@ -1,54 +1,66 @@
 ﻿using System.Reactive;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
+using ErogeHelper.Shared.Languages;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace ErogeHelper.ViewModel.Dialogs
+namespace ErogeHelper.ViewModel.Dialogs;
+
+public class HCodeViewModel : ReactiveValidationObject
 {
-    public class HCodeViewModel : ReactiveValidationObject
+    public Interaction<Unit, string> Show { get; set; } = new();
+
+    public HCodeViewModel(IHookCodeService? hookCodeService = null, IGameDataService? gameDataService = null)
     {
-        public Interaction<Unit, string> Show { get; set; } = new();
+        hookCodeService ??= DependencyResolver.GetService<IHookCodeService>();
+        gameDataService ??= DependencyResolver.GetService<IGameDataService>();
 
-        public HCodeViewModel()
+        var codeValidation = this.ValidationRule(
+            vm => vm.HookCode,
+            CodeValidateRegExp,
+            "Invalid hcode format");
+
+        this.WhenAnyValue(x => x.HookCode,
+            code => !string.IsNullOrEmpty(code) && codeValidation.IsValid)
+            .ToPropertyEx(this, x => x.CanInsertCode);
+
+        SearchCode = ReactiveCommand.CreateFromObservable(() =>
+            hookCodeService.QueryHCode(gameDataService.Md5).Select(g => g?.Games?.Game?.Hook ?? string.Empty));
+
+        SearchCode.Subscribe(x => HookCode = x == string.Empty ? Strings.HookPage_CodeSearchNoResult : x);
+    }
+
+    [Reactive]
+    public string? HookCode { get; set; } = string.Empty;
+
+    [ObservableAsProperty]
+    public bool CanInsertCode { get; }
+
+    public ReactiveCommand<Unit, string> SearchCode { get; }
+
+    // TODO: Imporve code regexp
+    private bool CodeValidateRegExp(string? code)
+    {
+        // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
+        // RCode 0或1个/ RS@ 1个以上十六进制
+        if (string.IsNullOrWhiteSpace(code))
         {
-            var codeValidation = this.ValidationRule(
-                vm => vm.HookCode,
-                code => Validate(code),
-                "Invalid hcode format");
-
-            this.WhenAnyValue(x => x.HookCode,
-                code => !string.IsNullOrEmpty(code) && codeValidation.IsValid)
-                .ToPropertyEx(this, x => x.CanInsertCode);
+            // if hcode is null or space, make TextBox normal style
+            return true;
         }
 
-        [Reactive]
-        public string? HookCode { get; set; } = string.Empty;
-
-        [ObservableAsProperty]
-        public bool CanInsertCode { get; }
-
-        public ReactiveCommand<Unit, Unit> SearchCode { get; } = ReactiveCommand.Create(() => { });
-
-        // TODO: Imporve
-        private bool Validate(string? code)
+        if (code[^1] == ':')
         {
-            // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
-            // RCode 0或1个/ RS@ 1个以上十六进制
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                // if hcode is null or space, make TextBox normal style
-                return true;
-            }
-
-            if (code[^1] == ':')
-            {
-                return false;
-            }
-
-            return Regex.IsMatch(code, ConstantValue.CodeRegExp);
+            return false;
         }
+
+        return Regex.IsMatch(code, ConstantValue.CodeRegExp);
     }
 }

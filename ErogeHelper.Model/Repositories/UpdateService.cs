@@ -1,13 +1,13 @@
 ﻿using System.Drawing;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Shared.Languages;
 using Splat;
 using UpdateChecker;
 using UpdateChecker.VersionComparers;
 
-namespace ErogeHelper.Model.Services;
+namespace ErogeHelper.Model.Repositories;
 
 public class UpdateService : IUpdateService, IEnableLogger
 {
@@ -39,9 +39,7 @@ public class UpdateService : IUpdateService, IEnableLogger
                 {
                     var latestVersion = updateChecker.LatestVersion ?? "9.9.9.9";
                     if (usePreviewVersion)
-                    {
                         observable.OnNext((Strings.About_PreviewLatestVersion, Color.Purple, false));
-                    }
                     else if (new Version(version) > new Version(latestVersion))
                     {
                         observable.OnNext((Strings.About_PreviewVersion, Color.Purple, false));
