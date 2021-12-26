@@ -64,6 +64,8 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
 
         _gameProc.Exited += (_, _) =>
         {
+            // Do cloud save check
+
             _gamePositionSubj.OnNext(HiddenPos);
             this.Log().Debug("Detected game quit event");
             _gcSafetyHandle.Free();
@@ -74,6 +76,8 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
             _gamePositionSubj.OnCompleted();
             _gamePosChangedSubj.OnCompleted();
             _ViewOperationSubj.OnCompleted();
+            // FIXME: “System.InvalidOperationException”类型的未经处理的异常在 System.Private.CoreLib.dll 中发生 
+            // Collection was modified; enumeration operation may not execute.
         };
     }
 

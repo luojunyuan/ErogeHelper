@@ -11,7 +11,7 @@ using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.Services;
 
-public class TextractorServiceCli : ITextractorService, IEnableLogger
+public class TextractorCli : ITextractorService, IEnableLogger
 {
     private readonly Subject<HookParam> _dataSubj = new();
     public IObservable<HookParam> Data => _dataSubj;

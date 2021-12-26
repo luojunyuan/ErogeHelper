@@ -30,6 +30,7 @@ using ModernWpf.Controls;
 using ReactiveUI;
 using Refit;
 using Splat;
+using Vanara.PInvoke.NetListMgr;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper.Functions;
@@ -66,13 +67,13 @@ internal static class DI
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabService());
         }
-        //Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
+        Locator.CurrentMutable.Register(() => new NetworkListManager(), typeof(INetworkListManager));
         //if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         if (true)
-            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorServiceCli());
+            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
         //else
         //{
-        //    Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorService());
+        //    Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
         //}
 
         // MISC
@@ -94,6 +95,8 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new HookViewModel());
         Locator.CurrentMutable.Register(() => new HCodeViewModel());
 
+        Locator.CurrentMutable.Register(() => new CloudSaveViewModel());
+
         Locator.CurrentMutable.Register(() => new PreferenceViewModel());
         Locator.CurrentMutable.Register(() => new GeneralViewModel());
         Locator.CurrentMutable.Register(() => new MeCabViewModel());
@@ -114,6 +117,8 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());
         Locator.CurrentMutable.Register<IViewFor<HCodeViewModel>>(() => new HCodeDialog());
+
+        Locator.CurrentMutable.Register<IViewFor<CloudSaveViewModel>>(() => new CloudSaveWindow());
 
         Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
         Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());

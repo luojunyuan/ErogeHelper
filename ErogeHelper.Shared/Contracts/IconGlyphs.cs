@@ -37,6 +37,8 @@ public static class CommonGlyphs
     public const string Color = "\uE790";
 
     public const string LangJPN = "\uE7DE";
+
+    public const string Cloud = "\uE753";
 }
 
 public enum SymbolName

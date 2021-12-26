@@ -7,7 +7,7 @@ namespace ErogeHelper.View.Windows;
 public class DummyTouchBug : Window
 {
     /// <summary>
-    /// This fix the problem of ScrollViewer can not receive Manipulation event caused by unknown reason
+    /// This fix the problem of ScrollViewer can not receive Manipulation events caused by unknown reason
     /// </summary>
     public static void Fix()
     {

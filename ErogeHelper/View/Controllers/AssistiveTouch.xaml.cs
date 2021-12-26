@@ -407,6 +407,12 @@ public partial class AssistiveTouch : IEnableLogger
         DI.ShowView<HookViewModel>();
     }
 
+    private void CloudSaveOnClick(object sender, RoutedEventArgs e)
+    {
+        AssistiveTouchFlyout.Hide();
+        DI.ShowView<CloudSaveViewModel>();
+    }
+
     private void PreferenceOnClick(object sender, RoutedEventArgs e) =>
         DI.ShowView<PreferenceViewModel>();
 }

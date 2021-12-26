@@ -55,6 +55,11 @@
                                         <ui:SymbolIcon Symbol="Attach" />
                                     </MenuItem.Icon>
                                 </MenuItem>
+                                <MenuItem Click="CloudSaveOnClick" Header="Cloud Saves">
+                                    <MenuItem.Icon>
+                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Cloud}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ui:MenuFlyout>
                         </ui:AppBarButton.Flyout>
                     </ui:AppBarButton>
