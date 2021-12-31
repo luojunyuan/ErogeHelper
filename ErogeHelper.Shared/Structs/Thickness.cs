@@ -1,6 +1,6 @@
 ﻿namespace ErogeHelper.Shared.Structs;
 
-public readonly struct Thickness
+public readonly ref struct Thickness
 {
     public readonly double Left;
     public readonly double Top;

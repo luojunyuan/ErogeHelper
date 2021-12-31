@@ -64,7 +64,7 @@ public partial class App : IEnableLogger
 
                 ToastManage.Register();
                 ToastManage.AdminModeTipToast();
-                DummyTouchBug.Fix();
+                DummyTouchBug.Fix(); // Put in aonther thread?
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.RegisterInteractions();
