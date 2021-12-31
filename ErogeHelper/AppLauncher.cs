@@ -13,7 +13,6 @@ using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Windows;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -148,7 +147,7 @@ public class AppLauncher
             monitorResolutionChanged
                 .Merge(gameResolutionChanged)
                 .Merge(dpiChanged)
-                .SelectMany(_ => Interactions.CheckGameFullscreen.Handle(gameDataService.GameRealWindowHandle))
+                .Select(_ => WpfHelper.IsGameForegroundFullscreen(gameDataService.GameRealWindowHandle))
                 .DistinctUntilChanged().Publish());
     }
 

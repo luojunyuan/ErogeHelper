@@ -30,7 +30,6 @@ using ModernWpf.Controls;
 using ReactiveUI;
 using Refit;
 using Splat;
-using Vanara.PInvoke;
 using Vanara.PInvoke.NetListMgr;
 using MessageBox = ModernWpf.MessageBox;
 

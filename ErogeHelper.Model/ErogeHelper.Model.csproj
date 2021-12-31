@@ -9,8 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.289" />
-    <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.289" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.1" />
+    <!--<PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.289" />
+    <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.289" />-->
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
     <!-- Microsoft.Data.Sqlite 6.0.1 seems like conflict with FluentMigrator -->
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
