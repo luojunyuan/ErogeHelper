@@ -29,7 +29,7 @@ public partial class App : IEnableLogger
     {
         try
         {
-            SetupExceptionHandling(); // Memory use: 14656K (debug taskmanager)
+            SetupExceptionHandling();
             SingleInstanceWatcher();
 
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -39,8 +39,8 @@ public partial class App : IEnableLogger
 
             Startup += (_, startupEvent) =>
             {
-                var args = startupEvent.Args; // Memory use: 30420K (debug taskmanager)
-                                              // EH already exit, but toast is clicked. This one shouldn't happen 
+                var args = startupEvent.Args;
+                // EH already exit, but toast is clicked. This one shouldn't happen 
                 if (args.Contains("-ToastActivated") || args.Contains("-Embedding"))
                 {
                     Terminate(-1);
@@ -64,13 +64,12 @@ public partial class App : IEnableLogger
 
                 ToastManage.Register();
                 ToastManage.AdminModeTipToast();
-                DummyTouchBug.Fix(); // Put in aonther thread?
+                DummyTouchBug.Fix();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.RegisterInteractions();
 
                 AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
-                // Memory use without window: 61724K (debug taskmanager) => 53348K
             };
         }
         catch (AppExistedException)

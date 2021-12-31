@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
@@ -10,9 +8,6 @@ using ModernWpf.Controls;
 
 namespace ErogeHelper.Installer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         private const string ShellMenuDllName = "ErogeHelper.ShellMenuHandler.dll";

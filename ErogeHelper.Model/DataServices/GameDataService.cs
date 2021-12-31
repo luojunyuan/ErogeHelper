@@ -59,7 +59,8 @@ public class GameDataService : IGameDataService, IEnableLogger, IDisposable
         }
 
         LogHost.Default.Debug(
-            $"{procList.Count} Process(es) and MainWindowHandle 0x{mainProcess.MainWindowHandle:X8} Found.");
+            $"{procList.Count} Process(es) and MainWindowHandle 0x{mainProcess.MainWindowHandle:X8} Found. " +
+            $"{spendTime.ElapsedMilliseconds}ms");
 
         return (mainProcess, procList);
     }

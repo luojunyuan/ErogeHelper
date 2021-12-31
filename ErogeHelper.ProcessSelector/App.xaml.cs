@@ -1,14 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 
 namespace ErogeHelper.ProcessSelector
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
@@ -27,7 +21,7 @@ namespace ErogeHelper.ProcessSelector
                                           throw new ArgumentNullException(nameof(currentDirectory)));
         }
 
-        // http://stackoverflow.com/a/23730146/1644202"
+        // http://stackoverflow.com/a/23730146/1644202
         private static void SingleInstanceWatcher()
         {
             if (EventWaitHandle.TryOpenExisting(UniqueEventName, out var eventWaitHandle))

@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <UseWPF>true</UseWPF>
-        <OutputPath>..\bin\$(Configuration)</OutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <ApplicationManifest>assets\app.manifest</ApplicationManifest>
-        <Version>0.0.9.3</Version>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
         <Authors>k1mlka</Authors>
-        <PublishReadyToRun>true</PublishReadyToRun>
+		<Version>0.0.9.3</Version>
         <Platforms>AnyCPU;x86</Platforms>
-        <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<ApplicationManifest>assets\app.manifest</ApplicationManifest>
+		<OutputPath>..\bin\$(Configuration)</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />

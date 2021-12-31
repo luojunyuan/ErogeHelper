@@ -25,7 +25,7 @@ public class AppLauncher
 {
     public static void StartFromCommandLine(string gamePath, bool leEnable)
     {
-        var gameDataService = DependencyResolver.GetService<IGameDataService>(); // Memory use: 39916K (debug taskmanager)
+        var gameDataService = DependencyResolver.GetService<IGameDataService>();
         var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
         var textractorService = DependencyResolver.GetService<ITextractorService>();
         var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
@@ -33,7 +33,7 @@ public class AppLauncher
         var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
 
         InitializeGameDatas(gameDataService, textractorService, gameWindowHooker, ehConfigRepository,
-            gamePath, leEnable, gameDir); // Memory use: 52000K (debug taskmanager)
+            gamePath, leEnable, gameDir);
 
         var leproc = RunGame(gamePath, leEnable, gameDir);
 
@@ -124,7 +124,7 @@ public class AppLauncher
             textractorService.Setting = new();
         }
 
-        if (ehConfigRepository.DPIByApplication && !WpfHelper.AlreadyHasDpiCompatibilitySetting(gamePath))
+        if (ehConfigRepository.DPIByApplication && !WpfHelper.IsDpiCompatibilitySet(gamePath))
         {
             WpfHelper.SetDPICompatibilityAsApplication(gamePath);
         }

@@ -11,25 +11,20 @@
     Width="400"
     MinWidth="400"
     Title="{x:Static resx:Strings.Installer_Title}"
-    ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height"
-    WindowStartupLocation="CenterScreen">
+    ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="NoResize"
+    SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
-    <ScrollViewer PanningMode="Both">
-        <StackPanel Margin="20,10">
-            <GroupBox Header="ErogeHelper Installer">
-                <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock Text="{x:Static resx:Strings.Installer_Info}" TextWrapping="Wrap" />
-                    <Button x:Name="InstallButton"
-                        MinWidth="90"
-                        Click="Register"
-                        Content="{x:Static resx:Strings.Installer_Register}" />
-                    <Button x:Name="UninstallButton"
-                        MinWidth="90"
-                        Click="UnInstall"
-                        Content="{x:Static resx:Strings.Installer_Unload}" />
-                    <CheckBox x:Name="DeleteCacheCheckBox" Content="{x:Static resx:Strings.Installer_DeleteCheckBox}" IsEnabled="{Binding ElementName=UninstallButton, Path=IsEnabled}" />
-                </ui:SimpleStackPanel>
-            </GroupBox>
-        </StackPanel>
-    </ScrollViewer>
+    <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+        <Label Margin="0,5,0,10" Content="ErogeHelper Installer" FontSize="20" />
+        <TextBlock Text="{x:Static resx:Strings.Installer_Info}" TextWrapping="Wrap" />
+        <Button x:Name="InstallButton"
+            MinWidth="90"
+            Click="Register"
+            Content="{x:Static resx:Strings.Installer_Register}" />
+        <Button x:Name="UninstallButton"
+            MinWidth="90"
+            Click="UnInstall"
+            Content="{x:Static resx:Strings.Installer_Unload}" />
+        <CheckBox x:Name="DeleteCacheCheckBox" Content="{x:Static resx:Strings.Installer_DeleteCheckBox}" IsEnabled="{Binding ElementName=UninstallButton, Path=IsEnabled}" />
+    </ui:SimpleStackPanel>
 </Window>

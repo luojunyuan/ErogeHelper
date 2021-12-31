@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ErogeHelper.Shared.Languages;
@@ -11,9 +8,6 @@ using ModernWpf.Controls;
 
 namespace ErogeHelper.ProcessSelector
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         private static ContentDialog ProcessExitTipDialog => new()
@@ -44,6 +38,7 @@ namespace ErogeHelper.ProcessSelector
             Task.Run(RefreshProcesses);
         }
 
+        // UPSTREAM: ToolTip bugged with.Net 6
         public ObservableCollection<ProcessDataModel> Processes { get; } = new();
 
         private async void ProcessComboBoxOnDropDownOpened(object sender, EventArgs e) =>

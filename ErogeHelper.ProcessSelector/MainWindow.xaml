@@ -11,8 +11,8 @@
     Width="400"
     MinWidth="400"
     Title="{x:Static resx:Strings.SelectProcess_Title}"
-    ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height"
-    Topmost="True" WindowStartupLocation="CenterScreen">
+    ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="NoResize"
+    SizeToContent="Height" Topmost="True" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style x:Key="TipFadeInTrigger" TargetType="{x:Type ui:FontIcon}">
@@ -31,48 +31,42 @@
         </Style>
     </Window.Resources>
 
-    <ScrollViewer PanningMode="Both">
-        <StackPanel Margin="20,10">
-            <GroupBox>
-                <ui:SimpleStackPanel Spacing="10">
-                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Static resx:Strings.SelectProcess_Tips}" />
-                </ui:SimpleStackPanel>
-            </GroupBox>
-            <GroupBox Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">
-                <ui:SimpleStackPanel Spacing="10">
-                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
-                        <ComboBox x:Name="ProcessComboBox"
-                            Width="240"
-                            DropDownOpened="ProcessComboBoxOnDropDownOpened"
-                            ItemsSource="{Binding Processes}"
-                            SelectionChanged="ProcessComboBoxOnSelectionChanged">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Width="210" Orientation="Horizontal" ToolTip="{Binding Describe}">
-                                        <Image Source="{Binding Icon}" />
-                                        <TextBlock
-                                            MaxWidth="180"
-                                            Margin="10,0,0,0" VerticalAlignment="Center"
-                                            Text="{Binding Title}"
-                                            TextWrapping="Wrap" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <ui:FontIcon x:Name="TipSymbol"
-                            Glyph="&#xE946;"
-                            Style="{StaticResource TipFadeInTrigger}"
-                            ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}"
-                            Visibility="Collapsed" />
-                    </ui:SimpleStackPanel>
-
-                    <Button x:Name="InjectButton"
+    <StackPanel Margin="20,10">
+        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Static resx:Strings.SelectProcess_Tips}" />
+        <GroupBox Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">
+            <ui:SimpleStackPanel Spacing="10">
+                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                    <ComboBox x:Name="ProcessComboBox"
                         Width="240"
-                        Click="InjectButtonOnClick"
-                        Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
-                        Style="{StaticResource AccentButtonStyle}" />
+                        DropDownOpened="ProcessComboBoxOnDropDownOpened"
+                        ItemsSource="{Binding Processes}"
+                        SelectionChanged="ProcessComboBoxOnSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="210" Orientation="Horizontal" ToolTip="{Binding Describe}">
+                                    <Image Source="{Binding Icon}" />
+                                    <TextBlock
+                                        MaxWidth="180"
+                                        Margin="10,0,0,0" VerticalAlignment="Center"
+                                        Text="{Binding Title}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ui:FontIcon x:Name="TipSymbol"
+                        Glyph="&#xE946;"
+                        Style="{StaticResource TipFadeInTrigger}"
+                        ToolTip="{x:Static resx:Strings.SelectProcess_AdminTip}"
+                        Visibility="Collapsed" />
                 </ui:SimpleStackPanel>
-            </GroupBox>
-        </StackPanel>
-    </ScrollViewer>
+
+                <Button x:Name="InjectButton"
+                    Width="240"
+                    Click="InjectButtonOnClick"
+                    Content="{x:Static resx:Strings.SelectProcess_InjectButton}"
+                    Style="{StaticResource AccentButtonStyle}" />
+            </ui:SimpleStackPanel>
+        </GroupBox>
+    </StackPanel>
 </Window>

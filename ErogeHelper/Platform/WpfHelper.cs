@@ -10,7 +10,7 @@ internal static class WpfHelper
 {
     public static HWND GetWpfWindowHandle(Window window) => new(new WindowInteropHelper(window).EnsureHandle());
 
-    public static bool AlreadyHasDpiCompatibilitySetting(string exeFilePath)
+    public static bool IsDpiCompatibilitySet(string exeFilePath)
     {
         using var key = Registry.CurrentUser.OpenSubKey(ConstantValue.ApplicationCompatibilityRegistryPath, true)
             ?? Registry.CurrentUser.CreateSubKey(ConstantValue.ApplicationCompatibilityRegistryPath);
@@ -47,7 +47,6 @@ internal static class WpfHelper
     {
         User32.GetWindowRect(gameHwnd, out var rect);
         var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-        Splat.LogHost.Default.Debug(fullScreenGameRect.ToString());
         foreach (var screen in WpfScreenHelper.Screen.AllScreens)
         {
             if (fullScreenGameRect.Contains(screen.PixelBounds))
