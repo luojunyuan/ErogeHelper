@@ -30,6 +30,7 @@ using ModernWpf.Controls;
 using ReactiveUI;
 using Refit;
 using Splat;
+using Vanara.PInvoke;
 using Vanara.PInvoke.NetListMgr;
 using MessageBox = ModernWpf.MessageBox;
 
@@ -202,7 +203,10 @@ internal static class DI
             if (view is not Window window)
                 throw new TypeAccessException("View not implement IViewFor");
             window.Show();
-            window.Activate();
+            if (window is not MainGameWindow)
+            {
+                window.Activate();
+            }
         }
     }
 

@@ -46,9 +46,10 @@ internal static class WpfHelper
     public static bool IsGameForegroundFullscreen(HWND gameHwnd)
     {
         User32.GetWindowRect(gameHwnd, out var rect);
+        var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        Splat.LogHost.Default.Debug(fullScreenGameRect.ToString());
         foreach (var screen in WpfScreenHelper.Screen.AllScreens)
         {
-            var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
             if (fullScreenGameRect.Contains(screen.PixelBounds))
                 return true;
         }

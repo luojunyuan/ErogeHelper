@@ -75,9 +75,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
         #region BringWindowToTop Subject
 
-        var stayTopSubj =
-            new BehaviorSubject<bool>(Interactions.
-                CheckGameFullscreen.Handle(gameDataService.GameRealWindowHandle).Wait());
+        var stayTopSubj = new Subject<bool>();
 
         var interval = Observable
             .Interval(TimeSpan.FromMilliseconds(ConstantValue.GameFullscreenStatusRefreshTime))
@@ -85,8 +83,9 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
         stayTopSubj
             .DistinctUntilChanged()
-            .Where(on => on && !windowDataService.MainWindowHandle.IsNull)
+            .Where(on => on)
             .SelectMany(interval)
+            .Where(_ => !windowDataService.MainWindowHandle.IsNull)
             .Subscribe(_ => User32.BringWindowToTop(windowDataService.MainWindowHandle));
 
         #endregion
@@ -117,10 +116,10 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             // HACK: EH may receive the dpi changed event faster than the game initialization
             // when starting for the first time 
             Observable
-            .Start(() => Unit.Default)
-            .SubscribeOn(RxApp.TaskpoolScheduler)
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => gameWindowHooker.InvokeUpdatePosition());
+                .Start(() => Unit.Default)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => gameWindowHooker.InvokeUpdatePosition());
         });
     }
 

@@ -11,8 +11,8 @@
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
     Left="-32000" Top="-32000" Width="0" Height="0"
     Title="MainGameWindow"
-    AllowsTransparency="True" IsTabStop="False" ShowInTaskbar="False" TabIndex="0"
-    Topmost="True" WindowStyle="None">
+    AllowsTransparency="True" IsTabStop="False" ShowActivated="False"
+    ShowInTaskbar="False" TabIndex="0" Topmost="True" WindowStyle="None">
 
     <Window.Background>
         <SolidColorBrush />
