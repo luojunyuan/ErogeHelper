@@ -12,7 +12,8 @@
     <PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.289" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.289" />
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.1" />
+    <!-- Microsoft.Data.Sqlite 6.0.1 seems like conflict with FluentMigrator -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0" />
     <PackageReference Include="Refit" Version="6.1.15" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Config.Net.Json" Version="4.19.0" />
