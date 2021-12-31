@@ -19,13 +19,13 @@
         <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
         <PackageReference Include="luojunyuan.WpfDanmaku" Version="0.0.0.2" />
         <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
-        <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.0" />
+        <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
         <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="ReactiveUI.WPF" Version="17.1.9" />
-        <PackageReference Include="Splat.Drawing" Version="14.1.1" />
+        <PackageReference Include="Splat.Drawing" Version="14.1.17" />
         <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
         <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
         <PackageReference Include="WindowsInput" Version="6.3.0" />

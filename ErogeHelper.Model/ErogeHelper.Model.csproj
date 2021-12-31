@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentMigrator.Runner" Version="3.3.1" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
     <!--<PackageReference Include="FluentMigrator.Runner" Version="4.0.0-alpha.289" />
     <PackageReference Include="FluentMigrator.Runner.SQLite" Version="4.0.0-alpha.289" />-->
     <PackageReference Include="MeCab.DotNet" Version="0.0.40" />
