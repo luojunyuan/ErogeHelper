@@ -14,60 +14,6 @@
 
     <Button x:Name="AssistiveButton"
         d:Template="{StaticResource NormalAssistiveTouchTemplate}"
-        Click="DisableFlyoutPopup" Focusable="False">
-
-        <ui:FlyoutService.Flyout>
-            <ui:CommandBarFlyout x:Name="AssistiveTouchFlyout" ShowMode="Standard">
-                <ui:AppBarButton Click="VolumeDownOnClick" ToolTip="{x:Static resx:Strings.GameView_VolumeDecreaseTip}">
-                    <ui:AppBarButton.Icon>
-                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Volume1}" />
-                    </ui:AppBarButton.Icon>
-                </ui:AppBarButton>
-                <ui:AppBarButton Click="VolumeUpOnClick" Icon="Volume" ToolTip="{x:Static resx:Strings.GameView_VolumeIncreaseTip}" />
-                <ui:AppBarButton x:Name="FullScreenSwitcher" Click="FullScreenSwitcherOnClick" />
-                <ui:AppBarToggleButton x:Name="LoseFocusToggle" Icon="Trim" ToolTip="{x:Static resx:Strings.GameView_FocusTip}" />
-                <ui:AppBarToggleButton x:Name="TouchConversionToggle" Icon="TouchPointer" ToolTip="{x:Static resx:Strings.GameView_TouchToMouse}" />
-
-                <ui:CommandBarFlyout.SecondaryCommands>
-                    <ui:AppBarButton
-                        Click="ActionCenterOnClick" Icon="DockRight" InputGestureText="Win+A"
-                        Label="{x:Static resx:Strings.GameView_ActionCenter}" />
-                    <ui:AppBarButton Click="TaskViewOnClick" InputGestureText="Win+Tab" Label="{x:Static resx:Strings.GameView_TaskView}">
-                        <ui:AppBarButton.Icon>
-                            <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.TaskView}" />
-                        </ui:AppBarButton.Icon>
-                    </ui:AppBarButton>
-                    <ui:AppBarButton
-                        Click="ScreenShotOnClick" Icon="Pictures" InputGestureText="Win+Shift+S"
-                        Label="{x:Static resx:Strings.GameView_ScreenShot}" />
-
-                    <ui:AppBarSeparator />
-                    <ui:AppBarButton Label="{x:Static resx:Strings.GameView_Functions}">
-                        <ui:AppBarButton.Flyout>
-                            <ui:MenuFlyout Placement="Right">
-                                <MenuItem x:Name="TouchBoxToggle" Header="{x:Static resx:Strings.GameView_VirtualKeyboard}" IsCheckable="True">
-                                    <MenuItem.Icon>
-                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.KeyboardClassic}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Click="HookSettingOnClick" Header="{x:Static resx:Strings.HookPage_Title}">
-                                    <MenuItem.Icon>
-                                        <ui:SymbolIcon Symbol="Attach" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Click="CloudSaveOnClick" Header="Cloud Saves">
-                                    <MenuItem.Icon>
-                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Cloud}" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </ui:MenuFlyout>
-                        </ui:AppBarButton.Flyout>
-                    </ui:AppBarButton>
-
-                    <ui:AppBarButton Click="PreferenceOnClick" Icon="Setting" Label="{x:Static resx:Strings.GameView_Preference}" />
-                </ui:CommandBarFlyout.SecondaryCommands>
-            </ui:CommandBarFlyout>
-        </ui:FlyoutService.Flyout>
-    </Button>
+        Click="DisableFlyoutPopup" Focusable="False" />
 
 </rxui:ReactiveUserControl>

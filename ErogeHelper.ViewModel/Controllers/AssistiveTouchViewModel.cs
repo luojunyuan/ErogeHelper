@@ -12,11 +12,12 @@ using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel.Controllers;
 
-public class AssistiveTouchViewModel : ReactiveObject, IDisposable
+public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IEnableLogger
 {
     public bool IsTouchBigSize { get; }
     private readonly Subject<bool> _useBigSizeSubj = new();
@@ -24,6 +25,8 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
 
     public AssistiveTouchPosition AssistiveTouchPosition { get; }
     public Subject<AssistiveTouchPosition> AssistiveTouchPositionChanged { get; } = new();
+
+    public ViewModelActivator Activator => new();
 
     private readonly IEHConfigRepository _ehConfigRepository;
     public AssistiveTouchViewModel(
@@ -48,8 +51,10 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
 
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         touchConversionHooker.Init();
-        touchConversionHooker.DisposeWith(_disposables);
+        touchConversionHooker.DisposeWith(disposables);
 #endif
+        ShowAssistiveTouch = true;
+        var disposables = new CompositeDisposable();
         SwitchFullScreenIcon = SymbolName.FullScreen;
         SwitchFullScreenToolTip = Strings.GameView_SwitchFullScreen;
         LoseFocusEnable = ehDbRepository.GameInfo.IsLoseFocus;
@@ -61,12 +66,12 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
         _ehConfigRepository.WhenAnyValue(x => x.UseBigAssistiveTouchSize)
             .Skip(1)
             .Subscribe(useBigSize => _useBigSizeSubj.OnNext(useBigSize))
-            .DisposeWith(_disposables);
+            .DisposeWith(disposables);
 
         AssistiveTouchPositionChanged
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
             .Subscribe(pos => _ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(pos))
-            .DisposeWith(_disposables);
+            .DisposeWith(disposables);
 
         // Flyout bar commands implements
         gameDataService
@@ -84,7 +89,7 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
                     SwitchFullScreenToolTip = Strings.GameView_SwitchFullScreen;
                 }
             })
-            .DisposeWith(_disposables);
+            .DisposeWith(disposables);
 
         this.WhenAnyValue(x => x.LoseFocusEnable)
             .Skip(1)
@@ -104,7 +109,7 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
             .Subscribe(v => _ehConfigRepository.UseTouchToolBox = v);
         this.WhenAnyValue(x => x.LoseFocusEnable, x => x.TouchBoxEnable, (a, b) => a && b)
             .ToPropertyEx(touchToolBoxViewModel, x => x.TouchToolBoxVisible)
-            .DisposeWith(_disposables);
+            .DisposeWith(disposables);
 
         this.WhenAnyValue(x => x.IsTouchToMouse)
             .Skip(1)
@@ -116,7 +121,12 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
 
         SwitchFullScreen = ReactiveCommand.Create(() =>
             User32.BringWindowToTop(gameDataService.MainProcess.MainWindowHandle));
+
+        this.WhenActivated(d => disposables.DisposeWith(d));
     }
+
+    [Reactive]
+    public bool ShowAssistiveTouch { get; set; }
 
     [Reactive]
     public bool LoseFocusEnable { get; set; }
@@ -137,7 +147,4 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
     public string SwitchFullScreenToolTip { get; set; }
 
     public ReactiveCommand<Unit, bool> SwitchFullScreen { get; }
-
-    private readonly CompositeDisposable _disposables = new();
-    public void Dispose() => _disposables.Dispose();
 }

@@ -138,7 +138,7 @@ public class AppLauncher
             x => SystemEvents.DisplaySettingsChanged += x,
             x => SystemEvents.DisplaySettingsChanged -= x)
             .Select(_ => Unit.Default);
-        var dpiChanged = windowDataService.DpiChanged
+        var dpiChanged = AmbiantContext.DpiChanged
             .DistinctUntilChanged()
             .Select(_ => Unit.Default);
         #endregion

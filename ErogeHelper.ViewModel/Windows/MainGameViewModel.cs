@@ -47,10 +47,10 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameWindowHooker.GamePosUpdated
             .Subscribe(pos =>
             {
-                Height = pos.Height / Dpi;
-                Width = pos.Width / Dpi;
-                Left = pos.Left / Dpi;
-                Top = pos.Top / Dpi;
+                Height = pos.Height / AmbiantContext.Dpi;
+                Width = pos.Width / AmbiantContext.Dpi;
+                Left = pos.Left / AmbiantContext.Dpi;
+                Top = pos.Top / AmbiantContext.Dpi;
             }).DisposeWith(_disposables);
 
         gameWindowHooker.WhenViewOperated
@@ -107,23 +107,16 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             }
         });
 
-        DpiChanged = ReactiveCommand.Create<double>(newDpi =>
-        {
-            this.Log().Debug($"Current screen dpi {newDpi * 100}%");
-            Dpi = windowDataService.Dpi = newDpi;
-            windowDataService.DpiOnNext(newDpi);
-
-            // HACK: EH may receive the dpi changed event faster than the game initialization
-            // when starting for the first time 
-            Observable
+        // HACK: EH may receive the dpi changed event faster than the game initialization
+        // when starting for the first time 
+        AmbiantContext.DpiChanged
+            .SelectMany(_ => Observable
                 .Start(() => Unit.Default)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => gameWindowHooker.InvokeUpdatePosition());
-        });
+                .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
+            .Subscribe();
     }
-
-    public double Dpi { private get; set; }
 
     public HWND MainWindowHandle { private get; set; }
 
@@ -143,8 +136,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
     public bool ShowEdgeTouchMask { get; } = default;
 
     public ReactiveCommand<Unit, Unit> Loaded { get; }
-
-    public ReactiveCommand<double, Unit> DpiChanged { get; }
 
     public Interaction<Unit, Unit> ShowMainWindow { get; } = new();
 

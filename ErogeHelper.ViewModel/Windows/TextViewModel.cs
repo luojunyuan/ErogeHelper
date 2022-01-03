@@ -46,8 +46,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         mecabService ??= DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
-        var dpi = _windowDataService.Dpi;
-        _windowDataService.DpiChanged.Subscribe(x => dpi = x);
         WindowWidth = ehConfigRepository.TextWindowWidth;
         WindowOpacity = ehConfigRepository.TextWindowOpacity;
         EnableBlurBackground = ehConfigRepository.TextWindowBlur;
@@ -69,8 +67,8 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Where(_ => ehConfigRepository.HideTextWindow != true && _currentText != string.Empty)
             .Subscribe(pos =>
             {
-                Left += pos.HorizontalChange / dpi;
-                Top += pos.VerticalChange / dpi;
+                Left += pos.HorizontalChange / AmbiantContext.Dpi;
+                Top += pos.VerticalChange / AmbiantContext.Dpi;
             }).DisposeWith(_disposables);
 
         void SideCheck()
@@ -79,7 +77,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
             if (_hasNotShowedUp)
             {
-                MoveToGameCenter(gameWindowHooker, WindowWidth, dpi);
+                MoveToGameCenter(gameWindowHooker, WindowWidth, AmbiantContext.Dpi);
                 _showSubj.OnNext(Unit.Default);
                 _hasNotShowedUp = false;
             }
@@ -125,9 +123,9 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
                 }
 
-                MoveToGameCenter(gameWindowHooker, WindowWidth, dpi);
+                MoveToGameCenter(gameWindowHooker, WindowWidth, AmbiantContext.Dpi);
             }).DisposeWith(_disposables);
-        _windowDataService
+        AmbiantContext
             .DpiChanged
             .Subscribe(x => MoveToGameCenter(gameWindowHooker, WindowWidth, x))
             .DisposeWith(_disposables);

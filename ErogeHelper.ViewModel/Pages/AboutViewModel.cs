@@ -16,11 +16,13 @@ using ReactiveUI.Fody.Helpers;
 
 namespace ErogeHelper.ViewModel.Pages;
 
-public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
+public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
 {
     public IScreen HostScreen => throw new NotImplementedException();
 
     public string UrlPathSegment => PageTag.About;
+
+    public ViewModelActivator Activator => new();
 
     public AboutViewModel(
         IEHConfigRepository? ehConfigRepository = null,
@@ -29,6 +31,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         updateService ??= DependencyResolver.GetService<IUpdateService>();
 
+        var disposables = new CompositeDisposable();
         var currentPreviewFlag = AcceptedPreviewVersion = ehConfigRepository.UpdatePreviewVersion;
         this.WhenAnyValue(x => x.AcceptedPreviewVersion)
             .Skip(1)
@@ -49,7 +52,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
             currentPreviewFlag = AcceptedPreviewVersion;
             return updateService.CheckUpdate(AppVersion, currentPreviewFlag);
         });
-        CheckUpdate.Subscribe(pack => updateVMSubj.OnNext(pack)).DisposeWith(_disposables);
+        CheckUpdate.Subscribe(pack => updateVMSubj.OnNext(pack)).DisposeWith(disposables);
 
         Update = ReactiveCommand.Create(() => DoUpdate(currentPreviewFlag));
 
@@ -89,7 +92,9 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
                     Process.Start("explorer");
                 }
             })
-            .DisposeWith(_disposables);
+            .DisposeWith(disposables);
+
+        this.WhenActivated(d => disposables.DisposeWith(d));
     }
 
     public string AppVersion { get; set; } = string.Empty;
@@ -151,9 +156,6 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IDisposable
             }
         }
     }
-
-    private readonly CompositeDisposable _disposables = new();
-    public void Dispose() => _disposables.Dispose();
 
     private const string UpdateInfoPrefix = "https://cdn.jsdelivr.net/gh/luojunyuan/FreeJsdelivrUpdateInfo/";
     private const string x86_64 = UpdateInfoPrefix + "x86_64.xml";
