@@ -17,6 +17,10 @@ public static class Utils
 
     public static bool HasWinRT { get; } = OsVersion > new Version(10, 0);
 
+    public static bool After1903 { get; } = OsVersion >= new Version(10, 0, 18362);
+
+    public static bool After1909 { get; } = OsVersion >= new Version(10, 0, 18363);
+
     public static bool IsArm { get; } = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
 
     public static bool IsFileInUse(string fileName)
@@ -65,7 +69,7 @@ public static class Utils
             19042 => "20H2",
             19041 => "2004",
             18363 => "1909",
-            18362 => "1903", // Current target WinRT-SDK version
+            18362 => "1903", // Current target WinRT-SDK version, inherit from ModernWpf
             17763 => "1809",
             17134 => "1803",
             16299 => "1709",
