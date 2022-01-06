@@ -12,7 +12,7 @@ using ToastNotifications.Position;
 
 namespace ErogeHelper.Platform;
 
-public static class ToastManage
+public static class ToastManagement
 {
     // Tip: CustomNotification
     // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
@@ -102,7 +102,7 @@ public static class ToastManage
         }
     }
 
-    public static void AdminModeTipToast()
+    public static void IfAdminToast()
     {
         var current = WindowsIdentity.GetCurrent();
         var windowsPrincipal = new WindowsPrincipal(current);

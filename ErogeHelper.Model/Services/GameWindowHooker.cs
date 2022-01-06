@@ -18,8 +18,6 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
     private HWND _gameHwnd;
     private Process _gameProc = null!;
     private static readonly WindowPosition HiddenPos = new(0, 0, -32000, -32000);
-    //private static readonly RECT MinimizedPosition = new(-32000, -32000, -31840, -31972);
-    //private static readonly RECT MinimizedPosition4K = new(-64000, -64000, -63680, -63944);
 
     private User32.HWINEVENTHOOK _windowsEventHook = IntPtr.Zero;
     private const uint EventObjectDestroy = 0x8001;
@@ -73,11 +71,6 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
             User32.UnhookWinEvent(_windowsEventHook);
 
             _ViewOperationSubj.OnNext(ViewOperation.TerminateApp);
-            _gamePositionSubj.OnCompleted();
-            _gamePosChangedSubj.OnCompleted();
-            _ViewOperationSubj.OnCompleted();
-            // FIXME: “System.InvalidOperationException”类型的未经处理的异常在 System.Private.CoreLib.dll 中发生 
-            // Collection was modified; enumeration operation may not execute.
         };
     }
 

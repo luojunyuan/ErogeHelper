@@ -20,20 +20,12 @@ namespace ErogeHelper.ViewModel.Windows;
 
 public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 {
-    public void SetWindowHandle(HWND handle)
-    {
-        _textWindowHandle = handle;
-        _windowDataService.InitTextWindowHandle(handle);
-    }
-
-    private HWND _textWindowHandle;
-    private readonly IWindowDataService _windowDataService;
+    public static HWND TextWindowHandle { get; set; }
 
     public TextViewModel(
         ITextractorService? textractorService = null,
         IEHConfigRepository? ehConfigRepository = null,
         IGameDataService? gameDataService = null,
-        IWindowDataService? windowDataService = null,
         IGameWindowHooker? gameWindowHooker = null,
         IMeCabService? mecabService = null,
         IGameInfoRepository? gameInfoRepository = null)
@@ -41,7 +33,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
-        _windowDataService = windowDataService ?? DependencyResolver.GetService<IWindowDataService>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         mecabService ??= DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
@@ -56,10 +47,10 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         Loaded = ReactiveCommand.Create(() =>
         {
-            HwndTools.WindowBlur(_textWindowHandle, ehConfigRepository.TextWindowBlur);
+            HwndTools.WindowBlur(TextWindowHandle, ehConfigRepository.TextWindowBlur);
             if (gameInfoRepository.GameInfo.IsLoseFocus)
             {
-                HwndTools.WindowLostFocus(_textWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
+                HwndTools.WindowLostFocus(TextWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
             }
         }).DisposeWith(_disposables);
 
@@ -73,7 +64,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         void SideCheck()
         {
-            User32.BringWindowToTop(_textWindowHandle);
+            User32.BringWindowToTop(TextWindowHandle);
 
             if (_hasNotShowedUp)
             {
@@ -106,7 +97,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         // Relocate position
         // TODO: Relocating position when dpi changed (or move between monitors)
         gameDataService.GameFullscreenChanged
-            .Where(_ => !_textWindowHandle.IsNull)
+            .Where(_ => !TextWindowHandle.IsNull)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(isFullscreen =>
             {
@@ -116,7 +107,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 // this.Log().Debug(gamePos);
                 if (isFullscreen)
                 {
-                    User32.BringWindowToTop(_textWindowHandle);
+                    User32.BringWindowToTop(TextWindowHandle);
                 }
                 else
                 {
@@ -146,7 +137,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Skip(1)
             .Subscribe(x =>
             {
-                HwndTools.WindowBlur(_textWindowHandle, x);
+                HwndTools.WindowBlur(TextWindowHandle, x);
                 ehConfigRepository.TextWindowBlur = x;
             });
     }

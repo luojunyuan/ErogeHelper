@@ -12,6 +12,7 @@ using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
+using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Languages;
 using ErogeHelper.ViewModel.Windows;
 using Microsoft.Win32;
@@ -52,7 +53,8 @@ public class AppLauncher
         gameWindowHooker.SetupGameWindowHook(
             gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
 
-        DI.ShowView<MainGameViewModel>();
+
+        DI.ShowView<PreferenceViewModel>();
 
         // Optional functions
         if (ehConfigRepository.InjectProcessByDefalut)
@@ -75,7 +77,6 @@ public class AppLauncher
         string gamePath, bool leEnable, string gameDir)
     {
         var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
-        var windowDataService = DependencyResolver.GetService<IWindowDataService>();
 
         if (!File.Exists(gamePath))
         {
@@ -149,8 +150,21 @@ public class AppLauncher
                 .Merge(dpiChanged)
                 .Select(_ => WpfHelper.IsGameForegroundFullscreen(gameDataService.GameRealWindowHandle))
                 .DistinctUntilChanged().Publish());
+
+        gameWindowHooker.WhenViewOperated
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(operation =>
+            {
+                switch (operation)
+                {
+                    case ViewOperation.TerminateApp:
+                        App.Terminate();
+                        break;
+                }
+            });
     }
 
+    /// <returns>Return LE if enabled</returns>
     private static Process? RunGame(string gamePath, bool leEnable, string gameDir)
     {
         Process? leproc = null;

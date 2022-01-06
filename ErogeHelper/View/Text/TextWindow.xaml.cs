@@ -15,15 +15,12 @@ namespace ErogeHelper.View.Windows;
 
 public partial class TextWindow : IEnableLogger
 {
-    public TextWindow(TextViewModel? textViewModel = null)
+    public TextWindow()
     {
         InitializeComponent();
+        HwndTools.HideWindowInAltTab(TextViewModel.TextWindowHandle = WpfHelper.GetWpfWindowHandle(this));
 
-        var handle = WpfHelper.GetWpfWindowHandle(this);
-        HwndTools.HideWindowInAltTab(handle);
-
-        ViewModel = textViewModel ?? DependencyResolver.GetService<TextViewModel>();
-        ViewModel.SetWindowHandle(handle);
+        ViewModel = DependencyResolver.GetService<TextViewModel>();
         Width = ViewModel.WindowWidth;
 
         var disposables = new CompositeDisposable();
@@ -40,18 +37,18 @@ public partial class TextWindow : IEnableLogger
             .InvokeCommand(this, x => x.ViewModel!.Loaded)
             .DisposeWith(disposables);
 
-        MouseEnter += (_, _) => DragBar.Visibility = Visibility.Visible;
-        MouseLeave += (_, _) => DragBar.Visibility = Visibility.Hidden;
-        ControlCenterFlyout.Opened += (_, _) => DragBar.Visibility = Visibility.Visible;
+        MouseEnter += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        MouseLeave += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
+        ControlCenterFlyout.Opened += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         ControlCenterFlyout.Events().Closed
             .Where(_ => !IsMouseOver)
-            .Subscribe(_ => DragBar.Visibility = Visibility.Hidden)
+            .Subscribe(_ => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Hidden))
             .DisposeWith(disposables);
         BlurSwitch.Toggled += (_, args) =>
         {
             if (BlurSwitch.IsOn)
             {
-                OpacitySlider.Minimum = 0.02;
+                OpacitySlider.SetCurrentValue(System.Windows.Controls.Primitives.RangeBase.MinimumProperty, 0.02);
                 if (OpacitySlider.Value < OpacitySlider.Minimum)
                 {
                     ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();
@@ -59,7 +56,7 @@ public partial class TextWindow : IEnableLogger
             }
             else
             {
-                OpacitySlider.Minimum = 0;
+                OpacitySlider.SetCurrentValue(System.Windows.Controls.Primitives.RangeBase.MinimumProperty, 0.0);
                 if (OpacitySlider.Value == 0.02)
                 {
                     ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();

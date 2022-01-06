@@ -13,7 +13,6 @@ using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Exceptions;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.View.Windows;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
@@ -54,22 +53,22 @@ public partial class App : IEnableLogger
                     return;
                 }
 
-                var fullPath = Path.GetFullPath(args[0]);
-                if (fullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
+                var gameFullPath = string.Join(" ", args);
+                if (gameFullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                 {
                     MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
                     Terminate();
                     return;
                 }
 
-                ToastManage.Register();
-                ToastManage.AdminModeTipToast();
+                ToastManagement.Register();
+                ToastManagement.IfAdminToast();
                 DummyTouchBug.Fix();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.RegisterInteractions();
 
-                AppLauncher.StartFromCommandLine(fullPath, args.Any(arg => arg is "/le" or "-le"));
+                AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };
         }
         catch (AppExistedException)
@@ -183,7 +182,7 @@ public partial class App : IEnableLogger
                 return Disposable.Empty;
             })
             .SubscribeOn(RxApp.TaskpoolScheduler)
-            .Subscribe(_ => ToastManage
+            .Subscribe(_ => ToastManagement
                 .ShowAsync("ErogeHelper is running!", toastLifetimeTimer)
                 .ConfigureAwait(false)
             );

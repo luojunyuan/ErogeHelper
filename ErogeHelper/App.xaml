@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
                 <ResourceDictionary Source="Properties/UIValueDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <!--  TODO: Should refactor to MarkupExtension cause these only use in two windows  -->
             <converter:IsLessThanConverter x:Key="IsLessThanConverter" />
             <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
             <converter:FontSizeHalfConverter x:Key="FontSizeHalfConverter" />

@@ -1,26 +1,16 @@
-﻿using System.Reactive.Disposables;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ErogeHelper.Shared.Contracts;
-using ReactiveUI;
 using WindowsInput.Events;
 
-namespace ErogeHelper.View.Controllers;
+namespace ErogeHelper.View.MainGame;
 
 public partial class TouchToolBox
 {
     public TouchToolBox()
     {
         InitializeComponent();
-
-        this.WhenActivated(d =>
-        {
-            this.OneWayBind(ViewModel,
-               vm => vm.TouchToolBoxVisible,
-               v => v.TouchToolBoxView.Visibility,
-               value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
-        });
 
         _enterHolder = new DispatcherTimer
         {
@@ -34,8 +24,8 @@ public partial class TouchToolBox
 
     private void ControlButton_Click(object sender, RoutedEventArgs e)
     {
-        TheButtonBox.Visibility = TheButtonBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-        ControlButton.Content = ControlButton.Content.ToString() == "<" ? '>' : '<';
+        TheButtonBox.SetCurrentValue(VisibilityProperty, TheButtonBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
+        ControlButton.SetCurrentValue(ContentProperty, ControlButton.Content.ToString() == "<" ? '>' : '<');
     }
 
     private async void Esc(object sender, RoutedEventArgs e) =>
@@ -113,26 +103,26 @@ public partial class TouchToolBox
 
     private async void ScrollUpOnClick(object sender, RoutedEventArgs e)
     {
-        ScrollUp.Visibility = Visibility.Collapsed;
-        ScrollDown.Visibility = Visibility.Collapsed;
+        ScrollUp.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        ScrollDown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         // Certain focus by mouse position
         await WindowsInput.Simulate.Events()
             .Wait(ConstantValue.UIMinimumResponseTime)
             .Scroll(ButtonCode.VScroll, ButtonScrollDirection.Up)
             .Wait(ConstantValue.UIMinimumResponseTime)
             .Invoke().ConfigureAwait(true);
-        ScrollUp.Visibility = Visibility.Visible;
-        ScrollDown.Visibility = Visibility.Visible;
+        ScrollUp.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        ScrollDown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
     }
 
     private async void ScrollDownOnClick(object sender, RoutedEventArgs e)
     {
-        ScrollDown.Visibility = Visibility.Collapsed;
+        ScrollDown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         await WindowsInput.Simulate.Events()
             .Wait(ConstantValue.UIMinimumResponseTime)
             .Scroll(ButtonCode.VScroll, ButtonScrollDirection.Down)
             .Wait(ConstantValue.UIMinimumResponseTime)
             .Invoke().ConfigureAwait(true);
-        ScrollDown.Visibility = Visibility.Visible;
+        ScrollDown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
     }
 }

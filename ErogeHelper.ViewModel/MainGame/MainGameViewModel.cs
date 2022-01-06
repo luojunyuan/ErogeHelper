@@ -18,23 +18,19 @@ namespace ErogeHelper.ViewModel.Windows;
 
 public class MainGameViewModel : ReactiveObject, IDisposable
 {
-    public TouchToolBoxViewModel TouchToolBoxViewModel { get; }
+    public static HWND MainWindowHandle { get; set; }
 
     public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
 
     public MainGameViewModel(
         AssistiveTouchViewModel? assistiveTouchViewModel = null,
-        TouchToolBoxViewModel? touchToolBoxViewModel = null,
         IEHConfigRepository? ehConfigRepository = null,
-        IWindowDataService? windowDataService = null,
         IGameWindowHooker? gameWindowHooker = null,
         IGameInfoRepository? ehDbRepository = null,
         IGameDataService? gameDataService = null)
     {
-        TouchToolBoxViewModel = touchToolBoxViewModel ?? DependencyResolver.GetService<TouchToolBoxViewModel>();
         AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
@@ -42,6 +38,11 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
             .ToPropertyEx(this, x => x.ShowEdgeTouchMask)
+            .DisposeWith(_disposables);
+
+        //this.WhenAnyValue(x => x.Menu.LoseFocusEnable, x => x.Menu.TouchBoxEnable, (a, b) => a && b)
+        Observable.Return(false)
+            .ToPropertyEx(this, x => x.TouchToolBoxVisible)
             .DisposeWith(_disposables);
 
         gameWindowHooker.GamePosUpdated
@@ -65,11 +66,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
                     case ViewOperation.Hide:
                         HideMainWindow.Handle(Unit.Default).ObserveOn(RxApp.MainThreadScheduler).Subscribe();
                         break;
-                    case ViewOperation.TerminateApp:
-                        Interactions.TerminateApp.Handle(Unit.Default)
-                            .ObserveOn(RxApp.MainThreadScheduler)
-                            .Subscribe();
-                        break;
                 }
             }).DisposeWith(_disposables);
 
@@ -85,8 +81,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             .DistinctUntilChanged()
             .Where(on => on)
             .SelectMany(interval)
-            .Where(_ => !windowDataService.MainWindowHandle.IsNull)
-            .Subscribe(_ => User32.BringWindowToTop(windowDataService.MainWindowHandle));
+            .Where(_ => !MainWindowHandle.IsNull)
+            .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
 
         #endregion
 
@@ -97,7 +93,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
         Loaded = ReactiveCommand.Create(() =>
         {
-            windowDataService.InitMainWindowHandle(MainWindowHandle);
             // The first time position get invoked
             gameWindowHooker.InvokeUpdatePosition();
 
@@ -118,8 +113,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             .Subscribe();
     }
 
-    public HWND MainWindowHandle { private get; set; }
-
     [Reactive]
     public double Height { get; set; }
 
@@ -134,6 +127,9 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
     [ObservableAsProperty]
     public bool ShowEdgeTouchMask { get; } = default;
+
+    [ObservableAsProperty]
+    public bool TouchToolBoxVisible { get; }
 
     public ReactiveCommand<Unit, Unit> Loaded { get; }
 

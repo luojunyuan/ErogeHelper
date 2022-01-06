@@ -7,7 +7,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
         <Authors>k1mlka</Authors>
-		<Version>0.0.9.3</Version>
+		<Version>0.0.9.1</Version>
         <Platforms>AnyCPU;x86</Platforms>
 		<PublishReadyToRun>true</PublishReadyToRun>
 		<ApplicationManifest>assets\app.manifest</ApplicationManifest>
@@ -29,6 +29,10 @@
         <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
         <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
         <PackageReference Include="WindowsInput" Version="6.3.0" />
+        <PackageReference Include="WpfAnalyzers" Version="4.0.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="WpfScreenHelper" Version="1.1.0" />
     </ItemGroup>
 

@@ -10,6 +10,7 @@ using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
+using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -30,7 +31,6 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
 
     private readonly IEHConfigRepository _ehConfigRepository;
     public AssistiveTouchViewModel(
-        IWindowDataService? windowDataService = null,
         IEHConfigRepository? ehConfigDataService = null,
         IGameDataService? gameDataService = null,
         IGameInfoRepository? ehDbRepository = null,
@@ -38,7 +38,6 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         IGameWindowHooker? gameWindowHooker = null,
         TouchToolBoxViewModel? touchToolBoxViewModel = null)
     {
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
         _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEHConfigRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
@@ -95,8 +94,8 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
             .Skip(1)
             .Subscribe(v =>
             {
-                HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
-                HwndTools.WindowLostFocus(windowDataService.TextWindowHandle, v);
+                HwndTools.WindowLostFocus(MainGameViewModel.MainWindowHandle, v);
+                HwndTools.WindowLostFocus(TextViewModel.TextWindowHandle, v);
                 ehDbRepository.UpdateLostFocusStatus(v);
             });
 

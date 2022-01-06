@@ -13,9 +13,9 @@ using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.View.Controllers;
 using ErogeHelper.View.Dialogs;
 using ErogeHelper.View.Items;
+using ErogeHelper.View.MainGame;
 using ErogeHelper.View.Pages;
 using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel;
@@ -50,7 +50,6 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
-        Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
         Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
 
@@ -82,13 +81,12 @@ internal static class DI
     }
 
     /// <summary>
-    /// Register viewmodel layer of windows, controllers and pages
+    /// Register viewmodel layer
     /// </summary>
     private static void RegisterViewModelsForViews()
     {
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
-        Locator.CurrentMutable.RegisterLazySingleton(() => new TouchToolBoxViewModel());
 
         Locator.CurrentMutable.RegisterLazySingleton(() => new TextViewModel());
 
@@ -104,13 +102,12 @@ internal static class DI
     }
 
     /// <summary>
-    /// Register view layer of windows, controllers, pages and items for <see cref="ItemViewLocator"/>
+    /// Register view layer for <see cref="ItemViewLocator"/>
     /// </summary>
     private static void RegisterViews()
     {
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
-        Locator.CurrentMutable.RegisterLazySingleton<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
-        Locator.CurrentMutable.RegisterLazySingleton<IViewFor<TouchToolBoxViewModel>>(() => new TouchToolBox());
+        //Locator.CurrentMutable.RegisterLazySingleton<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
 
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<TextViewModel>>(() => new TextWindow());
 

@@ -1,12 +1,12 @@
 ﻿<rxui:ReactiveWindow
-    x:Class="ErogeHelper.View.Windows.MainGameWindow"
+    x:Class="ErogeHelper.View.MainGame.MainGameWindow"
     x:TypeArguments="vm:MainGameViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rxui="http://reactiveui.net"
-    xmlns:control="clr-namespace:ErogeHelper.View.Controllers"
+    xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Windows;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
@@ -20,16 +20,14 @@
         <SolidColorBrush />
     </Window.Background>
 
-    <!--  Layout of the whole game window or client area  -->
+    <!--  Layout of the whole game client area  -->
     <Grid>
         <Border x:Name="PreventFalseTouchMask"
             BorderBrush="Black" BorderThickness="5"
             Opacity="{StaticResource MinimalOpacity}" />
 
-        <rxui:ViewModelViewHost x:Name="TouchToolBoxHost" Margin="5,50,0,0" />
+        <maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" />
 
-        <control:AssistiveTouchMenu x:Name="AssistiveTouchMenuHost" Visibility="Hidden" />
-        <control:AssistiveTouchTransformAnimation x:Name="AssistiveTouchAnimation" />
         <rxui:ViewModelViewHost x:Name="AssistiveTouchHost" />
     </Grid>
 </rxui:ReactiveWindow>

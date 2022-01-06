@@ -62,7 +62,9 @@ public static class HwndTools
         Marshal.FreeHGlobal(accentPtr);
     }
 
-    // DwmEnableBlurBehindWindow in Win7
+    // Alternative implement? https://www.cnblogs.com/lan-mei/archive/2012/05/11/2495740.html
+    // Do not make it complex just curious the difference
+    // SetWindowCompositionAttribute is win10 only, for Win7 DwmEnableBlurBehindWindow 
 
     [DllImport("user32.dll")]
     private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
@@ -95,8 +97,6 @@ public static class HwndTools
 
     private enum WindowCompositionAttribute
     {
-        // ...
         WCA_ACCENT_POLICY = 19,
-        // ...
     }
 }

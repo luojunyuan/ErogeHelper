@@ -8,7 +8,7 @@ using System.Windows.Media;
 namespace ErogeHelper.Components;
 
 // https://stackoverflow.com/questions/93650/apply-stroke-to-a-textblock-in-wpf
-[ContentProperty("Text")]
+[ContentProperty(nameof(Text))]
 public class OutlinedTextBlock : FrameworkElement
 {
     private void UpdatePen()
@@ -42,19 +42,19 @@ public class OutlinedTextBlock : FrameworkElement
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 
     public static readonly DependencyProperty FillProperty = DependencyProperty.Register(
-        "Fill",
+        nameof(Fill),
         typeof(Brush),
         typeof(OutlinedTextBlock),
         new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.AffectsRender));
 
     public static readonly DependencyProperty StrokeProperty = DependencyProperty.Register(
-        "Stroke",
+        nameof(Stroke),
         typeof(Brush),
         typeof(OutlinedTextBlock),
         new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.AffectsRender));
 
     public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register(
-        "StrokeThickness",
+        nameof(StrokeThickness),
         typeof(double),
         typeof(OutlinedTextBlock),
         new FrameworkPropertyMetadata(1d, FrameworkPropertyMetadataOptions.AffectsRender));

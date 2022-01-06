@@ -1,12 +1,9 @@
-﻿<rxui:ReactiveUserControl
-    x:Class="ErogeHelper.View.Controllers.TouchToolBox"
-    x:TypeArguments="vm:TouchToolBoxViewModel"
+﻿<UserControl
+    x:Class="ErogeHelper.View.MainGame.TouchToolBox"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:rxui="http://reactiveui.net"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Controllers;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     Margin="5"
     d:DesignHeight="450" d:DesignWidth="800">
@@ -69,4 +66,4 @@
         </WrapPanel>
 
     </Grid>
-</rxui:ReactiveUserControl>
+</UserControl>

@@ -6,12 +6,10 @@ namespace ErogeHelper.Platform;
 
 internal static class WinRTHelper
 {
-    /// <summary>
-    /// Seems like must be called in main thread
-    /// </summary>
     /// <param name="sentence">The maximum length of the sentence is 100 characters</param>
     public static IEnumerable<MeCabWord> JapaneseAnalyzer(string sentence)
     {
+        // Seems like must be called in main thread
         var (phonemes, count) = Application.Current.Dispatcher.Invoke(() =>
         {
             var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence);
