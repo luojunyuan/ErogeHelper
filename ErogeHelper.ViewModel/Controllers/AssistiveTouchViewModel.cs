@@ -47,13 +47,13 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
 
         AssistiveTouchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>
             (_ehConfigRepository.AssistiveTouchPosition) ?? AssistiveTouchPosition.Default;
+        var disposables = new CompositeDisposable();
 
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         touchConversionHooker.Init();
         touchConversionHooker.DisposeWith(disposables);
 #endif
         ShowAssistiveTouch = true;
-        var disposables = new CompositeDisposable();
         SwitchFullScreenIcon = SymbolName.FullScreen;
         SwitchFullScreenToolTip = Strings.GameView_SwitchFullScreen;
         LoseFocusEnable = ehDbRepository.GameInfo.IsLoseFocus;
