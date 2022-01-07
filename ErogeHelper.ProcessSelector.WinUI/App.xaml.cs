@@ -1,5 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 
+// Currently for building unpackaged WinUI use msbuid
+// msbuild $env:Solution_Name /t:Publish /p:WindowsPackageType=None /p:Configuration=$env:Configuration /p:Platform=x64
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
