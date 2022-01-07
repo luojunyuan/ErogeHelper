@@ -11,7 +11,8 @@
     Width="400"
     MinWidth="400"
     Title="{x:Static resx:Strings.Installer_Title}"
-    ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="NoResize"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    Icon="pack://application:,,,/app.ico" ResizeMode="NoResize"
     SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
     <ui:SimpleStackPanel Margin="20,10" Spacing="10">

@@ -11,7 +11,8 @@
     Width="400"
     MinWidth="400"
     Title="{x:Static resx:Strings.SelectProcess_Title}"
-    ui:WindowHelper.UseModernWindowStyle="True" ResizeMode="NoResize"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    Icon="pack://application:,,,/app.ico" ResizeMode="NoResize"
     SizeToContent="Height" Topmost="True" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>

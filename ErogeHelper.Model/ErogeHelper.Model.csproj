@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
-    <MeCabUseDefaultDictionary>false</MeCabUseDefaultDictionary>
     <ImplicitUsings>enable</ImplicitUsings>
+    <MeCabUseDefaultDictionary>false</MeCabUseDefaultDictionary>
   </PropertyGroup>
 
   <ItemGroup>

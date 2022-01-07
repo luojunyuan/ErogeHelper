@@ -7,17 +7,18 @@
     <RootNamespace>ErogeHelper.ProcessSelector.WinUI</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;arm64</Platforms>
-    <!--<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>-->
+    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <!--<PublishProfile>win10-$(Platform).pubxml</PublishProfile>-->
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 
     <WindowsPackageType>None</WindowsPackageType>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!--  Should see CreateR2RImages logs  -->
     <PublishReadyToRun>true</PublishReadyToRun>
     <IsPublishable>false</IsPublishable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

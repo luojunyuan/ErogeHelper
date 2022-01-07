@@ -1,13 +1,13 @@
-﻿// dotnet publish .\ProcessSelector\ProcessSelector.csproj -c Release -r win-x64 --self-contained -o ./bin/Publish -p:IsPublishable=true
-// rm .\bin\ProcessSelector.deps.json
-// rm .\bin\ProcessSelector.runtimeconfig.json
+﻿// dotnet publish .\Installer\Installer.csproj -c Release -r win-x64 --self-contained -o ./bin/Publish -p:IsPublishable=true
+// rm .\bin\Installer.deps.json
+// rm .\bin\Installer.runtimeconfig.json
 using System.Diagnostics;
 
 var IsOrAfter1809 = Environment.OSVersion.Version >= new Version(10, 0, 18363);
 var directories = Directory.GetDirectories(Directory.GetCurrentDirectory());
 var path = directories.Length == 1 ? directories.First() : null;
-var wpfPath = "ErogeHelper.ProcessSelector.exe";
-var winUIPath = "ErogeHelper.ProcessSelector.WinUI.exe";
+var wpfPath = "ErogeHelper.Installer.exe";
+var winUIPath = "ErogeHelper.Installer.WinUI.exe";
 if (path is not null)
 {
     wpfPath = Path.Combine(path, wpfPath);
