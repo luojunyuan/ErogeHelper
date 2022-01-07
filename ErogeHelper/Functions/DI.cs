@@ -88,7 +88,7 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
 
-        Locator.CurrentMutable.RegisterLazySingleton(() => new TextViewModel());
+        Locator.CurrentMutable.Register(() => new TextViewModel());
 
         Locator.CurrentMutable.Register(() => new HookViewModel());
         Locator.CurrentMutable.Register(() => new HCodeViewModel());
@@ -109,7 +109,7 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
         //Locator.CurrentMutable.RegisterLazySingleton<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
 
-        Locator.CurrentMutable.RegisterLazySingleton<IViewFor<TextViewModel>>(() => new TextWindow());
+        Locator.CurrentMutable.Register<IViewFor<TextViewModel>>(() => new TextWindow());
 
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());

@@ -80,7 +80,7 @@ public static class Utils
             _ => buildVersion.ToString()
         };
 
-        // Not reliable
+        // osName not reliable
         // var osName = Registry.GetValue(ConstantValues.HKLMWinNTCurrent, "productName", "")?.ToString();
 
         var windowVersionString =

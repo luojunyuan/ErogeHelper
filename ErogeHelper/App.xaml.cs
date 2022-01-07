@@ -31,10 +31,7 @@ public partial class App : IEnableLogger
             SetupExceptionHandling();
             SingleInstanceWatcher();
 
-            ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            var currentDirectory = Path.GetDirectoryName(AppContext.BaseDirectory);
-            Directory.SetCurrentDirectory(currentDirectory ??
-                                          throw new ArgumentNullException(nameof(currentDirectory)));
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             Startup += (_, startupEvent) =>
             {
@@ -83,10 +80,9 @@ public partial class App : IEnableLogger
         }
     }
 
-    public static readonly string EHVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString()
-        ?? "?.?.?.?";
+    public static string EHVersion { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "error";
 
-    /// <param name="exitCode">-1 unnormal, 0 normal, 1 another process</param>
+    /// <param name="exitCode">-1 unnormal, 0 normal, 1 by another instance</param>
     public static void Terminate(int exitCode = 0)
     {
         if (Current is not null)

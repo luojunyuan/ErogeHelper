@@ -33,6 +33,12 @@ public class TextractorCli : ITextractorService, IEnableLogger
     /// <inheritdoc />
     public void InjectProcesses(List<Process> gameProcesses)
     {
+        if (Injected)
+        {
+            return;
+        }
+        Injected = true;
+
         _gameProcesses = gameProcesses;
         // CODESMELL: Operate _gameProcesses in IsX86Process() function
         bool isX86 = gameProcesses.ToList().Any(p => IsX86Process(p));
@@ -71,8 +77,6 @@ public class TextractorCli : ITextractorService, IEnableLogger
         {
             InsertHook(Setting.HookCode);
         }
-
-        Injected = true;
     }
 
     public void InsertHook(string hookcode)

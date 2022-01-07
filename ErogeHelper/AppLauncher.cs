@@ -50,23 +50,26 @@ public class AppLauncher
             return;
         }
 
-        gameWindowHooker.SetupGameWindowHook(
-            gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
-
-
+        // Game hook and transparent MainGameWindow is the core of EH
+        gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
         DI.ShowView<PreferenceViewModel>();
 
         // Optional functions
-        if (ehConfigRepository.InjectProcessByDefalut)
+        Observable.Start(() =>
         {
-            textractorService.InjectProcesses(gameDataService.GameProcesses);
-        }
+            if (ehConfigRepository.InjectProcessByDefalut)
+            {
+                // Question: GameProcesses Ambiant Context?
+                textractorService.InjectProcesses(gameDataService.GameProcesses);
+            }
 
-        if (!ehConfigRepository.HideTextWindow)
-        {
-            //_ = DependencyResolver.GetService<TextViewModel>();
-            //_ = new View.Windows.TextWindow();
-        }
+            if (!ehConfigRepository.HideTextWindow)
+            {
+                // Show And Close
+                //_ = DependencyResolver.GetService<TextViewModel>();
+                //_ = new View.Windows.TextWindow(); // UI thread?
+            }
+        });
     }
 
     private static void InitializeGameDatas(
