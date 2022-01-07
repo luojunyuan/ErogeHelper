@@ -28,7 +28,7 @@
             </StackPanel>
             <TextBox x:Name="TotalText"
                 MaxHeight="150"
-                behavior:ScrollToEndBehavior.OnTextChanged="True"
+                behavior:ScrollToEndBehavior.TextChanged="True"
                 d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
                 AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" />
         </StackPanel>

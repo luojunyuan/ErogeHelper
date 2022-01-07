@@ -5,25 +5,32 @@ namespace ErogeHelper.XamlTool.Behaviors;
 
 public class ScrollToEndBehavior
 {
-    public static readonly DependencyProperty OnTextChangedProperty =
+    public static readonly DependencyProperty TextChangedProperty =
         DependencyProperty.RegisterAttached(
-            "OnTextChanged",
+            "TextChanged",
             typeof(bool),
             typeof(ScrollToEndBehavior),
-            new UIPropertyMetadata(false, OnTextChanged)
+            new UIPropertyMetadata(false, OnTextChangedChanged)
         );
 
-    public static bool GetOnTextChanged(DependencyObject dependencyObject)
+    /// <summary>Helper for getting <see cref="TextChangedProperty"/> from <paramref name="dependencyObject"/>.</summary>
+    /// <param name="dependencyObject"><see cref="DependencyObject"/> to read <see cref="TextChangedProperty"/> from.</param>
+    /// <returns>TextChanged property value.</returns>
+    [AttachedPropertyBrowsableForType(typeof(DependencyObject))]
+    public static bool GetTextChanged(DependencyObject dependencyObject)
     {
-        return (bool)dependencyObject.GetValue(OnTextChangedProperty);
+        return (bool)dependencyObject.GetValue(TextChangedProperty);
     }
 
-    public static void SetOnTextChanged(DependencyObject dependencyObject, bool value)
+    /// <summary>Helper for setting <see cref="TextChangedProperty"/> on <paramref name="dependencyObject"/>.</summary>
+    /// <param name="dependencyObject"><see cref="DependencyObject"/> to set <see cref="TextChangedProperty"/> on.</param>
+    /// <param name="value">TextChanged property value.</param>
+    public static void SetTextChanged(DependencyObject dependencyObject, bool value)
     {
-        dependencyObject.SetValue(OnTextChangedProperty, value);
+        dependencyObject.SetValue(TextChangedProperty, value);
     }
 
-    private static void OnTextChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+    private static void OnTextChangedChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
     {
         var newValue = (bool)e.NewValue;
 

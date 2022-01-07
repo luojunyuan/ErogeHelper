@@ -36,41 +36,6 @@ namespace ErogeHelper.ProcessSelector.WinUI
 
         private Window? m_window;
 
-        private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
-
-        private void SingleInstanceWatcher()
-        {
-            if (EventWaitHandle.TryOpenExisting(UniqueEventName, out var eventWaitHandle))
-            {
-                eventWaitHandle.Set();
-                Current.Exit();
-            }
-            else
-            {
-                eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, UniqueEventName);
-                Task.Factory.StartNew(() =>
-                {
-                    while (eventWaitHandle.WaitOne())
-                    {
-                        //DispatcherQueue.
-                        //Current.Dispatcher.Invoke(() =>
-                        {
-
-                            //if (mainWindow.WindowState == WindowState.Minimized ||
-                            //    mainWindow.Visibility != Visibility.Visible)
-                            //{
-                            //    mainWindow.Show();
-                            //    mainWindow.WindowState = WindowState.Normal;
-                            //}
-
-                            m_window?.Activate();
-                            //mainWindow.Topmost = true;
-                            //mainWindow.Topmost = false;
-                            //mainWindow.Focus();
-                        }//);
-                    }
-                }, TaskCreationOptions.LongRunning);
-            }
-        }
+        //private const string UniqueEventName = "{a5f52aac-d734-4ff2-bbf2-426025628837}";
     }
 }

@@ -56,7 +56,7 @@
                             <TextBox x:Name="ConsoleInfo"
                                 MinWidth="240" MaxWidth="520" MaxHeight="150"
                                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                                behavior:ScrollToEndBehavior.OnTextChanged="True" AcceptsReturn="True"
+                                behavior:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True"
                                 FontSize="16" IsReadOnly="True" TextWrapping="NoWrap"
                                 VerticalScrollBarVisibility="Hidden" />
 
