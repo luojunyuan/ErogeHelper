@@ -63,7 +63,7 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     public string ExternalSharedDrivePath { get; set; }
 
     [Option(DefaultValue = false)]
-    public bool DPIByApplication { get; set; }
+    public bool DPICompatibilityByApplication { get; set; }
 
     [Option(DefaultValue = false)]
     public bool UseEdgeTouchMask { get; set; }

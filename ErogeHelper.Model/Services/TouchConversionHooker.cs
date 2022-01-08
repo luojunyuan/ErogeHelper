@@ -11,9 +11,9 @@ using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.Services;
 
-public class TouchConversionHooker : ITouchConversionHooker, IDisposable
+public class TouchConversionHooker : ITouchConversionHooker
 {
-    private User32.SafeHHOOK? _hookId;
+    private readonly User32.SafeHHOOK? _hookId;
     private readonly User32.HookProc _hookCallback;
 
     // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
@@ -21,17 +21,16 @@ public class TouchConversionHooker : ITouchConversionHooker, IDisposable
 
     private readonly IGameDataService _gameDataService;
     private HWND GameWindowHandle => _gameDataService.GameRealWindowHandle;
-    public TouchConversionHooker(IGameInfoRepository? ehDbRepository = null, IGameDataService? gameDataService = null)
+
+    public TouchConversionHooker(
+        IGameInfoRepository? gameInfoRepository = null,
+        IGameDataService? gameDataService = null)
     {
         _hookCallback = HookCallback;
-        Enable = (ehDbRepository ?? DependencyResolver.GetService<IGameInfoRepository>()).GameInfo.IsEnableTouchToMouse;
         _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
-    }
+        Enable = (gameInfoRepository ?? DependencyResolver.GetService<IGameInfoRepository>()).TryGetGameInfo()?.
+            IsEnableTouchToMouse ?? false;
 
-    public bool Enable { get; set; }
-
-    public void Init()
-    {
         var moduleHandle = Kernel32.GetModuleHandle();
 
         _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, _hookCallback, moduleHandle, 0);
@@ -40,6 +39,8 @@ public class TouchConversionHooker : ITouchConversionHooker, IDisposable
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
     }
+
+    public bool Enable { private get; set; }
 
     private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
@@ -100,4 +101,14 @@ public class TouchConversionHooker : ITouchConversionHooker, IDisposable
     }
 
     public void Dispose() => User32.UnhookWindowsHookEx(_hookId);
+}
+
+/// <summary>
+/// For debug proposal
+/// </summary>
+public class TouchConversionHookerFake : ITouchConversionHooker
+{
+    public bool Enable { set => throw new NotImplementedException(); }
+
+    public void Dispose() { }
 }

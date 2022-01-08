@@ -14,7 +14,7 @@ using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.ViewModel.Windows;
+using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
@@ -31,16 +31,14 @@ public class AppLauncher
         var textractorService = DependencyResolver.GetService<ITextractorService>();
         var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
 
-        var gameDir = Path.GetDirectoryName(gamePath) ?? throw new InvalidOperationException();
-
         InitializeGameDatas(gameDataService, textractorService, gameWindowHooker, ehConfigRepository,
-            gamePath, leEnable, gameDir);
+            gamePath, leEnable);
 
-        var leproc = RunGame(gamePath, leEnable, gameDir);
+        var leproc = RunGame(gamePath, leEnable);
 
         try
         {
-            gameDataService.SearchingProcesses(gamePath);
+            gameDataService.InitGameProcesses(gamePath);
             leproc?.Kill();
         }
         catch (TimeoutException)
@@ -52,15 +50,14 @@ public class AppLauncher
 
         // Game hook and transparent MainGameWindow is the core of EH
         gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
-        DI.ShowView<PreferenceViewModel>();
+        DI.ShowView<MainGameViewModel>();
 
         // Optional functions
         Observable.Start(() =>
         {
             if (ehConfigRepository.InjectProcessByDefalut)
             {
-                // Question: GameProcesses Ambiant Context?
-                textractorService.InjectProcesses(gameDataService.GameProcesses);
+                textractorService.InjectProcesses(gameDataService);
             }
 
             if (!ehConfigRepository.HideTextWindow)
@@ -77,9 +74,12 @@ public class AppLauncher
         ITextractorService textractorService,
         IGameWindowHooker gameWindowHooker,
         IEHConfigRepository ehConfigRepository,
-        string gamePath, bool leEnable, string gameDir)
+        string gamePath, bool leEnable)
     {
         var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
+        var windowDataService = DependencyResolver.GetService<IWindowDataService>();
+        var gameDir = Path.GetDirectoryName(gamePath);
+        ArgumentNullException.ThrowIfNull(gameDir);
 
         if (!File.Exists(gamePath))
         {
@@ -118,17 +118,17 @@ public class AppLauncher
 
         try
         {
-            textractorService.Setting = JsonSerializer.Deserialize<TextractorSetting>
-                (gameInfo.TextractorSettingJson) ?? new();
+            textractorService.SetSetting(JsonSerializer.Deserialize<TextractorSetting>
+                (gameInfo.TextractorSettingJson) ?? new());
         }
         catch (JsonException ex)
         {
             // For compatible
             LogHost.Default.Debug(ex.Message);
-            textractorService.Setting = new();
+            textractorService.SetSetting(new());
         }
 
-        if (ehConfigRepository.DPIByApplication && !WpfHelper.IsDpiCompatibilitySet(gamePath))
+        if (ehConfigRepository.DPICompatibilityByApplication && !WpfHelper.IsDpiCompatibilitySet(gamePath))
         {
             WpfHelper.SetDPICompatibilityAsApplication(gamePath);
         }
@@ -142,7 +142,7 @@ public class AppLauncher
             x => SystemEvents.DisplaySettingsChanged += x,
             x => SystemEvents.DisplaySettingsChanged -= x)
             .Select(_ => Unit.Default);
-        var dpiChanged = AmbiantContext.DpiChanged
+        var dpiChanged = windowDataService.DpiChanged
             .DistinctUntilChanged()
             .Select(_ => Unit.Default);
         #endregion
@@ -155,21 +155,16 @@ public class AppLauncher
                 .DistinctUntilChanged().Publish());
 
         gameWindowHooker.WhenViewOperated
+            .Where(op => op == ViewOperation.TerminateApp)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(operation =>
-            {
-                switch (operation)
-                {
-                    case ViewOperation.TerminateApp:
-                        App.Terminate();
-                        break;
-                }
-            });
+            .Subscribe(_ => App.Terminate());
     }
 
     /// <returns>Return LE if enabled</returns>
-    private static Process? RunGame(string gamePath, bool leEnable, string gameDir)
+    private static Process? RunGame(string gamePath, bool leEnable)
     {
+        var gameDir = Path.GetDirectoryName(gamePath);
+        ArgumentNullException.ThrowIfNull(gameDir);
         Process? leproc = null;
         var gameAlreadyStart = Utils.GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 

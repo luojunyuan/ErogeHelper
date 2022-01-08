@@ -27,12 +27,12 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.HideTextWindow = v);
 
-        UseDPIDpiCompatibility = ehConfigRepository.DPIByApplication;
+        UseDPIDpiCompatibility = ehConfigRepository.DPICompatibilityByApplication;
         this.WhenAnyValue(x => x.UseDPIDpiCompatibility)
             .Skip(1)
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
             .DistinctUntilChanged()
-            .Subscribe(v => ehConfigRepository.DPIByApplication = v);
+            .Subscribe(v => ehConfigRepository.DPICompatibilityByApplication = v);
 
         UseEdgeTouchMask = ehConfigRepository.UseEdgeTouchMask;
         this.WhenAnyValue(x => x.UseEdgeTouchMask)

@@ -6,7 +6,7 @@ using System.Windows.Input;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
-using ErogeHelper.ViewModel.Windows;
+using ErogeHelper.ViewModel.MainGame;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
@@ -18,9 +18,11 @@ public partial class MainGameWindow : IEnableLogger
     public MainGameWindow()
     {
         InitializeComponent();
-        HwndTools.HideWindowInAltTab(MainGameViewModel.MainWindowHandle = WpfHelper.GetWpfWindowHandle(this));
+        var handle = WpfHelper.GetWpfWindowHandle(this);
+        HwndTools.HideWindowInAltTab(handle);
 
         ViewModel ??= DependencyResolver.GetService<MainGameViewModel>();
+        ViewModel.InitMainWindowHandle(handle);
 
         this.Events().Loaded
             .Select(_ => Unit.Default)
@@ -61,11 +63,9 @@ public partial class MainGameWindow : IEnableLogger
                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
 
 
-            this.OneWayBind(ViewModel,
-               vm => vm.AssistiveTouchViewModel,
-               v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
-
-            ViewModel.DisposeWith(d);
+            //this.OneWayBind(ViewModel,
+            //   vm => vm.AssistiveTouchViewModel,
+            //   v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
         });
     }
 
@@ -78,5 +78,5 @@ public partial class MainGameWindow : IEnableLogger
     }
 
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
-        AmbiantContext.UpdateDpi(e.NewDpi.DpiScaleX);
+        ViewModel!.UpdateDpi(e.NewDpi.DpiScaleX);
 }

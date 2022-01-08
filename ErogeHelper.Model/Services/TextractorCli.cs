@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Text.RegularExpressions;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Structs;
@@ -19,19 +20,21 @@ public class TextractorCli : ITextractorService, IEnableLogger
     private readonly Subject<HookParam> _selectedDataSubj = new();
     public IObservable<HookParam> SelectedData => _selectedDataSubj;
 
-    public TextractorSetting Setting { get; set; } = null!;
+    public void SetSetting(TextractorSetting setting) => Setting = setting;
+    public TextractorSetting Setting { get; private set; } = null!;
 
     private readonly List<string> _consoleOutput = new();
     public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
     private Process _textractorCli = null!;
 
-    private List<Process> _gameProcesses = null!;
+    private IGameDataService? _gameDataService;
+    private List<Process> GameProcesses => _gameDataService!.GameProcesses;
 
     public bool Injected { get; private set; } = false;
 
     /// <inheritdoc />
-    public void InjectProcesses(List<Process> gameProcesses)
+    public void InjectProcesses(IGameDataService? gameDataService = null)
     {
         if (Injected)
         {
@@ -39,9 +42,9 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
         Injected = true;
 
-        _gameProcesses = gameProcesses;
+        _gameDataService = gameDataService;
         // CODESMELL: Operate _gameProcesses in IsX86Process() function
-        bool isX86 = gameProcesses.ToList().Any(p => IsX86Process(p));
+        bool isX86 = GameProcesses.ToList().Any(p => IsX86Process(p));
 
         var textractorCliPath = Path.Combine(
             Directory.GetCurrentDirectory(),
@@ -66,7 +69,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
         _textractorCli.OutputDataReceived += OutputDataRetrieveCallback;
         _textractorCli.BeginOutputReadLine();
 
-        foreach (Process p in _gameProcesses)
+        foreach (Process p in GameProcesses)
         {
             _textractorCli.StandardInput.WriteLine("attach -P" + p.Id);
             _textractorCli.StandardInput.Flush();
@@ -81,7 +84,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
 
     public void InsertHook(string hookcode)
     {
-        foreach (Process p in _gameProcesses)
+        foreach (Process p in GameProcesses)
         {
             _textractorCli.StandardInput.WriteLine($"{hookcode} -P{p.Id}");
             _textractorCli.StandardInput.Flush();
@@ -91,7 +94,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
 
     public void ReAttachProcesses()
     {
-        foreach (Process p in _gameProcesses)
+        foreach (Process p in GameProcesses)
         {
             _textractorCli.StandardInput.WriteLine("detach -P" + p.Id);
             _textractorCli.StandardInput.Flush();
@@ -170,7 +173,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
         catch (InvalidOperationException ex)
         {
-            _gameProcesses.Remove(process);
+            GameProcesses.Remove(process);
             LogHost.Default.Debug(ex.Message);
         }
         catch (Exception ex)

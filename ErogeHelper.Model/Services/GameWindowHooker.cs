@@ -33,8 +33,8 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
     private readonly ReplaySubject<WindowPosition> _gamePositionSubj = new(1);
     public IObservable<WindowPosition> GamePosUpdated => _gamePositionSubj;
 
-    private readonly ReplaySubject<WindowPositionChange> _gamePosChangedSubj = new(1);
-    public IObservable<WindowPositionChange> GamePosChanged => _gamePosChangedSubj;
+    private readonly ReplaySubject<WindowPositionDelta> _gamePosChangedSubj = new(1);
+    public IObservable<WindowPositionDelta> GamePosChanged => _gamePosChangedSubj;
 
     private readonly Subject<ViewOperation> _ViewOperationSubj = new();
     public IObservable<ViewOperation> WhenViewOperated => _ViewOperationSubj;
@@ -218,7 +218,7 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
             _gameDataService!.SetGameRealWindowHandle(_gameHwnd);
         }
 
-        _gamePosChangedSubj.OnNext(new WindowPositionChange(left - _lastPos.Left, top - _lastPos.Top));
+        _gamePosChangedSubj.OnNext(new WindowPositionDelta(left - _lastPos.Left, top - _lastPos.Top));
         _lastPos = windowPosition;
         _gamePositionSubj.OnNext(windowPosition);
         return windowPosition;

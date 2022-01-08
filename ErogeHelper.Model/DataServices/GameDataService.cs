@@ -23,14 +23,13 @@ public class GameDataService : IGameDataService, IEnableLogger, IDisposable
 
     public IConnectableObservable<bool> GameFullscreenChanged { get; private set; } = null!;
 
-    public void SearchingProcesses(string gamePath) =>
+    public void InitGameProcesses(string gamePath) =>
         (MainProcess, GameProcesses) = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
     public List<Process> GameProcesses { get; private set; } = null!;
     public Process MainProcess { get; private set; } = null!;
 
     public HWND GameRealWindowHandle { get; private set; }
     public void SetGameRealWindowHandle(HWND handle) => GameRealWindowHandle = handle;
-
 
     /// <summary>
     /// Get all processes of the game (timeout 20s)

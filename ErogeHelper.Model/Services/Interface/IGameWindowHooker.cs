@@ -10,7 +10,7 @@ public interface IGameWindowHooker
 {
     IObservable<WindowPosition> GamePosUpdated { get; }
 
-    IObservable<WindowPositionChange> GamePosChanged { get; }
+    IObservable<WindowPositionDelta> GamePosChanged { get; }
 
     IObservable<ViewOperation> WhenViewOperated { get; }
 

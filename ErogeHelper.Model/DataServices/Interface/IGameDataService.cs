@@ -13,7 +13,11 @@ public interface IGameDataService : IDisposable
     void InitFullscreenChanged(IConnectableObservable<bool> observable);
     IConnectableObservable<bool> GameFullscreenChanged { get; }
 
-    void SearchingProcesses(string gamePath);
+    /// <summary>
+    /// Initialze game process by seraching it
+    /// </summary>
+    /// <exception cref="TimeoutException"></exception>
+    void InitGameProcesses(string gamePath);
     List<Process> GameProcesses { get; }
     Process MainProcess { get; }
 

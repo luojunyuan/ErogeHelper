@@ -2,8 +2,6 @@
 
 public interface ITouchConversionHooker : IDisposable
 {
-    bool Enable { get; set; }
-
-    void Init();
+    bool Enable { set; }
 }
 

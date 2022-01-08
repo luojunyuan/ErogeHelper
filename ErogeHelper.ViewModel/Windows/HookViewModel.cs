@@ -182,7 +182,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         };
 
         // Update textractor setting
-        textractorService.Setting = textractorSetting;
+        textractorService.SetSetting(textractorSetting);
 
         // Post to server except Search code
 

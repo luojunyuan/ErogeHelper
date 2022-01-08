@@ -14,26 +14,31 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.ViewModel.Windows;
+namespace ErogeHelper.ViewModel.MainGame;
 
 public class MainGameViewModel : ReactiveObject, IDisposable
 {
-    public static HWND MainWindowHandle { get; set; }
+    public void UpdateDpi(double dpi) => _windowState.UpdateDpi(dpi);
+    public void InitMainWindowHandle(HWND handle) => _windowState.InitMainWindowHandle(handle);
 
     public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
+
+    private readonly IWindowDataService _windowState;
 
     public MainGameViewModel(
         AssistiveTouchViewModel? assistiveTouchViewModel = null,
         IEHConfigRepository? ehConfigRepository = null,
         IGameWindowHooker? gameWindowHooker = null,
         IGameInfoRepository? ehDbRepository = null,
-        IGameDataService? gameDataService = null)
+        IGameDataService? gameDataService = null,
+        IWindowDataService? windowDataService = null)
     {
         AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
+        _windowState = windowDataService ?? DependencyResolver.GetService<IWindowDataService>();
 
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -48,10 +53,10 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameWindowHooker.GamePosUpdated
             .Subscribe(pos =>
             {
-                Height = pos.Height / AmbiantContext.Dpi;
-                Width = pos.Width / AmbiantContext.Dpi;
-                Left = pos.Left / AmbiantContext.Dpi;
-                Top = pos.Top / AmbiantContext.Dpi;
+                Height = pos.Height / _windowState.Dpi;
+                Width = pos.Width / _windowState.Dpi;
+                Left = pos.Left / _windowState.Dpi;
+                Top = pos.Top / _windowState.Dpi;
             }).DisposeWith(_disposables);
 
         gameWindowHooker.WhenViewOperated
@@ -81,8 +86,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             .DistinctUntilChanged()
             .Where(on => on)
             .SelectMany(interval)
-            .Where(_ => !MainWindowHandle.IsNull)
-            .Subscribe(_ => User32.BringWindowToTop(MainWindowHandle));
+            .Where(_ => !_windowState.MainWindowHandle.IsNull)
+            .Subscribe(_ => User32.BringWindowToTop(_windowState.MainWindowHandle));
 
         #endregion
 
@@ -98,19 +103,20 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
             if (ehDbRepository.GameInfo.IsLoseFocus)
             {
-                HwndTools.WindowLostFocus(MainWindowHandle, ehDbRepository.GameInfo.IsLoseFocus);
+                HwndTools.WindowLostFocus(_windowState.MainWindowHandle, ehDbRepository.GameInfo.IsLoseFocus);
             }
         });
 
         // HACK: EH may receive the dpi changed event faster than the game initialization
         // when starting for the first time 
-        AmbiantContext.DpiChanged
+        _windowState.DpiChanged
             .SelectMany(_ => Observable
                 .Start(() => Unit.Default)
                 .SubscribeOn(RxApp.TaskpoolScheduler)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
-            .Subscribe();
+            .Subscribe()
+            .DisposeWith(_disposables);
     }
 
     [Reactive]

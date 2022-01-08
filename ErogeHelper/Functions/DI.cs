@@ -22,6 +22,7 @@ using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.Controllers;
 using ErogeHelper.ViewModel.Dialogs;
 using ErogeHelper.ViewModel.Items;
+using ErogeHelper.ViewModel.MainGame;
 using ErogeHelper.ViewModel.Pages;
 using ErogeHelper.ViewModel.Windows;
 using FluentMigrator.Runner;
@@ -49,14 +50,20 @@ internal static class DI
             () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build());
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
-        Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
         Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
+        // In memory state
+        Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
+        Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
 
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
+#if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
+#else
+        Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
+#endif    
         if (Utils.HasWinRT)
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
@@ -69,7 +76,9 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new NetworkListManager(), typeof(INetworkListManager));
         //if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         if (true)
+        {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
+        }
         //else
         //{
         //    Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
@@ -87,6 +96,7 @@ internal static class DI
     {
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
+        Locator.CurrentMutable.RegisterLazySingleton(() => new TouchToolBoxViewModel());
 
         Locator.CurrentMutable.Register(() => new TextViewModel());
 
@@ -125,10 +135,6 @@ internal static class DI
 
     public static void RegisterInteractions()
     {
-        Interactions.CheckGameFullscreen
-            .RegisterHandler(context =>
-                context.SetOutput(WpfHelper.IsGameForegroundFullscreen(context.Input)));
-
         Interactions.TerminateApp
             .RegisterHandler(context =>
             {

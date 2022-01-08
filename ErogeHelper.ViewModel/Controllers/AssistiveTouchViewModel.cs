@@ -10,7 +10,6 @@ using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.ViewModel.Windows;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -36,7 +35,8 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         IGameInfoRepository? ehDbRepository = null,
         ITouchConversionHooker? touchConversionHooker = null,
         IGameWindowHooker? gameWindowHooker = null,
-        TouchToolBoxViewModel? touchToolBoxViewModel = null)
+        TouchToolBoxViewModel? touchToolBoxViewModel = null,
+        IWindowDataService? windowDataService = null)
     {
         _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEHConfigRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
@@ -44,6 +44,7 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         touchToolBoxViewModel ??= DependencyResolver.GetService<TouchToolBoxViewModel>();
+        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
 
         AssistiveTouchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>
             (_ehConfigRepository.AssistiveTouchPosition) ?? AssistiveTouchPosition.Default;
@@ -94,8 +95,8 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
             .Skip(1)
             .Subscribe(v =>
             {
-                HwndTools.WindowLostFocus(MainGameViewModel.MainWindowHandle, v);
-                HwndTools.WindowLostFocus(TextViewModel.TextWindowHandle, v);
+                HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
+                HwndTools.WindowLostFocus(windowDataService.TextWindowHandle ?? IntPtr.Zero, v);
                 ehDbRepository.UpdateLostFocusStatus(v);
             });
 
