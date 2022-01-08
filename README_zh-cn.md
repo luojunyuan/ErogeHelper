@@ -9,7 +9,7 @@
   <br>
 </p>
 
-帮助日语学习者轻松阅读不认识的汉字读音，以及查询游戏中的单词！现仅支持在线的Moji辞书。
+EH 是一个现代多功能的黄油帮助器！可以帮忙日语学习者轻松阅读不认识的汉字读音，以及查询游戏中的单词！现仅支持在线的Moji辞书。
 
 Eroge Helper 面向用户友好进行开发。
 
@@ -50,15 +50,15 @@ EH支持 windows 7 sp1 至最新版本的 windows 10 系统
 
 stable 版本的EH项目在分支 [Caliburn.Micro-Archive](https://github.com/ErogeHelper/ErogeHelper/tree/Caliburn.Micro-Archive) 中
 
-当前仓库main分支即 Preview 版本去掉了核心功能，使用reactiveUI完全重构，并且也在学习中。
-
-计划等 winui3 推出了，确保提取功能 texthost 能在arm系统上运行后，再将主要功能从stable移植到main分支。
+当前仓库main分支即 Preview 版本去掉了核心功能，使用 ReactiveUI 完全重构。
 
 想法很多，还需要还原vnr的大部分功能，前路漫漫。。
 
-> 作者是萌新开发，代码有很多奇怪的表达，以及很多反模式。今后会尽量弄代码模块文档，如果你对EH有兴趣希望可以得到指导意见与代码优化。
+等 WinUI3 1.1 了，XamlIslands .Net6 能用了，~~提取模块 texthost 能在arm系统上工作后，~~ 再将主要功能从stable移植到main分支。
 
-**EH的许多功能建立在之前已有的项目基础之上**
+> 作者是萌新开发，代码尽量不做奇怪表达，有机会尝试写点架构文档
+
+**EH的开发离不开许多三方开源项目**
 
 ### 证书
 
