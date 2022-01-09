@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reactive;
+using System.Runtime.InteropServices;
 using System.Windows;
 using Config.Net;
 using ErogeHelper.Model.DataServices;
@@ -64,6 +65,7 @@ internal static class DI
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
+        Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
 #else
@@ -78,14 +80,15 @@ internal static class DI
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabService());
         }
-        Locator.CurrentMutable.Register(() => new NetworkListManager(), typeof(INetworkListManager));
         //if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-        if (true)
+        if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
-        //else
-        //{
-        //    Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
-        //}
+        }
+        else
+        {
+            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
+        }
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255

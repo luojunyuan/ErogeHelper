@@ -15,11 +15,14 @@ public static class Utils
 
     public static bool IsWin8 { get; } = !IsWin7 && OsVersion <= new Version(6, 3);
 
+    /// <summary>
+    /// System begin with win10 1507
+    /// </summary>
     public static bool HasWinRT { get; } = OsVersion > new Version(10, 0);
 
-    public static bool After1903 { get; } = OsVersion >= new Version(10, 0, 18362);
+    public static bool IsOrAfter1903 { get; } = OsVersion >= new Version(10, 0, 18362);
 
-    public static bool After1909 { get; } = OsVersion >= new Version(10, 0, 18363);
+    public static bool IsOrAfter1909 { get; } = OsVersion >= new Version(10, 0, 18363);
 
     public static bool IsArm { get; } = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
 
@@ -39,6 +42,20 @@ public static class Utils
             fs?.Close();
         }
         return inUse;
+    }
+
+    public static string ConsoleI18N(string text)
+    {
+        // https://github.com/lgztx96/texthost/blob/master/texthost/texthost.cpp
+        return text switch
+        {
+            "Textractor: already injected" => Languages.Strings.Textractor_AlreadyInject,
+            "Textractor: invalid code" => Languages.Strings.Textractor_InvalidCode,
+            "Textractor: initialization completed" => Languages.Strings.Textractor_Init,
+            "Textractor: couldn't inject" => Languages.Strings.Textractor_InjectFailed,
+            "Textractor: invalid process" => Languages.Strings.Textractor_InvalidProcess,
+            _ => text
+        };
     }
 
     public static List<Process> GetProcessesByFriendlyName(string friendlyName)
