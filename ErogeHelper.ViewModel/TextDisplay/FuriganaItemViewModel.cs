@@ -2,7 +2,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ErogeHelper.ViewModel.Items;
+namespace ErogeHelper.ViewModel.TextDisplay;
 
 public class FuriganaItemViewModel : ReactiveObject
 {

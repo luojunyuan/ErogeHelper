@@ -10,13 +10,12 @@ using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Extensions;
-using ErogeHelper.ViewModel.Items;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.ViewModel.Windows;
+namespace ErogeHelper.ViewModel.TextDisplay;
 
 public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 {
@@ -51,9 +50,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         {
             HwndTools.WindowBlur(TextWindowHandle, ehConfigRepository.TextWindowBlur);
             if (gameInfoRepository.GameInfo.IsLoseFocus)
-            {
                 HwndTools.WindowLostFocus(TextWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
-            }
         }).DisposeWith(_disposables);
 
         gameWindowHooker.GamePosChanged
@@ -108,9 +105,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 // this.Log().Debug($"{Left} {Top} {WindowWidth}");
                 // this.Log().Debug(gamePos);
                 if (isFullscreen)
-                {
                     User32.BringWindowToTop(TextWindowHandle);
-                }
                 else
                 {
 
@@ -201,15 +196,11 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Subscribe(hide =>
             {
                 if (hide)
-                {
                     _hideSubj.OnNext(Unit.Default);
-                }
                 else
                 {
                     if (_currentText != string.Empty)
-                    {
                         _showSubj.OnNext(Unit.Default);
-                    }
                 }
             }).DisposeWith(disposables);
 
@@ -221,9 +212,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
               {
                   case ViewOperation.Show:
                       if (_currentText != string.Empty)
-                      {
                           _showSubj.OnNext(Unit.Default);
-                      }
                       break;
                   case ViewOperation.Hide:
                       _hideSubj.OnNext(Unit.Default);
@@ -238,7 +227,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
     {
         if (_furiganaItemViewModel.Count < vms.Count)
         {
-            int i = 0;
+            var i = 0;
             for (; i < _furiganaItemViewModel.Count; i++)
             {
                 _furiganaItemViewModel[i].Kana = vms[i].Kana;
@@ -253,7 +242,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         }
         else
         {
-            int i = 0;
+            var i = 0;
             for (; i < vms.Count; i++)
             {
                 _furiganaItemViewModel[i].Kana = vms[i].Kana;

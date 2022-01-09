@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace ErogeHelper.ViewModel.Windows;
+namespace ErogeHelper.ViewModel;
 
 public class CloudSaveViewModel : ReactiveObject
 {

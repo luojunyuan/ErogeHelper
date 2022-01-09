@@ -1,28 +1,23 @@
-﻿<rxui:ReactiveUserControl   
+﻿<rxui:ReactiveUserControl
     x:Class="ErogeHelper.View.Pages.MeCabPage"
     x:TypeArguments="vm:MeCabViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:rxui="http://reactiveui.net"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
     xmlns:component="clr-namespace:ErogeHelper.XamlTool.Components"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
-    mc:Ignorable="d" 
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Preference;assembly=ErogeHelper.ViewModel"
+    mc:Ignorable="d"
     d:DesignHeight="650" d:DesignWidth="800">
 
     <component:ScrollViewerSmooth PanningMode="Both">
         <ui:SimpleStackPanel Margin="20,10" Spacing="10">
-            <Button x:Name="SelectMeCabDictButton"
-                Content="{x:Static resx:Strings.MeCabPage_SelectDict}" 
-                ToolTip="{x:Static resx:Strings.MeCabPage_SelectDictTip}" />
+            <Button x:Name="SelectMeCabDictButton" Content="{x:Static resx:Strings.MeCabPage_SelectDict}" ToolTip="{x:Static resx:Strings.MeCabPage_SelectDictTip}" />
 
             <ui:ToggleSwitch x:Name="ShowJapaneseSwitch" Header="{x:Static resx:Strings.MeCabPage_JapaneseText}" />
-            <GroupBox
-                Header="{x:Static resx:Strings.MeCabPage_TextFlyout}" 
-                IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
+            <GroupBox Header="{x:Static resx:Strings.MeCabPage_TextFlyout}" IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:RadioButtons x:Name="KanaPosButtons" Header="{x:Static resx:Strings.MeCabPage_PositionFormat}">
                         <RadioButton x:Name="KanaDefault" Content="{x:Static resx:Strings.MeCabPage_FuriganaDefault}" />
@@ -38,9 +33,7 @@
                 </ui:SimpleStackPanel>
             </GroupBox>
 
-            <GroupBox 
-                Header="{x:Static resx:Strings.MeCabPage_Dict}" 
-                IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
+            <GroupBox Header="{x:Static resx:Strings.MeCabPage_Dict}" IsEnabled="{Binding ElementName=ShowJapaneseSwitch, Path=IsOn}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:ToggleSwitch x:Name="MojiDictToggle" Header="Moji辞書" IsEnabled="False" />
                     <ui:ToggleSwitch x:Name="JishoDictToggle" Header="Jisho" IsEnabled="False" />

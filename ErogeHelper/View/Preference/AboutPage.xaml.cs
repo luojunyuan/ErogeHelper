@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using ErogeHelper.ViewModel.Preference;
 using ReactiveUI;
 using Splat;
 
@@ -8,7 +9,7 @@ namespace ErogeHelper.View.Pages;
 
 public partial class AboutPage
 {
-    private new ViewModel.Pages.AboutViewModel ViewModel => base.ViewModel!;
+    private new AboutViewModel ViewModel => base.ViewModel!;
 
     public AboutPage()
     {

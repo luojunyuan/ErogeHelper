@@ -11,7 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 
-namespace ErogeHelper.ViewModel.Dialogs;
+namespace ErogeHelper.ViewModel.HookConfig;
 
 public class HCodeViewModel : ReactiveValidationObject
 {
@@ -51,15 +51,11 @@ public class HCodeViewModel : ReactiveValidationObject
         // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
         // RCode 0或1个/ RS@ 1个以上十六进制
         if (string.IsNullOrWhiteSpace(code))
-        {
             // if hcode is null or space, make TextBox normal style
             return true;
-        }
 
         if (code[^1] == ':')
-        {
             return false;
-        }
 
         return Regex.IsMatch(code, ConstantValue.CodeRegExp);
     }

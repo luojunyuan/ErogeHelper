@@ -5,7 +5,7 @@ using ErogeHelper.Shared.Contracts;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ErogeHelper.ViewModel.Pages;
+namespace ErogeHelper.ViewModel.Preference;
 
 public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 {

@@ -1,5 +1,5 @@
 ﻿using ErogeHelper.Shared;
-using ErogeHelper.ViewModel.Windows;
+using ErogeHelper.ViewModel;
 using ReactiveUI;
 
 namespace ErogeHelper.View.Windows;

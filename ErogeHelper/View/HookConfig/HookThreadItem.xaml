@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
     xmlns:tool="clr-namespace:ErogeHelper.XamlTool"
-    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Items;assembly=ErogeHelper.ViewModel"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DesignHeight="200" d:DesignWidth="300">
 

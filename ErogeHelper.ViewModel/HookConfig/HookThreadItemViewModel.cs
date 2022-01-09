@@ -5,7 +5,7 @@ using ErogeHelper.Shared;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ErogeHelper.ViewModel.Items;
+namespace ErogeHelper.ViewModel.HookConfig;
 
 public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
 {

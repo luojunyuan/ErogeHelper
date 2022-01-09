@@ -10,7 +10,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 
-namespace ErogeHelper.ViewModel.Pages;
+namespace ErogeHelper.ViewModel.Preference;
 
 public class MeCabViewModel : ReactiveObject, IRoutableViewModel, IEnableLogger
 {

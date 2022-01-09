@@ -11,13 +11,11 @@ using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
-using ErogeHelper.ViewModel.Dialogs;
-using ErogeHelper.ViewModel.Items;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 
-namespace ErogeHelper.ViewModel.Windows;
+namespace ErogeHelper.ViewModel.HookConfig;
 
 public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
 {
@@ -204,9 +202,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     private static TextractorSetting.TextThread SelectThreadType(HookThreadItemViewModel vm)
     {
         if (vm.IsTextThread)
-        {
             return TextractorSetting.TextThread.Text;
-        }
         else if (vm.IsCharacterThread)
         {
             return TextractorSetting.TextThread.CharacterName;

@@ -15,7 +15,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.ViewModel.Controllers;
+namespace ErogeHelper.ViewModel.MainGame;
 
 public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IEnableLogger
 {

@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using ErogeHelper.Shared;
-using ErogeHelper.ViewModel.Windows;
+using ErogeHelper.ViewModel.HookConfig;
 using ReactiveUI;
 using Splat;
 

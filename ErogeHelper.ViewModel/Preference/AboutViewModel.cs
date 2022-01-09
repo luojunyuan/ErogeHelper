@@ -14,7 +14,7 @@ using ErogeHelper.Shared.Languages;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ErogeHelper.ViewModel.Pages;
+namespace ErogeHelper.ViewModel.Preference;
 
 public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableViewModel
 {
@@ -128,9 +128,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
         if (!previewVersion)
         {
             if (architecture == Architecture.X86)
-            {
                 AutoUpdater.Start(x86_32);
-            }
             else if (architecture == Architecture.X64)
             {
                 AutoUpdater.Start(x86_64);
@@ -143,9 +141,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
         else
         {
             if (architecture == Architecture.X86)
-            {
                 AutoUpdater.Start(x86_32_preview);
-            }
             else if (architecture == Architecture.X64)
             {
                 AutoUpdater.Start(x86_64_preview);

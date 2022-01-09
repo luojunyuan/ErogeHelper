@@ -1,7 +1,7 @@
 using Config.Net;
 using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.ViewModel.Pages;
+using ErogeHelper.ViewModel.Preference;
 using NUnit.Framework;
 
 namespace ErogeHelper.UnitTests.ViewModel

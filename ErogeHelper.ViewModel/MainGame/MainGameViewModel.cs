@@ -8,7 +8,6 @@ using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Enums;
-using ErogeHelper.ViewModel.Controllers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;

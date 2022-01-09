@@ -8,7 +8,7 @@ using ErogeHelper.Shared.Languages;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace ErogeHelper.ViewModel.Windows;
+namespace ErogeHelper.ViewModel.Preference;
 
 public class PreferenceViewModel : ReactiveObject, IScreen, IDisposable
 {

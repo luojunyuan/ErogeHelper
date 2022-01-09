@@ -6,7 +6,7 @@ using System.Windows.Input;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
-using ErogeHelper.ViewModel.Windows;
+using ErogeHelper.ViewModel.TextDisplay;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
