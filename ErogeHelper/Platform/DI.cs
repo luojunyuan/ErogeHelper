@@ -9,6 +9,7 @@ using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Repositories.Migration;
 using ErogeHelper.Model.Services;
 using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.Platform.RxUI;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
@@ -33,16 +34,20 @@ using Splat;
 using Vanara.PInvoke.NetListMgr;
 using MessageBox = ModernWpf.MessageBox;
 
-namespace ErogeHelper.Platform.RxUI;
+namespace ErogeHelper.Platform;
 
 internal static class DI
 {
+    /// <summary>
+    /// The Composite Root
+    /// </summary>
     public static void RegisterServices()
     {
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator());
 
         RegisterViews();
         RegisterViewModelsForViews();
+        RegisterInteractions();
 
         // DataService
         Locator.CurrentMutable.RegisterLazySingleton(
@@ -130,7 +135,7 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
     }
 
-    public static void RegisterInteractions()
+    private static void RegisterInteractions()
     {
         Interactions.TerminateApp
             .RegisterHandler(context =>

@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.WinUI.Notifications;
 using ErogeHelper.Platform;
-using ErogeHelper.Platform.RxUI;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Exceptions;
 using ErogeHelper.Shared.Languages;
@@ -63,7 +62,6 @@ public partial class App : IEnableLogger
                 DummyTouchBug.Fix();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
-                DI.RegisterInteractions();
 
                 AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };
