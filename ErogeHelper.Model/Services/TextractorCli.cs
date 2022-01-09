@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Text;
@@ -15,21 +16,19 @@ namespace ErogeHelper.Model.Services;
 public class TextractorCli : ITextractorService, IEnableLogger
 {
     private readonly Subject<HookParam> _dataSubj = new();
+    private readonly Subject<HookParam> _selectedDataSubj = new();
+    private readonly List<string> _consoleOutput = new();
+
     public IObservable<HookParam> Data => _dataSubj;
 
-    private readonly Subject<HookParam> _selectedDataSubj = new();
     public IObservable<HookParam> SelectedData => _selectedDataSubj;
 
-    public void SetSetting(TextractorSetting setting) => Setting = setting;
     public TextractorSetting Setting { get; private set; } = null!;
 
-    private readonly List<string> _consoleOutput = new();
-    public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
     private Process _textractorCli = null!;
-
     private IGameDataService? _gameDataService;
-    private List<Process> GameProcesses => _gameDataService!.GameProcesses;
+    private ReadOnlyCollection<Process> GameProcesses => _gameDataService!.GameProcesses.AsReadOnly();
 
     public bool Injected { get; private set; } = false;
 
@@ -104,6 +103,9 @@ public class TextractorCli : ITextractorService, IEnableLogger
     public void RemoveHook(long address) => throw new InvalidOperationException();
     public void RemoveUselessHooks() => throw new InvalidOperationException();
     public void SearchRCode(string text) => throw new InvalidOperationException();
+
+    public void SetSetting(TextractorSetting setting) => Setting = setting;
+    public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {

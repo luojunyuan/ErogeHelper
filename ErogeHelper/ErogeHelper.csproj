@@ -1,70 +1,70 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
-        <UseWPF>true</UseWPF>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <ApplicationManifest>assets\app.manifest</ApplicationManifest>
-        <Authors>k1mlka</Authors>
-        <Version>0.0.9.1</Version>
-        <Platforms>AnyCPU;x86</Platforms>
-        <OutputPath>..\bin\$(Configuration)</OutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <PublishReadyToRun>true</PublishReadyToRun>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows10.0.18362.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationManifest>assets\app.manifest</ApplicationManifest>
+    <Authors>k1mlka</Authors>
+    <Version>0.0.9.1</Version>
+    <Platforms>AnyCPU;x86</Platforms>
+    <OutputPath>..\bin\$(Configuration)</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
-        <PackageReference Include="luojunyuan.WpfDanmaku" Version="0.0.0.2" />
-        <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
-        <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-        <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="ReactiveUI.WPF" Version="17.1.9" />
-        <PackageReference Include="Splat.Drawing" Version="14.1.17" />
-        <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
-        <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
-        <PackageReference Include="WindowsInput" Version="6.3.0" />
-        <PackageReference Include="WpfAnalyzers" Version="4.0.1">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="WpfScreenHelper" Version="1.1.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
+    <PackageReference Include="luojunyuan.WpfDanmaku" Version="0.0.0.2" />
+    <PackageReference Include="ModernWpf.MessageBox" Version="0.5.2" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI.WPF" Version="17.1.9" />
+    <PackageReference Include="Splat.Drawing" Version="14.1.17" />
+    <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
+    <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
+    <PackageReference Include="WindowsInput" Version="6.3.0" />
+    <PackageReference Include="WpfAnalyzers" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="WpfScreenHelper" Version="1.1.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\ErogeHelper.ViewModel\ErogeHelper.ViewModel.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.ViewModel\ErogeHelper.ViewModel.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="libs\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="libs\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup>
-        <Resource Include="assets\text_background\aqua_green.png" />
-        <Resource Include="assets\text_background\green.png" />
-        <Resource Include="assets\text_background\pink.png" />
-        <Resource Include="assets\text_background\transparent.png" />
-        <Resource Include="assets\app.ico" />
-        <Resource Include="assets\app.png" />
-    </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\text_background\aqua_green.png" />
+    <Resource Include="assets\text_background\green.png" />
+    <Resource Include="assets\text_background\pink.png" />
+    <Resource Include="assets\text_background\transparent.png" />
+    <Resource Include="assets\app.ico" />
+    <Resource Include="assets\app.png" />
+  </ItemGroup>
 
-    <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
-        <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
-    </Target>
+  <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
+    <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
+  </Target>
 
-    <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
-        <Copy SourceFiles="$(OutDir)libs\texthost_x86.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
-        <Delete Files="$(OutDir)libs\texthost_x86.dll" />
-    </Target>
-    <Target Name="TextHostX86-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'" AfterTargets="Publish">
-        <Copy SourceFiles="$(PublishDir)libs\texthost_x86.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
-        <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
-    </Target>
+  <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
+    <Copy SourceFiles="$(OutDir)libs\texthost_x86.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
+    <Delete Files="$(OutDir)libs\texthost_x86.dll" />
+  </Target>
+  <Target Name="TextHostX86-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'" AfterTargets="Publish">
+    <Copy SourceFiles="$(PublishDir)libs\texthost_x86.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
+  </Target>
 </Project>

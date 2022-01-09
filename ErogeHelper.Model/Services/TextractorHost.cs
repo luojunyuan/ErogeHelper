@@ -24,6 +24,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
     public bool Injected { get; private set; } = false;
 
+
     private IGameDataService? _gameDataService;
     private ReadOnlyCollection<Process> GameProcesses => _gameDataService!.GameProcesses.AsReadOnly();
 
@@ -135,8 +136,6 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
     private readonly Dictionary<long, HookParam> _threadHandleDict = new();
 
-    private bool firstTimeInject = true;
-
     private void CreateThreadHandle(
         long threadId,
         uint processId,
@@ -146,7 +145,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
         string name,
         string hookcode)
     {
-        if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode) && firstTimeInject)
+        if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode))
         {
             GameProcesses.ToList().ForEach(proc =>
                 _ = TextHostDll.RemoveHook((uint)proc.Id, address));
