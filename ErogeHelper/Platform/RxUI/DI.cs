@@ -9,7 +9,6 @@ using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Repositories.Migration;
 using ErogeHelper.Model.Services;
 using ErogeHelper.Model.Services.Interface;
-using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
@@ -34,7 +33,7 @@ using Splat;
 using Vanara.PInvoke.NetListMgr;
 using MessageBox = ModernWpf.MessageBox;
 
-namespace ErogeHelper.Functions;
+namespace ErogeHelper.Platform.RxUI;
 
 internal static class DI
 {
@@ -77,9 +76,7 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new NetworkListManager(), typeof(INetworkListManager));
         //if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         if (true)
-        {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
-        }
         //else
         //{
         //    Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
@@ -206,9 +203,7 @@ internal static class DI
                 throw new TypeAccessException("View not implement IViewFor");
             window.Show();
             if (window is not MainGameWindow)
-            {
                 window.Activate();
-            }
         }
     }
 

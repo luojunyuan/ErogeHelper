@@ -1,13 +1,14 @@
-﻿using System.Windows;
+﻿#pragma warning disable IDE0051 // No reference to GetDependencyProperty
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace ErogeHelper.Components;
+namespace ErogeHelper.XamlTool.Components;
 
 public static class ScrollViewerHelper
 {
-    #region IsAnimating
+    #region IsAnimating DependencyProperty
 
     internal static readonly DependencyProperty IsAnimatingProperty =
         DependencyProperty.RegisterAttached(
@@ -16,15 +17,22 @@ public static class ScrollViewerHelper
             typeof(ScrollViewerHelper),
             new PropertyMetadata(false));
 
+    /// <summary>Helper for getting <see cref="IsAnimatingProperty"/> from <paramref name="scrollViewer"/>.</summary>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/> to read <see cref="IsAnimatingProperty"/> from.</param>
+    /// <returns>IsAnimating property value.</returns>
+    [AttachedPropertyBrowsableForType(typeof(ScrollViewer))]
     internal static bool GetIsAnimating(ScrollViewer scrollViewer) =>
         (bool)scrollViewer.GetValue(IsAnimatingProperty);
 
+    /// <summary>Helper for setting <see cref="IsAnimatingProperty"/> on <paramref name="scrollViewer"/>.</summary>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/> to set <see cref="IsAnimatingProperty"/> on.</param>
+    /// <param name="value">IsAnimating property value.</param>
     internal static void SetIsAnimating(ScrollViewer scrollViewer, bool value) =>
         scrollViewer.SetValue(IsAnimatingProperty, value);
 
     #endregion
 
-    #region CurrentVerticalOffset
+    #region CurrentVerticalOffset DependencyProperty
 
     internal static readonly DependencyProperty CurrentVerticalOffsetProperty =
         DependencyProperty.RegisterAttached("CurrentVerticalOffset",
@@ -32,9 +40,8 @@ public static class ScrollViewerHelper
             typeof(ScrollViewerHelper),
             new PropertyMetadata(0.0, OnCurrentVerticalOffsetChanged));
 
-#pragma warning disable IDE0051 // 删除未使用的私有成员
+    [AttachedPropertyBrowsableForType(typeof(ScrollViewer))]
     private static double GetCurrentVerticalOffset(ScrollViewer scrollViewer) =>
-#pragma warning restore IDE0051 // 删除未使用的私有成员
             (double)scrollViewer.GetValue(CurrentVerticalOffsetProperty);
 
     private static void SetCurrentVerticalOffset(ScrollViewer scrollViewer, double value) =>
@@ -43,14 +50,12 @@ public static class ScrollViewerHelper
     private static void OnCurrentVerticalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is ScrollViewer ctl && e.NewValue is double v)
-        {
             ctl.ScrollToVerticalOffset(v);
-        }
     }
 
     #endregion
 
-    #region CurrentHorizontalOffset
+    #region CurrentHorizontalOffset DependencyProperty
 
     internal static readonly DependencyProperty CurrentHorizontalOffsetProperty =
         DependencyProperty.RegisterAttached("CurrentHorizontalOffset",
@@ -58,9 +63,8 @@ public static class ScrollViewerHelper
             typeof(ScrollViewerHelper),
             new PropertyMetadata(0.0, OnCurrentHorizontalOffsetChanged));
 
-#pragma warning disable IDE0051 // 删除未使用的私有成员
+    [AttachedPropertyBrowsableForType(typeof(ScrollViewer))]
     private static double GetCurrentHorizontalOffset(ScrollViewer scrollViewer) =>
-#pragma warning restore IDE0051 // 删除未使用的私有成员
             (double)scrollViewer.GetValue(CurrentHorizontalOffsetProperty);
 
     private static void SetCurrentHorizontalOffset(ScrollViewer scrollViewer, double value) =>
@@ -69,9 +73,7 @@ public static class ScrollViewerHelper
     private static void OnCurrentHorizontalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is ScrollViewer ctl && e.NewValue is double v)
-        {
             ctl.ScrollToHorizontalOffset(v);
-        }
     }
 
     #endregion
@@ -85,9 +87,7 @@ public static class ScrollViewerHelper
         if (!isHorizontal)
         {
             if (!GetIsAnimating(scrollViewer))
-            {
                 SetCurrentVerticalOffset(scrollViewer, scrollViewer.VerticalOffset);
-            }
 
             var totalVerticalOffset = Math.Min(Math.Max(0, scrollViewer.VerticalOffset - e.Delta), scrollViewer.ScrollableHeight);
             ScrollToVerticalOffset(scrollViewer, totalVerticalOffset);
@@ -95,9 +95,7 @@ public static class ScrollViewerHelper
         else
         {
             if (!GetIsAnimating(scrollViewer))
-            {
                 SetCurrentHorizontalOffset(scrollViewer, scrollViewer.HorizontalOffset);
-            }
 
             var totalHorizontalOffset = Math.Min(Math.Max(0, scrollViewer.HorizontalOffset - e.Delta), scrollViewer.ScrollableWidth);
             ScrollToHorizontalOffset(scrollViewer, totalHorizontalOffset);
@@ -116,9 +114,7 @@ public static class ScrollViewerHelper
         animation.Completed += (s, e1) =>
         {
             if (orientation == Orientation.Vertical)
-            {
                 SetCurrentVerticalOffset(scrollViewer, offset);
-            }
             else
             {
                 SetCurrentHorizontalOffset(scrollViewer, offset);

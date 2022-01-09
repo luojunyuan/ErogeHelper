@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:ui="http://schemas.modernwpf.com/2019"
     xmlns:rxui="http://reactiveui.net"
-    xmlns:component="clr-namespace:ErogeHelper.Components"
+    xmlns:component="clr-namespace:ErogeHelper.XamlTool.Components"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Pages;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d" 

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace ErogeHelper.XamlTool.Behaviors;
+namespace ErogeHelper.XamlTool;
 
 public class ScrollToEndBehavior
 {

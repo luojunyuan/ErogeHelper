@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
-    xmlns:behavior="clr-namespace:ErogeHelper.XamlTool.Behaviors"
-    xmlns:component="clr-namespace:ErogeHelper.Components"
+    xmlns:component="clr-namespace:ErogeHelper.XamlTool.Components"
+    xmlns:tool="clr-namespace:ErogeHelper.XamlTool"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Items;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="500">

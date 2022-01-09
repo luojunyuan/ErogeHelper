@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
-    xmlns:behavior="clr-namespace:ErogeHelper.XamlTool.Behaviors"
+    xmlns:tool="clr-namespace:ErogeHelper.XamlTool"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Items;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DesignHeight="200" d:DesignWidth="300">
@@ -28,7 +28,7 @@
             </StackPanel>
             <TextBox x:Name="TotalText"
                 MaxHeight="150"
-                behavior:ScrollToEndBehavior.TextChanged="True"
+                tool:ScrollToEndBehavior.TextChanged="True"
                 d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
                 AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" />
         </StackPanel>

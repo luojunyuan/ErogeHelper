@@ -5,7 +5,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 
-namespace ErogeHelper.Components;
+namespace ErogeHelper.XamlTool.Components;
 
 // https://stackoverflow.com/questions/93650/apply-stroke-to-a-textblock-in-wpf
 [ContentProperty(nameof(Text))]
@@ -22,9 +22,7 @@ public class OutlinedTextBlock : FrameworkElement
         };
 
         if (StrokeOutside)
-        {
             _pen.Thickness = StrokeThickness * 2;
-        }
 
         InvalidateVisual();
     }
@@ -206,16 +204,12 @@ public class OutlinedTextBlock : FrameworkElement
         drawingContext.DrawGeometry(Fill, null, _textGeometry);
 
         if (StrokeOutside)
-        {
             drawingContext.PushClip(_clipGeometry);
-        }
 
         drawingContext.DrawGeometry(null, _pen, _textGeometry);
 
         if (StrokeOutside)
-        {
             drawingContext.Pop();
-        }
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -278,9 +272,7 @@ public class OutlinedTextBlock : FrameworkElement
     private void EnsureFormattedText()
     {
         if (_formattedText != null)
-        {
             return;
-        }
 
         _formattedText = new FormattedText(
             Text,
@@ -296,9 +288,7 @@ public class OutlinedTextBlock : FrameworkElement
     private void UpdateFormattedText()
     {
         if (_formattedText == null)
-        {
             return;
-        }
 
         _formattedText.MaxLineCount = TextWrapping == TextWrapping.NoWrap ? 1 : int.MaxValue;
         _formattedText.TextAlignment = TextAlignment;
@@ -315,15 +305,11 @@ public class OutlinedTextBlock : FrameworkElement
     private void EnsureGeometry()
     {
         if (_textGeometry != null)
-        {
             return;
-        }
 
         EnsureFormattedText();
         if (_formattedText is null)
-        {
             throw new ArgumentNullException(nameof(_formattedText));
-        }
         _textGeometry = _formattedText.BuildGeometry(new Point(0, 0));
 
         if (StrokeOutside)

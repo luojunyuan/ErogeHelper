@@ -4,7 +4,7 @@ using ErogeHelper.ViewModel.Items;
 using ReactiveUI;
 using Splat;
 
-namespace ErogeHelper.Functions;
+namespace ErogeHelper.Platform.RxUI;
 
 internal class ItemViewLocator : IViewLocator, IEnableLogger
 {

@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
-    xmlns:behavior="clr-namespace:ErogeHelper.XamlTool.Behaviors"
+    xmlns:tool="clr-namespace:ErogeHelper.XamlTool"
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:validation="clr-namespace:ErogeHelper.XamlTool.Validations"
