@@ -48,7 +48,6 @@ public class TextractorCli : ITextractorService, IEnableLogger
             Directory.GetCurrentDirectory(),
             "libs",
             isX86 ? "x86" : "x64",
-            "cli",
             "TextractorCLI.exe");
 
         ProcessStartInfo processStartInfo = new ProcessStartInfo()

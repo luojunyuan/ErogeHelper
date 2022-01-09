@@ -55,16 +55,28 @@
     <Resource Include="assets\app.png" />
   </ItemGroup>
 
+  <Target Name="TextHostX64" Condition="'$(Platform)' == 'AnyCPU'" AfterTargets="Build">
+    <Move SourceFiles="$(OutDir)libs\x64\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
+  </Target>
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
-    <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\texthost.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\x86\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\x64\TextractorCLI.exe" />
+    <Delete Files="$(PublishDir)libs\x86\TextractorCLI.exe" />
   </Target>
 
   <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
-    <Copy SourceFiles="$(OutDir)libs\texthost_x86.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
-    <Delete Files="$(OutDir)libs\texthost_x86.dll" />
+    <Move SourceFiles="$(OutDir)libs\x86\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
   </Target>
   <Target Name="TextHostX86-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'" AfterTargets="Publish">
-    <Copy SourceFiles="$(PublishDir)libs\texthost_x86.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
-    <Delete Files="$(PublishDir)libs\texthost_x86.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\texthost.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\x64\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\x64\TextractorCLI.exe" />
+    <Delete Files="$(PublishDir)libs\x86\TextractorCLI.exe" />
+  </Target>
+
+  <Target Name="TextractorCLI-Publish" Condition="'$(RuntimeIdentifier)' == 'win-arm64'" AfterTargets="Publish">
+    <Delete Files="$(PublishDir)libs\x64\texthost.dll" />
+    <Delete Files="$(PublishDir)libs\x86\texthost.dll" />
   </Target>
 </Project>
