@@ -24,9 +24,10 @@
     <Grid>
         <Border x:Name="PreventFalseTouchMask"
             BorderBrush="Black" BorderThickness="5"
-            Opacity="{StaticResource MinimalOpacity}" />
+            Opacity="{StaticResource MinimalOpacity}"
+            Visibility="Collapsed" />
 
-        <maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" />
+        <maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" Visibility="Collapsed" />
 
         <rxui:ViewModelViewHost x:Name="AssistiveTouchHost" />
     </Grid>

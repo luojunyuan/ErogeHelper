@@ -52,6 +52,7 @@ internal static class DI
             () => new GameInfoRepository(EHContext.DbConnectString));
         Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
+
         // In memory state
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
         Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
@@ -96,7 +97,6 @@ internal static class DI
     {
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
-        Locator.CurrentMutable.RegisterLazySingleton(() => new TouchToolBoxViewModel());
 
         Locator.CurrentMutable.Register(() => new TextViewModel());
 

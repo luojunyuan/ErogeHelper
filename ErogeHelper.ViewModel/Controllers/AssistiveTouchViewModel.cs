@@ -35,7 +35,6 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         IGameInfoRepository? ehDbRepository = null,
         ITouchConversionHooker? touchConversionHooker = null,
         IGameWindowHooker? gameWindowHooker = null,
-        TouchToolBoxViewModel? touchToolBoxViewModel = null,
         IWindowDataService? windowDataService = null)
     {
         _ehConfigRepository = ehConfigDataService ?? DependencyResolver.GetService<IEHConfigRepository>();
@@ -43,17 +42,13 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
-        touchToolBoxViewModel ??= DependencyResolver.GetService<TouchToolBoxViewModel>();
         windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
 
         AssistiveTouchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>
             (_ehConfigRepository.AssistiveTouchPosition) ?? AssistiveTouchPosition.Default;
         var disposables = new CompositeDisposable();
-
-#if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
-        touchConversionHooker.Init();
         touchConversionHooker.DisposeWith(disposables);
-#endif
+
         ShowAssistiveTouch = true;
         SwitchFullScreenIcon = SymbolName.FullScreen;
         SwitchFullScreenToolTip = Strings.GameView_SwitchFullScreen;
@@ -103,13 +98,13 @@ public class AssistiveTouchViewModel : ReactiveObject, IActivatableViewModel, IE
         this.WhenAnyValue(x => x.LoseFocusEnable)
             .ToPropertyEx(this, x => x.TouchBoxSwitcherVisible);
 
-        this.WhenAnyValue(x => x.TouchBoxEnable)
-            .Skip(1)
-            .DistinctUntilChanged()
-            .Subscribe(v => _ehConfigRepository.UseTouchToolBox = v);
-        this.WhenAnyValue(x => x.LoseFocusEnable, x => x.TouchBoxEnable, (a, b) => a && b)
-            .ToPropertyEx(touchToolBoxViewModel, x => x.TouchToolBoxVisible)
-            .DisposeWith(disposables);
+        //this.WhenAnyValue(x => x.TouchBoxEnable)
+        //    .Skip(1)
+        //    .DistinctUntilChanged()
+        //    .Subscribe(v => _ehConfigRepository.UseTouchToolBox = v);
+        //this.WhenAnyValue(x => x.LoseFocusEnable, x => x.TouchBoxEnable, (a, b) => a && b)
+        //    .ToPropertyEx(touchToolBoxViewModel, x => x.TouchToolBoxVisible)
+        //    .DisposeWith(disposables);
 
         this.WhenAnyValue(x => x.IsTouchToMouse)
             .Skip(1)

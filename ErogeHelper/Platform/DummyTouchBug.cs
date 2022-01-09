@@ -1,8 +1,7 @@
 ﻿using System.Windows;
-using ErogeHelper.Platform;
 using ErogeHelper.ViewModel;
 
-namespace ErogeHelper.Functions;
+namespace ErogeHelper.Platform;
 
 public class DummyTouchBug : Window
 {

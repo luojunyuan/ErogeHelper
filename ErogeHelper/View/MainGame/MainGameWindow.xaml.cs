@@ -63,9 +63,9 @@ public partial class MainGameWindow : IEnableLogger
                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
 
 
-            //this.OneWayBind(ViewModel,
-            //   vm => vm.AssistiveTouchViewModel,
-            //   v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+               vm => vm.AssistiveTouchViewModel,
+               v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
         });
     }
 

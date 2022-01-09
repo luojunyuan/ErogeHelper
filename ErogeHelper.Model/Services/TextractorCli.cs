@@ -43,8 +43,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
         Injected = true;
 
         _gameDataService = gameDataService;
-        // CODESMELL: Operate _gameProcesses in IsX86Process() function
-        bool isX86 = GameProcesses.ToList().Any(p => IsX86Process(p));
+        bool isX86 = GameProcesses.Any(p => IsX86Process(p));
 
         var textractorCliPath = Path.Combine(
             Directory.GetCurrentDirectory(),
@@ -102,9 +101,9 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
     }
 
-    public void RemoveHook(long address) => throw new NotImplementedException();
-    public void RemoveUselessHooks() => throw new NotImplementedException();
-    public void SearchRCode(string text) => throw new NotImplementedException();
+    public void RemoveHook(long address) => throw new InvalidOperationException();
+    public void RemoveUselessHooks() => throw new InvalidOperationException();
+    public void SearchRCode(string text) => throw new InvalidOperationException();
 
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {
@@ -117,6 +116,8 @@ public class TextractorCli : ITextractorService, IEnableLogger
 
         var regex = new Regex(@"\[(?<time>.*?):(?<pid>.*?):(?<addr>.*?):(?<ctx>.*?):(?<ctx2>.*?):(?<name>.*?):(?<hcode>.*?)\] (?<text>.*)");
         var match = regex.Match(outputData);
+
+        var sentence = RemoveRepeatChar(match.Groups[8].Value);
         var hp = new HookParam()
         {
             Handle = Convert.ToInt64(match.Groups[1].Value, 16),
@@ -126,7 +127,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
             Ctx2 = Convert.ToInt64(match.Groups[5].Value, 16),
             Name = match.Groups[6].Value,
             HookCode = match.Groups[7].Value,
-            Text = match.Groups[8].Value
+            Text = sentence
         };
 
         _dataSubj.OnNext(hp);
@@ -155,7 +156,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
     }
 
-    private bool IsX86Process(Process process)
+    private static bool IsX86Process(Process process)
     {
         // 32 bit system must be x86 process
         if (!Environment.Is64BitOperatingSystem)
@@ -173,14 +174,51 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
         catch (InvalidOperationException ex)
         {
-            GameProcesses.Remove(process);
             LogHost.Default.Debug(ex.Message);
         }
         catch (Exception ex)
         {
-            LogHost.Default.Fatal(ex.ToString());
+            LogHost.Default.Debug(ex.ToString());
         }
 
         return runningInWow64;
+    }
+
+    private static string RemoveRepeatChar(string sentence)
+    {
+        int[] repeatNumbers = new int[sentence.Length + 1];
+        var repeatNumber = 1;
+        var prevChar = '\0';
+        foreach (var nextChar in sentence)
+        {
+            if (nextChar == prevChar)
+            {
+                repeatNumber += 1;
+            }
+            else
+            {
+                prevChar = nextChar;
+                repeatNumbers[repeatNumber] += 1;
+                repeatNumber = 1;
+            }
+        }
+        var (_, index) = repeatNumbers.Select((n, i) => (n, i)).Max();
+        if (index == 1)
+            return sentence;
+
+        var newSentence = string.Empty;
+        for (int i = 0; i < sentence.Length;)
+        {
+            newSentence += sentence[i];
+            for (int j = i; j <= sentence.Length; ++j)
+            {
+                if (j == sentence.Length || sentence[i] != sentence[j])
+                {
+                    i += (j - i) % repeatNumber == 0 ? repeatNumber : 1;
+                    break;
+                }
+            }
+        }
+        return newSentence;
     }
 }

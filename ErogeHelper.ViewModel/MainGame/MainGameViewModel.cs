@@ -18,12 +18,12 @@ namespace ErogeHelper.ViewModel.MainGame;
 
 public class MainGameViewModel : ReactiveObject, IDisposable
 {
-    public void UpdateDpi(double dpi) => _windowState.UpdateDpi(dpi);
-    public void InitMainWindowHandle(HWND handle) => _windowState.InitMainWindowHandle(handle);
+    public void UpdateDpi(double dpi) => _windowDataService.UpdateDpi(dpi);
+    public void InitMainWindowHandle(HWND handle) => _windowDataService.InitMainWindowHandle(handle);
 
-    public AssistiveTouchViewModel AssistiveTouchViewModel { get; }
+    public AssistiveTouchViewModel? AssistiveTouchViewModel { get; }
 
-    private readonly IWindowDataService _windowState;
+    private readonly IWindowDataService _windowDataService;
 
     public MainGameViewModel(
         AssistiveTouchViewModel? assistiveTouchViewModel = null,
@@ -33,12 +33,13 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         IGameDataService? gameDataService = null,
         IWindowDataService? windowDataService = null)
     {
-        AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
+        //AssistiveTouchViewModel = assistiveTouchViewModel ?? DependencyResolver.GetService<AssistiveTouchViewModel>();
+        AssistiveTouchViewModel = assistiveTouchViewModel;
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
-        _windowState = windowDataService ?? DependencyResolver.GetService<IWindowDataService>();
+        _windowDataService = windowDataService ?? DependencyResolver.GetService<IWindowDataService>();
 
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -53,10 +54,10 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameWindowHooker.GamePosUpdated
             .Subscribe(pos =>
             {
-                Height = pos.Height / _windowState.Dpi;
-                Width = pos.Width / _windowState.Dpi;
-                Left = pos.Left / _windowState.Dpi;
-                Top = pos.Top / _windowState.Dpi;
+                Height = pos.Height / _windowDataService.Dpi;
+                Width = pos.Width / _windowDataService.Dpi;
+                Left = pos.Left / _windowDataService.Dpi;
+                Top = pos.Top / _windowDataService.Dpi;
             }).DisposeWith(_disposables);
 
         gameWindowHooker.WhenViewOperated
@@ -86,8 +87,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             .DistinctUntilChanged()
             .Where(on => on)
             .SelectMany(interval)
-            .Where(_ => !_windowState.MainWindowHandle.IsNull)
-            .Subscribe(_ => User32.BringWindowToTop(_windowState.MainWindowHandle));
+            .Where(_ => !_windowDataService.MainWindowHandle.IsNull)
+            .Subscribe(_ => User32.BringWindowToTop(_windowDataService.MainWindowHandle));
 
         #endregion
 
@@ -103,13 +104,13 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
             if (ehDbRepository.GameInfo.IsLoseFocus)
             {
-                HwndTools.WindowLostFocus(_windowState.MainWindowHandle, ehDbRepository.GameInfo.IsLoseFocus);
+                HwndTools.WindowLostFocus(_windowDataService.MainWindowHandle, ehDbRepository.GameInfo.IsLoseFocus);
             }
         });
 
         // HACK: EH may receive the dpi changed event faster than the game initialization
         // when starting for the first time 
-        _windowState.DpiChanged
+        _windowDataService.DpiChanged
             .SelectMany(_ => Observable
                 .Start(() => Unit.Default)
                 .SubscribeOn(RxApp.TaskpoolScheduler)

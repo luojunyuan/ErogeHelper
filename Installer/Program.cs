@@ -1,7 +1,4 @@
-﻿// dotnet publish .\Installer\Installer.csproj -c Release -r win-x64 --self-contained -o ./bin/Publish -p:IsPublishable=true
-// rm .\bin\Installer.deps.json
-// rm .\bin\Installer.runtimeconfig.json
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 var IsOrAfter1809 = Environment.OSVersion.Version >= new Version(10, 0, 18363);
 var directories = Directory.GetDirectories(Directory.GetCurrentDirectory());
