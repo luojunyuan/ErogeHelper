@@ -34,6 +34,7 @@ public class MeCabWinRTService : IMeCabService
     {
         ArgumentNullException.ThrowIfNull(MeCabWordWinRTCallback, nameof(MeCabWordWinRTCallback));
 
+        // TODO: Fix Japanese words when length bigger than 100
         if (sentence.Length > 100)
         {
             sentence = sentence[..100];

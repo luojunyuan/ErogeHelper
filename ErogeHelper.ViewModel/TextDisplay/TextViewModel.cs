@@ -76,8 +76,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         textractorService.SelectedData
             .Where(_ => ehConfigRepository.HideTextWindow != true && ehConfigRepository.EnableMeCab)
             .Select(hp => _currentText = hp.Text)
-            // TODO: Toast: Japanese can be only analyzed in 100 words
-            .Do(text => _ = text.Length > 100 ? Unit.Default : Unit.Default)
             .Select(sentence => mecabService
                 .GenerateMeCabWords(sentence).Select(item => new FuriganaItemViewModel()
                 {
@@ -94,7 +92,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             }).DisposeWith(_disposables);
 
         // Relocate position
-        // TODO: Relocating position when dpi changed (or move between monitors)
+        // TODO: Relocating TextWindow position when dpi changed (or move between monitors)
         gameDataService.GameFullscreenChanged
             .Where(_ => !TextWindowHandle.IsNull)
             .ObserveOn(RxApp.MainThreadScheduler)

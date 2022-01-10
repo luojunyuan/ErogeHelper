@@ -45,7 +45,7 @@ public class HCodeViewModel : ReactiveValidationObject
 
     public ReactiveCommand<Unit, string> SearchCode { get; }
 
-    // TODO: Imporve code regexp
+    // TODO: Imporve hook code regexp check
     private bool CodeValidateRegExp(string? code)
     {
         // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
