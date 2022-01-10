@@ -109,8 +109,8 @@ public class TextractorCli : ITextractorService, IEnableLogger
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {
         if (e.Data is not string outputData ||
-              !outputData.StartsWith('[') ||
-              outputData.Length > 500)
+            !outputData.StartsWith('[') ||
+            outputData.Length > 5000)
         {
             return;
         }

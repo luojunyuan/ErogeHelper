@@ -12,7 +12,7 @@
     <Platforms>AnyCPU;x86</Platforms>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRun>false</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>
@@ -63,6 +63,8 @@
     <Delete Files="$(PublishDir)libs\x86\texthost.dll" />
     <Delete Files="$(PublishDir)libs\x64\TextractorCLI.exe" />
     <Delete Files="$(PublishDir)libs\x86\TextractorCLI.exe" />
+    <Move SourceFiles="$(PublishDir)libs\Installer.exe" DestinationFiles="$(PublishDir)..\Installer.exe" />
+    <Move SourceFiles="$(PublishDir)libs\ProcessSelector.exe" DestinationFiles="$(PublishDir)..\ProcessSelector.exe" />
   </Target>
 
   <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">

@@ -14,12 +14,12 @@
 
     <StackPanel>
         <!--  Kana Part  -->
-        <component:OutlinedTextBlock x:Name="Kana"
+        <!--<component:OutlinedTextBlock x:Name="Kana"
             HorizontalAlignment="Center"
             d:FontSize="32" d:Text="かな" ClipToBounds="False" Fill="White"
             FontFamily="ＭＳ ゴシック"
             FontSize="{Binding ElementName=TextItem, Path=FontSize, Converter={StaticResource FontSizeHalfConverter}}"
-            StrokeOutside="True" StrokeThickness="1.5" Text="" />
+            StrokeOutside="True" StrokeThickness="1.5" Text="" />-->
         <!--<component:OutlinedTextBlock
             Fill="White" FontSize="32" StrokeOutside="False" StrokeThickness="0.1"
             Text="かな" />
@@ -32,11 +32,11 @@
                 <ImageBrush x:Name="MojiBackgroundColor" Opacity="1" />
             </Border.Background>
 
-            <component:OutlinedTextBlock x:Name="TextItem"
+            <!--<component:OutlinedTextBlock x:Name="TextItem"
                 HorizontalAlignment="Center"
                 d:FontSize="64" d:Text="仮名" ClipToBounds="False" Fill="White"
                 FontFamily="ＭＳ ゴシック" Stroke="Black" StrokeOutside="True" StrokeThickness="1.5"
-                Text="" />
+                Text="" />-->
         </Border>
 
     </StackPanel>

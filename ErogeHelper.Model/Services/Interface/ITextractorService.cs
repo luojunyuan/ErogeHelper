@@ -20,6 +20,8 @@ public interface ITextractorService
     /// </summary>
     void InjectProcesses(IGameDataService? gameDataService = null);
 
+    /// <param name="hookcode">if there is : and suffix with exe, the executable name must be file name. 
+    /// How about .log?</param>
     void InsertHook(string hookcode);
 
     void SearchRCode(string text);

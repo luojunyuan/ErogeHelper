@@ -49,7 +49,8 @@ public partial class App : IEnableLogger
                     return;
                 }
 
-                var gameFullPath = string.Join(" ", args);
+                //var gameFullPath = string.Join(" ", args);
+                var gameFullPath = args[0];
                 if (gameFullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                 {
                     MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
@@ -199,8 +200,8 @@ public partial class App : IEnableLogger
             Width = 300,
         };
 
-        TaskDialogButton clipboardButton = new(Strings.OokiiDialog_ClipboardLabel);
-        TaskDialogButton okButton = new(ButtonType.Ok);
+        var clipboardButton = new TaskDialogButton(Strings.OokiiDialog_ClipboardLabel);
+        var okButton = new TaskDialogButton(ButtonType.Ok);
         dialog.Buttons.Add(clipboardButton);
         dialog.Buttons.Add(okButton);
         var clicked = dialog.ShowDialog();
