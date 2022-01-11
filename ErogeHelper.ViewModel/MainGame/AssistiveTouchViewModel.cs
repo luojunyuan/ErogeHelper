@@ -12,12 +12,10 @@ namespace ErogeHelper.ViewModel.MainGame;
 
 public class AssistiveTouchViewModel : ReactiveObject, IDisposable
 {
-    public AssistiveTouchViewModel(
-        IEHConfigRepository? ehConfigRepository = null)
+    public AssistiveTouchViewModel(IEHConfigRepository? ehConfigRepository = null)
     {
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
 
-        ShowAssistiveTouch = true;
         AssistiveTouchPosition = JsonSerializer.Deserialize<AssistiveTouchPosition>
             (ehConfigRepository.AssistiveTouchPosition) ?? AssistiveTouchPosition.Default;
 
@@ -29,11 +27,7 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
     }
 
     [Reactive]
-    public bool ShowAssistiveTouch { get; set; }
-
-    [Reactive]
     public AssistiveTouchPosition AssistiveTouchPosition { get; set; }
-
 
     private readonly CompositeDisposable _disposables = new();
     public void Dispose() => _disposables.Dispose();

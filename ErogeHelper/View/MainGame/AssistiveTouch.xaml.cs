@@ -48,12 +48,6 @@ namespace ErogeHelper.View.MainGame
         private double _oneThirdDistance;
         private double _twoThirdDistance;
 
-        private AssistiveTouchPosition TouchPosition
-        {
-            get => ViewModel!.AssistiveTouchPosition;
-            set => ViewModel!.AssistiveTouchPosition = value;
-        }
-
         public AssistiveTouch()
         {
             InitializeComponent();
@@ -286,6 +280,12 @@ namespace ErogeHelper.View.MainGame
                 TouchButtonCorner.Bottom => new Thickness(horizontalScaleMargin, bottomLineMargin, 0, 0),
                 _ => throw new InvalidOperationException(),
             };
+        }
+
+        public AssistiveTouchPosition TouchPosition
+        {
+            get => ViewModel!.AssistiveTouchPosition;
+            set => ViewModel!.AssistiveTouchPosition = value;
         }
 
         private Point _newPos; // The position of the button after the left mouse button is released

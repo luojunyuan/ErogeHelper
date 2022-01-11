@@ -8,9 +8,9 @@ namespace ErogeHelper.ViewModel
     public static class State
     {
         /// <summary>
-        /// Indicates the screen DPI where MainGameWindow is located
+        /// Indicates the screen DPI where game window is located
         /// </summary>
-        public static double Dpi { get; private set; } = 1;
+        public static double Dpi { get; private set; }
 
         /// <summary>
         /// Occurs when the dpi of game's screen changed
