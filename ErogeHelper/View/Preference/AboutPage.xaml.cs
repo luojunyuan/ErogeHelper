@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using ErogeHelper.ViewModel.Preference;
@@ -47,6 +48,15 @@ public partial class AboutPage
             this.BindCommand(ViewModel,
                 vm => vm.Update,
                 v => v.UpdateButton).DisposeWith(d);
+
+            this.BindInteraction(ViewModel,
+               vm => vm.AppExit,
+               context =>
+               {
+                   App.Terminate();
+                   context.SetOutput(Unit.Default);
+                   return Task.CompletedTask;
+               }).DisposeWith(d);
         });
     }
 

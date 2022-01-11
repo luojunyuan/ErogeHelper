@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using Splat;
 
-namespace ErogeHelper.XamlTool.Validations;
+namespace ErogeHelper.Platform.XamlTool.Validations;
 
 public class RegExpValidationRule : ValidationRule, IEnableLogger
 {

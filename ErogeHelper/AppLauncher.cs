@@ -13,10 +13,12 @@ using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Languages;
+using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
@@ -49,6 +51,7 @@ public class AppLauncher
 
         // Game hook and transparent MainGameWindow is the core of EH
         gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
+        State.UpdateDpi(Screen.FromHandle(gameDataService.GameRealWindowHandle.DangerousGetHandle()).ScaleFactor);
         DI.ShowView<MainGameViewModel>();
 
         // Optional functions
@@ -76,7 +79,6 @@ public class AppLauncher
         string gamePath, bool leEnable)
     {
         var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
-        var windowDataService = DependencyResolver.GetService<IWindowDataService>();
         var gameDir = Path.GetDirectoryName(gamePath);
         ArgumentNullException.ThrowIfNull(gameDir);
 
@@ -141,7 +143,7 @@ public class AppLauncher
             x => SystemEvents.DisplaySettingsChanged += x,
             x => SystemEvents.DisplaySettingsChanged -= x)
             .Select(_ => Unit.Default);
-        var dpiChanged = windowDataService.DpiChanged
+        var dpiChanged = State.DpiChanged
             .DistinctUntilChanged()
             .Select(_ => Unit.Default);
         #endregion

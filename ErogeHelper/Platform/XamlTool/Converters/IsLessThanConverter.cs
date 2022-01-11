@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace ErogeHelper.XamlTool.Converters;
+namespace ErogeHelper.Platform.XamlTool.Converters;
 
 public class IsLessThanConverter : IValueConverter
 {

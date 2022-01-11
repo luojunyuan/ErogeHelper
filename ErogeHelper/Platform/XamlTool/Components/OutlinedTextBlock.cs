@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace ErogeHelper.XamlTool.Components;
+namespace ErogeHelper.Platform.XamlTool.Components;
 
 //[ContentProperty(nameof(Text))]
 public class OutlinedTextBlock : FrameworkElement

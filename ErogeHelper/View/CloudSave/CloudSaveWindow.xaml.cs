@@ -1,8 +1,8 @@
 ﻿using ErogeHelper.Shared;
-using ErogeHelper.ViewModel;
+using ErogeHelper.ViewModel.CloudSave;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Windows;
+namespace ErogeHelper.View.CloudSave;
 
 public partial class CloudSaveWindow
 {

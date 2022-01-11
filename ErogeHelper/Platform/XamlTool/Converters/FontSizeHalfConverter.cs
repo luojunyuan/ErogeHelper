@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace ErogeHelper.XamlTool.Converters;
+namespace ErogeHelper.Platform.XamlTool.Converters;
 
 public class FontSizeHalfConverter : MarkupExtension, IValueConverter
 {

@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace ErogeHelper.XamlTool.Converters;
+namespace ErogeHelper.Platform.XamlTool.Converters;
 
 public class TextEvaluateConverter : IValueConverter
 {

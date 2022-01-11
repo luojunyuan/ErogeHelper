@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace ErogeHelper.XamlTool.Components;
+namespace ErogeHelper.Platform.XamlTool.Components;
 
 public static class ScrollViewerHelper
 {

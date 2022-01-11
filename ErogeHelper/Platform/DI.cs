@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Reactive;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Config.Net;
@@ -14,12 +13,14 @@ using ErogeHelper.Platform.RxUI;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
+using ErogeHelper.View.CloudSave;
 using ErogeHelper.View.Dialogs;
 using ErogeHelper.View.Items;
 using ErogeHelper.View.MainGame;
 using ErogeHelper.View.Pages;
 using ErogeHelper.View.Windows;
 using ErogeHelper.ViewModel;
+using ErogeHelper.ViewModel.CloudSave;
 using ErogeHelper.ViewModel.HookConfig;
 using ErogeHelper.ViewModel.MainGame;
 using ErogeHelper.ViewModel.Preference;
@@ -138,13 +139,6 @@ internal static class DI
 
     private static void RegisterInteractions()
     {
-        Interactions.TerminateApp
-            .RegisterHandler(context =>
-            {
-                App.Terminate();
-                context.SetOutput(Unit.Default);
-            });
-
         Interactions.MessageBoxConfirm
             .RegisterHandler(context =>
             {

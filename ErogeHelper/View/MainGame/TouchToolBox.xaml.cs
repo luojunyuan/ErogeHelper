@@ -8,6 +8,9 @@ namespace ErogeHelper.View.MainGame;
 
 public partial class TouchToolBox
 {
+    //<!--  TODO: Use a window instead  -->
+    //<!--<maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" Visibility="Collapsed" />-->
+    //this.WhenAnyValue(x => x.Menu.LoseFocusEnable, x => x.Menu.TouchBoxEnable, (a, b) => a && b)
     public TouchToolBox()
     {
         InitializeComponent();

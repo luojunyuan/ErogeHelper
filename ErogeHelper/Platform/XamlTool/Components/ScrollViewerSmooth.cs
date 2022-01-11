@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace ErogeHelper.XamlTool.Components;
+namespace ErogeHelper.Platform.XamlTool.Components;
 
 /// <summary>
 /// Smooth move animation for ScrollViewer
@@ -19,7 +19,9 @@ public class ScrollViewerSmooth : ScrollViewer
 
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
-        if (e.Handled) return; ScrollViewerHelper.OnMouseWheel(this, e);
+        if (e.Handled) 
+            return; 
+        ScrollViewerHelper.OnMouseWheel(this, e);
         e.Handled = true;
     }
 }

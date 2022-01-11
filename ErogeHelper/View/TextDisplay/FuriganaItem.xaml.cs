@@ -1,5 +1,5 @@
 ﻿using System.Reactive.Disposables;
-using ErogeHelper.XamlTool;
+using ErogeHelper.Platform.XamlTool;
 using ReactiveUI;
 
 namespace ErogeHelper.View.Items;

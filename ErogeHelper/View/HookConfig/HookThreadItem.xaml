@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
-    xmlns:tool="clr-namespace:ErogeHelper.XamlTool"
+    xmlns:tool="clr-namespace:ErogeHelper.Platform.XamlTool"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DesignHeight="200" d:DesignWidth="300">

@@ -27,8 +27,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         IGameDataService? gameDataService = null,
         IGameWindowHooker? gameWindowHooker = null,
         IMeCabService? mecabService = null,
-        IGameInfoRepository? gameInfoRepository = null,
-        IWindowDataService? windowDataService = null)
+        IGameInfoRepository? gameInfoRepository = null)
     {
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
@@ -36,7 +35,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         mecabService ??= DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
 
         WindowWidth = ehConfigRepository.TextWindowWidth;
         WindowOpacity = ehConfigRepository.TextWindowOpacity;
@@ -57,8 +55,8 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Where(_ => ehConfigRepository.HideTextWindow != true && _currentText != string.Empty)
             .Subscribe(pos =>
             {
-                Left += pos.HorizontalChange / windowDataService.Dpi;
-                Top += pos.VerticalChange / windowDataService.Dpi;
+                Left += pos.HorizontalChange / State.Dpi;
+                Top += pos.VerticalChange / State.Dpi;
             }).DisposeWith(_disposables);
 
         void SideCheck()
@@ -67,7 +65,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
             if (_hasNotShowedUp)
             {
-                MoveToGameCenter(gameWindowHooker, WindowWidth, windowDataService.Dpi);
+                MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
                 _showSubj.OnNext(Unit.Default);
                 _hasNotShowedUp = false;
             }
@@ -109,10 +107,9 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
                 }
 
-                MoveToGameCenter(gameWindowHooker, WindowWidth, windowDataService.Dpi);
+                MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
             }).DisposeWith(_disposables);
-        windowDataService
-            .DpiChanged
+        State.DpiChanged
             .Subscribe(x => MoveToGameCenter(gameWindowHooker, WindowWidth, x))
             .DisposeWith(_disposables);
 

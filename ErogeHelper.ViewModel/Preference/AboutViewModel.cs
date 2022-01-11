@@ -82,7 +82,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
             .Where(downloadFinished => downloadFinished)
             .Subscribe(_ =>
             {
-                Interactions.TerminateApp.Handle(Unit.Default).Subscribe();
+                AppExit.Handle(Unit.Default).Subscribe();
 
                 if (Utils.IsFileInUse(
                         Path.Combine(AppContext.BaseDirectory, "ErogeHelper.ShellMenuHandler.dll")))
@@ -117,6 +117,8 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
     public ReactiveCommand<Unit, (string, Color, bool)> CheckUpdate { get; }
 
     public ReactiveCommand<Unit, Unit> Update { get; }
+
+    public Interaction<Unit, Unit> AppExit { get; set; } = new();
 
     private static void DoUpdate(bool previewVersion)
     {

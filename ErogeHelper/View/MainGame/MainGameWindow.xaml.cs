@@ -21,11 +21,10 @@ public partial class MainGameWindow : IEnableLogger
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
 
-        ViewModel ??= DependencyResolver.GetService<MainGameViewModel>();
-        ViewModel.InitMainWindowHandle(handle);
+        ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
         this.Events().Loaded
-            .Select(_ => Unit.Default)
+            .Select(_ => handle)
             .InvokeCommand(this, x => x.ViewModel!.Loaded);
 
         this.WhenActivated(d =>
@@ -56,16 +55,6 @@ public partial class MainGameWindow : IEnableLogger
                 vm => vm.ShowEdgeTouchMask,
                 v => v.PreventFalseTouchMask.Visibility,
                 value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
-
-            this.OneWayBind(ViewModel,
-               vm => vm.TouchToolBoxVisible,
-               v => v.TouchToolBox.Visibility,
-               value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
-
-
-            this.OneWayBind(ViewModel,
-               vm => vm.AssistiveTouchViewModel,
-               v => v.AssistiveTouchHost.ViewModel).DisposeWith(d);
         });
     }
 
@@ -78,5 +67,5 @@ public partial class MainGameWindow : IEnableLogger
     }
 
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
-        ViewModel!.UpdateDpi(e.NewDpi.DpiScaleX);
+        State.UpdateDpi(e.NewDpi.DpiScaleX);
 }
