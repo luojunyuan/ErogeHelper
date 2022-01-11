@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.WinUI.Notifications;
@@ -95,7 +96,15 @@ public partial class App : IEnableLogger
 
         if (exitCode != 1 && Utils.HasWinRT)
         {
-            ToastNotificationManagerCompat.History.Clear();
+            try
+            {
+                ToastNotificationManagerCompat.History.Clear();
+            }
+            catch(COMException ex)
+            {
+                // When first time run on early system like 1507 1511 would throw error #16
+                LogHost.Default.Debug(ex.Message);
+            }
         }
 
         if (exitCode == -1)

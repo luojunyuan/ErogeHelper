@@ -9,7 +9,7 @@ namespace ErogeHelper.Model.Services;
 
 public class MeCabWinRTService : IMeCabService
 {
-    public static Func<string, IEnumerable<MeCabWord>>? MeCabWordWinRTCallback { private get; set; }
+    public static Func<string, IEnumerable<MeCabWord>> JapaneseAnalyzerCallback { private get; set; } = null!;
 
     public bool Loaded => true;
 
@@ -32,14 +32,12 @@ public class MeCabWinRTService : IMeCabService
 
     private IEnumerable<MeCabWord> MeCabWordWinRTEnumerable(string sentence)
     {
-        ArgumentNullException.ThrowIfNull(MeCabWordWinRTCallback, nameof(MeCabWordWinRTCallback));
-
         // TODO: Fix Japanese words when length bigger than 100
         if (sentence.Length > 100)
         {
             sentence = sentence[..100];
         }
-        foreach (var mecabWord in MeCabWordWinRTCallback(sentence))
+        foreach (var mecabWord in JapaneseAnalyzerCallback(sentence))
         {
             var kana = " "; // full-width space to force render it
             if (_configRepository.KanaRuby == KanaRuby.Romaji)

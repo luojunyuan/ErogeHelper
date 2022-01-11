@@ -24,5 +24,7 @@ namespace ErogeHelper.ViewModel
             Dpi = newDpi;
             _dpiSubj.OnNext(newDpi);
         }
+
+        public static Func<IntPtr, double> GetDpiFromViewCallback { get; set; } = null!;
     }
 }

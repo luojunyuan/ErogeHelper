@@ -32,6 +32,7 @@ using ReactiveUI;
 using Refit;
 using Splat;
 using Vanara.PInvoke.NetListMgr;
+using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper.Platform;
@@ -73,7 +74,7 @@ internal static class DI
         if (Utils.HasWinRT)
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
-            MeCabWinRTService.MeCabWordWinRTCallback = WinRTHelper.JapaneseAnalyzer;
+            MeCabWinRTService.JapaneseAnalyzerCallback = WinRTHelper.JapaneseAnalyzer;
         }
         else
         {
@@ -88,6 +89,9 @@ internal static class DI
         {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
         }
+
+        // ViewModel->View callback 
+        State.GetDpiFromViewCallback = GetDpiFromView;
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -227,4 +231,6 @@ internal static class DI
         // Note: May be the reason of ScrollViewer bug
         runner.MigrateUp();
     }
+
+    private static double GetDpiFromView(IntPtr handle) => Screen.FromHandle(handle).ScaleFactor;
 }

@@ -8,4 +8,6 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=maingame:AssistiveTouchViewModel}"
     HorizontalAlignment="Left" VerticalAlignment="Top"
-    Template="{StaticResource NormalAssistiveTouchTemplate}" />
+    Stylus.IsPressAndHoldEnabled="False" Stylus.IsTapFeedbackEnabled="False"
+    Template="{StaticResource NormalAssistiveTouchTemplate}"
+    Visibility="Collapsed" />

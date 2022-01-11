@@ -48,7 +48,7 @@ public static class ToastManagement
         if (Utils.HasWinRT)
         {
             new ToastContentBuilder()
-                .AddText("ErogeHelper is running in Admin")
+                .AddText(mainText)
                 .Show(toast =>
                 {
                     toast.Group = "eh";
@@ -65,7 +65,7 @@ public static class ToastManagement
         else
         {
             DesktopNotifier.ShowInformation(
-                "ErogeHelper is running in Admin",
+                mainText,
                 new MessageOptions { ShowCloseButton = false, FreezeOnMouseEnter = false });
         }
     }

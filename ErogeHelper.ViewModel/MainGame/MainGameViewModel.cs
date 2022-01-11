@@ -38,6 +38,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameWindowHooker.GamePosUpdated
             .Subscribe(pos =>
             {
+                this.Log().Debug(pos);
                 Height = pos.Height / State.Dpi;
                 Width = pos.Width / State.Dpi;
                 Left = pos.Left / State.Dpi;
@@ -92,16 +93,20 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             return Unit.Default;
         });
 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIx position on second screen first
+        // 2. test animation performance
+        // 3. opacity animation to button
         // HACK: EH may receive the dpi changed event faster than the game initialization
         // when starting for the first time 
-        State.DpiChanged
-            .SelectMany(_ => Observable
-                .Start(() => Unit.Default)
-                .SubscribeOn(RxApp.TaskpoolScheduler)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
-            .Subscribe()
-            .DisposeWith(_disposables);
+        //State.DpiChanged
+        //    .SelectMany(_ => Observable
+        //        .Start(() => Unit.Default)
+        //        .SubscribeOn(RxApp.TaskpoolScheduler)
+        //        .ObserveOn(RxApp.MainThreadScheduler)
+        //        .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
+        //    .Subscribe()
+        //    .DisposeWith(_disposables);
+        State.UpdateDpi(State.GetDpiFromViewCallback(gameDataService.GameRealWindowHandle.DangerousGetHandle()));
     }
 
     [Reactive]

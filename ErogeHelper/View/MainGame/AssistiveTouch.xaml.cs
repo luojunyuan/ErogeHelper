@@ -54,6 +54,11 @@ namespace ErogeHelper.View.MainGame
 
             ViewModel = DependencyResolver.GetService<AssistiveTouchViewModel>();
 
+            Click += (_, _) =>
+            {
+                Shared.DependencyResolver.GetService<Model.Services.Interface.IGameWindowHooker>().InvokeUpdatePosition();
+            };
+
             var disposables = new CompositeDisposable();
             Loaded += (_, _) =>
             {
@@ -61,6 +66,7 @@ namespace ErogeHelper.View.MainGame
                     ?? throw new InvalidOperationException("Control's parent must be FrameworkElement type");
 
                 UpdateButtonDiameterFields(false, TouchPosition, parent);
+                SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
                 parent.Events().SizeChanged
                     .Subscribe(_ => SetCurrentValue(MarginProperty, GetTouchMargin(_buttonSize, TouchPosition, parent)))
@@ -114,7 +120,7 @@ namespace ErogeHelper.View.MainGame
                     if (left < -_oneThirdDistance || top < -_oneThirdDistance ||
                         left > parent.ActualWidth - _twoThirdDistance || top > parent.ActualHeight - _twoThirdDistance)
                     {
-                        RaiseMouseUpEventInCode(this, parent);
+                        RaiseMouseReleaseEventInCode(this, parent);
                     }
                 });
 
@@ -213,6 +219,9 @@ namespace ErogeHelper.View.MainGame
         private static readonly double AssistiveTouchBigSize =
             (double)Application.Current.Resources["BigAssistiveTouchSize"];
 
+        /// <summary>
+        /// Initialize whole button layout values
+        /// </summary>
         private void UpdateButtonDiameterFields
             (bool isBigSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
         {
@@ -236,7 +245,7 @@ namespace ErogeHelper.View.MainGame
                            ?? throw new IOException("Cannot locate resource 'NormalAssistiveTouchTemplate'");
 #pragma warning restore IDE0051 // 删除未使用的私有成员
 
-        private static void RaiseMouseUpEventInCode(Button touch, UIElement father)
+        private static void RaiseMouseReleaseEventInCode(Button touch, UIElement father)
         {
             var timestamp = new TimeSpan(DateTime.Now.Ticks).Milliseconds;
 
@@ -249,16 +258,22 @@ namespace ErogeHelper.View.MainGame
             father.RaiseEvent(mouseUpEvent);
         }
 
+        private static readonly ThicknessAnimation MoveMarginAnimation = new()
+        {
+            Duration = TimeSpan.FromMilliseconds(300)
+        };
+
         private static void SmoothMoveAnimation(Button touch, double left, double top)
         {
-            var marginAnimation = new ThicknessAnimation
+            //MoveMarginAnimation.SetCurrentValue(ThicknessAnimation.FromProperty, touch.Margin);
+            //MoveMarginAnimation.SetCurrentValue(ThicknessAnimation.ToProperty, new Thickness(left, top, 0, 0));
+            var moveAnimation = new ThicknessAnimation
             {
                 From = touch.Margin,
                 To = new Thickness(left, top, 0, 0),
                 Duration = TimeSpan.FromMilliseconds(300)
             };
-
-            touch.BeginAnimation(MarginProperty, marginAnimation);
+            touch.BeginAnimation(MarginProperty, moveAnimation);
         }
 
         private static Thickness GetTouchMargin(
