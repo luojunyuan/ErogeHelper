@@ -8,6 +8,9 @@ namespace ErogeHelper.View.MainGame;
 
 public partial class TouchToolBox
 {
+    private const int PressEnterKeyIntervalTime = 25;
+
+    private const int PressFirstKeyLagTime = 500;
     //<!--  TODO: Use a window instead  -->
     //<!--<maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" Visibility="Collapsed" />-->
     //this.WhenAnyValue(x => x.Menu.LoseFocusEnable, x => x.Menu.TouchBoxEnable, (a, b) => a && b)
@@ -17,7 +20,7 @@ public partial class TouchToolBox
 
         _enterHolder = new DispatcherTimer
         {
-            Interval = TimeSpan.FromMilliseconds(ConstantValue.PressEnterKeyIntervalTime)
+            Interval = TimeSpan.FromMilliseconds(PressEnterKeyIntervalTime)
         };
         _enterHolder.Tick += async (_, _) =>
             await WindowsInput.Simulate.Events()
@@ -55,7 +58,7 @@ public partial class TouchToolBox
         _enterIsHolded = true;
         await WindowsInput.Simulate.Events()
             .Click(KeyCode.Enter)
-            .Wait(ConstantValue.PressFirstKeyLagTime)
+            .Wait(PressFirstKeyLagTime)
             .Invoke().ConfigureAwait(false);
         if (_enterIsHolded)
         {

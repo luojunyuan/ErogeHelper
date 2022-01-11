@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using ErogeHelper.Shared;
-using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.ViewModel.MainGame;
 using ReactiveMarbles.ObservableEvents;
@@ -37,9 +36,13 @@ namespace ErogeHelper.View.MainGame
         }
         #endregion
 
-        private const double OpacityValue = 0.4;
-        private const double OpacityNormal = 1;
+        private const double OpacityHalf = 0.4;
+        private const double OpacityFull = 1;
         private const double ButtonSpace = 2;
+
+        private const double TouchReleaseToEdgeDuration = 300;
+        private const double TouchTransformDuration = 200;
+        private const double OpacityChangeDuration = 5000;
 
         // The diameter of button use for mouse releasing
         private double _buttonSize;
@@ -50,19 +53,15 @@ namespace ErogeHelper.View.MainGame
 
         public AssistiveTouch()
         {
+            // TODO: button can not be selected by keyboard
             InitializeComponent();
 
             ViewModel = DependencyResolver.GetService<AssistiveTouchViewModel>();
 
-            Click += (_, _) =>
-            {
-                Shared.DependencyResolver.GetService<Model.Services.Interface.IGameWindowHooker>().InvokeUpdatePosition();
-            };
-
             var disposables = new CompositeDisposable();
             Loaded += (_, _) =>
             {
-                var parent = Parent as FrameworkElement 
+                var parent = Parent as FrameworkElement
                     ?? throw new InvalidOperationException("Control's parent must be FrameworkElement type");
 
                 UpdateButtonDiameterFields(false, TouchPosition, parent);
@@ -71,16 +70,16 @@ namespace ErogeHelper.View.MainGame
                 parent.Events().SizeChanged
                     .Subscribe(_ => SetCurrentValue(MarginProperty, GetTouchMargin(_buttonSize, TouchPosition, parent)))
                     .DisposeWith(disposables);
-            
+
                 #region Opacity Adjust
                 Point lastPos;
                 var isMoving = false;
                 BehaviorSubject<bool> tryTransparentizeSubj = new(true);
                 tryTransparentizeSubj
-                    .Throttle(TimeSpan.FromMilliseconds(ConstantValue.AssistiveTouchOpacityChangedTime))
+                    .Throttle(TimeSpan.FromMilliseconds(OpacityChangeDuration))
                     .ObserveOn(RxApp.MainThreadScheduler)
                     .Where(on => on && isMoving == false) //&& AssistiveTouchMenu.IsOpen == false)
-                    .Subscribe(_ => SetCurrentValue(OpacityProperty, OpacityValue));
+                    .Subscribe(_ => BeginAnimation(OpacityProperty, FadeOpacityAnimation));
 
                 //AssistiveTouchMenu.Events().Closed
                 //    .Subscribe(_ => tryTransparentizeSubj.OnNext(true))
@@ -95,7 +94,7 @@ namespace ErogeHelper.View.MainGame
 
                 updateStatusWhenMouseDown.Subscribe(evt =>
                 {
-                    SetCurrentValue(OpacityProperty, OpacityNormal);
+                    SetCurrentValue(OpacityProperty, OpacityFull);
                     isMoving = true;
                     tryTransparentizeSubj.OnNext(true);
                     lastPos = evt.GetPosition(parent);
@@ -214,6 +213,13 @@ namespace ErogeHelper.View.MainGame
             this.WhenActivated(d => { });
         }
 
+        private static readonly DoubleAnimation FadeOpacityAnimation = new()
+        {
+            From = OpacityFull,
+            To = OpacityHalf,
+            Duration = TimeSpan.FromMilliseconds(TouchTransformDuration)
+        };
+
         private static readonly double AssistiveTouchSize =
             (double)Application.Current.Resources["AssistiveTouchSize"];
         private static readonly double AssistiveTouchBigSize =
@@ -258,20 +264,13 @@ namespace ErogeHelper.View.MainGame
             father.RaiseEvent(mouseUpEvent);
         }
 
-        private static readonly ThicknessAnimation MoveMarginAnimation = new()
-        {
-            Duration = TimeSpan.FromMilliseconds(300)
-        };
-
         private static void SmoothMoveAnimation(Button touch, double left, double top)
         {
-            //MoveMarginAnimation.SetCurrentValue(ThicknessAnimation.FromProperty, touch.Margin);
-            //MoveMarginAnimation.SetCurrentValue(ThicknessAnimation.ToProperty, new Thickness(left, top, 0, 0));
             var moveAnimation = new ThicknessAnimation
             {
                 From = touch.Margin,
                 To = new Thickness(left, top, 0, 0),
-                Duration = TimeSpan.FromMilliseconds(300)
+                Duration = TimeSpan.FromMilliseconds(TouchReleaseToEdgeDuration)
             };
             touch.BeginAnimation(MarginProperty, moveAnimation);
         }

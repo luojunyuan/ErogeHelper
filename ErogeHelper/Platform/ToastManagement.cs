@@ -2,7 +2,6 @@
 using System.Security.Principal;
 using CommunityToolkit.WinUI.Notifications;
 using ErogeHelper.Shared;
-using ErogeHelper.Shared.Contracts;
 using Splat;
 using ToastNotifications;
 using ToastNotifications.Core;
@@ -14,6 +13,8 @@ namespace ErogeHelper.Platform;
 
 public static class ToastManagement
 {
+    private const int ToastDurationTime = 5000;
+
     // Tip: CustomNotification
     // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
     private static readonly Notifier DesktopNotifier = new(cfg =>
@@ -25,7 +26,7 @@ public static class ToastManagement
                 offsetY: 12);
 
         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-            notificationLifetime: TimeSpan.FromMilliseconds(ConstantValue.ToastDurationTime),
+            notificationLifetime: TimeSpan.FromMilliseconds(ToastDurationTime),
             maximumNotificationCount: MaximumNotificationCount.UnlimitedNotifications());
 
         cfg.DisplayOptions.TopMost = true;
@@ -59,7 +60,7 @@ public static class ToastManagement
                     //toast.ExpirationTime = DateTime.Now.AddSeconds(5);
                 });
 
-            Thread.Sleep(ConstantValue.ToastDurationTime);
+            Thread.Sleep(ToastDurationTime);
             ToastNotificationManagerCompat.History.Clear();
         }
         else
@@ -87,8 +88,8 @@ public static class ToastManagement
                 });
 
             toastLifetimeTimer.Restart();
-            await Task.Delay(ConstantValue.ToastDurationTime).ConfigureAwait(false);
-            if (toastLifetimeTimer.ElapsedMilliseconds >= ConstantValue.ToastDurationTime)
+            await Task.Delay(ToastDurationTime).ConfigureAwait(false);
+            if (toastLifetimeTimer.ElapsedMilliseconds >= ToastDurationTime)
             {
                 ToastNotificationManagerCompat.History.Clear();
                 toastLifetimeTimer.Stop();

@@ -6,7 +6,6 @@ using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
-using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -17,6 +16,8 @@ namespace ErogeHelper.ViewModel.MainGame;
 
 public class MainGameViewModel : ReactiveObject, IDisposable
 {
+    private const int GameFullscreenStatusRefreshTime = 200;
+
     public MainGameViewModel(
         IEHConfigRepository? ehConfigRepository = null,
         IGameWindowHooker? gameWindowHooker = null,
@@ -30,6 +31,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
 
+        State.UpdateDpi(State.GetDpiFromViewCallback(gameDataService.GameRealWindowHandle.DangerousGetHandle()));
+
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
             .ToPropertyEx(this, x => x.ShowEdgeTouchMask)
@@ -38,7 +41,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameWindowHooker.GamePosUpdated
             .Subscribe(pos =>
             {
-                this.Log().Debug(pos);
                 Height = pos.Height / State.Dpi;
                 Width = pos.Width / State.Dpi;
                 Left = pos.Left / State.Dpi;
@@ -65,7 +67,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         var stayTopSubj = new Subject<bool>();
 
         var interval = Observable
-            .Interval(TimeSpan.FromMilliseconds(ConstantValue.GameFullscreenStatusRefreshTime))
+            .Interval(TimeSpan.FromMilliseconds(GameFullscreenStatusRefreshTime))
             .TakeUntil(stayTopSubj.Where(on => !on));
 
         stayTopSubj
@@ -80,6 +82,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameDataService.GameFullscreenChanged
             .Do(isFullscreen => this.Log().Debug("Game fullscreen: " + isFullscreen))
             // TODO: Turn off focus if exit fullscreen
+            // TODO: May need re-locate button position
             .Subscribe(isFullscreen => stayTopSubj.OnNext(isFullscreen))
             .DisposeWith(_disposables);
 
@@ -93,20 +96,16 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             return Unit.Default;
         });
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! FIx position on second screen first
-        // 2. test animation performance
-        // 3. opacity animation to button
         // HACK: EH may receive the dpi changed event faster than the game initialization
         // when starting for the first time 
-        //State.DpiChanged
-        //    .SelectMany(_ => Observable
-        //        .Start(() => Unit.Default)
-        //        .SubscribeOn(RxApp.TaskpoolScheduler)
-        //        .ObserveOn(RxApp.MainThreadScheduler)
-        //        .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
-        //    .Subscribe()
-        //    .DisposeWith(_disposables);
-        State.UpdateDpi(State.GetDpiFromViewCallback(gameDataService.GameRealWindowHandle.DangerousGetHandle()));
+        State.DpiChanged
+            .SelectMany(_ => Observable
+                .Start(() => Unit.Default)
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(_ => gameWindowHooker.InvokeUpdatePosition()))
+            .Subscribe()
+            .DisposeWith(_disposables);
     }
 
     [Reactive]

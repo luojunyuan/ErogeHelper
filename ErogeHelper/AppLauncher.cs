@@ -9,7 +9,6 @@ using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
-using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Languages;
@@ -18,7 +17,6 @@ using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
-using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
@@ -160,6 +158,8 @@ public class AppLauncher
             .Subscribe(_ => App.Terminate());
     }
 
+    private const int WaitNWJSGameStartDelayTime = 7000;
+
     /// <returns>Return LE if enabled</returns>
     private static Process? RunGame(string gamePath, bool leEnable)
     {
@@ -195,7 +195,7 @@ public class AppLauncher
             // Wait for nw.js based game start multi-process
             if (File.Exists(Path.Combine(gameDir, "nw.pak")))
             {
-                Thread.Sleep(ConstantValue.WaitNWJSGameStartDelayTime);
+                Thread.Sleep(WaitNWJSGameStartDelayTime);
             }
         }
 

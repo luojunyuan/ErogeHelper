@@ -12,17 +12,9 @@ public static class ConstantValue
 
     public const int UserTimerMinimum = 0x0000000A;
 
-    public const int PressEnterKeyIntervalTime = 25;
-
     public const int UIMinimumResponseTime = 50;
 
-    public const int MouseDownUpIntervalTime = 50;
-
     public const int TextractorReAttachBlockTime = 100;
-
-    public const int GameFullscreenStatusRefreshTime = 200;
-
-    public const int PressFirstKeyLagTime = 500;
 
     public const int UserConfigOperationDelayTime = 500;
 
@@ -30,13 +22,7 @@ public static class ConstantValue
 
     public const int ScreenShotHideButtonTime = 3000;
 
-    public const int AssistiveTouchOpacityChangedTime = 5000;
-
-    public const int ToastDurationTime = 5000;
-
     public const int FullscreenDelayRefreshTime = 5000;
-
-    public const int WaitNWJSGameStartDelayTime = 7000;
 
     public const int WaitGameStartTimeout = 20000;
 
