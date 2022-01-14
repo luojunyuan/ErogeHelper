@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
@@ -10,6 +9,9 @@ using ErogeHelper.ViewModel.MainGame;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
+using Vanara.PInvoke;
+using WindowsInput.Events;
+using WindowsInput.Events.Sources;
 
 namespace ErogeHelper.View.MainGame;
 
@@ -20,6 +22,7 @@ public partial class MainGameWindow : IEnableLogger
         InitializeComponent();
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
+        var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
@@ -29,6 +32,8 @@ public partial class MainGameWindow : IEnableLogger
 
         this.WhenActivated(d =>
         {
+            keyboardDisposal.DisposeWith(d);
+
             ViewModel.HideMainWindow
                 .RegisterHandler(context => { Hide(); context.SetOutput(Unit.Default); }).DisposeWith(d);
 
@@ -58,12 +63,26 @@ public partial class MainGameWindow : IEnableLogger
         });
     }
 
-    private void HandleTabKey(object sender, KeyEventArgs e)
+    private static IDisposable DisableWinArrawResizeShotcut(HWND handle)
     {
-        if (e.Key == Key.Tab)
+        var keyboard = WindowsInput.Capture.Global.Keyboard();
+        var winLeftListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Left)) { Enabled = true };
+        var winUpListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Up)) { Enabled = true };
+        var winRightListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Right)) { Enabled = true };
+        var winDownListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Down)) { Enabled = true };
+        void winArrawDelegate(object? s, KeyChordEventArgs e)
         {
-            e.Handled = true;
+            if (User32.GetForegroundWindow() == handle)
+            {
+                e.Input.Next_Hook_Enabled = false;
+            }
         }
+        winLeftListener.Triggered += winArrawDelegate;
+        winUpListener.Triggered += winArrawDelegate;
+        winRightListener.Triggered += winArrawDelegate;
+        winDownListener.Triggered += winArrawDelegate;
+
+        return keyboard;
     }
 
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>

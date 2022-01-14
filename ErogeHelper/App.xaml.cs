@@ -100,9 +100,9 @@ public partial class App : IEnableLogger
             {
                 ToastNotificationManagerCompat.History.Clear();
             }
-            catch(COMException ex)
+            catch (COMException ex)
             {
-                // When first time run on early system like 1507 1511 would throw error #16
+                // When run on early system like 1507 1511 for the first time would throw error #16
                 LogHost.Default.Debug(ex.Message);
             }
         }

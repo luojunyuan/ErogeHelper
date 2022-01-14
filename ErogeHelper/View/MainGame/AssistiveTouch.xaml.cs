@@ -42,7 +42,7 @@ namespace ErogeHelper.View.MainGame
 
         private const double TouchReleaseToEdgeDuration = 300;
         private const double TouchTransformDuration = 200;
-        private const double OpacityChangeDuration = 5000;
+        private const double OpacityChangeDuration = 4000;
 
         // The diameter of button use for mouse releasing
         private double _buttonSize;
@@ -53,8 +53,10 @@ namespace ErogeHelper.View.MainGame
 
         public AssistiveTouch()
         {
-            // TODO: button can not be selected by keyboard
             InitializeComponent();
+
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+                return;
 
             ViewModel = DependencyResolver.GetService<AssistiveTouchViewModel>();
 
@@ -226,7 +228,7 @@ namespace ErogeHelper.View.MainGame
             (double)Application.Current.Resources["BigAssistiveTouchSize"];
 
         /// <summary>
-        /// Initialize whole button layout values
+        /// Set whole button layout values
         /// </summary>
         private void UpdateButtonDiameterFields
             (bool isBigSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
@@ -302,11 +304,21 @@ namespace ErogeHelper.View.MainGame
             set => ViewModel!.AssistiveTouchPosition = value;
         }
 
-        private Point _newPos; // The position of the button after the left mouse button is released
-#pragma warning disable IDE0052 // 删除未读的私有成员
-        private Point _oldPos; // The position of the button
-#pragma warning restore IDE0052 // 删除未读的私有成员
+        private new event EventHandler? ClickEvent;
 
-        public Action<double, Thickness>? Clicked { get; set; }
+        private Point _newPos; // The position of the button after the left mouse button is released
+        private Point _oldPos; // The position of the button
+
+        private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
+        {
+            if (_newPos.Equals(_oldPos))
+            {
+                ClickEvent?.Invoke(sender, e);
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

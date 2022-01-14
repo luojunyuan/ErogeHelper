@@ -1,4 +1,4 @@
-﻿<Button x:Name="FloatButton"
+﻿<Button
     x:Class="ErogeHelper.View.MainGame.AssistiveTouch"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=maingame:AssistiveTouchViewModel}"
     HorizontalAlignment="Left" VerticalAlignment="Top"
+    d:Visibility="Visible" Click="AssistiveTouchOnClick" Focusable="False"
     Stylus.IsPressAndHoldEnabled="False" Stylus.IsTapFeedbackEnabled="False"
     Template="{StaticResource NormalAssistiveTouchTemplate}"
     Visibility="Collapsed" />
