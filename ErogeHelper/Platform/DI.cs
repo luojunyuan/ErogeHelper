@@ -70,8 +70,9 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
 #else
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
-#endif    
-        if (Utils.HasWinRT)
+#endif
+        // QUESTION: 到底win8可以用toast这些winrt api不
+        if (Utils.HasWinRT && !Directory.Exists(EHContext.MeCabDicFolder))
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
             MeCabWinRTService.JapaneseAnalyzerCallback = WinRTHelper.JapaneseAnalyzer;
@@ -91,7 +92,6 @@ internal static class DI
         }
 
         // ViewModel->View callback 
-        State.GetDpiFromViewCallback = GetDpiFromView;
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255

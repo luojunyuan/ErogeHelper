@@ -31,8 +31,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
 
-        State.UpdateDpi(State.GetDpiFromViewCallback(gameDataService.GameRealWindowHandle.DangerousGetHandle()));
-
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
             .ToPropertyEx(this, x => x.ShowEdgeTouchMask)

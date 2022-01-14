@@ -17,6 +17,7 @@ using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
@@ -49,6 +50,7 @@ public class AppLauncher
 
         // Game hook and transparent MainGameWindow is the core of EH
         gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
+        State.UpdateDpi(Screen.FromHandle(gameDataService.GameRealWindowHandle.DangerousGetHandle()).ScaleFactor);
         DI.ShowView<MainGameViewModel>();
 
         // Optional functions

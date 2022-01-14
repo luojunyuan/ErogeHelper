@@ -23,11 +23,6 @@
     <Grid>
         <maingame:AssistiveTouch />
 
-        <!--  HACK QUESTION FIXME: This may be a dummy bug. 一些游戏处于第二屏幕时 host 让 DpiChanged 事件先于 Loaded 事件发生 dpi load dpi dpi  -->
-        <!--  如果没有 host 则为 loaded dpi，并且窗口位置计算无误，但是却无法定位到正确的位置，产生一个没有有头绪的 offset  -->
-        <!--  TODO: 找以前没有使用 host 的实现来观察 槇村葉月の恋語り 在第二块屏幕的行为  -->
-        <rxui:ViewModelViewHost Focusable="False" />
-
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"
             BorderBrush="Black" BorderThickness="5"

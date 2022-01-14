@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Media;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
@@ -23,6 +24,7 @@ public partial class MainGameWindow : IEnableLogger
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
+        VisualTreeHelper.SetRootDpi(this, new(State.Dpi, State.Dpi));
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
