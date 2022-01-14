@@ -49,7 +49,6 @@ public class TextractorHost : ITextractorService, IEnableLogger
         _removeThread = RemoveThreadHandle;
         _callback = OnConnectCallBackHandle;
 
-        // TODO: Check textractor dependency https://github.com/ErogeHelper/ErogeHelper/issues/11
         _ = TextHostDll.TextHostInit(_callback, _ => { }, _createThread, _removeThread, _output);
 
         foreach (Process p in GameProcesses)

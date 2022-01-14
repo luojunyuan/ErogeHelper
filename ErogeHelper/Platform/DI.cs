@@ -71,7 +71,6 @@ internal static class DI
 #else
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
 #endif
-        // QUESTION: 到底win8可以用toast这些winrt api不
         if (Utils.HasWinRT && !Directory.Exists(EHContext.MeCabDicFolder))
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());

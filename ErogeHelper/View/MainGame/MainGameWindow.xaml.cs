@@ -13,6 +13,7 @@ using Splat;
 using Vanara.PInvoke;
 using WindowsInput.Events;
 using WindowsInput.Events.Sources;
+using WpfScreenHelper;
 
 namespace ErogeHelper.View.MainGame;
 
@@ -24,7 +25,7 @@ public partial class MainGameWindow : IEnableLogger
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
-        VisualTreeHelper.SetRootDpi(this, new(State.Dpi, State.Dpi));
+        InitializeDpi();
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
@@ -63,6 +64,13 @@ public partial class MainGameWindow : IEnableLogger
                 v => v.PreventFalseTouchMask.Visibility,
                 value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
         });
+    }
+
+    private void InitializeDpi()
+    {
+        var dpiOfGameScreen = Screen.FromHandle(HwndTools.GetRealGameHandle()).ScaleFactor;
+        State.UpdateDpi(dpiOfGameScreen);
+        VisualTreeHelper.SetRootDpi(this, new(dpiOfGameScreen, dpiOfGameScreen));
     }
 
     private static IDisposable DisableWinArrawResizeShotcut(HWND handle)

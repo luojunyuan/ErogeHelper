@@ -94,8 +94,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             return Unit.Default;
         });
 
-        // HACK: EH may receive the dpi changed event faster than the game initialization
-        // when starting for the first time 
+        // HACK: EH receive the dpi changed event twice if game on second screen when starting
         State.DpiChanged
             .SelectMany(_ => Observable
                 .Start(() => Unit.Default)

@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Shared;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.ViewModel;
@@ -6,6 +8,9 @@ namespace ErogeHelper.ViewModel;
 // Directly reference by view so put this in viewmodel
 public static class HwndTools
 {
+    public static IntPtr GetRealGameHandle() =>
+        DependencyResolver.GetService<IGameDataService>().GameRealWindowHandle.DangerousGetHandle();
+
     public static void HideWindowInAltTab(HWND windowHandle)
     {
         const int wsExToolWindow = 0x00000080;
