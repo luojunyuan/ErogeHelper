@@ -8,6 +8,8 @@
     <system:Double x:Key="ColumnInfoThresholdWidth">850</system:Double>
     <system:Double x:Key="MinimalOpacity">0.002</system:Double>
 
+    <SolidColorBrush x:Key="AssistiveTouchMenuItemPressed" Color="#77C4F1" />
+    <SolidColorBrush x:Key="AssistiveTouchMenuItemForgroundColor" Color="#FFFFFF" />
 
     <!--  AssistiveTouch Basic  -->
     <SolidColorBrush x:Key="AssistiveTouchBackground" Color="#262626" />

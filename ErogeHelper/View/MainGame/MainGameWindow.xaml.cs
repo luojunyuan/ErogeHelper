@@ -22,10 +22,10 @@ public partial class MainGameWindow : IEnableLogger
     public MainGameWindow()
     {
         InitializeComponent();
+        InitializeDpi();
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
-        InitializeDpi();
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
@@ -97,4 +97,16 @@ public partial class MainGameWindow : IEnableLogger
 
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
         State.UpdateDpi(e.NewDpi.DpiScaleX);
+
+    private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
+    {
+        Touch.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        TouchMenu.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+    }
+
+    private void MainGameWindowOnDeactivated(object sender, EventArgs e)
+    {
+        TouchMenu.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        Touch.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+    }
 }
