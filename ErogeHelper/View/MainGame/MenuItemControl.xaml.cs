@@ -4,10 +4,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ErogeHelper.Shared.Contracts;
 using ModernWpf.Controls;
+using Splat;
 
 namespace ErogeHelper.View.MainGame;
 
-public partial class MenuItemControl : UserControl
+public partial class MenuItemControl : UserControl, IEnableLogger
 {
     #region Symbol DependencyProperty
     /// <summary>Identifies the <see cref="Symbol"/> dependency property.</summary>
@@ -78,26 +79,26 @@ public partial class MenuItemControl : UserControl
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
-    private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e)
-    {
-        ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, ItemPressedColor);
-        ItemText.SetCurrentValue(TextBlock.ForegroundProperty, ItemPressedColor);
-    }
+    private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e) =>
+        SetItemForegroundColor(ItemPressedColor);
 
-    private void ItemOnPreviewMouseLeave(object sender, MouseEventArgs e)
-    {
-        ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, Brushes.White);
-        ItemText.SetCurrentValue(TextBlock.ForegroundProperty, Brushes.White);
-    }
+    private void ItemOnPreviewMouseLeave(object sender, InputEventArgs e) => SetItemForegroundColor(Brushes.White);
 
     private void ItemOnPreviewMouseLeftButtonUp(object sender, InputEventArgs e)
     {
         if (ItemIcon.Foreground != Brushes.White)
         {
-            ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, Brushes.White);
-            ItemText.SetCurrentValue(TextBlock.ForegroundProperty, Brushes.White);
+            SetItemForegroundColor(Brushes.White);
 
             ClickEvent?.Invoke(this, e);
         }
+    }
+
+    private void ItemOnTouchUp(object sender, TouchEventArgs e) => ClickEvent?.Invoke(this, e);
+
+    private void SetItemForegroundColor(Brush color)
+    {
+        ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, color);
+        ItemText.SetCurrentValue(TextBlock.ForegroundProperty, color);
     }
 }

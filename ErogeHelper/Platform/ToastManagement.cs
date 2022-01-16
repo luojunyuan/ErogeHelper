@@ -103,7 +103,7 @@ public static class ToastManagement
         }
     }
 
-    public static void IfAdminToast()
+    public static void IfAdminThenToast()
     {
         var current = WindowsIdentity.GetCurrent();
         var windowsPrincipal = new WindowsPrincipal(current);

@@ -41,7 +41,7 @@ internal static class DI
     /// <summary>
     /// The Composite Root
     /// </summary>
-    public static void RegisterServices()
+    internal static void RegisterServices()
     {
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator());
 
@@ -177,7 +177,7 @@ internal static class DI
             });
     }
 
-    public static void ShowView<T>() where T : ReactiveObject
+    internal static void ShowView<T>() where T : ReactiveObject
     {
         var viewName = typeof(T).ToString()[..^9] // erase ViewModel suffix
             .Replace("Model", string.Empty) + "Window";
@@ -209,7 +209,7 @@ internal static class DI
         }
     }
 
-    public static void UpdateDatabase()
+    internal static void UpdateDatabase()
     {
         Directory.CreateDirectory(EHContext.RoamingEHFolder);
 
@@ -228,6 +228,25 @@ internal static class DI
         var runner = microsoftServiceProvider.GetRequiredService<IMigrationRunner>();
         // Note: May be the reason of ScrollViewer bug
         runner.MigrateUp();
+    }
+
+    /// <summary>
+    /// 聊胜于无
+    /// </summary>
+    internal static void PreLoadAssembly()
+    {
+        // Modules for loading AboutPage 
+        System.Reflection.Assembly.Load("System.Net.Http");
+        System.Reflection.Assembly.Load("System.Diagnostics.DiagnosticSource");
+        System.Reflection.Assembly.Load("System.Net.Security");
+        System.Reflection.Assembly.Load("System.Security.Cryptography.X509Certificates");
+        System.Reflection.Assembly.Load("System.Net.Http.Json");
+        System.Reflection.Assembly.Load("System.Net.NetworkInformation");
+        System.Reflection.Assembly.Load("System.Net.Sockets");
+        System.Reflection.Assembly.Load("System.Net.NameResolution");
+        System.Reflection.Assembly.Load("Splat.Drawing");
+        System.Reflection.Assembly.Load("System.Security.Cryptography.Encoding");
+        System.Reflection.Assembly.Load("UpdateChecker");
     }
 
     private static double GetDpiFromView(IntPtr handle) => Screen.FromHandle(handle).ScaleFactor;

@@ -6,23 +6,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
     mc:Ignorable="d"
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="100" d:DesignWidth="100"
+    Background="{StaticResource AssistiveTouchBackground}"
+    TouchEnter="ItemOnPreviewMouseLeftButtonDown"
+    TouchLeave="ItemOnPreviewMouseLeave" TouchUp="ItemOnTouchUp">
     <StackPanel
         Grid.Row="1" Grid.Column="2"
-        VerticalAlignment="Center"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
         MouseLeave="ItemOnPreviewMouseLeave" Orientation="Vertical"
         PreviewMouseLeftButtonDown="ItemOnPreviewMouseLeftButtonDown"
-        PreviewMouseLeftButtonUp="ItemOnPreviewMouseLeftButtonUp"
-        PreviewTouchDown="ItemOnPreviewMouseLeftButtonDown"
-        PreviewTouchUp="ItemOnPreviewMouseLeftButtonUp">
-        <Border HorizontalAlignment="Center" Background="{StaticResource AssistiveTouchBackground}">
+        PreviewMouseLeftButtonUp="ItemOnPreviewMouseLeftButtonUp">
+        <Border HorizontalAlignment="Center">
             <Viewbox x:Name="IconViewbox" Width="40">
                 <ui:SymbolIcon x:Name="ItemIcon" Foreground="White" />
             </Viewbox>
         </Border>
         <TextBlock x:Name="ItemText"
             Padding="0,4,0,0" HorizontalAlignment="Center"
-            Background="{StaticResource AssistiveTouchBackground}"
             Foreground="White" Text="Emoji" />
         <!--  Multiline  -->
         <!--<StackPanel

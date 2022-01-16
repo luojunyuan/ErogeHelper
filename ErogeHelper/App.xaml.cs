@@ -60,10 +60,11 @@ public partial class App : IEnableLogger
                 }
 
                 ToastManagement.Register();
-                ToastManagement.IfAdminToast();
+                ToastManagement.IfAdminThenToast();
                 DummyTouchBug.Fix();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
+                DI.PreLoadAssembly();
 
                 AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };

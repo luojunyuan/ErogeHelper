@@ -33,6 +33,10 @@
             SymbolExtend="Tablet" Text="Device" />
 
         <maingame:MenuItemControl
+            Grid.Row="1" Grid.Column="2"
+            Symbol="Repair" Text="Function" />
+
+        <maingame:MenuItemControl
             Grid.Row="2" Grid.Column="1"
             ClickEvent="PreferenceOnClickEvent" Symbol="Setting" Text="Preference" />
     </Grid>

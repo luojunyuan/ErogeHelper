@@ -24,7 +24,7 @@
         BottomLeft="360" BottomRight="360" TopLeft="360" TopRight="360" />
 
     <!--  AssistiveTouch Normal Style  -->
-    <system:Double x:Key="AssistiveTouchSize">55</system:Double>
+    <system:Double x:Key="AssistiveTouchSize">60</system:Double>
     <CornerRadius
         x:Key="AssistiveTouchLayerZeroCornerRadius"
         BottomLeft="13.75" BottomRight="13.75" TopLeft="13.75" TopRight="13.75" />
