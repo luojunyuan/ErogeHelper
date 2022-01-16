@@ -64,7 +64,7 @@ public partial class App : IEnableLogger
                 DummyTouchBug.Fix();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
-                DI.PreLoadAssembly();
+                DI.WarmingUp();
 
                 AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };

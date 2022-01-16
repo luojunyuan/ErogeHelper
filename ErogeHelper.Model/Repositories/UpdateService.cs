@@ -15,8 +15,8 @@ public class UpdateService : IUpdateService, IEnableLogger
         CheckUpdate(string version, bool usePreviewVersion)
     {
         var updateChecker = new GitHubReleasesUpdateChecker(
-            @"erogehelper",
-            @"erogehelper",
+            "erogehelper",
+            "erogehelper",
             usePreviewVersion,
             version,
             tag => tag.Replace(@"v", string.Empty), // Tag to version string

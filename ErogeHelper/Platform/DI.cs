@@ -30,6 +30,7 @@ using ModernWpf.Controls;
 using ReactiveUI;
 using Refit;
 using Splat;
+using UpdateChecker;
 using Vanara.PInvoke.NetListMgr;
 using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
@@ -41,7 +42,7 @@ internal static class DI
     /// <summary>
     /// The Composite Root
     /// </summary>
-    internal static void RegisterServices()
+    public static void RegisterServices()
     {
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator());
 
@@ -177,7 +178,7 @@ internal static class DI
             });
     }
 
-    internal static void ShowView<T>() where T : ReactiveObject
+    public static void ShowView<T>() where T : ReactiveObject
     {
         var viewName = typeof(T).ToString()[..^9] // erase ViewModel suffix
             .Replace("Model", string.Empty) + "Window";
@@ -209,7 +210,7 @@ internal static class DI
         }
     }
 
-    internal static void UpdateDatabase()
+    public static void UpdateDatabase()
     {
         Directory.CreateDirectory(EHContext.RoamingEHFolder);
 
@@ -230,23 +231,13 @@ internal static class DI
         runner.MigrateUp();
     }
 
-    /// <summary>
-    /// 聊胜于无
-    /// </summary>
-    internal static void PreLoadAssembly()
+    public async static void WarmingUp()
     {
-        // Modules for loading AboutPage 
-        System.Reflection.Assembly.Load("System.Net.Http");
-        System.Reflection.Assembly.Load("System.Diagnostics.DiagnosticSource");
-        System.Reflection.Assembly.Load("System.Net.Security");
-        System.Reflection.Assembly.Load("System.Security.Cryptography.X509Certificates");
-        System.Reflection.Assembly.Load("System.Net.Http.Json");
-        System.Reflection.Assembly.Load("System.Net.NetworkInformation");
-        System.Reflection.Assembly.Load("System.Net.Sockets");
-        System.Reflection.Assembly.Load("System.Net.NameResolution");
-        System.Reflection.Assembly.Load("Splat.Drawing");
-        System.Reflection.Assembly.Load("System.Security.Cryptography.Encoding");
-        System.Reflection.Assembly.Load("UpdateChecker");
+        try
+        {
+            await new GitHubReleasesUpdateChecker("erogehelper", "erogehelper", false, "9.9.9.9").CheckAsync(default);
+        }
+        catch { }
     }
 
     private static double GetDpiFromView(IntPtr handle) => Screen.FromHandle(handle).ScaleFactor;
