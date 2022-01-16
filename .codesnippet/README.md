@@ -1,1 +1,0 @@
-Copy these folder to your `C:\Users\username\Documents\Visual Studio 2022\Templates\ItemTemplates\Visual C#`
