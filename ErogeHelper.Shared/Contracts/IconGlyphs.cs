@@ -46,3 +46,9 @@ public enum SymbolName
     BackToWindow,
     FullScreen,
 }
+
+public enum SymbolExtend
+{
+    Tablet = 0xE70A,
+    TBD = 0xFFFF
+}

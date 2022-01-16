@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using ErogeHelper.Platform;
+using ErogeHelper.ViewModel.Preference;
 
 namespace ErogeHelper.View.MainGame;
 
@@ -36,4 +38,6 @@ public partial class AssistiveTouchMenu
             }
         }
     }
+
+    private void PreferenceOnClickEvent(object sender, EventArgs e) => DI.ShowView<PreferenceViewModel>();
 }

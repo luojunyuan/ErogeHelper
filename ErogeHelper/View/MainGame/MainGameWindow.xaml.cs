@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
@@ -98,6 +99,7 @@ public partial class MainGameWindow : IEnableLogger
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
         State.UpdateDpi(e.NewDpi.DpiScaleX);
 
+    // AssistiveTouch
     private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
     {
         Touch.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -108,5 +110,13 @@ public partial class MainGameWindow : IEnableLogger
     {
         TouchMenu.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         Touch.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+    }
+
+    private void TouchMenuOnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (e.OriginalSource is AssistiveTouchMenu)
+        {
+            MainGameWindowOnDeactivated(sender, e);
+        }
     }
 }

@@ -23,7 +23,7 @@
     <!--  Layout of the whole game client area  -->
     <Grid>
         <maingame:AssistiveTouch x:Name="Touch" Click="AssistiveTouchOnClick" />
-        <maingame:AssistiveTouchMenu x:Name="TouchMenu" Visibility="Collapsed" />
+        <maingame:AssistiveTouchMenu x:Name="TouchMenu" PreviewMouseLeftButtonUp="TouchMenuOnPreviewMouseLeftButtonUp" Visibility="Collapsed" />
 
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"

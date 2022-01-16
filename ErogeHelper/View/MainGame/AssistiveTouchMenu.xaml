@@ -5,13 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
     mc:Ignorable="d"
     Width="300" Height="300"
     MaxWidth="300" MaxHeight="300"
     Padding="12"
     Background="{StaticResource AssistiveTouchBackground}"
-    CornerRadius="25,25,25,25">
+    CornerRadius="25,25,25,25" Stylus.IsPressAndHoldEnabled="False"
+    Stylus.IsTapFeedbackEnabled="False">
 
     <!--  Switchable Page  -->
     <Grid>
@@ -26,21 +28,12 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0" Grid.Column="1"
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            FontSize="64" Foreground="White" Text="2" />
-        <TextBlock
-            Grid.Row="1" Grid.Column="0"
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            FontSize="64" Foreground="White" Text="4" />
-
         <maingame:MenuItemControl
-            Grid.Row="1" Grid.Column="2"
-            Symbol="Setting" Text="偏好设置" />
+            Grid.Row="0" Grid.Column="1"
+            SymbolExtend="Tablet" Text="Device" />
 
         <maingame:MenuItemControl
             Grid.Row="2" Grid.Column="1"
-            Symbol="Back" Text="返回" />
+            ClickEvent="PreferenceOnClickEvent" Symbol="Setting" Text="Preference" />
     </Grid>
 </Border>

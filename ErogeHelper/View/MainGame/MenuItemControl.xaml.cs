@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ErogeHelper.Shared.Contracts;
 using ModernWpf.Controls;
 
 namespace ErogeHelper.View.MainGame;
@@ -29,6 +30,27 @@ public partial class MenuItemControl : UserControl
         ItemIcon.SetCurrentValue(SymbolIcon.SymbolProperty, (Symbol)e.NewValue);
     #endregion
 
+    #region SymbolExtend DependencyProperty
+    /// <summary>Identifies the <see cref="SymbolExtend"/> dependency property.</summary>
+    public static readonly DependencyProperty SymbolExtendProperty = DependencyProperty.Register(
+        nameof(SymbolExtend),
+        typeof(SymbolExtend),
+        typeof(MenuItemControl),
+        new PropertyMetadata(SymbolExtend.TBD, (d, e) => ((MenuItemControl)d).OnSymbolExtendChanged(e)));
+
+    /// <summary>
+    /// Gets or sets the Segoe MDL2 Assets glyph used as the icon content.
+    /// </summary>
+    public SymbolExtend SymbolExtend
+    {
+        get => (SymbolExtend)GetValue(SymbolExtendProperty);
+        set => SetValue(SymbolExtendProperty, value);
+    }
+
+    private void OnSymbolExtendChanged(DependencyPropertyChangedEventArgs e) =>
+        ItemIcon.SetCurrentValue(SymbolIcon.SymbolProperty, (Symbol)e.NewValue);
+    #endregion
+
     #region Text DependencyProperty
     /// <summary>Identifies the <see cref="Text"/> dependency property.</summary>
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
@@ -47,29 +69,16 @@ public partial class MenuItemControl : UserControl
         ItemText.SetCurrentValue(TextBlock.TextProperty, (string)e.NewValue);
     #endregion
 
-    private event EventHandler? ClickEvent;
+    public event EventHandler? ClickEvent;
 
     public MenuItemControl()
     {
         InitializeComponent();
-
-        Loaded += (s, e) =>
-        {
-            ItemIcon.SetCurrentValue(SymbolIcon.SymbolProperty, Symbol);
-        };
-    }
-
-    private void MenuIconOnLoaded(object sender, RoutedEventArgs e)
-    {
-        if (sender is SymbolIcon menuIcon)
-        {
-            menuIcon.Symbol = Symbol;
-        }
     }
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
-    private void ItemOnPreviewMouseLeftButtonDown(object sender, MouseEventArgs e)
+    private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e)
     {
         ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, ItemPressedColor);
         ItemText.SetCurrentValue(TextBlock.ForegroundProperty, ItemPressedColor);
@@ -81,7 +90,7 @@ public partial class MenuItemControl : UserControl
         ItemText.SetCurrentValue(TextBlock.ForegroundProperty, Brushes.White);
     }
 
-    private void ItemOnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    private void ItemOnPreviewMouseLeftButtonUp(object sender, InputEventArgs e)
     {
         if (ItemIcon.Foreground != Brushes.White)
         {

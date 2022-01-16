@@ -12,10 +12,12 @@
         VerticalAlignment="Center"
         MouseLeave="ItemOnPreviewMouseLeave" Orientation="Vertical"
         PreviewMouseLeftButtonDown="ItemOnPreviewMouseLeftButtonDown"
-        PreviewMouseLeftButtonUp="ItemOnPreviewMouseLeftButtonUp">
+        PreviewMouseLeftButtonUp="ItemOnPreviewMouseLeftButtonUp"
+        PreviewTouchDown="ItemOnPreviewMouseLeftButtonDown"
+        PreviewTouchUp="ItemOnPreviewMouseLeftButtonUp">
         <Border HorizontalAlignment="Center" Background="{StaticResource AssistiveTouchBackground}">
             <Viewbox x:Name="IconViewbox" Width="40">
-                <ui:SymbolIcon x:Name="ItemIcon" Foreground="White" Loaded="MenuIconOnLoaded" />
+                <ui:SymbolIcon x:Name="ItemIcon" Foreground="White" />
             </Viewbox>
         </Border>
         <TextBlock x:Name="ItemText"
