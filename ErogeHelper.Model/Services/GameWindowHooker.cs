@@ -64,7 +64,7 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
         {
             // Do cloud save check
 
-            _gamePositionSubj.OnNext(HiddenPos);
+            mainScheduler.Schedule(() => _gamePositionSubj.OnNext(HiddenPos));
             this.Log().Debug("Detected game quit event");
             _gcSafetyHandle.Free();
             // Produce EventObjectDestroy
