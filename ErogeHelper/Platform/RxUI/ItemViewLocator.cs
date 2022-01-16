@@ -1,5 +1,5 @@
 ﻿using ErogeHelper.Shared;
-using ErogeHelper.View.Items;
+using ErogeHelper.View.TextDisplay;
 using ErogeHelper.ViewModel.TextDisplay;
 using ReactiveUI;
 using Splat;

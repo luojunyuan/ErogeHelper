@@ -1,5 +1,5 @@
 ﻿<rxui:ReactiveUserControl
-    x:Class="ErogeHelper.View.Dialogs.HCodeDialog"
+    x:Class="ErogeHelper.View.HookConfig.HCodeDialog"
     x:TypeArguments="vm:HCodeViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

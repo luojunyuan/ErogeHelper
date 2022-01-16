@@ -2,7 +2,7 @@
 using ErogeHelper.Platform.XamlTool;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Items;
+namespace ErogeHelper.View.TextDisplay;
 
 public partial class FuriganaItem
 {

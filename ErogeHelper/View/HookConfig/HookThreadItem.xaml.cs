@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Items;
+namespace ErogeHelper.View.HookConfig;
 
 public partial class HookThreadItem
 {

@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Pages;
+namespace ErogeHelper.View.Preference;
 
 public partial class GeneralPage
 {

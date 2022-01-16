@@ -6,7 +6,7 @@ using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 
-namespace ErogeHelper.View.Dialogs;
+namespace ErogeHelper.View.HookConfig;
 
 public partial class HCodeDialog
 {

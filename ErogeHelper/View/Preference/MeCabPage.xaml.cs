@@ -3,7 +3,7 @@ using System.Windows;
 using ErogeHelper.Shared.Enums;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Pages;
+namespace ErogeHelper.View.Preference;
 
 public partial class MeCabPage
 {

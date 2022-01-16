@@ -6,7 +6,7 @@ using ErogeHelper.ViewModel.Preference;
 using ReactiveUI;
 using Splat;
 
-namespace ErogeHelper.View.Pages;
+namespace ErogeHelper.View.Preference;
 
 public partial class AboutPage
 {

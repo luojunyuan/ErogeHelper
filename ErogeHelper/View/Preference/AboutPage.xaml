@@ -1,5 +1,5 @@
 ﻿<rxui:ReactiveUserControl
-    x:Class="ErogeHelper.View.Pages.AboutPage"
+    x:Class="ErogeHelper.View.Preference.AboutPage"
     x:TypeArguments="vm:AboutViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

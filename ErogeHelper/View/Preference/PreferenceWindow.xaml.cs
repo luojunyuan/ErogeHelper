@@ -8,7 +8,7 @@ using ModernWpf.Controls;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
-namespace ErogeHelper.View.Windows;
+namespace ErogeHelper.View.Preference;
 
 public partial class PreferenceWindow
 {

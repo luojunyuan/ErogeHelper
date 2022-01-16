@@ -11,7 +11,7 @@ using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 
-namespace ErogeHelper.View.Windows;
+namespace ErogeHelper.View.TextDisplay;
 
 public partial class TextWindow : IEnableLogger
 {

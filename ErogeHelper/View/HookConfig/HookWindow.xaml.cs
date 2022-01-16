@@ -4,7 +4,7 @@ using ErogeHelper.ViewModel.HookConfig;
 using ReactiveUI;
 using Splat;
 
-namespace ErogeHelper.View.Windows;
+namespace ErogeHelper.View.HookConfig;
 
 public partial class HookWindow : IEnableLogger
 {
