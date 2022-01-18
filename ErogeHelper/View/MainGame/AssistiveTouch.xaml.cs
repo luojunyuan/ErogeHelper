@@ -74,8 +74,7 @@ namespace ErogeHelper.View.MainGame
                     .DisposeWith(disposables);
 
                 #region Opacity Adjust
-                var mainGameWindow = parent.Parent as MainGameWindow
-                    ?? throw new InvalidOperationException("Parent not the MainGameWindow");
+                var mainGameWindow = (MainGameWindow)Application.Current.MainWindow;
                 Point lastPos;
                 var isMoving = false;
                 BehaviorSubject<bool> tryTransparentizeSubj = new(true);
