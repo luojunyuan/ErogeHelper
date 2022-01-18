@@ -74,18 +74,20 @@ namespace ErogeHelper.View.MainGame
                     .DisposeWith(disposables);
 
                 #region Opacity Adjust
+                var mainGameWindow = parent.Parent as MainGameWindow
+                    ?? throw new InvalidOperationException("Parent not the MainGameWindow");
                 Point lastPos;
                 var isMoving = false;
                 BehaviorSubject<bool> tryTransparentizeSubj = new(true);
                 tryTransparentizeSubj
                     .Throttle(TimeSpan.FromMilliseconds(OpacityChangeDuration))
                     .ObserveOn(RxApp.MainThreadScheduler)
-                    .Where(on => on && isMoving == false) //&& AssistiveTouchMenu.IsOpen == false)
+                    .Where(on => on && isMoving == false && mainGameWindow.TouchMenu.IsOpen == false)
                     .Subscribe(_ => BeginAnimation(OpacityProperty, FadeOpacityAnimation));
 
-                //AssistiveTouchMenu.Events().Closed
-                //    .Subscribe(_ => tryTransparentizeSubj.OnNext(true))
-                //    .DisposeWith(disposables);
+                mainGameWindow.TouchMenu.Events().Closed
+                    .Subscribe(_ => tryTransparentizeSubj.OnNext(true))
+                    .DisposeWith(disposables);
                 #endregion
 
                 #region Core Logic of Moving
@@ -214,6 +216,10 @@ namespace ErogeHelper.View.MainGame
 
             this.WhenActivated(d => { });
         }
+
+        public void Show() => SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+        public void Hide() => SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
         private static readonly DoubleAnimation FadeOpacityAnimation = new()
         {

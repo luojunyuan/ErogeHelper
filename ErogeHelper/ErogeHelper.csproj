@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>assets\app.manifest</ApplicationManifest>
     <Authors>k1mlka</Authors>
-    <Version>0.0.9.1</Version>
+    <Version>0.0.9.3</Version>
     <Platforms>AnyCPU;x86</Platforms>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

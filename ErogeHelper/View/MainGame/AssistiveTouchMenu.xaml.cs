@@ -9,6 +9,8 @@ public partial class AssistiveTouchMenu
     private const double MaxSizeOfMenu = 300;
     private const int EndureEdgeHeight = 30;
 
+    public event EventHandler? Closed;
+
     public AssistiveTouchMenu()
     {
         InitializeComponent();
@@ -20,6 +22,21 @@ public partial class AssistiveTouchMenu
 
             parent.SizeChanged += ResizeMenu;
         };
+    }
+
+    public bool IsOpen { get; private set; }
+
+    public void Show()
+    {
+        IsOpen = true;
+        SetCurrentValue(VisibilityProperty, Visibility.Visible);
+    }
+
+    public void Hide()
+    {
+        IsOpen = false;
+        SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        Closed?.Invoke(this, new());
     }
 
     private void ResizeMenu(object sender, SizeChangedEventArgs e)

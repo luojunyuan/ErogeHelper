@@ -102,14 +102,14 @@ public partial class MainGameWindow : IEnableLogger
     // AssistiveTouch
     private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
     {
-        Touch.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        TouchMenu.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        Touch.Hide();
+        TouchMenu.Show();
     }
 
     private void MainGameWindowOnDeactivated(object sender, EventArgs e)
     {
-        TouchMenu.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        Touch.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        TouchMenu.Hide();
+        Touch.Show();
     }
 
     private void TouchMenuOnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
