@@ -59,9 +59,9 @@ public partial class App : IEnableLogger
                     return;
                 }
 
+                DisablePointerMessage.Apply();
                 ToastManagement.Register();
                 ToastManagement.IfAdminThenToast();
-                DisablePointerMessage.Apply();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.WarmingUp();
