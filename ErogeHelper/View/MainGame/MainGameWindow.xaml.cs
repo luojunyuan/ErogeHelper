@@ -74,6 +74,9 @@ public partial class MainGameWindow : IEnableLogger
         VisualTreeHelper.SetRootDpi(this, new(dpiOfGameScreen, dpiOfGameScreen));
     }
 
+    private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
+        State.UpdateDpi(e.NewDpi.DpiScaleX);
+
     private static IDisposable DisableWinArrawResizeShotcut(HWND handle)
     {
         var keyboard = WindowsInput.Capture.Global.Keyboard();
@@ -96,8 +99,9 @@ public partial class MainGameWindow : IEnableLogger
         return keyboard;
     }
 
-    private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
-        State.UpdateDpi(e.NewDpi.DpiScaleX);
+
+
+
 
     // AssistiveTouch
     private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)

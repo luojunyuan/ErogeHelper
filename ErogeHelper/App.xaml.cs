@@ -61,7 +61,7 @@ public partial class App : IEnableLogger
 
                 ToastManagement.Register();
                 ToastManagement.IfAdminThenToast();
-                DummyTouchBug.Fix();
+                DisablePointerMessage.Apply();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.WarmingUp();

@@ -3,19 +3,20 @@ using ErogeHelper.ViewModel;
 
 namespace ErogeHelper.Platform;
 
-public class DummyTouchBug : Window
+public class DisablePointerMessage : Window
 {
     /// <summary>
-    /// This fix the problem of ScrollViewer can not receive Manipulation events caused by unknown reason
+    /// WPF automatically upgraded the point message for some reason, 
+    /// Creating a new window in advance can prevent this behavior.
     /// </summary>
-    public static void Fix()
+    public static void Apply()
     {
-        var dummyBug = new DummyTouchBug();
-        dummyBug.Show();
-        dummyBug.Close();
+        var workaround = new DisablePointerMessage();
+        workaround.Show();
+        workaround.Close();
     }
 
-    private DummyTouchBug()
+    private DisablePointerMessage()
     {
         Left = -32000;
         Top = -32000;
