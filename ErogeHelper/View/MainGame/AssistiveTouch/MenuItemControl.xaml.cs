@@ -75,6 +75,8 @@ public partial class MenuItemControl : UserControl, IEnableLogger
     public MenuItemControl()
     {
         InitializeComponent();
+        // TODO: 控制背景颜色，给一个开关 EnableBackGround
+        //再去page里控制所有 遍历
     }
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));

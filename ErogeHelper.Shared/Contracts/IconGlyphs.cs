@@ -50,6 +50,7 @@ public enum SymbolName
 public enum SymbolExtend
 {
     Tablet = 0xE70A,
+    Volume1 = 0xE993,
     SettingSolid = 0xF8B0,
     TBD = 0xFFFF
 }

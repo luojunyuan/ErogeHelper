@@ -40,8 +40,8 @@ namespace ErogeHelper.View.MainGame
         private const double OpacityFull = 1;
         private const double ButtonSpace = 2;
 
+        public const double TouchTransformDuration = 1200;
         private const double TouchReleaseToEdgeDuration = 300;
-        private const double TouchTransformDuration = 200;
         private const double OpacityChangeDuration = 4000;
 
         // The diameter of button use for mouse releasing
