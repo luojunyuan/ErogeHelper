@@ -4,9 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
-    xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
     mc:Ignorable="d"
     Width="300" Height="300"
     MaxWidth="300" MaxHeight="300"
@@ -16,8 +13,12 @@
     CornerRadius="25,25,25,25" Stylus.IsPressAndHoldEnabled="False"
     Stylus.IsTapFeedbackEnabled="False" Visibility="Collapsed">
 
-    <Frame x:Name="MenuContent"
-        Navigating="MenuContentOnNavigating" NavigationUIVisibility="Hidden"
-        Source="MenuMainPage.xaml" />
+    <Grid>
+        <Frame x:Name="MenuContent"
+            Navigating="MenuContentOnNavigating" NavigationUIVisibility="Hidden"
+            Source="MenuMainPage.xaml" />
+
+        <Frame x:Name="MenuSecondLayer" NavigationUIVisibility="Hidden" />
+    </Grid>
 
 </Border>

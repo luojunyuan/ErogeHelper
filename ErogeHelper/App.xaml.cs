@@ -50,7 +50,6 @@ public partial class App : IEnableLogger
                     return;
                 }
 
-                //var gameFullPath = string.Join(" ", args);
                 var gameFullPath = args[0];
                 if (gameFullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                 {

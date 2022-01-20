@@ -12,9 +12,8 @@
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
     Left="-32000" Top="-32000" Width="0" Height="0"
     Title="MainGameWindow"
-    AllowsTransparency="True" Deactivated="MainGameWindowOnDeactivated"
-    DpiChanged="MainGameWindowOnDpiChanged" ShowActivated="False"
-    ShowInTaskbar="False" Topmost="True" WindowStyle="None">
+    AllowsTransparency="True" DpiChanged="MainGameWindowOnDpiChanged"
+    ShowActivated="False" ShowInTaskbar="False" Topmost="True" WindowStyle="None">
 
     <Window.Background>
         <SolidColorBrush />
@@ -22,8 +21,8 @@
 
     <!--  Layout of the whole game client area  -->
     <Grid>
-        <maingame:AssistiveTouch x:Name="Touch" Click="AssistiveTouchOnClick" />
-        <maingame:AssistiveTouchMenu x:Name="TouchMenu" PreviewMouseLeftButtonUp="TouchMenuOnPreviewMouseLeftButtonUp" />
+        <maingame:AssistiveTouch x:Name="Touch" />
+        <maingame:AssistiveTouchMenu x:Name="TouchMenu" />
 
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"

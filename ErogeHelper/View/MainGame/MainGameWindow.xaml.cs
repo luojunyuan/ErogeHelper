@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
@@ -27,6 +26,7 @@ public partial class MainGameWindow : IEnableLogger
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
+        var touchDisposal = RegisterAssistiveTouchEvents();
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
 
@@ -37,6 +37,7 @@ public partial class MainGameWindow : IEnableLogger
         this.WhenActivated(d =>
         {
             keyboardDisposal.DisposeWith(d);
+            touchDisposal.DisposeWith(d);
 
             ViewModel.HideMainWindow
                 .RegisterHandler(context => { Hide(); context.SetOutput(Unit.Default); }).DisposeWith(d);
@@ -77,6 +78,31 @@ public partial class MainGameWindow : IEnableLogger
     private void MainGameWindowOnDpiChanged(object sender, DpiChangedEventArgs e) =>
         State.UpdateDpi(e.NewDpi.DpiScaleX);
 
+    private IDisposable RegisterAssistiveTouchEvents()
+    {
+        var disposable = new CompositeDisposable();
+        var touchMenuBaseMouseUp = TouchMenu.Events().PreviewMouseLeftButtonUp
+            .Where(e => e.OriginalSource is AssistiveTouchMenu)
+        //    ;
+
+        //this.Events().Deactivated
+        //    .Merge(touchMenuBaseMouseUp)
+            .Where(_ => !TouchMenu.IsAnimating)
+            .Subscribe(_ =>
+            {
+                TouchMenu.Hide();
+                Touch.Show();
+            }).DisposeWith(disposable);
+
+        Touch.Events().Click.Subscribe(_ =>
+        {
+            Touch.Hide();
+            TouchMenu.Show(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), 60.0);
+        }).DisposeWith(disposable);
+
+        return disposable;
+    }
+
     private static IDisposable DisableWinArrawResizeShotcut(HWND handle)
     {
         var keyboard = WindowsInput.Capture.Global.Keyboard();
@@ -97,30 +123,5 @@ public partial class MainGameWindow : IEnableLogger
         winDownListener.Triggered += winArrawDelegate;
 
         return keyboard;
-    }
-
-
-
-
-
-    // AssistiveTouch
-    private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
-    {
-        Touch.Hide();
-        TouchMenu.Show();
-    }
-
-    private void MainGameWindowOnDeactivated(object sender, EventArgs e)
-    {
-        TouchMenu.Hide();
-        Touch.Show();
-    }
-
-    private void TouchMenuOnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        if (e.OriginalSource is AssistiveTouchMenu)
-        {
-            MainGameWindowOnDeactivated(sender, e);
-        }
     }
 }

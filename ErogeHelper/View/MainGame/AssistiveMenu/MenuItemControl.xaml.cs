@@ -79,12 +79,24 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         //再去page里控制所有 遍历
     }
 
+    private static readonly SolidColorBrush AssistiveTouchBackground =
+            (SolidColorBrush)Application.Current.Resources["AssistiveTouchBackground"];
+
+    public void FillBackground(bool transparent) =>
+        SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : AssistiveTouchBackground);
+
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
     private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e) =>
         SetItemForegroundColor(ItemPressedColor);
 
     private void ItemOnPreviewMouseLeave(object sender, InputEventArgs e) => SetItemForegroundColor(Brushes.White);
+
+    private void SetItemForegroundColor(Brush color)
+    {
+        ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, color);
+        ItemText.SetCurrentValue(TextBlock.ForegroundProperty, color);
+    }
 
     private void ItemOnPreviewMouseLeftButtonUp(object sender, InputEventArgs e)
     {
@@ -97,10 +109,4 @@ public partial class MenuItemControl : UserControl, IEnableLogger
     }
 
     private void ItemOnTouchUp(object sender, TouchEventArgs e) => ClickEvent?.Invoke(this, e);
-
-    private void SetItemForegroundColor(Brush color)
-    {
-        ItemIcon.SetCurrentValue(IconElement.ForegroundProperty, color);
-        ItemText.SetCurrentValue(TextBlock.ForegroundProperty, color);
-    }
 }

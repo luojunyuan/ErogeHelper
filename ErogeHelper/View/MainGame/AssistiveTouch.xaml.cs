@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
@@ -36,13 +35,13 @@ namespace ErogeHelper.View.MainGame
         }
         #endregion
 
+        public const double TouchTransformDuration = 200;
+        private const double TouchReleaseToEdgeDuration = 300;
+        private const double OpacityChangeDuration = 4000;
+
         private const double OpacityHalf = 0.4;
         private const double OpacityFull = 1;
         private const double ButtonSpace = 2;
-
-        public const double TouchTransformDuration = 1200;
-        private const double TouchReleaseToEdgeDuration = 300;
-        private const double OpacityChangeDuration = 4000;
 
         // The diameter of button use for mouse releasing
         private double _buttonSize;
@@ -213,7 +212,7 @@ namespace ErogeHelper.View.MainGame
                 #endregion Core Logic of Moving
             };
 
-            this.WhenActivated(d => { });
+            this.WhenActivated(d => d(disposables));
         }
 
         public void Show() => SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -238,25 +237,22 @@ namespace ErogeHelper.View.MainGame
         private void UpdateButtonDiameterFields
             (bool isBigSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
         {
-            //AssistiveButton.Template = GetAssistiveTouchStyle(isBigSize);
+            SetCurrentValue(TemplateProperty, GetAssistiveTouchStyle(isBigSize));
             _buttonSize = isBigSize ? AssistiveTouchBigSize : AssistiveTouchSize;
             _distance = _buttonSize;
             _halfDistance = _distance / 2;
             _oneThirdDistance = _distance / 3;
             _twoThirdDistance = _oneThirdDistance * 2;
 
-            SetCurrentValue(MarginProperty, GetTouchMargin(_buttonSize, touchPos, parent));
+            // This would affect Margin value when first time idk why
+#pragma warning disable WPF0041 // Set mutable dependency properties using SetCurrentValue
+            Margin = GetTouchMargin(_buttonSize, touchPos, parent);
+#pragma warning restore WPF0041 // Set mutable dependency properties using SetCurrentValue
         }
 
-#pragma warning disable IDE0051 // 删除未使用的私有成员
         private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
-           useBigSize ? Application.Current.Resources["BigAssistiveTouchTemplate"]
-                           as ControlTemplate
-                           ?? throw new IOException("Cannot locate resource 'BigAssistiveTouchTemplate'")
-                      : Application.Current.Resources["NormalAssistiveTouchTemplate"]
-                           as ControlTemplate
-                           ?? throw new IOException("Cannot locate resource 'NormalAssistiveTouchTemplate'");
-#pragma warning restore IDE0051 // 删除未使用的私有成员
+           useBigSize ? (ControlTemplate)Application.Current.Resources["BigAssistiveTouchTemplate"]
+                      : (ControlTemplate)Application.Current.Resources["NormalAssistiveTouchTemplate"];
 
         private static void RaiseMouseReleaseEventInCode(Button touch, UIElement father)
         {
