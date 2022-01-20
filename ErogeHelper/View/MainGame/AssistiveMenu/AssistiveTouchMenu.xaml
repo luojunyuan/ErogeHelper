@@ -19,6 +19,10 @@
             Source="MenuMainPage.xaml" />
 
         <Frame x:Name="MenuSecondLayer" NavigationUIVisibility="Hidden" />
+
+        <UserControl x:Name="FackWhitePoint"
+            HorizontalAlignment="Right" VerticalAlignment="Bottom"
+            Template="{StaticResource NormalAssistiveTouchTemplate}" />
     </Grid>
 
 </Border>

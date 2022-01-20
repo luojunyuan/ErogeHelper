@@ -82,17 +82,14 @@ public partial class MainGameWindow : IEnableLogger
     {
         var disposable = new CompositeDisposable();
         var touchMenuBaseMouseUp = TouchMenu.Events().PreviewMouseLeftButtonUp
-            .Where(e => e.OriginalSource is AssistiveTouchMenu)
-        //    ;
+            .Where(e => e.OriginalSource is AssistiveTouchMenu);
 
-        //this.Events().Deactivated
-        //    .Merge(touchMenuBaseMouseUp)
+        TouchMenu.ShowTouchCallback = Touch.Show;
+        this.Events().Deactivated
+            .Merge(touchMenuBaseMouseUp)
             .Where(_ => !TouchMenu.IsAnimating)
-            .Subscribe(_ =>
-            {
-                TouchMenu.Hide();
-                Touch.Show();
-            }).DisposeWith(disposable);
+            .Subscribe(_ => TouchMenu.Hide(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), 60.0))
+            .DisposeWith(disposable);
 
         Touch.Events().Click.Subscribe(_ =>
         {

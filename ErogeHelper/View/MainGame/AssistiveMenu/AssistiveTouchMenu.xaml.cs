@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Reactive;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
@@ -14,11 +16,13 @@ public partial class AssistiveTouchMenu : IEnableLogger
     private const int EndureEdgeHeight = 30;
 
     public event EventHandler? Closed;
+    public Action ShowTouchCallback = null!;
 
     public AssistiveTouchMenu()
     {
         InitializeComponent();
         ApplyTouchToMenuStoryboard();
+        ApplyMenuToTouchStoryboard();
 
         Loaded += (_, _) =>
         {
@@ -46,63 +50,37 @@ public partial class AssistiveTouchMenu : IEnableLogger
         SetCurrentValue(CornerRadiusProperty, new CornerRadius(13.75));
         var relativePos = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
         SetCurrentValue(RenderTransformProperty, new TranslateTransform(relativePos.X, relativePos.Y));
+        FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
         // Set animations' target value
-        _widthAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchSize);
-        _widthAnimation.SetCurrentValue(DoubleAnimation.ToProperty, realWidth);
-        _heightAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchSize);
-        _heightAnimation.SetCurrentValue(DoubleAnimation.ToProperty, realWidth);
+        _widthShowAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchSize);
+        _widthShowAnimation.SetCurrentValue(DoubleAnimation.ToProperty, realWidth);
+        _heightShowAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchSize);
+        _heightShowAnimation.SetCurrentValue(DoubleAnimation.ToProperty, realWidth);
 
         // Show menu and begin animation
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        _touchToMenuStoryboard.Completed += (_, _) =>
-        {
-            SetCurrentValue(RenderTransformProperty, new TranslateTransform(0.0, 0.0));
-            IsAnimating = false;
-        };
+
+        // FIXME: Position is wrong when animating first time 
         _touchToMenuStoryboard.Begin();
     }
 
-    private readonly Storyboard _touchToMenuStoryboard = new() { FillBehavior = FillBehavior.Stop };
-    private readonly DoubleAnimation _widthAnimation = AnimationTool.CreateSizeChangeAnimation();
-    private readonly DoubleAnimation _heightAnimation = AnimationTool.CreateSizeChangeAnimation();
+    private Point _touchPosWhenHideAnimationComplete;
 
-    /// <summary>
-    /// Initialize menu x, y, width, height and frame animations.
-    /// </summary>
-    private void ApplyTouchToMenuStoryboard()
+    public void Hide(Point middlePoint, Point touchPos, double touchSize)
     {
-        Storyboard.SetTarget(_widthAnimation, this);
-        Storyboard.SetTargetProperty(_widthAnimation, new PropertyPath(WidthProperty));
-        _touchToMenuStoryboard.Children.Add(_widthAnimation);
-        Storyboard.SetTarget(_heightAnimation, this);
-        Storyboard.SetTargetProperty(_heightAnimation, new PropertyPath(HeightProperty));
-        _touchToMenuStoryboard.Children.Add(_heightAnimation);
+        _touchPosWhenHideAnimationComplete = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
+        FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        var menuXMoveAnimation = AnimationTool.CreateTransformMoveToZeroAnimation();
-        Storyboard.SetTarget(menuXMoveAnimation, this);
-        Storyboard.SetTargetProperty(menuXMoveAnimation, new PropertyPath(AnimationTool.XProperty));
-        _touchToMenuStoryboard.Children.Add(menuXMoveAnimation);
-        var menuYMoveAnimation = AnimationTool.CreateTransformMoveToZeroAnimation();
-        Storyboard.SetTarget(menuYMoveAnimation, this);
-        Storyboard.SetTargetProperty(menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
-        _touchToMenuStoryboard.Children.Add(menuYMoveAnimation);
+        // Set animations' target value
+        _widthHideAnimation.SetCurrentValue(DoubleAnimation.FromProperty, Width);
+        _widthHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, 60.0);
+        _heightHideAnimation.SetCurrentValue(DoubleAnimation.FromProperty, Width);
+        _heightHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, 60.0);
+        _menuXMoveAnimation.SetCurrentValue(DoubleAnimation.ToProperty, _touchPosWhenHideAnimationComplete.X);
+        _menuYMoveAnimation.SetCurrentValue(DoubleAnimation.ToProperty, _touchPosWhenHideAnimationComplete.Y);
 
-        var frameOpacityAnimation = AnimationTool.CreateFadeInAnimation();
-        Storyboard.SetTarget(frameOpacityAnimation, MenuContent);
-        Storyboard.SetTargetProperty(frameOpacityAnimation, new PropertyPath(OpacityProperty));
-        _touchToMenuStoryboard.Children.Add(frameOpacityAnimation);
-    }
-
-    public void Hide()
-    {
-        IsOpen = false;
-        IsAnimating = true;
-
-        SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        Closed?.Invoke(this, new());
-
-        IsAnimating = false;
+        _menuToTouchStoryboard.Begin();
     }
 
     private void ResizeMenu(object sender, SizeChangedEventArgs e)
@@ -121,6 +99,89 @@ public partial class AssistiveTouchMenu : IEnableLogger
             }
         }
     }
+
+    private readonly Storyboard _touchToMenuStoryboard = new() { FillBehavior = FillBehavior.Stop };
+    private readonly DoubleAnimation _widthShowAnimation = AnimationTool.SizeChangeAnimation;
+    private readonly DoubleAnimation _heightShowAnimation = AnimationTool.SizeChangeAnimation;
+
+    private readonly Storyboard _menuToTouchStoryboard = new() { FillBehavior = FillBehavior.Stop };
+    private readonly DoubleAnimation _widthHideAnimation = AnimationTool.SizeChangeAnimation;
+    private readonly DoubleAnimation _heightHideAnimation = AnimationTool.SizeChangeAnimation;
+    private DoubleAnimation _menuXMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
+    private DoubleAnimation _menuYMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
+
+    private void ApplyTouchToMenuStoryboard()
+    {
+        Storyboard.SetTarget(_widthShowAnimation, this);
+        Storyboard.SetTargetProperty(_widthShowAnimation, new PropertyPath(WidthProperty));
+        _touchToMenuStoryboard.Children.Add(_widthShowAnimation);
+        Storyboard.SetTarget(_heightShowAnimation, this);
+        Storyboard.SetTargetProperty(_heightShowAnimation, new PropertyPath(HeightProperty));
+        _touchToMenuStoryboard.Children.Add(_heightShowAnimation);
+
+        var menuXMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        Storyboard.SetTarget(menuXMoveAnimation, this);
+        Storyboard.SetTargetProperty(menuXMoveAnimation, new PropertyPath(AnimationTool.XProperty));
+        _touchToMenuStoryboard.Children.Add(menuXMoveAnimation);
+        var menuYMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        Storyboard.SetTarget(menuYMoveAnimation, this);
+        Storyboard.SetTargetProperty(menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
+        _touchToMenuStoryboard.Children.Add(menuYMoveAnimation);
+
+        var frameOpacityAnimation = AnimationTool.FadeInAnimation;
+        Storyboard.SetTarget(frameOpacityAnimation, MenuContent);
+        Storyboard.SetTargetProperty(frameOpacityAnimation, new PropertyPath(OpacityProperty));
+        _touchToMenuStoryboard.Children.Add(frameOpacityAnimation);
+
+        var fackWhitePointOpacityAnimation = AnimationTool.FadeOutAnimation;
+        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FackWhitePoint);
+        Storyboard.SetTargetProperty(fackWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        _touchToMenuStoryboard.Children.Add(fackWhitePointOpacityAnimation);
+
+        _touchToMenuStoryboard.Completed += (_, _) =>
+        {
+            SetCurrentValue(RenderTransformProperty, new TranslateTransform(0.0, 0.0));
+            FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            IsAnimating = false;
+        };
+    }
+
+    private void ApplyMenuToTouchStoryboard()
+    {
+        Storyboard.SetTarget(_widthHideAnimation, this);
+        Storyboard.SetTargetProperty(_widthHideAnimation, new PropertyPath(WidthProperty));
+        _menuToTouchStoryboard.Children.Add(_widthHideAnimation);
+        Storyboard.SetTarget(_heightHideAnimation, this);
+        Storyboard.SetTargetProperty(_heightHideAnimation, new PropertyPath(HeightProperty));
+        _menuToTouchStoryboard.Children.Add(_heightHideAnimation);
+
+        Storyboard.SetTarget(_menuXMoveAnimation, this);
+        Storyboard.SetTargetProperty(_menuXMoveAnimation, new PropertyPath(AnimationTool.XProperty));
+        _menuToTouchStoryboard.Children.Add(_menuXMoveAnimation);
+        Storyboard.SetTarget(_menuYMoveAnimation, this);
+        Storyboard.SetTargetProperty(_menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
+        _menuToTouchStoryboard.Children.Add(_menuYMoveAnimation);
+
+        var frameOpacityAnimation = AnimationTool.FadeOutAnimation;
+        Storyboard.SetTarget(frameOpacityAnimation, MenuContent);
+        Storyboard.SetTargetProperty(frameOpacityAnimation, new PropertyPath(OpacityProperty));
+        _menuToTouchStoryboard.Children.Add(frameOpacityAnimation);
+
+        var fackWhitePointOpacityAnimation = AnimationTool.FadeInAnimation;
+        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FackWhitePoint);
+        Storyboard.SetTargetProperty(fackWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        _menuToTouchStoryboard.Children.Add(fackWhitePointOpacityAnimation);
+
+        _menuToTouchStoryboard.Completed += (_, _) =>
+        {
+            ShowTouchCallback();
+            SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            Closed?.Invoke(this, new());
+            IsAnimating = IsOpen = false;
+        };
+    }
+
+
 
     // https://paulstovell.com/wpf-navigation/
     private void MenuContentOnNavigating(object sender, NavigatingCancelEventArgs e)

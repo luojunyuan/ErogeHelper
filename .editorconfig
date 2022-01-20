@@ -41,3 +41,6 @@ dotnet_sort_system_directives_first = true
 # Editor Guidelines extension
 [*.cs]
 guidelines = 120
+
+# WPF0041: Set mutable dependency properties using SetCurrentValue
+dotnet_diagnostic.WPF0041.severity = silent
