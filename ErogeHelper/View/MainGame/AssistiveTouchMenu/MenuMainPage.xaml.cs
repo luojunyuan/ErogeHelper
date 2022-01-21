@@ -21,12 +21,15 @@ public partial class MenuMainPage : Page
     {
         InitializeComponent();
         _fadeOutAnimation.Completed += (_, _) => SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        _fadeInAnimation.Completed += (_, _) => SetCurrentValue(VisibilityProperty, Visibility.Visible);
     }
 
     public void FadeOut() => BeginAnimation(OpacityProperty, _fadeOutAnimation);
 
-    public void FadeIn() => BeginAnimation(OpacityProperty, _fadeInAnimation);
+    public void FadeIn()
+    {
+        SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        BeginAnimation(OpacityProperty, _fadeInAnimation);
+    }
 
     private void PreferenceOnClickEvent(object sender, EventArgs e) => DI.ShowView<PreferenceViewModel>();
 
