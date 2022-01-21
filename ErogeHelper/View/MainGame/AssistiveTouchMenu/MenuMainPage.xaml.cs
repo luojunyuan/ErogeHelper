@@ -21,6 +21,7 @@ namespace ErogeHelper.View.MainGame
         {
             InitializeComponent();
             _fadeOutAnimation.Completed += (_, _) => SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            _fadeInAnimation.Completed += (_, _) => SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
 
         public void FadeOut() => BeginAnimation(OpacityProperty, _fadeOutAnimation);

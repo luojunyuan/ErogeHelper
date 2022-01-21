@@ -112,8 +112,12 @@ public partial class AssistiveTouchMenu : IEnableLogger
         switch (nav)
         {
             case PageTag.Device:
+                _menuMainPage.FadeOut();
+                _menuDevicePage.TransistIn();
                 break;
             case PageTag.DeviceBack:
+                _menuMainPage.FadeIn();
+                _menuDevicePage.TransistOut();
                 break;
             default:
                 break;
@@ -221,8 +225,8 @@ public partial class AssistiveTouchMenu : IEnableLogger
             Closed?.Invoke(this, new());
             IsAnimating = IsOpen = false;
 
-            MainMenu.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            DeviceMenu.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            _menuMainPage.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            _menuDevicePage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         };
     }
 }

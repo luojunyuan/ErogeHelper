@@ -16,7 +16,7 @@
     <Grid>
         <Grid x:Name="FrameBase">
             <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden" />
-            <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" Visibility="Collapsed" />
+            <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" />
         </Grid>
         <UserControl x:Name="FakeWhitePoint"
             HorizontalAlignment="Right" VerticalAlignment="Bottom"

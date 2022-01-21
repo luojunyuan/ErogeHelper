@@ -5,54 +5,76 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.View.MainGame.AssistiveMenu;
+using Splat;
 
 namespace ErogeHelper.View.MainGame
 {
-    public partial class MenuDevicePage : Page
+    public partial class MenuDevicePage : Page, IEnableLogger
     {
+        private readonly Subject<string> _pageSubject = new();
+        public IObservable<string> PageChanged => _pageSubject;
+
         public MenuDevicePage()
         {
             InitializeComponent();
             ApplyTransistionInAnimation();
         }
 
-        private readonly Subject<string> _pageSubject = new();
-        public IObservable<string> PageChanged => _pageSubject;
+        public void TransistIn()
+        {
+            SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        public readonly Storyboard TransitionInStoryboard = new();
-        private readonly TranslateTransform volumeDownTransform = new(100, 0);
-        private readonly TranslateTransform backTransform = new(0, -100);
+            VolumeDown.SetCurrentValue(RenderTransformProperty, _volumeDownTransform);
+            Back.SetCurrentValue(RenderTransformProperty, _backTransform);
+
+            _volumeDownMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, _volumeDownTransform.X);
+            _backMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, _backTransform.Y);
+
+            _transitionInStoryboard.Begin();
+        }
+
+        public void TransistOut()
+        {
+            _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, true);
+            _transitionInStoryboard.Begin();
+            _transitionInStoryboard.Seek(TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration));
+        }
+
+        private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.DeviceBack);
+
+        private readonly TranslateTransform _volumeDownTransform = new(100, 0);
+        private readonly TranslateTransform _backTransform = new(0, -100);
+
+        private readonly Storyboard _transitionInStoryboard = new();
+        private readonly DoubleAnimation _volumeDownMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        private readonly DoubleAnimation _backMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
 
         private void ApplyTransistionInAnimation()
         {
             var pageOpacityAnimation = AnimationTool.FadeInAnimation;
             Storyboard.SetTarget(pageOpacityAnimation, this);
             Storyboard.SetTargetProperty(pageOpacityAnimation, new PropertyPath(OpacityProperty));
-            TransitionInStoryboard.Children.Add(pageOpacityAnimation);
+            _transitionInStoryboard.Children.Add(pageOpacityAnimation);
 
-            //VolumeDown
-            VolumeDown.SetCurrentValue(RenderTransformProperty, volumeDownTransform);
-            var volumeDownMoveAnimation = new DoubleAnimation()
-            {
-                To = 0.0,
-                Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration)
-            };
-            Storyboard.SetTarget(volumeDownMoveAnimation, VolumeDown);
-            Storyboard.SetTargetProperty(volumeDownMoveAnimation, new PropertyPath(AnimationTool.XProperty));
-            TransitionInStoryboard.Children.Add(volumeDownMoveAnimation);
+            Storyboard.SetTarget(_volumeDownMoveAnimation, VolumeDown);
+            Storyboard.SetTargetProperty(_volumeDownMoveAnimation, new PropertyPath(AnimationTool.XProperty));
+            _transitionInStoryboard.Children.Add(_volumeDownMoveAnimation);
 
-            // Back
-            Back.SetCurrentValue(RenderTransformProperty, backTransform);
-            var backMoveAnimation = new DoubleAnimation()
+            Storyboard.SetTarget(_backMoveAnimation, Back);
+            Storyboard.SetTargetProperty(_backMoveAnimation, new PropertyPath(AnimationTool.YProperty));
+            _transitionInStoryboard.Children.Add(_backMoveAnimation);
+
+            _transitionInStoryboard.Completed += (_, _) =>
             {
-                To = 0.0,
-                Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration)
+                VolumeDown.SetCurrentValue(RenderTransformProperty, new TranslateTransform(0, 0));
+                Back.SetCurrentValue(RenderTransformProperty, new TranslateTransform(0, 0));
+
+                if (_transitionInStoryboard.AutoReverse == true)
+                {
+                    _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, false);
+                    SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                }
             };
-            Storyboard.SetTarget(backMoveAnimation, Back);
-            Storyboard.SetTargetProperty(backMoveAnimation, new PropertyPath(AnimationTool.YProperty));
-            TransitionInStoryboard.Children.Add(backMoveAnimation);
         }
-
-        private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.DeviceBack);
     }
 }

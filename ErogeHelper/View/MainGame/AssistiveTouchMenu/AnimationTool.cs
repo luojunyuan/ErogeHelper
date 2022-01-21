@@ -12,6 +12,7 @@ internal static class AnimationTool
         From = 1.0,
         To = 0.0,
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
+        FillBehavior = FillBehavior.Stop,
     };
 
     public static DoubleAnimation FadeInAnimation => new()
@@ -19,6 +20,7 @@ internal static class AnimationTool
         From = 0.0,
         To = 1.0,
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
+        FillBehavior = FillBehavior.Stop,
     };
 
     public static DoubleAnimation TransformMoveToZeroAnimation => new()
@@ -26,6 +28,7 @@ internal static class AnimationTool
         To = 0.0,
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+        FillBehavior = FillBehavior.Stop,
     };
 
     public static DoubleAnimation TransformMoveToTargetAnimation => new()
@@ -33,11 +36,13 @@ internal static class AnimationTool
         From = 0.0,
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+        FillBehavior = FillBehavior.Stop,
     };
 
     public static DoubleAnimation SizeChangeAnimation => new()
     {
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
+        FillBehavior = FillBehavior.Stop,
     };
 }
