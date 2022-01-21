@@ -17,11 +17,11 @@
                 <ComboBox x:Name="ProcessComboBox"
                     Width="240"
                     DropDownOpened="ProcessComboBoxOnDropDownOpened"
-                    ItemsSource="{Binding Processes}">
+                    SelectionChanged="ProcessComboBoxOnSelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Width="210" Orientation="Horizontal">
-                                <Image Source="{Binding Icon}" />
+                                <!--<Image Source="{Binding Icon}" />-->
                                 <TextBlock
                                     MaxWidth="180"
                                     Margin="10,0,0,0" VerticalAlignment="Center"
@@ -36,6 +36,7 @@
             <Button x:Name="InjectButton"
                 Width="240"
                 Click="InjectButtonOnClick" Content="resx:Strings.SelectProcess_InjectButton"
+                IsEnabled="False"
                 Style="{StaticResource AccentButtonStyle}" />
         </StackPanel>
     </StackPanel>

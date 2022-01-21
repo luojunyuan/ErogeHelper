@@ -12,7 +12,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:PreferenceViewModel}"
     MinWidth="400"
-    Title="{x:Static resx:Strings.GameView_Preference}"
+    Title="{x:Static resx:Strings.AssistiveTouch_Preference}"
     d:Height="500" d:Width="600" ui:TitleBar.ExtendViewIntoTitleBar="True"
     ui:WindowHelper.UseModernWindowStyle="True"
     Icon="pack://application:,,,/assets/app.ico" ResizeMode="CanResizeWithGrip"

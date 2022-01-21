@@ -1,11 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Media.Imaging;
 
-namespace ErogeHelper.ProcessSelector;
+namespace ErogeHelper.ProcessSelector.WinUI;
 
 internal class FilterProcessService
 {
@@ -48,27 +44,27 @@ internal class FilterProcessService
             .Select(p =>
             {
                 var fileName = p.MainModule?.FileName!;
-                var icon = PeIconToBitmapImage(fileName);
+                //var icon = PeIconToBitmapImage(fileName);
                 var describe = p.MainModule?.FileVersionInfo.FileDescription ?? string.Empty;
                 var title = (p.MainWindowTitle.Length > MaxTitleLength && describe != string.Empty) ?
                     describe : p.MainWindowTitle;
-                return new ProcessDataModel(p, icon, describe, title);
+                return new ProcessDataModel(p, null, describe, title);
             });
 
-    private static BitmapImage PeIconToBitmapImage(string fullPath)
-    {
-        var result = new BitmapImage();
+    //private static BitmapImage PeIconToBitmapImage(string fullPath)
+    //{
+    //    var result = new BitmapImage();
 
-        Stream stream = new MemoryStream();
+    //    Stream stream = new MemoryStream();
 
-        var iconBitmap = (Icon.ExtractAssociatedIcon(fullPath) ?? throw new InvalidOperationException()).ToBitmap();
-        iconBitmap.Save(stream, ImageFormat.Png);
-        iconBitmap.Dispose();
-        result.BeginInit();
-        result.StreamSource = stream;
-        result.EndInit();
-        result.Freeze();
+    //    var iconBitmap = (Icon.ExtractAssociatedIcon(fullPath) ?? throw new InvalidOperationException()).ToBitmap();
+    //    iconBitmap.Save(stream, ImageFormat.Png);
+    //    iconBitmap.Dispose();
+    //    result.BeginInit();
+    //    result.StreamSource = stream;
+    //    result.EndInit();
+    //    result.Freeze();
 
-        return result;
-    }
+    //    return result;
+    //}
 }

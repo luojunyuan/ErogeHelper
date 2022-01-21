@@ -253,6 +253,51 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Device 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_Device {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.Device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Function 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_Function {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.Function", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Preference 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_Preference {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.Preference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Volume Down 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_VolumeDecrease {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.VolumeDecrease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Volume Up 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_VolumeIncrease {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.VolumeIncrease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Close Card 的本地化字符串。
         /// </summary>
         public static string CardControl_CloseTip {
@@ -398,15 +443,6 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Functions... 的本地化字符串。
-        /// </summary>
-        public static string GameView_Functions {
-            get {
-                return ResourceManager.GetString("GameView.Functions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Skip too long text 的本地化字符串。
         /// </summary>
         public static string GameView_MaxLenthTip {
@@ -421,15 +457,6 @@ namespace ErogeHelper.Shared.Languages {
         public static string GameView_PinnedTip {
             get {
                 return ResourceManager.GetString("GameView.PinnedTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Preference 的本地化字符串。
-        /// </summary>
-        public static string GameView_Preference {
-            get {
-                return ResourceManager.GetString("GameView.Preference", resourceCulture);
             }
         }
         
@@ -511,24 +538,6 @@ namespace ErogeHelper.Shared.Languages {
         public static string GameView_VirtualKeyboard {
             get {
                 return ResourceManager.GetString("GameView.VirtualKeyboard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Volume down 的本地化字符串。
-        /// </summary>
-        public static string GameView_VolumeDecreaseTip {
-            get {
-                return ResourceManager.GetString("GameView.VolumeDecreaseTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Volume Up 的本地化字符串。
-        /// </summary>
-        public static string GameView_VolumeIncreaseTip {
-            get {
-                return ResourceManager.GetString("GameView.VolumeIncreaseTip", resourceCulture);
             }
         }
         
@@ -1262,7 +1271,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 You can use ErogeHelper.Installer.exe to install me~ 的本地化字符串。
+        ///   查找类似 You can also use ErogeHelper.Installer.exe to install me~ 的本地化字符串。
         /// </summary>
         public static string SelectProcess_Tips {
             get {

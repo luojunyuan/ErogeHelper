@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
-using System.Windows.Media.Imaging;
+using Microsoft.UI.Xaml.Media.Imaging;
 
-namespace ErogeHelper.ProcessSelector;
+namespace ErogeHelper.ProcessSelector.WinUI;
 
 public class ProcessDataModel : IEquatable<ProcessDataModel>
 {
-    public ProcessDataModel(Process process, BitmapImage icon, string describe, string title)
+    public ProcessDataModel(Process process, BitmapImage? icon, string describe, string title)
     {
         Proc = process;
         Icon = icon;
@@ -15,7 +15,7 @@ public class ProcessDataModel : IEquatable<ProcessDataModel>
 
     public Process Proc { get; }
 
-    public BitmapImage Icon { get; }
+    public BitmapImage? Icon { get; }
 
     public string Describe { get; }
 

@@ -121,7 +121,7 @@
     <value>Select Process</value>
   </data>
   <data name="SelectProcess.Tips" xml:space="preserve">
-    <value>You can use ErogeHelper.Installer.exe to install me~</value>
+    <value>You can also use ErogeHelper.Installer.exe to install me~</value>
   </data>
   <data name="SelectProcess.Label" xml:space="preserve">
     <value>Select Application</value>
@@ -241,7 +241,7 @@
   <data name="GameView.ScreenShot" xml:space="preserve">
     <value>ScreenShot</value>
   </data>
-  <data name="GameView.Preference" xml:space="preserve">
+  <data name="AssistiveTouch.Preference" xml:space="preserve">
     <value>Preference</value>
   </data>
   <data name="SelectProcess.ProcessExit" xml:space="preserve">
@@ -307,11 +307,11 @@
   <data name="GameView.FontIncreaseTip" xml:space="preserve">
     <value>Increase size</value>
   </data>
-  <data name="GameView.VolumeIncreaseTip" xml:space="preserve">
+  <data name="AssistiveTouch.VolumeIncrease" xml:space="preserve">
     <value>Volume Up</value>
   </data>
-  <data name="GameView.VolumeDecreaseTip" xml:space="preserve">
-    <value>Volume down</value>
+  <data name="AssistiveTouch.VolumeDecrease" xml:space="preserve">
+    <value>Volume Down</value>
   </data>
   <data name="GameView.PinnedTip" xml:space="preserve">
     <value>Unpin Japanese text</value>
@@ -522,8 +522,8 @@ Caused by source `{1}`
   <data name="GameView.TouchKeyboard" xml:space="preserve">
     <value>Touch keyboard keys</value>
   </data>
-  <data name="GameView.Functions" xml:space="preserve">
-    <value>Functions...</value>
+  <data name="AssistiveTouch.Function" xml:space="preserve">
+    <value>Function</value>
   </data>
   <data name="GameView.VirtualKeyboard" xml:space="preserve">
     <value>Virtual Keyboard</value>
@@ -579,5 +579,8 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="Common.None" xml:space="preserve">
     <value>None</value>
+  </data>
+  <data name="AssistiveTouch.Device" xml:space="preserve">
+    <value>Device</value>
   </data>
 </root>

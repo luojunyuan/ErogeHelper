@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SelectProcess.Tips" xml:space="preserve">
-    <value>请使用ErogeHelper.Installer.exe来安装我，安装后右键游戏程序选择Eroge Helper启动更方便哦~</value>
+    <value>也可以使用 Installer 来安装我，安装后右键游戏程序选择Eroge Helper启动更方便哦~</value>
   </data>
   <data name="SelectProcess.InjectButton" xml:space="preserve">
     <value>注入</value>
@@ -151,7 +151,7 @@
     <value>创建新 Issue</value>
   </data>
   <data name="Installer.Info" xml:space="preserve">
-    <value>这会将Eroge Helper注册到所有exe程序的右键上下文菜单，若要更新、移动或删除EH文件夹请先点击下方的"卸载"来注销掉我。</value>
+    <value>这会将 ErogeHelper 注册到所有exe程序的右键上下文菜单，若需要手动更新、移动或删除EH文件夹请先点击下方的"卸载"来注销掉我。</value>
   </data>
   <data name="Installer.Register" xml:space="preserve">
     <value>注册</value>
@@ -241,7 +241,7 @@
   <data name="GameView.ScreenShot" xml:space="preserve">
     <value>截图</value>
   </data>
-  <data name="GameView.Preference" xml:space="preserve">
+  <data name="AssistiveTouch.Preference" xml:space="preserve">
     <value>偏好设置</value>
   </data>
   <data name="SelectProcess.ProcessExit" xml:space="preserve">
@@ -274,11 +274,11 @@
   <data name="GameView.UnpinTip" xml:space="preserve">
     <value>固定日文文本</value>
   </data>
-  <data name="GameView.VolumeDecreaseTip" xml:space="preserve">
-    <value>减小系统音量</value>
+  <data name="AssistiveTouch.VolumeDecrease" xml:space="preserve">
+    <value>调低音量</value>
   </data>
-  <data name="GameView.VolumeIncreaseTip" xml:space="preserve">
-    <value>增加系统音量</value>
+  <data name="AssistiveTouch.VolumeIncrease" xml:space="preserve">
+    <value>调高音量</value>
   </data>
   <data name="GeneralPage.Brightness" xml:space="preserve">
     <value>亮度</value>
@@ -522,8 +522,8 @@
   <data name="GameView.TouchKeyboard" xml:space="preserve">
     <value>触控键盘按键</value>
   </data>
-  <data name="GameView.Functions" xml:space="preserve">
-    <value>功能...</value>
+  <data name="AssistiveTouch.Function" xml:space="preserve">
+    <value>功能</value>
   </data>
   <data name="GameView.VirtualKeyboard" xml:space="preserve">
     <value>虚拟键盘</value>
@@ -579,5 +579,8 @@
   </data>
   <data name="Common.None" xml:space="preserve">
     <value>无</value>
+  </data>
+  <data name="AssistiveTouch.Device" xml:space="preserve">
+    <value>设备</value>
   </data>
 </root>

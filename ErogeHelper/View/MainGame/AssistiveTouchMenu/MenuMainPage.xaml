@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
     Title="MenuMainPage"
     d:DesignHeight="300" d:DesignWidth="300">
@@ -23,14 +24,17 @@
 
         <maingame:MenuItemControl x:Name="Device"
             Grid.Row="0" Grid.Column="1"
-            ClickEvent="DeviceOnClickEvent" SymbolExtend="Tablet" Text="Device" />
+            ClickEvent="DeviceOnClickEvent" SymbolExtend="Tablet"
+            Text="{x:Static resx:Strings.AssistiveTouch_Device}" />
 
         <maingame:MenuItemControl x:Name="Function"
             Grid.Row="1" Grid.Column="2"
-            Symbol="Repair" Text="Function" />
+            Symbol="Repair"
+            Text="{x:Static resx:Strings.AssistiveTouch_Function}" />
 
         <maingame:MenuItemControl x:Name="Preference"
             Grid.Row="2" Grid.Column="1"
-            ClickEvent="PreferenceOnClickEvent" Symbol="Setting" Text="Preference" />
+            ClickEvent="PreferenceOnClickEvent" Symbol="Setting"
+            Text="{x:Static resx:Strings.AssistiveTouch_Preference}" />
     </Grid>
 </Page>

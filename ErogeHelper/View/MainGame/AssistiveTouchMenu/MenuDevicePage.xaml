@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="300" d:Visibility="Visible"
     Visibility="Collapsed">
@@ -23,11 +24,13 @@
 
         <maingame:MenuItemControl x:Name="VolumeDown"
             Grid.Row="0" Grid.Column="0"
-            SymbolExtend="Volume1" Text="Volume Down" />
+            SymbolExtend="Volume1"
+            Text="{x:Static resx:Strings.AssistiveTouch_VolumeDecrease}" />
 
         <maingame:MenuItemControl x:Name="VolumeUp"
             Grid.Row="0" Grid.Column="1"
-            Symbol="Volume" Text="Volume Up" />
+            Symbol="Volume"
+            Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
         <maingame:MenuItemControl x:Name="Back"
             Grid.Row="1" Grid.Column="1"
