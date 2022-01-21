@@ -75,8 +75,6 @@ public partial class MenuItemControl : UserControl, IEnableLogger
     public MenuItemControl()
     {
         InitializeComponent();
-        // TODO: 控制背景颜色，给一个开关 EnableBackGround
-        //再去page里控制所有 遍历
     }
 
     private static readonly SolidColorBrush AssistiveTouchBackground =

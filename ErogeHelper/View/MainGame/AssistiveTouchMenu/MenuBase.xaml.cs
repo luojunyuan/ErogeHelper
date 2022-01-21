@@ -1,9 +1,8 @@
-﻿using System.Reactive;
+﻿using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
+using ErogeHelper.Shared.Contracts;
 using ErogeHelper.View.MainGame.AssistiveMenu;
 using Splat;
 
@@ -18,11 +17,20 @@ public partial class AssistiveTouchMenu : IEnableLogger
     public event EventHandler? Closed;
     public Action ShowTouchCallback = null!;
 
+    private readonly MenuMainPage _menuMainPage = new();
+    private readonly MenuDevicePage _menuDevicePage = new();
+
     public AssistiveTouchMenu()
     {
         InitializeComponent();
+        MainMenu.Navigate(_menuMainPage);
+        DeviceMenu.Navigate(_menuDevicePage);
         ApplyTouchToMenuStoryboard();
         ApplyMenuToTouchStoryboard();
+
+        _menuMainPage.PageChanged
+            .Merge(_menuDevicePage.PageChanged)
+            .Subscribe(PageNavigation);
 
         Loaded += (_, _) =>
         {
@@ -32,7 +40,6 @@ public partial class AssistiveTouchMenu : IEnableLogger
             parent.SizeChanged += ResizeMenu;
         };
     }
-
     public bool IsOpen { get; private set; }
 
     public bool IsAnimating { get; private set; }
@@ -50,7 +57,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         SetCurrentValue(CornerRadiusProperty, new CornerRadius(13.75));
         var relativePos = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
         SetCurrentValue(RenderTransformProperty, new TranslateTransform(relativePos.X, relativePos.Y));
-        FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
         // Set animations' target value
         _widthShowAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchSize);
@@ -61,7 +68,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         // Show menu and begin animation
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        // FIXME: Position is wrong when animating first time 
+        // FIXME: Multi-Screen issue: Position is wrong when animating for the first time
         _touchToMenuStoryboard.Begin();
     }
 
@@ -70,13 +77,13 @@ public partial class AssistiveTouchMenu : IEnableLogger
     public void Hide(Point middlePoint, Point touchPos, double touchSize)
     {
         _touchPosWhenHideAnimationComplete = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
-        FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
         // Set animations' target value
         _widthHideAnimation.SetCurrentValue(DoubleAnimation.FromProperty, Width);
-        _widthHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, 60.0);
+        _widthHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, touchSize);
         _heightHideAnimation.SetCurrentValue(DoubleAnimation.FromProperty, Width);
-        _heightHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, 60.0);
+        _heightHideAnimation.SetCurrentValue(DoubleAnimation.ToProperty, touchSize);
         _menuXMoveAnimation.SetCurrentValue(DoubleAnimation.ToProperty, _touchPosWhenHideAnimationComplete.X);
         _menuYMoveAnimation.SetCurrentValue(DoubleAnimation.ToProperty, _touchPosWhenHideAnimationComplete.Y);
 
@@ -100,6 +107,19 @@ public partial class AssistiveTouchMenu : IEnableLogger
         }
     }
 
+    private void PageNavigation(string nav)
+    {
+        switch (nav)
+        {
+            case PageTag.Device:
+                break;
+            case PageTag.DeviceBack:
+                break;
+            default:
+                break;
+        }
+    }
+
     private readonly Storyboard _touchToMenuStoryboard = new() { FillBehavior = FillBehavior.Stop };
     private readonly DoubleAnimation _widthShowAnimation = AnimationTool.SizeChangeAnimation;
     private readonly DoubleAnimation _heightShowAnimation = AnimationTool.SizeChangeAnimation;
@@ -107,8 +127,8 @@ public partial class AssistiveTouchMenu : IEnableLogger
     private readonly Storyboard _menuToTouchStoryboard = new() { FillBehavior = FillBehavior.Stop };
     private readonly DoubleAnimation _widthHideAnimation = AnimationTool.SizeChangeAnimation;
     private readonly DoubleAnimation _heightHideAnimation = AnimationTool.SizeChangeAnimation;
-    private DoubleAnimation _menuXMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
-    private DoubleAnimation _menuYMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
+    private readonly DoubleAnimation _menuXMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
+    private readonly DoubleAnimation _menuYMoveAnimation = AnimationTool.TransformMoveToTargetAnimation;
 
     private void ApplyTouchToMenuStoryboard()
     {
@@ -128,20 +148,31 @@ public partial class AssistiveTouchMenu : IEnableLogger
         Storyboard.SetTargetProperty(menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
         _touchToMenuStoryboard.Children.Add(menuYMoveAnimation);
 
-        var frameOpacityAnimation = AnimationTool.FadeInAnimation;
-        Storyboard.SetTarget(frameOpacityAnimation, MenuContent);
-        Storyboard.SetTargetProperty(frameOpacityAnimation, new PropertyPath(OpacityProperty));
-        _touchToMenuStoryboard.Children.Add(frameOpacityAnimation);
+        var paddingAnimation = new ThicknessAnimation()
+        {
+            From = new(0),
+            To = new(12),
+            Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
+        };
+        Storyboard.SetTarget(paddingAnimation, this);
+        Storyboard.SetTargetProperty(paddingAnimation, new PropertyPath(PaddingProperty));
+        _touchToMenuStoryboard.Children.Add(paddingAnimation);
 
-        var fackWhitePointOpacityAnimation = AnimationTool.FadeOutAnimation;
-        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FackWhitePoint);
-        Storyboard.SetTargetProperty(fackWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
-        _touchToMenuStoryboard.Children.Add(fackWhitePointOpacityAnimation);
+        var frameBaseOpacityAnimation = AnimationTool.FadeInAnimation;
+        Storyboard.SetTarget(frameBaseOpacityAnimation, FrameBase);
+        Storyboard.SetTargetProperty(frameBaseOpacityAnimation, new PropertyPath(OpacityProperty));
+        _touchToMenuStoryboard.Children.Add(frameBaseOpacityAnimation);
+
+        var fakeWhitePointOpacityAnimation = AnimationTool.FadeOutAnimation;
+        Storyboard.SetTarget(fakeWhitePointOpacityAnimation, FakeWhitePoint);
+        Storyboard.SetTargetProperty(fakeWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        _touchToMenuStoryboard.Children.Add(fakeWhitePointOpacityAnimation);
 
         _touchToMenuStoryboard.Completed += (_, _) =>
         {
             SetCurrentValue(RenderTransformProperty, new TranslateTransform(0.0, 0.0));
-            FackWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            SetCurrentValue(PaddingProperty, new Thickness(12));
             IsAnimating = false;
         };
     }
@@ -162,13 +193,23 @@ public partial class AssistiveTouchMenu : IEnableLogger
         Storyboard.SetTargetProperty(_menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
         _menuToTouchStoryboard.Children.Add(_menuYMoveAnimation);
 
-        var frameOpacityAnimation = AnimationTool.FadeOutAnimation;
-        Storyboard.SetTarget(frameOpacityAnimation, MenuContent);
-        Storyboard.SetTargetProperty(frameOpacityAnimation, new PropertyPath(OpacityProperty));
-        _menuToTouchStoryboard.Children.Add(frameOpacityAnimation);
+        var frameBaseOpacityAnimation = AnimationTool.FadeOutAnimation;
+        Storyboard.SetTarget(frameBaseOpacityAnimation, FrameBase);
+        Storyboard.SetTargetProperty(frameBaseOpacityAnimation, new PropertyPath(OpacityProperty));
+        _menuToTouchStoryboard.Children.Add(frameBaseOpacityAnimation);
+
+        var paddingAnimation = new ThicknessAnimation()
+        {
+            From = new(12),
+            To = new(0),
+            Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
+        };
+        Storyboard.SetTarget(paddingAnimation, this);
+        Storyboard.SetTargetProperty(paddingAnimation, new PropertyPath(PaddingProperty));
+        _menuToTouchStoryboard.Children.Add(paddingAnimation);
 
         var fackWhitePointOpacityAnimation = AnimationTool.FadeInAnimation;
-        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FackWhitePoint);
+        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FakeWhitePoint);
         Storyboard.SetTargetProperty(fackWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
         _menuToTouchStoryboard.Children.Add(fackWhitePointOpacityAnimation);
 
@@ -176,47 +217,12 @@ public partial class AssistiveTouchMenu : IEnableLogger
         {
             ShowTouchCallback();
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            SetCurrentValue(PaddingProperty, new Thickness(0));
             Closed?.Invoke(this, new());
             IsAnimating = IsOpen = false;
+
+            MainMenu.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            DeviceMenu.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         };
-    }
-
-
-
-    // https://paulstovell.com/wpf-navigation/
-    private void MenuContentOnNavigating(object sender, NavigatingCancelEventArgs e)
-    {
-        if (e.Content is MenuMainPage menuMainPage)
-        {
-        }
-        else if (e.Content is MenuDevicePage menuDevicePage)
-        {
-            //var sb = e.ExtraData as Storyboard;
-            //sb.Begin();
-            menuDevicePage.DeviceStoryboard.Begin();
-            // back to the right position
-            //menuDevicePage.volumeDownTransform.SetCurrentValue(System.Windows.Media.TranslateTransform.XProperty, (double)0);
-            // 开始动画后，设置各个控件TranslateTransform的移动位置
-            this.Log().Debug("menuDevicePage");
-        }
-        else
-        {
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-            }
-        }
-        //var ta = new ThicknessAnimation();
-        //ta.Duration = TimeSpan.FromSeconds(0.3);
-        //ta.DecelerationRatio = 0.7;
-        //ta.To = new Thickness(0, 0, 0, 0);
-        //if (e.NavigationMode == NavigationMode.New)
-        //{
-        //    ta.From = new Thickness(500, 0, 0, 0);
-        //}
-        //else if (e.NavigationMode == NavigationMode.Back)
-        //{
-        //    ta.From = new Thickness(0, 0, 500, 0);
-        //}
-        //(e.Content as Page).BeginAnimation(MarginProperty, ta);
     }
 }

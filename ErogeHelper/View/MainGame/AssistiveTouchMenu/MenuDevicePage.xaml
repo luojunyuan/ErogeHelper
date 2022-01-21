@@ -30,6 +30,6 @@
 
         <maingame:MenuItemControl x:Name="Back"
             Grid.Row="1" Grid.Column="1"
-            ClickEvent="Back_ClickEvent" Symbol="Back" />
+            ClickEvent="BackOnClickEvent" Symbol="Back" />
     </Grid>
 </Page>

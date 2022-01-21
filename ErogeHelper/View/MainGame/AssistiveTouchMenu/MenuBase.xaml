@@ -14,13 +14,11 @@
     Stylus.IsTapFeedbackEnabled="False" Visibility="Collapsed">
 
     <Grid>
-        <Frame x:Name="MenuContent"
-            Navigating="MenuContentOnNavigating" NavigationUIVisibility="Hidden"
-            Source="MenuMainPage.xaml" />
-
-        <Frame x:Name="MenuSecondLayer" NavigationUIVisibility="Hidden" />
-
-        <UserControl x:Name="FackWhitePoint"
+        <Grid x:Name="FrameBase">
+            <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden" />
+            <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" Visibility="Collapsed" />
+        </Grid>
+        <UserControl x:Name="FakeWhitePoint"
             HorizontalAlignment="Right" VerticalAlignment="Bottom"
             Template="{StaticResource NormalAssistiveTouchTemplate}" />
     </Grid>
