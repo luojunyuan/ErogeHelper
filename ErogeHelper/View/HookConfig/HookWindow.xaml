@@ -42,10 +42,10 @@
                 </Grid.RowDefinitions>
 
                 <!--  Main  -->
-                <StackPanel Margin="20,10" HorizontalAlignment="Left">
+                <StackPanel Margin="20 10" HorizontalAlignment="Left">
 
                     <!--  Current Hook In Using  -->
-                    <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                    <StackPanel Margin="0 0 0 10" Orientation="Horizontal">
                         <Label Content="{x:Static resx:Strings.HookPage_HookNameLabel}" />
                         <Label x:Name="CurrentInUseHook" />
                     </StackPanel>
@@ -59,13 +59,13 @@
                                 tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True" FontSize="16"
                                 IsReadOnly="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden" />
 
-                            <Button x:Name="ReInject" Margin="0,10,0,0" Content="{x:Static resx:Strings.HookPage_ReInject}" />
+                            <Button x:Name="ReInject" Margin="0 10 0 0" Content="{x:Static resx:Strings.HookPage_ReInject}" />
                         </StackPanel>
                     </GroupBox>
 
                     <!--  RegExp  -->
-                    <Expander Margin="0,10,0,20" Header="{x:Static resx:Strings.HookPage_TextCleaning}">
-                        <StackPanel Margin="0,10">
+                    <Expander Margin="0 10 0 20" Header="{x:Static resx:Strings.HookPage_TextCleaning}">
+                        <StackPanel Margin="0 10">
 
                             <!--  Current Text  -->
                             <Label Content="{x:Static resx:Strings.HookPage_Text}" />
@@ -79,7 +79,7 @@
                             <CheckBox Content="{x:Static resx:Strings.HookPage_RegExpTag3}" />
                             <CheckBox Content="{x:Static resx:Strings.HookPage_RegExpTag4}" />
                             <CheckBox Content="{x:Static resx:Strings.HookPage_RegExpTag5}" />
-                            <Label Margin="0,10" Content="{x:Static resx:Strings.HookPage_RegExp}" />
+                            <Label Margin="0 10" Content="{x:Static resx:Strings.HookPage_RegExp}" />
                             <TextBox Width="240" HorizontalAlignment="Left">
                                 <TextBox.Text>
                                     <Binding Path="RegExp" UpdateSourceTrigger="PropertyChanged">
@@ -120,9 +120,9 @@
                                     DisplayMemberPath="EngineName" />
                                 <Button x:Name="RemoveHookButton"
                                     Width="30"
-                                    Margin="10,0,0,0"
+                                    Margin="10 0 0 0"
                                     ToolTip="{x:Static resx:Strings.HookPage_RemoveHook}">
-                                    <ui:SymbolIcon Margin="-9,-2,-8,-2.5" Symbol="Clear" />
+                                    <ui:SymbolIcon Margin="-9 -2 -8 -2.5" Symbol="Clear" />
                                 </Button>
                             </StackPanel>
                             <ItemsControl x:Name="HookThreadItems" HorizontalAlignment="Left">
@@ -144,7 +144,7 @@
                 <!--  Infomation Column  -->
                 <ui:SimpleStackPanel
                     Width="210"
-                    Margin="20,10" HorizontalAlignment="Left"
+                    Margin="20 10" HorizontalAlignment="Left"
                     Spacing="10">
                     <ui:SimpleStackPanel.Style>
                         <Style TargetType="ui:SimpleStackPanel">
@@ -164,11 +164,11 @@
                     <Label Content="From Web" />
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="5" Symbol="Help" />
-                        <ui:HyperlinkButton Margin="5,0,0,0" Content="How to set hook?" NavigateUri="https://www.google.com" />
+                        <ui:HyperlinkButton Margin="5 0 0 0" Content="How to set hook?" NavigateUri="https://www.google.com" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="5" Symbol="Globe" />
-                        <ui:HyperlinkButton Margin="5,0,0,0" Content="What is Hook Code?" NavigateUri="https://www.google.com" />
+                        <ui:HyperlinkButton Margin="5 0 0 0" Content="What is Hook Code?" NavigateUri="https://www.google.com" />
                     </StackPanel>
                 </ui:SimpleStackPanel>
             </Grid>
@@ -179,7 +179,7 @@
         <Button x:Name="SubmitButton"
             Grid.Row="1"
             Width="240"
-            Margin="20,10"
+            Margin="20 10"
             Content="{x:Static resx:Strings.HookPage_Submit}" />
     </Grid>
 </rxui:ReactiveWindow>

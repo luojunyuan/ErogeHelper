@@ -32,9 +32,9 @@
         </Style>
     </Window.Resources>
 
-    <StackPanel Margin="20,10">
+    <StackPanel Margin="20 10">
         <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Static resx:Strings.SelectProcess_Tips}" />
-        <GroupBox Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">
+        <GroupBox Margin="0 20 0 0" Header="{x:Static resx:Strings.SelectProcess_Label}">
             <ui:SimpleStackPanel Spacing="10">
                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
                     <ComboBox x:Name="ProcessComboBox"
@@ -48,7 +48,7 @@
                                     <Image Source="{Binding Icon}" />
                                     <TextBlock
                                         MaxWidth="180"
-                                        Margin="10,0,0,0" VerticalAlignment="Center"
+                                        Margin="10 0 0 0" VerticalAlignment="Center"
                                         Text="{Binding Title}"
                                         TextWrapping="Wrap" />
                                 </StackPanel>

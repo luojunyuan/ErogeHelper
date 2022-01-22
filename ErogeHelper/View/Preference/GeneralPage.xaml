@@ -14,7 +14,7 @@
     d:DesignHeight="450" d:DesignWidth="800">
 
     <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
-        <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+        <ui:SimpleStackPanel Margin="20 10" Spacing="10">
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_AssistiveTouch}">
                 <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}" />
             </GroupBox>

@@ -19,14 +19,15 @@
     Topmost="False" WindowStartupLocation="CenterScreen">
 
     <ui:NavigationView x:Name="NavigationView"
-        d:DesignHeight="450" d:DesignWidth="800" CompactModeThresholdWidth="0"
+        d:DesignHeight="450" d:DesignWidth="800"
+        CompactModeThresholdWidth="0"
         ExpandedModeThresholdWidth="{StaticResource ExpandedModeThresholdWidth}"
         IsBackButtonVisible="Collapsed" IsPaneToggleButtonVisible="False"
         IsSettingsVisible="False" IsTabStop="False"
         OpenPaneLength="{StaticResource SidePaneLength}"
         PaneDisplayMode="Auto">
         <ui:NavigationView.MenuItems>
-            <ui:NavigationViewItemSeparator Margin="0,30,0,0" />
+            <ui:NavigationViewItemSeparator Margin="0 30 0 0" />
             <ui:NavigationViewItem
                 Content="{x:Static resx:Strings.GeneralPage_Title}"
                 Icon="AllApps"
@@ -55,7 +56,7 @@
             </Grid.RowDefinitions>
             <Grid>
                 <TextBlock x:Name="HeaderBlock"
-                    Margin="12,15,0,11" VerticalAlignment="Center"
+                    Margin="12 15 0 11" VerticalAlignment="Center"
                     Style="{StaticResource TitleTextBlockStyle}" />
             </Grid>
 

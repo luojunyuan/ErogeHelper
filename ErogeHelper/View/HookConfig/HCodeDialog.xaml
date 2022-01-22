@@ -30,7 +30,7 @@
                     Width="32" Height="32"
                     ToolTip="{x:Static resx:Strings.HookPage_CodeSearchTip}">
                     <ui:AppBarButton.Icon>
-                        <ui:FontIcon Margin="0,-6.5,0,0" Glyph="{x:Static contract:CommonGlyphs.Search}" />
+                        <ui:FontIcon Margin="0 -6.5 0 0" Glyph="{x:Static contract:CommonGlyphs.Search}" />
                     </ui:AppBarButton.Icon>
                 </ui:AppBarButton>
             </ui:SimpleStackPanel>

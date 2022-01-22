@@ -13,7 +13,7 @@
     d:DesignHeight="650" d:DesignWidth="800">
 
     <component:ScrollViewerSmooth PanningMode="Both">
-        <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+        <ui:SimpleStackPanel Margin="20 10" Spacing="10">
             <Button x:Name="SelectMeCabDictButton" Content="{x:Static resx:Strings.MeCabPage_SelectDict}" ToolTip="{x:Static resx:Strings.MeCabPage_SelectDictTip}" />
 
             <ui:ToggleSwitch x:Name="ShowJapaneseSwitch" Header="{x:Static resx:Strings.MeCabPage_JapaneseText}" />

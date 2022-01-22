@@ -24,7 +24,7 @@
     "Left, Top, Width, Height",
     "MinWidth, MinHeight, MaxWidth, MaxHeight",
     "Title",
-    "Margin, Padding, HorizontalAlignment, VerticalAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
+    "Margin, Padding, CornerRadius, HorizontalAlignment, VerticalAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
     "*:*, *",
     "PageSource, PageIndex, Offset, Color, TargetName, Property, Value, StartPoint, EndPoint",
     "Storyboard.*, From, To, Duration"
@@ -41,7 +41,7 @@
   "ReorderSetters": 0,
   "FormatMarkupExtension": true,
   "NoNewLineMarkupExtensions": "x:Bind, Binding",
-  "ThicknessSeparator": 2,
+  "ThicknessSeparator": 1,
   "ThicknessAttributes": "Margin, Padding, BorderThickness, ThumbnailClipMargin",
   "FormatOnSave": true,
   "CommentPadding": 2

@@ -21,6 +21,9 @@ namespace ErogeHelper.Platform.XamlTool
             set => Application.Current.Resources["AssistiveTouchItemSize"] = value;
         }
 
+        public static SolidColorBrush AssistiveTouchBackground { get; }
+            = (SolidColorBrush)Application.Current.Resources["AssistiveTouchBackground"];
+
         public static double AssistiveTouchSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchSize"];
 
@@ -33,6 +36,10 @@ namespace ErogeHelper.Platform.XamlTool
         public static ControlTemplate BigAssistiveTouchTemplate { get; }
             = (ControlTemplate)Application.Current.Resources["BigAssistiveTouchTemplate"];
 
+        public static Thickness AssistiveTouchMenuPadding { get; }
+            = (Thickness)Application.Current.Resources["AssistiveTouchMenuPadding"];
+
+
         public static double AssistiveTouchMenuNormalSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchMenuNormalSize"];
 
@@ -44,8 +51,5 @@ namespace ErogeHelper.Platform.XamlTool
 
         public static double AssistiveTouchItemBiggerSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchItemBiggerSize"];
-
-        public static SolidColorBrush AssistiveTouchBackground { get; }
-            = (SolidColorBrush)Application.Current.Resources["AssistiveTouchBackground"];
     }
 }

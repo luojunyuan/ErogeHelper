@@ -15,7 +15,7 @@
     d:DesignHeight="450" d:DesignWidth="400">
 
     <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
-        <ui:SimpleStackPanel Margin="20,10" Spacing="10">
+        <ui:SimpleStackPanel Margin="20 10" Spacing="10">
             <TextBlock FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" Text="Eroge Helper" />
             <Image Height="128" HorizontalAlignment="Left" Source="pack://application:,,,/assets/app.png" />
             <TextBlock Text="it's eroge helper!" TextWrapping="Wrap" />
@@ -32,10 +32,10 @@
                     </Bold>
                 </TextBlock>
                 <Border x:Name="VersionBorder"
-                    Margin="10,-1,0,0" Padding="5,0,5,0"
-                    BorderThickness="1" CornerRadius="10">
+                    Margin="10 -1 0 0" Padding="5 0 5 0" CornerRadius="10"
+                    BorderThickness="1">
                     <ui:HyperlinkButton x:Name="VersionForeground"
-                        Margin="5,0,5,0" Padding="0"
+                        Margin="5 0 5 0" Padding="0"
                         Cursor="Hand" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/releases"
                         ToolTip="Click me jump to release page">
                         <TextBlock x:Name="UpdateStatusTip" />

@@ -9,10 +9,11 @@
     d:Visibility="Visible"
     MaxWidth="{DynamicResource AssistiveTouchMenuMaxSize}"
     MaxHeight="{DynamicResource AssistiveTouchMenuMaxSize}"
-    Padding="12"
+    Padding="{StaticResource AssistiveTouchMenuPadding}"
+    CornerRadius="25"
     Background="{StaticResource AssistiveTouchBackground}"
-    CornerRadius="25,25,25,25" Stylus.IsPressAndHoldEnabled="False"
-    Stylus.IsTapFeedbackEnabled="False" Visibility="Collapsed">
+    Stylus.IsPressAndHoldEnabled="False" Stylus.IsTapFeedbackEnabled="False"
+    Visibility="Collapsed">
 
     <Grid>
         <Grid x:Name="FrameBase">

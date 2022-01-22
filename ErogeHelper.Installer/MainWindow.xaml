@@ -15,8 +15,8 @@
     Icon="pack://application:,,,/app.ico" ResizeMode="NoResize"
     SizeToContent="Height" WindowStartupLocation="CenterScreen">
 
-    <ui:SimpleStackPanel Margin="20,10" Spacing="10">
-        <Label Margin="0,5,0,10" Content="ErogeHelper Installer" FontSize="20" />
+    <ui:SimpleStackPanel Margin="20 10" Spacing="10">
+        <Label Margin="0 5 0 10" Content="ErogeHelper Installer" FontSize="20" />
         <TextBlock Text="{x:Static resx:Strings.Installer_Info}" TextWrapping="Wrap" />
         <Button x:Name="InstallButton"
             MinWidth="90"

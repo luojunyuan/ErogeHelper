@@ -45,11 +45,11 @@
                     PreviewMouseLeftButtonDown="DragBarOnLeftButtonDown"
                     PreviewMouseRightButtonUp="DragBarOnPreviewMouseRightButtonUp" RadiusX="5"
                     RadiusY="5" />
-                <Button x:Name="ControlButton" d:Visibility="Visible" Visibility="Collapsed">
+                <Button d:Visibility="Visible" x:Name="ControlButton" Visibility="Collapsed">
                     <ui:SymbolIcon Symbol="More" />
                     <ui:FlyoutService.Flyout>
                         <ui:Flyout x:Name="ControlCenterFlyout" Placement="TopEdgeAlignedLeft">
-                            <ui:SimpleStackPanel Margin="12,0" Spacing="10">
+                            <ui:SimpleStackPanel Margin="12 0" Spacing="10">
                                 <Label Content="Window width" />
                                 <Slider
                                     Name="WidthSlider"
@@ -68,7 +68,7 @@
                                             <ui:SymbolIcon Symbol="FontIncrease" />
                                         </Button>
                                     </ui:SimpleStackPanel>
-                                    <ui:ToggleSwitch x:Name="BlurSwitch" Margin="0,10,0,0" Header="Bulr background" />
+                                    <ui:ToggleSwitch x:Name="BlurSwitch" Margin="0 10 0 0" Header="Bulr background" />
                                     <ui:AppBarButton Icon="Preview" Label="Opacity">
                                         <ui:FlyoutService.Flyout>
                                             <ui:Flyout Placement="Top">

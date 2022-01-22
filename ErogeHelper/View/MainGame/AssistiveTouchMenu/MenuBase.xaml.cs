@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.View.MainGame.AssistiveMenu;
 using Splat;
@@ -50,8 +51,6 @@ public partial class AssistiveTouchMenu : IEnableLogger
         SetCurrentValue(HeightProperty, touchSize);
         SetCurrentValue(WidthProperty, touchSize);
         SetCurrentValue(PaddingProperty, new Thickness());
-        //SetCurrentValue(CornerRadiusProperty, new CornerRadius(13.75));
-        SetCurrentValue(CornerRadiusProperty, new CornerRadius(25));
         var relativePos = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
         SetCurrentValue(RenderTransformProperty, new TranslateTransform(relativePos.X, relativePos.Y));
         FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -166,7 +165,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         var paddingAnimation = new ThicknessAnimation()
         {
             From = new(0),
-            To = new(12),
+            To = XamlResource.AssistiveTouchMenuPadding,
             Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         };
         Storyboard.SetTarget(paddingAnimation, this);
@@ -187,7 +186,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         {
             SetCurrentValue(RenderTransformProperty, new TranslateTransform(0.0, 0.0));
             FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            SetCurrentValue(PaddingProperty, new Thickness(12));
+            SetCurrentValue(PaddingProperty, XamlResource.AssistiveTouchMenuPadding);
             IsAnimating = false;
         };
     }
@@ -215,7 +214,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
 
         var paddingAnimation = new ThicknessAnimation()
         {
-            From = new(12),
+            From = XamlResource.AssistiveTouchMenuPadding,
             To = new(0),
             Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         };

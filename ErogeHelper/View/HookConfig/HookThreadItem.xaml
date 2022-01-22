@@ -13,22 +13,23 @@
 
     <GroupBox x:Name="WholeBox"
         Width="250" Height="auto"
-        Margin="0,0,20,0">
+        Margin="0 0 20 0">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="ThreadIndex"
-                    Margin="2,2,20,0" VerticalAlignment="Center"
-                    d:Text="1" FontWeight="Bold" />
+                    d:Text="1"
+                    Margin="2 2 20 0" VerticalAlignment="Center"
+                    FontWeight="Bold" />
                 <ui:RadioButtons MaxColumns="2">
                     <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="Text" />
                     <RadioButton x:Name="CharacterRadioButton"
-                        Margin="-25,0,0,0" HorizontalAlignment="Left"
+                        Margin="-25 0 0 0" HorizontalAlignment="Left"
                         Click="OptionalRadioButtonCheck" Content="Character" />
                 </ui:RadioButtons>
             </StackPanel>
             <TextBox x:Name="TotalText"
-                MaxHeight="150"
                 d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
+                MaxHeight="150"
                 tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True"
                 IsReadOnly="True" TextWrapping="Wrap" />
         </StackPanel>

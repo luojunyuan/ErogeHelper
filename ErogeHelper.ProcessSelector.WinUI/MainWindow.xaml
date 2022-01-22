@@ -8,11 +8,11 @@
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d">
 
-    <StackPanel Margin="20,10">
+    <StackPanel Margin="20 10">
         <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="resx:Strings.SelectProcess_Tips" />
         <!--<GroupItem Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">-->
 
-        <StackPanel Margin="0,20,0,0" Spacing="10">
+        <StackPanel Margin="0 20 0 0" Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <ComboBox x:Name="ProcessComboBox"
                     Width="240"
@@ -24,7 +24,7 @@
                                 <!--<Image Source="{Binding Icon}" />-->
                                 <TextBlock
                                     MaxWidth="180"
-                                    Margin="10,0,0,0" VerticalAlignment="Center"
+                                    Margin="10 0 0 0" VerticalAlignment="Center"
                                     Text="{Binding Title}"
                                     TextWrapping="Wrap" />
                             </StackPanel>
