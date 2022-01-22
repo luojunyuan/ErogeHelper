@@ -20,13 +20,23 @@ public partial class MenuMainPage : Page
     public MenuMainPage()
     {
         InitializeComponent();
-        _fadeOutAnimation.Completed += (_, _) => SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        _fadeInAnimation.Completed += (_, _) => GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
+        _fadeOutAnimation.Completed += (_, _) =>
+        {
+            SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
+        };
     }
 
-    public void FadeOut() => BeginAnimation(OpacityProperty, _fadeOutAnimation);
+    public void FadeOut()
+    {
+        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+        BeginAnimation(OpacityProperty, _fadeOutAnimation);
+    }
 
     public void FadeIn()
     {
+        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
         BeginAnimation(OpacityProperty, _fadeInAnimation);
     }

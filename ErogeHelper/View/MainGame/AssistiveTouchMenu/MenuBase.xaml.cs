@@ -33,7 +33,6 @@ public partial class AssistiveTouchMenu : IEnableLogger
             var parent = Parent as FrameworkElement
                 ?? throw new InvalidOperationException("Control's parent must be FrameworkElement type");
 
-            UpdateMenuSize(parent.ActualHeight);
             parent.SizeChanged += ResizeMenu;
         };
     }
@@ -88,7 +87,13 @@ public partial class AssistiveTouchMenu : IEnableLogger
         _menuToTouchStoryboard.Begin();
     }
 
-    private double EndureEdgeHeight => MaxHeight / 10;
+    public void UpdateMenuStatus(double windowHeight)
+    {
+        EndureEdgeHeight = MaxHeight / 10;
+        UpdateMenuSize(windowHeight);
+    }
+
+    private double EndureEdgeHeight;
 
     private void ResizeMenu(object sender, SizeChangedEventArgs e)
     {
@@ -98,7 +103,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         }
     }
 
-    public void UpdateMenuSize(double newGameWindowHeight)
+    private void UpdateMenuSize(double newGameWindowHeight)
     {
         if (newGameWindowHeight > EndureEdgeHeight + MaxHeight)
         {

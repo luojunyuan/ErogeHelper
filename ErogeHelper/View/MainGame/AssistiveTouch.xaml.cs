@@ -36,7 +36,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
     }
     #endregion
 
-    public const double TouchTransformDuration = 200;
+    public const double TouchTransformDuration = 2200;
     private const double TouchReleaseToEdgeDuration = 300;
     private const double OpacityChangeDuration = 4000;
 
@@ -260,9 +260,9 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         // Update assistivetouch menu dynamic values
         XamlResource.AssistiveTouchMenuMaxSize = isBigSize ? XamlResource.AssistiveTouchMenuBiggerSize
                                                            : XamlResource.AssistiveTouchMenuNormalSize;
-        UpdateMenuStatusCallback?.Invoke(parent.ActualHeight);
         XamlResource.AssistiveTouchItemSize = isBigSize ? XamlResource.AssistiveTouchItemBiggerSize
                                                         : XamlResource.AssistiveTouchItemNormalSize;
+        UpdateMenuStatusCallback?.Invoke(parent.ActualHeight);
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>

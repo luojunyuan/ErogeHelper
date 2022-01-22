@@ -78,7 +78,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         InitializeComponent();
     }
 
-    public void FillBackground(bool transparent) =>
+    public void TransparenceBackground(bool transparent) =>
         SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : XamlResource.AssistiveTouchBackground);
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));

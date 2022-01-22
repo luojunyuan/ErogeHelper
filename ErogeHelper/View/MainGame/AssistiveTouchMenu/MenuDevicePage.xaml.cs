@@ -24,6 +24,8 @@ public partial class MenuDevicePage : Page
     {
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
+        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+
         VolumeDown.SetCurrentValue(RenderTransformProperty, _volumeDownTransform);
         Back.SetCurrentValue(RenderTransformProperty, _backTransform);
 
@@ -35,6 +37,7 @@ public partial class MenuDevicePage : Page
 
     public void TransistOut()
     {
+        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
         _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, true);
         _transitionInStoryboard.Begin();
         _transitionInStoryboard.Seek(TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration));
@@ -68,6 +71,7 @@ public partial class MenuDevicePage : Page
         {
             VolumeDown.SetCurrentValue(RenderTransformProperty, new TranslateTransform(0, 0));
             Back.SetCurrentValue(RenderTransformProperty, new TranslateTransform(0, 0));
+            GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
 
             if (_transitionInStoryboard.AutoReverse == true)
             {

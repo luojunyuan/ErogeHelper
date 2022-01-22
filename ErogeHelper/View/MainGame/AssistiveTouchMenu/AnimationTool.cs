@@ -49,4 +49,12 @@ internal static class AnimationTool
         EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut },
         FillBehavior = FillBehavior.Stop,
     };
+
+    public static void FillBackground(this IEnumerable<MenuItemControl> children, bool fill)
+    {
+        foreach (var control in children)
+        {
+            control.TransparenceBackground(!fill);
+        }
+    }
 }
