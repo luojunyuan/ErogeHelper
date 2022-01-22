@@ -32,6 +32,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
         updateService ??= DependencyResolver.GetService<IUpdateService>();
 
         var disposables = new CompositeDisposable();
+        // TODO: Use preview version check button instead
         var currentPreviewFlag = AcceptedPreviewVersion = ehConfigRepository.UpdatePreviewVersion;
         this.WhenAnyValue(x => x.AcceptedPreviewVersion)
             .Skip(1)

@@ -126,6 +126,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
                 _menuDevicePage.TransistIn(Height / 3);
                 break;
             case PageTag.DeviceBack:
+                // TODO: Transist step by step when back
                 _menuMainPage.FadeIn();
                 _menuDevicePage.TransistOut();
                 break;

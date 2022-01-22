@@ -39,7 +39,6 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
         _gameDataService = gameDataService;
 
-        // Current texthook.dll version 4.15
         var textractorPath = Directory.GetCurrentDirectory() + @"\libs\texthost.dll";
         if (!File.Exists(textractorPath))
             throw new FileNotFoundException(textractorPath);

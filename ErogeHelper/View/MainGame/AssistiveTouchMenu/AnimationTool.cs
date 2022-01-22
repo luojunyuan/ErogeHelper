@@ -24,8 +24,13 @@ internal static class AnimationTool
         FillBehavior = FillBehavior.Stop,
     };
 
+    public static TranslateTransform ZeroTransform => new(0, 0);
     public static TranslateTransform LeftOneTransform(double distance) => new(distance, 0);
+    public static TranslateTransform RightOneTransform(double distance) => new(-distance, 0);
     public static TranslateTransform BottomOneTransform(double distance) => new(0, -distance);
+    public static TranslateTransform BottomOneLeftOneTransform(double distance) => new(distance, -distance);
+    public static TranslateTransform BottomOneRightOneTransform(double distance) => new(-distance, -distance);
+    public static TranslateTransform BottomTwoRightOneTransform(double distance) => new(-distance, -distance * 2);
 
     public static DoubleAnimation TransformMoveToZeroAnimation => new()
     {

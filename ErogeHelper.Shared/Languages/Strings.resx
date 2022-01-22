@@ -232,13 +232,13 @@
     <value>Lose Focus
 (If you can't use when play game full screen. Turn on this)</value>
   </data>
-  <data name="GameView.ActionCenter" xml:space="preserve">
+  <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>Action Center</value>
   </data>
-  <data name="GameView.TaskView" xml:space="preserve">
+  <data name="AssistiveTouch.TaskView" xml:space="preserve">
     <value>Task View</value>
   </data>
-  <data name="GameView.ScreenShot" xml:space="preserve">
+  <data name="AssistiveTouch.ScreenShot" xml:space="preserve">
     <value>ScreenShot</value>
   </data>
   <data name="AssistiveTouch.Preference" xml:space="preserve">
@@ -582,5 +582,11 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="AssistiveTouch.Device" xml:space="preserve">
     <value>Device</value>
+  </data>
+  <data name="AssistiveTouch.FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="AssistiveTouch.Window" xml:space="preserve">
+    <value>Window</value>
   </data>
 </root>

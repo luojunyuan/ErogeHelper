@@ -20,6 +20,7 @@
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <!--  TODO: 启动时不自动注入  -->
                     <ui:ToggleSwitch x:Name="HideTextWindow" Header="{x:Static resx:Strings.GeneralPage_HideTextWindow}" />
                     <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}" />
                     <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}" />

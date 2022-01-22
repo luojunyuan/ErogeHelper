@@ -22,6 +22,7 @@ using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.CloudSave;
 using ErogeHelper.ViewModel.HookConfig;
 using ErogeHelper.ViewModel.MainGame;
+using ErogeHelper.ViewModel.MainGame.AssistiveTouchMenu;
 using ErogeHelper.ViewModel.Preference;
 using ErogeHelper.ViewModel.TextDisplay;
 using FluentMigrator.Runner;
@@ -80,8 +81,7 @@ internal static class DI
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabService());
         }
-        //if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-        if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
         }
@@ -104,6 +104,7 @@ internal static class DI
     {
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
+        Locator.CurrentMutable.RegisterLazySingleton(() => new MenuDeviceViewModel());
 
         Locator.CurrentMutable.Register(() => new TextViewModel());
 
@@ -124,7 +125,6 @@ internal static class DI
     private static void RegisterViews()
     {
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
-        //Locator.CurrentMutable.RegisterLazySingleton<IViewFor<AssistiveTouchViewModel>>(() => new AssistiveTouch());
 
         Locator.CurrentMutable.Register<IViewFor<TextViewModel>>(() => new TextWindow());
 

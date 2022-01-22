@@ -32,8 +32,29 @@
             ClickEvent="VolumeUpOnClickEvent" Symbol="Volume"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
+        <maingame:MenuItemControl x:Name="FullScreenSwitcher"
+            d:Text="{x:Static resx:Strings.AssistiveTouch_FullScreen}"
+            d:Symbol="FullScreen"
+            Grid.Row="0" Grid.Column="2"
+            ClickEvent="FullScreenSwitcherOnClickEvent" ToolTip="Alt + Enter" />
+
+        <maingame:MenuItemControl x:Name="TaskView"
+            Grid.Row="1" Grid.Column="0"
+            ClickEvent="TaskViewOnClickEvent" SymbolExtend="TaskView"
+            Text="{x:Static resx:Strings.AssistiveTouch_TaskView}" />
+
         <maingame:MenuItemControl x:Name="Back"
             Grid.Row="1" Grid.Column="1"
             ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />
+
+        <maingame:MenuItemControl x:Name="DockRight"
+            Grid.Row="1" Grid.Column="2"
+            ClickEvent="ActionCenterOnClickEvent" Symbol="DockRight"
+            Text="{x:Static resx:Strings.AssistiveTouch_ActionCenter}" />
+
+        <maingame:MenuItemControl x:Name="ScreenShot"
+            Grid.Row="2" Grid.Column="2"
+            ClickEvent="ScreenShotOnClickEvent" Symbol="Pictures"
+            Text="{x:Static resx:Strings.AssistiveTouch_ScreenShot}" />
     </Grid>
 </Page>

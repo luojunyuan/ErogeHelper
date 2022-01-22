@@ -253,11 +253,29 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Action Center 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_ActionCenter {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.ActionCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Device 的本地化字符串。
         /// </summary>
         public static string AssistiveTouch_Device {
             get {
                 return ResourceManager.GetString("AssistiveTouch.Device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Full Screen 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_FullScreen {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.FullScreen", resourceCulture);
             }
         }
         
@@ -280,6 +298,24 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 ScreenShot 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_ScreenShot {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.ScreenShot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Task View 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_TaskView {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.TaskView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Volume Down 的本地化字符串。
         /// </summary>
         public static string AssistiveTouch_VolumeDecrease {
@@ -294,6 +330,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string AssistiveTouch_VolumeIncrease {
             get {
                 return ResourceManager.GetString("AssistiveTouch.VolumeIncrease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Window 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_Window {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.Window", resourceCulture);
             }
         }
         
@@ -406,15 +451,6 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Action Center 的本地化字符串。
-        /// </summary>
-        public static string GameView_ActionCenter {
-            get {
-                return ResourceManager.GetString("GameView.ActionCenter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Lose Focus
         ///(If you can&apos;t use when play game full screen. Turn on this) 的本地化字符串。
         /// </summary>
@@ -470,15 +506,6 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 ScreenShot 的本地化字符串。
-        /// </summary>
-        public static string GameView_ScreenShot {
-            get {
-                return ResourceManager.GetString("GameView.ScreenShot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Full Screen (Alt+Enter) 的本地化字符串。
         /// </summary>
         public static string GameView_SwitchFullScreen {
@@ -493,15 +520,6 @@ namespace ErogeHelper.Shared.Languages {
         public static string GameView_SwitchWindow {
             get {
                 return ResourceManager.GetString("GameView.SwitchWindow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Task View 的本地化字符串。
-        /// </summary>
-        public static string GameView_TaskView {
-            get {
-                return ResourceManager.GetString("GameView.TaskView", resourceCulture);
             }
         }
         

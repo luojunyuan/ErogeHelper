@@ -61,7 +61,7 @@ public class AppLauncher
 
             if (!ehConfigRepository.HideTextWindow)
             {
-                // Show And Close
+                // Show And Close ?
                 //_ = DependencyResolver.GetService<TextViewModel>();
                 //_ = new View.Windows.TextWindow(); // UI thread?
             }

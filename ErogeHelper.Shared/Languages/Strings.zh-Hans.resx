@@ -232,13 +232,13 @@
     <value>使EH失去焦点
 (如果你无法在全屏游戏时使用小圆点或文本窗口就请打开这个)</value>
   </data>
-  <data name="GameView.ActionCenter" xml:space="preserve">
+  <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>操作中心</value>
   </data>
-  <data name="GameView.TaskView" xml:space="preserve">
+  <data name="AssistiveTouch.TaskView" xml:space="preserve">
     <value>任务视图</value>
   </data>
-  <data name="GameView.ScreenShot" xml:space="preserve">
+  <data name="AssistiveTouch.ScreenShot" xml:space="preserve">
     <value>截图</value>
   </data>
   <data name="AssistiveTouch.Preference" xml:space="preserve">
@@ -582,5 +582,11 @@
   </data>
   <data name="AssistiveTouch.Device" xml:space="preserve">
     <value>设备</value>
+  </data>
+  <data name="AssistiveTouch.FullScreen" xml:space="preserve">
+    <value>全屏</value>
+  </data>
+  <data name="AssistiveTouch.Window" xml:space="preserve">
+    <value>窗口</value>
   </data>
 </root>

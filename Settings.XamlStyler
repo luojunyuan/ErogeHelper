@@ -18,7 +18,7 @@
     "xmlns:*",
     "mc:Ignorable",
     "d:DataContext, d:IsDataSource, d:LayoutOverrides, d:IsStaticText",
-    "d:DesignHeight, d:DesignWidth, d:MaxHeight, d:MaxWidth, d:Visibility, d:Template, d:Text",
+    "d:DesignHeight, d:DesignWidth, d:MaxHeight, d:MaxWidth, d:Visibility, d:Template, d:Text, d:Symbol",
     "x:Key, Key, x:Name, Name, x:Uid, Uid, mc:Ignorable",
     "Grid.Row, Grid.RowSpan, Grid.Column, Grid.ColumnSpan, Canvas.Left, Canvas.Top, Canvas.Right, Canvas.Bottom",
     "Left, Top, Width, Height",
