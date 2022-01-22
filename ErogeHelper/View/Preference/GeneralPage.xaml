@@ -15,11 +15,15 @@
 
     <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Margin="20 10" Spacing="10">
-            <GroupBox Header="{x:Static resx:Strings.GeneralPage_AssistiveTouch}">
-                <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}" />
+            <GroupBox Header="{x:Static resx:Strings.GeneralPage_CurrentGame}">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="LoseFocus" Header="{x:Static resx:Strings.GameView_FocusTip}" />
+                    <ui:ToggleSwitch x:Name="TouchToMouse" Header="{x:Static resx:Strings.GameView_TouchToMouse}" />
+                </ui:SimpleStackPanel>
             </GroupBox>
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}" />
                     <!--  TODO: 启动时不自动注入  -->
                     <ui:ToggleSwitch x:Name="HideTextWindow" Header="{x:Static resx:Strings.GeneralPage_HideTextWindow}" />
                     <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}" />

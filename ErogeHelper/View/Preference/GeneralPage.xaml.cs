@@ -12,6 +12,14 @@ public partial class GeneralPage
         this.WhenActivated(d =>
         {
             this.Bind(ViewModel,
+               vm => vm.LoseFocusEnable,
+               v => v.LoseFocus.IsOn).DisposeWith(d);
+
+            this.Bind(ViewModel,
+                vm => vm.TouchToMouseEnable,
+                v => v.TouchToMouse.IsOn).DisposeWith(d);
+
+            this.Bind(ViewModel,
                 vm => vm.UseBigSizeAssistiveTouch,
                 v => v.BigSizeAssistiveTouch.IsOn).DisposeWith(d);
 

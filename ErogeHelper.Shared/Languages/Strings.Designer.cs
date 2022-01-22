@@ -451,8 +451,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Lose Focus
-        ///(If you can&apos;t use when play game full screen. Turn on this) 的本地化字符串。
+        ///   查找类似 Lose Focus (If you can&apos;t use when play game full screen. Turn on this) 的本地化字符串。
         /// </summary>
         public static string GameView_FocusTip {
             get {
@@ -605,7 +604,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Bigger Size 的本地化字符串。
+        ///   查找类似 Button Bigger Size 的本地化字符串。
         /// </summary>
         public static string GeneralPage_ButtonBiggerSize {
             get {
@@ -619,6 +618,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string GeneralPage_CacheSpaceLabel {
             get {
                 return ResourceManager.GetString("GeneralPage.CacheSpaceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Current Game 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_CurrentGame {
+            get {
+                return ResourceManager.GetString("GeneralPage.CurrentGame", resourceCulture);
             }
         }
         

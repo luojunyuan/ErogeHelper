@@ -108,7 +108,7 @@ public class TouchConversionHooker : ITouchConversionHooker
 /// </summary>
 public class TouchConversionHookerFake : ITouchConversionHooker
 {
-    public bool Enable { set => throw new NotImplementedException(); }
+    public bool Enable { get; set; }
 
     public void Dispose() { }
 }

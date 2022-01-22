@@ -62,30 +62,40 @@ public class GameInfoRepository : IGameInfoRepository
     public void UpdateCloudStatus(bool useCloudSaveData)
     {
         using var connection = GetOpenConnection();
-        connection.Update(_gameInfo! with { UseCloudSave = useCloudSaveData });
+        var info = _gameInfo! with { UseCloudSave = useCloudSaveData };
+        connection.Update(info);
+        _gameInfo = info;
     }
 
     public void UpdateSaveDataPath(string path)
     {
         using var connection = GetOpenConnection();
-        connection.Update(_gameInfo! with { SaveDataPath = path });
+        var info = _gameInfo! with { SaveDataPath = path };
+        connection.Update(info);
+        _gameInfo = info;
     }
 
     public void UpdateLostFocusStatus(bool status)
     {
         using var connection = GetOpenConnection();
-        connection.Update(_gameInfo! with { IsLoseFocus = status });
+        var info = _gameInfo! with { IsLoseFocus = status };
+        connection.Update(info);
+        _gameInfo = info;
     }
 
     public void UpdateTouchEnable(bool status)
     {
         using var connection = GetOpenConnection();
-        connection.Update(_gameInfo! with { IsEnableTouchToMouse = status });
+        var info = _gameInfo! with { IsEnableTouchToMouse = status };
+        connection.Update(info);
+        _gameInfo = info;
     }
 
     public void UpdateTextractorSetting(string setting)
     {
         using var connection = GetOpenConnection();
-        connection.Update(_gameInfo! with { TextractorSettingJson = setting });
+        var info = _gameInfo! with { TextractorSettingJson = setting };
+        connection.Update(info);
+        _gameInfo = info;
     }
 }

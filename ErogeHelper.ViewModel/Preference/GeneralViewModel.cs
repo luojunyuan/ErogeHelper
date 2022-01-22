@@ -1,5 +1,7 @@
 ﻿using System.Reactive.Linq;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ReactiveUI;
@@ -13,9 +15,35 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 
     public string? UrlPathSegment => PageTag.General;
 
-    public GeneralViewModel(IEHConfigRepository? ehConfigRepository = null)
+    public GeneralViewModel(
+        IWindowDataService? windowDataService = null,
+        IGameInfoRepository? gameInfoRepository = null,
+        ITouchConversionHooker? touchConversionHooker = null,
+        IEHConfigRepository? ehConfigRepository = null)
     {
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
+        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
+        gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
+        touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
+
+        LoseFocusEnable = gameInfoRepository.GameInfo.IsLoseFocus;
+        this.WhenAnyValue(x => x.LoseFocusEnable)
+            .Skip(1)
+            .Subscribe(v =>
+            {
+                HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
+                HwndTools.WindowLostFocus(windowDataService.TextWindowHandle ?? new(), v);
+                gameInfoRepository.UpdateLostFocusStatus(v);
+            });
+
+        TouchToMouseEnable = gameInfoRepository.GameInfo.IsEnableTouchToMouse;
+        this.WhenAnyValue(x => x.TouchToMouseEnable)
+            .Skip(1)
+            .Subscribe(v =>
+            {
+                touchConversionHooker.Enable = v;
+                gameInfoRepository.UpdateTouchEnable(v);
+            });
 
         UseBigSizeAssistiveTouch = ehConfigRepository.UseBigAssistiveTouchSize;
         this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
@@ -39,6 +67,12 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UseEdgeTouchMask = v);
     }
+
+    [Reactive]
+    public bool LoseFocusEnable { get; set; }
+
+    [Reactive]
+    public bool TouchToMouseEnable { get; set; }
 
     [Reactive]
     public bool UseBigSizeAssistiveTouch { get; set; }

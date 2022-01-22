@@ -229,8 +229,7 @@
     <value>全屏 (Alt + Enter)</value>
   </data>
   <data name="GameView.FocusTip" xml:space="preserve">
-    <value>使EH失去焦点
-(如果你无法在全屏游戏时使用小圆点或文本窗口就请打开这个)</value>
+    <value>失去焦点 (如果你无法在全屏游戏时使用小圆点或文本窗口就请打开这个)</value>
   </data>
   <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>操作中心</value>
@@ -508,7 +507,7 @@
     <value>不可以启动ErogeHelper自身</value>
   </data>
   <data name="GeneralPage.ButtonBiggerSize" xml:space="preserve">
-    <value>更大</value>
+    <value>更大的小白点</value>
   </data>
   <data name="GeneralPage.AssistiveTouch" xml:space="preserve">
     <value>小白点</value>
@@ -588,5 +587,8 @@
   </data>
   <data name="AssistiveTouch.Window" xml:space="preserve">
     <value>窗口</value>
+  </data>
+  <data name="GeneralPage.CurrentGame" xml:space="preserve">
+    <value>当前游戏</value>
   </data>
 </root>
