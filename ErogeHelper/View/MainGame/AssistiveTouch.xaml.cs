@@ -36,7 +36,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
     }
     #endregion
 
-    public const double TouchTransformDuration = 2200;
+    public const double TouchTransformDuration = 200;
     private const double TouchReleaseToEdgeDuration = 300;
     private const double OpacityChangeDuration = 4000;
 

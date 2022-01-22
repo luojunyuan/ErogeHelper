@@ -20,17 +20,19 @@ public partial class MenuDevicePage : Page
         ApplyTransistionInAnimation();
     }
 
-    public void TransistIn()
+    public void TransistIn(double moveDistance)
     {
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
         GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
 
-        VolumeDown.SetCurrentValue(RenderTransformProperty, _volumeDownTransform);
-        Back.SetCurrentValue(RenderTransformProperty, _backTransform);
+        var volumeDownTransform = AnimationTool.LeftOneTransform(moveDistance);
+        var backTransform = AnimationTool.BottomOneTransform(moveDistance);
+        VolumeDown.SetCurrentValue(RenderTransformProperty, volumeDownTransform);
+        Back.SetCurrentValue(RenderTransformProperty, backTransform);
 
-        _volumeDownMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, _volumeDownTransform.X);
-        _backMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, _backTransform.Y);
+        _volumeDownMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, volumeDownTransform.X);
+        _backMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, backTransform.Y);
 
         _transitionInStoryboard.Begin();
     }
@@ -44,9 +46,6 @@ public partial class MenuDevicePage : Page
     }
 
     private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.DeviceBack);
-
-    private readonly TranslateTransform _volumeDownTransform = AnimationTool.LeftOneTransform;
-    private readonly TranslateTransform _backTransform = AnimationTool.BottomOneTransform;
 
     private readonly Storyboard _transitionInStoryboard = new();
     private readonly DoubleAnimation _volumeDownMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;

@@ -123,7 +123,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
         {
             case PageTag.Device:
                 _menuMainPage.FadeOut();
-                _menuDevicePage.TransistIn();
+                _menuDevicePage.TransistIn(Height / 3);
                 break;
             case PageTag.DeviceBack:
                 _menuMainPage.FadeIn();
