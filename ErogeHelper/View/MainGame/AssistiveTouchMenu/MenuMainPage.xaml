@@ -7,8 +7,8 @@
     xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
-    Title="MenuMainPage"
-    d:DesignHeight="300" d:DesignWidth="300">
+    d:DesignHeight="300" d:DesignWidth="300"
+    Title="MenuMainPage">
 
     <Grid>
         <Grid.ColumnDefinitions>

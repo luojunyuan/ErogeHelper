@@ -84,8 +84,8 @@ public partial class MainGameWindow : IEnableLogger
         var touchMenuBaseMouseUp = TouchMenu.Events().PreviewMouseLeftButtonUp
             .Where(e => e.OriginalSource is AssistiveTouchMenu);
 
+        Touch.UpdateMenuStatusCallback = TouchMenu.UpdateMenuSize;
         TouchMenu.ShowTouchCallback = Touch.Show;
-        Touch.UpdateMenuStatus = TouchMenu.UpdateMenuSize;
         this.Events().Deactivated
             .Merge(touchMenuBaseMouseUp)
             .Where(_ => !TouchMenu.IsAnimating)

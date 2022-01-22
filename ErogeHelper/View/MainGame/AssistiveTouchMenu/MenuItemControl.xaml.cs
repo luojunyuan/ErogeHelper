@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared.Contracts;
 using ModernWpf.Controls;
 using Splat;
@@ -77,11 +78,8 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         InitializeComponent();
     }
 
-    private static readonly SolidColorBrush AssistiveTouchBackground =
-            (SolidColorBrush)Application.Current.Resources["AssistiveTouchBackground"];
-
     public void FillBackground(bool transparent) =>
-        SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : AssistiveTouchBackground);
+        SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : XamlResource.AssistiveTouchBackground);
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 

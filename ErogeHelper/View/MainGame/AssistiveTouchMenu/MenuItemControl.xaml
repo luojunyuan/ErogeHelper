@@ -24,7 +24,7 @@
         </Border>
         <TextBlock x:Name="ItemText"
             Padding="0,4,0,0" HorizontalAlignment="Center"
-            Foreground="White" />
+            Foreground="White" Text="Emoji" />
         <!--  Multiline  -->
         <!--<StackPanel
             Margin="0,4,0,0" HorizontalAlignment="Center"

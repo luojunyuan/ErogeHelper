@@ -51,6 +51,8 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
     private double _oneThirdDistance;
     private double _twoThirdDistance;
 
+    public Action<double>? UpdateMenuStatusCallback;
+
     public AssistiveTouch()
     {
         InitializeComponent();
@@ -237,8 +239,6 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         Duration = TimeSpan.FromMilliseconds(TouchTransformDuration)
     };
 
-    public Action<double>? UpdateMenuStatus;
-
     /// <summary>
     /// Set whole button layout values
     /// </summary>
@@ -252,15 +252,15 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         _oneThirdDistance = _distance / 3;
         _twoThirdDistance = _oneThirdDistance * 2;
 
-        // This would affect Margin value when first time idk why
+        // This would effect Margin value when first time idk why
         var newMargin = GetTouchMargin(_buttonSize, touchPos, parent);
         Margin = newMargin;
         SetCurrentValue(MarginProperty, newMargin);
 
-        // Update dynamic values
+        // Update assistivetouch menu dynamic values
         XamlResource.AssistiveTouchMenuMaxSize = isBigSize ? XamlResource.AssistiveTouchMenuBiggerSize
                                                            : XamlResource.AssistiveTouchMenuNormalSize;
-        UpdateMenuStatus?.Invoke(parent.ActualHeight);
+        UpdateMenuStatusCallback?.Invoke(parent.ActualHeight);
         XamlResource.AssistiveTouchItemSize = isBigSize ? XamlResource.AssistiveTouchItemBiggerSize
                                                         : XamlResource.AssistiveTouchItemNormalSize;
     }

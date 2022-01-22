@@ -33,6 +33,7 @@
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
         <maingame:MenuItemControl x:Name="Back"
+            d:Text=" "
             Grid.Row="1" Grid.Column="1"
             ClickEvent="BackOnClickEvent" Symbol="Back" />
     </Grid>

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ErogeHelper.Platform.XamlTool
 {
@@ -43,5 +44,8 @@ namespace ErogeHelper.Platform.XamlTool
 
         public static double AssistiveTouchItemBiggerSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchItemBiggerSize"];
+
+        public static SolidColorBrush AssistiveTouchBackground { get; }
+            = (SolidColorBrush)Application.Current.Resources["AssistiveTouchBackground"];
     }
 }
