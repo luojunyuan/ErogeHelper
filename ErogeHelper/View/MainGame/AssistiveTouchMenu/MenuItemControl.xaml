@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     d:DesignHeight="100" d:DesignWidth="100"
     Background="{StaticResource AssistiveTouchBackground}"
+    Stylus.IsPressAndHoldEnabled="False" Stylus.IsTapFeedbackEnabled="False"
     TouchEnter="ItemOnPreviewMouseLeftButtonDown"
     TouchLeave="ItemOnPreviewMouseLeave" TouchUp="ItemOnTouchUp">
     <StackPanel
@@ -17,7 +18,7 @@
         PreviewMouseLeftButtonDown="ItemOnPreviewMouseLeftButtonDown"
         PreviewMouseLeftButtonUp="ItemOnPreviewMouseLeftButtonUp">
         <Border HorizontalAlignment="Center">
-            <Viewbox x:Name="IconViewbox" Width="40">
+            <Viewbox x:Name="IconViewbox" Width="{DynamicResource AssistiveTouchItemSize}" d:Width="30">
                 <ui:SymbolIcon x:Name="ItemIcon" Foreground="White" />
             </Viewbox>
         </Border>

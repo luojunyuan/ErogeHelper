@@ -261,6 +261,8 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         XamlResource.AssistiveTouchMenuMaxSize = isBigSize ? XamlResource.AssistiveTouchMenuBiggerSize
                                                            : XamlResource.AssistiveTouchMenuNormalSize;
         UpdateMenuStatus?.Invoke(parent.ActualHeight);
+        XamlResource.AssistiveTouchItemSize = isBigSize ? XamlResource.AssistiveTouchItemBiggerSize
+                                                        : XamlResource.AssistiveTouchItemNormalSize;
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>

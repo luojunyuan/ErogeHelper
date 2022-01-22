@@ -3,6 +3,7 @@
     <!--  AssistiveTouch Current Dynamic Values  -->
     <ControlTemplate x:Key="AssistiveTouchStyle" />
     <system:Double x:Key="AssistiveTouchMenuMaxSize" />
+    <system:Double x:Key="AssistiveTouchItemSize" />
 
 
     <system:Double x:Key="MinWindowWidth">400</system:Double>
@@ -15,6 +16,8 @@
 
     <system:Double x:Key="AssistiveTouchMenuNormalSize">300</system:Double>
     <system:Double x:Key="AssistiveTouchMenuBiggerSize">500</system:Double>
+    <system:Double x:Key="AssistiveTouchItemNormalSize">30</system:Double>
+    <system:Double x:Key="AssistiveTouchItemBiggerSize">50</system:Double>
     <SolidColorBrush x:Key="AssistiveTouchMenuItemPressed" Color="#77C4F1" />
     <SolidColorBrush x:Key="AssistiveTouchMenuItemForgroundColor" Color="#FFFFFF" />
 

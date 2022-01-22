@@ -15,6 +15,11 @@ namespace ErogeHelper.Platform.XamlTool
             set => Application.Current.Resources["AssistiveTouchMenuMaxSize"] = value;
         }
 
+        public static double AssistiveTouchItemSize
+        {
+            set => Application.Current.Resources["AssistiveTouchItemSize"] = value;
+        }
+
         public static double AssistiveTouchSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchSize"];
 
@@ -32,5 +37,11 @@ namespace ErogeHelper.Platform.XamlTool
 
         public static double AssistiveTouchMenuBiggerSize { get; }
             = (double)Application.Current.Resources["AssistiveTouchMenuBiggerSize"];
+
+        public static double AssistiveTouchItemNormalSize { get; }
+           = (double)Application.Current.Resources["AssistiveTouchItemNormalSize"];
+
+        public static double AssistiveTouchItemBiggerSize { get; }
+            = (double)Application.Current.Resources["AssistiveTouchItemBiggerSize"];
     }
 }
