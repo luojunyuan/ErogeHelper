@@ -5,11 +5,11 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.View.MainGame.AssistiveMenu;
-using Splat;
+using WindowsInput.Events;
 
 namespace ErogeHelper.View.MainGame;
 
-public partial class MenuDevicePage : Page, IEnableLogger
+public partial class MenuDevicePage : Page
 {
     private readonly Subject<string> _pageSubject = new();
     public IObservable<string> PageChanged => _pageSubject;
@@ -42,8 +42,8 @@ public partial class MenuDevicePage : Page, IEnableLogger
 
     private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.DeviceBack);
 
-    private readonly TranslateTransform _volumeDownTransform = new(100, 0);
-    private readonly TranslateTransform _backTransform = new(0, -100);
+    private readonly TranslateTransform _volumeDownTransform = AnimationTool.LeftOneTransform;
+    private readonly TranslateTransform _backTransform = AnimationTool.BottomOneTransform;
 
     private readonly Storyboard _transitionInStoryboard = new();
     private readonly DoubleAnimation _volumeDownMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
@@ -76,4 +76,14 @@ public partial class MenuDevicePage : Page, IEnableLogger
             }
         };
     }
+
+    private async void VolumeDownOnClickEvent(object sender, EventArgs e) =>
+         await WindowsInput.Simulate.Events()
+            .Click(KeyCode.VolumeDown)
+            .Invoke().ConfigureAwait(false);
+
+    private async void VolumeUpOnClickEvent(object sender, EventArgs e) =>
+        await WindowsInput.Simulate.Events()
+            .Click(KeyCode.VolumeUp)
+            .Invoke().ConfigureAwait(false);
 }

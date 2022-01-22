@@ -24,12 +24,12 @@
 
         <maingame:MenuItemControl x:Name="VolumeDown"
             Grid.Row="0" Grid.Column="0"
-            SymbolExtend="Volume1"
+            ClickEvent="VolumeDownOnClickEvent" SymbolExtend="Volume1"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeDecrease}" />
 
         <maingame:MenuItemControl x:Name="VolumeUp"
             Grid.Row="0" Grid.Column="1"
-            Symbol="Volume"
+            ClickEvent="VolumeUpOnClickEvent" Symbol="Volume"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
         <maingame:MenuItemControl x:Name="Back"

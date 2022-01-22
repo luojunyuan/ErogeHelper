@@ -65,7 +65,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
             var parent = Parent as FrameworkElement
                 ?? throw new InvalidOperationException("Control's parent must be FrameworkElement type");
 
-            UpdateButtonDiameterFields(false, TouchPosition, parent);
+            UpdateButtonDiameterFields(ViewModel.UseBigSize.Take(1).Wait(), TouchPosition, parent);
             SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
             parent.Events().SizeChanged
@@ -212,7 +212,14 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
             #endregion Core Logic of Moving
         };
 
-        this.WhenActivated(d => d(disposables));
+        this.WhenActivated(d =>
+        {
+            disposables.DisposeWith(d);
+            this.WhenAnyObservable(x => x.ViewModel!.UseBigSize)
+                .Skip(1)
+                .Subscribe(isBigSize =>
+                    UpdateButtonDiameterFields(isBigSize, TouchPosition, (FrameworkElement)Parent)).DisposeWith(d);
+        });
     }
 
     public void Show() => SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -245,9 +252,9 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         _twoThirdDistance = _oneThirdDistance * 2;
 
         // This would affect Margin value when first time idk why
-#pragma warning disable WPF0041 // Set mutable dependency properties using SetCurrentValue
-        Margin = GetTouchMargin(_buttonSize, touchPos, parent);
-#pragma warning restore WPF0041 // Set mutable dependency properties using SetCurrentValue
+        var newMargin = GetTouchMargin(_buttonSize, touchPos, parent);
+        Margin = newMargin;
+        SetCurrentValue(MarginProperty, newMargin);
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>

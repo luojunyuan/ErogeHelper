@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Animation;
+﻿using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace ErogeHelper.View.MainGame.AssistiveMenu;
 
@@ -22,6 +23,9 @@ internal static class AnimationTool
         Duration = TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration),
         FillBehavior = FillBehavior.Stop,
     };
+
+    public static TranslateTransform LeftOneTransform => new(100, 0);
+    public static TranslateTransform BottomOneTransform => new(0, -100);
 
     public static DoubleAnimation TransformMoveToZeroAnimation => new()
     {
