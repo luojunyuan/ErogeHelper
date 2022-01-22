@@ -1,5 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
+    <!--  AssistiveTouch Current Dynamic Values  -->
+    <ControlTemplate x:Key="AssistiveTouchStyle" />
+    <system:Double x:Key="AssistiveTouchMenuMaxSize" />
+
+
     <system:Double x:Key="MinWindowWidth">400</system:Double>
     <system:Double x:Key="ControllerWidth">240</system:Double>
     <system:Double x:Key="MinButtonWidth">90</system:Double>
@@ -8,6 +13,8 @@
     <system:Double x:Key="ColumnInfoThresholdWidth">850</system:Double>
     <system:Double x:Key="MinimalOpacity">0.002</system:Double>
 
+    <system:Double x:Key="AssistiveTouchMenuNormalSize">300</system:Double>
+    <system:Double x:Key="AssistiveTouchMenuBiggerSize">500</system:Double>
     <SolidColorBrush x:Key="AssistiveTouchMenuItemPressed" Color="#77C4F1" />
     <SolidColorBrush x:Key="AssistiveTouchMenuItemForgroundColor" Color="#FFFFFF" />
 

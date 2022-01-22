@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.ViewModel.MainGame;
@@ -222,6 +223,9 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         });
     }
 
+    public double Size => ViewModel!.UseBigSize.Take(1).Wait() ? XamlResource.AssistiveTouchBigSize
+                                                               : XamlResource.AssistiveTouchSize;
+
     public void Show() => SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
     public void Hide() => SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -233,10 +237,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         Duration = TimeSpan.FromMilliseconds(TouchTransformDuration)
     };
 
-    private static readonly double AssistiveTouchSize =
-        (double)Application.Current.Resources["AssistiveTouchSize"];
-    private static readonly double AssistiveTouchBigSize =
-        (double)Application.Current.Resources["BigAssistiveTouchSize"];
+    public Action<double>? UpdateMenuStatus;
 
     /// <summary>
     /// Set whole button layout values
@@ -244,8 +245,8 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
     private void UpdateButtonDiameterFields
         (bool isBigSize, AssistiveTouchPosition touchPos, FrameworkElement parent)
     {
-        SetCurrentValue(TemplateProperty, GetAssistiveTouchStyle(isBigSize));
-        _buttonSize = isBigSize ? AssistiveTouchBigSize : AssistiveTouchSize;
+        XamlResource.AssistiveTouchStyle = GetAssistiveTouchStyle(isBigSize);
+        _buttonSize = isBigSize ? XamlResource.AssistiveTouchBigSize : XamlResource.AssistiveTouchSize;
         _distance = _buttonSize;
         _halfDistance = _distance / 2;
         _oneThirdDistance = _distance / 3;
@@ -255,11 +256,15 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
         var newMargin = GetTouchMargin(_buttonSize, touchPos, parent);
         Margin = newMargin;
         SetCurrentValue(MarginProperty, newMargin);
+
+        // Update dynamic values
+        XamlResource.AssistiveTouchMenuMaxSize = isBigSize ? XamlResource.AssistiveTouchMenuBiggerSize
+                                                           : XamlResource.AssistiveTouchMenuNormalSize;
+        UpdateMenuStatus?.Invoke(parent.ActualHeight);
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>
-       useBigSize ? (ControlTemplate)Application.Current.Resources["BigAssistiveTouchTemplate"]
-                  : (ControlTemplate)Application.Current.Resources["NormalAssistiveTouchTemplate"];
+        useBigSize ? XamlResource.BigAssistiveTouchTemplate : XamlResource.NormalAssistiveTouchTemplate;
 
     private static void RaiseMouseReleaseEventInCode(Button touch, UIElement father)
     {

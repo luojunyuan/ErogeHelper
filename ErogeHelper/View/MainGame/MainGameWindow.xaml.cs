@@ -85,16 +85,18 @@ public partial class MainGameWindow : IEnableLogger
             .Where(e => e.OriginalSource is AssistiveTouchMenu);
 
         TouchMenu.ShowTouchCallback = Touch.Show;
+        Touch.UpdateMenuStatus = TouchMenu.UpdateMenuSize;
         this.Events().Deactivated
             .Merge(touchMenuBaseMouseUp)
             .Where(_ => !TouchMenu.IsAnimating)
-            .Subscribe(_ => TouchMenu.Hide(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), 60.0))
+            .Subscribe(_ =>
+                TouchMenu.Hide(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), Touch.Size))
             .DisposeWith(disposable);
 
         Touch.Events().Click.Subscribe(_ =>
         {
             Touch.Hide();
-            TouchMenu.Show(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), 60.0);
+            TouchMenu.Show(new(Width / 2, Height / 2), new(Touch.Margin.Left, Touch.Margin.Top), Touch.Size);
         }).DisposeWith(disposable);
 
         return disposable;

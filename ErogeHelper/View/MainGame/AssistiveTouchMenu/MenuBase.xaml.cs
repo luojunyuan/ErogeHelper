@@ -10,10 +10,6 @@ namespace ErogeHelper.View.MainGame;
 
 public partial class AssistiveTouchMenu : IEnableLogger
 {
-    // TODO: Consider bigger menu 500pixel
-    private const double MaxSizeOfMenu = 300;
-    private const int EndureEdgeHeight = 30;
-
     public event EventHandler? Closed;
     public Action ShowTouchCallback = null!;
 
@@ -50,13 +46,13 @@ public partial class AssistiveTouchMenu : IEnableLogger
         IsAnimating = IsOpen = true;
 
         var realWidth = Width;
-        this.Log().Debug(Width);
 
         // Initilize values
         SetCurrentValue(HeightProperty, touchSize);
         SetCurrentValue(WidthProperty, touchSize);
         SetCurrentValue(PaddingProperty, new Thickness());
-        SetCurrentValue(CornerRadiusProperty, new CornerRadius(13.75));
+        //SetCurrentValue(CornerRadiusProperty, new CornerRadius(13.75));
+        SetCurrentValue(CornerRadiusProperty, new CornerRadius(25));
         var relativePos = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
         SetCurrentValue(RenderTransformProperty, new TranslateTransform(relativePos.X, relativePos.Y));
         FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -92,25 +88,27 @@ public partial class AssistiveTouchMenu : IEnableLogger
         _menuToTouchStoryboard.Begin();
     }
 
+    private double EndureEdgeHeight => MaxHeight / 10;
+
     private void ResizeMenu(object sender, SizeChangedEventArgs e)
     {
-        if (e.HeightChanged && e.NewSize.Height > 30)
+        if (e.HeightChanged && e.NewSize.Height > EndureEdgeHeight)
         {
             UpdateMenuSize(e.NewSize.Height);
         }
     }
 
-    private void UpdateMenuSize(double newGameWindowHeight)
+    public void UpdateMenuSize(double newGameWindowHeight)
     {
-        if (newGameWindowHeight > EndureEdgeHeight + MaxSizeOfMenu)
+        if (newGameWindowHeight > EndureEdgeHeight + MaxHeight)
         {
-            Height = MaxSizeOfMenu;
-            Width = MaxSizeOfMenu;
+            Height = MaxHeight;
+            Width = MaxHeight;
         }
         else
         {
-            Height = newGameWindowHeight - 30;
-            Width = newGameWindowHeight - 30;
+            Height = newGameWindowHeight - EndureEdgeHeight;
+            Width = newGameWindowHeight - EndureEdgeHeight;
         }
     }
 

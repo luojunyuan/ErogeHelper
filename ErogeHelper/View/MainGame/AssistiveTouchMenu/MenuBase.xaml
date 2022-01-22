@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    MaxWidth="300" MaxHeight="300"
+    MaxWidth="{DynamicResource AssistiveTouchMenuMaxSize}"
+    MaxHeight="{DynamicResource AssistiveTouchMenuMaxSize}"
     Padding="12"
     d:Height="300" d:Visibility="Visible" d:Width="300"
     Background="{StaticResource AssistiveTouchBackground}"
@@ -19,7 +20,8 @@
         </Grid>
         <UserControl x:Name="FakeWhitePoint"
             HorizontalAlignment="Right" VerticalAlignment="Bottom"
-            Template="{StaticResource NormalAssistiveTouchTemplate}" />
+            d:Template="{StaticResource NormalAssistiveTouchTemplate}"
+            Template="{DynamicResource AssistiveTouchStyle}" />
     </Grid>
 
 </Border>
