@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -14,6 +15,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
     public event EventHandler? Closed;
     public Action ShowTouchCallback = null!;
 
+    private readonly Subject<MenuPageTag> _pageNavHideSubj = new();
     private readonly MenuMainPage _menuMainPage = new();
     private readonly MenuDevicePage _menuDevicePage = new();
 
@@ -25,8 +27,10 @@ public partial class AssistiveTouchMenu : IEnableLogger
         ApplyTouchToMenuStoryboard();
         ApplyMenuToTouchStoryboard();
 
-        _menuMainPage.PageChanged
+        _pageNavHideSubj
+            .Merge(_menuMainPage.PageChanged)
             .Merge(_menuDevicePage.PageChanged)
+            //.DistinctUntilChanged()
             .Subscribe(PageNavigation);
 
         Loaded += (_, _) =>
@@ -72,6 +76,8 @@ public partial class AssistiveTouchMenu : IEnableLogger
 
     public void Hide(Point middlePoint, Point touchPos, double touchSize)
     {
+        IsAnimating = true;
+        _pageNavHideSubj.OnNext(MenuPageTag.None);
         _touchPosWhenHideAnimationComplete = touchPos - middlePoint + new Point(touchSize / 2, touchSize / 2);
         FakeWhitePoint.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
@@ -116,16 +122,15 @@ public partial class AssistiveTouchMenu : IEnableLogger
         }
     }
 
-    private void PageNavigation(string nav)
+    private void PageNavigation(MenuPageTag nav)
     {
         switch (nav)
         {
-            case PageTag.Device:
+            case MenuPageTag.Device:
                 _menuMainPage.FadeOut();
                 _menuDevicePage.TransistIn(Height / 3);
                 break;
-            case PageTag.DeviceBack:
-                // TODO: Transist step by step when back
+            case MenuPageTag.DeviceBack:
                 _menuMainPage.FadeIn();
                 _menuDevicePage.TransistOut();
                 break;

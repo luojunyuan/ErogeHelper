@@ -14,8 +14,8 @@ public partial class MenuMainPage : Page
     private readonly DoubleAnimation _fadeOutAnimation = AnimationTool.FadeOutAnimation;
     private readonly DoubleAnimation _fadeInAnimation = AnimationTool.FadeInAnimation;
 
-    private readonly Subject<string> _pageSubject = new();
-    public IObservable<string> PageChanged => _pageSubject;
+    private readonly Subject<MenuPageTag> _pageSubject = new();
+    public IObservable<MenuPageTag> PageChanged => _pageSubject;
 
     public MenuMainPage()
     {
@@ -43,5 +43,5 @@ public partial class MenuMainPage : Page
 
     private void PreferenceOnClickEvent(object sender, EventArgs e) => DI.ShowView<PreferenceViewModel>();
 
-    private void DeviceOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.Device);
+    private void DeviceOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.Device);
 }

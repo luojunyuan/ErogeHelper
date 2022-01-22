@@ -36,8 +36,8 @@ public partial class MenuDevicePage : Page, IViewFor<MenuDeviceViewModel>
     }
     #endregion
 
-    private readonly Subject<string> _pageSubject = new();
-    public IObservable<string> PageChanged => _pageSubject;
+    private readonly Subject<MenuPageTag> _pageSubject = new();
+    public IObservable<MenuPageTag> PageChanged => _pageSubject;
 
     public MenuDevicePage()
     {
@@ -102,7 +102,7 @@ public partial class MenuDevicePage : Page, IViewFor<MenuDeviceViewModel>
         _transitionInStoryboard.Seek(TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration));
     }
 
-    private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(PageTag.DeviceBack);
+    private void BackOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.DeviceBack);
 
     private readonly Storyboard _transitionInStoryboard = new();
     private readonly DoubleAnimation _volumeDownMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
