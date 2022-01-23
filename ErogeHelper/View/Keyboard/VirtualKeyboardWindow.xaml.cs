@@ -4,19 +4,18 @@ using System.Windows.Threading;
 using ErogeHelper.Shared.Contracts;
 using WindowsInput.Events;
 
-namespace ErogeHelper.View.MainGame;
+namespace ErogeHelper.View.Keyboard;
 
-public partial class TouchToolBox
+public partial class VirtualKeyboardWindow
 {
     private const int PressEnterKeyIntervalTime = 25;
 
     private const int PressFirstKeyLagTime = 500;
-    //<!--  TODO: Use a window instead  -->
-    //<!--<maingame:TouchToolBox x:Name="TouchToolBox" Margin="5,50,0,0" Visibility="Collapsed" />-->
-    //this.WhenAnyValue(x => x.Menu.LoseFocusEnable, x => x.Menu.TouchBoxEnable, (a, b) => a && b)
-    public TouchToolBox()
+
+    public VirtualKeyboardWindow()
     {
         InitializeComponent();
+        // TODO: Same window follower as MainGameWindow. Abosolute Close and Edit Button. Editable Canva with buttons
 
         _enterHolder = new DispatcherTimer
         {

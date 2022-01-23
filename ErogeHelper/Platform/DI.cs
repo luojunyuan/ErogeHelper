@@ -227,7 +227,7 @@ internal static class DI
 
         using var scope = microsoftServiceProvider.CreateScope();
         var runner = microsoftServiceProvider.GetRequiredService<IMigrationRunner>();
-        // Note: May be the reason of ScrollViewer bug
+        // Note: May be the reason of upgrading to PointerMessage automatically
         runner.MigrateUp();
     }
 

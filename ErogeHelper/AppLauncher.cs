@@ -103,7 +103,6 @@ public class AppLauncher
 
 
         gameInfoRepository.InitGameMd5(md5);
-        // TODO: Add try block to catch the error from new db version back to old one. Tip user the db would be rebuild and the old one would be deleted.
         var gameInfo = gameInfoRepository.TryGetGameInfo();
         if (gameInfo is null)
         {
