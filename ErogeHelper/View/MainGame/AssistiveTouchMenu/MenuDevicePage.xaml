@@ -1,10 +1,10 @@
 ﻿<Page
-    x:Class="ErogeHelper.View.MainGame.MenuDevicePage"
+    x:Class="ErogeHelper.View.MainGame.AssistiveTouchMenu.MenuDevicePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
+    xmlns:menu="clr-namespace:ErogeHelper.View.MainGame.AssistiveTouchMenu"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="300" d:Visibility="Visible"
@@ -22,37 +22,37 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <maingame:MenuItemControl x:Name="VolumeDown"
+        <menu:MenuItemControl x:Name="VolumeDown"
             Grid.Row="0" Grid.Column="0"
             ClickEvent="VolumeDownOnClickEvent" SymbolExtend="Volume1"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeDecrease}" />
 
-        <maingame:MenuItemControl x:Name="VolumeUp"
+        <menu:MenuItemControl x:Name="VolumeUp"
             Grid.Row="0" Grid.Column="1"
             ClickEvent="VolumeUpOnClickEvent" Symbol="Volume"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
-        <maingame:MenuItemControl x:Name="FullScreenSwitcher"
+        <menu:MenuItemControl x:Name="FullScreenSwitcher"
             d:Text="{x:Static resx:Strings.AssistiveTouch_FullScreen}"
             d:Symbol="FullScreen"
             Grid.Row="0" Grid.Column="2"
             ClickEvent="FullScreenSwitcherOnClickEvent" ToolTip="Alt + Enter" />
 
-        <maingame:MenuItemControl x:Name="TaskView"
+        <menu:MenuItemControl x:Name="TaskView"
             Grid.Row="1" Grid.Column="0"
             ClickEvent="TaskViewOnClickEvent" SymbolExtend="TaskView"
             Text="{x:Static resx:Strings.AssistiveTouch_TaskView}" />
 
-        <maingame:MenuItemControl x:Name="Back"
+        <menu:MenuItemControl x:Name="Back"
             Grid.Row="1" Grid.Column="1"
             ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />
 
-        <maingame:MenuItemControl x:Name="DockRight"
+        <menu:MenuItemControl x:Name="DockRight"
             Grid.Row="1" Grid.Column="2"
             ClickEvent="ActionCenterOnClickEvent" Symbol="DockRight"
             Text="{x:Static resx:Strings.AssistiveTouch_ActionCenter}" />
 
-        <maingame:MenuItemControl x:Name="ScreenShot"
+        <menu:MenuItemControl x:Name="ScreenShot"
             Grid.Row="2" Grid.Column="2"
             ClickEvent="ScreenShotOnClickEvent" Symbol="Pictures"
             Text="{x:Static resx:Strings.AssistiveTouch_ScreenShot}" />

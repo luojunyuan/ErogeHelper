@@ -5,10 +5,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared.Contracts;
-using ErogeHelper.View.MainGame.AssistiveMenu;
 using Splat;
 
-namespace ErogeHelper.View.MainGame;
+namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
 public partial class MenuBase : IEnableLogger
 {
@@ -18,19 +17,22 @@ public partial class MenuBase : IEnableLogger
     private readonly Subject<MenuPageTag> _pageNavHideSubj = new();
     private readonly MenuMainPage _menuMainPage = new();
     private readonly MenuDevicePage _menuDevicePage = new();
+    private readonly MenuFunctionPage _menuFunctionPage = new();
 
     public MenuBase()
     {
         InitializeComponent();
         MainMenu.Navigate(_menuMainPage);
         DeviceMenu.Navigate(_menuDevicePage);
+        FunctionMenu.Navigate(_menuFunctionPage);
         ApplyTouchToMenuStoryboard();
         ApplyMenuToTouchStoryboard();
 
         _pageNavHideSubj
             .Merge(_menuMainPage.PageChanged)
             .Merge(_menuDevicePage.PageChanged)
-            //.DistinctUntilChanged()
+            .Merge(_menuFunctionPage.PageChanged)
+            .DistinctUntilChanged()
             .Subscribe(PageNavigation);
 
         Loaded += (_, _) =>
@@ -133,6 +135,14 @@ public partial class MenuBase : IEnableLogger
             case MenuPageTag.DeviceBack:
                 _menuMainPage.FadeIn();
                 _menuDevicePage.TransistOut();
+                break;
+            case MenuPageTag.Function:
+                _menuMainPage.FadeOut();
+                _menuFunctionPage.TransistIn(Height / 3);
+                break;
+            case MenuPageTag.FunctionBack:
+                _menuMainPage.FadeIn();
+                _menuFunctionPage.TransistOut();
                 break;
             default:
                 break;
@@ -242,6 +252,7 @@ public partial class MenuBase : IEnableLogger
 
             _menuMainPage.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             _menuDevicePage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            _menuFunctionPage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         };
     }
 }

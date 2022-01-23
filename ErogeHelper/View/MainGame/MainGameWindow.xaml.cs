@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
+using ErogeHelper.View.MainGame.AssistiveTouchMenu;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.MainGame;
 using ReactiveMarbles.ObservableEvents;

@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="ErogeHelper.View.MainGame.AssistiveTouchMenu.MenuMainPage"
+    x:Class="ErogeHelper.View.MainGame.AssistiveTouchMenu.MenuFunctionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,8 @@
     xmlns:menu="clr-namespace:ErogeHelper.View.MainGame.AssistiveTouchMenu"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="300"
-    Title="MenuMainPage">
+    d:DesignHeight="300" d:DesignWidth="300" d:Visibility="Visible"
+    Visibility="Collapsed">
 
     <Grid x:Name="GridPanel">
         <Grid.ColumnDefinitions>
@@ -22,19 +22,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <menu:MenuItemControl x:Name="Device"
-            Grid.Row="0" Grid.Column="1"
-            ClickEvent="DeviceOnClickEvent" SymbolExtend="Tablet"
-            Text="{x:Static resx:Strings.AssistiveTouch_Device}" />
+        <menu:MenuItemControl x:Name="Back"
+            Grid.Row="1" Grid.Column="1"
+            ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />
 
-        <menu:MenuItemControl x:Name="Function"
+        <menu:MenuItemControl x:Name="HookConfig"
             Grid.Row="1" Grid.Column="2"
-            ClickEvent="FunctionOnClickEvent" Symbol="Repair"
-            Text="{x:Static resx:Strings.AssistiveTouch_Function}" />
-
-        <menu:MenuItemControl x:Name="Preference"
-            Grid.Row="2" Grid.Column="1"
-            ClickEvent="PreferenceOnClickEvent" Symbol="Setting"
-            Text="{x:Static resx:Strings.AssistiveTouch_Preference}" />
+            ClickEvent="HookConfigOnClickEvent" Symbol="Attach"
+            Text="{x:Static resx:Strings.HookPage_Title}" />
     </Grid>
 </Page>

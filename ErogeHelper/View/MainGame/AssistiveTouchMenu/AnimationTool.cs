@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace ErogeHelper.View.MainGame.AssistiveMenu;
+namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
 internal static class AnimationTool
 {

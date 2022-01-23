@@ -4,10 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared.Contracts;
-using ErogeHelper.View.MainGame.AssistiveMenu;
 using ErogeHelper.ViewModel.Preference;
 
-namespace ErogeHelper.View.MainGame;
+namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
 public partial class MenuMainPage : Page
 {
@@ -44,4 +43,6 @@ public partial class MenuMainPage : Page
     private void PreferenceOnClickEvent(object sender, EventArgs e) => DI.ShowView<PreferenceViewModel>();
 
     private void DeviceOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.Device);
+
+    private void FunctionOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.Function);
 }

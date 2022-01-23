@@ -7,7 +7,7 @@ using ErogeHelper.Shared.Contracts;
 using ModernWpf.Controls;
 using Splat;
 
-namespace ErogeHelper.View.MainGame;
+namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
 public partial class MenuItemControl : UserControl, IEnableLogger
 {
@@ -28,7 +28,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         set => SetValue(SymbolProperty, value);
     }
 
-    private void OnSymbolChanged(DependencyPropertyChangedEventArgs e) =>
+    protected void OnSymbolChanged(DependencyPropertyChangedEventArgs e) =>
         ItemIcon.SetCurrentValue(SymbolIcon.SymbolProperty, (Symbol)e.NewValue);
     #endregion
 
@@ -49,7 +49,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         set => SetValue(SymbolExtendProperty, value);
     }
 
-    private void OnSymbolExtendChanged(DependencyPropertyChangedEventArgs e) =>
+    protected void OnSymbolExtendChanged(DependencyPropertyChangedEventArgs e) =>
         ItemIcon.SetCurrentValue(SymbolIcon.SymbolProperty, (Symbol)e.NewValue);
     #endregion
 
@@ -67,7 +67,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger
         set => SetValue(TextProperty, value);
     }
 
-    private void OnTextChanged(DependencyPropertyChangedEventArgs e) =>
+    protected void OnTextChanged(DependencyPropertyChangedEventArgs e) =>
         ItemText.SetCurrentValue(TextBlock.TextProperty, (string)e.NewValue);
     #endregion
 

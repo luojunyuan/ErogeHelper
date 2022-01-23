@@ -5,14 +5,13 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
-using ErogeHelper.View.MainGame.AssistiveMenu;
 using ErogeHelper.ViewModel.MainGame.AssistiveTouchMenu;
 using ModernWpf.Controls;
 using ReactiveUI;
 using WindowsInput.Events;
 using Page = System.Windows.Controls.Page;
 
-namespace ErogeHelper.View.MainGame;
+namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
 public partial class MenuDevicePage : Page, IViewFor<MenuDeviceViewModel>
 {

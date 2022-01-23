@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rxui="http://reactiveui.net"
     xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
+    xmlns:menu="clr-namespace:ErogeHelper.View.MainGame.AssistiveTouchMenu"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.MainGame;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
@@ -22,7 +23,7 @@
     <!--  Layout of the whole game client area  -->
     <Grid>
         <maingame:AssistiveTouch x:Name="Touch" />
-        <maingame:MenuBase x:Name="TouchMenu" />
+        <menu:MenuBase x:Name="TouchMenu" />
 
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"
