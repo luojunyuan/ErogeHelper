@@ -591,4 +591,10 @@ NOTE: You are about updating to dev version. This version may not stable only su
   <data name="GeneralPage.CurrentGame" xml:space="preserve">
     <value>Current Game</value>
   </data>
+  <data name="HookPage.Clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="HookPage.ClipboardTip" xml:space="preserve">
+    <value>Toggle this to add clipboard monitor</value>
+  </data>
 </root>

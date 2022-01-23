@@ -23,4 +23,6 @@ public interface IGameInfoRepository
     public void UpdateTouchEnable(bool status);
 
     public void UpdateTextractorSetting(string setting);
+
+    public void UpdateUseClipboard(bool use);
 }

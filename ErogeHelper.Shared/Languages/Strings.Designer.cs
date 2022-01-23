@@ -712,6 +712,24 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Clipboard 的本地化字符串。
+        /// </summary>
+        public static string HookPage_Clipboard {
+            get {
+                return ResourceManager.GetString("HookPage.Clipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Toggle this to add clipboard monitor 的本地化字符串。
+        /// </summary>
+        public static string HookPage_ClipboardTip {
+            get {
+                return ResourceManager.GetString("HookPage.ClipboardTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Input HCode or RCode 的本地化字符串。
         /// </summary>
         public static string HookPage_CodeInsertDialogTip {

@@ -98,4 +98,12 @@ public class GameInfoRepository : IGameInfoRepository
         connection.Update(info);
         _gameInfo = info;
     }
+
+    public void UpdateUseClipboard(bool use)
+    {
+        using var connection = GetOpenConnection();
+        var info = _gameInfo! with { UseClipboard = use };
+        connection.Update(info);
+        _gameInfo = info;
+    }
 }

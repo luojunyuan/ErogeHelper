@@ -22,4 +22,6 @@ public record GameInfoTable
     public bool UseCloudSave { get; set; }
 
     public string SaveDataPath { get; set; } = string.Empty;
+    
+    public bool UseClipboard { get; set; }
 }

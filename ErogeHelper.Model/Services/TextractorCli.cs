@@ -106,6 +106,8 @@ public class TextractorCli : ITextractorService, IEnableLogger
     public void SetSetting(TextractorSetting setting) => Setting = setting;
     public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
+    public void AddClipboardText(HookParam text) => _dataSubj.OnNext(text);
+
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {
         if (e.Data is not string outputData ||

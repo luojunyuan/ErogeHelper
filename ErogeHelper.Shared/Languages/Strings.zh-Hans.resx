@@ -591,4 +591,10 @@
   <data name="GeneralPage.CurrentGame" xml:space="preserve">
     <value>当前游戏</value>
   </data>
+  <data name="HookPage.Clipboard" xml:space="preserve">
+    <value>剪切板</value>
+  </data>
+  <data name="HookPage.ClipboardTip" xml:space="preserve">
+    <value>添加剪切板监控</value>
+  </data>
 </root>

@@ -54,6 +54,9 @@ internal static class TextHostDll
         int codepage
     );
 
+    /// <summary>
+    /// Weird after a peried of time, we don't use it
+    /// </summary>
     [DllImport(TextHostRelativePath)]
     internal static extern int AddClipboardThread(IntPtr handle);
 }

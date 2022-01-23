@@ -19,6 +19,8 @@ namespace ErogeHelper.ViewModel.HookConfig;
 
 public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
 {
+    public static Action<bool> EnableClipboardCallback { get; set; } = null!;
+
     public HCodeViewModel HCodeViewModel { get; }
 
     public HookViewModel(
@@ -33,6 +35,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         CurrentInUseHookName = textractorService.Setting.HookCode == string.Empty ?
             Strings.Common_None : textractorService.Setting.HookName;
         ConsoleInfo = string.Join('\n', textractorService.GetConsoleOutputInfo());
+        ClipboardStatus = gameInfoRepository.GameInfo.UseClipboard;
         var hookThreads = new SourceCache<HookThreadParam, long>(p => p.Handle);
 
         this.WhenAnyValue(x => x.CurrentInUseHookName)
@@ -52,6 +55,14 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         OpenHCodeDialog
             .Where(code => code != string.Empty)
             .Subscribe(textractorService.InsertHook);
+
+        this.WhenAnyValue(x => x.ClipboardStatus)
+            .Skip(1)
+            .Subscribe(v =>
+            {
+                EnableClipboardCallback(v);
+                gameInfoRepository.UpdateUseClipboard(v);
+            });
 
         textractorService.Data
             .Where(hp => hp.Handle != 0)
@@ -139,6 +150,9 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     public ReactiveCommand<Unit, Unit> ReInject { get; }
 
     public ReactiveCommand<Unit, string> OpenHCodeDialog { get; }
+
+    [Reactive]
+    public bool ClipboardStatus { get; set; }
 
     // No memory leak, but would like to exist for a while
     private readonly ReadOnlyObservableCollection<HookEngineLabel> _hookEngineNames;

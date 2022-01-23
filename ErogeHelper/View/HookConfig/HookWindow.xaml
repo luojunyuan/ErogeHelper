@@ -108,7 +108,12 @@
                                 </ui:AppBarButton>
                                 <!--  Read Code  -->
                                 <ui:AppBarButton Icon="Find" Label="{x:Static resx:Strings.HookPage_RCodeLabel}" ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" />
-
+                                <!--  Clipboard  -->
+                                <ui:AppBarToggleButton x:Name="ClipboardButton" Label="{x:Static resx:Strings.HookPage_Clipboard}" ToolTip="{x:Static resx:Strings.HookPage_ClipboardTip}">
+                                    <ui:AppBarToggleButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.ClipboardList}" />
+                                    </ui:AppBarToggleButton.Icon>
+                                </ui:AppBarToggleButton>
                                 <rxui:ViewModelViewHost x:Name="HcodeDialogHost" />
                             </StackPanel>
 

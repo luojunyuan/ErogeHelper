@@ -14,7 +14,7 @@ public class TouchConversionHooker : ITouchConversionHooker
 {
     private const int MouseDownUpIntervalTime = 50;
     private readonly User32.SafeHHOOK? _hookId;
-    private readonly User32.HookProc _hookCallback;
+    private readonly User32.HookProc _hook;
 
     // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
     private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
@@ -26,14 +26,14 @@ public class TouchConversionHooker : ITouchConversionHooker
         IGameInfoRepository? gameInfoRepository = null,
         IGameDataService? gameDataService = null)
     {
-        _hookCallback = HookCallback;
+        _hook = Hook;
         _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
         Enable = (gameInfoRepository ?? DependencyResolver.GetService<IGameInfoRepository>()).TryGetGameInfo()?.
             IsEnableTouchToMouse ?? false;
 
         var moduleHandle = Kernel32.GetModuleHandle();
 
-        _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, _hookCallback, moduleHandle, 0);
+        _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, _hook, moduleHandle, 0);
         if (_hookId == IntPtr.Zero)
         {
             throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -42,7 +42,7 @@ public class TouchConversionHooker : ITouchConversionHooker
 
     public bool Enable { private get; set; }
 
-    private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+    private IntPtr Hook(int nCode, IntPtr wParam, IntPtr lParam)
     {
         if (!Enable || nCode < 0)
         {

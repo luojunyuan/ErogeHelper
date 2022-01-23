@@ -38,6 +38,10 @@ public partial class HookWindow : IEnableLogger
                 vm => vm.OpenHCodeDialog,
                 v => v.HCodeButton).DisposeWith(d);
 
+            this.Bind(ViewModel,
+                vm => vm.ClipboardStatus,
+                v => v.ClipboardButton.IsChecked).DisposeWith(d);
+
             this.OneWayBind(ViewModel,
                 vm => vm.HookEngineNames,
                 v => v.HookThreadsComboBox.ItemsSource).DisposeWith(d);

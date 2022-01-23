@@ -17,7 +17,10 @@ using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WK.Libraries.SharpClipboardNS;
 using MessageBox = ModernWpf.MessageBox;
+using ReactiveMarbles.ObservableEvents;
+using ErogeHelper.Shared.Structs;
 
 namespace ErogeHelper;
 
@@ -29,8 +32,10 @@ public class AppLauncher
         var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
         var textractorService = DependencyResolver.GetService<ITextractorService>();
         var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
+        var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
-        InitializeGameDatas(gameDataService, textractorService, gameWindowHooker, ehConfigRepository,
+        InitializeGameDatas(
+            gameDataService, textractorService, gameWindowHooker, ehConfigRepository, gameInfoRepository,
             gamePath, leEnable);
 
         var leproc = RunGame(gamePath, leEnable);
@@ -52,8 +57,20 @@ public class AppLauncher
         DI.ShowView<MainGameViewModel>();
 
         // Optional functions
+        var sharpClipboard = DependencyResolver.GetService<SharpClipboard>();
         Observable.Start(() =>
         {
+            // Enable Clipboard of the game
+            if (!gameInfoRepository.GameInfo.UseClipboard)
+            {
+                sharpClipboard.MonitorClipboard = false;
+            }
+            sharpClipboard.Events().ClipboardChanged
+                .Where(e => e.SourceApplication.ID != Environment.ProcessId 
+                    && e.ContentType == SharpClipboard.ContentTypes.Text)
+                .Subscribe(e => textractorService.AddClipboardText(
+                    new HookParam(1, 0, 0, -1, -1, "Clipboard", "HB0@0", e.Content.ToString() ?? string.Empty)));
+
             if (ehConfigRepository.InjectProcessByDefalut)
             {
                 textractorService.InjectProcesses(gameDataService);
@@ -73,9 +90,9 @@ public class AppLauncher
         ITextractorService textractorService,
         IGameWindowHooker gameWindowHooker,
         IEHConfigRepository ehConfigRepository,
+        IGameInfoRepository gameInfoRepository,
         string gamePath, bool leEnable)
     {
-        var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
         var gameDir = Path.GetDirectoryName(gamePath);
         ArgumentNullException.ThrowIfNull(gameDir);
 

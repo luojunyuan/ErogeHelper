@@ -33,6 +33,7 @@ using Refit;
 using Splat;
 using UpdateChecker;
 using Vanara.PInvoke.NetListMgr;
+using WK.Libraries.SharpClipboardNS;
 using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
@@ -67,6 +68,8 @@ internal static class DI
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
         Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
+        var sharpClipboard = new SharpClipboard();
+        Locator.CurrentMutable.RegisterLazySingleton(() => sharpClipboard);
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
 #else
@@ -91,6 +94,7 @@ internal static class DI
         }
 
         // ViewModel->View callback 
+        HookViewModel.EnableClipboardCallback = isUseClipboard => sharpClipboard.MonitorClipboard = isUseClipboard;
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -222,6 +226,7 @@ internal static class DI
                 .ScanIn(typeof(_001AddGameInfoTable).Assembly)
                 .ScanIn(typeof(_002AddUserTermTable).Assembly)
                 .ScanIn(typeof(_003AddSaveDataCloudColumn).Assembly)
+                .ScanIn(typeof(_004AddUseClipboardColumn).Assembly)
                 .For.Migrations())
             .BuildServiceProvider(false);
 

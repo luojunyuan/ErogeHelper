@@ -51,7 +51,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
     private double _oneThirdDistance;
     private double _twoThirdDistance;
 
-    public Action<double>? UpdateMenuStatusCallback;
+    public Action<double>? UpdateMenuStatusDelegate;
 
     public AssistiveTouch()
     {
@@ -262,7 +262,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
                                                            : XamlResource.AssistiveTouchMenuNormalSize;
         XamlResource.AssistiveTouchItemSize = isBigSize ? XamlResource.AssistiveTouchItemBiggerSize
                                                         : XamlResource.AssistiveTouchItemNormalSize;
-        UpdateMenuStatusCallback?.Invoke(parent.ActualHeight);
+        UpdateMenuStatusDelegate!(parent.ActualHeight);
     }
 
     private static ControlTemplate GetAssistiveTouchStyle(bool useBigSize) =>

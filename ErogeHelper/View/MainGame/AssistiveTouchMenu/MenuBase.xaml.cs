@@ -12,7 +12,7 @@ namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 public partial class MenuBase : IEnableLogger
 {
     public event EventHandler? Closed;
-    public Action ShowTouchCallback = null!;
+    public Action? ShowTouchDelegate;
 
     private readonly Subject<MenuPageTag> _pageNavHideSubj = new();
     private readonly MenuMainPage _menuMainPage = new();
@@ -22,6 +22,10 @@ public partial class MenuBase : IEnableLogger
     public MenuBase()
     {
         InitializeComponent();
+
+        if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            return;
+
         MainMenu.Navigate(_menuMainPage);
         DeviceMenu.Navigate(_menuDevicePage);
         FunctionMenu.Navigate(_menuFunctionPage);
@@ -244,7 +248,7 @@ public partial class MenuBase : IEnableLogger
 
         _menuToTouchStoryboard.Completed += (_, _) =>
         {
-            ShowTouchCallback();
+            ShowTouchDelegate!();
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             SetCurrentValue(PaddingProperty, new Thickness(0));
             Closed?.Invoke(this, new());

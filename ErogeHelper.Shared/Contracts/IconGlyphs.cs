@@ -38,6 +38,8 @@ public static class CommonGlyphs
 
     public const string LowerBrightness = "\uEC8A";
 
+    public const string ClipboardList = "\uF0E3";
+
     public const string GroupList = "\uF168";
 }
 
