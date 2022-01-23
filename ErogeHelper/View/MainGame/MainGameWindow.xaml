@@ -22,7 +22,7 @@
     <!--  Layout of the whole game client area  -->
     <Grid>
         <maingame:AssistiveTouch x:Name="Touch" />
-        <maingame:AssistiveTouchMenu x:Name="TouchMenu" />
+        <maingame:MenuBase x:Name="TouchMenu" />
 
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"

@@ -82,7 +82,7 @@ public partial class MainGameWindow : IEnableLogger
     {
         var disposable = new CompositeDisposable();
         var touchMenuBaseMouseUp = TouchMenu.Events().PreviewMouseLeftButtonUp
-            .Where(e => e.OriginalSource is AssistiveTouchMenu);
+            .Where(e => e.OriginalSource is MenuBase);
 
         Touch.UpdateMenuStatusCallback = TouchMenu.UpdateMenuStatus;
         TouchMenu.ShowTouchCallback = Touch.Show;

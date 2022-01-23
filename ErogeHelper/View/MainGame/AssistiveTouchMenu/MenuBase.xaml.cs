@@ -10,7 +10,7 @@ using Splat;
 
 namespace ErogeHelper.View.MainGame;
 
-public partial class AssistiveTouchMenu : IEnableLogger
+public partial class MenuBase : IEnableLogger
 {
     public event EventHandler? Closed;
     public Action ShowTouchCallback = null!;
@@ -19,7 +19,7 @@ public partial class AssistiveTouchMenu : IEnableLogger
     private readonly MenuMainPage _menuMainPage = new();
     private readonly MenuDevicePage _menuDevicePage = new();
 
-    public AssistiveTouchMenu()
+    public MenuBase()
     {
         InitializeComponent();
         MainMenu.Navigate(_menuMainPage);
@@ -117,8 +117,8 @@ public partial class AssistiveTouchMenu : IEnableLogger
         }
         else
         {
-            Height = newGameWindowHeight - EndureEdgeHeight;
-            Width = newGameWindowHeight - EndureEdgeHeight;
+            var newSize = newGameWindowHeight - EndureEdgeHeight;
+            Height = Width = newSize > 0 ? newSize : 0;
         }
     }
 
