@@ -34,5 +34,5 @@ public interface ITextractorService
 
     void RemoveUselessHooks();
 
-    void AddClipboardText(HookParam text);
+    void AddClipboardText(string text);
 }

@@ -597,4 +597,7 @@ NOTE: You are about updating to dev version. This version may not stable only su
   <data name="HookPage.ClipboardTip" xml:space="preserve">
     <value>Toggle this to add clipboard monitor</value>
   </data>
+  <data name="GeneralPage.NotInjectStartup" xml:space="preserve">
+    <value>Do not inject process when startup</value>
+  </data>
 </root>

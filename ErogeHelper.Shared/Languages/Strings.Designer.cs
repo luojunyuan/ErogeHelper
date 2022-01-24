@@ -685,6 +685,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Do not inject process when startup 的本地化字符串。
+        /// </summary>
+        public static string GeneralPage_NotInjectStartup {
+            get {
+                return ResourceManager.GetString("GeneralPage.NotInjectStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Use outside text window 的本地化字符串。
         /// </summary>
         public static string GeneralPage_OutsideWindow {

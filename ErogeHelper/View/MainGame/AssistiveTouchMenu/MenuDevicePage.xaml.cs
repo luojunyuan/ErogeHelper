@@ -43,6 +43,9 @@ public partial class MenuDevicePage : Page, IViewFor<MenuDeviceViewModel>
         InitializeComponent();
         ApplyTransistionInAnimation();
 
+        if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            return;
+
         ViewModel = DependencyResolver.GetService<MenuDeviceViewModel>();
         this.WhenActivated(d =>
         {

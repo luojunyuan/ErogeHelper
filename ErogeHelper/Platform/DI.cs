@@ -8,6 +8,7 @@ using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Repositories.Migration;
 using ErogeHelper.Model.Services;
+using ErogeHelper.Model.Services.Function;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Platform.RxUI;
 using ErogeHelper.Shared;
@@ -57,6 +58,7 @@ internal static class DI
             () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build());
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
+        Locator.CurrentMutable.RegisterLazySingleton<ICommentRepository>(() => new CommentRepository());
         Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
 
@@ -66,6 +68,7 @@ internal static class DI
 
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
+        Locator.CurrentMutable.Register<ScenarioContext>(() => new ScenarioContext());
         Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
         Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
         var sharpClipboard = new SharpClipboard();
@@ -109,6 +112,7 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new MenuDeviceViewModel());
+        Locator.CurrentMutable.Register(() => new DanmakuCanvasViewModel());
 
         Locator.CurrentMutable.Register(() => new TextViewModel());
 
@@ -120,6 +124,7 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new PreferenceViewModel());
         Locator.CurrentMutable.Register(() => new GeneralViewModel());
         Locator.CurrentMutable.Register(() => new MeCabViewModel());
+        Locator.CurrentMutable.Register(() => new DanmakuViewModel());
         Locator.CurrentMutable.Register(() => new AboutViewModel());
     }
 
@@ -129,6 +134,7 @@ internal static class DI
     private static void RegisterViews()
     {
         Locator.CurrentMutable.RegisterLazySingleton<IViewFor<MainGameViewModel>>(() => new MainGameWindow());
+        Locator.CurrentMutable.Register<IViewFor<DanmakuCanvasViewModel>>(() => new DanmakuCanvas());
 
         Locator.CurrentMutable.Register<IViewFor<TextViewModel>>(() => new TextWindow());
 
@@ -141,6 +147,7 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<PreferenceViewModel>>(() => new PreferenceWindow());
         Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());
         Locator.CurrentMutable.Register<IViewFor<MeCabViewModel>>(() => new MeCabPage());
+        Locator.CurrentMutable.Register<IViewFor<DanmakuViewModel>>(() => new DanmakuPage());
         Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
     }
 

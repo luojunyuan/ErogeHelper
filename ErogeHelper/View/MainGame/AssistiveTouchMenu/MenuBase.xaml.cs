@@ -23,9 +23,6 @@ public partial class MenuBase : IEnableLogger
     {
         InitializeComponent();
 
-        if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            return;
-
         MainMenu.Navigate(_menuMainPage);
         DeviceMenu.Navigate(_menuDevicePage);
         FunctionMenu.Navigate(_menuFunctionPage);

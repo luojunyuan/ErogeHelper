@@ -38,6 +38,8 @@
                     <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.LangJPN}" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
+            <ui:NavigationViewItem Content="Danmaku" Tag="danmaku" ToolTip="Danmaku" />
+
         </ui:NavigationView.MenuItems>
 
         <ui:NavigationView.FooterMenuItems>

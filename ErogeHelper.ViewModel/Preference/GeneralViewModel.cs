@@ -50,6 +50,11 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UseBigAssistiveTouchSize = v);
 
+        StartupInject = ehConfigRepository.InjectProcessByDefalut;
+        this.WhenAnyValue(x => x.StartupInject)
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.InjectProcessByDefalut = v);
+
         HideTextWindow = ehConfigRepository.HideTextWindow;
         this.WhenAnyValue(x => x.HideTextWindow)
             .Skip(1)
@@ -76,6 +81,9 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 
     [Reactive]
     public bool UseBigSizeAssistiveTouch { get; set; }
+
+    [Reactive]
+    public bool StartupInject { get; set; }
 
     [Reactive]
     public bool HideTextWindow { get; set; }

@@ -6,6 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.WinUI.Notifications;
@@ -32,6 +33,7 @@ public partial class App : IEnableLogger
             SingleInstanceWatcher();
 
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Startup += (_, startupEvent) =>
             {

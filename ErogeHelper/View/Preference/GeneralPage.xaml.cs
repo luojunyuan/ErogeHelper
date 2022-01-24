@@ -24,6 +24,11 @@ public partial class GeneralPage
                 v => v.BigSizeAssistiveTouch.IsOn).DisposeWith(d);
 
             this.Bind(ViewModel,
+                vm => vm.StartupInject,
+                v => v.NotStartupInject.IsOn, 
+                x => !x, x => !x).DisposeWith(d);
+
+            this.Bind(ViewModel,
                 vm => vm.HideTextWindow,
                 v => v.HideTextWindow.IsOn).DisposeWith(d);
 
@@ -36,4 +41,6 @@ public partial class GeneralPage
                 v => v.EdgeTouchMask.IsOn).DisposeWith(d);
         });
     }
+
+    private void ForceGCButtonOnClick(object sender, System.Windows.RoutedEventArgs e) => GC.Collect();
 }

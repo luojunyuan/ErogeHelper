@@ -24,10 +24,15 @@
             <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
                 <ui:SimpleStackPanel Spacing="10">
                     <ui:ToggleSwitch x:Name="BigSizeAssistiveTouch" Header="{x:Static resx:Strings.GeneralPage_ButtonBiggerSize}" />
-                    <!--  TODO: 启动时不自动注入  -->
+                    <ui:ToggleSwitch x:Name="NotStartupInject" Header="{x:Static resx:Strings.GeneralPage_NotInjectStartup}" />
                     <ui:ToggleSwitch x:Name="HideTextWindow" Header="{x:Static resx:Strings.GeneralPage_HideTextWindow}" />
                     <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}" />
                     <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+            <GroupBox Header="Developer Options">
+                <ui:SimpleStackPanel Spacing="10">
+                    <Button Click="ForceGCButtonOnClick" Content="Force GC" />
                 </ui:SimpleStackPanel>
             </GroupBox>
         </ui:SimpleStackPanel>

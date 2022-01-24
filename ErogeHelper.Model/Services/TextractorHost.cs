@@ -125,7 +125,21 @@ public class TextractorHost : ITextractorService, IEnableLogger
     public void SetSetting(TextractorSetting setting) => Setting = setting;
     public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
-    public void AddClipboardText(HookParam text) => _dataSubj.OnNext(text);
+    public TextractorHost()
+    {
+        _threadHandleDict[-1] = new HookParam
+        {
+            Handle = -1,
+            Pid = 0,
+            Address = 0,
+            Ctx = -1,
+            Ctx2 = -1,
+            Name = "Clipboard",
+            HookCode = "HB0@0"
+        };
+    }
+
+    public void AddClipboardText(string text) => OutputHandle(-1, text, (uint)text.Length);
 
     #region TextHost Callback Implement
 

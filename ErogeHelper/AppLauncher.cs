@@ -60,7 +60,6 @@ public class AppLauncher
         var sharpClipboard = DependencyResolver.GetService<SharpClipboard>();
         Observable.Start(() =>
         {
-            // Enable Clipboard of the game
             if (!gameInfoRepository.GameInfo.UseClipboard)
             {
                 sharpClipboard.MonitorClipboard = false;
@@ -68,8 +67,7 @@ public class AppLauncher
             sharpClipboard.Events().ClipboardChanged
                 .Where(e => e.SourceApplication.ID != Environment.ProcessId 
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
-                .Subscribe(e => textractorService.AddClipboardText(
-                    new HookParam(1, 0, 0, -1, -1, "Clipboard", "HB0@0", e.Content.ToString() ?? string.Empty)));
+                .Subscribe(e => textractorService.AddClipboardText(e.Content.ToString() ?? string.Empty));
 
             if (ehConfigRepository.InjectProcessByDefalut)
             {

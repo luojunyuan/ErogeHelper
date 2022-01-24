@@ -18,22 +18,34 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 {
     private const int GameFullscreenStatusRefreshTime = 200;
 
+    [Reactive]
+    public DanmakuCanvasViewModel? DanmakuCanvasViewModel { get; private set; }
+
     public MainGameViewModel(
         IEHConfigRepository? ehConfigRepository = null,
         IGameWindowHooker? gameWindowHooker = null,
-        IGameInfoRepository? ehDbRepository = null,
+        IGameInfoRepository? ehGameInfoRepository = null,
         IGameDataService? gameDataService = null,
         IWindowDataService? windowDataService = null)
     {
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
-        ehDbRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
+        ehGameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
+        if (ehConfigRepository.UseDanmaku)
+        {
+            DanmakuCanvasViewModel = DependencyResolver.GetService<DanmakuCanvasViewModel>();
+        }
 
         ehConfigRepository.WhenAnyValue(x => x.UseEdgeTouchMask)
             .ObserveOn(RxApp.MainThreadScheduler)
             .ToPropertyEx(this, x => x.ShowEdgeTouchMask)
+            .DisposeWith(_disposables);
+
+        ehConfigRepository.WhenAnyValue(x => x.UseDanmaku)
+            .Select(v => v ? DependencyResolver.GetService<DanmakuCanvasViewModel>() : null)
+            .Subscribe(vm => DanmakuCanvasViewModel = vm)
             .DisposeWith(_disposables);
 
         gameWindowHooker.GamePosUpdated
@@ -90,7 +102,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             gameWindowHooker.InvokeUpdatePosition();
 
             windowDataService.InitMainWindowHandle(handle);
-            HwndTools.WindowLostFocus(handle, ehDbRepository.GameInfo.IsLoseFocus);
+            HwndTools.WindowLostFocus(handle, ehGameInfoRepository.GameInfo.IsLoseFocus);
             return Unit.Default;
         });
 

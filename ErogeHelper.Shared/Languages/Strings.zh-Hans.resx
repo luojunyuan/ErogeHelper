@@ -597,4 +597,7 @@
   <data name="HookPage.ClipboardTip" xml:space="preserve">
     <value>添加剪切板监控</value>
   </data>
+  <data name="GeneralPage.NotInjectStartup" xml:space="preserve">
+    <value>不在启动时自动注入</value>
+  </data>
 </root>

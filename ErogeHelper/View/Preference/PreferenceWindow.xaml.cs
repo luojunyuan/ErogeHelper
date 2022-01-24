@@ -19,6 +19,7 @@ public partial class PreferenceWindow
         ViewModel ??= DependencyResolver.GetService<PreferenceViewModel>();
         var generalViewModel = DependencyResolver.GetService<GeneralViewModel>();
         var mecabViewModel = DependencyResolver.GetService<MeCabViewModel>();
+        var danmakuViewModel = DependencyResolver.GetService<DanmakuViewModel>();
         var aboutViewModel = DependencyResolver.GetService<AboutViewModel>();
 
         Height = ViewModel.Height;
@@ -61,6 +62,9 @@ public partial class PreferenceWindow
                             break;
                         case PageTag.MeCab:
                             ViewModel!.Router.NavigateAndReset.Execute(mecabViewModel);
+                            break;
+                        case PageTag.Danmaku:
+                            ViewModel!.Router.NavigateAndReset.Execute(danmakuViewModel);
                             break;
                         case PageTag.About:
                             ViewModel!.Router.NavigateAndReset.Execute(aboutViewModel);

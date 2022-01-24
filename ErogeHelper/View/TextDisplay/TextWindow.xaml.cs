@@ -84,6 +84,7 @@ public partial class TextWindow : IEnableLogger
             this.OneWayBind(ViewModel,
                 vm => vm.WindowWidth,
                 v => v.WidthSlider.Value).DisposeWith(d);
+            // TODO: Refactor InvokeCommand to BindCommand
             WidthSlider.Events().ValueChanged
                 .Select(arg => arg.NewValue)
                 .InvokeCommand(this, x => x.ViewModel!.WindowWidthChanged).DisposeWith(d);

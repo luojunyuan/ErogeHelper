@@ -66,6 +66,10 @@ public partial class MainGameWindow : IEnableLogger
                 vm => vm.ShowEdgeTouchMask,
                 v => v.PreventFalseTouchMask.Visibility,
                 value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.DanmakuCanvasViewModel,
+                v => v.Danmaku.ViewModel).DisposeWith(d);
         });
     }
 
