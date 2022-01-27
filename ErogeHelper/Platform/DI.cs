@@ -54,13 +54,17 @@ internal static class DI
         RegisterInteractions();
 
         // DataService
-        Locator.CurrentMutable.RegisterLazySingleton(
-            () => new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build());
+        var ehConfigRepository = 
+            new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
+        Locator.CurrentMutable.RegisterConstant(ehConfigRepository);
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
-        Locator.CurrentMutable.RegisterLazySingleton<ICommentRepository>(() => new CommentRepository());
+        Locator.CurrentMutable.RegisterLazySingleton<ICommentRepository>(
+            () => new CommentRepository(EHContext.DbConnectString));
         Locator.CurrentMutable.Register(() => RestService.For<IHookCodeService>(ConstantValue.AniclanBaseUrl,
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
+        Locator.CurrentMutable.Register(
+            () => RestService.For<IEHServerApiRepository>(ehConfigRepository.ServerBaseUrl));
 
         // In memory state
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
@@ -68,11 +72,11 @@ internal static class DI
 
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
-        Locator.CurrentMutable.Register<ScenarioContext>(() => new ScenarioContext());
+        Locator.CurrentMutable.Register(() => new ScenarioContext());
         Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
         Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
         var sharpClipboard = new SharpClipboard();
-        Locator.CurrentMutable.RegisterLazySingleton(() => sharpClipboard);
+        Locator.CurrentMutable.RegisterConstant(sharpClipboard);
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
 #else
@@ -230,10 +234,10 @@ internal static class DI
             .ConfigureRunner(rb => rb
                 .AddSQLite()
                 .WithGlobalConnectionString(EHContext.DbConnectString)
-                .ScanIn(typeof(_001AddGameInfoTable).Assembly)
-                .ScanIn(typeof(_002AddUserTermTable).Assembly)
-                .ScanIn(typeof(_003AddSaveDataCloudColumn).Assembly)
-                .ScanIn(typeof(_004AddUseClipboardColumn).Assembly)
+                .ScanIn(typeof(AddGameInfoTable).Assembly)
+                .ScanIn(typeof(AddUserTermTable).Assembly)
+                .ScanIn(typeof(AddSaveDataCloudColumn).Assembly)
+                .ScanIn(typeof(AddUseClipboardColumn).Assembly)
                 .For.Migrations())
             .BuildServiceProvider(false);
 

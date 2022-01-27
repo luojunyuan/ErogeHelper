@@ -11,7 +11,7 @@
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Preference;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:GeneralViewModel}"
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="850" d:DesignWidth="800">
 
     <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
         <ui:SimpleStackPanel Margin="20 10" Spacing="10">
@@ -33,6 +33,10 @@
             <GroupBox Header="Developer Options">
                 <ui:SimpleStackPanel Spacing="10">
                     <Button Click="ForceGCButtonOnClick" Content="Force GC" />
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <Label VerticalAlignment="Center" Content="Server Url:" />
+                        <TextBox x:Name="ServerUrl" MinWidth="140" ui:ControlHelper.PlaceholderText="https://eh.nya.run" />
+                    </ui:SimpleStackPanel>
                 </ui:SimpleStackPanel>
             </GroupBox>
         </ui:SimpleStackPanel>

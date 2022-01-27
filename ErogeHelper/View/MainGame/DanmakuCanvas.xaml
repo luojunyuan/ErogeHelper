@@ -17,7 +17,7 @@
             Margin="24" HorizontalAlignment="Left" VerticalAlignment="Bottom"
             Background="White" Orientation="Horizontal">
             <TextBox x:Name="DanmakuContent" MinWidth="240" />
-            <Button Click="Button_Click" Content="Send" />
+            <Button x:Name="SendDanmaku" Content="Send" />
         </StackPanel>
     </Grid>
 </rxui:ReactiveUserControl>

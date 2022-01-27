@@ -14,6 +14,8 @@ public interface IGameInfoRepository
 
     public void UpdateGameInfo(GameInfoTable gameInfoTable);
 
+    public void UpdateGameIdList(string gameIdList);
+
     public void UpdateCloudStatus(bool useCloudSaveData);
 
     public void UpdateSaveDataPath(string path);

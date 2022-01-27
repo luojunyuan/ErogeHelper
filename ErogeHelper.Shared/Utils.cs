@@ -26,6 +26,33 @@ public static class Utils
 
     public static bool IsArm { get; } = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
 
+    public static Dictionary<string, string> GetGameNamesByPath(string absolutePath)
+    {
+        var file = Path.GetFileName(absolutePath);
+        var fullDir = Path.GetDirectoryName(absolutePath) ?? string.Empty;
+        var dir = Path.GetFileName(fullDir);
+        var fileWithoutExtension = Path.GetFileNameWithoutExtension(absolutePath);
+
+        return new Dictionary<string, string>
+        {
+            { "File", file },
+            { "Dir", dir },
+            { "FileNoExt", fileWithoutExtension },
+        };
+    }
+
+    public static Dictionary<string, string> GetGameNamesByProcess(Process proc)
+    {
+        var fullPath = proc.MainModule?.FileName ?? string.Empty;
+        if (fullPath == string.Empty)
+            return new();
+        var dictionary = GetGameNamesByPath(fullPath);
+        var title = proc.MainWindowTitle;
+        dictionary.Add("Title", title);
+
+        return dictionary;
+    }
+
     public static bool IsFileInUse(string fileName)
     {
         var inUse = true;

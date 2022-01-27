@@ -1,5 +1,8 @@
 ﻿using System.Reactive.Disposables;
 using ReactiveUI;
+using ReactiveMarbles.ObservableEvents;
+using System.Reactive.Linq;
+using System.Windows.Controls;
 
 namespace ErogeHelper.View.Preference;
 

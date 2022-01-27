@@ -16,6 +16,52 @@
         <ui:SimpleStackPanel Margin="20 10" Spacing="10">
             <ui:ToggleSwitch x:Name="DanmakuSwitch" Header="Danmaku(In Test)" />
 
+            <ui:SimpleStackPanel Spacing="8">
+                <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                    <Button Content="Sync" />
+                    <Label Margin="10 0 0 0" VerticalAlignment="Center" Content="Last sync time: " />
+                    <TextBlock d:Text="yyyy-mm-dd 00/00" x:Name="LastSyncTime" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <ListView Margin="0 10 0 0" ItemsSource="{Binding Comments}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding CreationTime}" Header="Creation Time" />
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Text}" Header="Text" />
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Danmaku}" Header="Comment" />
+                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Username}" Header="Username" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <StackPanel
+                    Margin="8 8 4 0" VerticalAlignment="Center"
+                    DataContext="{Binding PageParameters}"
+                    Orientation="Horizontal">
+                    <RepeatButton
+                        Height="26"
+                        Padding="0"
+                        Command="{Binding PreviousPageCommand}"
+                        Content=" ← " ToolTip="Move to previous page" />
+                    <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="Page {0} of {1}">
+                                <Binding Path="CurrentPage" />
+                                <Binding Path="PageCount" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <RepeatButton
+                        Height="26"
+                        Margin="8 0 0 0" Padding="0"
+                        Command="{Binding NextPageCommand}"
+                        Content=" → " ToolTip="Move to next page" />
+                    <TextBlock
+                        Margin="8 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Text="{Binding PageSize, StringFormat='(\{0} items per page)'}" />
+                </StackPanel>
+
+            </ui:SimpleStackPanel>
         </ui:SimpleStackPanel>
     </component:ScrollViewerSmooth>
 </rxui:ReactiveUserControl>

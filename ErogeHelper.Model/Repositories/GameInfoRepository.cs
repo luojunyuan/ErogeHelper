@@ -59,6 +59,14 @@ public class GameInfoRepository : IGameInfoRepository
         connection.Update(gameInfoTable);
     }
 
+    public void UpdateGameIdList(string gameIdList)
+    {
+        using var connection = GetOpenConnection();
+        var info = _gameInfo! with { GameIdList = gameIdList };
+        connection.Update(info);
+        _gameInfo = info;
+    }
+
     public void UpdateCloudStatus(bool useCloudSaveData)
     {
         using var connection = GetOpenConnection();

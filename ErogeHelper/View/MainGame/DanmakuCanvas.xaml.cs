@@ -10,7 +10,7 @@ namespace ErogeHelper.View.MainGame;
 public partial class DanmakuCanvas
 {
     private readonly DanmakuStyle _danmakuStyle = new();
-    private WPFDanmakuEngine? _damakuEngine;
+    private WPFDanmakuEngine? _danmakuEngine;
 
     public DanmakuCanvas()
     {
@@ -19,7 +19,7 @@ public partial class DanmakuCanvas
         var engineBehavior = new EngineBehavior(DrawMode.WPF, CollisionPrevention.Enabled);
         _danmakuStyle.FontSize = 22;
         DanmakuContainer.Loaded += (s, _) =>
-            _damakuEngine = new WPFDanmakuEngine(engineBehavior, _danmakuStyle, (Canvas)s);
+            _danmakuEngine = new WPFDanmakuEngine(engineBehavior, _danmakuStyle, (Canvas)s);
 
         this.WhenActivated(d =>
         {
@@ -37,13 +37,10 @@ public partial class DanmakuCanvas
         var duration = DanmakuContainer.ActualWidth / (120 + text.Length);
         _danmakuStyle.Duration = (int)duration;
         // override default danmaku style
-        _damakuEngine?.DrawDanmaku(text, _danmakuStyle);
+        if (text == string.Empty)
+            return;
+        _danmakuEngine?.DrawDanmaku(text, _danmakuStyle);
     }
 
     // Max danmaku length 100, tip when over it and disable button
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-        ToastDanmaku(DanmakuContent.Text);
-    }
 }

@@ -28,5 +28,6 @@ public class DanmakuCanvasViewModel : ReactiveObject, IActivatableViewModel
     public IObservable<string> NewDanmakuTerm => 
         _scenarioContext
             .ScenarioHash
-            .SelectMany(hash => _commentRepository.GetAllCommentByHash(hash));
+            .SelectMany(hash => _commentRepository.GetAllCommentByHash(hash))
+            .Take(20);
 }

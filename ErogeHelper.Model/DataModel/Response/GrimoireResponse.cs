@@ -6,7 +6,7 @@ namespace ErogeHelper.Model.DataModel.Response
     /// VNR Grimoire xml format, use for fetching code on Aniclan
     /// </summary>
     [XmlRoot(ElementName = "grimoire")]
-    public class Grimoire
+    public class GrimoireResponse
     {
         [XmlElement(ElementName = "games")]
         public GamesClass? Games { get; set; }

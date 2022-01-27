@@ -6,5 +6,5 @@ namespace ErogeHelper.Model.Repositories.Interface;
 public interface IHookCodeService
 {
     [Get("/connection.php?go=game_query")]
-    IObservable<Grimoire?> QueryHCode(string md5);
+    IObservable<GrimoireResponse?> QueryHCode(string md5);
 }

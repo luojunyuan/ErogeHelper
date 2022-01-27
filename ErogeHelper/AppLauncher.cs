@@ -21,6 +21,9 @@ using WK.Libraries.SharpClipboardNS;
 using MessageBox = ModernWpf.MessageBox;
 using ReactiveMarbles.ObservableEvents;
 using ErogeHelper.Shared.Structs;
+using ErogeHelper.Model.DataModel.Response;
+using System.Net.Http;
+using ErogeHelper.Model.DataModel.Payload;
 
 namespace ErogeHelper;
 
@@ -67,6 +70,7 @@ public class AppLauncher
             sharpClipboard.Events().ClipboardChanged
                 .Where(e => e.SourceApplication.ID != Environment.ProcessId 
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
+                .Skip(1)
                 .Subscribe(e => textractorService.AddClipboardText(e.Content.ToString() ?? string.Empty));
 
             if (ehConfigRepository.InjectProcessByDefalut)
@@ -91,6 +95,7 @@ public class AppLauncher
         IGameInfoRepository gameInfoRepository,
         string gamePath, bool leEnable)
     {
+        var ehServerApiRepository = DependencyResolver.GetService<IEHServerApiRepository>();
         var gameDir = Path.GetDirectoryName(gamePath);
         ArgumentNullException.ThrowIfNull(gameDir);
 
@@ -116,7 +121,7 @@ public class AppLauncher
 
         gameDataService.InitGameMd5AndPath(md5, gamePath);
 
-
+        // Creating or reading the GameInfo table
         gameInfoRepository.InitGameMd5(md5);
         var gameInfo = gameInfoRepository.TryGetGameInfo();
         if (gameInfo is null)

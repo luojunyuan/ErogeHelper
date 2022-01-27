@@ -22,9 +22,9 @@
 
     <!--  Layout of the whole game client area  -->
     <Grid>
+        <rxui:ViewModelViewHost x:Name="Danmaku" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
         <maingame:AssistiveTouch x:Name="Touch" />
         <menu:MenuBase x:Name="TouchMenu" />
-        <rxui:ViewModelViewHost x:Name="Danmaku" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
 
         <!--  Top of Z-axis  -->
         <Border x:Name="PreventFalseTouchMask"

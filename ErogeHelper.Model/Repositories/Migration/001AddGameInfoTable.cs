@@ -3,7 +3,7 @@
 namespace ErogeHelper.Model.Repositories.Migration;
 
 [Migration(20210325151400)]
-public class _001AddGameInfoTable : AutoReversingMigration
+public class AddGameInfoTable : AutoReversingMigration
 {
     public override void Up() =>
         Create.Table("GameInfo")
