@@ -67,6 +67,7 @@ public partial class App : IEnableLogger
                 DI.RegisterServices();
                 DI.WarmingUp();
 
+                _ = System.Text.Json.JsonSerializer.Deserialize<Shared.Entities.TextractorSetting>("{}");
                 AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };
         }

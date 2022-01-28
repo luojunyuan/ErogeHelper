@@ -15,15 +15,11 @@ using ErogeHelper.Shared.Languages;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.MainGame;
 using Microsoft.Win32;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 using WK.Libraries.SharpClipboardNS;
 using MessageBox = ModernWpf.MessageBox;
-using ReactiveMarbles.ObservableEvents;
-using ErogeHelper.Shared.Structs;
-using ErogeHelper.Model.DataModel.Response;
-using System.Net.Http;
-using ErogeHelper.Model.DataModel.Payload;
 
 namespace ErogeHelper;
 
@@ -59,8 +55,10 @@ public class AppLauncher
         gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
         DI.ShowView<MainGameViewModel>();
 
-        // Optional functions
+        // Clipboard in UI thread
         var sharpClipboard = DependencyResolver.GetService<SharpClipboard>();
+
+        // Optional functions
         Observable.Start(() =>
         {
             if (!gameInfoRepository.GameInfo.UseClipboard)
@@ -68,7 +66,7 @@ public class AppLauncher
                 sharpClipboard.MonitorClipboard = false;
             }
             sharpClipboard.Events().ClipboardChanged
-                .Where(e => e.SourceApplication.ID != Environment.ProcessId 
+                .Where(e => e.SourceApplication.ID != Environment.ProcessId
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
                 .Skip(1)
                 .Subscribe(e => textractorService.AddClipboardText(e.Content.ToString() ?? string.Empty));
