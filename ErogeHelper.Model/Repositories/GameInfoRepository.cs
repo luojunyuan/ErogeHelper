@@ -40,7 +40,7 @@ public class GameInfoRepository : IGameInfoRepository
         if (_gameInfo is null)
         {
             using var connection = GetOpenConnection();
-            _gameInfo = new() { TextractorSettingJson = "{}" }; // connection.Get<GameInfoTable>(GameMd5);
+            _gameInfo = connection.Get<GameInfoTable>(GameMd5);
         }
 
         return _gameInfo;

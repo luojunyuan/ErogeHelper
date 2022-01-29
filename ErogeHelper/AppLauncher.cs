@@ -121,6 +121,7 @@ public class AppLauncher
 
         // Creating or reading the GameInfo table
         gameInfoRepository.InitGameMd5(md5);
+        // NOTE: There is a >5mb large object heap allocate
         var gameInfo = gameInfoRepository.TryGetGameInfo();
         if (gameInfo is null)
         {
