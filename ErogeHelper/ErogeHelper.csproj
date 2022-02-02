@@ -62,9 +62,26 @@
   </Target>
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
     <Move SourceFiles="$(PublishDir)libs\x64\texthost.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
-    <Delete Files="$(PublishDir)libs\x86\texthost.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\concrt140.dll" DestinationFiles="$(PublishDir)libs\concrt140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\msvcp140.dll" DestinationFiles="$(PublishDir)libs\msvcp140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\msvcp140_1.dll" DestinationFiles="$(PublishDir)libs\msvcp140_1.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\msvcp140_2.dll" DestinationFiles="$(PublishDir)libs\msvcp140_2.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\msvcp140_atomic_wait.dll" DestinationFiles="$(PublishDir)libs\msvcp140_atomic_wait.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\msvcp140_codecvt_ids.dll" DestinationFiles="$(PublishDir)libs\msvcp140_codecvt_ids.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\vccorlib140.dll" DestinationFiles="$(PublishDir)libs\vccorlib140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\vcruntime140.dll" DestinationFiles="$(PublishDir)libs\vcruntime140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x64\vcruntime140_1.dll" DestinationFiles="$(PublishDir)libs\vcruntime140_1.dll" />
     <Delete Files="$(PublishDir)libs\x64\TextractorCLI.exe" />
+    <Delete Files="$(PublishDir)libs\x86\texthost.dll" />
     <Delete Files="$(PublishDir)libs\x86\TextractorCLI.exe" />
+    <Delete Files="$(PublishDir)libs\x86\concrt140.dll" />
+    <Delete Files="$(PublishDir)libs\x86\msvcp140.dll" />
+    <Delete Files="$(PublishDir)libs\x86\msvcp140_1.dll" />
+    <Delete Files="$(PublishDir)libs\x86\msvcp140_2.dll" />
+    <Delete Files="$(PublishDir)libs\x86\msvcp140_atomic_wait.dll" />
+    <Delete Files="$(PublishDir)libs\x86\msvcp140_codecvt_ids.dll" />
+    <Delete Files="$(PublishDir)libs\x86\vccorlib140.dll" />
+    <Delete Files="$(PublishDir)libs\x86\vcruntime140.dll" />
     <Move SourceFiles="$(PublishDir)libs\Installer.exe" DestinationFiles="$(PublishDir)..\Installer.exe" />
     <Move SourceFiles="$(PublishDir)libs\ProcessSelector.exe" DestinationFiles="$(PublishDir)..\ProcessSelector.exe" />
   </Target>
@@ -74,9 +91,28 @@
   </Target>
   <Target Name="TextHostX86-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86'" AfterTargets="Publish">
     <Move SourceFiles="$(PublishDir)libs\x86\texthost.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\concrt140.dll" DestinationFiles="$(PublishDir)libs\concrt140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\msvcp140.dll" DestinationFiles="$(PublishDir)libs\msvcp140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\msvcp140_1.dll" DestinationFiles="$(PublishDir)libs\msvcp140_1.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\msvcp140_2.dll" DestinationFiles="$(PublishDir)libs\msvcp140_2.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\msvcp140_atomic_wait.dll" DestinationFiles="$(PublishDir)libs\msvcp140_atomic_wait.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\msvcp140_codecvt_ids.dll" DestinationFiles="$(PublishDir)libs\msvcp140_codecvt_ids.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\vccorlib140.dll" DestinationFiles="$(PublishDir)libs\vccorlib140.dll" />
+    <Move SourceFiles="$(PublishDir)libs\x86\vcruntime140.dll" DestinationFiles="$(PublishDir)libs\vcruntime140.dll" />
     <Delete Files="$(PublishDir)libs\x64\texthost.dll" />
     <Delete Files="$(PublishDir)libs\x64\TextractorCLI.exe" />
     <Delete Files="$(PublishDir)libs\x86\TextractorCLI.exe" />
+    <Delete Files="$(PublishDir)libs\x64\concrt140.dll" />
+    <Delete Files="$(PublishDir)libs\x64\msvcp140.dll" />
+    <Delete Files="$(PublishDir)libs\x64\msvcp140_1.dll" />
+    <Delete Files="$(PublishDir)libs\x64\msvcp140_2.dll" />
+    <Delete Files="$(PublishDir)libs\x64\msvcp140_atomic_wait.dll" />
+    <Delete Files="$(PublishDir)libs\x64\msvcp140_codecvt_ids.dll" />
+    <Delete Files="$(PublishDir)libs\x64\vccorlib140.dll" />
+    <Delete Files="$(PublishDir)libs\x64\vcruntime140.dll" />
+    <Delete Files="$(PublishDir)libs\x64\vcruntime140_1.dll" />
+    <Move SourceFiles="$(PublishDir)libs\Installer.exe" DestinationFiles="$(PublishDir)..\Installer.exe" />
+    <Move SourceFiles="$(PublishDir)libs\ProcessSelector.exe" DestinationFiles="$(PublishDir)..\ProcessSelector.exe" />
   </Target>
 
   <Target Name="TextractorCLI-Publish" Condition="'$(RuntimeIdentifier)' == 'win-arm64'" AfterTargets="Publish">

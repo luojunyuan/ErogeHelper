@@ -135,10 +135,12 @@ public partial class MenuDevicePage : Page
         _transitionInStoryboard.Completed += (_, _) =>
         {
             VolumeDown.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
-            Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
-            TaskView.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
-            DockRight.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
             ScreenShot.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+            TaskView.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+            Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+            DockRight.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+            BrightnessDown.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+            BrightnessUp.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
             GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
 
             if (_transitionInStoryboard.AutoReverse == true)
