@@ -1,110 +1,85 @@
-﻿using System.Windows;
+﻿using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using ErogeHelper.Platform;
 using ErogeHelper.Shared.Contracts;
+using ErogeHelper.ViewModel;
+using ReactiveUI;
 using WindowsInput.Events;
 
 namespace ErogeHelper.View.Keyboard;
 
 public partial class VirtualKeyboardWindow
 {
-    private const int PressEnterKeyIntervalTime = 25;
-
-    private const int PressFirstKeyLagTime = 500;
-
     public VirtualKeyboardWindow()
     {
         InitializeComponent();
-        // TODO: Same window follower as MainGameWindow. Abosolute Close and Edit Button. Editable Canva with buttons
+        var handle = WpfHelper.GetWpfWindowHandle(this);
+        HwndTools.HideWindowInAltTab(handle);
+        HwndTools.WindowLostFocus(handle, true);
 
-        _enterHolder = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromMilliseconds(PressEnterKeyIntervalTime)
-        };
-        _enterHolder.Tick += async (_, _) =>
-            await WindowsInput.Simulate.Events()
-                .Click(KeyCode.Enter)
-                .Invoke().ConfigureAwait(false);
+        var disposable = new CompositeDisposable();
+        var mainWindow = Application.Current.MainWindow;
+        mainWindow.WhenAnyValue(x => x.Left)
+            .BindTo(this, x => x.Left)
+            .DisposeWith(disposable);
+        mainWindow.WhenAnyValue(x => x.Top)
+            .BindTo(this, x => x.Top)
+            .DisposeWith(disposable);
+        mainWindow.WhenAnyValue(x => x.Width)
+            .BindTo(this, x => x.Width)
+            .DisposeWith(disposable);
+        mainWindow.WhenAnyValue(x => x.Height)
+            .BindTo(this, x => x.Height)
+            .DisposeWith(disposable);
+        Closed += (_, _) => disposable.Dispose();
     }
 
-    private void ControlButton_Click(object sender, RoutedEventArgs e)
+    private void PanelControlButtonOnClick(object sender, RoutedEventArgs e)
     {
-        TheButtonBox.SetCurrentValue(VisibilityProperty, TheButtonBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
-        ControlButton.SetCurrentValue(ContentProperty, ControlButton.Content.ToString() == "<" ? '>' : '<');
+        TheButtonBox.SetCurrentValue(VisibilityProperty,
+            TheButtonBox.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
+        PanelControlButton.SetCurrentValue(ContentProperty, PanelControlButton.Content.ToString() == "<" ? '>' : '<');
     }
+
+    private static EventBuilder PressKeyWithDelay(KeyCode key) =>
+        WindowsInput.Simulate.Events()
+            .Hold(key)
+            .Wait(ConstantValue.UserTimerMinimum)
+            .Release(key);
 
     private async void Esc(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Escape)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Escape).Invoke().ConfigureAwait(false);
 
     private async void Ctrl(object sender, MouseButtonEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Hold(KeyCode.Control)
-            .Invoke().ConfigureAwait(false);
+        await WindowsInput.Simulate.Events().Hold(KeyCode.Control).Invoke().ConfigureAwait(false);
 
     private async void CtrlRelease(object sender, MouseButtonEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Release(KeyCode.Control)
-            .Invoke().ConfigureAwait(false);
+        await WindowsInput.Simulate.Events().Release(KeyCode.Control).Invoke().ConfigureAwait(false);
 
-    private readonly DispatcherTimer _enterHolder;
-
-    private bool _enterIsHolded = false;
-
-    private async void Enter(object sender, MouseButtonEventArgs e)
-    {
-        _enterIsHolded = true;
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Enter)
-            .Wait(PressFirstKeyLagTime)
-            .Invoke().ConfigureAwait(false);
-        if (_enterIsHolded)
-        {
-            _enterHolder.Start();
-        }
-    }
-
-    private void EnterRelease(object sender, MouseButtonEventArgs e)
-    {
-        _enterHolder.Stop();
-        _enterIsHolded = false;
-    }
+    private async void Enter(object sender, RoutedEventArgs e) =>
+        await PressKeyWithDelay(KeyCode.Enter).Invoke().ConfigureAwait(false);
 
     private async void Space(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Space)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Space).Invoke().ConfigureAwait(false);
 
     private async void PageUp(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.PageUp)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.PageUp).Invoke().ConfigureAwait(false);
 
     private async void PageDown(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.PageDown)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.PageDown).Invoke().ConfigureAwait(false);
 
     private async void UpArrow(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Up)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Up).Invoke().ConfigureAwait(false);
 
     private async void LeftArrow(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Left)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Left).Invoke().ConfigureAwait(false);
 
     private async void DownArrow(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Down)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Down).Invoke().ConfigureAwait(false);
 
     private async void RightArrow(object sender, RoutedEventArgs e) =>
-        await WindowsInput.Simulate.Events()
-            .Click(KeyCode.Down)
-            .Invoke().ConfigureAwait(false);
+        await PressKeyWithDelay(KeyCode.Right).Invoke().ConfigureAwait(false);
 
     private async void ScrollUpOnClick(object sender, RoutedEventArgs e)
     {
@@ -130,4 +105,6 @@ public partial class VirtualKeyboardWindow
             .Invoke().ConfigureAwait(true);
         ScrollDown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
     }
+
+    private void CloseKeyboardButtonOnClick(object sender, RoutedEventArgs e) => Close();
 }

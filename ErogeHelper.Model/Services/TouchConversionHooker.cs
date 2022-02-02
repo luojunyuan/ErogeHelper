@@ -6,13 +6,13 @@ using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
+using ErogeHelper.Shared.Contracts;
 using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.Services;
 
 public class TouchConversionHooker : ITouchConversionHooker
 {
-    private const int MouseDownUpIntervalTime = 50;
     private readonly User32.SafeHHOOK? _hookId;
     private readonly User32.HookProc _hook;
 
@@ -71,7 +71,7 @@ public class TouchConversionHooker : ITouchConversionHooker
                     {
                         var (x, y) = GetCursorPosition();
                         User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN, x, y, 0, IntPtr.Zero);
-                        Thread.Sleep(MouseDownUpIntervalTime);
+                        Thread.Sleep(ConstantValue.UserTimerMinimum);
                         User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_LEFTUP, x, y, 0, IntPtr.Zero);
                     });
                     break;
@@ -80,7 +80,7 @@ public class TouchConversionHooker : ITouchConversionHooker
                     {
                         var (x, y) = GetCursorPosition();
                         User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTDOWN, x, y, 0, IntPtr.Zero);
-                        Thread.Sleep(MouseDownUpIntervalTime);
+                        Thread.Sleep(ConstantValue.UserTimerMinimum);
                         User32.mouse_event(User32.MOUSEEVENTF.MOUSEEVENTF_RIGHTUP, x, y, 0, IntPtr.Zero);
                     });
                     break;

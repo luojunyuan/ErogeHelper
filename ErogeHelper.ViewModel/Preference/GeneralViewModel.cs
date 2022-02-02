@@ -15,35 +15,9 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 
     public string? UrlPathSegment => PageTag.General;
 
-    public GeneralViewModel(
-        IWindowDataService? windowDataService = null,
-        IGameInfoRepository? gameInfoRepository = null,
-        ITouchConversionHooker? touchConversionHooker = null,
-        IEHConfigRepository? ehConfigRepository = null)
+    public GeneralViewModel(IEHConfigRepository? ehConfigRepository = null)
     {
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
-        gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
-        touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
-
-        LoseFocusEnable = gameInfoRepository.GameInfo.IsLoseFocus;
-        this.WhenAnyValue(x => x.LoseFocusEnable)
-            .Skip(1)
-            .Subscribe(v =>
-            {
-                HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
-                HwndTools.WindowLostFocus(windowDataService.TextWindowHandle ?? new(), v);
-                gameInfoRepository.UpdateLostFocusStatus(v);
-            });
-
-        TouchToMouseEnable = gameInfoRepository.GameInfo.IsEnableTouchToMouse;
-        this.WhenAnyValue(x => x.TouchToMouseEnable)
-            .Skip(1)
-            .Subscribe(v =>
-            {
-                touchConversionHooker.Enable = v;
-                gameInfoRepository.UpdateTouchEnable(v);
-            });
 
         UseBigSizeAssistiveTouch = ehConfigRepository.UseBigAssistiveTouchSize;
         this.WhenAnyValue(x => x.UseBigSizeAssistiveTouch)
@@ -74,23 +48,17 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
     }
 
     [Reactive]
-    public bool LoseFocusEnable { get; set; }
-
-    [Reactive]
-    public bool TouchToMouseEnable { get; set; }
-
-    [Reactive]
     public bool UseBigSizeAssistiveTouch { get; set; }
-
-    [Reactive]
-    public bool StartupInject { get; set; }
 
     [Reactive]
     public bool HideTextWindow { get; set; }
 
     [Reactive]
-    public bool UseDPIDpiCompatibility { get; set; }
+    public bool UseEdgeTouchMask { get; set; }
 
     [Reactive]
-    public bool UseEdgeTouchMask { get; set; }
+    public bool StartupInject { get; set; }
+
+    [Reactive]
+    public bool UseDPIDpiCompatibility { get; set; }
 }

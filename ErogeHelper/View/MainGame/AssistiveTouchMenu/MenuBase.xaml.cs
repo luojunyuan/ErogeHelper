@@ -5,7 +5,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared.Contracts;
+using ErogeHelper.ViewModel;
 using Splat;
+using WpfScreenHelper;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
@@ -16,6 +18,7 @@ public partial class MenuBase : IEnableLogger
 
     private readonly Subject<MenuPageTag> _pageNavHideSubj = new();
     private readonly MenuMainPage _menuMainPage = new();
+    private readonly MenuGamePage _menuGamePage = new();
     private readonly MenuDevicePage _menuDevicePage = new();
     private readonly MenuFunctionPage _menuFunctionPage = new();
 
@@ -24,6 +27,7 @@ public partial class MenuBase : IEnableLogger
         InitializeComponent();
 
         MainMenu.Navigate(_menuMainPage);
+        GameMenu.Navigate(_menuGamePage);
         DeviceMenu.Navigate(_menuDevicePage);
         FunctionMenu.Navigate(_menuFunctionPage);
         ApplyTouchToMenuStoryboard();
@@ -31,6 +35,7 @@ public partial class MenuBase : IEnableLogger
 
         _pageNavHideSubj
             .Merge(_menuMainPage.PageChanged)
+            .Merge(_menuGamePage.PageChanged)
             .Merge(_menuDevicePage.PageChanged)
             .Merge(_menuFunctionPage.PageChanged)
             .DistinctUntilChanged()
@@ -71,7 +76,7 @@ public partial class MenuBase : IEnableLogger
         // Show menu and begin animation
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        // FIXME: Multi-Screen issue: Position is wrong when animating for the first time
+        // FIXME: Multi-screen dpi issue: Position is wrong when animating for the first time
         _touchToMenuStoryboard.Begin();
     }
 
@@ -129,6 +134,14 @@ public partial class MenuBase : IEnableLogger
     {
         switch (nav)
         {
+            case MenuPageTag.Game:
+                _menuMainPage.FadeOut();
+                _menuGamePage.TransistIn(Height / 3);
+                break;
+            case MenuPageTag.GameBack:
+                _menuMainPage.FadeIn();
+                _menuGamePage.TransistOut();
+                break;
             case MenuPageTag.Device:
                 _menuMainPage.FadeOut();
                 _menuDevicePage.TransistIn(Height / 3);
@@ -252,6 +265,7 @@ public partial class MenuBase : IEnableLogger
             IsAnimating = IsOpen = false;
 
             _menuMainPage.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            _menuGamePage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             _menuDevicePage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             _menuFunctionPage.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         };

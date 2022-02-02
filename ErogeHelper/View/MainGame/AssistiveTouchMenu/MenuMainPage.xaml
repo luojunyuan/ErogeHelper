@@ -27,6 +27,11 @@
             ClickEvent="DeviceOnClickEvent" SymbolExtend="Tablet"
             Text="{x:Static resx:Strings.AssistiveTouch_Device}" />
 
+        <menu:MenuItemControl x:Name="Game"
+            Grid.Row="1" Grid.Column="0"
+            ClickEvent="GameOnClickEvent" SymbolExtend="Game"
+            Text="{x:Static resx:Strings.AssistiveTouch_Game}" />
+
         <menu:MenuItemControl x:Name="Function"
             Grid.Row="1" Grid.Column="2"
             ClickEvent="FunctionOnClickEvent" Symbol="Repair"

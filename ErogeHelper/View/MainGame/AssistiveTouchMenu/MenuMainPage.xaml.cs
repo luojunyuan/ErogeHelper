@@ -19,28 +19,30 @@ public partial class MenuMainPage : Page
     public MenuMainPage()
     {
         InitializeComponent();
-        _fadeInAnimation.Completed += (_, _) => GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
+        _fadeInAnimation.Completed += (_, _) => GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
         _fadeOutAnimation.Completed += (_, _) =>
         {
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
+            GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
         };
     }
 
     public void FadeOut()
     {
-        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
         BeginAnimation(OpacityProperty, _fadeOutAnimation);
     }
 
     public void FadeIn()
     {
-        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
         BeginAnimation(OpacityProperty, _fadeInAnimation);
     }
 
     private void PreferenceOnClickEvent(object sender, EventArgs e) => DI.ShowView<PreferenceViewModel>();
+
+    private void GameOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.Game);
 
     private void DeviceOnClickEvent(object sender, EventArgs e) => _pageSubject.OnNext(MenuPageTag.Device);
 

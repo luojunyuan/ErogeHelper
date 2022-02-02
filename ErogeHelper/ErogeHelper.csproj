@@ -27,6 +27,7 @@
     <PackageReference Include="ReactiveUI.WPF" Version="17.1.9" />
     <PackageReference Include="SharpClipboard" Version="3.5.2" />
     <PackageReference Include="Splat.Drawing" Version="14.1.17" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
     <!-- Annoying ".nuget" files in solution explorer: https://github.com/NuGet/Home/issues/4856 -->
     <PackageReference Include="WindowsInput" Version="6.3.0" />

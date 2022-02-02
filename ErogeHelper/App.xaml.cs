@@ -82,7 +82,8 @@ public partial class App : IEnableLogger
         }
     }
 
-    public static string EHVersion { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "error";
+    public static string EHVersion { get; } 
+        = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "9.9.9.9";
 
     /// <param name="exitCode">-1 unnormal, 0 normal, 1 by another instance</param>
     public static void Terminate(int exitCode = 0)

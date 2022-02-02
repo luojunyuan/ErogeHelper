@@ -10,7 +10,7 @@ public static class ConstantValue
 
     public const string HKLMWinNTCurrent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion";
 
-    public const int UserTimerMinimum = 0x0000000A;
+    public const int UserTimerMinimum = 0xA;
 
     public const int UIMinimumResponseTime = 50;
 

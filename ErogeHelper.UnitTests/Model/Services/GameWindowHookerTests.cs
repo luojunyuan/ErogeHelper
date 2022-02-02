@@ -43,7 +43,6 @@ namespace ErogeHelper.UnitTests.Model.Services
 
             // Assert
             Assert.AreEqual(1, posCollect.Count);
-            // FIXME: TestScheduler not work
             notepad.Kill();
             _single.WaitOne();
             Assert.AreEqual((0, 0), (posCollect[^1].Width, posCollect[^1].Height));

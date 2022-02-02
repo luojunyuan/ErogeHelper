@@ -11,6 +11,8 @@ public static class PageTag
 public enum MenuPageTag
 {
     None,
+    Game,
+    GameBack,
     Device,
     DeviceBack,
     Function,

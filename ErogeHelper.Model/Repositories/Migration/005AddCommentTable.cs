@@ -17,6 +17,6 @@ public class AddCommentTable : AutoReversingMigration
             .WithColumn("CreationTime").AsDateTime();
 
         Alter.Table("GameInfo")
-           .AddColumn("CommentLastSyncTime").AsDateTime().WithDefaultValue(DateTime.MinValue); // TODO: TEst
+           .AddColumn("CommentLastSyncTime").AsDateTime().WithDefaultValue(DateTime.MinValue);
     }
 }

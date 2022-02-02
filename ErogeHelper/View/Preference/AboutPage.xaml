@@ -45,7 +45,7 @@
 
             <Button x:Name="UpdateButton" Content="{x:Static resx:Strings.Common_Update}" />
 
-            <CheckBox x:Name="PreviewCheckBox" Content="{x:Static resx:Strings.About_NightlyBuild}" />
+            <Button x:Name="PreviewUpdateButton" Click="PreviewUpdateButtonOnClick" Content="{x:Static resx:Strings.About_NightlyBuild}" />
 
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_GitHub}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Contributors}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />

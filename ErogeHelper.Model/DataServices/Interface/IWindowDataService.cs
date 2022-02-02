@@ -8,6 +8,6 @@ namespace ErogeHelper.Model.DataServices.Interface
         HWND MainWindowHandle { get; }
 
         void SetTextWindowHandle(HWND handle);
-        HWND? TextWindowHandle { get; }
+        HWND TextWindowHandle { get; }
     }
 }

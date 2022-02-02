@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using ErogeHelper.ViewModel.Preference;
 using ReactiveUI;
 using Splat;
@@ -37,9 +38,6 @@ public partial class AboutPage
             this.OneWayBind(ViewModel,
                 vm => vm.UpdateStatusTip,
                 v => v.UpdateStatusTip.Text).DisposeWith(d);
-            this.Bind(ViewModel,
-                vm => vm.AcceptedPreviewVersion,
-                v => v.PreviewCheckBox.IsChecked).DisposeWith(d);
 
             this.OneWayBind(ViewModel,
                 vm => vm.ShowUpdateButton,
@@ -48,6 +46,10 @@ public partial class AboutPage
             this.BindCommand(ViewModel,
                 vm => vm.Update,
                 v => v.UpdateButton).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.CheckUpdate,
+                v => v.PreviewUpdateButton,
+                Observable.Return(true)).DisposeWith(d);
 
             this.BindInteraction(ViewModel,
                vm => vm.AppExit,
@@ -60,5 +62,8 @@ public partial class AboutPage
         });
     }
 
-    private void HandleActivation() => ViewModel.CheckUpdate.Execute().Subscribe();
+    private void HandleActivation() => ViewModel.CheckUpdate.Execute(false).Subscribe();
+
+    private void PreviewUpdateButtonOnClick(object sender, RoutedEventArgs e) =>
+        ((Button)sender).SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 }

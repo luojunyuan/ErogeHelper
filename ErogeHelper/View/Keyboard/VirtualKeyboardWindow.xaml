@@ -6,20 +6,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800"
-    Margin="5">
+    Margin="5"
+    AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False"
+    Topmost="True" WindowStyle="None">
 
-    <Grid x:Name="TouchToolBoxView">
+    <Grid x:Name="TouchToolBoxView" Margin="10 20">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="ControlButton"
-            Grid.Column="0"
-            Width="50" Height="100"
-            VerticalAlignment="Top"
-            Click="ControlButton_Click" Content="&lt;" FontSize="30" />
+        <StackPanel Grid.Column="0">
+            <Button x:Name="PanelControlButton"
+                Width="50" Height="100"
+                Click="PanelControlButtonOnClick" Content="&lt;" FontSize="30" />
+            <Button x:Name="CloseKeyboardButton"
+                Width="50" Height="100"
+                Click="CloseKeyboardButtonOnClick" Content="x" FontSize="30" />
+        </StackPanel>
 
         <WrapPanel x:Name="TheButtonBox"
             Grid.Column="1"
@@ -32,9 +37,9 @@
             <Button
                 Width="100" Height="100"
                 Content="Ctrl" PreviewMouseDown="Ctrl" PreviewMouseUp="CtrlRelease" />
-            <Button
+            <RepeatButton
                 Width="100" Height="100"
-                Content="Enter" PreviewMouseDown="Enter" PreviewMouseUp="EnterRelease" />
+                Click="Enter" Content="Enter" />
             <Button
                 Width="100" Height="100"
                 Click="Space" Content="Space" />

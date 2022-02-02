@@ -99,7 +99,10 @@
                             <!--  Commanders  -->
                             <StackPanel Orientation="Horizontal">
                                 <!--  Refresh  -->
-                                <ui:AppBarButton Icon="Refresh" Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}" ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" />
+                                <ui:AppBarButton x:Name="RefreshButton"
+                                    Icon="Refresh"
+                                    Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}"
+                                    ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" />
                                 <!--  Hook Code  -->
                                 <ui:AppBarButton x:Name="HCodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}" ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}">
                                     <ui:AppBarButton.Icon>
@@ -166,14 +169,13 @@
                         </Style>
                     </ui:SimpleStackPanel.Style>
 
-                    <Label Content="From Web" />
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="5" Symbol="Help" />
-                        <ui:HyperlinkButton Margin="5 0 0 0" Content="How to set hook?" NavigateUri="https://www.google.com" />
+                        <ui:HyperlinkButton x:Name="SetHookTipLink" Margin="5 0 0 0" Content="{x:Static resx:Strings.HookPage_SetHook}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Margin="5" Symbol="Globe" />
-                        <ui:HyperlinkButton Margin="5 0 0 0" Content="What is Hook Code?" NavigateUri="https://www.google.com" />
+                        <ui:HyperlinkButton x:Name="WhatIsHookTipLink" Margin="5 0 0 0" Content="{x:Static resx:Strings.HookPage_WhatIsHook}" />
                     </StackPanel>
                 </ui:SimpleStackPanel>
             </Grid>

@@ -52,8 +52,12 @@ public enum SymbolName
 public enum SymbolExtend
 {
     Tablet = 0xE70A,
+    Brightness = 0xE706,
     TaskView = 0xE7C4,
+    Game = 0xE7FC,
+    ChromeClose = 0xE8BB,
     Volume1 = 0xE993,
+    LowerBrightness = 0xEC8A,
     SettingSolid = 0xF8B0,
     TBD = 0xFFFF
 }

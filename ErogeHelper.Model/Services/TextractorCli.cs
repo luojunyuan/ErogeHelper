@@ -89,18 +89,8 @@ public class TextractorCli : ITextractorService, IEnableLogger
         }
     }
 
-    public void ReAttachProcesses()
-    {
-        foreach (Process p in GameProcesses)
-        {
-            _textractorCli.StandardInput.WriteLine("detach -P" + p.Id);
-            _textractorCli.StandardInput.Flush();
-            this.Log().Debug($"detach to PID {p.Id}.");
-        }
-    }
-
+    public void ReAttachProcesses() => throw new InvalidOperationException();
     public void RemoveHook(long address) => throw new InvalidOperationException();
-    public void RemoveUselessHooks() => throw new InvalidOperationException();
     public void SearchRCode(string text) => throw new InvalidOperationException();
 
     public void SetSetting(TextractorSetting setting) => Setting = setting;

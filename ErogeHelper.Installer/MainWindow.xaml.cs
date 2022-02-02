@@ -148,7 +148,7 @@ namespace ErogeHelper.Installer
                     ExplorerHelper.KillExplorer();
                     ExplorerHelper.OpenDirectories(directories);
 
-                    // TODO: Test Arm64 installer unload dll progress
+                    // QUESTION: Is this really needed
                     if (Utils.IsArm)
                     {
                         Process.GetProcessesByName("dllhost").ToList()

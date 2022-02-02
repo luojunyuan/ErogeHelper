@@ -9,15 +9,15 @@ using Splat;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
-public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBackround
+public partial class MenuItemToggleControl : UserControl, IEnableLogger, IMenuItemBackround
 {
     #region Symbol DependencyProperty
     /// <summary>Identifies the <see cref="Symbol"/> dependency property.</summary>
     public static readonly DependencyProperty SymbolProperty = DependencyProperty.Register(
         nameof(Symbol),
         typeof(Symbol),
-        typeof(MenuItemControl),
-        new PropertyMetadata(Symbol.Emoji, (d, e) => ((MenuItemControl)d).OnSymbolChanged(e)));
+        typeof(MenuItemToggleControl),
+        new PropertyMetadata(Symbol.Emoji, (d, e) => ((MenuItemToggleControl)d).OnSymbolChanged(e)));
 
     /// <summary>
     /// Gets or sets the Segoe MDL2 Assets glyph used as the icon content.
@@ -37,8 +37,8 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
     public static readonly DependencyProperty SymbolExtendProperty = DependencyProperty.Register(
         nameof(SymbolExtend),
         typeof(SymbolExtend),
-        typeof(MenuItemControl),
-        new PropertyMetadata(SymbolExtend.TBD, (d, e) => ((MenuItemControl)d).OnSymbolExtendChanged(e)));
+        typeof(MenuItemToggleControl),
+        new PropertyMetadata(SymbolExtend.TBD, (d, e) => ((MenuItemToggleControl)d).OnSymbolExtendChanged(e)));
 
     /// <summary>
     /// Gets or sets the Segoe MDL2 Assets glyph used as the icon content.
@@ -58,8 +58,8 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
     public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
         nameof(Text),
         typeof(string),
-        typeof(MenuItemControl),
-        new PropertyMetadata(string.Empty, (d, e) => ((MenuItemControl)d).OnTextChanged(e)));
+        typeof(MenuItemToggleControl),
+        new PropertyMetadata(string.Empty, (d, e) => ((MenuItemToggleControl)d).OnTextChanged(e)));
 
     public string Text
     {
@@ -71,9 +71,25 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
         ItemText.SetCurrentValue(TextBlock.TextProperty, (string)e.NewValue);
     #endregion
 
-    public event EventHandler? ClickEvent;
+    #region IsOn DependencyProperty
+    /// <summary>Identifies the <see cref="IsOn"/> dependency property.</summary>
+    public static readonly DependencyProperty IsOnProperty = DependencyProperty.Register(
+        nameof(IsOn),
+        typeof(bool),
+        typeof(MenuItemToggleControl),
+        new PropertyMetadata(false, (d, e) => ((MenuItemToggleControl)d).OnIsOnChanged(e)));
 
-    public MenuItemControl()
+    public bool IsOn
+    {
+        get => (bool)GetValue(IsOnProperty);
+        set => SetValue(IsOnProperty, value);
+    }
+
+    protected void OnIsOnChanged(DependencyPropertyChangedEventArgs e) =>
+        SetItemForegroundColor((bool)e.NewValue == true ? ItemPressedColor : Brushes.White);
+    #endregion
+
+    public MenuItemToggleControl()
     {
         InitializeComponent();
     }
@@ -83,10 +99,33 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
 
     private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
-    private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e) =>
-        SetItemForegroundColor(ItemPressedColor);
+    private bool _buttonPressed;
 
-    private void ItemOnPreviewMouseLeave(object sender, InputEventArgs e) => SetItemForegroundColor(Brushes.White);
+    private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e)
+    {
+        _buttonPressed = true;
+        if (IsOn)
+        {
+            SetItemForegroundColor(Brushes.DeepSkyBlue);
+        }
+        else
+        {
+            SetItemForegroundColor(Brushes.Gray);
+        }
+    }
+
+    private void ItemOnPreviewMouseLeave(object sender, InputEventArgs e)
+    {
+        _buttonPressed = false;
+        if (IsOn)
+        {
+            SetItemForegroundColor(ItemPressedColor);
+        }
+        else
+        {
+            SetItemForegroundColor(Brushes.White);
+        }
+    }
 
     private void SetItemForegroundColor(Brush color)
     {
@@ -96,13 +135,19 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
 
     private void ItemOnPreviewMouseLeftButtonUp(object sender, InputEventArgs e)
     {
-        if (ItemIcon.Foreground != Brushes.White)
+        if (_buttonPressed)
         {
-            SetItemForegroundColor(Brushes.White);
-
-            ClickEvent?.Invoke(this, e);
+            SetCurrentValue(IsOnProperty, !IsOn);
+            _buttonPressed = false;
         }
     }
 
-    private void ItemOnTouchUp(object sender, TouchEventArgs e) => ClickEvent?.Invoke(this, e);
+    private void ItemOnTouchUp(object sender, TouchEventArgs e)
+    {
+        if (_buttonPressed)
+        {
+            SetCurrentValue(IsOnProperty, !IsOn);
+            _buttonPressed = false;
+        }
+    }
 }

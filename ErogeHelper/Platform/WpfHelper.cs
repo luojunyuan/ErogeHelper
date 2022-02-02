@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Interop;
 using ErogeHelper.Shared.Contracts;
 using Microsoft.Win32;
@@ -49,6 +50,8 @@ internal static class WpfHelper
         var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
         foreach (var screen in WpfScreenHelper.Screen.AllScreens)
         {
+            fullScreenGameRect.X = screen.PixelBounds.Left;
+            fullScreenGameRect.Y = screen.PixelBounds.Top;
             if (fullScreenGameRect.Contains(screen.PixelBounds))
                 return true;
         }

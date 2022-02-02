@@ -23,7 +23,7 @@ public partial class MenuFunctionPage : Page
     {
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
 
         var backTransform = AnimationTool.LeftOneTransform(moveDistance);
         Back.SetCurrentValue(RenderTransformProperty, backTransform);
@@ -34,7 +34,7 @@ public partial class MenuFunctionPage : Page
 
     public void TransistOut()
     {
-        GridPanel.Children.Cast<MenuItemControl>().FillBackground(false);
+        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
         _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, true);
         _transitionInStoryboard.Begin();
         _transitionInStoryboard.Seek(TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration));
@@ -58,7 +58,7 @@ public partial class MenuFunctionPage : Page
         _transitionInStoryboard.Completed += (_, _) =>
         {
             Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
-            GridPanel.Children.Cast<MenuItemControl>().FillBackground(true);
+            GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
 
             if (_transitionInStoryboard.AutoReverse == true)
             {

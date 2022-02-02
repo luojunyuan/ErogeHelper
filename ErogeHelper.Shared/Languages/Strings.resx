@@ -228,8 +228,8 @@
   <data name="GameView.SwitchFullScreen" xml:space="preserve">
     <value>Full Screen (Alt+Enter)</value>
   </data>
-  <data name="GameView.FocusTip" xml:space="preserve">
-    <value>Lose Focus (If you can't use when play game full screen. Turn on this)</value>
+  <data name="AssistiveTouch.LoseFocusTip" xml:space="preserve">
+    <value>Make eh not occupied focus when full-screen</value>
   </data>
   <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>Action Center</value>
@@ -524,8 +524,8 @@ Caused by source `{1}`
   <data name="AssistiveTouch.Function" xml:space="preserve">
     <value>Function</value>
   </data>
-  <data name="GameView.VirtualKeyboard" xml:space="preserve">
-    <value>Virtual Keyboard</value>
+  <data name="AssistiveTouch.VirtualKeyboard" xml:space="preserve">
+    <value>Keyboard</value>
   </data>
   <data name="About.Update.CloseGameTip" xml:space="preserve">
     <value>Please save and close your game in purpose to finish the update</value>
@@ -550,13 +550,13 @@ NOTE: You are about updating to dev version. This version may not stable only su
     <value>Latest preview version</value>
   </data>
   <data name="About.CheckingFailed" xml:space="preserve">
-    <value>No Internet or request error url address</value>
+    <value>No Internet or proxy failed</value>
   </data>
   <data name="About.PreviewVersion" xml:space="preserve">
     <value>Preview version</value>
   </data>
   <data name="About.NightlyBuild" xml:space="preserve">
-    <value>Receive pre-release vsersion</value>
+    <value>Check Pre-Release version</value>
   </data>
   <data name="Common.Update" xml:space="preserve">
     <value>Update</value>
@@ -599,5 +599,44 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="GeneralPage.NotInjectStartup" xml:space="preserve">
     <value>Do not inject process when startup</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessDown" xml:space="preserve">
+    <value>Brightness Down</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessUp" xml:space="preserve">
+    <value>Brightness Up</value>
+  </data>
+  <data name="Common.GetHelp" xml:space="preserve">
+    <value>Get help</value>
+  </data>
+  <data name="HookPage.SetHook" xml:space="preserve">
+    <value>How to set hook?</value>
+  </data>
+  <data name="HookPage.WhatIsHook" xml:space="preserve">
+    <value>What is Hook Code?</value>
+  </data>
+  <data name="HookPage.LinkSetHook" xml:space="preserve">
+    <value>https://www.google.com</value>
+  </data>
+  <data name="HookPage.LinkWhatIsHook" xml:space="preserve">
+    <value>https://www.google.com</value>
+  </data>
+  <data name="AssistiveTouch.Game" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouseTip" xml:space="preserve">
+    <value>Add a touch to mouse simulate layer</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouse" xml:space="preserve">
+    <value>To Mouse</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocus" xml:space="preserve">
+    <value>Lose Focus</value>
+  </data>
+  <data name="AssistiveTouch.CloseGame" xml:space="preserve">
+    <value>CloseGame</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocusWarn" xml:space="preserve">
+    <value>Note lose focus only recommend when you can not interact with eh when full-screen.</value>
   </data>
 </root>

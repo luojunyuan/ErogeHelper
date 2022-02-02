@@ -32,7 +32,5 @@ public interface ITextractorService
 
     void RemoveHook(long address);
 
-    void RemoveUselessHooks();
-
     void AddClipboardText(string text);
 }

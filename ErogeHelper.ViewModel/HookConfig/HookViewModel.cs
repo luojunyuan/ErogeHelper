@@ -37,6 +37,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         ConsoleInfo = string.Join('\n', textractorService.GetConsoleOutputInfo());
         ClipboardStatus = gameInfoRepository.GameInfo.UseClipboard;
         var hookThreads = new SourceCache<HookThreadParam, long>(p => p.Handle);
+        var hookThreadItemsList = new SourceCache<HookThreadItemViewModel, long>(vm => vm.Handle);
 
         this.WhenAnyValue(x => x.CurrentInUseHookName)
             .Select(hookname => hookname == Strings.Common_None ? Color.Red : Color.Green)
@@ -44,11 +45,23 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         textractorService.Data
             .Where(hp => hp.Handle == 0)
+            .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(hp => ConsoleInfo += "\n" + hp.Text)
             .DisposeWith(_disposables);
 
+        Refresh = ReactiveCommand.Create(() =>
+        {
+            hookThreads.Clear();
+            hookThreadItemsList.Clear();
+        });
+
         var canReInject = Utils.IsArm ? Observable.Return(false) : Observable.Return(true);
-        ReInject = ReactiveCommand.Create(textractorService.ReAttachProcesses, canReInject);
+        ReInject = ReactiveCommand.Create(() =>
+        {
+            ConsoleInfo = string.Empty;
+            Refresh.Execute().Subscribe();
+            textractorService.ReAttachProcesses();
+        }, canReInject);
 
         OpenHCodeDialog = ReactiveCommand.CreateFromObservable(() => HCodeViewModel.Show.Handle(Unit.Default));
         // TODO: Already insert tip, try move game text and check Combobox
@@ -75,17 +88,23 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .DistinctValues(v => new HookEngineLabel(v.Address, v.EngineName))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _hookEngineNames)
+            .Where(_ => HookEngineNames.Count != 0)
             .Subscribe(v => SelectedHookEngine ??= _hookEngineNames.First());
 
         var canRemoveHook = Utils.IsArm ? Observable.Return(false) :
             this.WhenAnyValue<HookViewModel, bool, HookEngineLabel?>(
                 x => x.SelectedHookEngine,
                 v => v != null);
-        RemoveHook = ReactiveCommand.Create(
-            () => textractorService.RemoveHook(SelectedHookEngine!.Value.Address), canRemoveHook);
+        RemoveHook = ReactiveCommand.Create(() =>
+        {
+            var threadAddress = SelectedHookEngine!.Value.Address;
+            textractorService.RemoveHook(threadAddress);
+            var tagetThreads = hookThreads.Items.Where(p => p.Address == threadAddress);
+            hookThreads.Remove(tagetThreads);
+            hookThreadItemsList.Clear();
+        }, canRemoveHook);
 
         #region Hook Thread Items
-        var hookThreadItemsList = new SourceCache<HookThreadItemViewModel, long>(vm => vm.Handle);
         hookThreadItemsList
             .Connect()
             .Bind(out _hookThreadItems)
@@ -93,7 +112,6 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         this.WhenAnyValue(x => x.SelectedHookEngine)
             .WhereNotNull()
-            // Use Do() may be bad approach
             .Do(_ => hookThreadItemsList.Clear())
             .SelectMany(_ => hookThreads.Items.ToObservable())
             .Where(v => v.Address == SelectedHookEngine!.Value.Address)
@@ -148,6 +166,8 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     public string ConsoleInfo { get; set; }
 
     public ReactiveCommand<Unit, Unit> ReInject { get; }
+
+    public ReactiveCommand<Unit, Unit> Refresh { get; }
 
     public ReactiveCommand<Unit, string> OpenHCodeDialog { get; }
 

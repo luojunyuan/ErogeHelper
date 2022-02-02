@@ -11,6 +11,8 @@ public partial class HookWindow : IEnableLogger
     public HookWindow()
     {
         InitializeComponent();
+        SetHookTipLink.NavigateUri = new Uri(Shared.Languages.Strings.HookPage_LinkSetHook);
+        WhatIsHookTipLink.NavigateUri = new Uri(Shared.Languages.Strings.HookPage_LinkWhatIsHook);
 
         ViewModel ??= DependencyResolver.GetService<HookViewModel>();
 
@@ -33,6 +35,10 @@ public partial class HookWindow : IEnableLogger
             this.BindCommand(ViewModel,
                 vm => vm.ReInject,
                 v => v.ReInject).DisposeWith(d);
+
+            this.BindCommand(ViewModel,
+                vm => vm.Refresh,
+                v => v.RefreshButton).DisposeWith(d);
 
             this.BindCommand(ViewModel,
                 vm => vm.OpenHCodeDialog,

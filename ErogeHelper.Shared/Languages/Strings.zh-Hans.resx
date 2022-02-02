@@ -228,8 +228,8 @@
   <data name="GameView.SwitchFullScreen" xml:space="preserve">
     <value>全屏 (Alt + Enter)</value>
   </data>
-  <data name="GameView.FocusTip" xml:space="preserve">
-    <value>失去焦点 (如果你无法在全屏游戏时使用小圆点或文本窗口就请打开这个)</value>
+  <data name="AssistiveTouch.LoseFocusTip" xml:space="preserve">
+    <value>全屏游戏时eh不抢占焦点</value>
   </data>
   <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>操作中心</value>
@@ -524,7 +524,7 @@
   <data name="AssistiveTouch.Function" xml:space="preserve">
     <value>功能</value>
   </data>
-  <data name="GameView.VirtualKeyboard" xml:space="preserve">
+  <data name="AssistiveTouch.VirtualKeyboard" xml:space="preserve">
     <value>虚拟键盘</value>
   </data>
   <data name="About.Update.CloseGameTip" xml:space="preserve">
@@ -538,7 +538,7 @@
     <value>发现新版本 {0}。是否立即更新？（如果提示 LocateEnumator 正在使用，请先关闭游戏后点击 try again）</value>
   </data>
   <data name="About.CheckingFailed" xml:space="preserve">
-    <value>没有网络或者请求地址错误</value>
+    <value>没有网络或代理失败</value>
   </data>
   <data name="About.CheckingVersion" xml:space="preserve">
     <value>正在检查更新 ...</value>
@@ -556,7 +556,7 @@
     <value>预览版</value>
   </data>
   <data name="About.NightlyBuild" xml:space="preserve">
-    <value>接收 Pre-Release 开发版更新</value>
+    <value>检查 Pre-Release 开发版更新</value>
   </data>
   <data name="Common.Update" xml:space="preserve">
     <value>更新</value>
@@ -598,6 +598,49 @@
     <value>添加剪切板监控</value>
   </data>
   <data name="GeneralPage.NotInjectStartup" xml:space="preserve">
-    <value>不在启动时自动注入</value>
+    <value>不在程序启动时自动注入</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessDown" xml:space="preserve">
+    <value>调低亮度</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessUp" xml:space="preserve">
+    <value>调高亮度</value>
+  </data>
+  <data name="Common.GetHelp" xml:space="preserve">
+    <value>获取帮助</value>
+  </data>
+  <data name="HookPage.SetHook" xml:space="preserve">
+    <value>如何设置钩子？</value>
+  </data>
+  <data name="HookPage.WhatIsHook" xml:space="preserve">
+    <value>什么是特殊码？</value>
+  </data>
+  <data name="HookPage.LinkSetHook" xml:space="preserve">
+    <value>https://www.baidu.com</value>
+  </data>
+  <data name="HookPage.LinkWhatIsHook" xml:space="preserve">
+    <value>https://www.baidu.com</value>
+  </data>
+  <data name="AssistiveTouch.Game" xml:space="preserve">
+    <value>游戏</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouse" xml:space="preserve">
+    <value>转鼠标</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouseTip" xml:space="preserve">
+    <value>添加触摸模拟鼠标层</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocus" xml:space="preserve">
+    <value>失去焦点</value>
+  </data>
+  <data name="AssistiveTouch.CloseGame" xml:space="preserve">
+    <value>关闭游戏</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocusWarn" xml:space="preserve">
+    <value>注意失去焦点仅推荐全屏游戏时无法与eh交互使用。
+1. 此选项仅作用于小白点与文本窗口。
+2. 失去焦点窗口中的文本框会变得无法输入文字。
+3. 部分游戏点击eh时可能会被鼠标穿透，触控不会受此影响。
+若全屏游戏时使用其他窗口导致弹回桌面，建议窗口化游戏或者就在桌面使用。</value>
   </data>
 </root>

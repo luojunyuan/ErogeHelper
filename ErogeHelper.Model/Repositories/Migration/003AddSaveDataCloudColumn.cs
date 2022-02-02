@@ -7,6 +7,6 @@ public class AddSaveDataCloudColumn : AutoReversingMigration
 {
     public override void Up() =>
         Alter.Table("GameInfo")
-            .AddColumn("UseCloudSave").AsBoolean()
-            .AddColumn("SaveDataPath").AsString();
+            .AddColumn("UseCloudSave").AsBoolean().WithDefaultValue(false)
+            .AddColumn("SaveDataPath").AsString().WithDefaultValue(string.Empty);
 }

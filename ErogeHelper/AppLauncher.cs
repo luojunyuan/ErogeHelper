@@ -69,7 +69,9 @@ public class AppLauncher
                 .Where(e => e.SourceApplication.ID != Environment.ProcessId
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
                 .Skip(1)
-                .Subscribe(e => textractorService.AddClipboardText(e.Content.ToString() ?? string.Empty));
+                .Select(e => e.Content.ToString() ?? string.Empty)
+                .DistinctUntilChanged()
+                .Subscribe(text => textractorService.AddClipboardText(text));
 
             if (ehConfigRepository.InjectProcessByDefalut)
             {

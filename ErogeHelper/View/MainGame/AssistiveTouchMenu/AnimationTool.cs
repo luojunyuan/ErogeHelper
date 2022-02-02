@@ -27,10 +27,16 @@ internal static class AnimationTool
     public static TranslateTransform ZeroTransform => new(0, 0);
     public static TranslateTransform LeftOneTransform(double distance) => new(distance, 0);
     public static TranslateTransform RightOneTransform(double distance) => new(-distance, 0);
+    public static TranslateTransform RightTwoTransform(double distance) => new(-distance * 2, 0);
     public static TranslateTransform BottomOneTransform(double distance) => new(0, -distance);
-    public static TranslateTransform BottomOneLeftOneTransform(double distance) => new(distance, -distance);
-    public static TranslateTransform BottomOneRightOneTransform(double distance) => new(-distance, -distance);
-    public static TranslateTransform BottomTwoRightOneTransform(double distance) => new(-distance, -distance * 2);
+    public static TranslateTransform BottomTwoTransform(double distance) => new(0, -distance * 2);
+
+    public static TranslateTransform LeftOneBottomOneTransform(double distance) => new(distance, -distance);
+    public static TranslateTransform LeftOneBottomTwoTransform(double distance) => new(distance, -distance * 2);
+    public static TranslateTransform RightOneTopOneTransform(double distance) => new(-distance, distance);
+    public static TranslateTransform RightOneBottomOneTransform(double distance) => new(-distance, -distance);
+    public static TranslateTransform RightOneBottomTwoTransform(double distance) => new(-distance, -distance * 2);
+    public static TranslateTransform RightTwoTopOneTransform(double distance) => new(-distance * 2, distance);
 
     public static DoubleAnimation TransformMoveToZeroAnimation => new()
     {
@@ -55,11 +61,11 @@ internal static class AnimationTool
         FillBehavior = FillBehavior.Stop,
     };
 
-    public static void FillBackground(this IEnumerable<MenuItemControl> children, bool fill)
+    public static void Fill(this IEnumerable<IMenuItemBackround> children, bool isBlock)
     {
         foreach (var control in children)
         {
-            control.TransparenceBackground(!fill);
+            control.TransparentBackground(!isBlock);
         }
     }
 }

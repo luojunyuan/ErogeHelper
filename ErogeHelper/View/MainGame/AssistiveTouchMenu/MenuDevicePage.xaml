@@ -32,11 +32,10 @@
             ClickEvent="VolumeUpOnClickEvent" Symbol="Volume"
             Text="{x:Static resx:Strings.AssistiveTouch_VolumeIncrease}" />
 
-        <menu:MenuItemControl x:Name="FullScreenSwitcher"
-            d:Text="{x:Static resx:Strings.AssistiveTouch_FullScreen}"
-            d:Symbol="FullScreen"
+        <menu:MenuItemControl x:Name="ScreenShot"
             Grid.Row="0" Grid.Column="2"
-            ClickEvent="FullScreenSwitcherOnClickEvent" ToolTip="Alt + Enter" />
+            ClickEvent="ScreenShotOnClickEvent" Symbol="Pictures"
+            Text="{x:Static resx:Strings.AssistiveTouch_ScreenShot}" />
 
         <menu:MenuItemControl x:Name="TaskView"
             Grid.Row="1" Grid.Column="0"
@@ -52,9 +51,14 @@
             ClickEvent="ActionCenterOnClickEvent" Symbol="DockRight"
             Text="{x:Static resx:Strings.AssistiveTouch_ActionCenter}" />
 
-        <menu:MenuItemControl x:Name="ScreenShot"
-            Grid.Row="2" Grid.Column="2"
-            ClickEvent="ScreenShotOnClickEvent" Symbol="Pictures"
-            Text="{x:Static resx:Strings.AssistiveTouch_ScreenShot}" />
+        <menu:MenuItemControl x:Name="BrightnessDown"
+            Grid.Row="2" Grid.Column="0"
+            ClickEvent="BrightnessDownOnClickEvent" SymbolExtend="LowerBrightness"
+            Text="{x:Static resx:Strings.AssistiveTouch_BrightnessDown}" />
+
+        <menu:MenuItemControl x:Name="BrightnessUp"
+            Grid.Row="2" Grid.Column="1"
+            ClickEvent="BrightnessUpOnClickEvent" SymbolExtend="Brightness"
+            Text="{x:Static resx:Strings.AssistiveTouch_BrightnessUp}" />
     </Grid>
 </Page>

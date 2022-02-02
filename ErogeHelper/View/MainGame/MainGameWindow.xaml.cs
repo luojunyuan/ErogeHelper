@@ -114,6 +114,7 @@ public partial class MainGameWindow : IEnableLogger
         var winUpListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Up)) { Enabled = true };
         var winRightListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Right)) { Enabled = true };
         var winDownListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Down)) { Enabled = true };
+        var altF4Listener = new KeyChordEventSource(keyboard, new(KeyCode.Alt, KeyCode.F4)) { Enabled = true };
         void winArrawDelegate(object? s, KeyChordEventArgs e)
         {
             if (User32.GetForegroundWindow() == handle)
@@ -125,6 +126,7 @@ public partial class MainGameWindow : IEnableLogger
         winUpListener.Triggered += winArrawDelegate;
         winRightListener.Triggered += winArrawDelegate;
         winDownListener.Triggered += winArrawDelegate;
+        altF4Listener.Triggered += winArrawDelegate;
 
         return keyboard;
     }

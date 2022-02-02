@@ -61,7 +61,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 No Internet or request error url address 的本地化字符串。
+        ///   查找类似 No Internet or proxy failed 的本地化字符串。
         /// </summary>
         public static string About_CheckingFailed {
             get {
@@ -133,7 +133,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Receive pre-release vsersion 的本地化字符串。
+        ///   查找类似 Check Pre-Release version 的本地化字符串。
         /// </summary>
         public static string About_NightlyBuild {
             get {
@@ -262,6 +262,33 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Brightness Down 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_BrightnessDown {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.BrightnessDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Brightness Up 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_BrightnessUp {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.BrightnessUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 CloseGame 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_CloseGame {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.CloseGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Device 的本地化字符串。
         /// </summary>
         public static string AssistiveTouch_Device {
@@ -289,6 +316,42 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Game 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_Game {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.Game", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Lose Focus 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_LoseFocus {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.LoseFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Make eh not occupied focus when full-screen 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_LoseFocusTip {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.LoseFocusTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Note lose focus only recommend when you can not interact with eh when full-screen. 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_LoseFocusWarn {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.LoseFocusWarn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Preference 的本地化字符串。
         /// </summary>
         public static string AssistiveTouch_Preference {
@@ -312,6 +375,33 @@ namespace ErogeHelper.Shared.Languages {
         public static string AssistiveTouch_TaskView {
             get {
                 return ResourceManager.GetString("AssistiveTouch.TaskView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 To Mouse 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_TouchToMouse {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.TouchToMouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Add a touch to mouse simulate layer 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_TouchToMouseTip {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.TouchToMouseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Keyboard 的本地化字符串。
+        /// </summary>
+        public static string AssistiveTouch_VirtualKeyboard {
+            get {
+                return ResourceManager.GetString("AssistiveTouch.VirtualKeyboard", resourceCulture);
             }
         }
         
@@ -375,6 +465,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string Common_Close {
             get {
                 return ResourceManager.GetString("Common.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Get help 的本地化字符串。
+        /// </summary>
+        public static string Common_GetHelp {
+            get {
+                return ResourceManager.GetString("Common.GetHelp", resourceCulture);
             }
         }
         
@@ -447,15 +546,6 @@ namespace ErogeHelper.Shared.Languages {
         public static string ErrorDialog_Content {
             get {
                 return ResourceManager.GetString("ErrorDialog.Content", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Lose Focus (If you can&apos;t use when play game full screen. Turn on this) 的本地化字符串。
-        /// </summary>
-        public static string GameView_FocusTip {
-            get {
-                return ResourceManager.GetString("GameView.FocusTip", resourceCulture);
             }
         }
         
@@ -546,15 +636,6 @@ namespace ErogeHelper.Shared.Languages {
         public static string GameView_UnpinTip {
             get {
                 return ResourceManager.GetString("GameView.UnpinTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Virtual Keyboard 的本地化字符串。
-        /// </summary>
-        public static string GameView_VirtualKeyboard {
-            get {
-                return ResourceManager.GetString("GameView.VirtualKeyboard", resourceCulture);
             }
         }
         
@@ -820,6 +901,24 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 https://www.google.com 的本地化字符串。
+        /// </summary>
+        public static string HookPage_LinkSetHook {
+            get {
+                return ResourceManager.GetString("HookPage.LinkSetHook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 https://www.google.com 的本地化字符串。
+        /// </summary>
+        public static string HookPage_LinkWhatIsHook {
+            get {
+                return ResourceManager.GetString("HookPage.LinkWhatIsHook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Select text area 的本地化字符串。
         /// </summary>
         public static string HookPage_RCodeClipTip {
@@ -982,6 +1081,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 How to set hook? 的本地化字符串。
+        /// </summary>
+        public static string HookPage_SetHook {
+            get {
+                return ResourceManager.GetString("HookPage.SetHook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Submit 的本地化字符串。
         /// </summary>
         public static string HookPage_Submit {
@@ -1041,6 +1149,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string HookPage_Title {
             get {
                 return ResourceManager.GetString("HookPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 What is Hook Code? 的本地化字符串。
+        /// </summary>
+        public static string HookPage_WhatIsHook {
+            get {
+                return ResourceManager.GetString("HookPage.WhatIsHook", resourceCulture);
             }
         }
         

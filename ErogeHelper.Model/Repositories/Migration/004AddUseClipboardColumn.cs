@@ -7,5 +7,5 @@ public class AddUseClipboardColumn : AutoReversingMigration
 {
     public override void Up() =>
         Alter.Table("GameInfo")
-            .AddColumn("UseClipboard").AsBoolean();
+            .AddColumn("UseClipboard").AsBoolean().WithDefaultValue(false);
 }

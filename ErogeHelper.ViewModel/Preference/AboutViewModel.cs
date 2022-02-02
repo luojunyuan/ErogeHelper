@@ -32,11 +32,8 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
         updateService ??= DependencyResolver.GetService<IUpdateService>();
 
         var disposables = new CompositeDisposable();
-        // TODO: Use preview version check button instead
-        var currentPreviewFlag = AcceptedPreviewVersion = ehConfigRepository.UpdatePreviewVersion;
-        this.WhenAnyValue(x => x.AcceptedPreviewVersion)
-            .Skip(1)
-            .Subscribe(v => ehConfigRepository.UpdatePreviewVersion = v);
+
+        var currentPreviewFlag = false;
 
         var updateVMSubj = new Subject<(string tip, Color versionColor, bool canUpdate)>();
         updateVMSubj.Select(pack => pack.tip).ToPropertyEx(this, x => x.UpdateStatusTip);
@@ -46,12 +43,11 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
         this.WhenAnyValue(x => x.ShowUpdateButton)
             .ToPropertyEx(this, x => x.CanJumpRelease);
 
-        CheckUpdate = ReactiveCommand.CreateFromObservable(() =>
+        CheckUpdate = ReactiveCommand.CreateFromObservable<bool, (string, Color, bool)>(isAcceptedPreview =>
         {
             updateVMSubj.OnNext((Strings.About_CheckingVersion, Color.Gray, false));
-
-            currentPreviewFlag = AcceptedPreviewVersion;
-            return updateService.CheckUpdate(AppVersion, currentPreviewFlag);
+            currentPreviewFlag = isAcceptedPreview;
+            return updateService.CheckUpdate(AppVersion, isAcceptedPreview);
         });
         CheckUpdate.Subscribe(pack => updateVMSubj.OnNext(pack)).DisposeWith(disposables);
 
@@ -112,10 +108,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
     [ObservableAsProperty]
     public bool CanJumpRelease { get; }
 
-    [Reactive]
-    public bool AcceptedPreviewVersion { get; set; }
-
-    public ReactiveCommand<Unit, (string, Color, bool)> CheckUpdate { get; }
+    public ReactiveCommand<bool, (string, Color, bool)> CheckUpdate { get; }
 
     public ReactiveCommand<Unit, Unit> Update { get; }
 

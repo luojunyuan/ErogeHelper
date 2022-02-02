@@ -115,7 +115,7 @@ internal static class DI
     {
         Locator.CurrentMutable.RegisterLazySingleton(() => new MainGameViewModel());
         Locator.CurrentMutable.RegisterLazySingleton(() => new AssistiveTouchViewModel());
-        Locator.CurrentMutable.RegisterLazySingleton(() => new MenuDeviceViewModel());
+        Locator.CurrentMutable.RegisterLazySingleton(() => new MenuGameViewModel());
         Locator.CurrentMutable.Register(() => new DanmakuCanvasViewModel());
 
         Locator.CurrentMutable.Register(() => new TextViewModel());
@@ -254,7 +254,6 @@ internal static class DI
             await new GitHubReleasesUpdateChecker("erogehelper", "erogehelper", false, "9.9.9.9").CheckAsync(default);
         }
         catch { }
+        (DependencyResolver.GetService<IViewFor<PreferenceViewModel>>() as Window)?.Close();
     }
-
-    private static double GetDpiFromView(IntPtr handle) => Screen.FromHandle(handle).ScaleFactor;
 }

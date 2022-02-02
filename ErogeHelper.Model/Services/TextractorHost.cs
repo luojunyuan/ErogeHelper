@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Function;
 using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Structs;
 using Splat;
@@ -113,11 +115,26 @@ public class TextractorHost : ITextractorService, IEnableLogger
         }
     }
 
-    public void ReAttachProcesses() => throw new NotImplementedException();
+    public void ReAttachProcesses()
+    {
+        if (!Injected)
+        {
+            InjectProcesses(Shared.DependencyResolver.GetService<IGameDataService>());
+        }
+        else
+        {
+            _consoleOutput.Clear();
+            GameProcesses.ToList().ForEach(p => _ = TextHostDll.DetachProcess((uint)p.Id));
+            Observable.Start(async () =>
+            {
+                await Task.Delay(ConstantValue.TextractorReAttachBlockTime).ConfigureAwait(false);
+                GameProcesses.ToList().ForEach(p => _ = TextHostDll.InjectProcess((uint)p.Id));
+            });
+        }
+    }
+
     public void RemoveHook(long address) =>
         GameProcesses.ToList().ForEach(p => _ = TextHostDll.RemoveHook((uint)p.Id, (ulong)address));
-
-    public void RemoveUselessHooks() => throw new NotImplementedException();
 
     public void SearchRCode(string text) =>
         GameProcesses.ToList().ForEach(p => _ = TextHostDll.SearchForText((uint)p.Id, text, 932));
@@ -161,8 +178,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
     {
         if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode))
         {
-            GameProcesses.ToList().ForEach(proc =>
-                _ = TextHostDll.RemoveHook((uint)proc.Id, address));
+            GameProcesses.ToList().ForEach(proc => _ = TextHostDll.RemoveHook((uint)proc.Id, address));
         }
 
         _threadHandleDict[threadId] = new HookParam

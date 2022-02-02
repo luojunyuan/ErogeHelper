@@ -18,6 +18,7 @@
     <Grid>
         <Grid x:Name="FrameBase">
             <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden" />
+            <Frame x:Name="GameMenu" NavigationUIVisibility="Hidden" />
             <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" />
             <Frame x:Name="FunctionMenu" NavigationUIVisibility="Hidden" />
         </Grid>
