@@ -6,7 +6,6 @@ using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
-using ErogeHelper.Shared.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -32,7 +31,7 @@ public class DanmakuViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UseDanmaku = v);
 
-        var pager = PageParameters.WhenAnyValue(
+        var pager = _pageParameters.WhenAnyValue(
             vm => vm.CurrentPage, vm => vm.PageSize, (page, size) => new PageRequest(page, size))
             .StartWith(new PageRequest(1, 20))
             .DistinctUntilChanged()
@@ -43,7 +42,7 @@ public class DanmakuViewModel : ReactiveObject, IRoutableViewModel
             .Sort(SortExpressionComparer<DanmakuItemModel>.Descending(t => t.CreationTime))
             .Page(pager)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Do(changes => PageParameters.Update(changes.Response))
+            .Do(changes => _pageParameters.Update(changes.Response))
             .Bind(out _comments)
             .Subscribe();
 
@@ -65,7 +64,7 @@ public class DanmakuViewModel : ReactiveObject, IRoutableViewModel
     private readonly ReadOnlyObservableCollection<DanmakuItemModel> _comments;
     public ReadOnlyObservableCollection<DanmakuItemModel> Comments => _comments;
 
-    public PageParameterData PageParameters { get; } = new PageParameterData(1, 20);
+    private readonly PageParameterData _pageParameters = new(1, 20);
 
     public class DanmakuItemModel
     {

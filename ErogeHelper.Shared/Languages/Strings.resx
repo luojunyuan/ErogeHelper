@@ -639,4 +639,7 @@ NOTE: You are about updating to dev version. This version may not stable only su
   <data name="AssistiveTouch.LoseFocusWarn" xml:space="preserve">
     <value>Note lose focus only recommend when you can not interact with eh when full-screen.</value>
   </data>
+  <data name="HookPage.HCodeInvalidFormat" xml:space="preserve">
+    <value>Invalid h-code format</value>
+  </data>
 </root>

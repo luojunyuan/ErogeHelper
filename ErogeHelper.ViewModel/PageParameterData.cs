@@ -6,7 +6,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace ErogeHelper.ViewModel;
 
-public class PageParameterData : ReactiveObject
+internal class PageParameterData : ReactiveObject
 {
     public PageParameterData(int currentPage, int pageSize)
     {

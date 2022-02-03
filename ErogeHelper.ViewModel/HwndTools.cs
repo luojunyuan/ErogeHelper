@@ -11,6 +11,8 @@ public static class HwndTools
     public static IntPtr GetRealGameHandle() =>
         DependencyResolver.GetService<IGameDataService>().GameRealWindowHandle.DangerousGetHandle();
 
+    public static Func<HWND, bool> IsGameFullscreenCallback { get; set; } = null!;
+
     public static void HideWindowInAltTab(HWND windowHandle)
     {
         const int wsExToolWindow = 0x00000080;

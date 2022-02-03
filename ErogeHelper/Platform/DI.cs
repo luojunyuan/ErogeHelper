@@ -102,6 +102,7 @@ internal static class DI
 
         // ViewModel->View callback 
         HookViewModel.EnableClipboardCallback = isUseClipboard => sharpClipboard.MonitorClipboard = isUseClipboard;
+        HwndTools.IsGameFullscreenCallback = WpfHelper.IsGameForegroundFullscreen;
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255

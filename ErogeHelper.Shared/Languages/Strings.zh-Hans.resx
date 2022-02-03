@@ -175,7 +175,7 @@
     <value>正则表达式（输入你想要去除的多余文字）</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">
-    <value>当前文本</value>
+    <value>当前选择的文本</value>
   </data>
   <data name="HookPage.Console" xml:space="preserve">
     <value>控制台输出</value>
@@ -229,7 +229,7 @@
     <value>全屏 (Alt + Enter)</value>
   </data>
   <data name="AssistiveTouch.LoseFocusTip" xml:space="preserve">
-    <value>全屏游戏时eh不抢占焦点</value>
+    <value>使eh在全屏游戏时不抢占焦点</value>
   </data>
   <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
     <value>操作中心</value>
@@ -637,10 +637,13 @@
     <value>关闭游戏</value>
   </data>
   <data name="AssistiveTouch.LoseFocusWarn" xml:space="preserve">
-    <value>注意失去焦点仅推荐全屏游戏时无法与eh交互使用。
+    <value>注意，失去焦点仅推荐全屏游戏时无法与eh交互使用。
 1. 此选项仅作用于小白点与文本窗口。
-2. 失去焦点窗口中的文本框会变得无法输入文字。
+2. 失去焦点后的窗口文本框会变得无法输入文字。
 3. 部分游戏点击eh时可能会被鼠标穿透，触控不会受此影响。
-若全屏游戏时使用其他窗口导致弹回桌面，建议窗口化游戏或者就在桌面使用。</value>
+若全屏游戏时进行偏好配置使用其他窗口导致弹回桌面，建议窗口化游戏或在桌面进行。</value>
+  </data>
+  <data name="HookPage.HCodeInvalidFormat" xml:space="preserve">
+    <value>无效的特殊码格式</value>
   </data>
 </root>

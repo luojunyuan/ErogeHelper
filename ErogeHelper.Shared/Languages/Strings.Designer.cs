@@ -874,6 +874,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Invalid h-code format 的本地化字符串。
+        /// </summary>
+        public static string HookPage_HCodeInvalidFormat {
+            get {
+                return ResourceManager.GetString("HookPage.HCodeInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Hook Code 的本地化字符串。
         /// </summary>
         public static string HookPage_HookCode {

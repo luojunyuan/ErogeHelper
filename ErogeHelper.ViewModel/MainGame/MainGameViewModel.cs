@@ -91,8 +91,7 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 
         gameDataService.GameFullscreenChanged
             .Do(isFullscreen => this.Log().Debug("Game fullscreen: " + isFullscreen))
-            // TODO: Turn off focus if exit fullscreen
-            // TODO: May need re-locate button position
+            // QUESTION: May need re-locate button position
             .Subscribe(isFullscreen => stayTopSubj.OnNext(isFullscreen))
             .DisposeWith(_disposables);
 

@@ -25,7 +25,7 @@ public class HCodeViewModel : ReactiveValidationObject
         var codeValidation = this.ValidationRule(
             vm => vm.HookCode,
             CodeValidateRegExp,
-            "Invalid hcode format");
+            Strings.HookPage_HCodeInvalidFormat);
 
         this.WhenAnyValue(x => x.HookCode,
             code => !string.IsNullOrEmpty(code) && codeValidation.IsValid)

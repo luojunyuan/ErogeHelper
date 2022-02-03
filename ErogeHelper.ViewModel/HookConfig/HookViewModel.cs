@@ -113,8 +113,9 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         this.WhenAnyValue(x => x.SelectedHookEngine)
             .WhereNotNull()
             .Do(_ => hookThreadItemsList.Clear())
-            .SelectMany(_ => hookThreads.Items.ToObservable())
-            .Where(v => v.Address == SelectedHookEngine!.Value.Address)
+            .SelectMany(_ => hookThreads.Items.ToObservable()
+                .Where(v => v.Address == SelectedHookEngine!.Value.Address)
+                .Take(50))
             .Select(v => new HookThreadItemViewModel()
             {
                 Index = hookThreadItemsList.Count + 1,
@@ -133,6 +134,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
                 !hookThreadItemsList.Items.Any(m => m.Handle == v.Handle))
             .Select(v => new HookThreadItemViewModel()
             {
+                // FIXME: Index increase at the same time
                 Index = hookThreadItemsList.Count + 1,
                 Handle = v.Handle,
                 TotalText = v.Text,
