@@ -44,6 +44,10 @@ public partial class HookWindow : IEnableLogger
                 vm => vm.OpenHCodeDialog,
                 v => v.HCodeButton).DisposeWith(d);
 
+            this.BindCommand(ViewModel,
+                vm => vm.OpenRCodeDialog,
+                v => v.RCodeButton).DisposeWith(d);
+
             this.Bind(ViewModel,
                 vm => vm.ClipboardStatus,
                 v => v.ClipboardButton.IsChecked).DisposeWith(d);
@@ -68,7 +72,11 @@ public partial class HookWindow : IEnableLogger
 
             this.OneWayBind(ViewModel,
                 vm => vm.HCodeViewModel,
-                v => v.HcodeDialogHost.ViewModel).DisposeWith(d);
+                v => v.HCodeDialogHost.ViewModel).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.RCodeViewModel,
+                v => v.RCodeDialogHost.ViewModel).DisposeWith(d);
         });
     }
 }

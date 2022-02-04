@@ -391,7 +391,9 @@
     <value>搜索</value>
   </data>
   <data name="HookPage.RCodeInputLabel" xml:space="preserve">
-    <value>输入当前日文文本</value>
+    <value>请从头输入当前游戏显示的日文文本。
+（输入包括可能的括弧符号，不包含角色名信息）
+（阅读码可能仅在本次游戏有效）</value>
   </data>
   <data name="HookPage.RCodeClipTip" xml:space="preserve">
     <value>选择待识别的文本区域</value>

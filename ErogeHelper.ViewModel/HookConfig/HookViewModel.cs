@@ -22,15 +22,18 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     public static Action<bool> EnableClipboardCallback { get; set; } = null!;
 
     public HCodeViewModel HCodeViewModel { get; }
+    public RCodeViewModel RCodeViewModel { get; }
 
     public HookViewModel(
         ITextractorService? textractorService = null,
         IGameInfoRepository? gameInfoRepository = null,
-        HCodeViewModel? hcodeViewModel = null)
+        HCodeViewModel? hcodeViewModel = null,
+        RCodeViewModel? rcodeViewModel = null)
     {
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         HCodeViewModel = hcodeViewModel ?? DependencyResolver.GetService<HCodeViewModel>();
+        RCodeViewModel = rcodeViewModel ?? DependencyResolver.GetService<RCodeViewModel>();
 
         CurrentInUseHookName = textractorService.Setting.HookCode == string.Empty ?
             Strings.Common_None : textractorService.Setting.HookName;
@@ -68,6 +71,11 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         OpenHCodeDialog
             .Where(code => code != string.Empty)
             .Subscribe(textractorService.InsertHook);
+
+        OpenRCodeDialog = ReactiveCommand.CreateFromObservable(() => RCodeViewModel.Show.Handle(Unit.Default));
+        OpenRCodeDialog
+            .Where(text => text != string.Empty)
+            .Subscribe(textractorService.SearchRCode);
 
         this.WhenAnyValue(x => x.ClipboardStatus)
             .Skip(1)
@@ -172,6 +180,8 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     public ReactiveCommand<Unit, Unit> Refresh { get; }
 
     public ReactiveCommand<Unit, string> OpenHCodeDialog { get; }
+
+    public ReactiveCommand<Unit, string> OpenRCodeDialog { get; }
 
     [Reactive]
     public bool ClipboardStatus { get; set; }

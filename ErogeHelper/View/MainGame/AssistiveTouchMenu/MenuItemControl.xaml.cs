@@ -17,7 +17,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
         nameof(Symbol),
         typeof(Symbol),
         typeof(MenuItemControl),
-        new PropertyMetadata(Symbol.Emoji, (d, e) => ((MenuItemControl)d).OnSymbolChanged(e)));
+        new PropertyMetadata(Symbol.Emoji2, (d, e) => ((MenuItemControl)d).OnSymbolChanged(e)));
 
     /// <summary>
     /// Gets or sets the Segoe MDL2 Assets glyph used as the icon content.

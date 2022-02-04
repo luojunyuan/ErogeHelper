@@ -8,10 +8,11 @@ using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 
 namespace ErogeHelper.ViewModel.MainGame;
 
-public class AssistiveTouchViewModel : ReactiveObject, IDisposable
+public class AssistiveTouchViewModel : ReactiveObject, IDisposable, IEnableLogger
 {
     public AssistiveTouchViewModel(IEHConfigRepository? ehConfigRepository = null)
     {
@@ -23,7 +24,6 @@ public class AssistiveTouchViewModel : ReactiveObject, IDisposable
         this.WhenAnyValue(x => x.AssistiveTouchPosition)
             .Skip(1)
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
-            // FIXME: System.IO.IOException:“无法将替换文件移到要被替换的文件。要被替换的文件保持原始名称。”
             .Subscribe(pos => ehConfigRepository.AssistiveTouchPosition = JsonSerializer.Serialize(pos))
             .DisposeWith(_disposables);
 

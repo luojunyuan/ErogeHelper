@@ -391,7 +391,9 @@
     <value>Search</value>
   </data>
   <data name="HookPage.RCodeInputLabel" xml:space="preserve">
-    <value>Input current Japanese Text</value>
+    <value>Please enter the current text displayed by the game and type from the beginning of the text.
+(Including the '「'　symbol, if exist)
+(Read-Code only work this turn during the game run)</value>
   </data>
   <data name="HookPage.RCodeClipTip" xml:space="preserve">
     <value>Select text area</value>

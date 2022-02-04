@@ -14,6 +14,8 @@ public static class CommonGlyphs
 
     public const string Share = "\uE72D";
 
+    public const string ReadingMode = "\uE736";
+
     public const string Cloud = "\uE753";
 
     public const string KeyboardClassic = "\uE765";

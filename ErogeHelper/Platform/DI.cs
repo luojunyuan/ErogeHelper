@@ -123,6 +123,7 @@ internal static class DI
 
         Locator.CurrentMutable.Register(() => new HookViewModel());
         Locator.CurrentMutable.Register(() => new HCodeViewModel());
+        Locator.CurrentMutable.Register(() => new RCodeViewModel());
 
         Locator.CurrentMutable.Register(() => new CloudSaveViewModel());
 
@@ -146,6 +147,7 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());
         Locator.CurrentMutable.Register<IViewFor<HCodeViewModel>>(() => new HCodeDialog());
+        Locator.CurrentMutable.Register<IViewFor<RCodeViewModel>>(() => new RCodeDialog());
 
         Locator.CurrentMutable.Register<IViewFor<CloudSaveViewModel>>(() => new CloudSaveWindow());
 

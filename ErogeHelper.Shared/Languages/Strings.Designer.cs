@@ -937,7 +937,9 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Input current Japanese Text 的本地化字符串。
+        ///   查找类似 Please enter the current text displayed by the game and type from the beginning of the text.
+        ///(Including the &apos;「&apos;　symbol, if exist)
+        ///(Read-Code only work this turn during the game run) 的本地化字符串。
         /// </summary>
         public static string HookPage_RCodeInputLabel {
             get {

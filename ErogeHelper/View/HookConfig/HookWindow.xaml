@@ -110,14 +110,19 @@
                                     </ui:AppBarButton.Icon>
                                 </ui:AppBarButton>
                                 <!--  Read Code  -->
-                                <ui:AppBarButton Icon="Find" Label="{x:Static resx:Strings.HookPage_RCodeLabel}" ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}" />
+                                <ui:AppBarButton x:Name="RCodeButton" Label="{x:Static resx:Strings.HookPage_RCodeLabel}" ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.ReadingMode}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
                                 <!--  Clipboard  -->
                                 <ui:AppBarToggleButton x:Name="ClipboardButton" Label="{x:Static resx:Strings.HookPage_Clipboard}" ToolTip="{x:Static resx:Strings.HookPage_ClipboardTip}">
                                     <ui:AppBarToggleButton.Icon>
                                         <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.ClipboardList}" />
                                     </ui:AppBarToggleButton.Icon>
                                 </ui:AppBarToggleButton>
-                                <rxui:ViewModelViewHost x:Name="HcodeDialogHost" />
+                                <rxui:ViewModelViewHost x:Name="HCodeDialogHost" />
+                                <rxui:ViewModelViewHost x:Name="RCodeDialogHost" />
                             </StackPanel>
 
                             <!--  Thread Select  -->
