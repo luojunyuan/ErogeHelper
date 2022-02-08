@@ -2,11 +2,11 @@
 
 namespace ErogeHelper.Model.Services.Interface;
 
-public interface IMeCabService
+public interface IMeCabService : IDisposable
 {
-    bool Loaded { get; }
+    bool CanLoaded { get; }
 
-    void CreateTagger();
+    void LoadMeCabTagger();
 
     List<MeCabWord> GenerateMeCabWords(string sentence);
 }

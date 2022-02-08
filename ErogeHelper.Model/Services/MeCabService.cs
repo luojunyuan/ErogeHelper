@@ -21,27 +21,19 @@ public class MeCabService : IMeCabService
     {
         _configRepository = ehConfigRepository ?? DependencyResolver.GetService<IEHConfigRepository>();
 
-        Loaded = false;
-        if (Directory.Exists(EHContext.MeCabDicFolder))
-        {
-            _tagger = MeCabTagger.Create(new MeCabParam
-            {
-                DicDir = EHContext.MeCabDicFolder
-            });
-            Loaded = true;
-        }
+        CanLoaded = Directory.Exists(EHContext.MeCabDicFolder);
     }
 
-    public bool Loaded { get; private set; }
+    public bool CanLoaded { get; private set; }
 
-    public void CreateTagger()
+    public void LoadMeCabTagger()
     {
         _tagger = MeCabTagger.Create(new MeCabParam
         {
             DicDir = EHContext.MeCabDicFolder
         });
 
-        Loaded = true;
+        CanLoaded = true;
     }
 
     public List<MeCabWord> GenerateMeCabWords(string sentence) => MeCabWordUniDicEnumerable(sentence).ToList();
@@ -82,5 +74,11 @@ public class MeCabService : IMeCabService
                 PartOfSpeech = hinshi
             }; ;
         }
+    }
+
+    public void Dispose()
+    {
+        _tagger?.Dispose();
+        _tagger = null;
     }
 }

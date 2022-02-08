@@ -76,7 +76,7 @@ public partial class MenuBase : IEnableLogger
         // Show menu and begin animation
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        // FIXME: Multi-screen dpi issue: Position is wrong when animating for the first time
+        // FIXME: Multi-screen dpi issue: Position is wrong when animating for the first time at second screen
         _touchToMenuStoryboard.Begin();
     }
 

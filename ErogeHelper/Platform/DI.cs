@@ -257,6 +257,5 @@ internal static class DI
             await new GitHubReleasesUpdateChecker("erogehelper", "erogehelper", false, "9.9.9.9").CheckAsync(default);
         }
         catch { }
-        (DependencyResolver.GetService<IViewFor<PreferenceViewModel>>() as Window)?.Close();
     }
 }

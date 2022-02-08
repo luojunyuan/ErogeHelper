@@ -58,27 +58,29 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
                 e => AutoUpdater.CheckForUpdateEvent += e,
                 e => AutoUpdater.CheckForUpdateEvent -= e)
             .Where(updateInfo => updateInfo.Error is null)
-            .SelectMany(updateInfo =>
+            // FIXME: Memory leak here
+            .Where(updateInfo =>
             {
                 if (!updateInfo.IsUpdateAvailable)
                 {
-                    return Interactions.MessageBoxConfirm.Handle("Update not availble now. Please try later, or you can update from release page.")
-                        .Where(_ => false)
-                        .Select(_ => updateInfo);
+                    return Interactions.MessageBoxConfirm
+                        .Handle("Update not availble now. Please try later, or you can update from release page.")
+                        .Wait();
                 }
                 var updateTip = currentPreviewFlag
                     ? string.Format(Strings.About_Update_Tip, updateInfo.CurrentVersion)
                       + Strings.About_Update_PreviewWarning
                     : string.Format(Strings.About_Update_Tip, updateInfo.CurrentVersion);
                 // PREFERENCE: better surface with update log info
-                return Interactions.MessageBoxConfirm.Handle(updateTip)
-                        .Where(continueUpdate => continueUpdate)
-                        .Select(_ => updateInfo);
+                return Interactions.MessageBoxConfirm
+                    .Handle(updateTip)
+                    .Wait();
             })
             .Select(AutoUpdater.DownloadUpdate)
             .Where(downloadFinished => downloadFinished)
             .Subscribe(_ =>
             {
+                // FIXME: Memory leak here
                 AppExit.Handle(Unit.Default).Subscribe();
 
                 if (Utils.IsFileInUse(
@@ -91,7 +93,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
             })
             .DisposeWith(disposables);
 
-        this.WhenActivated(d => disposables.DisposeWith(d));
+        this.WhenActivated(d => d(disposables));
     }
 
     public string AppVersion { get; set; } = string.Empty;

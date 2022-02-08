@@ -20,7 +20,7 @@ namespace ErogeHelper.UnitTests.Model.Services
                .Build();
             IMeCabService mecabService = new MeCabService(repo);
 
-            if (!mecabService.Loaded)
+            if (!mecabService.CanLoaded)
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace ErogeHelper.UnitTests.Model.Services
             IMeCabService meCabService = new MeCabService();
             var word = "スマホ";
 
-            meCabService.CreateTagger();
+            meCabService.LoadMeCabTagger();
             var list = meCabService.GenerateMeCabWords(word);
             foreach (var meCabWord in list)
             {

@@ -199,10 +199,10 @@ public class TextractorCli : ITextractorService, IEnableLogger
         if (index == 1)
             return sentence;
 
-        var newSentence = string.Empty;
+        var newSentence = new StringBuilder();
         for (int i = 0; i < sentence.Length;)
         {
-            newSentence += sentence[i];
+            newSentence.Append(sentence[i]);
             for (int j = i; j <= sentence.Length; ++j)
             {
                 if (j == sentence.Length || sentence[i] != sentence[j])
@@ -212,6 +212,6 @@ public class TextractorCli : ITextractorService, IEnableLogger
                 }
             }
         }
-        return newSentence;
+        return newSentence.ToString();
     }
 }

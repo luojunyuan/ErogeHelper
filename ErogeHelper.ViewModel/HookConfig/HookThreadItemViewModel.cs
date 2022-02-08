@@ -21,8 +21,29 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
                 .Where(hp => hp.Handle == Handle)
                 .Select(hp => hp.Text)
                 .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(LimitTextLength)
                 .Subscribe(text => TotalText += "\n\n" + text).DisposeWith(d);
         });
+    }
+
+    private const int MaxLength = 1000;
+
+    /// <summary>
+    /// Textbox begin large and need rendering more, reduces GC pressure
+    /// </summary>
+    private void LimitTextLength(string obj)
+    {
+        if (TotalText.Length > MaxLength)
+        {
+            var index = TotalText.LastIndexOf('\n', TotalText.Length - 1);
+            foreach (var _ in Enumerable.Range(0, 3))
+            {
+                if (index < 2) break;
+                index = TotalText.LastIndexOf('\n', index - 2);
+            }
+            if (index == -1) index = 0;
+            TotalText = TotalText[index..];
+        }
     }
 
     public long Handle { get; set; }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text.Json;
 using DynamicData;
 using DynamicData.Binding;
@@ -93,6 +95,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .DisposeWith(_disposables);
 
         hookThreads.Connect()
+            //.ObserveOn(TaskPoolScheduler.Default.DisableOptimizations(typeof(ISchedulerLongRunning)))
             .DistinctValues(v => new HookEngineLabel(v.Address, v.EngineName))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _hookEngineNames)
@@ -118,22 +121,44 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Bind(out _hookThreadItems)
             .Subscribe();
 
+        var resetSelectedAction = true;
+        var changeHookThreadsAction = new Subject<Unit>();
         this.WhenAnyValue(x => x.SelectedHookEngine)
             .WhereNotNull()
-            .Do(_ => hookThreadItemsList.Clear())
-            .SelectMany(_ => hookThreads.Items.ToObservable()
-                .Where(v => v.Address == SelectedHookEngine!.Value.Address)
-                .Take(50))
-            .Select(v => new HookThreadItemViewModel()
+            .Do(_ =>
             {
-                Index = hookThreadItemsList.Count + 1,
-                Handle = v.Handle,
-                TotalText = v.LatestText,
-                HookCode = v.HookCode,
-                EngineName = v.EngineName,
-                Context = v.ThreadContext,
-                SubContext = v.SubThreadContext
+                changeHookThreadsAction.OnNext(Unit.Default);
+                hookThreadItemsList.Clear();
+                resetSelectedAction = true;
             })
+            .ObserveOn(RxApp.TaskpoolScheduler)
+            .Select(_ => hookThreads.Items.ToObservable()
+                .Where(v => v.Address == SelectedHookEngine!.Value.Address)
+                .Buffer(10)
+                .Select(buf =>
+                {
+                    if (resetSelectedAction)
+                    {
+                        resetSelectedAction = false;
+                        return Observable.Return(buf);
+                    }
+                    return Observable.Return(buf).Delay(TimeSpan.FromMilliseconds(250));
+                })
+                .Concat()
+                .SelectMany(x => x)
+                .TakeUntil(changeHookThreadsAction))
+            .SelectMany(v => v)
+            .Select(v => new HookThreadItemViewModel()
+             {
+                 Index = hookThreadItemsList.Count + 1,
+                 Handle = v.Handle,
+                 TotalText = v.LatestText,
+                 HookCode = v.HookCode,
+                 EngineName = v.EngineName,
+                 Context = v.ThreadContext,
+                 SubContext = v.SubThreadContext
+             })
+            .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(hookThreadItemsList.AddOrUpdate);
 
         textractorService.Data
@@ -159,7 +184,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         var canSubmit = _hookThreadItems
             .ToObservableChangeSet()
             .AutoRefresh(m => m.IsTextThread)
-            .ToCollection()
+            .ToCollection() // TODO: And valid regex
             .Select(vms => vms.Any(m => m.IsTextThread) == true);
 
         Submit = ReactiveCommand.Create(() => CurrentInUseHookName =
@@ -186,7 +211,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     [Reactive]
     public bool ClipboardStatus { get; set; }
 
-    // No memory leak, but would like to exist for a while
+    // No memory leak, but would like to exist for a while (Long Scheduled)
     private readonly ReadOnlyObservableCollection<HookEngineLabel> _hookEngineNames;
     public ReadOnlyObservableCollection<HookEngineLabel> HookEngineNames => _hookEngineNames;
 
@@ -248,7 +273,9 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     private static TextractorSetting.TextThread SelectThreadType(HookThreadItemViewModel vm)
     {
         if (vm.IsTextThread)
+        {
             return TextractorSetting.TextThread.Text;
+        }
         else if (vm.IsCharacterThread)
         {
             return TextractorSetting.TextThread.CharacterName;

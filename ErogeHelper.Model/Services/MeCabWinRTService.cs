@@ -11,9 +11,9 @@ public class MeCabWinRTService : IMeCabService
 {
     public static Func<string, IEnumerable<MeCabWord>> JapaneseAnalyzerCallback { private get; set; } = null!;
 
-    public bool Loaded => true;
+    public bool CanLoaded => true;
 
-    public void CreateTagger() => throw new NotImplementedException();
+    public void LoadMeCabTagger() => throw new NotImplementedException();
 
     public List<MeCabWord> GenerateMeCabWords(string sentence)
     {
@@ -25,10 +25,10 @@ public class MeCabWinRTService : IMeCabService
         } : words;
     }
 
+    private readonly IEHConfigRepository _configRepository;
+
     public MeCabWinRTService(IEHConfigRepository? ehConfigRepository = null)
         => _configRepository = ehConfigRepository ?? DependencyResolver.GetService<IEHConfigRepository>();
-
-    private readonly IEHConfigRepository _configRepository;
 
     private IEnumerable<MeCabWord> MeCabWordWinRTEnumerable(string sentence)
     {
@@ -60,4 +60,6 @@ public class MeCabWinRTService : IMeCabService
             };
         }
     }
+
+    public void Dispose() { }
 }
