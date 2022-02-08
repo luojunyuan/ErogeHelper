@@ -95,7 +95,6 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .DisposeWith(_disposables);
 
         hookThreads.Connect()
-            //.ObserveOn(TaskPoolScheduler.Default.DisableOptimizations(typeof(ISchedulerLongRunning)))
             .DistinctValues(v => new HookEngineLabel(v.Address, v.EngineName))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _hookEngineNames)
@@ -131,7 +130,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
                 hookThreadItemsList.Clear();
                 resetSelectedAction = true;
             })
-            .ObserveOn(RxApp.TaskpoolScheduler)
+            .ObserveOn(TaskPoolScheduler.Default.DisableOptimizations(typeof(ISchedulerLongRunning)))
             .Select(_ => hookThreads.Items.ToObservable()
                 .Where(v => v.Address == SelectedHookEngine!.Value.Address)
                 .Buffer(10)
@@ -211,7 +210,6 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     [Reactive]
     public bool ClipboardStatus { get; set; }
 
-    // No memory leak, but would like to exist for a while (Long Scheduled)
     private readonly ReadOnlyObservableCollection<HookEngineLabel> _hookEngineNames;
     public ReadOnlyObservableCollection<HookEngineLabel> HookEngineNames => _hookEngineNames;
 

@@ -12,8 +12,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <OutputPath>..\bin\$(Configuration)</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PublishReadyToRun>false</PublishReadyToRun>
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PublishReadyToRunExclude Include="ModernWpf.MessageBox.dll" />
+  </ItemGroup>
   
   <ItemGroup>
     <Resource Include="app.ico" />

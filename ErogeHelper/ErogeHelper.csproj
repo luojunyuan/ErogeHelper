@@ -14,10 +14,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PublishReadyToRun>false</PublishReadyToRun>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <PublishReadyToRunExclude Include="ModernWpf.MessageBox.dll" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.Notifications" Version="7.1.2" />
