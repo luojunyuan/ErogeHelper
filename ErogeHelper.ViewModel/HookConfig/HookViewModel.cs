@@ -11,6 +11,7 @@ using DynamicData.Binding;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
+using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
 using ReactiveUI;
@@ -120,6 +121,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Bind(out _hookThreadItems)
             .Subscribe();
 
+        var itemIndex = 1;
         var resetSelectedAction = true;
         var changeHookThreadsAction = new Subject<Unit>();
         this.WhenAnyValue(x => x.SelectedHookEngine)
@@ -128,12 +130,12 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             {
                 changeHookThreadsAction.OnNext(Unit.Default);
                 hookThreadItemsList.Clear();
+                itemIndex = 1;
                 resetSelectedAction = true;
             })
             .ObserveOn(TaskPoolScheduler.Default.DisableOptimizations(typeof(ISchedulerLongRunning)))
             .Select(_ => hookThreads.Items.ToObservable()
                 .Where(v => v.Address == SelectedHookEngine!.Value.Address)
-                .Buffer(10)
                 .Select(buf =>
                 {
                     if (resetSelectedAction)
@@ -141,15 +143,14 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
                         resetSelectedAction = false;
                         return Observable.Return(buf);
                     }
-                    return Observable.Return(buf).Delay(TimeSpan.FromMilliseconds(250));
+                    return Observable.Return(buf).Delay(TimeSpan.FromMilliseconds(100));
                 })
                 .Concat()
-                .SelectMany(x => x)
                 .TakeUntil(changeHookThreadsAction))
             .SelectMany(v => v)
             .Select(v => new HookThreadItemViewModel()
              {
-                 Index = hookThreadItemsList.Count + 1,
+                 Index = itemIndex++,
                  Handle = v.Handle,
                  TotalText = v.LatestText,
                  HookCode = v.HookCode,
@@ -161,13 +162,14 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Subscribe(hookThreadItemsList.AddOrUpdate);
 
         textractorService.Data
+            .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UIMinimumResponseTime))
             .Where(v => SelectedHookEngine is not null &&
                 v.Address == SelectedHookEngine!.Value.Address &&
+                // different handle
                 !hookThreadItemsList.Items.Any(m => m.Handle == v.Handle))
             .Select(v => new HookThreadItemViewModel()
             {
-                // FIXME: Index increase at the same time
-                Index = hookThreadItemsList.Count + 1,
+                Index = itemIndex++,
                 Handle = v.Handle,
                 TotalText = v.Text,
                 HookCode = v.HookCode,

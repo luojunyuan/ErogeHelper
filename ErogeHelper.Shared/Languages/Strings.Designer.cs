@@ -1173,6 +1173,24 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Character 的本地化字符串。
+        /// </summary>
+        public static string HookThreadItem_Character {
+            get {
+                return ResourceManager.GetString("HookThreadItem.Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text 的本地化字符串。
+        /// </summary>
+        public static string HookThreadItem_Text {
+            get {
+                return ResourceManager.GetString("HookThreadItem.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Also delete EH cache files. 的本地化字符串。
         /// </summary>
         public static string Installer_DeleteCheckBox {

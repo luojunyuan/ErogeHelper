@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:tool="clr-namespace:ErogeHelper.Platform.XamlTool"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
@@ -21,10 +22,11 @@
                     Margin="2 2 20 0" VerticalAlignment="Center"
                     FontWeight="Bold" />
                 <ui:RadioButtons MaxColumns="2">
-                    <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="Text" />
+                    <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="{x:Static resx:Strings.HookThreadItem_Text}" />
                     <RadioButton x:Name="CharacterRadioButton"
                         Margin="-25 0 0 0" HorizontalAlignment="Left"
-                        Click="OptionalRadioButtonCheck" Content="Character" />
+                        Click="OptionalRadioButtonCheck"
+                        Content="{x:Static resx:Strings.HookThreadItem_Character}" />
                 </ui:RadioButtons>
             </StackPanel>
             <TextBox x:Name="TotalText"
