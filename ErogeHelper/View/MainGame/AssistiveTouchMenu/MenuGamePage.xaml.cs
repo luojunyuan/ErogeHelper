@@ -11,11 +11,10 @@ using ModernWpf.Controls;
 using ReactiveUI;
 using Vanara.PInvoke;
 using WindowsInput.Events;
-using Page = System.Windows.Controls.Page;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
-public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
+public partial class MenuGamePage : IViewFor<MenuGameViewModel>
 {
     #region ViewModel DependencyProperty
     /// <summary>Identifies the <see cref="ViewModel"/> dependency property.</summary>
@@ -43,7 +42,7 @@ public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
     public MenuGamePage()
     {
         InitializeComponent();
-        ApplyTransistionInAnimation();
+        ApplyTransitionInAnimation();
 
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             return;
@@ -79,11 +78,11 @@ public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
         });
     }
 
-    public void TransistIn(double moveDistance)
+    public void TransitIn(double moveDistance)
     {
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
+        GridPanel.Children.Cast<IMenuItemBackground>().Fill(false);
 
         var fullscreenTransform = AnimationTool.RightOneTopOneTransform(moveDistance);
         var backTransform = AnimationTool.RightOneTransform(moveDistance);
@@ -108,9 +107,9 @@ public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
         _transitionInStoryboard.Begin();
     }
 
-    public void TransistOut()
+    public void TransitOut()
     {
-        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
+        GridPanel.Children.Cast<IMenuItemBackground>().Fill(false);
         _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, true);
         _transitionInStoryboard.Begin();
         _transitionInStoryboard.Seek(TimeSpan.FromMilliseconds(AssistiveTouch.TouchTransformDuration));
@@ -125,7 +124,7 @@ public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
     private readonly DoubleAnimation _touchToMouseMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
     private readonly DoubleAnimation _touchToMouseMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
 
-    private void ApplyTransistionInAnimation()
+    private void ApplyTransitionInAnimation()
     {
         var pageOpacityAnimation = AnimationTool.FadeInAnimation;
         Storyboard.SetTarget(pageOpacityAnimation, this);
@@ -166,9 +165,9 @@ public partial class MenuGamePage : Page, IViewFor<MenuGameViewModel>
             CloseGame.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
             LoseFocus.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
             TouchToMouse.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
-            GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
+            GridPanel.Children.Cast<IMenuItemBackground>().Fill(true);
 
-            if (_transitionInStoryboard.AutoReverse == true)
+            if (_transitionInStoryboard.AutoReverse)
             {
                 _transitionInStoryboard.SetCurrentValue(Timeline.AutoReverseProperty, false);
                 SetCurrentValue(VisibilityProperty, Visibility.Collapsed);

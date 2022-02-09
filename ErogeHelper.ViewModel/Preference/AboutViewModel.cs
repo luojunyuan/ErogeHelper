@@ -24,11 +24,8 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
 
     public ViewModelActivator Activator => new();
 
-    public AboutViewModel(
-        IEHConfigRepository? ehConfigRepository = null,
-        IUpdateService? updateService = null)
+    public AboutViewModel(IUpdateService? updateService = null)
     {
-        ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         updateService ??= DependencyResolver.GetService<IUpdateService>();
 
         var disposables = new CompositeDisposable();

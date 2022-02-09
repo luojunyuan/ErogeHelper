@@ -26,7 +26,7 @@ public partial class MainGameWindow : IEnableLogger
         InitializeDpi();
         var handle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
-        var keyboardDisposal = DisableWinArrawResizeShotcut(handle);
+        var keyboardDisposal = DisableWinArrowResizeShotcut(handle);
         var touchDisposal = RegisterAssistiveTouchEvents();
 
         ViewModel = DependencyResolver.GetService<MainGameViewModel>();
@@ -107,7 +107,7 @@ public partial class MainGameWindow : IEnableLogger
         return disposable;
     }
 
-    private static IDisposable DisableWinArrawResizeShotcut(HWND handle)
+    private static IDisposable DisableWinArrowResizeShotcut(HWND handle)
     {
         var keyboard = WindowsInput.Capture.Global.Keyboard();
         var winLeftListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Left)) { Enabled = true };
@@ -115,18 +115,18 @@ public partial class MainGameWindow : IEnableLogger
         var winRightListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Right)) { Enabled = true };
         var winDownListener = new KeyChordEventSource(keyboard, new(KeyCode.LWin, KeyCode.Down)) { Enabled = true };
         var altF4Listener = new KeyChordEventSource(keyboard, new(KeyCode.Alt, KeyCode.F4)) { Enabled = true };
-        void winArrawDelegate(object? s, KeyChordEventArgs e)
+        void WinArrowDelegate(object? s, KeyChordEventArgs e)
         {
             if (User32.GetForegroundWindow() == handle)
             {
                 e.Input.Next_Hook_Enabled = false;
             }
         }
-        winLeftListener.Triggered += winArrawDelegate;
-        winUpListener.Triggered += winArrawDelegate;
-        winRightListener.Triggered += winArrawDelegate;
-        winDownListener.Triggered += winArrawDelegate;
-        altF4Listener.Triggered += winArrawDelegate;
+        winLeftListener.Triggered += WinArrowDelegate;
+        winUpListener.Triggered += WinArrowDelegate;
+        winRightListener.Triggered += WinArrowDelegate;
+        winDownListener.Triggered += WinArrowDelegate;
+        altF4Listener.Triggered += WinArrowDelegate;
 
         return keyboard;
     }

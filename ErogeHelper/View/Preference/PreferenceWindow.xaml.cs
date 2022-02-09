@@ -69,8 +69,6 @@ public partial class PreferenceWindow
                         case PageTag.About:
                             ViewModel!.Router.NavigateAndReset.Execute(aboutViewModel);
                             break;
-                        default:
-                            break;
                     }
                 }).DisposeWith(d);
 

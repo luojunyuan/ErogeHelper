@@ -52,6 +52,7 @@ public class MenuGameViewModel : ReactiveObject
             User32.PostMessage(
                 gameDataService.MainProcess.MainWindowHandle, 
                 (uint)User32.WindowMessage.WM_SYSCOMMAND, 
+                // ReSharper disable once RedundantArgumentDefaultValue
                 (IntPtr)User32.SysCommand.SC_CLOSE);
             User32.BringWindowToTop(gameDataService.MainProcess.MainWindowHandle);
         });

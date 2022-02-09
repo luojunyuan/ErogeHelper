@@ -8,7 +8,7 @@ using ErogeHelper.ViewModel.Preference;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
-public partial class MenuMainPage : Page
+public partial class MenuMainPage
 {
     private readonly DoubleAnimation _fadeOutAnimation = AnimationTool.FadeOutAnimation;
     private readonly DoubleAnimation _fadeInAnimation = AnimationTool.FadeInAnimation;
@@ -19,23 +19,23 @@ public partial class MenuMainPage : Page
     public MenuMainPage()
     {
         InitializeComponent();
-        _fadeInAnimation.Completed += (_, _) => GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
+        _fadeInAnimation.Completed += (_, _) => GridPanel.Children.Cast<IMenuItemBackground>().Fill(true);
         _fadeOutAnimation.Completed += (_, _) =>
         {
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            GridPanel.Children.Cast<IMenuItemBackround>().Fill(true);
+            GridPanel.Children.Cast<IMenuItemBackground>().Fill(true);
         };
     }
 
     public void FadeOut()
     {
-        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
+        GridPanel.Children.Cast<IMenuItemBackground>().Fill(false);
         BeginAnimation(OpacityProperty, _fadeOutAnimation);
     }
 
     public void FadeIn()
     {
-        GridPanel.Children.Cast<IMenuItemBackround>().Fill(false);
+        GridPanel.Children.Cast<IMenuItemBackground>().Fill(false);
         SetCurrentValue(VisibilityProperty, Visibility.Visible);
         BeginAnimation(OpacityProperty, _fadeInAnimation);
     }

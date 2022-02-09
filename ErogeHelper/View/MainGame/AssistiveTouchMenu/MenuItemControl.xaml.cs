@@ -9,7 +9,7 @@ using Splat;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
-public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBackround
+public partial class MenuItemControl : IEnableLogger, IMenuItemBackground
 {
     #region Symbol DependencyProperty
     /// <summary>Identifies the <see cref="Symbol"/> dependency property.</summary>
@@ -81,7 +81,7 @@ public partial class MenuItemControl : UserControl, IEnableLogger, IMenuItemBack
     public void TransparentBackground(bool transparent) =>
         SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : XamlResource.AssistiveTouchBackground);
 
-    private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
+    private static readonly Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
     private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e) =>
         SetItemForegroundColor(ItemPressedColor);

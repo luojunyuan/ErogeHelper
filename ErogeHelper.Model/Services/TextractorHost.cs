@@ -24,7 +24,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
     public TextractorSetting Setting { get; private set; } = null!;
 
-    public bool Injected { get; private set; } = false;
+    public bool Injected { get; private set; }
 
 
     private IGameDataService? _gameDataService;
@@ -68,7 +68,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
         if (hookcode.StartsWith('R'))
         {
             // EngineName = "READ";
-            if (_threadHandleDict.Any(hcodeItem => hookcode.Equals(hcodeItem.Value.HookCode)))
+            if (_threadHandleDict.Any(hcodeItem => hookcode.Equals(hcodeItem.Value.HookCode, StringComparison.Ordinal)))
             {
                 _dataSubj.OnNext(new HookParam
                 {
@@ -91,7 +91,8 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
             // Note: Re-insert the same code may result a high address context*
             if (_threadHandleDict.Any(hcodeItem =>
-                engineName.Equals(hcodeItem.Value.Name) || hookcode.Equals(hcodeItem.Value.HookCode)))
+                    engineName.Equals(hcodeItem.Value.Name, StringComparison.Ordinal) || 
+                    hookcode.Equals(hcodeItem.Value.HookCode, StringComparison.Ordinal)))
             {
                 _dataSubj.OnNext(new HookParam
                 {
@@ -176,7 +177,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
         string name,
         string hookcode)
     {
-        if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode))
+        if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode, StringComparison.Ordinal))
         {
             GameProcesses.ToList().ForEach(proc => _ = TextHostDll.RemoveHook((uint)proc.Id, address));
         }
@@ -210,7 +211,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
         foreach (var hookSetting in Setting.HookSettings)
         {
-            if (Setting.HookCode.Equals(hp.HookCode)
+            if (Setting.HookCode.Equals(hp.HookCode, StringComparison.Ordinal)
                 && (hookSetting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                 && hookSetting.SubThreadContext == hp.Ctx2)
             {
@@ -219,7 +220,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
             }
             // XXX: hp.Name `Search` `Read` is different
             else if (Setting.HookCode.StartsWith('R')
-                     && hp.Name.Equals("READ"))
+                     && hp.Name.Equals("READ", StringComparison.Ordinal))
             {
                 this.Log().Debug(hp.Text);
                 _selectedDataSubj.OnNext(hp);

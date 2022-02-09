@@ -5,9 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using ErogeHelper.Platform.XamlTool;
 using ErogeHelper.Shared.Contracts;
-using ErogeHelper.ViewModel;
 using Splat;
-using WpfScreenHelper;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
@@ -59,7 +57,7 @@ public partial class MenuBase : IEnableLogger
 
         var realWidth = Width;
 
-        // Initilize values
+        // Initialize values
         SetCurrentValue(HeightProperty, touchSize);
         SetCurrentValue(WidthProperty, touchSize);
         SetCurrentValue(PaddingProperty, new Thickness());
@@ -136,29 +134,27 @@ public partial class MenuBase : IEnableLogger
         {
             case MenuPageTag.Game:
                 _menuMainPage.FadeOut();
-                _menuGamePage.TransistIn(Height / 3);
+                _menuGamePage.TransitIn(Height / 3);
                 break;
             case MenuPageTag.GameBack:
                 _menuMainPage.FadeIn();
-                _menuGamePage.TransistOut();
+                _menuGamePage.TransitOut();
                 break;
             case MenuPageTag.Device:
                 _menuMainPage.FadeOut();
-                _menuDevicePage.TransistIn(Height / 3);
+                _menuDevicePage.TransitIn(Height / 3);
                 break;
             case MenuPageTag.DeviceBack:
                 _menuMainPage.FadeIn();
-                _menuDevicePage.TransistOut();
+                _menuDevicePage.TransitOut();
                 break;
             case MenuPageTag.Function:
                 _menuMainPage.FadeOut();
-                _menuFunctionPage.TransistIn(Height / 3);
+                _menuFunctionPage.TransitIn(Height / 3);
                 break;
             case MenuPageTag.FunctionBack:
                 _menuMainPage.FadeIn();
-                _menuFunctionPage.TransistOut();
-                break;
-            default:
+                _menuFunctionPage.TransitOut();
                 break;
         }
     }
@@ -251,17 +247,17 @@ public partial class MenuBase : IEnableLogger
         Storyboard.SetTargetProperty(paddingAnimation, new PropertyPath(PaddingProperty));
         _menuToTouchStoryboard.Children.Add(paddingAnimation);
 
-        var fackWhitePointOpacityAnimation = AnimationTool.FadeInAnimation;
-        Storyboard.SetTarget(fackWhitePointOpacityAnimation, FakeWhitePoint);
-        Storyboard.SetTargetProperty(fackWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
-        _menuToTouchStoryboard.Children.Add(fackWhitePointOpacityAnimation);
+        var fakeWhitePointOpacityAnimation = AnimationTool.FadeInAnimation;
+        Storyboard.SetTarget(fakeWhitePointOpacityAnimation, FakeWhitePoint);
+        Storyboard.SetTargetProperty(fakeWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        _menuToTouchStoryboard.Children.Add(fakeWhitePointOpacityAnimation);
 
         _menuToTouchStoryboard.Completed += (_, _) =>
         {
             ShowTouchDelegate!();
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             SetCurrentValue(PaddingProperty, new Thickness(0));
-            Closed?.Invoke(this, new());
+            Closed?.Invoke(this, EventArgs.Empty);
             IsAnimating = IsOpen = false;
 
             _menuMainPage.SetCurrentValue(VisibilityProperty, Visibility.Visible);

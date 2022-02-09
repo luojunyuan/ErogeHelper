@@ -35,7 +35,6 @@ using Splat;
 using UpdateChecker;
 using Vanara.PInvoke.NetListMgr;
 using WK.Libraries.SharpClipboardNS;
-using WpfScreenHelper;
 using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper.Platform;
@@ -250,12 +249,15 @@ internal static class DI
         runner.MigrateUp();
     }
 
-    public async static void WarmingUp()
+    public static async void WarmingUp()
     {
         try
         {
             await new GitHubReleasesUpdateChecker("erogehelper", "erogehelper", false, "9.9.9.9").CheckAsync(default);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 }

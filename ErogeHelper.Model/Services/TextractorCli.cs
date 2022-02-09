@@ -30,7 +30,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
     private IGameDataService? _gameDataService;
     private ReadOnlyCollection<Process> GameProcesses => _gameDataService!.GameProcesses.AsReadOnly();
 
-    public bool Injected { get; private set; } = false;
+    public bool Injected { get; private set; }
 
     /// <inheritdoc />
     public void InjectProcesses(IGameDataService? gameDataService = null)
@@ -42,7 +42,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
         Injected = true;
 
         _gameDataService = gameDataService;
-        bool isX86 = GameProcesses.Any(p => IsX86Process(p));
+        var isX86 = GameProcesses.Any(IsX86Process);
 
         var textractorCliPath = Path.Combine(
             Directory.GetCurrentDirectory(),
@@ -100,7 +100,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
 
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {
-        if (e.Data is not string outputData ||
+        if (e.Data is not { } outputData ||
             !outputData.StartsWith('[') ||
             outputData.Length > 5000)
         {
@@ -133,7 +133,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
 
         foreach (var hookSetting in Setting.HookSettings)
         {
-            if (Setting.HookCode.Equals(hp.HookCode)
+            if (Setting.HookCode.Equals(hp.HookCode, StringComparison.Ordinal)
                 && hookSetting.ThreadType == TextractorSetting.TextThread.Text
                 && (hookSetting.ThreadContext & 0xFFFF) == (hp.Ctx & 0xFFFF)
                 && hookSetting.SubThreadContext == hp.Ctx2)
@@ -141,7 +141,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
                 _selectedDataSubj.OnNext(hp);
             }
             // XXX: hp.Name `Search` `Read` is different
-            else if (Setting.HookCode.StartsWith('R') && hp.Name.Equals("READ"))
+            else if (Setting.HookCode.StartsWith('R') && hp.Name.Equals("READ", StringComparison.Ordinal))
             {
                 this.Log().Debug(hp.Text);
                 _selectedDataSubj.OnNext(hp);

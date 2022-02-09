@@ -12,7 +12,7 @@ using Splat;
 
 namespace ErogeHelper.ViewModel.MainGame;
 
-public class AssistiveTouchViewModel : ReactiveObject, IDisposable, IEnableLogger
+public class AssistiveTouchViewModel : ReactiveObject, IDisposable
 {
     public AssistiveTouchViewModel(IEHConfigRepository? ehConfigRepository = null)
     {

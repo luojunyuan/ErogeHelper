@@ -40,9 +40,9 @@ public partial class MeCabPage
                 },
                 radioButton =>
                     radioButton == null ? KanaPosition.None : // Just hack, takes no effect for real situation
-                    radioButton == KanaDefault ? KanaPosition.None :
-                    radioButton == KanaTop ? KanaPosition.Top :
-                    radioButton == KanaBottom ? KanaPosition.Bottom :
+                    radioButton.Equals(KanaDefault) ? KanaPosition.None :
+                    radioButton.Equals(KanaTop) ? KanaPosition.Top :
+                    radioButton.Equals(KanaBottom) ? KanaPosition.Bottom :
                     throw new NotSupportedException()
                 ).DisposeWith(d);
 
@@ -58,9 +58,9 @@ public partial class MeCabPage
                 },
                 radioButton =>
                     radioButton == null ? KanaRuby.Romaji :
-                    radioButton == Romaji ? KanaRuby.Romaji :
-                    radioButton == Hiragana ? KanaRuby.Hiragana :
-                    radioButton == Katakana ? KanaRuby.Katakana :
+                    radioButton.Equals(Romaji) ? KanaRuby.Romaji :
+                    radioButton.Equals(Hiragana) ? KanaRuby.Hiragana :
+                    radioButton.Equals(Katakana) ? KanaRuby.Katakana :
                     throw new NotSupportedException()
                 ).DisposeWith(d);
 

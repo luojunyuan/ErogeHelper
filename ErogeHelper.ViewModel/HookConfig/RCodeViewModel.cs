@@ -5,5 +5,5 @@ namespace ErogeHelper.ViewModel.HookConfig;
 
 public class RCodeViewModel : ReactiveObject
 {
-    public Interaction<Unit, string> Show { get; set; } = new();
+    public Interaction<Unit, string> Show { get; } = new();
 }

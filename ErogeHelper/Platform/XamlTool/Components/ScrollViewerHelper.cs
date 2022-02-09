@@ -111,7 +111,7 @@ public static class ScrollViewerHelper
         };
         animation.EasingFunction = easingFunction;
         animation.FillBehavior = FillBehavior.Stop;
-        animation.Completed += (s, e1) =>
+        animation.Completed += (_, _) =>
         {
             if (orientation == Orientation.Vertical)
                 SetCurrentVerticalOffset(scrollViewer, offset);

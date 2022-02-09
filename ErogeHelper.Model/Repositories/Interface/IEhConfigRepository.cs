@@ -35,7 +35,7 @@ public interface IEHConfigRepository : INotifyPropertyChanged
 
     // MISC
     [Option(DefaultValue = true)]
-    public bool InjectProcessByDefalut { get; set; }
+    public bool InjectProcessByDefault { get; set; }
 
     [Option(DefaultValue = 600.0)]
     public double PreferenceWindowHeight { get; set; }

@@ -46,14 +46,14 @@ public static class StaticXamlBitmapImage
     private static readonly int LightGreen = Color.LightGreen.ToArgb();
     private static readonly int Green = Color.Green.ToArgb();
     private static readonly int Pink = Color.Pink.ToArgb();
-    private static readonly int Transparent = Color.Transparent.ToArgb();
+    // private static readonly int Transparent = Color.Transparent.ToArgb();
 
     public static BitmapImage ToBitmapImage(this Color color)
     {
-        var argbValuve = color.ToArgb();
-        return argbValuve == LightGreen ? AquaGreenImage :
-               argbValuve == Green ? GreenImage :
-               argbValuve == Pink ? PinkImage :
+        var argbValue = color.ToArgb();
+        return argbValue == LightGreen ? AquaGreenImage :
+               argbValue == Green ? GreenImage :
+               argbValue == Pink ? PinkImage :
                TransparentImage;
     }
 }

@@ -12,8 +12,8 @@ internal static class WinRTHelper
         // Seems like must be called in main thread
         var (phonemes, count) = Application.Current.Dispatcher.Invoke(() =>
         {
-            var phonemes = JapanesePhoneticAnalyzer.GetWords(sentence);
-            return (phonemes, phonemes.Count);
+            var japanesePhonemes = JapanesePhoneticAnalyzer.GetWords(sentence);
+            return (phonemes: japanesePhonemes, japanesePhonemes.Count);
         });
 
         for (var i = 0; i < count; i++)

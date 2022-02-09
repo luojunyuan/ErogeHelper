@@ -61,7 +61,7 @@ internal static class AnimationTool
         FillBehavior = FillBehavior.Stop,
     };
 
-    public static void Fill(this IEnumerable<IMenuItemBackround> children, bool isBlock)
+    public static void Fill(this IEnumerable<IMenuItemBackground> children, bool isBlock)
     {
         foreach (var control in children)
         {

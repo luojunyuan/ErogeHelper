@@ -85,7 +85,7 @@ public partial class App : IEnableLogger
     public static string EHVersion { get; } 
         = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "9.9.9.9";
 
-    /// <param name="exitCode">-1 unnormal, 0 normal, 1 by another instance</param>
+    /// <param name="exitCode">-1 abnormal, 0 normal, 1 by another instance</param>
     public static void Terminate(int exitCode = 0)
     {
         if (Current is not null)
@@ -138,8 +138,10 @@ public partial class App : IEnableLogger
         {
             var ex = args.Exception;
 
-            if (Current is not null && Current.Windows.Cast<Window>()
-                .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (Current is not null && 
+                Current.Windows.Cast<Window>()
+                    .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
             {
                 //args.Handled = true;
                 LogHost.Default.Error(ex, "UI thread error occurrent");

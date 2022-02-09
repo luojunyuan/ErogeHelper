@@ -29,27 +29,27 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
     private const int MaxLength = 1000;
 
     /// <summary>
-    /// Textbox begin large and need rendering more, reduces GC pressure
+    /// TextBox begin large and need rendering more, reduces GC pressure
     /// </summary>
     private void LimitTextLength(string obj)
     {
-        if (TotalText.Length > MaxLength)
+        if (TotalText.Length <= MaxLength) 
+            return;
+        
+        var index = TotalText.LastIndexOf('\n', TotalText.Length - 1);
+        foreach (var _ in Enumerable.Range(0, 3))
         {
-            var index = TotalText.LastIndexOf('\n', TotalText.Length - 1);
-            foreach (var _ in Enumerable.Range(0, 3))
-            {
-                if (index < 2) break;
-                index = TotalText.LastIndexOf('\n', index - 2);
-            }
-            if (index == -1) index = 0;
-            TotalText = TotalText[index..];
+            if (index < 2) break;
+            index = TotalText.LastIndexOf('\n', index - 2);
         }
+        if (index == -1) index = 0;
+        TotalText = TotalText[index..];
     }
 
-    public long Handle { get; set; }
+    public long Handle { get; init; }
 
     [Reactive]
-    public int Index { get; set; }
+    public int Index { get; init; }
 
     [Reactive]
     public bool IsTextThread { get; set; }
@@ -61,11 +61,11 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
     public string TotalText { get; set; } = string.Empty;
 
     [Reactive]
-    public string HookCode { get; set; } = string.Empty;
+    public string HookCode { get; init; } = string.Empty;
 
-    public string EngineName { get; set; } = string.Empty;
+    public string EngineName { get; init; } = string.Empty;
 
-    public long Context { get; set; }
+    public long Context { get; init; }
 
-    public long SubContext { get; set; }
+    public long SubContext { get; init; }
 }

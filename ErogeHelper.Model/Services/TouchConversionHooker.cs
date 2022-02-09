@@ -14,7 +14,6 @@ namespace ErogeHelper.Model.Services;
 public class TouchConversionHooker : ITouchConversionHooker
 {
     private readonly User32.SafeHHOOK? _hookId;
-    private readonly User32.HookProc _hook;
 
     // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
     private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
@@ -26,14 +25,13 @@ public class TouchConversionHooker : ITouchConversionHooker
         IGameInfoRepository? gameInfoRepository = null,
         IGameDataService? gameDataService = null)
     {
-        _hook = Hook;
         _gameDataService = gameDataService ?? DependencyResolver.GetService<IGameDataService>();
         Enable = (gameInfoRepository ?? DependencyResolver.GetService<IGameInfoRepository>()).TryGetGameInfo()?.
             IsEnableTouchToMouse ?? false;
 
         var moduleHandle = Kernel32.GetModuleHandle();
 
-        _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, _hook, moduleHandle, 0);
+        _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, Hook, moduleHandle, 0);
         if (_hookId == IntPtr.Zero)
         {
             throw new Win32Exception(Marshal.GetLastWin32Error());

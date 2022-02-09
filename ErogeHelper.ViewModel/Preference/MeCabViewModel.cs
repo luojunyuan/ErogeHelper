@@ -12,9 +12,9 @@ using Splat;
 
 namespace ErogeHelper.ViewModel.Preference;
 
-public class MeCabViewModel : ReactiveObject, IRoutableViewModel, IEnableLogger
+public class MeCabViewModel : ReactiveObject, IRoutableViewModel
 {
-    public string? UrlPathSegment => PageTag.MeCab;
+    public string UrlPathSegment => PageTag.MeCab;
 
     public IScreen HostScreen => throw new NotImplementedException();
 
@@ -88,7 +88,7 @@ public class MeCabViewModel : ReactiveObject, IRoutableViewModel, IEnableLogger
         if (dicFilePath == string.Empty)
             return;
 
-        // Make ContentDialog for wating unzip
+        // Make ContentDialog for waiting unzip
         //var progress = new ModernWpf.Controls.ProgressRing
         //{
         //    IsActive = true,

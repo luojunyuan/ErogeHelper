@@ -14,7 +14,7 @@ public interface IGameDataService : IDisposable
     IConnectableObservable<bool> GameFullscreenChanged { get; }
 
     /// <summary>
-    /// Initialze game process by seraching it
+    /// Initialize game process by searching it
     /// </summary>
     /// <exception cref="TimeoutException"></exception>
     void InitGameProcesses(string gamePath);

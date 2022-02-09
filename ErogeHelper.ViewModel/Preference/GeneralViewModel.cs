@@ -1,7 +1,5 @@
 ﻿using System.Reactive.Linq;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
-using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ReactiveUI;
@@ -13,7 +11,7 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
 {
     public IScreen HostScreen => throw new NotImplementedException();
 
-    public string? UrlPathSegment => PageTag.General;
+    public string UrlPathSegment => PageTag.General;
 
     public GeneralViewModel(IEHConfigRepository? ehConfigRepository = null)
     {
@@ -24,10 +22,10 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UseBigAssistiveTouchSize = v);
 
-        StartupInject = ehConfigRepository.InjectProcessByDefalut;
+        StartupInject = ehConfigRepository.InjectProcessByDefault;
         this.WhenAnyValue(x => x.StartupInject)
             .Skip(1)
-            .Subscribe(v => ehConfigRepository.InjectProcessByDefalut = v);
+            .Subscribe(v => ehConfigRepository.InjectProcessByDefault = v);
 
         HideTextWindow = ehConfigRepository.HideTextWindow;
         this.WhenAnyValue(x => x.HideTextWindow)

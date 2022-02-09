@@ -55,7 +55,7 @@ internal static class TextHostDll
     );
 
     /// <summary>
-    /// Weird after a peried of time, we don't use it
+    /// Weird after a period of time, we don't use it
     /// </summary>
     [DllImport(TextHostRelativePath)]
     internal static extern int AddClipboardThread(IntPtr handle);

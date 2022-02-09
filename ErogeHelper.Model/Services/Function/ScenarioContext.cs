@@ -43,7 +43,7 @@ namespace ErogeHelper.Model.Services.Function
             SavedText = new();
         }
 
-        private readonly static Encoding CP932 = Encoding.GetEncoding(932); // Shift-JIS
+        private static readonly Encoding CP932 = Encoding.GetEncoding(932); // Shift-JIS
 
         private const int HASH_CAPACITY = 4;
         private const int CONTEXT_CAPACITY = HASH_CAPACITY - 1;
@@ -108,14 +108,7 @@ namespace ErogeHelper.Model.Services.Function
             }
         }
 
-        private static long Djb2Hash(in byte[] data, long hash = 5381)
-        {
-            for (int i = 0; i < data.Length; i++)
-            {
-                hash = (hash << 5) + hash + data[i];
-            }
-
-            return hash;
-        }
+        private static long Djb2Hash(in byte[] data, long hash = 5381) => 
+            data.Aggregate(hash, (current, cur) => (current << 5) + current + cur);
     }
 }

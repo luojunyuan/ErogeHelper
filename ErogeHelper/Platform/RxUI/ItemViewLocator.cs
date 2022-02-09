@@ -6,7 +6,7 @@ using Splat;
 
 namespace ErogeHelper.Platform.RxUI;
 
-internal class ItemViewLocator : IViewLocator, IEnableLogger
+internal class ItemViewLocator : IViewLocator
 {
     private readonly IViewLocator _defaultViewLocator;
 

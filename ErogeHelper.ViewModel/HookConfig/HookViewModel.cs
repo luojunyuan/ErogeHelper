@@ -16,11 +16,10 @@ using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Languages;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 
 namespace ErogeHelper.ViewModel.HookConfig;
 
-public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
+public class HookViewModel : ReactiveObject, IDisposable
 {
     public static Action<bool> EnableClipboardCallback { get; set; } = null!;
 
@@ -100,7 +99,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _hookEngineNames)
             .Where(_ => HookEngineNames.Count != 0)
-            .Subscribe(v => SelectedHookEngine ??= _hookEngineNames.First());
+            .Subscribe(_ => SelectedHookEngine ??= _hookEngineNames.First());
 
         var canRemoveHook = Utils.IsArm ? Observable.Return(false) :
             this.WhenAnyValue<HookViewModel, bool, HookEngineLabel?>(
@@ -110,8 +109,8 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
         {
             var threadAddress = SelectedHookEngine!.Value.Address;
             textractorService.RemoveHook(threadAddress);
-            var tagetThreads = hookThreads.Items.Where(p => p.Address == threadAddress);
-            hookThreads.Remove(tagetThreads);
+            var targetThreads = hookThreads.Items.Where(p => p.Address == threadAddress);
+            hookThreads.Remove(targetThreads);
             hookThreadItemsList.Clear();
         }, canRemoveHook);
 
@@ -149,15 +148,15 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
                 .TakeUntil(changeHookThreadsAction))
             .SelectMany(v => v)
             .Select(v => new HookThreadItemViewModel()
-             {
-                 Index = itemIndex++,
-                 Handle = v.Handle,
-                 TotalText = v.LatestText,
-                 HookCode = v.HookCode,
-                 EngineName = v.EngineName,
-                 Context = v.ThreadContext,
-                 SubContext = v.SubThreadContext
-             })
+            {
+                Index = itemIndex++,
+                Handle = v.Handle,
+                TotalText = v.LatestText,
+                HookCode = v.HookCode,
+                EngineName = v.EngineName,
+                Context = v.ThreadContext,
+                SubContext = v.SubThreadContext
+            })
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(hookThreadItemsList.AddOrUpdate);
 
@@ -166,7 +165,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .Where(v => SelectedHookEngine is not null &&
                 v.Address == SelectedHookEngine!.Value.Address &&
                 // different handle
-                !hookThreadItemsList.Items.Any(m => m.Handle == v.Handle))
+                hookThreadItemsList.Items.All(m => m.Handle != v.Handle))
             .Select(v => new HookThreadItemViewModel()
             {
                 Index = itemIndex++,
@@ -186,10 +185,10 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ToObservableChangeSet()
             .AutoRefresh(m => m.IsTextThread)
             .ToCollection() // TODO: And valid regex
-            .Select(vms => vms.Any(m => m.IsTextThread) == true);
+            .Select(vms => vms.Any(m => m.IsTextThread));
 
         Submit = ReactiveCommand.Create(() => CurrentInUseHookName =
-            SubmitSetting(textractorService, gameInfoRepository, hookThreadItemsList.Items), canSubmit);
+            SubmitSetting(textractorService, gameInfoRepository, hookThreadItemsList.Items.ToList()), canSubmit);
     }
 
     [Reactive]
@@ -229,7 +228,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     private static string SubmitSetting(
         ITextractorService textractorService,
         IGameInfoRepository gameInfoRepository,
-        IEnumerable<HookThreadItemViewModel> hookThreadItemViewModels)
+        IReadOnlyCollection<HookThreadItemViewModel> hookThreadItemViewModels)
     {
         // Remove useless hooks except selected one
         // _textractorService.RemoveUselessHooks();
@@ -287,6 +286,7 @@ public class HookViewModel : ReactiveObject, IEnableLogger, IDisposable
     private readonly CompositeDisposable _disposables = new();
     public void Dispose() => _disposables.Dispose();
 
+    // ReSharper disable once NotAccessedPositionalProperty.Global
     public readonly record struct HookEngineLabel(long Address, string EngineName);
 
     /// <param name="Handle">Unique key</param>

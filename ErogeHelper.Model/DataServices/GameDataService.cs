@@ -8,7 +8,7 @@ using Vanara.PInvoke;
 
 namespace ErogeHelper.Model.DataServices;
 
-public class GameDataService : IGameDataService, IEnableLogger, IDisposable
+public class GameDataService : IGameDataService, IEnableLogger
 {
     public void InitGameMd5AndPath(string md5, string gamePath) => (Md5, GamePath) = (md5, gamePath);
     public string Md5 { get; private set; } = string.Empty;

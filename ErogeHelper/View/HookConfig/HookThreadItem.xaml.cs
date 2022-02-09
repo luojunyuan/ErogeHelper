@@ -38,7 +38,7 @@ public partial class HookThreadItem
     {
         if (sender is not RadioButton radioButton)
         {
-            throw new System.InvalidCastException();
+            throw new InvalidCastException();
         }
 
         if (_selectedRadioButton is null)

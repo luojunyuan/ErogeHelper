@@ -1,8 +1,5 @@
 ﻿using System.Data;
-using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using Dapper;
-using Dapper.Contrib.Extensions;
 using ErogeHelper.Model.DataModel.Tables;
 using ErogeHelper.Model.Repositories.Interface;
 using Microsoft.Data.Sqlite;

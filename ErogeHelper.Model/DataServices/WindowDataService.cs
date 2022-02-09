@@ -1,7 +1,7 @@
 ﻿using ErogeHelper.Model.DataServices.Interface;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.Shared;
+namespace ErogeHelper.Model.DataServices;
 
 public class WindowDataService : IWindowDataService
 {

@@ -1,5 +1,4 @@
-﻿using System.Reactive.Linq;
-using ErogeHelper.Model.Repositories.Interface;
+﻿using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
@@ -49,9 +48,9 @@ public class MeCabService : IMeCabService
 
             var hinshi = (node.GetPos1() ?? string.Empty).ToHinshi();
             var kana = " "; // full-width space to force render it
-            if ((node.GetGoshu() ?? string.Empty).Equals("外"))
+            if ((node.GetGoshu() ?? string.Empty).Equals("外", StringComparison.Ordinal))
             {
-                // katakana's source form(外来語) like english supplied by unidic
+                // Katakana source form(外来語) like english supplied by unidic
                 kana = (node.GetLemma() ?? " ").Split('-')[^1];
             }
             else if (_configRepository.KanaRuby == KanaRuby.Romaji)
@@ -72,7 +71,7 @@ public class MeCabService : IMeCabService
                 Word = node.Surface,
                 Kana = kana,
                 PartOfSpeech = hinshi
-            }; ;
+            };
         }
     }
 

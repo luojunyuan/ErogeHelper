@@ -9,7 +9,7 @@ using Splat;
 
 namespace ErogeHelper.View.MainGame.AssistiveTouchMenu;
 
-public partial class MenuItemToggleControl : UserControl, IEnableLogger, IMenuItemBackround
+public partial class MenuItemToggleControl : IEnableLogger, IMenuItemBackground
 {
     #region Symbol DependencyProperty
     /// <summary>Identifies the <see cref="Symbol"/> dependency property.</summary>
@@ -86,7 +86,7 @@ public partial class MenuItemToggleControl : UserControl, IEnableLogger, IMenuIt
     }
 
     protected void OnIsOnChanged(DependencyPropertyChangedEventArgs e) =>
-        SetItemForegroundColor((bool)e.NewValue == true ? ItemPressedColor : Brushes.White);
+        SetItemForegroundColor((bool)e.NewValue ? ItemPressedColor : Brushes.White);
     #endregion
 
     public MenuItemToggleControl()
@@ -97,34 +97,20 @@ public partial class MenuItemToggleControl : UserControl, IEnableLogger, IMenuIt
     public void TransparentBackground(bool transparent) =>
         SetCurrentValue(BackgroundProperty, transparent ? Brushes.Transparent : XamlResource.AssistiveTouchBackground);
 
-    private readonly static Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
+    private static readonly Brush ItemPressedColor = new SolidColorBrush(Color.FromArgb(255, 111, 196, 241));
 
     private bool _buttonPressed;
 
     private void ItemOnPreviewMouseLeftButtonDown(object sender, InputEventArgs e)
     {
         _buttonPressed = true;
-        if (IsOn)
-        {
-            SetItemForegroundColor(Brushes.DeepSkyBlue);
-        }
-        else
-        {
-            SetItemForegroundColor(Brushes.Gray);
-        }
+        SetItemForegroundColor(IsOn ? Brushes.DeepSkyBlue : Brushes.Gray);
     }
 
     private void ItemOnPreviewMouseLeave(object sender, InputEventArgs e)
     {
         _buttonPressed = false;
-        if (IsOn)
-        {
-            SetItemForegroundColor(ItemPressedColor);
-        }
-        else
-        {
-            SetItemForegroundColor(Brushes.White);
-        }
+        SetItemForegroundColor(IsOn ? ItemPressedColor : Brushes.White);
     }
 
     private void SetItemForegroundColor(Brush color)

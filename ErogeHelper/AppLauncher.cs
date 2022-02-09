@@ -23,7 +23,7 @@ using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
 
-public class AppLauncher
+public static class AppLauncher
 {
     public static void StartFromCommandLine(string gamePath, bool leEnable)
     {
@@ -33,16 +33,16 @@ public class AppLauncher
         var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
         var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
-        InitializeGameDatas(
+        InitializeGameData(
             gameDataService, textractorService, gameWindowHooker, ehConfigRepository, gameInfoRepository,
             gamePath, leEnable);
 
-        var leproc = RunGame(gamePath, leEnable);
+        var leProc = RunGame(gamePath, leEnable);
 
         try
         {
             gameDataService.InitGameProcesses(gamePath);
-            leproc?.Kill();
+            leProc?.Kill();
         }
         catch (TimeoutException)
         {
@@ -73,7 +73,7 @@ public class AppLauncher
                 .DistinctUntilChanged()
                 .Subscribe(text => textractorService.AddClipboardText(text));
 
-            if (ehConfigRepository.InjectProcessByDefalut)
+            if (ehConfigRepository.InjectProcessByDefault)
             {
                 textractorService.InjectProcesses(gameDataService);
             }
@@ -87,7 +87,7 @@ public class AppLauncher
         });
     }
 
-    private static void InitializeGameDatas(
+    private static void InitializeGameData(
         IGameDataService gameDataService,
         ITextractorService textractorService,
         IGameWindowHooker gameWindowHooker,
@@ -95,7 +95,6 @@ public class AppLauncher
         IGameInfoRepository gameInfoRepository,
         string gamePath, bool leEnable)
     {
-        var ehServerApiRepository = DependencyResolver.GetService<IEHServerApiRepository>();
         var gameDir = Path.GetDirectoryName(gamePath);
         ArgumentNullException.ThrowIfNull(gameDir);
 
@@ -179,47 +178,47 @@ public class AppLauncher
             .Subscribe(_ => App.Terminate());
     }
 
-    private const int WaitNWJSGameStartDelayTime = 7000;
+    private const int WaitNWjsGameStartDelayTime = 7000;
 
     /// <returns>Return LE if enabled</returns>
     private static Process? RunGame(string gamePath, bool leEnable)
     {
         var gameDir = Path.GetDirectoryName(gamePath);
         ArgumentNullException.ThrowIfNull(gameDir);
-        Process? leproc = null;
         var gameAlreadyStart = Utils.GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 
-        if (!gameAlreadyStart)
+        if (gameAlreadyStart) 
+            return null;
+        
+        Process? leProc = null;
+        if (leEnable)
         {
-            if (leEnable)
+            leProc = Process.Start(new ProcessStartInfo
             {
-                leproc = Process.Start(new ProcessStartInfo
-                {
-                    FileName = Path.Combine(Directory.GetCurrentDirectory(), "libs", "x86", "LEProc.exe"),
-                    UseShellExecute = false,
-                    Arguments = File.Exists(gamePath + ".le.config")
-                        ? $"-run \"{gamePath}\""
-                        : $"\"{gamePath}\""
-                });
-                // NOTE: LE may throw AccessViolationException which can not be catch
-            }
-            else
+                FileName = Path.Combine(Directory.GetCurrentDirectory(), "libs", "x86", "LEProc.exe"),
+                UseShellExecute = false,
+                Arguments = File.Exists(gamePath + ".le.config")
+                    ? $"-run \"{gamePath}\""
+                    : $"\"{gamePath}\""
+            });
+            // NOTE: LE may throw AccessViolationException which can not be catch
+        }
+        else
+        {
+            Process.Start(new ProcessStartInfo
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = gamePath,
-                    UseShellExecute = false,
-                    WorkingDirectory = gameDir
-                });
-            }
-
-            // Wait for nw.js based game start multi-process
-            if (File.Exists(Path.Combine(gameDir, "nw.pak")))
-            {
-                Thread.Sleep(WaitNWJSGameStartDelayTime);
-            }
+                FileName = gamePath,
+                UseShellExecute = false,
+                WorkingDirectory = gameDir
+            });
         }
 
-        return leproc;
+        // Wait for nw.js based game start multi-process
+        if (File.Exists(Path.Combine(gameDir, "nw.pak")))
+        {
+            Thread.Sleep(WaitNWjsGameStartDelayTime);
+        }
+
+        return leProc;
     }
 }

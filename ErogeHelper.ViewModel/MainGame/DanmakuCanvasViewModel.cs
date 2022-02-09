@@ -1,8 +1,6 @@
-﻿using System.Reactive.Disposables;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Function;
-using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ReactiveUI;
 

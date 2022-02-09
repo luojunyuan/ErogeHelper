@@ -1,5 +1,4 @@
-﻿using System.Reactive.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Interop;
 using ErogeHelper.Shared.Contracts;
 using Microsoft.Win32;

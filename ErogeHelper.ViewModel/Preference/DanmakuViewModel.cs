@@ -15,7 +15,7 @@ public class DanmakuViewModel : ReactiveObject, IRoutableViewModel
 {
     public IScreen HostScreen => throw new NotImplementedException();
 
-    public string? UrlPathSegment => PageTag.General;
+    public string UrlPathSegment => PageTag.General;
 
     public DanmakuViewModel(
         IEHConfigRepository? ehConfigRepository = null,

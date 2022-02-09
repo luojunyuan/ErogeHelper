@@ -14,7 +14,7 @@ using ReactiveUI;
 
 namespace ErogeHelper.View.MainGame;
 
-public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
+public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
 {
     #region ViewModel DependencyProperty
     /// <summary>Identifies the <see cref="ViewModel"/> dependency property.</summary>
@@ -108,7 +108,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
 
             mouseMoveAndCheckEdge.Subscribe(evt =>
             {
-                if (!isMoving || parent is null)
+                if (!isMoving)
                     return;
 
                 var newPos = evt.GetPosition(parent);
@@ -130,20 +130,15 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
 
             mouseRelease.Subscribe(evt =>
             {
-                if (!isMoving || parent is null)
+                if (!isMoving)
                     return;
-
-                double parentActualWidth;
-                double parentActualHeight;
-                double curMarginLeft;
-                double curMarginTop;
 
                 var pos = evt.GetPosition(parent);
                 _newPos = pos;
-                parentActualHeight = parent.ActualHeight;
-                parentActualWidth = parent.ActualWidth;
-                curMarginLeft = Margin.Left;
-                curMarginTop = Margin.Top;
+                var parentActualHeight = parent.ActualHeight;
+                var parentActualWidth = parent.ActualWidth;
+                var curMarginLeft = Margin.Left;
+                var curMarginTop = Margin.Top;
 
                 var left = curMarginLeft + _newPos.X - lastPos.X;
                 var top = curMarginTop + _newPos.Y - lastPos.Y;
@@ -326,7 +321,7 @@ public partial class AssistiveTouch : Button, IViewFor<AssistiveTouchViewModel>
 
     private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
     {
-        if (_newPos.Equals(_oldPos))
+        if (_newPos == _oldPos)
         {
             ClickEvent?.Invoke(sender, e);
         }
