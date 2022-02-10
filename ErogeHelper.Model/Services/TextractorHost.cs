@@ -103,7 +103,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
                     Ctx2 = -1,
                     Name = "Console",
                     HookCode = "HB0@0",
-                    Text = "ErogeHelper: The Hook-Code has already insert"
+                    Text = "ErogeHelper: The Hook-Code has already insert, please try process text in game"
                 });
                 return;
             }
@@ -116,6 +116,8 @@ public class TextractorHost : ITextractorService, IEnableLogger
         }
     }
 
+    private bool _autoRemoveHandles = true;
+
     public void ReAttachProcesses()
     {
         if (!Injected)
@@ -124,11 +126,13 @@ public class TextractorHost : ITextractorService, IEnableLogger
         }
         else
         {
+            _autoRemoveHandles = false;
             _consoleOutput.Clear();
             GameProcesses.ToList().ForEach(p => _ = TextHostDll.DetachProcess((uint)p.Id));
             Observable.Start(async () =>
             {
                 await Task.Delay(ConstantValue.TextractorReAttachBlockTime).ConfigureAwait(false);
+                _threadHandleDict = InitializeClipboardThreadHandle();
                 GameProcesses.ToList().ForEach(p => _ = TextHostDll.InjectProcess((uint)p.Id));
             });
         }
@@ -145,16 +149,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
 
     public TextractorHost()
     {
-        _threadHandleDict[-1] = new HookParam
-        {
-            Handle = -1,
-            Pid = 0,
-            Address = 0,
-            Ctx = -1,
-            Ctx2 = -1,
-            Name = "Clipboard",
-            HookCode = "HB0@0"
-        };
+        _threadHandleDict = InitializeClipboardThreadHandle();
     }
 
     public void AddClipboardText(string text) => OutputHandle(-1, text, (uint)text.Length);
@@ -166,7 +161,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
     private TextHostDll.OnCreateThread? _createThread;
     private TextHostDll.OnRemoveThread? _removeThread;
 
-    private readonly Dictionary<long, HookParam> _threadHandleDict = new();
+    private Dictionary<long, HookParam> _threadHandleDict;
 
     private void CreateThreadHandle(
         long threadId,
@@ -177,7 +172,9 @@ public class TextractorHost : ITextractorService, IEnableLogger
         string name,
         string hookcode)
     {
-        if (Setting.HookCode != string.Empty && !Setting.HookCode.Equals(hookcode, StringComparison.Ordinal))
+        if (_autoRemoveHandles && 
+            Setting.HookCode != string.Empty && 
+            !Setting.HookCode.Equals(hookcode, StringComparison.Ordinal))
         {
             GameProcesses.ToList().ForEach(proc => _ = TextHostDll.RemoveHook((uint)proc.Id, address));
         }
@@ -241,4 +238,34 @@ public class TextractorHost : ITextractorService, IEnableLogger
         }
     }
     #endregion
+
+    private static Dictionary<long, HookParam> InitializeClipboardThreadHandle() => new()
+    {
+        {
+            -1,
+            new HookParam
+            {
+                Handle = -1,
+                Pid = 0,
+                Address = -1,
+                Ctx = -1,
+                Ctx2 = -1,
+                Name = "Clipboard",
+                HookCode = "HB0@0"
+            }
+        },
+        { 
+            0, 
+            new HookParam
+            {
+                Handle = 0,
+                Pid = 0,
+                Address = -1,
+                Ctx = -1,
+                Ctx2 = -1,
+                Name = "Console",
+                HookCode = "HB0@0"
+            } 
+        }
+    };
 }

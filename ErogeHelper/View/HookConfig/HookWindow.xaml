@@ -69,11 +69,10 @@
 
                             <!--  Current Text  -->
                             <Label Content="{x:Static resx:Strings.HookPage_Text}" />
-                            <ContentControl
+                            <ContentControl x:Name="SelectedText"
                                 Height="80"
                                 MaxWidth="430"
                                 HorizontalAlignment="Left"
-                                Content="{Binding SelectedText, Converter={StaticResource TextEvaluateConverter}, Mode=OneWay}"
                                 FontSize="16" />
 
                             <Button Content="{x:Static resx:Strings.HookPage_RegExpTag3}" />

@@ -10,13 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ErogeHelper.Model\ErogeHelper.Model.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Windows\" />
-    <None Remove="Pages\" />
-    <None Remove="Controllers\" />
-    <None Remove="ReactiveUI.Fody" />
-    <None Remove="WindowsInput" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="DynamicData" Version="7.4.9" />

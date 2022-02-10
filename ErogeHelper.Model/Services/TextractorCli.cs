@@ -96,7 +96,7 @@ public class TextractorCli : ITextractorService, IEnableLogger
     public void SetSetting(TextractorSetting setting) => Setting = setting;
     public List<string> GetConsoleOutputInfo() => _consoleOutput;
 
-    public void AddClipboardText(string text) => throw new InvalidOperationException();
+    public void AddClipboardText(string text) => throw new NotImplementedException();
 
     private void OutputDataRetrieveCallback(object sender, DataReceivedEventArgs e)
     {

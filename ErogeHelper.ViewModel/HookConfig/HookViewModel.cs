@@ -8,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Text.Json;
 using DynamicData;
 using DynamicData.Binding;
+using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
@@ -29,11 +30,13 @@ public class HookViewModel : ReactiveObject, IDisposable
     public HookViewModel(
         ITextractorService? textractorService = null,
         IGameInfoRepository? gameInfoRepository = null,
+        IGameDataService? gameDataService = null,
         HCodeViewModel? hcodeViewModel = null,
         RCodeViewModel? rcodeViewModel = null)
     {
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
+        gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         HCodeViewModel = hcodeViewModel ?? DependencyResolver.GetService<HCodeViewModel>();
         RCodeViewModel = rcodeViewModel ?? DependencyResolver.GetService<RCodeViewModel>();
 
@@ -69,9 +72,10 @@ public class HookViewModel : ReactiveObject, IDisposable
         }, canReInject);
 
         OpenHCodeDialog = ReactiveCommand.CreateFromObservable(() => HCodeViewModel.Show.Handle(Unit.Default));
-        // TODO: Already insert tip, try move game text and check Combobox
         OpenHCodeDialog
             .Where(code => code != string.Empty)
+            // TODO: Check gamename and code suffix (and .log?) (GameProcess.Name ?)
+            //.Select(code => var gameFileName = Path.GetFileName(gameDataService.GamePath))
             .Subscribe(textractorService.InsertHook);
 
         OpenRCodeDialog = ReactiveCommand.CreateFromObservable(() => RCodeViewModel.Show.Handle(Unit.Default));
@@ -181,6 +185,25 @@ public class HookViewModel : ReactiveObject, IDisposable
             .DisposeWith(_disposables);
         #endregion Hook Thread Items
 
+        CurrentSelectedText = string.Empty;
+        long handle = -99;
+        _hookThreadItems
+            .ToObservableChangeSet()
+            .AutoRefresh(m => m.IsTextThread)
+            .ToCollection()
+            .SelectMany(x => x)
+            .Where(vm => vm.IsTextThread == true)
+            .Do(vm => CurrentSelectedText = vm.TotalText)
+            .Subscribe(vm => handle = vm.Handle);
+
+        textractorService
+            .Data
+            .Where(hp => hp.Handle == handle)
+            .Select(hp => hp.Text)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(text => CurrentSelectedText = text)
+            .DisposeWith(_disposables);
+
         var canSubmit = _hookThreadItems
             .ToObservableChangeSet()
             .AutoRefresh(m => m.IsTextThread)
@@ -201,6 +224,9 @@ public class HookViewModel : ReactiveObject, IDisposable
     public string ConsoleInfo { get; set; }
 
     public ReactiveCommand<Unit, Unit> ReInject { get; }
+
+    [Reactive]
+    public string CurrentSelectedText { get; set; }
 
     public ReactiveCommand<Unit, Unit> Refresh { get; }
 

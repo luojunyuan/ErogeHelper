@@ -55,7 +55,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
                 e => AutoUpdater.CheckForUpdateEvent += e,
                 e => AutoUpdater.CheckForUpdateEvent -= e)
             .Where(updateInfo => updateInfo.Error is null)
-            // FIXME: Memory leak here
+            // XXX: Memory leak here
             .Where(updateInfo =>
             {
                 if (!updateInfo.IsUpdateAvailable)
@@ -77,7 +77,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
             .Where(downloadFinished => downloadFinished)
             .Subscribe(_ =>
             {
-                // FIXME: Memory leak here
+                // UNDONE: May memory leak
                 AppExit.Handle(Unit.Default).Subscribe();
 
                 if (Utils.IsFileInUse(

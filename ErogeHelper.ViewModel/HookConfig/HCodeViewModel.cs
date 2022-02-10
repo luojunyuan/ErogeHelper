@@ -45,11 +45,9 @@ public class HCodeViewModel : ReactiveValidationObject
 
     public ReactiveCommand<Unit, string> SearchCode { get; }
 
-    // TODO: Imporve hook code regexp check
+    // TODO: Imporve hook code regexp check, may compile it?
     private bool CodeValidateRegExp(string? code)
     {
-        // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
-        // RCode 0或1个/ RS@ 1个以上十六进制
         if (string.IsNullOrWhiteSpace(code))
             // if hcode is null or space, make TextBox normal style
             return true;

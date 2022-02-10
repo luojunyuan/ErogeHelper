@@ -55,7 +55,7 @@ public class DanmakuViewModel : ReactiveObject, IRoutableViewModel
                     Danmaku = x.UserComment,
                     Username = x.Username
                 })));
-        // TODO: Sync simulator 只需ids就够了
+        // Sync simulator only need `ids`
     }
 
     [Reactive]
