@@ -26,19 +26,22 @@ public class HookViewModel : ReactiveObject, IDisposable
 
     public HCodeViewModel HCodeViewModel { get; }
     public RCodeViewModel RCodeViewModel { get; }
+    public TextCleanViewModel TextCleanViewModel { get; }
 
     public HookViewModel(
         ITextractorService? textractorService = null,
         IGameInfoRepository? gameInfoRepository = null,
         IGameDataService? gameDataService = null,
         HCodeViewModel? hcodeViewModel = null,
-        RCodeViewModel? rcodeViewModel = null)
+        RCodeViewModel? rcodeViewModel = null,
+        TextCleanViewModel? textCleanViewModel = null)
     {
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         HCodeViewModel = hcodeViewModel ?? DependencyResolver.GetService<HCodeViewModel>();
         RCodeViewModel = rcodeViewModel ?? DependencyResolver.GetService<RCodeViewModel>();
+        TextCleanViewModel = textCleanViewModel ?? DependencyResolver.GetService<TextCleanViewModel>();
 
         CurrentInUseHookName = textractorService.Setting.HookCode == string.Empty ?
             Strings.Common_None : textractorService.Setting.HookName;
@@ -185,33 +188,25 @@ public class HookViewModel : ReactiveObject, IDisposable
             .DisposeWith(_disposables);
         #endregion Hook Thread Items
 
-        CurrentSelectedText = string.Empty;
-        long handle = -99;
-        _hookThreadItems
+        var canDoNextStep = _hookThreadItems
             .ToObservableChangeSet()
             .AutoRefresh(m => m.IsTextThread)
             .ToCollection()
-            .SelectMany(x => x)
-            .Where(vm => vm.IsTextThread == true)
-            .Do(vm => CurrentSelectedText = vm.TotalText)
-            .Subscribe(vm => handle = vm.Handle);
-
-        textractorService
-            .Data
-            .Where(hp => hp.Handle == handle)
-            .Select(hp => hp.Text)
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(text => CurrentSelectedText = text)
-            .DisposeWith(_disposables);
-
-        var canSubmit = _hookThreadItems
-            .ToObservableChangeSet()
-            .AutoRefresh(m => m.IsTextThread)
-            .ToCollection() // TODO: And valid regex
             .Select(vms => vms.Any(m => m.IsTextThread));
 
-        Submit = ReactiveCommand.Create(() => CurrentInUseHookName =
-            SubmitSetting(textractorService, gameInfoRepository, hookThreadItemsList.Items.ToList()), canSubmit);
+        OpenTextSplitDialog = ReactiveCommand.CreateFromObservable(() => 
+        {
+            var selectedItems = _hookThreadItems.Where(vm => vm.IsTextThread);
+            var firstItemText = selectedItems.First().TotalText;
+            var index = firstItemText.LastIndexOf('\n');
+            if (index == -1) index = 0;
+            return TextCleanViewModel.Show.Handle((selectedItems.Select(vm => vm.Handle), firstItemText[index..]));
+        }, canDoNextStep);
+        OpenTextSplitDialog
+            .Where(output => output.CanSubmit)
+            .Subscribe(output => CurrentInUseHookName =
+                SubmitSetting(
+                    textractorService, gameInfoRepository, hookThreadItemsList.Items.ToList(), output.RegExp));
     }
 
     [Reactive]
@@ -224,9 +219,6 @@ public class HookViewModel : ReactiveObject, IDisposable
     public string ConsoleInfo { get; set; }
 
     public ReactiveCommand<Unit, Unit> ReInject { get; }
-
-    [Reactive]
-    public string CurrentSelectedText { get; set; }
 
     public ReactiveCommand<Unit, Unit> Refresh { get; }
 
@@ -248,17 +240,15 @@ public class HookViewModel : ReactiveObject, IDisposable
     private readonly ReadOnlyObservableCollection<HookThreadItemViewModel> _hookThreadItems;
     public ReadOnlyObservableCollection<HookThreadItemViewModel> HookThreadItems => _hookThreadItems;
 
-    public ReactiveCommand<Unit, string> Submit { get; }
+    public ReactiveCommand<Unit, (bool CanSubmit, string RegExp)> OpenTextSplitDialog { get; }
 
     /// <returns>HookName</returns>
     private static string SubmitSetting(
         ITextractorService textractorService,
         IGameInfoRepository gameInfoRepository,
-        IReadOnlyCollection<HookThreadItemViewModel> hookThreadItemViewModels)
+        IReadOnlyCollection<HookThreadItemViewModel> hookThreadItemViewModels,
+        string regexp)
     {
-        // Remove useless hooks except selected one
-        // _textractorService.RemoveUselessHooks();
-
         // Build textractor setting
         var textractorSetting = new TextractorSetting()
         {
@@ -278,12 +268,14 @@ public class HookViewModel : ReactiveObject, IDisposable
         // Update textractor setting
         textractorService.SetSetting(textractorSetting);
 
-        // Post to server except Search code
-
         // Update to local database
         var setting = JsonSerializer.Serialize(textractorSetting);
         gameInfoRepository.UpdateTextractorSetting(setting);
+
         // And RegExp
+        gameInfoRepository.UpdateRegExp(regexp);
+
+        // TODO: Compile RegExp
 
         // Refresh current text in TextWindow
 

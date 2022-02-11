@@ -14,20 +14,20 @@ public partial class PreferenceWindow
 {
     public PreferenceWindow()
     {
-        InitializeComponent();
+        InitializeComponent(); // 97ms
 
-        ViewModel ??= DependencyResolver.GetService<PreferenceViewModel>();
-        var generalViewModel = DependencyResolver.GetService<GeneralViewModel>();
-        var mecabViewModel = DependencyResolver.GetService<MeCabViewModel>();
+        ViewModel ??= DependencyResolver.GetService<PreferenceViewModel>(); // 28ms
+        var generalViewModel = DependencyResolver.GetService<GeneralViewModel>(); // 6ms
+        var mecabViewModel = DependencyResolver.GetService<MeCabViewModel>(); // 25ms
         //var danmakuViewModel = DependencyResolver.GetService<DanmakuViewModel>();
-        var aboutViewModel = DependencyResolver.GetService<AboutViewModel>();
+        var aboutViewModel = DependencyResolver.GetService<AboutViewModel>(); // 40ms
 
         Height = ViewModel.Height;
         Width = ViewModel.Width;
 
         var closedEvent = this.Events().Closed
             .Select(_ => Unit.Default)
-            .InvokeCommand(this, x => x.ViewModel!.Closed);
+            .InvokeCommand(this, x => x.ViewModel!.Closed); // 16ms
 
         this.WhenActivated(d =>
         {
@@ -58,7 +58,7 @@ public partial class PreferenceWindow
                     switch (tag)
                     {
                         case PageTag.General:
-                            ViewModel!.Router.NavigateAndReset.Execute(generalViewModel);
+                            ViewModel!.Router.NavigateAndReset.Execute(generalViewModel); // 9ms
                             break;
                         case PageTag.MeCab:
                             ViewModel!.Router.NavigateAndReset.Execute(mecabViewModel);

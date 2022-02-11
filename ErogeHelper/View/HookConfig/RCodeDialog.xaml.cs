@@ -14,31 +14,19 @@ public partial class RCodeDialog
     {
         InitializeComponent();
 
-        var disposable = new CompositeDisposable();
-
-        // If the PrimaryButton is disabled, block the "Enter" key
-        ContentDialog.Events().Closing
-            .Select(x => x.args)
-            .Where(args => args.Result == ContentDialogResult.Primary && !ContentDialog.IsPrimaryButtonEnabled)
-            .Subscribe(args => args.Cancel = true).DisposeWith(disposable);
-
         this.WhenActivated(d =>
         {
-            disposable.DisposeWith(d);
+            // If the PrimaryButton is disabled, block the "Enter" key
+            ContentDialog.Events().Closing
+                .Select(x => x.args)
+                .Where(args => args.Result == ContentDialogResult.Primary && !ContentDialog.IsPrimaryButtonEnabled)
+                .Subscribe(args => args.Cancel = true).DisposeWith(d);
 
             this.BindInteraction(ViewModel,
                 vm => vm.Show,
-                async context =>
-                {
-                    var dialogResult = await Observable.FromAsync(ContentDialog.ShowAsync);
-                    var result = dialogResult switch
-                    {
-                        ContentDialogResult.Primary => JapaneseText.Text,
-                        ContentDialogResult.None => string.Empty,
-                        _ => throw new NotImplementedException(),
-                    };
-                    context.SetOutput(result);
-                }).DisposeWith(d);
+                async context => context.SetOutput(ContentDialogResult.Primary ==
+                    await Observable.FromAsync(ContentDialog.ShowAsync) ?
+                        JapaneseText.Text : string.Empty)).DisposeWith(d);
         });
     }
 

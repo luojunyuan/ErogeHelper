@@ -478,6 +478,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Next 的本地化字符串。
+        /// </summary>
+        public static string Common_Next {
+            get {
+                return ResourceManager.GetString("Common.Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 None 的本地化字符串。
         /// </summary>
         public static string Common_None {
@@ -910,6 +919,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Invalid regular expressions. 的本地化字符串。
+        /// </summary>
+        public static string HookPage_InvalidRegExp {
+            get {
+                return ResourceManager.GetString("HookPage.InvalidRegExp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 https://www.google.com 的本地化字符串。
         /// </summary>
         public static string HookPage_LinkSetHook {
@@ -984,7 +1002,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 RegExp 的本地化字符串。
+        ///   查找类似 Regular Expressions 的本地化字符串。
         /// </summary>
         public static string HookPage_RegExp {
             get {
@@ -1124,6 +1142,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string HookPage_Text {
             get {
                 return ResourceManager.GetString("HookPage.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text Clean 的本地化字符串。
+        /// </summary>
+        public static string HookPage_TextClean {
+            get {
+                return ResourceManager.GetString("HookPage.TextClean", resourceCulture);
             }
         }
         

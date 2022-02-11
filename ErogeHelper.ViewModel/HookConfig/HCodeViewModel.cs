@@ -38,7 +38,7 @@ public class HCodeViewModel : ReactiveValidationObject
     }
 
     [Reactive]
-    public string? HookCode { get; set; } = string.Empty;
+    public string? HookCode { get; set; }
 
     [ObservableAsProperty]
     public bool CanInsertCode { get; }

@@ -26,5 +26,7 @@ public interface IGameInfoRepository
 
     public void UpdateTextractorSetting(string setting);
 
+    public void UpdateRegExp(string regexp);
+
     public void UpdateUseClipboard(bool use);
 }

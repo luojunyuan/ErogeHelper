@@ -8,7 +8,6 @@
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
-    xmlns:validation="clr-namespace:ErogeHelper.Platform.XamlTool.Validations"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d">
 
@@ -35,7 +34,7 @@
                 </ui:AppBarButton>
             </ui:SimpleStackPanel>
 
-            <TextBlock x:Name="CodeValidation" Foreground="Red" />
+            <TextBlock x:Name="CodeValidationTip" Foreground="Red" />
         </ui:SimpleStackPanel>
 
     </ui:ContentDialog>

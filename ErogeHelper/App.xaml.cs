@@ -143,7 +143,7 @@ public partial class App : IEnableLogger
                 Current.Windows.Cast<Window>()
                     .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
             {
-                //args.Handled = true;
+                args.Handled = true;
                 LogHost.Default.Error(ex, "UI thread error occurrent");
                 ShowErrorDialog("UI", ex);
                 return;

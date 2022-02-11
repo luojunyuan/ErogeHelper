@@ -107,6 +107,14 @@ public class GameInfoRepository : IGameInfoRepository
         _gameInfo = info;
     }
 
+    public void UpdateRegExp(string regexp)
+    {
+        using var connection = GetOpenConnection();
+        var info = _gameInfo! with { RegExp = regexp };
+        connection.Update(info);
+        _gameInfo = info;
+    }
+
     public void UpdateUseClipboard(bool use)
     {
         using var connection = GetOpenConnection();

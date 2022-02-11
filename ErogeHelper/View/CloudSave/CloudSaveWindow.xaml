@@ -9,7 +9,6 @@
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:tool="clr-namespace:ErogeHelper.Platform.XamlTool"
-    xmlns:validation="clr-namespace:ErogeHelper.Platform.XamlTool.Validations"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.CloudSave;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     Width="400" Height="550"

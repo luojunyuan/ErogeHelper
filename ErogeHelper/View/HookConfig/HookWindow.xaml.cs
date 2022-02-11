@@ -41,11 +41,6 @@ public partial class HookWindow : IEnableLogger
                 vm => vm.ReInject,
                 v => v.ReInject).DisposeWith(d);
 
-            this.OneWayBind(ViewModel,
-                vm => vm.CurrentSelectedText,
-                v => v.SelectedText.Content,
-                TextEvaluateWrapper).DisposeWith(d);
-
             this.BindCommand(ViewModel,
                 vm => vm.Refresh,
                 v => v.RefreshButton).DisposeWith(d);
@@ -77,8 +72,8 @@ public partial class HookWindow : IEnableLogger
                 v => v.HookThreadItems.ItemsSource).DisposeWith(d);
 
             this.BindCommand(ViewModel,
-                vm => vm.Submit,
-                v => v.SubmitButton).DisposeWith(d);
+                vm => vm.OpenTextSplitDialog,
+                v => v.NextButton).DisposeWith(d);
 
             this.OneWayBind(ViewModel,
                 vm => vm.HCodeViewModel,
@@ -87,37 +82,10 @@ public partial class HookWindow : IEnableLogger
             this.OneWayBind(ViewModel,
                 vm => vm.RCodeViewModel,
                 v => v.RCodeDialogHost.ViewModel).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.TextCleanViewModel,
+                v => v.TextCleanDialogHost.ViewModel).DisposeWith(d);
         });
-    }
-
-    private object TextEvaluateWrapper(string input)
-    {
-        var textBlock = new TextBlock
-        {
-            TextWrapping = TextWrapping.Wrap
-        };
-
-        var escapedXml = SecurityElement.Escape(input);
-
-        while (escapedXml?.IndexOf("|~S~|") != -1)
-        {
-            //up to |~S~| is normal
-            textBlock.Inlines.Add(new Run(escapedXml?[..escapedXml.IndexOf("|~S~|", StringComparison.Ordinal)]));
-
-            //between |~S~| and |~E~| is highlighted
-            textBlock.Inlines.Add(new Run(escapedXml?[
-                (escapedXml.IndexOf("|~S~|", StringComparison.Ordinal) + 5)..escapedXml.IndexOf("|~E~|", StringComparison.Ordinal)])
-            {
-                TextDecorations = TextDecorations.Strikethrough,
-                Background = Brushes.Red
-            });
-
-            //the rest of the string (after the |~E~|)
-            escapedXml = escapedXml?[(escapedXml.IndexOf("|~E~|", StringComparison.Ordinal) + 5)..];
-        }
-
-        if (escapedXml.Length > 0)
-            textBlock.Inlines.Add(new Run(escapedXml));
-        return textBlock;
     }
 }

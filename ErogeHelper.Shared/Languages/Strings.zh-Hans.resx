@@ -172,7 +172,8 @@
     <value>选择的文本</value>
   </data>
   <data name="HookPage.RegExp" xml:space="preserve">
-    <value>正则表达式（输入你想要去除的多余文字）</value>
+    <value>正则表达式（输入想要去除的多余文字。
+如无必要，请勿使用）</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">
     <value>当前选择的文本</value>
@@ -653,5 +654,14 @@
   </data>
   <data name="HookThreadItem.Character" xml:space="preserve">
     <value>人物</value>
+  </data>
+  <data name="Common.Next" xml:space="preserve">
+    <value>下一步</value>
+  </data>
+  <data name="HookPage.TextClean" xml:space="preserve">
+    <value>文本清洗</value>
+  </data>
+  <data name="HookPage.InvalidRegExp" xml:space="preserve">
+    <value>无效的正则表达式。</value>
   </data>
 </root>

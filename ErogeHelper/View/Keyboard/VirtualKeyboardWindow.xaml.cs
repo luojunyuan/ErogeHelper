@@ -18,6 +18,7 @@ public partial class VirtualKeyboardWindow
         HwndTools.HideWindowInAltTab(handle);
         HwndTools.WindowLostFocus(handle, true);
 
+        // PerMonitorV2: May disapear at second screen
         var disposable = new CompositeDisposable();
         var mainWindow = Application.Current.MainWindow;
         mainWindow.WhenAnyValue(x => x.Left)

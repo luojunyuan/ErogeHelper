@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ErogeHelper.Shared;
 
@@ -25,6 +26,33 @@ public static class Utils
     public static bool IsOrAfter1909 { get; } = OsVersion >= new Version(10, 0, 18363);
 
     public static bool IsArm { get; } = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
+
+    public static string TextEvaluateWrapperWithRegExp(string sourceInput, string expr)
+    {
+        const string begin = "|~S~|";
+        const string end = "|~E~|";
+
+        if (expr == string.Empty)
+            return sourceInput;
+
+        if (expr[^1] == '|')
+            return sourceInput;
+
+        string wrapperText = sourceInput;
+
+        var instant = new Regex(expr);
+        var collect = instant.Matches(sourceInput);
+        foreach (Match match in collect)
+        {
+            var beginPos = wrapperText.LastIndexOf(end, StringComparison.Ordinal);
+            wrapperText = instant.Replace(
+                wrapperText,
+                begin + match + end,
+                1,
+                beginPos == -1 ? 0 : beginPos + 5);
+        }
+        return wrapperText;
+    }
 
     public static Dictionary<string, string> GetGameNamesByPath(string absolutePath)
     {

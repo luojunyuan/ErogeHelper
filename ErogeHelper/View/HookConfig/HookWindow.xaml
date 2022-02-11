@@ -9,7 +9,6 @@
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:tool="clr-namespace:ErogeHelper.Platform.XamlTool"
-    xmlns:validation="clr-namespace:ErogeHelper.Platform.XamlTool.Validations"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
     Width="400" Height="550"
@@ -54,7 +53,7 @@
                     <GroupBox Header="{x:Static resx:Strings.HookPage_Console}">
                         <StackPanel>
                             <TextBox x:Name="ConsoleInfo"
-                                MinWidth="240" MaxWidth="520" MaxHeight="150"
+                                MinWidth="240" MaxWidth="520" MaxHeight="120"
                                 HorizontalAlignment="Left" VerticalAlignment="Top"
                                 tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True" FontSize="16"
                                 IsReadOnly="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden" />
@@ -62,35 +61,6 @@
                             <Button x:Name="ReInject" Margin="0 10 0 0" Content="{x:Static resx:Strings.HookPage_ReInject}" />
                         </StackPanel>
                     </GroupBox>
-
-                    <!--  RegExp  -->
-                    <Expander Margin="0 10 0 20" Header="{x:Static resx:Strings.HookPage_TextCleaning}">
-                        <ui:SimpleStackPanel Margin="0 10" Spacing="2">
-
-                            <!--  Current Text  -->
-                            <Label Content="{x:Static resx:Strings.HookPage_Text}" />
-                            <ContentControl x:Name="SelectedText"
-                                Height="80"
-                                MaxWidth="430"
-                                HorizontalAlignment="Left"
-                                FontSize="16" />
-
-                            <Button Content="{x:Static resx:Strings.HookPage_RegExpTag3}" />
-                            <Button Content="{x:Static resx:Strings.HookPage_RegExpTag4}" />
-                            <Button Content="{x:Static resx:Strings.HookPage_RegExpTag5}" />
-                            <Label Margin="0 10" Content="{x:Static resx:Strings.HookPage_RegExp}" />
-                            <TextBox Width="240" HorizontalAlignment="Left">
-                                <TextBox.Text>
-                                    <Binding Path="RegExp" UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <validation:RegExpValidationRule ValidatesOnTargetUpdated="True" />
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
-                        </ui:SimpleStackPanel>
-
-                    </Expander>
 
                     <!--  Hook List  -->
                     <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
@@ -186,11 +156,12 @@
 
         </ScrollViewer>
 
-        <!--  Submit Button  -->
-        <Button x:Name="SubmitButton"
+        <!--  Next Button  -->
+        <rxui:ViewModelViewHost x:Name="TextCleanDialogHost" />
+        <Button x:Name="NextButton"
             Grid.Row="1"
             Width="240"
             Margin="20 10"
-            Content="{x:Static resx:Strings.HookPage_Submit}" />
+            Content="{x:Static resx:Strings.Common_Next}" />
     </Grid>
 </rxui:ReactiveWindow>

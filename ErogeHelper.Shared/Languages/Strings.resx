@@ -172,7 +172,7 @@
     <value>Selected Text</value>
   </data>
   <data name="HookPage.RegExp" xml:space="preserve">
-    <value>RegExp</value>
+    <value>Regular Expressions</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">
     <value>Current text</value>
@@ -649,5 +649,14 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="HookThreadItem.Character" xml:space="preserve">
     <value>Character</value>
+  </data>
+  <data name="Common.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="HookPage.TextClean" xml:space="preserve">
+    <value>Text Clean</value>
+  </data>
+  <data name="HookPage.InvalidRegExp" xml:space="preserve">
+    <value>Invalid regular expressions.</value>
   </data>
 </root>
