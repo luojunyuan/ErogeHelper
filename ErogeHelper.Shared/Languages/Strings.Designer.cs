@@ -451,6 +451,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Back 的本地化字符串。
+        /// </summary>
+        public static string Common_Back {
+            get {
+                return ResourceManager.GetString("Common.Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Cancel 的本地化字符串。
         /// </summary>
         public static string Common_Cancel {
@@ -1074,6 +1083,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 ReiPatcher 的本地化字符串。
+        /// </summary>
+        public static string HookPage_ReiPatcher {
+            get {
+                return ResourceManager.GetString("HookPage.ReiPatcher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Remove hook 的本地化字符串。
         /// </summary>
         public static string HookPage_RemoveHook {
@@ -1187,6 +1205,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string HookPage_Title {
             get {
                 return ResourceManager.GetString("HookPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Unity game can&apos;t inject automatically 的本地化字符串。
+        /// </summary>
+        public static string HookPage_UnityGameTip {
+            get {
+                return ResourceManager.GetString("HookPage.UnityGameTip", resourceCulture);
             }
         }
         
@@ -1421,6 +1448,33 @@ namespace ErogeHelper.Shared.Languages {
         public static string OokiiDialog_ClipboardLabel {
             get {
                 return ResourceManager.GetString("OokiiDialog.ClipboardLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 X Undone 的本地化字符串。
+        /// </summary>
+        public static string ReiPatcherDialog_Error {
+            get {
+                return ResourceManager.GetString("ReiPatcherDialog.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 √ Finish 的本地化字符串。
+        /// </summary>
+        public static string ReiPatcherDialog_OK {
+            get {
+                return ResourceManager.GetString("ReiPatcherDialog.OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ⭕ May need restart game 的本地化字符串。
+        /// </summary>
+        public static string ReiPatcherDialog_Tip {
+            get {
+                return ResourceManager.GetString("ReiPatcherDialog.Tip", resourceCulture);
             }
         }
         

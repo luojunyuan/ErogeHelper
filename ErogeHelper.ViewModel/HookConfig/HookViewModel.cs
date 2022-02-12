@@ -28,6 +28,8 @@ public class HookViewModel : ReactiveObject, IDisposable
     public RCodeViewModel RCodeViewModel { get; }
     public TextCleanViewModel TextCleanViewModel { get; }
 
+    public Interaction<Unit, Unit> ReiPatcherInteraction { get; } = new();
+
     public HookViewModel(
         ITextractorService? textractorService = null,
         IGameInfoRepository? gameInfoRepository = null,
@@ -60,28 +62,59 @@ public class HookViewModel : ReactiveObject, IDisposable
             .Subscribe(hp => ConsoleInfo += "\n" + hp.Text)
             .DisposeWith(_disposables);
 
+        var gameDir = Path.GetDirectoryName(gameDataService.GamePath)!;
+
+        var isUnityGame = File.Exists(Path.Combine(gameDir, "UnityPlayer.dll"));
+        Observable.Return(isUnityGame)
+            .ToPropertyEx(this, x => x.ShowReiPatcherTipDialog);
+        ReiPatcherTipDialog = ReactiveCommand.CreateFromObservable(() => ReiPatcherInteraction.Handle(Unit.Default));
+
+        Observable.Return(isUnityGame)
+            .ToPropertyEx(this, x => x.ShowUnityGameTip);
+
         Refresh = ReactiveCommand.Create(() =>
         {
             hookThreads.Clear();
             hookThreadItemsList.Clear();
         });
 
-        var canReInject = Utils.IsArm ? Observable.Return(false) : Observable.Return(true);
-        ReInject = ReactiveCommand.Create(() =>
+        var canUseFunctions = new BehaviorSubject<bool>(textractorService.Injected);
+        canUseFunctions.DisposeWith(_disposables);
+        // TODO: Write a TextractorConfig.txt file for Unity game { string:Substring (int,int) }
+        if (Utils.IsArm)
         {
-            ConsoleInfo = string.Empty;
-            Refresh.Execute().Subscribe();
-            textractorService.ReAttachProcesses();
-        }, canReInject);
+            var injectOnlyOnce = new BehaviorSubject<bool>(true);
+            ReInject = ReactiveCommand.Create(() =>
+            {
+                textractorService.InjectProcesses(gameDataService);
 
-        OpenHCodeDialog = ReactiveCommand.CreateFromObservable(() => HCodeViewModel.Show.Handle(Unit.Default));
+                injectOnlyOnce.OnNext(false);
+                injectOnlyOnce.OnCompleted();
+                canUseFunctions.OnNext(true);
+            }, injectOnlyOnce);
+        }
+        else
+        {
+            ReInject = ReactiveCommand.Create(() =>
+            {
+                ConsoleInfo = string.Empty;
+                Refresh.Execute().Subscribe();
+                textractorService.ReAttachProcesses();
+
+                canUseFunctions.OnNext(true);
+            });
+        }
+
+        OpenHCodeDialog = 
+            ReactiveCommand.CreateFromObservable(() => HCodeViewModel.Show.Handle(Unit.Default), canUseFunctions);
         OpenHCodeDialog
             .Where(code => code != string.Empty)
             // TODO: Check gamename and code suffix (and .log?) (GameProcess.Name ?)
             //.Select(code => var gameFileName = Path.GetFileName(gameDataService.GamePath))
             .Subscribe(textractorService.InsertHook);
 
-        OpenRCodeDialog = ReactiveCommand.CreateFromObservable(() => RCodeViewModel.Show.Handle(Unit.Default));
+        OpenRCodeDialog = 
+            ReactiveCommand.CreateFromObservable(() => RCodeViewModel.Show.Handle(Unit.Default), canUseFunctions);
         OpenRCodeDialog
             .Where(text => text != string.Empty)
             .Subscribe(textractorService.SearchRCode);
@@ -109,9 +142,9 @@ public class HookViewModel : ReactiveObject, IDisposable
             .Subscribe(_ => SelectedHookEngine ??= _hookEngineNames.First());
 
         var canRemoveHook = Utils.IsArm ? Observable.Return(false) :
-            this.WhenAnyValue<HookViewModel, bool, HookEngineLabel?>(
+            this.WhenAnyValue(
                 x => x.SelectedHookEngine,
-                v => v != null);
+                v => v != null && !v.Value.EngineName.Equals("Clipboard", StringComparison.Ordinal));
         RemoveHook = ReactiveCommand.Create(() =>
         {
             var threadAddress = SelectedHookEngine!.Value.Address;
@@ -219,6 +252,14 @@ public class HookViewModel : ReactiveObject, IDisposable
     public string ConsoleInfo { get; set; }
 
     public ReactiveCommand<Unit, Unit> ReInject { get; }
+
+    [ObservableAsProperty]
+    public bool ShowUnityGameTip { get; }
+
+    [ObservableAsProperty]
+    public bool ShowReiPatcherTipDialog { get; }
+
+    public ReactiveCommand<Unit, Unit> ReiPatcherTipDialog { get; }
 
     public ReactiveCommand<Unit, Unit> Refresh { get; }
 

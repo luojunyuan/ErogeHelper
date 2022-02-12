@@ -47,6 +47,12 @@
 
             <Button x:Name="PreviewUpdateButton" Click="PreviewUpdateButtonOnClick" Content="{x:Static resx:Strings.About_NightlyBuild}" />
 
+            <StackPanel>
+                <TextBlock Text="Locate Emulator: 2.5.0.1" />
+                <TextBlock Text="Textractor: 5.1.0" />
+                <TextBlock Text="XUnity.AutoTranslator-ReiPatcher: 5.0.0" />
+            </StackPanel>
+
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_GitHub}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Contributors}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />
             <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Dependencies}" Cursor="Hand" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" />

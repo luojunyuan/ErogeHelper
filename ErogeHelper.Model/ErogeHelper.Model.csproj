@@ -24,6 +24,10 @@
     <PackageReference Include="WanaKana-net" Version="1.0.0" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>-->
+
   <ItemGroup>
     <ProjectReference Include="..\ErogeHelper.Shared\ErogeHelper.Shared.csproj" />
   </ItemGroup>

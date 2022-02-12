@@ -172,8 +172,8 @@ public class TextractorHost : ITextractorService, IEnableLogger
         string name,
         string hookcode)
     {
-        if (_autoRemoveHandles && 
-            Setting.HookCode != string.Empty && 
+        if (_autoRemoveHandles &&
+            Setting.HookCode != string.Empty &&
             !Setting.HookCode.Equals(hookcode, StringComparison.Ordinal))
         {
             GameProcesses.ToList().ForEach(proc => _ = TextHostDll.RemoveHook((uint)proc.Id, address));

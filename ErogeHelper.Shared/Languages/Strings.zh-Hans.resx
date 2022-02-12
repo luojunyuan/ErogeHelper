@@ -173,7 +173,7 @@
   </data>
   <data name="HookPage.RegExp" xml:space="preserve">
     <value>正则表达式（输入想要去除的多余文字。
-如无必要，请勿使用）</value>
+如无必要，请勿使用，可直接提交）</value>
   </data>
   <data name="HookPage.Text" xml:space="preserve">
     <value>当前选择的文本</value>
@@ -663,5 +663,23 @@
   </data>
   <data name="HookPage.InvalidRegExp" xml:space="preserve">
     <value>无效的正则表达式。</value>
+  </data>
+  <data name="HookPage.ReiPatcher" xml:space="preserve">
+    <value>ReiPatcher 补丁</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="ReiPatcherDialog.OK" xml:space="preserve">
+    <value>√ 已完成</value>
+  </data>
+  <data name="ReiPatcherDialog.Error" xml:space="preserve">
+    <value>X 未完成</value>
+  </data>
+  <data name="ReiPatcherDialog.Tip" xml:space="preserve">
+    <value>⭕ 可能需要重启游戏</value>
+  </data>
+  <data name="HookPage.UnityGameTip" xml:space="preserve">
+    <value>Unity 游戏不能自动注入</value>
   </data>
 </root>

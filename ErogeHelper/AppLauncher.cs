@@ -3,6 +3,7 @@ using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json;
+using Config.Net;
 using ErogeHelper.Model.DataModel.Tables;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
@@ -27,6 +28,9 @@ public static class AppLauncher
 {
     public static void StartFromCommandLine(string gamePath, bool leEnable)
     {
+        var gameDir = Path.GetDirectoryName(gamePath);
+        ArgumentNullException.ThrowIfNull(gameDir);
+
         var gameDataService = DependencyResolver.GetService<IGameDataService>();
         var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
         var textractorService = DependencyResolver.GetService<ITextractorService>();
@@ -35,9 +39,9 @@ public static class AppLauncher
 
         InitializeGameData(
             gameDataService, textractorService, gameWindowHooker, ehConfigRepository, gameInfoRepository,
-            gamePath, leEnable);
+            gamePath, gameDir, leEnable);
 
-        var leProc = RunGame(gamePath, leEnable);
+        var leProc = RunGame(gamePath, gameDir, leEnable);
 
         try
         {
@@ -68,12 +72,13 @@ public static class AppLauncher
             sharpClipboard.Events().ClipboardChanged
                 .Where(e => e.SourceApplication.ID != Environment.ProcessId
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
+                // TODO: Unity game specile id check
                 .Skip(1)
                 .Select(e => e.Content.ToString() ?? string.Empty)
                 .DistinctUntilChanged()
                 .Subscribe(text => textractorService.AddClipboardText(text));
 
-            if (ehConfigRepository.InjectProcessByDefault)
+            if (ehConfigRepository.InjectProcessByDefault && !File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
             {
                 textractorService.InjectProcesses(gameDataService);
             }
@@ -93,11 +98,8 @@ public static class AppLauncher
         IGameWindowHooker gameWindowHooker,
         IEHConfigRepository ehConfigRepository,
         IGameInfoRepository gameInfoRepository,
-        string gamePath, bool leEnable)
+        string gamePath, string gameDir, bool leEnable)
     {
-        var gameDir = Path.GetDirectoryName(gamePath);
-        ArgumentNullException.ThrowIfNull(gameDir);
-
         if (!File.Exists(gamePath))
         {
             throw new FileNotFoundException($"Not a valid game path \"{gamePath}\".", gamePath);
@@ -151,7 +153,7 @@ public static class AppLauncher
             WpfHelper.SetDPICompatibilityAsApplication(gamePath);
         }
 
-        #region Fullscreen Change Sources
+#region Fullscreen Change Sources
         var gameResolutionChanged = gameWindowHooker.GamePosUpdated
             .Select(pos => (pos.Width, pos.Height))
             .DistinctUntilChanged()
@@ -163,7 +165,7 @@ public static class AppLauncher
         var dpiChanged = State.DpiChanged
             .DistinctUntilChanged()
             .Select(_ => Unit.Default);
-        #endregion
+#endregion
 
         gameDataService.InitFullscreenChanged(
             monitorResolutionChanged
@@ -181,10 +183,8 @@ public static class AppLauncher
     private const int WaitNWjsGameStartDelayTime = 7000;
 
     /// <returns>Return LE if enabled</returns>
-    private static Process? RunGame(string gamePath, bool leEnable)
+    private static Process? RunGame(string gamePath, string gameDir, bool leEnable)
     {
-        var gameDir = Path.GetDirectoryName(gamePath);
-        ArgumentNullException.ThrowIfNull(gameDir);
         var gameAlreadyStart = Utils.GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 
         if (gameAlreadyStart) 

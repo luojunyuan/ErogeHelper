@@ -1,0 +1,38 @@
+﻿<ui:ContentDialog
+    x:Class="ErogeHelper.View.HookConfig.ReiPatcherTipDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
+    mc:Ignorable="d"
+    Width="320"
+    Title="Install ReiPatcher"
+    CloseButtonText="{x:Static resx:Strings.Common_Back}">
+    <ui:SimpleStackPanel Spacing="12">
+        <TextBlock Text="可以尝试为Unity游戏安装ReiPatcher，通过剪切板监视来获取文本（不需要点击上方的重新注入游戏按钮）" TextWrapping="Wrap" />
+        <TextBlock FontSize="14" Text="1. 复制 ReiPatcher 到游戏目录下运行以创建补丁文件" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="CopyAndRun" Margin="0 0 5 0" Content="复制并运行" />
+            <TextBlock x:Name="StepOneStatus"
+                d:Text="{x:Static resx:Strings.ReiPatcherDialog_OK}"
+                d:Foreground="Green"
+                VerticalAlignment="Center" />
+        </StackPanel>
+        <TextBlock FontSize="14" Text="2. 配置 Config.ini" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="ApplyConfig" Margin="0 0 5 0" Content="应用配置" />
+            <TextBlock x:Name="StepTwoStatus"
+                d:Text="{x:Static resx:Strings.ReiPatcherDialog_Error}"
+                d:Foreground="Red"
+                VerticalAlignment="Center" />
+        </StackPanel>
+        <TextBlock FontSize="14" Text="3. 补丁游戏并重新运行，（这将会永久更改 UnityEngine.dll 文件，操作不可逆）" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="Patch" Content="补丁" />
+            <Button x:Name="Restart" Margin="10 0 0 0" Content="关闭当前游戏" />
+        </StackPanel>
+        <TextBlock FontSize="14" Text="4. 打开剪切板监控，提交文本" TextWrapping="Wrap" />
+    </ui:SimpleStackPanel>
+</ui:ContentDialog>

@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Reactive;
+using System.Reactive.Disposables;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +41,14 @@ public partial class HookWindow : IEnableLogger
             this.BindCommand(ViewModel,
                 vm => vm.ReInject,
                 v => v.ReInject).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.ShowReiPatcherTipDialog,
+                v => v.XUnityTip.Visibility,
+                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.ReiPatcherTipDialog,
+                v => v.XUnityTip).DisposeWith(d);
 
             this.BindCommand(ViewModel,
                 vm => vm.Refresh,
@@ -86,6 +95,18 @@ public partial class HookWindow : IEnableLogger
             this.OneWayBind(ViewModel,
                 vm => vm.TextCleanViewModel,
                 v => v.TextCleanDialogHost.ViewModel).DisposeWith(d);
+
+            ViewModel.ReiPatcherInteraction
+                .RegisterHandler(async context =>
+                {
+                    var result = await new ReiPatcherTipDialog().ShowAsync().ConfigureAwait(false);
+                    context.SetOutput(Unit.Default);
+                }).DisposeWith(d);
+
+            this.OneWayBind(ViewModel,
+                vm => vm.ShowUnityGameTip,
+                v => v.UnityGameTip.Visibility,
+                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
         });
     }
 }

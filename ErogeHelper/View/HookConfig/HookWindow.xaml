@@ -58,7 +58,14 @@
                                 tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True" FontSize="16"
                                 IsReadOnly="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden" />
 
-                            <Button x:Name="ReInject" Margin="0 10 0 0" Content="{x:Static resx:Strings.HookPage_ReInject}" />
+                            <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                                <Button x:Name="ReInject" Content="{x:Static resx:Strings.HookPage_ReInject}" />
+                                <TextBlock x:Name="UnityGameTip"
+                                    Margin="4 0 0 0" VerticalAlignment="Center"
+                                    Text="{x:Static resx:Strings.HookPage_UnityGameTip}" />
+                            </StackPanel>
+
+                            <Button x:Name="XUnityTip" Margin="0 10 0 0" Content="{x:Static resx:Strings.HookPage_ReiPatcher}" />
                         </StackPanel>
                     </GroupBox>
 

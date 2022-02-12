@@ -659,4 +659,22 @@ NOTE: You are about updating to dev version. This version may not stable only su
   <data name="HookPage.InvalidRegExp" xml:space="preserve">
     <value>Invalid regular expressions.</value>
   </data>
+  <data name="HookPage.ReiPatcher" xml:space="preserve">
+    <value>ReiPatcher</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ReiPatcherDialog.OK" xml:space="preserve">
+    <value>√ Finish</value>
+  </data>
+  <data name="ReiPatcherDialog.Error" xml:space="preserve">
+    <value>X Undone</value>
+  </data>
+  <data name="ReiPatcherDialog.Tip" xml:space="preserve">
+    <value>⭕ May need restart game</value>
+  </data>
+  <data name="HookPage.UnityGameTip" xml:space="preserve">
+    <value>Unity game can't inject automatically</value>
+  </data>
 </root>
