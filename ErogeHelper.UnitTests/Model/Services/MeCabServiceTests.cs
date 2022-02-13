@@ -20,11 +20,13 @@ namespace ErogeHelper.UnitTests.Model.Services
                .Build();
             IMeCabService mecabService = new MeCabService(repo);
 
+            // no mecab dic files in appdata
             if (!mecabService.CanLoaded)
             {
                 return;
             }
 
+            mecabService.LoadMeCabTagger();
             var sentence = "ヒルダは井戸から水を汲み取るのをやめなかったのテキスト。";
 
             // mecab-unidic-neologd get error when produce "スマホ"

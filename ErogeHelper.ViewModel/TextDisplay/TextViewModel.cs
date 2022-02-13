@@ -108,6 +108,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Do(_ => _appendTextViewModel.Clear())
             .ObserveOn(RxApp.TaskpoolScheduler)
+            // TODO: Regexp clean
             .Publish();
 
         sharedData.Connect().DisposeWith(_disposables);

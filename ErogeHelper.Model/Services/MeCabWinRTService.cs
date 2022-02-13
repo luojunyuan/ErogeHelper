@@ -32,11 +32,6 @@ public class MeCabWinRTService : IMeCabService
 
     private IEnumerable<MeCabWord> MeCabWordWinRTEnumerable(string sentence)
     {
-        // TODO: Fix Japanese words when length bigger than 100
-        if (sentence.Length > 100)
-        {
-            sentence = sentence[..100];
-        }
         foreach (var mecabWord in JapaneseAnalyzerCallback(sentence))
         {
             var kana = " "; // full-width space to force render it
