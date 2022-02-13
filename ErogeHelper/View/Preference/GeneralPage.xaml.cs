@@ -1,5 +1,11 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Reactive.Linq;
+using System.Reactive.Disposables;
+using System.Windows;
+using ErogeHelper.Platform;
+using ErogeHelper.View.TextDisplay;
+using ErogeHelper.ViewModel.TextDisplay;
 using ReactiveUI;
+using System.Reactive;
 
 namespace ErogeHelper.View.Preference;
 
@@ -18,6 +24,8 @@ public partial class GeneralPage
             this.Bind(ViewModel,
                 vm => vm.HideTextWindow,
                 v => v.HideTextWindow.IsOn).DisposeWith(d);
+            this.WhenAnyObservable(x => x.ViewModel!.ShowOrCloseTextWindow)
+                .Subscribe(InteractTextWindow).DisposeWith(d);
 
             this.Bind(ViewModel,
                 vm => vm.UseEdgeTouchMask,
@@ -34,5 +42,20 @@ public partial class GeneralPage
         });
     }
 
-    private void ForceGCButtonOnClick(object sender, System.Windows.RoutedEventArgs e) => GC.Collect();
+    private static void InteractTextWindow(Unit _)
+    {
+        var textWindow = Application.Current.Windows.Cast<Window>()
+            .Where(w => w.GetType() == typeof(TextWindow))
+            .FirstOrDefault();
+        if (textWindow != null)
+        {
+            textWindow.Close();
+        }
+        else
+        {
+            DI.ShowView<TextViewModel>();
+        }
+    }
+
+    private void ForceGCButtonOnClick(object sender, RoutedEventArgs e) => GC.Collect();
 }

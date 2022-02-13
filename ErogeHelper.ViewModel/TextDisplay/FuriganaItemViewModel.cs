@@ -13,7 +13,7 @@ public class FuriganaItemViewModel : ReactiveObject
     public string Kana { get; set; } = string.Empty;
 
     [Reactive]
-    public double FontSize { get; set; } = 1;
+    public double FontSize { get; set; }
 
     [Reactive]
     public Color BackgroundColor { get; set; }

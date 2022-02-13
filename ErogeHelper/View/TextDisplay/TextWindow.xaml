@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:Component="clr-namespace:ErogeHelper.Platform.XamlTool.Components"
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.TextDisplay;assembly=ErogeHelper.ViewModel"
@@ -55,16 +56,16 @@
                                     Name="WidthSlider"
                                     Width="145"
                                     HorizontalAlignment="Left"
-                                    Maximum="1800" Minimum="350" />
+                                    IsMoveToPointEnabled="True" Maximum="1800" Minimum="350" />
                                 <ui:CommandBarPanel>
                                     <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
-                                        <Button x:Name="PronounceButton">
+                                        <Button x:Name="PronounceButton" IsEnabled="False">
                                             <ui:SymbolIcon Symbol="Volume" />
                                         </Button>
-                                        <Button ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">
+                                        <Button x:Name="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">
                                             <ui:SymbolIcon Symbol="FontDecrease" />
                                         </Button>
-                                        <Button ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}">
+                                        <Button x:Name="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}">
                                             <ui:SymbolIcon Symbol="FontIncrease" />
                                         </Button>
                                     </ui:SimpleStackPanel>
@@ -76,7 +77,7 @@
                                             <ui:Flyout Placement="Top">
                                                 <Slider x:Name="OpacitySlider"
                                                     Width="100"
-                                                    Maximum="0.8" Minimum="0" />
+                                                    IsMoveToPointEnabled="True" Maximum="0.8" Minimum="0" />
                                             </ui:Flyout>
                                         </ui:FlyoutService.Flyout>
                                     </ui:AppBarButton>
@@ -99,11 +100,32 @@
                 </StackPanel.Background>
 
                 <ItemsControl x:Name="TextItemsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <rxui:ViewModelViewHost ViewModel="{Binding}" Duration="0" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <ItemsControl x:Name="AppendTextsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:AppendTextItemViewModel}">
+                            <StackPanel Orientation="Vertical">
+                                <Component:OutlinedTextBlock
+                                    Margin="0 0 0 -5"
+                                    ClipToBounds="False"
+                                    FontSize="{Binding FontSize}"
+                                    Text="{Binding Text}"
+                                    TextWrapping="Wrap"
+                                    ToolTip="{Binding ExtraInfo}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </Grid>

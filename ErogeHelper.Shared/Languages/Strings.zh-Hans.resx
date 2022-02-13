@@ -682,4 +682,16 @@
   <data name="HookPage.UnityGameTip" xml:space="preserve">
     <value>Unity 游戏不能自动注入</value>
   </data>
+  <data name="TextWindow.WaitingForText" xml:space="preserve">
+    <value>正在等待文本。。。</value>
+  </data>
+  <data name="TextWindow.DragAreaTip" xml:space="preserve">
+    <value>👈左侧方块可以拖动、长按或右键</value>
+  </data>
+  <data name="TextWindow.SetHookTip" xml:space="preserve">
+    <value>重要：似乎尚未设置Hook，请先设置钩子</value>
+  </data>
+  <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
+    <value>提示：你好像没有打开日文文本或者任意一个机器翻译功能</value>
+  </data>
 </root>

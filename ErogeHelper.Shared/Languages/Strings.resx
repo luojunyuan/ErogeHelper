@@ -677,4 +677,16 @@ NOTE: You are about updating to dev version. This version may not stable only su
   <data name="HookPage.UnityGameTip" xml:space="preserve">
     <value>Unity game can't inject automatically</value>
   </data>
+  <data name="TextWindow.WaitingForText" xml:space="preserve">
+    <value>Waiting for text...</value>
+  </data>
+  <data name="TextWindow.DragAreaTip" xml:space="preserve">
+    <value>👈Drag the block</value>
+  </data>
+  <data name="TextWindow.SetHookTip" xml:space="preserve">
+    <value>Important: Seems like hasn't set hook yet</value>
+  </data>
+  <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
+    <value>Tip: Has not enable Japanese text or Translators</value>
+  </data>
 </root>

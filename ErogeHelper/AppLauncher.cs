@@ -152,7 +152,7 @@ public static class AppLauncher
             WpfHelper.SetDPICompatibilityAsApplication(gamePath);
         }
 
-#region Fullscreen Change Sources
+        #region Fullscreen Change Sources
         var gameResolutionChanged = gameWindowHooker.GamePosUpdated
             .Select(pos => (pos.Width, pos.Height))
             .DistinctUntilChanged()
@@ -164,7 +164,7 @@ public static class AppLauncher
         var dpiChanged = State.DpiChanged
             .DistinctUntilChanged()
             .Select(_ => Unit.Default);
-#endregion
+        #endregion
 
         gameDataService.InitFullscreenChanged(
             monitorResolutionChanged

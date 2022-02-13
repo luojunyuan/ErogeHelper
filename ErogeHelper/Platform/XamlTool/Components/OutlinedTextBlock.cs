@@ -10,11 +10,11 @@ namespace ErogeHelper.Platform.XamlTool.Components;
 [ContentProperty(nameof(Text))]
 public class OutlinedTextBlock : FrameworkElement
 {
-    private const double StrokeThickness = 1;
+    private const int OutlineThinknessScale = 16;
 
     public OutlinedTextBlock()
     {
-        UpdateOutlinePen(StrokeThickness);
+        UpdateOutlinePen(FontSize / OutlineThinknessScale);
     }
 
     protected override void OnRender(DrawingContext drawingContext)
@@ -237,7 +237,7 @@ public class OutlinedTextBlock : FrameworkElement
         _formattedText.SetFontWeight(FontWeight);
         _formattedText.SetFontFamily(FontFamily);
         _formattedText.SetFontStretch(FontStretch);
-        UpdateOutlinePen(FontSize / 32);
+        UpdateOutlinePen(FontSize / OutlineThinknessScale);
     }
 
     private Geometry? _textGeometry;

@@ -1,4 +1,6 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
@@ -30,6 +32,9 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
         HideTextWindow = ehConfigRepository.HideTextWindow;
         this.WhenAnyValue(x => x.HideTextWindow)
             .Skip(1)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Do(_ => _textWindowCloseSubj.OnNext(Unit.Default))
+            .ObserveOn(RxApp.TaskpoolScheduler)
             .Subscribe(v => ehConfigRepository.HideTextWindow = v);
 
         UseDPIDpiCompatibility = ehConfigRepository.DPICompatibilityByApplication;
@@ -44,6 +49,9 @@ public class GeneralViewModel : ReactiveObject, IRoutableViewModel
             .Skip(1)
             .Subscribe(v => ehConfigRepository.UseEdgeTouchMask = v);
     }
+
+    private readonly Subject<Unit> _textWindowCloseSubj = new();
+    public IObservable<Unit> ShowOrCloseTextWindow => _textWindowCloseSubj;
 
     [Reactive]
     public bool UseBigSizeAssistiveTouch { get; set; }

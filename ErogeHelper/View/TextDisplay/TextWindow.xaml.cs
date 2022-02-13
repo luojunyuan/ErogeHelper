@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ErogeHelper.Platform;
 using ErogeHelper.Shared;
@@ -24,18 +25,6 @@ public partial class TextWindow : IEnableLogger
         Width = ViewModel.WindowWidth;
 
         var disposables = new CompositeDisposable();
-        this.WhenAnyObservable(x => x.ViewModel!.Show)
-            .Subscribe(_ => Show())
-            .DisposeWith(disposables);
-
-        this.WhenAnyObservable(x => x.ViewModel!.Hide)
-            .Subscribe(_ => Hide())
-            .DisposeWith(disposables);
-
-        this.WhenAnyObservable(x => x.ViewModel!.Close)
-            .Subscribe(_ => Close())
-            .DisposeWith(disposables);
-
         this.Events().Loaded
             .Select(_ => Unit.Default)
             .InvokeCommand(this, x => x.ViewModel!.Loaded)
@@ -48,11 +37,12 @@ public partial class TextWindow : IEnableLogger
             .Where(_ => !IsMouseOver)
             .Subscribe(_ => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Hidden))
             .DisposeWith(disposables);
+        // TODO: Refactor? (After test on win7
         BlurSwitch.Toggled += (_, args) =>
         {
             if (BlurSwitch.IsOn)
             {
-                OpacitySlider.SetCurrentValue(System.Windows.Controls.Primitives.RangeBase.MinimumProperty, 0.02);
+                OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.02);
                 if (OpacitySlider.Value < OpacitySlider.Minimum)
                 {
                     ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();
@@ -60,7 +50,7 @@ public partial class TextWindow : IEnableLogger
             }
             else
             {
-                OpacitySlider.SetCurrentValue(System.Windows.Controls.Primitives.RangeBase.MinimumProperty, 0.0);
+                OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.0);
                 if (OpacitySlider.Value == 0.02)
                 {
                     ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();
@@ -71,30 +61,35 @@ public partial class TextWindow : IEnableLogger
 
         this.WhenActivated(d =>
         {
+            this.WhenAnyValue(x => x.ViewModel)
+                .BindTo(this, x => x.DataContext).DisposeWith(d);
+
             ViewModel.DisposeWith(d);
             disposables.DisposeWith(d);
 
-            this.OneWayBind(ViewModel,
-                vm => vm.WindowWidth,
-                v => v.Width).DisposeWith(d);
+            this.WhenAnyObservable(x => x.ViewModel!.Show)
+                .Subscribe(_ => Show()).DisposeWith(d);
+            this.WhenAnyObservable(x => x.ViewModel!.Hide)
+                .Subscribe(_ => Hide()).DisposeWith(d);
+
             this.Bind(ViewModel,
                 vm => vm.Left,
                 v => v.Left).DisposeWith(d);
             this.Bind(ViewModel,
                 vm => vm.Top,
                 v => v.Top).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+                vm => vm.WindowWidth,
+                v => v.Width).DisposeWith(d);
 
 
             this.OneWayBind(ViewModel,
                 vm => vm.WindowWidth,
                 v => v.WidthSlider.Value).DisposeWith(d);
-            // TODO: Refactor InvokeCommand to BindCommand
-            //this.BindCommand(ViewModel,
-            //    vm => vm.WindowWidthChanged,
-            //    v => v.WidthSlider).DisposeWith(d);
             WidthSlider.Events().ValueChanged
                 .Select(arg => arg.NewValue)
                 .InvokeCommand(this, x => x.ViewModel!.WindowWidthChanged).DisposeWith(d);
+
             this.OneWayBind(ViewModel,
                 vm => vm.WindowOpacity,
                 v => v.OpacitySlider.Value).DisposeWith(d);
@@ -109,13 +104,24 @@ public partial class TextWindow : IEnableLogger
                 vm => vm.Pronounce,
                 v => v.PronounceButton).DisposeWith(d);
 
+            this.BindCommand(ViewModel,
+                vm => vm.FontDecrease,
+                v => v.FontDecrease).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.FontIncrease,
+                v => v.FontIncrease).DisposeWith(d);
+
             this.Bind(ViewModel,
                 vm => vm.EnableBlurBackground,
                 v => v.BlurSwitch.IsOn).DisposeWith(d);
 
+
             this.OneWayBind(ViewModel,
                 vm => vm.TextControlViewModel,
                 v => v.TextItemsControl.ItemsSource).DisposeWith(d);
+            this.OneWayBind(ViewModel,
+                vm => vm.AppendTextControlViewModel,
+                v => v.AppendTextsControl.ItemsSource).DisposeWith(d);
         });
     }
 

@@ -150,7 +150,7 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<DanmakuCanvasViewModel>>(() => new DanmakuCanvas());
 
         Locator.CurrentMutable.Register<IViewFor<TextViewModel>>(() => new TextWindow());
-        //Locator.CurrentMutable.Register<IViewFor<FuriganaItemViewModel>>(() => new FuriganaItem());
+        // Resolve FuriganaItemViewModel in ItemViewLocator
 
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());

@@ -1623,6 +1623,42 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 👈Drag the block 的本地化字符串。
+        /// </summary>
+        public static string TextWindow_DragAreaTip {
+            get {
+                return ResourceManager.GetString("TextWindow.DragAreaTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Tip: Has not enable Japanese text or Translators 的本地化字符串。
+        /// </summary>
+        public static string TextWindow_EnableFunctionTip {
+            get {
+                return ResourceManager.GetString("TextWindow.EnableFunctionTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Important: Seems like hasn&apos;t set hook yet 的本地化字符串。
+        /// </summary>
+        public static string TextWindow_SetHookTip {
+            get {
+                return ResourceManager.GetString("TextWindow.SetHookTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Waiting for text... 的本地化字符串。
+        /// </summary>
+        public static string TextWindow_WaitingForText {
+            get {
+                return ResourceManager.GetString("TextWindow.WaitingForText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 BaiduApi 的本地化字符串。
         /// </summary>
         public static string Translator_BaiduApi {
