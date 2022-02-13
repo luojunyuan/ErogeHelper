@@ -15,6 +15,7 @@ using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Languages;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.MainGame;
+using ErogeHelper.ViewModel.TextDisplay;
 using Microsoft.Win32;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -59,6 +60,11 @@ public static class AppLauncher
         gameWindowHooker.SetupGameWindowHook(gameDataService.MainProcess, gameDataService, RxApp.MainThreadScheduler);
         DI.ShowView<MainGameViewModel>();
 
+        if (!ehConfigRepository.HideTextWindow)
+        {
+            DI.ShowView<TextViewModel>();
+        }
+
         // Clipboard in UI thread
         var sharpClipboard = DependencyResolver.GetService<SharpClipboard>();
 
@@ -72,7 +78,7 @@ public static class AppLauncher
             sharpClipboard.Events().ClipboardChanged
                 .Where(e => e.SourceApplication.ID != Environment.ProcessId
                     && e.ContentType == SharpClipboard.ContentTypes.Text)
-                // TODO: Unity game specile id check
+                // TODO: Unity game special id check
                 .Skip(1)
                 .Select(e => e.Content.ToString() ?? string.Empty)
                 .DistinctUntilChanged()
@@ -81,13 +87,6 @@ public static class AppLauncher
             if (ehConfigRepository.InjectProcessByDefault && !File.Exists(Path.Combine(gameDir, "UnityPlayer.dll")))
             {
                 textractorService.InjectProcesses(gameDataService);
-            }
-
-            if (!ehConfigRepository.HideTextWindow)
-            {
-                // Show And Close ?
-                //_ = DependencyResolver.GetService<TextViewModel>();
-                //_ = new View.Windows.TextWindow(); // UI thread?
             }
         });
     }

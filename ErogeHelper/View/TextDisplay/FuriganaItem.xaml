@@ -14,29 +14,21 @@
 
     <StackPanel>
         <!--  Kana Part  -->
-        <!--<component:OutlinedTextBlock x:Name="Kana"
+        <component:OutlinedTextBlock x:Name="Kana"
+            d:Text="かな" d:FontSize="32"
             HorizontalAlignment="Center"
-            d:FontSize="32" d:Text="かな" ClipToBounds="False" Fill="White"
-            FontFamily="ＭＳ ゴシック"
-            FontSize="{Binding ElementName=TextItem, Path=FontSize, Converter={StaticResource FontSizeHalfConverter}}"
-            StrokeOutside="True" StrokeThickness="1.5" Text="" />-->
-        <!--<component:OutlinedTextBlock
-            Fill="White" FontSize="32" StrokeOutside="False" StrokeThickness="0.1"
-            Text="かな" />
-        <component:OutlinedTextBlock
-            FontSize="32" StrokeOutside="False" StrokeThickness="0.1" Text="かな" />
-        <TextBlock FontSize="32" Foreground="White" Text="かな" />-->
+            ClipToBounds="False" FontFamily="ＭＳ ゴシック"
+            FontSize="{Binding ElementName=TextItem, Path=FontSize, Converter={StaticResource FontSizeHalfConverter}}" />
         <!--  Moji Part  -->
         <Border>
             <Border.Background>
                 <ImageBrush x:Name="MojiBackgroundColor" Opacity="1" />
             </Border.Background>
 
-            <!--<component:OutlinedTextBlock x:Name="TextItem"
+            <component:OutlinedTextBlock x:Name="TextItem"
+                d:Text="仮名" d:FontSize="64"
                 HorizontalAlignment="Center"
-                d:FontSize="64" d:Text="仮名" ClipToBounds="False" Fill="White"
-                FontFamily="ＭＳ ゴシック" Stroke="Black" StrokeOutside="True" StrokeThickness="1.5"
-                Text="" />-->
+                ClipToBounds="False" Fill="White" FontFamily="ＭＳ ゴシック" />
         </Border>
 
     </StackPanel>

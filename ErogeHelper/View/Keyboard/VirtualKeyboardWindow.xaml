@@ -10,7 +10,6 @@
     AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False"
     Topmost="True" WindowStyle="None">
 
-    <Border BorderThickness="1" BorderBrush="Red">
     <Grid x:Name="TouchToolBoxView" Margin="10 20">
 
         <Grid.ColumnDefinitions>
@@ -71,6 +70,5 @@
 
         </WrapPanel>
 
-        </Grid>
-    </Border>
+    </Grid>
 </Window>

@@ -14,7 +14,8 @@ namespace ErogeHelper.ViewModel.HookConfig;
 
 public class TextCleanViewModel : ReactiveValidationObject
 {
-    public Interaction<(IEnumerable<long> Handles, string Text), (bool CanSubmit, string RegExp)> Show { get; } = new();
+    public Interaction<(IEnumerable<long> Handles, string Text), 
+        (bool CanSubmit, string RegExp, string CurrentText)> Show { get; } = new();
     
     public IDisposable TextCleanDisposal;
 

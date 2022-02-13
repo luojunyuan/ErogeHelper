@@ -88,7 +88,13 @@ internal static class DI
         }
         else
         {
-            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabService());
+            MeCabService? mecabService = null;
+            if (ehConfigRepository.EnableMeCab)
+            {
+                mecabService = new MeCabService();
+                mecabService.LoadMeCabTagger();
+            }
+            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => mecabService ?? new MeCabService());
         }
         if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         {
@@ -144,6 +150,7 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<DanmakuCanvasViewModel>>(() => new DanmakuCanvas());
 
         Locator.CurrentMutable.Register<IViewFor<TextViewModel>>(() => new TextWindow());
+        //Locator.CurrentMutable.Register<IViewFor<FuriganaItemViewModel>>(() => new FuriganaItem());
 
         Locator.CurrentMutable.Register<IViewFor<HookViewModel>>(() => new HookWindow());
         Locator.CurrentMutable.Register<IViewFor<HookThreadItemViewModel>>(() => new HookThreadItem());

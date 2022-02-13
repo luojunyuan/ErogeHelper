@@ -15,12 +15,12 @@ namespace ErogeHelper.View.TextDisplay;
 
 public partial class TextWindow : IEnableLogger
 {
-    public TextWindow()
+    public TextWindow(TextViewModel? textViewModel = null)
     {
         InitializeComponent();
         HwndTools.HideWindowInAltTab(TextViewModel.TextWindowHandle = WpfHelper.GetWpfWindowHandle(this));
 
-        ViewModel = DependencyResolver.GetService<TextViewModel>();
+        ViewModel = textViewModel ?? DependencyResolver.GetService<TextViewModel>();
         Width = ViewModel.WindowWidth;
 
         var disposables = new CompositeDisposable();
@@ -30,6 +30,10 @@ public partial class TextWindow : IEnableLogger
 
         this.WhenAnyObservable(x => x.ViewModel!.Hide)
             .Subscribe(_ => Hide())
+            .DisposeWith(disposables);
+
+        this.WhenAnyObservable(x => x.ViewModel!.Close)
+            .Subscribe(_ => Close())
             .DisposeWith(disposables);
 
         this.Events().Loaded
@@ -85,6 +89,9 @@ public partial class TextWindow : IEnableLogger
                 vm => vm.WindowWidth,
                 v => v.WidthSlider.Value).DisposeWith(d);
             // TODO: Refactor InvokeCommand to BindCommand
+            //this.BindCommand(ViewModel,
+            //    vm => vm.WindowWidthChanged,
+            //    v => v.WidthSlider).DisposeWith(d);
             WidthSlider.Events().ValueChanged
                 .Select(arg => arg.NewValue)
                 .InvokeCommand(this, x => x.ViewModel!.WindowWidthChanged).DisposeWith(d);

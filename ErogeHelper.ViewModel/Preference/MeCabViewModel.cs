@@ -34,7 +34,18 @@ public class MeCabViewModel : ReactiveObject, IRoutableViewModel
 
         this.WhenAnyValue(x => x.ShowJapanese)
             .Skip(1)
-            .Subscribe(v => ehConfigRepository.EnableMeCab = v);
+            .Subscribe(v =>
+            {
+                if (v)
+                {
+                    mecabService.LoadMeCabTagger();
+                }
+                else
+                {
+                    mecabService.Dispose();
+                }
+                ehConfigRepository.EnableMeCab = v;
+            });
 
         SelectMeCabDict = ReactiveCommand.Create(SelectMeCabDictDialog);
 

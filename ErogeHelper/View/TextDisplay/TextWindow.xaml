@@ -68,7 +68,9 @@
                                             <ui:SymbolIcon Symbol="FontIncrease" />
                                         </Button>
                                     </ui:SimpleStackPanel>
-                                    <ui:ToggleSwitch x:Name="BlurSwitch" Margin="0 10 0 0" Header="Bulr background" />
+                                    <ui:ToggleSwitch x:Name="BlurSwitch"
+                                        Margin="0 10 0 0"
+                                        Header="Bulr background" IsEnabled="False" />
                                     <ui:AppBarButton Icon="Preview" Label="Opacity">
                                         <ui:FlyoutService.Flyout>
                                             <ui:Flyout Placement="Top">

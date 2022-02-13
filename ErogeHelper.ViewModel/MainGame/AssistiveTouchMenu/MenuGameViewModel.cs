@@ -7,6 +7,7 @@ using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
+using ErogeHelper.ViewModel.TextDisplay;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Vanara.PInvoke;
@@ -67,7 +68,7 @@ public class MenuGameViewModel : ReactiveObject
                     Interactions.MessageBoxConfirm.Handle(Strings.AssistiveTouch_LoseFocusWarn).Subscribe();
                 }
                 HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
-                HwndTools.WindowLostFocus(windowDataService.TextWindowHandle, v);
+                HwndTools.WindowLostFocus(TextViewModel.TextWindowHandle, v);
                 gameInfoRepository.UpdateLostFocusStatus(v);
             });
 

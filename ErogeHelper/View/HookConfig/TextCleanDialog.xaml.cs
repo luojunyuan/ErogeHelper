@@ -44,10 +44,13 @@ public partial class TextCleanDialog
                     ViewModel.CurrentWrapperText
                         = Utils.TextEvaluateWrapperWithRegExp(ViewModel.CurrentText, ViewModel.RegExp ?? string.Empty);
                     var dialogResult = await Observable.FromAsync(ContentDialog.ShowAsync);
+                    context.SetOutput((
+                        ContentDialogResult.Primary == dialogResult, 
+                        ViewModel.RegExp ?? string.Empty,
+                        ViewModel.CurrentText));
                     ViewModel.SelectedHandles = Enumerable.Empty<long>();
                     ViewModel.CurrentText = string.Empty;
                     ViewModel.CurrentWrapperText = string.Empty;
-                    context.SetOutput((ContentDialogResult.Primary == dialogResult, ViewModel.RegExp ?? string.Empty));
                 }).DisposeWith(d);
 
             this.BindCommand(ViewModel,

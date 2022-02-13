@@ -19,7 +19,12 @@ namespace ErogeHelper.ViewModel.TextDisplay;
 
 public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 {
-    public static HWND TextWindowHandle { get; set; }
+    public static HWND TextWindowHandle { get; set; } = IntPtr.Zero;
+
+    /// <summary>
+    /// 好像没啥用了
+    /// </summary>
+    private string _currentText = "TODO: 如果设置了钩子就是Waiting for text，如果没有就是 暂未设置Hook，请先设置钩子，并打开原文或一个翻译器";
 
     public TextViewModel(
         ITextractorService? textractorService = null,
@@ -41,38 +46,24 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         EnableBlurBackground = ehConfigRepository.TextWindowBlur;
         _furiganaItemViewModel = new ObservableCollection<FuriganaItemViewModel>();
 
-
-        ShowAndHideWindowSubscription(ehConfigRepository, gameWindowHooker).DisposeWith(_disposables);
+        WindowStatusChangeSubscription(ehConfigRepository, gameWindowHooker).DisposeWith(_disposables);
 
         Loaded = ReactiveCommand.Create(() =>
         {
             HwndTools.WindowBlur(TextWindowHandle, ehConfigRepository.TextWindowBlur);
-            if (gameInfoRepository.GameInfo.IsLoseFocus)
-                HwndTools.WindowLostFocus(TextWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
+            HwndTools.WindowLostFocus(TextWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
+            MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
         }).DisposeWith(_disposables);
 
         gameWindowHooker.GamePosChanged
-            .Where(_ => ehConfigRepository.HideTextWindow != true && _currentText != string.Empty)
             .Subscribe(pos =>
             {
                 Left += pos.HorizontalChange / State.Dpi;
                 Top += pos.VerticalChange / State.Dpi;
             }).DisposeWith(_disposables);
 
-        void SideCheck()
-        {
-            User32.BringWindowToTop(TextWindowHandle);
-
-            if (_hasNotShowedUp)
-            {
-                MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
-                _showSubj.OnNext(Unit.Default);
-                _hasNotShowedUp = false;
-            }
-        }
-
         textractorService.SelectedData
-            .Where(_ => ehConfigRepository.HideTextWindow != true && ehConfigRepository.EnableMeCab)
+            .Where(_ => ehConfigRepository.EnableMeCab)
             .Select(hp => _currentText = hp.Text)
             .Select(sentence => mecabService
                 .GenerateMeCabWords(sentence).Select(item => new FuriganaItemViewModel()
@@ -82,17 +73,13 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                     FontSize = ehConfigRepository.FontSize,
                     BackgroundColor = item.PartOfSpeech.ToColor(),
                 }).ToList())
+            .Do(_ => User32.BringWindowToTop(TextWindowHandle))
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(vms =>
-            {
-                UpdateOrAddFuriganaItems(vms);
-                SideCheck();
-            }).DisposeWith(_disposables);
+            .Subscribe(UpdateOrAddFuriganaItems).DisposeWith(_disposables);
 
         // Relocate position
-        // TODO: Relocating TextWindow position when dpi changed (or move between monitors)
+        // TODO: Massive work Relocating TextWindow position when dpi changed (or move between monitors)
         gameDataService.GameFullscreenChanged
-            .Where(_ => !TextWindowHandle.IsNull)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(isFullscreen =>
             {
@@ -101,13 +88,13 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 // this.Log().Debug($"{Left} {Top} {WindowWidth}");
                 // this.Log().Debug(gamePos);
                 if (isFullscreen)
+                {
                     User32.BringWindowToTop(TextWindowHandle);
+                }
                 else
                 {
 
                 }
-
-                MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
             }).DisposeWith(_disposables);
         State.DpiChanged
             .Subscribe(x => MoveToGameCenter(gameWindowHooker, WindowWidth, x))
@@ -133,10 +120,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 ehConfigRepository.TextWindowBlur = x;
             });
     }
-
-    private string _currentText = string.Empty;
-
-    private bool _hasNotShowedUp = true;
 
     [Reactive]
     public double Left { get; set; }
@@ -181,21 +164,26 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
     private readonly Subject<Unit> _hideSubj = new();
     public IObservable<Unit> Hide => _hideSubj;
 
-    private IDisposable ShowAndHideWindowSubscription(
+    private readonly Subject<Unit> _closeSubj = new();
+    public IObservable<Unit> Close => _closeSubj;
+
+    private IDisposable WindowStatusChangeSubscription(
         IEHConfigRepository ehConfigRepository,
         IGameWindowHooker gameWindowHooker)
     {
         var disposables = new CompositeDisposable();
         ehConfigRepository.WhenAnyValue(x => x.HideTextWindow)
             .Skip(1)
-            .Subscribe(hide =>
+            .Subscribe(close =>
             {
-                if (hide)
-                    _hideSubj.OnNext(Unit.Default);
+                if (close)
+                {
+                    _closeSubj.OnNext(Unit.Default);
+                    TextWindowHandle = IntPtr.Zero;
+                }
                 else
                 {
-                    if (_currentText != string.Empty)
-                        _showSubj.OnNext(Unit.Default);
+                    _showSubj.OnNext(Unit.Default);
                 }
             }).DisposeWith(disposables);
 
@@ -206,8 +194,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
               switch (operation)
               {
                   case ViewOperation.Show:
-                      if (_currentText != string.Empty)
-                          _showSubj.OnNext(Unit.Default);
+                      _showSubj.OnNext(Unit.Default);
                       break;
                   case ViewOperation.Hide:
                       _hideSubj.OnNext(Unit.Default);

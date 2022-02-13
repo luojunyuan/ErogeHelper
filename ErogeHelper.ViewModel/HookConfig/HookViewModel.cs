@@ -81,31 +81,9 @@ public class HookViewModel : ReactiveObject, IDisposable
         var canUseFunctions = new BehaviorSubject<bool>(textractorService.Injected);
         canUseFunctions.DisposeWith(_disposables);
         // TODO: Write a TextractorConfig.txt file for Unity game { string:Substring (int,int) }
-        if (Utils.IsArm)
-        {
-            var injectOnlyOnce = new BehaviorSubject<bool>(true);
-            ReInject = ReactiveCommand.Create(() =>
-            {
-                textractorService.InjectProcesses(gameDataService);
+        ReInject = SetupReInject(textractorService, gameDataService, canUseFunctions);
 
-                injectOnlyOnce.OnNext(false);
-                injectOnlyOnce.OnCompleted();
-                canUseFunctions.OnNext(true);
-            }, injectOnlyOnce);
-        }
-        else
-        {
-            ReInject = ReactiveCommand.Create(() =>
-            {
-                ConsoleInfo = string.Empty;
-                Refresh.Execute().Subscribe();
-                textractorService.ReAttachProcesses();
-
-                canUseFunctions.OnNext(true);
-            });
-        }
-
-        OpenHCodeDialog = 
+        OpenHCodeDialog =
             ReactiveCommand.CreateFromObservable(() => HCodeViewModel.Show.Handle(Unit.Default), canUseFunctions);
         OpenHCodeDialog
             .Where(code => code != string.Empty)
@@ -113,7 +91,7 @@ public class HookViewModel : ReactiveObject, IDisposable
             //.Select(code => var gameFileName = Path.GetFileName(gameDataService.GamePath))
             .Subscribe(textractorService.InsertHook);
 
-        OpenRCodeDialog = 
+        OpenRCodeDialog =
             ReactiveCommand.CreateFromObservable(() => RCodeViewModel.Show.Handle(Unit.Default), canUseFunctions);
         OpenRCodeDialog
             .Where(text => text != string.Empty)
@@ -227,7 +205,7 @@ public class HookViewModel : ReactiveObject, IDisposable
             .ToCollection()
             .Select(vms => vms.Any(m => m.IsTextThread));
 
-        OpenTextSplitDialog = ReactiveCommand.CreateFromObservable(() => 
+        OpenTextSplitDialog = ReactiveCommand.CreateFromObservable(() =>
         {
             var selectedItems = _hookThreadItems.Where(vm => vm.IsTextThread);
             var firstItemText = selectedItems.First().TotalText;
@@ -237,9 +215,8 @@ public class HookViewModel : ReactiveObject, IDisposable
         }, canDoNextStep);
         OpenTextSplitDialog
             .Where(output => output.CanSubmit)
-            .Subscribe(output => CurrentInUseHookName =
-                SubmitSetting(
-                    textractorService, gameInfoRepository, hookThreadItemsList.Items.ToList(), output.RegExp));
+            .Subscribe(output => CurrentInUseHookName = SubmitSetting(textractorService, gameInfoRepository,
+                hookThreadItemsList.Items.ToList(), output.RegExp, output.CurrentText));
     }
 
     [Reactive]
@@ -281,14 +258,14 @@ public class HookViewModel : ReactiveObject, IDisposable
     private readonly ReadOnlyObservableCollection<HookThreadItemViewModel> _hookThreadItems;
     public ReadOnlyObservableCollection<HookThreadItemViewModel> HookThreadItems => _hookThreadItems;
 
-    public ReactiveCommand<Unit, (bool CanSubmit, string RegExp)> OpenTextSplitDialog { get; }
+    public ReactiveCommand<Unit, (bool CanSubmit, string RegExp, string CurrentText)> OpenTextSplitDialog { get; }
 
     /// <returns>HookName</returns>
     private static string SubmitSetting(
         ITextractorService textractorService,
         IGameInfoRepository gameInfoRepository,
         IReadOnlyCollection<HookThreadItemViewModel> hookThreadItemViewModels,
-        string regexp)
+        string regexp, string currentText)
     {
         // Build textractor setting
         var textractorSetting = new TextractorSetting()
@@ -319,6 +296,7 @@ public class HookViewModel : ReactiveObject, IDisposable
         // TODO: Compile RegExp
 
         // Refresh current text in TextWindow
+        MessageBus.Current.SendMessage<HookVMToTextVM>(new() { CurrentText = currentText });
 
         // Toast
         Interactions.ContentDialog
@@ -326,6 +304,42 @@ public class HookViewModel : ReactiveObject, IDisposable
             .Subscribe();
 
         return textractorSetting.HookName;
+    }
+
+    private ReactiveCommand<Unit, Unit> SetupReInject(
+        ITextractorService textractorService,
+        IGameDataService gameDataService,
+        BehaviorSubject<bool> canUseFunctions)
+    {
+        if (Utils.IsArm)
+        {
+            var injectOnlyOnce = new BehaviorSubject<bool>(true);
+            return ReactiveCommand.Create(() =>
+            {
+                textractorService.InjectProcesses(gameDataService);
+
+                injectOnlyOnce.OnNext(false);
+                injectOnlyOnce.OnCompleted();
+                canUseFunctions.OnNext(true);
+                canUseFunctions.OnCompleted();
+            }, injectOnlyOnce);
+        }
+        else
+        {
+            return ReactiveCommand.Create(() =>
+            {
+                ConsoleInfo = string.Empty;
+                Refresh.Execute().Subscribe();
+                textractorService.ReAttachProcesses();
+
+                if (!canUseFunctions.IsDisposed)
+                {
+                    canUseFunctions.OnNext(true);
+                    canUseFunctions.OnCompleted();
+                    canUseFunctions.Dispose();
+                }
+            });
+        }
     }
 
     private static TextractorSetting.TextThread SelectThreadType(HookThreadItemViewModel vm)
