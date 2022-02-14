@@ -115,6 +115,11 @@ public partial class TextWindow : IEnableLogger
                 vm => vm.EnableBlurBackground,
                 v => v.BlurSwitch.IsOn).DisposeWith(d);
 
+            this.OneWayBind(ViewModel,
+                vm => vm.ShowFunctionNotEnableTip,
+                v => v.FunctionNotEnableTip.Visibility,
+                value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
+
 
             this.OneWayBind(ViewModel,
                 vm => vm.TextControlViewModel,

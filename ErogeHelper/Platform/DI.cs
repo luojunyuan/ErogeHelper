@@ -28,6 +28,7 @@ using ErogeHelper.ViewModel.Preference;
 using ErogeHelper.ViewModel.TextDisplay;
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
+using ModernWpf;
 using ModernWpf.Controls;
 using ReactiveUI;
 using Refit;
@@ -173,7 +174,7 @@ internal static class DI
         Interactions.MessageBoxConfirm
             .RegisterHandler(context =>
             {
-                var result = MessageBox.Show(context.Input, "Eroge Helper");
+                var result = ShowMessageBox(context.Input);
                 var yesOrNo = result switch
                 {
                     MessageBoxResult.OK => true,
@@ -181,8 +182,7 @@ internal static class DI
                     MessageBoxResult.No => false,
                     MessageBoxResult.Cancel => false,
                     MessageBoxResult.None => false,
-                    null => false,
-                    _ => throw new InvalidOperationException(),
+                    _ => false,
                 };
                 context.SetOutput(yesOrNo);
             });
@@ -204,6 +204,22 @@ internal static class DI
                 };
                 context.SetOutput(yesOrNo);
             });
+    }
+
+    public static MessageBoxResult? ShowMessageBox(string messageBoxText, string caption = "Eroge Helper")
+    {
+        var owner = Application.Current.Windows.Cast<Window>().FirstOrDefault((Window window) => 
+            window.IsActive && window.ShowActivated);
+
+        var messageBoxWindow = new MessageBoxWindow(messageBoxText, caption, MessageBoxButton.OK, null)
+        {
+            Owner = owner,
+            WindowStartupLocation = (owner == null) 
+                ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
+            Topmost = true
+        };
+        messageBoxWindow.ShowDialog();
+        return messageBoxWindow.Result;
     }
 
     public static void ShowView<T>() where T : ReactiveObject

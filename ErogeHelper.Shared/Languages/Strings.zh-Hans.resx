@@ -642,7 +642,7 @@
   <data name="AssistiveTouch.LoseFocusWarn" xml:space="preserve">
     <value>注意，失去焦点仅推荐全屏游戏时无法与eh交互使用。
 1. 此选项仅作用于小白点与文本窗口。
-2. 失去焦点后的窗口文本框会变得无法输入文字。
+2. 失去焦点后的窗口文本框会无法使用键盘输入。
 3. 部分游戏点击eh时可能会被鼠标穿透，触控不会受此影响。
 若全屏游戏时进行偏好配置使用其他窗口导致弹回桌面，建议窗口化游戏或在桌面进行。</value>
   </data>
@@ -692,6 +692,6 @@
     <value>重要：似乎尚未设置Hook，请先设置钩子</value>
   </data>
   <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
-    <value>提示：你好像没有打开日文文本或者任意一个机器翻译功能</value>
+    <value>提示：没有打开日文文本或者任意一个翻译功能</value>
   </data>
 </root>

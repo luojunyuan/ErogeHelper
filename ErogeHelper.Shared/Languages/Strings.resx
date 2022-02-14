@@ -681,12 +681,12 @@ NOTE: You are about updating to dev version. This version may not stable only su
     <value>Waiting for text...</value>
   </data>
   <data name="TextWindow.DragAreaTip" xml:space="preserve">
-    <value>👈Drag the block</value>
+    <value>👈Drag the square</value>
   </data>
   <data name="TextWindow.SetHookTip" xml:space="preserve">
     <value>Important: Seems like hasn't set hook yet</value>
   </data>
   <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
-    <value>Tip: Has not enable Japanese text or Translators</value>
+    <value>Tip: Has not enable Japanese text or any translator</value>
   </data>
 </root>

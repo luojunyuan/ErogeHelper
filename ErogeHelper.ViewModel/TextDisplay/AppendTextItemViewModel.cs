@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace ErogeHelper.ViewModel.TextDisplay;
 
-public class AppendTextItemViewModel
+public class AppendTextItemViewModel : ReactiveObject
 {
     public string Text { get; init; } = string.Empty;
 

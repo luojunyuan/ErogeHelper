@@ -47,7 +47,7 @@ public partial class App : IEnableLogger
 
                 if (args.Length == 0)
                 {
-                    MessageBox.Show(Strings.App_StartNoParameter, "Eroge Helper");
+                    DI.ShowMessageBox(Strings.App_StartNoParameter);
                     Terminate();
                     return;
                 }
@@ -55,7 +55,7 @@ public partial class App : IEnableLogger
                 var gameFullPath = args[0];
                 if (gameFullPath.Equals(Environment.ProcessPath, StringComparison.Ordinal))
                 {
-                    MessageBox.Show(Strings.App_StartItself, "Eroge Helper");
+                    DI.ShowMessageBox(Strings.App_StartItself);
                     Terminate();
                     return;
                 }

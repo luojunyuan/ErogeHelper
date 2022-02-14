@@ -1623,7 +1623,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 👈Drag the block 的本地化字符串。
+        ///   查找类似 👈Drag the square 的本地化字符串。
         /// </summary>
         public static string TextWindow_DragAreaTip {
             get {
@@ -1632,7 +1632,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Tip: Has not enable Japanese text or Translators 的本地化字符串。
+        ///   查找类似 Tip: Has not enable Japanese text or any translator 的本地化字符串。
         /// </summary>
         public static string TextWindow_EnableFunctionTip {
             get {

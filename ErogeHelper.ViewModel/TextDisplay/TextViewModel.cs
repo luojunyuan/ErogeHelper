@@ -23,6 +23,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
     public static HWND TextWindowHandle { get; set; } = IntPtr.Zero;
 
     private readonly IEHConfigRepository _ehConfigRepository;
+    private readonly IMeCabService _mecabService;
 
     public TextViewModel(
         ITextractorService? textractorService = null,
@@ -36,7 +37,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         _ehConfigRepository = ehConfigRepository ?? DependencyResolver.GetService<IEHConfigRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
-        mecabService ??= DependencyResolver.GetService<IMeCabService>();
+        _mecabService = mecabService ?? DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
         // The "Zen" of ctor. if ViewModel is getting too big, split it up.
@@ -55,10 +56,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         {
             _appendTextViewModel.Add(new() { Text = Strings.TextWindow_SetHookTip, FontSize = _fontSize });
         }
-        if (!_ehConfigRepository.EnableMeCab)
-        {
-            _appendTextViewModel.Add(new() { Text = Strings.TextWindow_EnableFunctionTip, FontSize = _fontSize });
-        }
+
 
         gameWindowHooker.WhenViewOperated
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -89,7 +87,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 Top += pos.VerticalChange / State.Dpi;
             }).DisposeWith(_disposables);
 
-        // TODO: Relocate position when enter or exit full-screen
+        // TODO: Relocate position when enter or exit full-screen 应该好弄
         gameDataService.GameFullscreenChanged
             .Where(isFullscreen => isFullscreen)
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -104,7 +102,37 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
 
 
+        _ehConfigRepository.WhenAnyValue(x => x.EnableMeCab, enable => !enable)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .ToPropertyEx(this, x => x.ShowFunctionNotEnableTip)
+            .DisposeWith(_disposables);
+
+        _ehConfigRepository.WhenAnyValue(x => x.EnableMeCab)
+            .Skip(1)
+            .Select(enable => 
+            { 
+                if (enable && _currentText != string.Empty)
+                {
+                    return GenerateFuriganaViewModels(_currentText);
+                }
+
+                return null;
+            })
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(furiganaVMs =>
+            {
+                if (furiganaVMs != null) UpdateOrAddFuriganaItems(furiganaVMs); 
+                else _furiganaItemViewModel.Clear();
+            }).DisposeWith(_disposables);
+
+        // TODO: Position not suit for it, template? 
+        _ehConfigRepository.WhenAnyValue(x => x.KanaPosition, x => x.KanaRuby)
+            .Skip(1)
+            .Subscribe(_ => UpdateOrAddFuriganaItems(GenerateFuriganaViewModels(_currentText)))
+            .DisposeWith(_disposables);
+
         var sharedData = textractorService.SelectedData
+            .Do(hp => _currentText = hp.Text)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Do(_ => _appendTextViewModel.Clear())
             .ObserveOn(RxApp.TaskpoolScheduler)
@@ -114,14 +142,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         sharedData.Connect().DisposeWith(_disposables);
         sharedData
             .Where(_ => _ehConfigRepository.EnableMeCab)
-            .Select(hp => mecabService
-                .GenerateMeCabWords(hp.Text).Select(item => new FuriganaItemViewModel()
-                {
-                    Text = item.Word,
-                    Kana = item.Kana,
-                    FontSize = _fontSize,
-                    BackgroundColor = item.PartOfSpeech.ToColor(),
-                }).ToList())
+            .Select(hp => GenerateFuriganaViewModels(hp.Text))
             .Do(_ => User32.BringWindowToTop(TextWindowHandle))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(UpdateOrAddFuriganaItems).DisposeWith(_disposables);
@@ -142,16 +163,8 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         var canDecrease = this.WhenAnyValue(x => x.FontSize)
             .Select(size => size > 10);
-        FontDecrease = ReactiveCommand.Create(() =>
-        {
-            FontModify(-2);
-            FontSize -= 2;
-        }, canDecrease);
-        FontIncrease = ReactiveCommand.Create(() =>
-        {
-            FontModify(2);
-            FontSize += 2;
-        });
+        FontDecrease = ReactiveCommand.Create(() => FontSize -= 2, canDecrease);
+        FontIncrease = ReactiveCommand.Create(() => FontSize += 2);
 
         this.WhenAnyValue(x => x.EnableBlurBackground)
             .Skip(1)
@@ -188,6 +201,9 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
     private readonly ObservableCollection<AppendTextItemViewModel> _appendTextViewModel;
     public ObservableCollection<AppendTextItemViewModel> AppendTextControlViewModel => _appendTextViewModel;
 
+    [ObservableAsProperty]
+    public bool ShowFunctionNotEnableTip { get; }
+
     #region Command Panel
 
     public ReactiveCommand<double, double> WindowWidthChanged { get; }
@@ -196,9 +212,9 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     public ReactiveCommand<Unit, Unit> Pronounce { get; }
 
-    public ReactiveCommand<Unit, Unit> FontDecrease { get; }
+    public ReactiveCommand<Unit, double> FontDecrease { get; }
     
-    public ReactiveCommand<Unit, Unit> FontIncrease { get; }
+    public ReactiveCommand<Unit, double> FontIncrease { get; }
 
     private double _fontSize;
     private double FontSize
@@ -206,21 +222,16 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         get => _fontSize;
         set
         {
+            foreach (var i in _furiganaItemViewModel)
+            {
+                i.FontSize = value;
+            }
+            foreach (var i in _appendTextViewModel)
+            {
+                i.FontSize = value;
+            }
             _ehConfigRepository.FontSize = value;
             this.RaiseAndSetIfChanged(ref _fontSize, value);
-        }
-    }
-
-    private void FontModify(double quantity)
-    {
-        foreach (var i in _furiganaItemViewModel)
-        {
-            i.FontSize += quantity;
-        }
-        foreach (var i in _appendTextViewModel)
-        {
-            // TODO: FIXME: Not work
-            i.FontSize += quantity;
         }
     }
 
@@ -230,6 +241,8 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     #endregion Command Panel
 
+    private string _currentText = string.Empty;
+
     // Note: Sometimes it can't be positioned correctly at second screen, need to try several times
     private void MoveToGameCenter(IGameWindowHooker gameWindowHooker, double windowWidth, double dpi)
     {
@@ -238,6 +251,17 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         Top = (gamePos.Top + gamePos.Height / 2) / dpi;
     }
 
+    private List<FuriganaItemViewModel> GenerateFuriganaViewModels(string text) =>
+        _mecabService.GenerateMeCabWords(text)
+            .Select(item => new FuriganaItemViewModel()
+            {
+                Text = item.Word,
+                Kana = item.Kana,
+                FontSize = _fontSize,
+                BackgroundColor = item.PartOfSpeech.ToColor(),
+                KanaPosition = _ehConfigRepository.KanaPosition,
+            }).ToList();
+
     private void UpdateOrAddFuriganaItems(List<FuriganaItemViewModel> vms)
     {
         if (_furiganaItemViewModel.Count < vms.Count)
@@ -245,10 +269,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             var i = 0;
             for (; i < _furiganaItemViewModel.Count; i++)
             {
-                _furiganaItemViewModel[i].Kana = vms[i].Kana;
-                _furiganaItemViewModel[i].Text = vms[i].Text;
-                _furiganaItemViewModel[i].FontSize = vms[i].FontSize;
-                _furiganaItemViewModel[i].BackgroundColor = vms[i].BackgroundColor;
+                UpdateFuriganaItemViewModelAt(i, vms[i]);
             }
             for (; i < vms.Count; i++)
             {
@@ -260,17 +281,24 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             var i = 0;
             for (; i < vms.Count; i++)
             {
-                _furiganaItemViewModel[i].Kana = vms[i].Kana;
-                _furiganaItemViewModel[i].Text = vms[i].Text;
-                _furiganaItemViewModel[i].FontSize = vms[i].FontSize;
-                _furiganaItemViewModel[i].BackgroundColor = vms[i].BackgroundColor;
+                UpdateFuriganaItemViewModelAt(i, vms[i]);
             }
+
             for (; i < _furiganaItemViewModel.Count; i++)
             {
                 _furiganaItemViewModel[i].Kana = string.Empty;
                 _furiganaItemViewModel[i].Text = string.Empty;
             }
         }
+    }
+
+    private void UpdateFuriganaItemViewModelAt(int i, FuriganaItemViewModel vm)
+    {
+        _furiganaItemViewModel[i].Kana = vm.Kana;
+        _furiganaItemViewModel[i].Text = vm.Text;
+        _furiganaItemViewModel[i].FontSize = vm.FontSize;
+        _furiganaItemViewModel[i].BackgroundColor = vm.BackgroundColor;
+        _furiganaItemViewModel[i].KanaPosition = vm.KanaPosition;
     }
 
     private readonly CompositeDisposable _disposables = new();

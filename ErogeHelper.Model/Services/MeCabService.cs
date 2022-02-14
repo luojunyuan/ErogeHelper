@@ -56,7 +56,8 @@ public class MeCabService : IMeCabService
             else if (_configRepository.KanaRuby == KanaRuby.Romaji)
             {
                 // all to romaji
-                kana = WanaKana.ToRomaji(node.GetPron() ?? " ");
+                var pron = node.GetPron() ?? " ";
+                kana = WanaKana.ToRomaji(pron == "*" ? " " : pron);
             }
             else if (!WanaKana.IsKana(node.Surface) && hinshi != JapanesePartOfSpeech.Mark)
             {

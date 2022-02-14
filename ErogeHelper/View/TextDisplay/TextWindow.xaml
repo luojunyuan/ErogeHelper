@@ -127,6 +127,8 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <Component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
             </StackPanel>
         </Grid>
     </Border>

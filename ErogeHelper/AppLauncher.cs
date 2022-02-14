@@ -51,7 +51,7 @@ public static class AppLauncher
         }
         catch (TimeoutException)
         {
-            MessageBox.Show(Strings.MessageBox_TimeoutInfo, "Eroge Helper");
+            DI.ShowMessageBox(Strings.MessageBox_TimeoutInfo);
             App.Terminate();
             return;
         }

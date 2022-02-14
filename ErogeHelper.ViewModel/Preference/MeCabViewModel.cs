@@ -34,6 +34,8 @@ public class MeCabViewModel : ReactiveObject, IRoutableViewModel
 
         this.WhenAnyValue(x => x.ShowJapanese)
             .Skip(1)
+            .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
+            .DistinctUntilChanged()
             .Subscribe(v =>
             {
                 if (v)
@@ -57,11 +59,11 @@ public class MeCabViewModel : ReactiveObject, IRoutableViewModel
             .Subscribe(v => ehConfigRepository.KanaRuby = v);
 
         this.WhenAnyValue(x => x.MojiDict)
-           .Skip(1)
-           .Subscribe(v => ehConfigRepository.MojiDictEnable = v);
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.MojiDictEnable = v);
         this.WhenAnyValue(x => x.JishoDict)
-           .Skip(1)
-           .Subscribe(v => ehConfigRepository.JishoDictEnable = v);
+            .Skip(1)
+            .Subscribe(v => ehConfigRepository.JishoDictEnable = v);
     }
 
     [Reactive]

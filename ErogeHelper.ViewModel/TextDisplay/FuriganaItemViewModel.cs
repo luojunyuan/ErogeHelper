@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using ErogeHelper.Shared.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -17,4 +18,6 @@ public class FuriganaItemViewModel : ReactiveObject
 
     [Reactive]
     public Color BackgroundColor { get; set; }
+
+    public KanaPosition KanaPosition { get; set; }
 }
