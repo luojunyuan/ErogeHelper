@@ -17,7 +17,6 @@ using ErogeHelper.Shared.Languages;
 using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Splat;
-using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
 
@@ -120,8 +119,9 @@ public partial class App : IEnableLogger
     {
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
         {
-            if (Dispatcher.FromThread(Thread.CurrentThread) is null ||
-                Dispatcher.CurrentDispatcher.Thread == Thread.CurrentThread)
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (Current is not null && 
+                Current.Dispatcher.Thread.ManagedThreadId == Environment.CurrentManagedThreadId)
             {
                 return;
             }
