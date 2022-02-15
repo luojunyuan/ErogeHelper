@@ -128,11 +128,17 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         // TODO: Position not suit for it, template? 
         _ehConfigRepository.WhenAnyValue(x => x.KanaPosition, x => x.KanaRuby)
             .Skip(1)
+            // FIXME: Do it wrong
             .Subscribe(_ => UpdateOrAddFuriganaItems(GenerateFuriganaViewModels(_currentText)))
             .DisposeWith(_disposables);
 
+        var textMessage = MessageBus.Current.Listen<HookVMToTextVM>()
+            .Select(msg => _currentText = msg.CurrentText);
+
         var sharedData = textractorService.SelectedData
-            .Do(hp => _currentText = hp.Text)
+            .Select(hp => hp.Text)
+            .Merge(textMessage)
+            .Do(text => _currentText = text)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Do(_ => _appendTextViewModel.Clear())
             .ObserveOn(RxApp.TaskpoolScheduler)
@@ -142,7 +148,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         sharedData.Connect().DisposeWith(_disposables);
         sharedData
             .Where(_ => _ehConfigRepository.EnableMeCab)
-            .Select(hp => GenerateFuriganaViewModels(hp.Text))
+            .Select(text => GenerateFuriganaViewModels(text))
             .Do(_ => User32.BringWindowToTop(TextWindowHandle))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(UpdateOrAddFuriganaItems).DisposeWith(_disposables);

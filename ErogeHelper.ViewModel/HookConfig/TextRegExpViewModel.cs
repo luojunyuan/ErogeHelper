@@ -12,14 +12,14 @@ using Splat;
 
 namespace ErogeHelper.ViewModel.HookConfig;
 
-public class TextCleanViewModel : ReactiveValidationObject
+public class TextRegExpViewModel : ReactiveValidationObject
 {
     public Interaction<(IEnumerable<long> Handles, string Text), 
         (bool CanSubmit, string RegExp, string CurrentText)> Show { get; } = new();
     
     public IDisposable TextCleanDisposal;
 
-    public TextCleanViewModel(
+    public TextRegExpViewModel(
         ITextractorService? textractorService = null,
         IGameInfoRepository? gameInfoRepository = null)
     {

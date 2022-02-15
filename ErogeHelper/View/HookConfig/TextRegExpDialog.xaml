@@ -1,6 +1,6 @@
 ﻿<rxui:ReactiveUserControl
-    x:Class="ErogeHelper.View.HookConfig.TextCleanDialog"
-    x:TypeArguments="vm:TextCleanViewModel"
+    x:Class="ErogeHelper.View.HookConfig.TextRegExpDialog"
+    x:TypeArguments="vm:TextRegExpViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=vm:TextCleanViewModel}">
+    d:DataContext="{d:DesignInstance Type=vm:TextRegExpViewModel}">
 
     <ui:ContentDialog x:Name="ContentDialog"
         Title="{x:Static resx:Strings.HookPage_TextClean}"

@@ -22,7 +22,7 @@ internal class ItemViewLocator : IViewLocator
         if (viewModel is FuriganaItemViewModel)
         {
             this.Log().Debug($"Resolved service type '{typeof(FuriganaItemViewModel)}'");
-            return Activator.CreateInstance(typeof(FuriganaItem)) as IViewFor;
+            return Activator.CreateInstance(typeof(FuriganaItem), viewModel) as IViewFor;
         }
         else
         {

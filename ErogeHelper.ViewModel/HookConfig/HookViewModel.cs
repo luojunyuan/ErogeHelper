@@ -26,7 +26,7 @@ public class HookViewModel : ReactiveObject, IDisposable
 
     public HCodeViewModel HCodeViewModel { get; }
     public RCodeViewModel RCodeViewModel { get; }
-    public TextCleanViewModel TextCleanViewModel { get; }
+    public TextRegExpViewModel TextCleanViewModel { get; }
 
     public Interaction<Unit, Unit> ReiPatcherInteraction { get; } = new();
 
@@ -36,14 +36,14 @@ public class HookViewModel : ReactiveObject, IDisposable
         IGameDataService? gameDataService = null,
         HCodeViewModel? hcodeViewModel = null,
         RCodeViewModel? rcodeViewModel = null,
-        TextCleanViewModel? textCleanViewModel = null)
+        TextRegExpViewModel? textCleanViewModel = null)
     {
         textractorService ??= DependencyResolver.GetService<ITextractorService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
         HCodeViewModel = hcodeViewModel ?? DependencyResolver.GetService<HCodeViewModel>();
         RCodeViewModel = rcodeViewModel ?? DependencyResolver.GetService<RCodeViewModel>();
-        TextCleanViewModel = textCleanViewModel ?? DependencyResolver.GetService<TextCleanViewModel>();
+        TextCleanViewModel = textCleanViewModel ?? DependencyResolver.GetService<TextRegExpViewModel>();
 
         CurrentInUseHookName = textractorService.Setting.HookCode == string.Empty ?
             Strings.Common_None : textractorService.Setting.HookName;

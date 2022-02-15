@@ -17,7 +17,7 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     [Option(DefaultValue = 800.0)]
     public double TextWindowWidth { get; set; }
 
-    [Option(DefaultValue = 0.002)]
+    [Option(DefaultValue = 0.4)]
     public double TextWindowOpacity { get; set; }
 
     [Option(DefaultValue = false)]

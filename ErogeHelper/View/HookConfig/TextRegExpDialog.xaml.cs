@@ -14,11 +14,11 @@ using ErogeHelper.Shared;
 
 namespace ErogeHelper.View.HookConfig;
 
-public partial class TextCleanDialog
+public partial class TextRegExpDialog
 {
-    private new ViewModel.HookConfig.TextCleanViewModel ViewModel => base.ViewModel!;
+    private new ViewModel.HookConfig.TextRegExpViewModel ViewModel => base.ViewModel!;
 
-    public TextCleanDialog()
+    public TextRegExpDialog()
     {
         InitializeComponent();
 
