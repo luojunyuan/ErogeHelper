@@ -151,7 +151,7 @@ public class HookViewModel : ReactiveObject, IDisposable
                 resetSelectedAction = true;
             })
             .ObserveOn(TaskPoolScheduler.Default.DisableOptimizations(typeof(ISchedulerLongRunning)))
-            .Select(_ => hookThreads.Items.ToObservable()
+            .SelectMany(_ => hookThreads.Items.ToObservable()
                 .Where(v => v.Address == SelectedHookEngine!.Value.Address)
                 .Select(buf =>
                 {
@@ -164,7 +164,6 @@ public class HookViewModel : ReactiveObject, IDisposable
                 })
                 .Concat()
                 .TakeUntil(changeHookThreadsAction))
-            .SelectMany(v => v)
             .Select(v => new HookThreadItemViewModel()
             {
                 Index = itemIndex++,
@@ -179,6 +178,7 @@ public class HookViewModel : ReactiveObject, IDisposable
             .Subscribe(hookThreadItemsList.AddOrUpdate);
 
         textractorService.Data
+            // NOTE: This is a lossy back pressure for display
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UIMinimumResponseTime))
             .Where(v => SelectedHookEngine is not null &&
                 v.Address == SelectedHookEngine!.Value.Address &&

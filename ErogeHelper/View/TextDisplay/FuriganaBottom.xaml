@@ -1,0 +1,30 @@
+﻿<StackPanel
+    x:Class="ErogeHelper.View.TextDisplay.FuriganaBottom"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:component="clr-namespace:ErogeHelper.Platform.XamlTool.Components"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.TextDisplay;assembly=ErogeHelper.ViewModel"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:FuriganaItemViewModel}">
+
+    <!--  Moji Part  -->
+    <Border>
+        <Border.Background>
+            <ImageBrush x:Name="MojiBackgroundColor" Opacity="1" />
+        </Border.Background>
+
+        <component:OutlinedTextBlock x:Name="TextItem"
+            d:Text="仮名" d:FontSize="64"
+            HorizontalAlignment="Center"
+            ClipToBounds="False" Fill="White" FontFamily="ＭＳ ゴシック" />
+    </Border>
+    <!--  Kana Part  -->
+    <component:OutlinedTextBlock x:Name="Kana"
+        d:Text="かな" d:FontSize="32"
+        HorizontalAlignment="Center"
+        ClipToBounds="False" FontFamily="ＭＳ ゴシック"
+        FontSize="{Binding ElementName=TextItem, Path=FontSize, Converter={StaticResource FontSizeHalfConverter}}" />
+
+</StackPanel>

@@ -47,8 +47,8 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         WindowOpacity = _ehConfigRepository.TextWindowOpacity;
         EnableBlurBackground = _ehConfigRepository.TextWindowBlur;
         _furiganaItemViewModel = new ObservableCollection<FuriganaItemViewModel>();
-        _appendTextViewModel = new ObservableCollection<AppendTextItemViewModel>() 
-        { 
+        _appendTextViewModel = new ObservableCollection<AppendTextItemViewModel>()
+        {
             new() { Text = Strings.TextWindow_DragAreaTip, FontSize = _fontSize },
             new() { Text = Strings.TextWindow_WaitingForText, FontSize = _fontSize }
         };
@@ -72,7 +72,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                         break;
                 }
             }).DisposeWith(_disposables);
-            
+
         Loaded = ReactiveCommand.Create(() =>
         {
             HwndTools.WindowBlur(TextWindowHandle, _ehConfigRepository.TextWindowBlur);
@@ -109,29 +109,31 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         _ehConfigRepository.WhenAnyValue(x => x.EnableMeCab)
             .Skip(1)
-            .Select(enable => 
-            { 
-                if (enable && _currentText != string.Empty)
-                {
-                    return GenerateFuriganaViewModels(_currentText);
-                }
-
-                return null;
-            })
+            .Select(enable =>
+                (enable && _currentText != string.Empty) ? GenerateFuriganaViewModels(_currentText) : null)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(furiganaVMs =>
-            {
-                if (furiganaVMs != null) UpdateOrAddFuriganaItems(furiganaVMs); 
-                else _furiganaItemViewModel.Clear();
+            .Subscribe(vms => 
+            { 
+                if (vms == null) _furiganaItemViewModel.Clear(); 
+                else UpdateOrAddFuriganaItems(vms); 
             }).DisposeWith(_disposables);
 
-        // TODO: Position not suit for it, template? 
-        _ehConfigRepository.WhenAnyValue(x => x.KanaPosition, x => x.KanaRuby)
+        _ehConfigRepository.WhenAnyValue(x => x.KanaPosition)
             .Skip(1)
-            // FIXME: Do it wrong
+            .Where(_ => _currentText != string.Empty)
+            .Subscribe(_ =>
+            {
+                _furiganaItemViewModel.Clear();
+                UpdateOrAddFuriganaItems(GenerateFuriganaViewModels(_currentText));
+            }).DisposeWith(_disposables);
+
+        _ehConfigRepository.WhenAnyValue(x => x.KanaRuby)
+            .Skip(1)
+            .Where(_ => _currentText != string.Empty)
             .Subscribe(_ => UpdateOrAddFuriganaItems(GenerateFuriganaViewModels(_currentText)))
             .DisposeWith(_disposables);
 
+        // New text stream
         var textMessage = MessageBus.Current.Listen<HookVMToTextVM>()
             .Select(msg => _currentText = msg.CurrentText);
 
@@ -265,7 +267,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 Kana = item.Kana,
                 FontSize = _fontSize,
                 BackgroundColor = item.PartOfSpeech.ToColor(),
-                KanaPosition = _ehConfigRepository.KanaPosition,
             }).ToList();
 
     private void UpdateOrAddFuriganaItems(List<FuriganaItemViewModel> vms)
@@ -304,7 +305,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         _furiganaItemViewModel[i].Text = vm.Text;
         _furiganaItemViewModel[i].FontSize = vm.FontSize;
         _furiganaItemViewModel[i].BackgroundColor = vm.BackgroundColor;
-        _furiganaItemViewModel[i].KanaPosition = vm.KanaPosition;
     }
 
     private readonly CompositeDisposable _disposables = new();

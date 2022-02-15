@@ -1,11 +1,33 @@
 ﻿using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Controls;
+using ErogeHelper.ViewModel.HookConfig;
 using ReactiveUI;
 
 namespace ErogeHelper.View.HookConfig;
 
-public partial class HookThreadItem
+public partial class HookThreadItem : IViewFor<HookThreadItemViewModel>
 {
+    #region ViewModel DependencyProperty
+    /// <summary>Identifies the <see cref="ViewModel"/> dependency property.</summary>
+    public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
+        nameof(ViewModel),
+        typeof(HookThreadItemViewModel),
+        typeof(HookThreadItem));
+
+    public HookThreadItemViewModel? ViewModel
+    {
+        get => (HookThreadItemViewModel?)GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
+    }
+
+    object? IViewFor.ViewModel
+    {
+        get => ViewModel;
+        set => SetValue(ViewModelProperty, (HookThreadItemViewModel?)value);
+    }
+    #endregion
+
     public HookThreadItem()
     {
         InitializeComponent();

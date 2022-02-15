@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
-    xmlns:Component="clr-namespace:ErogeHelper.Platform.XamlTool.Components"
+    xmlns:component="clr-namespace:ErogeHelper.Platform.XamlTool.Components"
     xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.TextDisplay;assembly=ErogeHelper.ViewModel"
@@ -107,7 +107,7 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
+                            <component:AlignableWrapPanel HorizontalContentAlignment="Left" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
@@ -115,8 +115,8 @@
                 <ItemsControl x:Name="AppendTextsControl">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:AppendTextItemViewModel}">
-                            <StackPanel Orientation="Vertical">
-                                <Component:OutlinedTextBlock
+                            <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                                <component:OutlinedTextBlock
                                     Margin="0 0 0 -5"
                                     ClipToBounds="False"
                                     FontSize="{Binding FontSize}"
@@ -128,7 +128,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
+                <component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
             </StackPanel>
         </Grid>
     </Border>

@@ -18,6 +18,4 @@ public class FuriganaItemViewModel : ReactiveObject
 
     [Reactive]
     public Color BackgroundColor { get; set; }
-
-    public KanaPosition KanaPosition { get; set; }
 }

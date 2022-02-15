@@ -1,39 +1,33 @@
-﻿<rxui:ReactiveUserControl
+﻿<StackPanel x:Name="WholeBox"
     x:Class="ErogeHelper.View.HookConfig.HookThreadItem"
-    x:TypeArguments="vm:HookThreadItemViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:tool="clr-namespace:ErogeHelper.Platform.XamlTool"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
-    d:DesignHeight="200" d:DesignWidth="300">
-
-    <GroupBox x:Name="WholeBox"
-        Width="250" Height="auto"
-        Margin="0 0 20 0">
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="ThreadIndex"
-                    d:Text="1"
-                    Margin="2 2 20 0" VerticalAlignment="Center"
-                    FontWeight="Bold" />
-                <ui:RadioButtons MaxColumns="2">
-                    <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="{x:Static resx:Strings.HookThreadItem_Text}" />
-                    <RadioButton x:Name="CharacterRadioButton"
-                        Margin="-25 0 0 0" HorizontalAlignment="Left"
-                        Click="OptionalRadioButtonCheck"
-                        Content="{x:Static resx:Strings.HookThreadItem_Character}" />
-                </ui:RadioButtons>
-            </StackPanel>
-            <TextBox x:Name="TotalText"
-                d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
-                MaxHeight="150"
-                tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True"
-                IsReadOnly="True" TextWrapping="Wrap" />
-        </StackPanel>
-    </GroupBox>
-</rxui:ReactiveUserControl>
+    d:DataContext="{d:DesignInstance Type=vm:HookThreadItemViewModel}"
+    Width="250" Height="auto"
+    Margin="0 0 20 0">
+    <StackPanel Orientation="Horizontal">
+        <TextBlock x:Name="ThreadIndex"
+            d:Text="1"
+            Margin="2 2 20 0" VerticalAlignment="Center"
+            FontWeight="Bold" />
+        <ui:RadioButtons MaxColumns="2">
+            <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="{x:Static resx:Strings.HookThreadItem_Text}" />
+            <RadioButton x:Name="CharacterRadioButton"
+                Margin="-25 0 0 0" HorizontalAlignment="Left"
+                Click="OptionalRadioButtonCheck"
+                Content="{x:Static resx:Strings.HookThreadItem_Character}" />
+        </ui:RadioButtons>
+    </StackPanel>
+    <TextBox x:Name="TotalText"
+        d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
+        MaxHeight="150"
+        tool:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True"
+        IsReadOnly="True" TextWrapping="Wrap" />
+</StackPanel>

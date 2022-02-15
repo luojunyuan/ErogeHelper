@@ -48,6 +48,8 @@ public class MeCabService : IMeCabService
 
             var hinshi = (node.GetPos1() ?? string.Empty).ToHinshi();
             var kana = " "; // full-width space to force render it
+            var pron = node.GetPron() ?? " ";
+            pron = pron == "*" ? " " : pron;
             if ((node.GetGoshu() ?? string.Empty).Equals("外", StringComparison.Ordinal))
             {
                 // Katakana source form(外来語) like english supplied by unidic
@@ -56,15 +58,14 @@ public class MeCabService : IMeCabService
             else if (_configRepository.KanaRuby == KanaRuby.Romaji)
             {
                 // all to romaji
-                var pron = node.GetPron() ?? " ";
-                kana = WanaKana.ToRomaji(pron == "*" ? " " : pron);
+                kana = WanaKana.ToRomaji(pron);
             }
             else if (!WanaKana.IsKana(node.Surface) && hinshi != JapanesePartOfSpeech.Mark)
             {
                 // kanji to kana
                 kana = _configRepository.KanaRuby == KanaRuby.Hiragana
-                    ? WanaKana.ToHiragana(node.GetPron() ?? " ")
-                    : node.GetPron() ?? " "; // katakana by default
+                    ? WanaKana.ToHiragana(pron)
+                    : pron; // katakana by default
             }
 
             yield return new MeCabWord

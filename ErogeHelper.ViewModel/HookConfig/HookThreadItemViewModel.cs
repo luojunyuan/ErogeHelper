@@ -19,6 +19,7 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
         {
             hookerService.Data
                 .Where(hp => hp.Handle == Handle)
+                .Do(hp => Context = hp.Ctx) // Context may be inaccurate
                 .Select(hp => hp.Text)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Do(LimitTextLength)
@@ -65,7 +66,7 @@ public class HookThreadItemViewModel : ReactiveObject, IActivatableViewModel
 
     public string EngineName { get; init; } = string.Empty;
 
-    public long Context { get; init; }
+    public long Context { get; set; }
 
     public long SubContext { get; init; }
 }

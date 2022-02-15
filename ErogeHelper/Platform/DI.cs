@@ -47,15 +47,16 @@ internal static class DI
     /// </summary>
     public static void RegisterServices()
     {
-        Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator());
+        var ehConfigRepository =
+            new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
+        
+        Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator(ehConfigRepository));
 
         RegisterViews();
         RegisterViewModelsForViews();
         RegisterInteractions();
 
         // DataService
-        var ehConfigRepository = 
-            new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
         Locator.CurrentMutable.RegisterConstant(ehConfigRepository);
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
