@@ -29,6 +29,8 @@ internal static class BrightnessAdjust
         }
     }
 
+    public static void WarmUp() => GetBrightness();
+
     /// <summary>
     /// Returns the current brightness setting
     /// </summary>

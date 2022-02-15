@@ -286,5 +286,10 @@ internal static class DI
         {
             // ignored
         }
+
+        if (BrightnessAdjust.IsSupported)
+        {
+            BrightnessAdjust.WarmUp();
+        }
     }
 }

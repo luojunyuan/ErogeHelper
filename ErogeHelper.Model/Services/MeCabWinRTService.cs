@@ -13,7 +13,7 @@ public class MeCabWinRTService : IMeCabService
 
     public bool CanLoaded => true;
 
-    public void LoadMeCabTagger() => throw new InvalidOperationException();
+    public void LoadMeCabTagger() { }
 
     public List<MeCabWord> GenerateMeCabWords(string sentence)
     {

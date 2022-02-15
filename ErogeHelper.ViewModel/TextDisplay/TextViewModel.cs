@@ -52,7 +52,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             new() { Text = Strings.TextWindow_DragAreaTip, FontSize = _fontSize },
             new() { Text = Strings.TextWindow_WaitingForText, FontSize = _fontSize }
         };
-        if (textractorService.Setting == null)
+        if (textractorService.Setting.HookCode == string.Empty)
         {
             _appendTextViewModel.Add(new() { Text = Strings.TextWindow_SetHookTip, FontSize = _fontSize });
         }
