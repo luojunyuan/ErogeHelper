@@ -88,7 +88,7 @@ public partial class TextWindow : IEnableLogger
 
 
             this.Bind(ViewModel,
-                vm => vm.WindowScale,
+                vm => vm.WindowWidth,
                 v => v.WidthSlider.Value).DisposeWith(d);
             this.BindCommand(ViewModel,
                 vm => vm.WindowWidthChanged,

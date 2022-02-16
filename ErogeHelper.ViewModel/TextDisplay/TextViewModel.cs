@@ -41,12 +41,10 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         _mecabService = mecabService ?? DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
-        var mainGameViewModel = DependencyResolver.GetService<MainGameViewModel>();
-
         // The "Zen" of ctor. if ViewModel is getting too big, split it up.
 
-        WindowScale = _ehConfigRepository.TextWindowWidthScale;
         _fontSize = _ehConfigRepository.FontSize;
+        WindowWidth = _ehConfigRepository.TextWindowWidth;
         WindowOpacity = _ehConfigRepository.TextWindowOpacity;
         EnableBlurBackground = _ehConfigRepository.TextWindowBlur;
         _furiganaItemViewModel = new ObservableCollection<FuriganaItemViewModel>();
@@ -59,13 +57,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         {
             _appendTextViewModel.Add(new() { Text = Strings.TextWindow_SetHookTip, FontSize = _fontSize });
         }
-
-        WindowWidth = CaculateWindowWindth(mainGameViewModel.Width, _ehConfigRepository.TextWindowWidthScale);
-        mainGameViewModel.WhenAnyValue(x => x.Width)
-            .Subscribe(width => WindowWidth = CaculateWindowWindth(width, _ehConfigRepository.TextWindowWidthScale))
-            .DisposeWith(_disposables);
-        this.WhenAnyValue(x => x.WindowScale)
-            .Subscribe(scale => WindowWidth = CaculateWindowWindth(mainGameViewModel.Width, scale));
 
         gameWindowHooker.WhenViewOperated
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -86,7 +77,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         {
             HwndTools.WindowBlur(TextWindowHandle, _ehConfigRepository.TextWindowBlur);
             HwndTools.WindowLostFocus(TextWindowHandle, gameInfoRepository.GameInfo.IsLoseFocus);
-            MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi);
+            MoveToGameCenter(gameWindowHooker, WindowWidth, State.Dpi, true);
         }).DisposeWith(_disposables);
 
         gameWindowHooker.GamePosChanged
@@ -96,7 +87,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 Top += pos.VerticalChange / State.Dpi;
             }).DisposeWith(_disposables);
 
-        // TODO: Relocate position when enter or exit full-screen 应该好弄
+        // TODO: Relocate position when enter or exit full-screen
         gameDataService.GameFullscreenChanged
             .Where(isFullscreen => isFullscreen)
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -106,7 +97,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 User32.BringWindowToTop(TextWindowHandle);
             }).DisposeWith(_disposables);
         State.DpiChanged
-            .Subscribe(x => MoveToGameCenter(gameWindowHooker, WindowWidth, x))
+            .Subscribe(dpi => MoveToGameCenter(gameWindowHooker, WindowWidth, dpi, true))
             .DisposeWith(_disposables);
 
 
@@ -164,10 +155,10 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(UpdateOrAddFuriganaItems).DisposeWith(_disposables);
 
-        WindowWidthChanged = ReactiveCommand.Create<Unit, double>(_ => WindowScale);
+        WindowWidthChanged = ReactiveCommand.Create<Unit, double>(_ => WindowWidth);
         WindowWidthChanged
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
-            .Subscribe(v => _ehConfigRepository.TextWindowWidthScale = v)
+            .Subscribe(v => _ehConfigRepository.TextWindowWidth = v)
             .DisposeWith(_disposables);
         WindowOpacityChanged = ReactiveCommand.Create<Unit, double>(_ => WindowOpacity);
         WindowOpacityChanged
@@ -222,9 +213,6 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     #region Command Panel
 
-    [Reactive]
-    public double WindowScale { get; set; }
-
     public ReactiveCommand<Unit, double> WindowWidthChanged { get; }
 
     public ReactiveCommand<Unit, double> WindowOpacityChanged { get; }
@@ -262,14 +250,17 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     private string _currentText = string.Empty;
 
-    private static double CaculateWindowWindth(double gameWidth, double userScale) => gameWidth * userScale;
-
     // Note: Sometimes it can't be positioned correctly at second screen, need to try several times
-    private void MoveToGameCenter(IGameWindowHooker gameWindowHooker, double windowWidth, double dpi, double offset = 0)
+    private void MoveToGameCenter(
+        IGameWindowHooker gameWindowHooker, 
+        double windowWidth, 
+        double dpi, bool moveTop = false, double topOffset = 0)
     {
         var gamePos = gameWindowHooker.InvokeUpdatePosition();
         Left = (gamePos.Left + (gamePos.Width - windowWidth * dpi) / 2) / dpi;
-        Top = (gamePos.Top + gamePos.Height / 2) / dpi + offset;
+        Top = (moveTop ? gamePos.Top 
+                       : (gamePos.Top + gamePos.Height / 2)) / dpi
+            + topOffset;
     }
 
     private List<FuriganaItemViewModel> GenerateFuriganaViewModels(string text) =>
