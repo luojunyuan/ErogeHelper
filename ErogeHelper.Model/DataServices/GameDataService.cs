@@ -15,13 +15,11 @@ public class GameDataService : IGameDataService, IEnableLogger
     public string GamePath { get; private set; } = string.Empty;
 
     private IDisposable? _fullscreenDisposable;
-    public void InitFullscreenChanged(IConnectableObservable<bool> observable)
-    {
-        GameFullscreenChanged = observable;
-        _fullscreenDisposable = GameFullscreenChanged.Connect();
-    }
+    public void InitFullscreenChanged(IObservable<bool> observable) => 
+        _fullscreenDisposable = observable.Subscribe(x => _fullscreenSubject.OnNext(x));
 
-    public IConnectableObservable<bool> GameFullscreenChanged { get; private set; } = null!;
+    private readonly ReplaySubject<bool> _fullscreenSubject = new(1);
+    public IObservable<bool> GameFullscreenChanged => _fullscreenSubject;
 
     public void InitGameProcesses(string gamePath) =>
         (MainProcess, GameProcesses) = ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
@@ -64,6 +62,10 @@ public class GameDataService : IGameDataService, IEnableLogger
         return (mainProcess, procList);
     }
 
-    public void Dispose() => _fullscreenDisposable?.Dispose();
+    public void Dispose()
+    {
+        _fullscreenDisposable?.Dispose();
+        _fullscreenSubject.Dispose();
+    }
 }
 

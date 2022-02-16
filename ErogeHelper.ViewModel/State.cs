@@ -1,28 +1,30 @@
 ﻿using System.Reactive.Subjects;
+using Vanara.PInvoke;
 
-namespace ErogeHelper.ViewModel
+namespace ErogeHelper.ViewModel;
+
+/// <summary>
+/// Static global store, A kind of ambient context, for convenience
+/// </summary>
+public static class State
 {
     /// <summary>
-    /// Static global store, A kind of ambient context, for convenience
+    /// Indicates the screen DPI where game window is located
     /// </summary>
-    public static class State
+    public static double Dpi { get; private set; }
+
+    /// <summary>
+    /// Occurs when the dpi of game's screen changed
+    /// </summary>
+    public static IObservable<double> DpiChanged => _dpiSubj;
+
+    private static readonly Subject<double> _dpiSubj = new();
+
+    public static void UpdateDpi(double newDpi)
     {
-        /// <summary>
-        /// Indicates the screen DPI where game window is located
-        /// </summary>
-        public static double Dpi { get; private set; }
-
-        /// <summary>
-        /// Occurs when the dpi of game's screen changed
-        /// </summary>
-        public static IObservable<double> DpiChanged => _dpiSubj;
-
-        private static readonly Subject<double> _dpiSubj = new();
-
-        public static void UpdateDpi(double newDpi)
-        {
-            Dpi = newDpi;
-            _dpiSubj.OnNext(newDpi);
-        }
+        Dpi = newDpi;
+        _dpiSubj.OnNext(newDpi);
     }
+
+    public static HWND VirtualKeyboardWindowHandle { get; set; } = IntPtr.Zero;
 }

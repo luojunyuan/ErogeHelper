@@ -29,7 +29,13 @@ internal static class BrightnessAdjust
         }
     }
 
-    public static void WarmUp() => GetBrightness();
+    public static void WarmUp()
+    {
+        if (IsSupported)
+        {
+            StartupBrightness(GetBrightness());
+        }
+    }
 
     /// <summary>
     /// Returns the current brightness setting

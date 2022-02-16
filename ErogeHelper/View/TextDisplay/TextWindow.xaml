@@ -21,115 +21,117 @@
         <WindowChrome CaptionHeight="0" GlassFrameThickness="-1" />
     </WindowChrome.WindowChrome>
 
-    <Border BorderBrush="Red" BorderThickness="0">
+    <Grid Margin="0 4 0 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="64" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="64" />
+        </Grid.ColumnDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" VerticalAlignment="Top">
 
-            <ui:SimpleStackPanel x:Name="ControlCenter"
-                Grid.Column="0"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Spacing="1">
+            <StackPanel.Background>
+                <SolidColorBrush Opacity="{StaticResource MinimalOpacity}" Color="Black" />
+            </StackPanel.Background>
 
-                <ui:SimpleStackPanel.Background>
-                    <SolidColorBrush Opacity="0.002" Color="Black" />
-                </ui:SimpleStackPanel.Background>
+            <Rectangle x:Name="DragBar"
+                Width="60" Height="60"
+                Margin="4 0 0 0"
+                Fill="{DynamicResource SystemAccentColorLight1Brush}"
+                PreviewMouseLeftButtonDown="DragBarOnLeftButtonDown"
+                PreviewMouseRightButtonUp="DragBarOnPreviewMouseRightButtonUp" RadiusX="13.75"
+                RadiusY="13.75" />
+        </StackPanel>
 
-                <Rectangle x:Name="DragBar"
-                    Width="38" Height="38"
-                    MinWidth="38" MinHeight="38" MaxHeight="60"
-                    HorizontalAlignment="Left"
-                    Fill="{DynamicResource SystemAccentColorLight1Brush}"
-                    PreviewMouseLeftButtonDown="DragBarOnLeftButtonDown"
-                    PreviewMouseRightButtonUp="DragBarOnPreviewMouseRightButtonUp" RadiusX="5"
-                    RadiusY="5" />
-                <Button d:Visibility="Visible" x:Name="ControlButton" Visibility="Collapsed">
-                    <ui:SymbolIcon Symbol="More" />
-                    <ui:FlyoutService.Flyout>
-                        <ui:Flyout x:Name="ControlCenterFlyout" Placement="TopEdgeAlignedLeft">
-                            <ui:SimpleStackPanel Margin="12 0" Spacing="10">
-                                <Label Content="Window width" />
-                                <Slider
-                                    Name="WidthSlider"
-                                    Width="145"
-                                    HorizontalAlignment="Left"
-                                    IsMoveToPointEnabled="True" Maximum="1800" Minimum="350" />
-                                <ui:CommandBarPanel>
-                                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
-                                        <Button x:Name="PronounceButton" IsEnabled="False">
-                                            <ui:SymbolIcon Symbol="Volume" />
-                                        </Button>
-                                        <Button x:Name="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">
-                                            <ui:SymbolIcon Symbol="FontDecrease" />
-                                        </Button>
-                                        <Button x:Name="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}">
-                                            <ui:SymbolIcon Symbol="FontIncrease" />
-                                        </Button>
-                                    </ui:SimpleStackPanel>
-                                    <ui:ToggleSwitch x:Name="BlurSwitch"
-                                        Margin="0 10 0 0"
-                                        Header="Bulr background" IsEnabled="False" />
-                                    <ui:AppBarButton Icon="Preview" Label="Opacity">
-                                        <ui:FlyoutService.Flyout>
-                                            <ui:Flyout Placement="Top">
-                                                <Slider x:Name="OpacitySlider"
-                                                    Width="100"
-                                                    IsMoveToPointEnabled="True" Maximum="0.8" Minimum="0" />
-                                            </ui:Flyout>
-                                        </ui:FlyoutService.Flyout>
-                                    </ui:AppBarButton>
-                                    <ui:AppBarButton Icon="Up" IsEnabled="False" Label="Last Sentence" />
-                                    <ui:AppBarButton IsEnabled="False" Label="Color">
-                                        <ui:AppBarButton.Icon>
-                                            <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Color}" />
-                                        </ui:AppBarButton.Icon>
-                                    </ui:AppBarButton>
-                                </ui:CommandBarPanel>
-                            </ui:SimpleStackPanel>
-                        </ui:Flyout>
-                    </ui:FlyoutService.Flyout>
-                </Button>
-            </ui:SimpleStackPanel>
+        <StackPanel Grid.Column="1">
+            <StackPanel.Background>
+                <SolidColorBrush x:Name="BackgroundOpacity" Opacity="0" Color="Black" />
+            </StackPanel.Background>
 
-            <StackPanel Grid.Column="1">
-                <StackPanel.Background>
-                    <SolidColorBrush x:Name="BackgroundOpacity" Opacity="0" Color="Black" />
-                </StackPanel.Background>
+            <ItemsControl x:Name="TextItemsControl">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <rxui:ViewModelViewHost ViewModel="{Binding}" Duration="0" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <component:AlignableWrapPanel HorizontalContentAlignment="Left" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
 
-                <ItemsControl x:Name="TextItemsControl">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <rxui:ViewModelViewHost ViewModel="{Binding}" Duration="0" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <component:AlignableWrapPanel HorizontalContentAlignment="Left" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+            <ItemsControl x:Name="AppendTextsControl">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:AppendTextItemViewModel}">
+                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                            <component:OutlinedTextBlock
+                                Margin="0 0 0 -5"
+                                ClipToBounds="False"
+                                FontSize="{Binding FontSize}"
+                                Text="{Binding Text}"
+                                TextWrapping="Wrap"
+                                ToolTip="{Binding ExtraInfo}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                <ItemsControl x:Name="AppendTextsControl">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:AppendTextItemViewModel}">
-                            <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
-                                <component:OutlinedTextBlock
-                                    Margin="0 0 0 -5"
-                                    ClipToBounds="False"
-                                    FontSize="{Binding FontSize}"
-                                    Text="{Binding Text}"
-                                    TextWrapping="Wrap"
-                                    ToolTip="{Binding ExtraInfo}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
+        </StackPanel>
 
-                <component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
-            </StackPanel>
-        </Grid>
-    </Border>
+        <StackPanel Grid.Column="2" VerticalAlignment="Top">
+
+            <StackPanel.Background>
+                <SolidColorBrush Opacity="{StaticResource MinimalOpacity}" Color="Black" />
+            </StackPanel.Background>
+
+            <Button x:Name="ControlButton" Width="60" Height="60">
+                <ui:SymbolIcon Symbol="More" />
+                <ui:FlyoutService.Flyout>
+                    <ui:Flyout x:Name="ControlCenterFlyout" Placement="TopEdgeAlignedRight">
+                        <ui:SimpleStackPanel Margin="12 0" Spacing="10">
+                            <Label Content="Window width" />
+                            <Slider
+                                Name="WidthSlider"
+                                Width="145"
+                                HorizontalAlignment="Left"
+                                IsMoveToPointEnabled="True" Maximum="1450" Minimum="350" />
+                            <ui:CommandBarPanel>
+                                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button x:Name="PronounceButton" IsEnabled="False">
+                                        <ui:SymbolIcon Symbol="Volume" />
+                                    </Button>
+                                    <Button x:Name="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">
+                                        <ui:SymbolIcon Symbol="FontDecrease" />
+                                    </Button>
+                                    <Button x:Name="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}">
+                                        <ui:SymbolIcon Symbol="FontIncrease" />
+                                    </Button>
+                                </ui:SimpleStackPanel>
+                                <ui:ToggleSwitch x:Name="BlurSwitch"
+                                    Margin="0 10 0 0"
+                                    Header="Bulr background" IsEnabled="False" />
+                                <ui:AppBarButton Icon="Preview" Label="Opacity">
+                                    <ui:FlyoutService.Flyout>
+                                        <ui:Flyout Placement="Top">
+                                            <Slider x:Name="OpacitySlider"
+                                                Width="100"
+                                                IsMoveToPointEnabled="True" Maximum="0.8" Minimum="0" />
+                                        </ui:Flyout>
+                                    </ui:FlyoutService.Flyout>
+                                </ui:AppBarButton>
+                                <ui:AppBarButton Icon="Up" IsEnabled="False" Label="Last Sentence" />
+                                <ui:AppBarButton IsEnabled="False" Label="Color">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Color}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
+                            </ui:CommandBarPanel>
+                        </ui:SimpleStackPanel>
+                    </ui:Flyout>
+                </ui:FlyoutService.Flyout>
+            </Button>
+        </StackPanel>
+    </Grid>
 </rxui:ReactiveWindow>

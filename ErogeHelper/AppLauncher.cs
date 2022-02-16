@@ -171,7 +171,7 @@ public static class AppLauncher
                 .Merge(gameResolutionChanged)
                 .Merge(dpiChanged)
                 .Select(_ => WpfHelper.IsGameForegroundFullscreen(gameDataService.GameRealWindowHandle))
-                .DistinctUntilChanged().Publish());
+                .DistinctUntilChanged());
 
         gameWindowHooker.WhenViewOperated
             .Where(op => op == ViewOperation.TerminateApp)

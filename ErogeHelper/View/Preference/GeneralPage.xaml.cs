@@ -49,6 +49,7 @@ public partial class GeneralPage
             .FirstOrDefault();
         if (textWindow != null)
         {
+            TextViewModel.TextWindowHandle = IntPtr.Zero;
             textWindow.Close();
         }
         else

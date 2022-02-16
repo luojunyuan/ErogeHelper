@@ -10,8 +10,8 @@ public interface IGameDataService : IDisposable
     string Md5 { get; }
     string GamePath { get; }
 
-    void InitFullscreenChanged(IConnectableObservable<bool> observable);
-    IConnectableObservable<bool> GameFullscreenChanged { get; }
+    void InitFullscreenChanged(IObservable<bool> observable);
+    IObservable<bool> GameFullscreenChanged { get; }
 
     /// <summary>
     /// Initialize game process by searching it

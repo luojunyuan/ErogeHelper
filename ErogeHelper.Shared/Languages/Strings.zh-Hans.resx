@@ -686,7 +686,7 @@
     <value>正在等待文本。。。</value>
   </data>
   <data name="TextWindow.DragAreaTip" xml:space="preserve">
-    <value>👈左侧方块可以拖动、长按或右键</value>
+    <value>👈左侧方块可以拖动</value>
   </data>
   <data name="TextWindow.SetHookTip" xml:space="preserve">
     <value>重要：似乎尚未设置Hook，请先设置钩子</value>

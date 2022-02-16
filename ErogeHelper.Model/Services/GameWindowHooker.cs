@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
@@ -23,6 +24,7 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
     private const uint EventObjectDestroy = 0x8001;
     private const uint EventObjectShow = 0x8002;
     private const uint EventObjectHide = 0x8003;
+    private const uint EventObjectFocus = 0x8005;
     private const uint EventObjectLocationChange = 0x800B;
     private GCHandle _gcSafetyHandle;
     // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
@@ -38,6 +40,9 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
 
     private readonly Subject<ViewOperation> _ViewOperationSubj = new();
     public IObservable<ViewOperation> WhenViewOperated => _ViewOperationSubj;
+
+    private readonly Subject<Unit> _keyboardWindowSubj = new();
+    public IObservable<Unit> BringKeyboardWindowToTop => _keyboardWindowSubj;
 
     private IGameDataService? _gameDataService;
     public void SetupGameWindowHook(Process process, IGameDataService? gameDataService, IScheduler mainScheduler)
@@ -194,6 +199,9 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
                         UpdateLocation();
                     }
                 }
+                break;
+            case EventObjectFocus:
+                _keyboardWindowSubj.OnNext(Unit.Default);
                 break;
         }
     }

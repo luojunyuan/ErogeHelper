@@ -8,6 +8,7 @@ using ErogeHelper.Platform;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.TextDisplay;
+using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
@@ -30,12 +31,14 @@ public partial class TextWindow : IEnableLogger
             .InvokeCommand(this, x => x.ViewModel!.Loaded)
             .DisposeWith(disposables);
 
-        MouseEnter += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        MouseLeave += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Hidden);
-        ControlCenterFlyout.Opened += (_, _) => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        MouseEnter += (_, _) => DragBar.Visibility = ControlButton.Visibility = Visibility.Visible;
+        MouseLeave += (_, _) => DragBar.Visibility = ControlButton.Visibility = Visibility.Hidden;
+        ControlCenterFlyout.Opened += (_, _) => DragBar.Visibility = ControlButton.Visibility = Visibility.Visible;
         ControlCenterFlyout.Events().Closed
+            .Do(_ => ControlCenterFlyout.SetCurrentValue(
+                FlyoutBase.PlacementProperty, FlyoutPlacementMode.TopEdgeAlignedRight))
             .Where(_ => !IsMouseOver)
-            .Subscribe(_ => DragBar.SetCurrentValue(VisibilityProperty, Visibility.Hidden))
+            .Subscribe(_ => DragBar.Visibility = ControlButton.Visibility = Visibility.Hidden)
             .DisposeWith(disposables);
         // TODO: Refactor? (After test on win7
         BlurSwitch.Toggled += (_, args) =>
@@ -133,5 +136,8 @@ public partial class TextWindow : IEnableLogger
     private void DragBarOnLeftButtonDown(object sender, RoutedEventArgs args) => DragMove();
 
     private void DragBarOnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        => ControlCenterFlyout.ShowAt(sender as FrameworkElement);
+    {
+        ControlCenterFlyout.SetCurrentValue(FlyoutBase.PlacementProperty, FlyoutPlacementMode.TopEdgeAlignedLeft);
+        ControlCenterFlyout.ShowAt(sender as FrameworkElement);
+    }
 }

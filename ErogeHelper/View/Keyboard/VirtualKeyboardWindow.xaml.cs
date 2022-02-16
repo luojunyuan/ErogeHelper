@@ -14,7 +14,7 @@ public partial class VirtualKeyboardWindow
     public VirtualKeyboardWindow()
     {
         InitializeComponent();
-        var handle = WpfHelper.GetWpfWindowHandle(this);
+        var handle = State.VirtualKeyboardWindowHandle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         HwndTools.WindowLostFocus(handle, true);
 
@@ -33,7 +33,11 @@ public partial class VirtualKeyboardWindow
         mainWindow.WhenAnyValue(x => x.Height)
             .BindTo(this, x => x.Height)
             .DisposeWith(disposable);
-        Closed += (_, _) => disposable.Dispose();
+        Closed += (_, _) =>
+        {
+            State.VirtualKeyboardWindowHandle = IntPtr.Zero;
+            disposable.Dispose();
+        };
     }
 
     private void PanelControlButtonOnClick(object sender, RoutedEventArgs e)

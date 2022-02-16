@@ -34,6 +34,7 @@ using ReactiveUI;
 using Refit;
 using Splat;
 using UpdateChecker;
+using Vanara.PInvoke;
 using Vanara.PInvoke.NetListMgr;
 using WK.Libraries.SharpClipboardNS;
 using MessageBox = ModernWpf.MessageBox;
@@ -74,7 +75,8 @@ internal static class DI
         // Service
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.Register(() => new ScenarioContext());
-        Locator.CurrentMutable.RegisterLazySingleton<IGameWindowHooker>(() => new GameWindowHooker());
+        var gameWindowHookerService = new GameWindowHooker();
+        Locator.CurrentMutable.RegisterConstant<IGameWindowHooker>(gameWindowHookerService);
         Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
         var sharpClipboard = new SharpClipboard();
         Locator.CurrentMutable.RegisterConstant(sharpClipboard);
@@ -110,6 +112,10 @@ internal static class DI
         // ViewModel->View callback 
         HookViewModel.EnableClipboardCallback = isUseClipboard => sharpClipboard.MonitorClipboard = isUseClipboard;
         HwndTools.IsGameFullscreenCallback = WpfHelper.IsGameForegroundFullscreen;
+
+        // Model->ViewModel data flow
+        gameWindowHookerService.BringKeyboardWindowToTop
+            .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -288,9 +294,6 @@ internal static class DI
             // ignored
         }
 
-        if (BrightnessAdjust.IsSupported)
-        {
-            BrightnessAdjust.WarmUp();
-        }
+        BrightnessAdjust.WarmUp();
     }
 }
