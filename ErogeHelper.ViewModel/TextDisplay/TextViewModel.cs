@@ -11,6 +11,7 @@ using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Extensions;
 using ErogeHelper.Shared.Languages;
+using ErogeHelper.ViewModel.MainGame;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -40,10 +41,12 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         _mecabService = mecabService ?? DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
+        var mainGameViewModel = DependencyResolver.GetService<MainGameViewModel>();
+
         // The "Zen" of ctor. if ViewModel is getting too big, split it up.
 
+        WindowScale = _ehConfigRepository.TextWindowWidthScale;
         _fontSize = _ehConfigRepository.FontSize;
-        WindowWidth = _ehConfigRepository.TextWindowWidth;
         WindowOpacity = _ehConfigRepository.TextWindowOpacity;
         EnableBlurBackground = _ehConfigRepository.TextWindowBlur;
         _furiganaItemViewModel = new ObservableCollection<FuriganaItemViewModel>();
@@ -57,6 +60,12 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             _appendTextViewModel.Add(new() { Text = Strings.TextWindow_SetHookTip, FontSize = _fontSize });
         }
 
+        WindowWidth = CaculateWindowWindth(mainGameViewModel.Width, _ehConfigRepository.TextWindowWidthScale);
+        mainGameViewModel.WhenAnyValue(x => x.Width)
+            .Subscribe(width => WindowWidth = CaculateWindowWindth(width, _ehConfigRepository.TextWindowWidthScale))
+            .DisposeWith(_disposables);
+        this.WhenAnyValue(x => x.WindowScale)
+            .Subscribe(scale => WindowWidth = CaculateWindowWindth(mainGameViewModel.Width, scale));
 
         gameWindowHooker.WhenViewOperated
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -155,13 +164,12 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(UpdateOrAddFuriganaItems).DisposeWith(_disposables);
 
-
-        WindowWidthChanged = ReactiveCommand.Create<double, double>(width => WindowWidth = width);
+        WindowWidthChanged = ReactiveCommand.Create<Unit, double>(_ => WindowScale);
         WindowWidthChanged
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
-            .Subscribe(v => _ehConfigRepository.TextWindowWidth = v)
+            .Subscribe(v => _ehConfigRepository.TextWindowWidthScale = v)
             .DisposeWith(_disposables);
-        WindowOpacityChanged = ReactiveCommand.Create<double, double>(opacity => WindowOpacity = opacity);
+        WindowOpacityChanged = ReactiveCommand.Create<Unit, double>(_ => WindowOpacity);
         WindowOpacityChanged
             .Throttle(TimeSpan.FromMilliseconds(ConstantValue.UserConfigOperationDelayTime))
             .Subscribe(v => _ehConfigRepository.TextWindowOpacity = v)
@@ -214,9 +222,12 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     #region Command Panel
 
-    public ReactiveCommand<double, double> WindowWidthChanged { get; }
+    [Reactive]
+    public double WindowScale { get; set; }
 
-    public ReactiveCommand<double, double> WindowOpacityChanged { get; }
+    public ReactiveCommand<Unit, double> WindowWidthChanged { get; }
+
+    public ReactiveCommand<Unit, double> WindowOpacityChanged { get; }
 
     public ReactiveCommand<Unit, Unit> Pronounce { get; }
 
@@ -251,12 +262,14 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
     private string _currentText = string.Empty;
 
+    private static double CaculateWindowWindth(double gameWidth, double userScale) => gameWidth * userScale;
+
     // Note: Sometimes it can't be positioned correctly at second screen, need to try several times
-    private void MoveToGameCenter(IGameWindowHooker gameWindowHooker, double windowWidth, double dpi)
+    private void MoveToGameCenter(IGameWindowHooker gameWindowHooker, double windowWidth, double dpi, double offset = 0)
     {
         var gamePos = gameWindowHooker.InvokeUpdatePosition();
         Left = (gamePos.Left + (gamePos.Width - windowWidth * dpi) / 2) / dpi;
-        Top = (gamePos.Top + gamePos.Height / 2) / dpi;
+        Top = (gamePos.Top + gamePos.Height / 2) / dpi + offset;
     }
 
     private List<FuriganaItemViewModel> GenerateFuriganaViewModels(string text) =>

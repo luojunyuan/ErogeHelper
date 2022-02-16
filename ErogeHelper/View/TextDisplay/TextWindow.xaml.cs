@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ErogeHelper.Platform;
@@ -48,7 +49,7 @@ public partial class TextWindow : IEnableLogger
                 OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.02);
                 if (OpacitySlider.Value < OpacitySlider.Minimum)
                 {
-                    ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();
+                    ViewModel.WindowOpacityChanged.Execute(Unit.Default).Subscribe();
                 }
             }
             else
@@ -56,7 +57,7 @@ public partial class TextWindow : IEnableLogger
                 OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.0);
                 if (OpacitySlider.Value == 0.02)
                 {
-                    ViewModel.WindowOpacityChanged.Execute(OpacitySlider.Minimum).Subscribe();
+                    ViewModel.WindowOpacityChanged.Execute(Unit.Default).Subscribe();
                 }
             }
         };
@@ -86,22 +87,22 @@ public partial class TextWindow : IEnableLogger
                 v => v.Width).DisposeWith(d);
 
 
-            this.OneWayBind(ViewModel,
-                vm => vm.WindowWidth,
+            this.Bind(ViewModel,
+                vm => vm.WindowScale,
                 v => v.WidthSlider.Value).DisposeWith(d);
-            WidthSlider.Events().ValueChanged
-                .Select(arg => arg.NewValue)
-                .InvokeCommand(this, x => x.ViewModel!.WindowWidthChanged).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.WindowWidthChanged,
+                v => v.WidthSlider).DisposeWith(d);
 
-            this.OneWayBind(ViewModel,
+            this.Bind(ViewModel,
                 vm => vm.WindowOpacity,
                 v => v.OpacitySlider.Value).DisposeWith(d);
             this.OneWayBind(ViewModel,
                 vm => vm.WindowOpacity,
                 v => v.BackgroundOpacity.Opacity).DisposeWith(d);
-            OpacitySlider.Events().ValueChanged
-                .Select(arg => arg.NewValue)
-                .InvokeCommand(this, x => x.ViewModel!.WindowOpacityChanged).DisposeWith(d);
+            this.BindCommand(ViewModel,
+                vm => vm.WindowOpacityChanged,
+                v => v.OpacitySlider).DisposeWith(d);
 
             this.BindCommand(ViewModel,
                 vm => vm.Pronounce,

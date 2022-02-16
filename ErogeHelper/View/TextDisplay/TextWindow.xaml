@@ -45,7 +45,7 @@
 
         <StackPanel Grid.Column="1">
             <StackPanel.Background>
-                <SolidColorBrush x:Name="BackgroundOpacity" Opacity="0" Color="Black" />
+                <SolidColorBrush x:Name="BackgroundOpacity" Opacity="0.7" Color="Black" />
             </StackPanel.Background>
 
             <ItemsControl x:Name="TextItemsControl">
@@ -94,9 +94,10 @@
                             <Label Content="Window width" />
                             <Slider
                                 Name="WidthSlider"
-                                Width="145"
+                                Width="180"
                                 HorizontalAlignment="Left"
-                                IsMoveToPointEnabled="True" Maximum="1450" Minimum="350" />
+                                AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"
+                                IsMoveToPointEnabled="True" Maximum="2" Minimum="0.2" />
                             <ui:CommandBarPanel>
                                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
                                     <Button x:Name="PronounceButton" IsEnabled="False">

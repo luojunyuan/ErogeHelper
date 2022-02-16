@@ -14,10 +14,13 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     [Option(DefaultValue = false)]
     public bool TextWindowBlur { get; set; }
 
+    [Option(DefaultValue = 1.0)] // Between 0.2 - 2
+    public double TextWindowWidthScale { get; set; }
+
     [Option(DefaultValue = 800.0)]
     public double TextWindowWidth { get; set; }
 
-    [Option(DefaultValue = 0.4)]
+    [Option(DefaultValue = 0.7)]
     public double TextWindowOpacity { get; set; }
 
     [Option(DefaultValue = false)]

@@ -3,28 +3,33 @@ using System.Windows.Controls;
 
 namespace ErogeHelper.Platform.XamlTool.Components;
 
-// TODO: Clean up
 public class AlignableWrapPanel : Panel
 {
+    #region HorizontalContentAlignment
+    /// <summary>Identifies the <see cref="HorizontalContentAlignment"/> dependency property.</summary>
+    public static readonly DependencyProperty HorizontalContentAlignmentProperty = DependencyProperty.Register(
+        nameof(HorizontalContentAlignment),
+        typeof(HorizontalAlignment),
+        typeof(AlignableWrapPanel),
+        new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsArrange));
+
     public HorizontalAlignment HorizontalContentAlignment
     {
         get { return (HorizontalAlignment)GetValue(HorizontalContentAlignmentProperty); }
         set { SetValue(HorizontalContentAlignmentProperty, value); }
     }
-
-    public static readonly DependencyProperty HorizontalContentAlignmentProperty =
-        DependencyProperty.Register("HorizontalContentAlignment", typeof(HorizontalAlignment), typeof(AlignableWrapPanel), new FrameworkPropertyMetadata(HorizontalAlignment.Left, FrameworkPropertyMetadataOptions.AffectsArrange));
+    #endregion
 
     protected override Size MeasureOverride(Size constraint)
     {
         Size curLineSize = new Size();
         Size panelSize = new Size();
 
-        UIElementCollection children = base.InternalChildren;
+        UIElementCollection children = InternalChildren;
 
         for (int i = 0; i < children.Count; i++)
         {
-            UIElement child = children[i] as UIElement;
+            UIElement child = children[i];
 
             // Flow passes its own constraint to children
             child.Measure(constraint);
@@ -62,7 +67,7 @@ public class AlignableWrapPanel : Panel
         int firstInLine = 0;
         Size curLineSize = new Size();
         double accumulatedHeight = 0;
-        UIElementCollection children = this.InternalChildren;
+        UIElementCollection children = InternalChildren;
 
         for (int i = 0; i < children.Count; i++)
         {
@@ -99,13 +104,13 @@ public class AlignableWrapPanel : Panel
     private void ArrangeLine(double y, Size lineSize, double boundsWidth, int start, int end)
     {
         double x = 0;
-        if (this.HorizontalContentAlignment == HorizontalAlignment.Center)
+        if (HorizontalContentAlignment == HorizontalAlignment.Center)
         {
             x = (boundsWidth - lineSize.Width) / 2;
         }
-        else if (this.HorizontalContentAlignment == HorizontalAlignment.Right)
+        else if (HorizontalContentAlignment == HorizontalAlignment.Right)
         {
-            x = (boundsWidth - lineSize.Width);
+            x = boundsWidth - lineSize.Width;
         }
 
         UIElementCollection children = InternalChildren;
