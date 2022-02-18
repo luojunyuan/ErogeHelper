@@ -11,6 +11,7 @@
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.TextDisplay;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:TextViewModel}"
     Left="-32000" Top="-32000" Height="200"
     MinHeight="40"
     d:Height="100" d:Width="400" AllowsTransparency="True" Background="Transparent"

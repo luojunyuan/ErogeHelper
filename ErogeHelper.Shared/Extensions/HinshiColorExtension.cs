@@ -25,11 +25,12 @@ public static class HinshiColorExtension
         };
     }
 
+    /// <returns>Can only use LightGreen Green Pink three colors</returns>
     public static Color ToColor(this JapanesePartOfSpeech partOfSpeech)
     {
         return partOfSpeech switch
         {
-            JapanesePartOfSpeech.Noun or JapanesePartOfSpeech.Pronoun
+            JapanesePartOfSpeech.Noun or JapanesePartOfSpeech.Pronoun or JapanesePartOfSpeech.Kanji
                 => Color.LightGreen,
             JapanesePartOfSpeech.Verb or JapanesePartOfSpeech.AuxiliaryVerb or JapanesePartOfSpeech.Adverb
                 => Color.Green,

@@ -14,5 +14,6 @@ public enum JapanesePartOfSpeech
     Pronoun,
     Conjunction,
     Suffix,
-    Mark
+    Mark,
+    Kanji, // Specially for winrt term
 }

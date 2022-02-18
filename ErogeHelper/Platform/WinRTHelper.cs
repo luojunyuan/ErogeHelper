@@ -1,12 +1,14 @@
 ﻿using System.Windows;
+using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Structs;
+using WanaKanaNet;
 using Windows.Globalization;
 
 namespace ErogeHelper.Platform;
 
 internal static class WinRTHelper
 {
-    private static IEnumerable<string> Split(string str, int chunkSize) => 
+    private static IEnumerable<string> Split(string str, int chunkSize) =>
         Enumerable.Range(0, str.Length / chunkSize)
             .Select(i => str.Substring(i * chunkSize, chunkSize));
 
@@ -27,19 +29,18 @@ internal static class WinRTHelper
 
         for (var i = 0; i < count; i++)
         {
-            var isKanji = WanaKanaNet.WanaKana.IsKanji(phonemes[i].DisplayText);
-            if (!isKanji)
-            {
-                var stripedWord = WanaKanaNet.WanaKana.StripOkurigana(phonemes[i].DisplayText);
-                isKanji = WanaKanaNet.WanaKana.IsKanji(stripedWord);
-            }
+            var stripedWord = WanaKana.StripOkurigana(phonemes[i].DisplayText);
+            var isKanji = ContainKanji(stripedWord);
 
             yield return new MeCabWord()
             {
                 Word = phonemes[i].DisplayText,
                 Kana = phonemes[i].YomiText,
+                PartOfSpeech = isKanji ? JapanesePartOfSpeech.Kanji : JapanesePartOfSpeech.Undefined,
                 WordIsKanji = isKanji
             };
         }
     }
+
+    private static bool ContainKanji(string input) => input.Any(c => '一' <= c && c <= '龯');
 }

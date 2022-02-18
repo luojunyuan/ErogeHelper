@@ -48,11 +48,7 @@ public class MeCabWinRTService : IMeCabService
                     : mecabWord.Kana; // hiragana by default
             }
 
-            yield return new MeCabWord
-            {
-                Word = mecabWord.Word,
-                Kana = kana,
-            };
+            yield return mecabWord with { Kana = kana };
         }
     }
 

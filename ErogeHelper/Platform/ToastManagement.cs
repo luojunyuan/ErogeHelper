@@ -32,6 +32,7 @@ public static class ToastManagement
         cfg.DisplayOptions.TopMost = true;
     });
 
+    // TODO: Refactor to service register pattern
     public static void Register() =>
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
         {

@@ -42,7 +42,7 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
     public IObservable<ViewOperation> WhenViewOperated => _ViewOperationSubj;
 
     private readonly Subject<Unit> _keyboardWindowSubj = new();
-    public IObservable<Unit> BringKeyboardWindowToTop => _keyboardWindowSubj;
+    public IObservable<Unit> BringKeyboardWindowTopDataFlow => _keyboardWindowSubj;
 
     private IGameDataService? _gameDataService;
     public void SetupGameWindowHook(Process process, IGameDataService? gameDataService, IScheduler mainScheduler)

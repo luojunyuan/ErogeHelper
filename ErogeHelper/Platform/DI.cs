@@ -47,6 +47,9 @@ internal static class DI
     /// </summary>
     public static void RegisterServices()
     {
+#if !DEBUG
+        Locator.CurrentMutable.RegisterConstant<ILogger>(new NullLogger());
+#endif
         var ehConfigRepository =
             new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
         
@@ -113,7 +116,7 @@ internal static class DI
         HwndTools.IsGameFullscreenCallback = WpfHelper.IsGameForegroundFullscreen;
 
         // Model->ViewModel data flow
-        gameWindowHookerService.BringKeyboardWindowToTop
+        gameWindowHookerService.BringKeyboardWindowTopDataFlow
             .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
 
         // MISC
