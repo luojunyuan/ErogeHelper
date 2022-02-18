@@ -21,7 +21,6 @@ using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Splat;
 using WK.Libraries.SharpClipboardNS;
-using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper;
 
@@ -88,7 +87,7 @@ public static class AppLauncher
             {
                 textractorService.InjectProcesses(gameDataService);
             }
-        });
+        }).Subscribe(_ => { }, ex => throw ex);
     }
 
     private static void InitializeGameData(

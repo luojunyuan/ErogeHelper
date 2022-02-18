@@ -49,9 +49,9 @@ internal static class WpfHelper
         var fullScreenGameRect = new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
         foreach (var screen in WpfScreenHelper.Screen.AllScreens)
         {
-            fullScreenGameRect.X = screen.PixelBounds.Left;
-            fullScreenGameRect.Y = screen.PixelBounds.Top;
-            if (fullScreenGameRect.Contains(screen.PixelBounds))
+            fullScreenGameRect.X = screen.Bounds.Left;
+            fullScreenGameRect.Y = screen.Bounds.Top;
+            if (fullScreenGameRect.Contains(screen.Bounds))
                 return true;
         }
         return false;

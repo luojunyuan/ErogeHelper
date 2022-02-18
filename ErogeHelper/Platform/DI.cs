@@ -37,7 +37,6 @@ using UpdateChecker;
 using Vanara.PInvoke;
 using Vanara.PInvoke.NetListMgr;
 using WK.Libraries.SharpClipboardNS;
-using MessageBox = ModernWpf.MessageBox;
 
 namespace ErogeHelper.Platform;
 

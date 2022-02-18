@@ -41,7 +41,7 @@ public class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
         _mecabService = mecabService ?? DependencyResolver.GetService<IMeCabService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
 
-        // The "Zen" of ctor. if ViewModel is getting too big, split it up.
+        // TODO: The "Zen" of ctor. if ViewModel is getting too big, split it up.
 
         _fontSize = _ehConfigRepository.FontSize;
         WindowWidth = _ehConfigRepository.TextWindowWidth;
