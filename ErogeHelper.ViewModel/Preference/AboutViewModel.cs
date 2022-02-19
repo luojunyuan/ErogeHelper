@@ -77,7 +77,7 @@ public class AboutViewModel : ReactiveObject, IRoutableViewModel, IActivatableVi
             .Where(downloadFinished => downloadFinished)
             .Subscribe(_ =>
             {
-                // UNDONE: May memory leak
+                // UNDONE: May have memory leak
                 AppExit.Handle(Unit.Default).Subscribe();
 
                 if (Utils.IsFileInUse(

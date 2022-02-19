@@ -44,8 +44,14 @@ public static class ConstantValue
 
     public const string MeCabUniDicMD5 = "92C3E76ABBB89274EE95A9B8698E691E";
 
-    // HCode 0或1个/ H 1个以上任意字符 @ 1个以上十六进制 (: 1个以上任意字符)
-    // RCode 0或1个/ RS@ 1个以上十六进制
+    //                  HCode
+    // /?H              match the beginning of hcode
+    // \S+
+    // @[A-Fa-f0-9]+    one or more hex number
+    // (:\S+)?          empty or ':' with game file, module name
+    // |                then RCode
+    // /?RS             the beginning of read code and string encode (unicode)
+    // @[A-Fa-f0-9]+    one or more hex number
     public const string CodeRegExp = @"/?H\S+@[A-Fa-f0-9]+(:\S+)?|/?RS@[A-Fa-f0-9]+";
 
     public const string AniclanBaseUrl = "http://vnr.aniclan.com";

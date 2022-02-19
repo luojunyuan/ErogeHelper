@@ -60,11 +60,12 @@ public partial class App : IEnableLogger
                 }
 
                 DisablePointerMessage.Apply();
-                ToastManagement.Register();
-                ToastManagement.IfAdminThenToast();
                 DI.UpdateDatabase();
                 DI.RegisterServices();
                 DI.WarmingUp();
+
+                ToastManagement = DependencyResolver.GetService<IToastManagement>();
+                ToastManagement.InAdminModeToastTip();
 
                 AppLauncher.StartFromCommandLine(gameFullPath, args.Any(arg => arg is "/le" or "-le"));
             };
@@ -168,6 +169,8 @@ public partial class App : IEnableLogger
         };
     }
 
+    private static IToastManagement? ToastManagement;
+
     private static void SingleInstanceWatcher()
     {
         var eventWaitHandle =
@@ -191,7 +194,7 @@ public partial class App : IEnableLogger
                 return Disposable.Empty;
             })
             .SubscribeOn(RxApp.TaskpoolScheduler)
-            .Subscribe(_ => ToastManagement
+            .Subscribe(_ => ToastManagement?
                 .ShowAsync("ErogeHelper is running!", toastLifetimeTimer)
                 .ConfigureAwait(false)
             );

@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
@@ -174,7 +175,8 @@ public partial class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Do(_ => appendTextViewModel.Clear())
             .ObserveOn(RxApp.TaskpoolScheduler)
-            // TODO: Regexp clean
+            .Select(text => 
+                Regex.Replace(text, _gameInfoRepository.GameInfo.RegExp, string.Empty, RegexOptions.Compiled))
             .Publish();
 
         sharedData.Connect().DisposeWith(_disposables);

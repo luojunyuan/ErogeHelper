@@ -51,6 +51,8 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
     private double _oneThirdDistance;
     private double _twoThirdDistance;
 
+    private bool _isMoving = false;
+
     public Action<double>? UpdateMenuStatusDelegate;
 
     public AssistiveTouch()
@@ -78,12 +80,11 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
             #region Opacity Adjust
             var mainGameWindow = (MainGameWindow)Application.Current.MainWindow;
             Point lastPos;
-            var isMoving = false;
             BehaviorSubject<bool> tryTransparentizeSubj = new(true);
             tryTransparentizeSubj
                 .Throttle(TimeSpan.FromMilliseconds(OpacityChangeDuration))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Where(on => on && isMoving == false && mainGameWindow.TouchMenu.IsOpen == false)
+                .Where(on => on && _isMoving == false && mainGameWindow.TouchMenu.IsOpen == false)
                 .Subscribe(_ => BeginAnimation(OpacityProperty, FadeOpacityAnimation));
 
             mainGameWindow.TouchMenu.Events().Closed
@@ -100,7 +101,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
             updateStatusWhenMouseDown.Subscribe(evt =>
             {
                 SetCurrentValue(OpacityProperty, OpacityFull);
-                isMoving = true;
+                _isMoving = true;
                 tryTransparentizeSubj.OnNext(true);
                 lastPos = evt.GetPosition(parent);
                 _oldPos = lastPos;
@@ -108,7 +109,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
 
             mouseMoveAndCheckEdge.Subscribe(evt =>
             {
-                if (!isMoving)
+                if (!_isMoving)
                     return;
 
                 var newPos = evt.GetPosition(parent);
@@ -130,7 +131,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
 
             mouseRelease.Subscribe(evt =>
             {
-                if (!isMoving)
+                if (!_isMoving)
                     return;
 
                 var pos = evt.GetPosition(parent);
@@ -203,7 +204,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
                 }
 
                 SmoothMoveAnimation(this, left, top);
-                isMoving = false;
+                _isMoving = false;
                 tryTransparentizeSubj.OnNext(true);
             });
 
@@ -321,7 +322,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
 
     private void AssistiveTouchOnClick(object sender, RoutedEventArgs e)
     {
-        if (_newPos == _oldPos)
+        if (_newPos == _oldPos && !_isMoving)
         {
             ClickEvent?.Invoke(sender, e);
         }

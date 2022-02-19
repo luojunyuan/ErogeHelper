@@ -293,8 +293,6 @@ public class HookViewModel : ReactiveObject, IDisposable
         // And RegExp
         gameInfoRepository.UpdateRegExp(regexp);
 
-        // TODO: Compile RegExp
-
         // Refresh current text in TextWindow
         MessageBus.Current.SendMessage<HookVMToTextVM>(new() { CurrentText = currentText });
 

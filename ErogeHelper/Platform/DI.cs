@@ -52,14 +52,34 @@ internal static class DI
 #endif
         var ehConfigRepository =
             new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
-        
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator(ehConfigRepository));
 
         RegisterViews();
         RegisterViewModelsForViews();
         RegisterInteractions();
 
-        // DataService
+        // DataService (Include repositories)
+        RegisterDataServices(ehConfigRepository);
+
+        // Service (Model layer, various tools and functions)
+        var (gameWindowHookerService, sharpClipboard) = RegisterModelServices(ehConfigRepository);
+
+        // MISC
+        // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
+        Locator.CurrentMutable.RegisterLazySingleton<ICreatesObservableForProperty>(() => new CustomPropertyResolver());
+
+
+        // ViewModel->View callback 
+        HookViewModel.EnableClipboardCallback = isUseClipboard => sharpClipboard.MonitorClipboard = isUseClipboard;
+        HwndTools.IsGameFullscreenCallback = WpfHelper.IsGameForegroundFullscreen;
+
+        // Model->ViewModel data flow
+        gameWindowHookerService.BringKeyboardWindowTopDataFlow
+            .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
+    }
+
+    private static void RegisterDataServices(IEHConfigRepository ehConfigRepository)
+    {
         Locator.CurrentMutable.RegisterConstant(ehConfigRepository);
         Locator.CurrentMutable.RegisterLazySingleton<IGameInfoRepository>(
             () => new GameInfoRepository(EHContext.DbConnectString));
@@ -73,8 +93,18 @@ internal static class DI
         // In memory state
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
         Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
+    }
 
-        // Service
+    private static (GameWindowHooker, SharpClipboard) RegisterModelServices(IEHConfigRepository ehConfigRepository)
+    {
+        if (Utils.HasWinRT)
+        {
+            Locator.CurrentMutable.RegisterLazySingleton<IToastManagement>(() => new ToastManagementWinRT());
+        }
+        else
+        {
+            Locator.CurrentMutable.RegisterLazySingleton<IToastManagement>(() => new ToastManagement());
+        }
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.Register(() => new ScenarioContext());
         var gameWindowHookerService = new GameWindowHooker();
@@ -90,7 +120,7 @@ internal static class DI
         if (Utils.HasWinRT && !Directory.Exists(EHContext.MeCabDicFolder))
         {
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
-            MeCabWinRTService.JapaneseAnalyzerCallback = WinRTHelper.JapaneseAnalyzer;
+            MeCabWinRTService.JapaneseAnalyzerCallback = JapaneseAnalyzerWinRT.JapaneseAnalyzer;
         }
         else
         {
@@ -102,6 +132,7 @@ internal static class DI
             }
             Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => mecabService ?? new MeCabService());
         }
+        // TODO: Can change it to compile macro
         if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
@@ -111,17 +142,7 @@ internal static class DI
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
         }
 
-        // ViewModel->View callback 
-        HookViewModel.EnableClipboardCallback = isUseClipboard => sharpClipboard.MonitorClipboard = isUseClipboard;
-        HwndTools.IsGameFullscreenCallback = WpfHelper.IsGameForegroundFullscreen;
-
-        // Model->ViewModel data flow
-        gameWindowHookerService.BringKeyboardWindowTopDataFlow
-            .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
-
-        // MISC
-        // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
-        Locator.CurrentMutable.RegisterLazySingleton<ICreatesObservableForProperty>(() => new CustomPropertyResolver());
+        return (gameWindowHookerService, sharpClipboard);
     }
 
     /// <summary>

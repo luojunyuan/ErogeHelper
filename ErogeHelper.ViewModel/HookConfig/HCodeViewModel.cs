@@ -45,7 +45,6 @@ public class HCodeViewModel : ReactiveValidationObject
 
     public ReactiveCommand<Unit, string> SearchCode { get; }
 
-    // TODO: Imporve hook code regexp check, may compile it?
     private bool CodeValidateRegExp(string? code)
     {
         if (string.IsNullOrWhiteSpace(code))
@@ -55,6 +54,6 @@ public class HCodeViewModel : ReactiveValidationObject
         if (code[^1] == ':')
             return false;
 
-        return Regex.IsMatch(code, ConstantValue.CodeRegExp);
+        return Regex.IsMatch(code, ConstantValue.CodeRegExp, RegexOptions.Compiled);
     }
 }

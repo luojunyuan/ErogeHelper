@@ -121,7 +121,7 @@ internal static class BrightnessAdjust
         }
         catch (Exception ex)
         {
-            LogHost.Default.Debug(ex.Message);
+            LogHost.Default.Debug("System.Management.ManagementException " + ex.Message);
         }
 
         return bLevels;
