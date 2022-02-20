@@ -5,12 +5,10 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-using System.Windows.Threading;
-using CommunityToolkit.WinUI.Notifications;
 using ErogeHelper.Platform;
+using ErogeHelper.Platform.MISC;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Exceptions;
 using ErogeHelper.Shared.Languages;
@@ -82,10 +80,10 @@ public partial class App : IEnableLogger
         }
     }
 
-    public static string EHVersion { get; } 
+    public static string EHVersion { get; }
         = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "9.9.9.9";
 
-    /// <param name="exitCode">-1 abnormal, 0 normal, 1 by another instance</param>
+    /// <param name="exitCode">-1 abnormal, 0 normal, 1 by another eh instance</param>
     public static void Terminate(int exitCode = 0)
     {
         if (Current is not null)
@@ -97,17 +95,9 @@ public partial class App : IEnableLogger
             Current.Shutdown(exitCode);
         }
 
-        if (exitCode != 1 && Utils.HasWinRT)
+        if (exitCode != 1)
         {
-            try
-            {
-                ToastNotificationManagerCompat.History.Clear();
-            }
-            catch (COMException ex)
-            {
-                // When run on early system like 1507 1511 for the first time would throw error #16
-                LogHost.Default.Debug(ex.Message);
-            }
+            ToastManagement?.ClearToast();
         }
 
         if (exitCode == -1)
@@ -121,7 +111,7 @@ public partial class App : IEnableLogger
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (Current is not null && 
+            if (Current is not null &&
                 Current.Dispatcher.Thread.ManagedThreadId == Environment.CurrentManagedThreadId)
             {
                 return;
@@ -140,7 +130,7 @@ public partial class App : IEnableLogger
             var ex = args.Exception;
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (Current is not null && 
+            if (Current is not null &&
                 Current.Windows.Cast<Window>()
                     .Any(window => window.Title.Equals("MainGameWindow", StringComparison.Ordinal)))
             {

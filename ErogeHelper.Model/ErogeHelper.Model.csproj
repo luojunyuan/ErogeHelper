@@ -17,6 +17,7 @@
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
     <PackageReference Include="Refit.Xml" Version="6.3.2" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="System.Speech" Version="6.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
     <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.3.15" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.3.15" />

@@ -10,7 +10,9 @@ using ErogeHelper.Model.Repositories.Migration;
 using ErogeHelper.Model.Services;
 using ErogeHelper.Model.Services.Function;
 using ErogeHelper.Model.Services.Interface;
+using ErogeHelper.Platform.MISC;
 using ErogeHelper.Platform.RxUI;
+using ErogeHelper.Platform.WinRTHelper;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;
@@ -50,6 +52,7 @@ internal static class DI
 #if !DEBUG
         Locator.CurrentMutable.RegisterConstant<ILogger>(new NullLogger());
 #endif
+
         var ehConfigRepository =
             new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator(ehConfigRepository));
@@ -58,11 +61,9 @@ internal static class DI
         RegisterViewModelsForViews();
         RegisterInteractions();
 
-        // DataService (Include repositories)
-        RegisterDataServices(ehConfigRepository);
-
-        // Service (Model layer, various tools and functions)
-        var (gameWindowHookerService, sharpClipboard) = RegisterModelServices(ehConfigRepository);
+        RegisterDataServices(ehConfigRepository); // DataService (Include repositories)
+        var (gameWindowHookerService, sharpClipboard) =
+            RegisterModelServices(ehConfigRepository);  // Service (Model layer, various tools and functions)
 
         // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
@@ -238,13 +239,13 @@ internal static class DI
 
     public static MessageBoxResult? ShowMessageBox(string messageBoxText, string caption = "Eroge Helper")
     {
-        var owner = Application.Current.Windows.Cast<Window>().FirstOrDefault((Window window) => 
+        var owner = Application.Current.Windows.Cast<Window>().FirstOrDefault((Window window) =>
             window.IsActive && window.ShowActivated);
 
         var messageBoxWindow = new MessageBoxWindow(messageBoxText, caption, MessageBoxButton.OK, null)
         {
             Owner = owner,
-            WindowStartupLocation = (owner == null) 
+            WindowStartupLocation = (owner == null)
                 ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
             Topmost = true
         };

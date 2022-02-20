@@ -1,10 +1,11 @@
 ﻿using System.Management;
 using Splat;
 
-namespace ErogeHelper.Platform;
+namespace ErogeHelper.Platform.MISC;
 
 internal static class BrightnessAdjust
 {
+    // ManagementScope can only use in `window` project
     private static readonly ManagementScope Scope = new("root\\WMI");
     private static readonly SelectQuery Query = new("WmiMonitorBrightness");
     private static readonly SelectQuery QueryMethods = new("WmiMonitorBrightnessMethods");
@@ -16,25 +17,19 @@ internal static class BrightnessAdjust
     public static void IncreaseBrightness()
     {
         if (IsSupported)
-        {
             StartupBrightness(GetBrightness() + 10);
-        }
     }
 
     public static void DecreaseBrightness()
     {
         if (IsSupported)
-        {
             StartupBrightness(GetBrightness() - 10);
-        }
     }
 
     public static void WarmUp()
     {
         if (IsSupported)
-        {
             StartupBrightness(GetBrightness());
-        }
     }
 
     /// <summary>
@@ -43,10 +38,10 @@ internal static class BrightnessAdjust
     private static int GetBrightness()
     {
         using ManagementObjectSearcher searcher = new(Scope, Query);
-        using ManagementObjectCollection objCollection = searcher.Get();
+        using var objCollection = searcher.Get();
 
         byte curBrightness = 0;
-        foreach (ManagementBaseObject obj in objCollection)
+        foreach (var obj in objCollection)
         {
             curBrightness = (byte)obj.GetPropertyValue("CurrentBrightness");
             break;
@@ -68,17 +63,17 @@ internal static class BrightnessAdjust
         };
 
         // iPercent is in the range of brightnessLevels
-        if (iPercent > BrightnessLevels[^1]) 
+        if (iPercent > BrightnessLevels[^1])
             return;
-        
+
         // Default level 100
         byte level = 100;
         foreach (var item in BrightnessLevels)
         {
             // Found most close one of iPercent in brightnessLevels
-            if (item < iPercent) 
+            if (item < iPercent)
                 continue;
-            
+
             level = item;
             break;
         }
@@ -90,8 +85,8 @@ internal static class BrightnessAdjust
     /// </summary>
     private static void SetBrightness(byte targetBrightness)
     {
-        using ManagementObjectSearcher searcher = new ManagementObjectSearcher(Scope, QueryMethods);
-        using ManagementObjectCollection objectCollection = searcher.Get();
+        using var searcher = new ManagementObjectSearcher(Scope, QueryMethods);
+        using var objectCollection = searcher.Get();
         foreach (var o in objectCollection)
         {
             var mObj = (ManagementObject)o;
@@ -107,10 +102,10 @@ internal static class BrightnessAdjust
         // Output current brightness
         using ManagementObjectSearcher mos = new(Scope, Query);
 
-        byte[] bLevels = Array.Empty<byte>();
+        var bLevels = Array.Empty<byte>();
         try
         {
-            using ManagementObjectCollection moc = mos.Get();
+            using var moc = mos.Get();
             foreach (var managementBaseObject in moc)
             {
                 var o = (ManagementObject)managementBaseObject;

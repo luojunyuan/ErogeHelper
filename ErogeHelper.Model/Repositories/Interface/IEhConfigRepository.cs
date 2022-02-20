@@ -30,7 +30,7 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     [Option(DefaultValue = 120)]
     public int MaxAcceptTextLength { get; set; }
 
-    [Option(DefaultValue = 28.0)]
+    [Option(DefaultValue = 36.0)] // the height match the white button size
     public double FontSize { get; set; }
 
     [Option(DefaultValue = false)]

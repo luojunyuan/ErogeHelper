@@ -175,7 +175,7 @@ public partial class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Do(_ => appendTextViewModel.Clear())
             .ObserveOn(RxApp.TaskpoolScheduler)
-            .Select(text => 
+            .Select(text => _gameInfoRepository.GameInfo.RegExp == string.Empty ? text :
                 Regex.Replace(text, _gameInfoRepository.GameInfo.RegExp, string.Empty, RegexOptions.Compiled))
             .Publish();
 

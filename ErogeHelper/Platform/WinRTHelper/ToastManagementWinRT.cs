@@ -1,66 +1,24 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Windows;
 using CommunityToolkit.WinUI.Notifications;
-using ErogeHelper.Shared.Enums;
-using ErogeHelper.Shared.Structs;
+using ErogeHelper.Platform.MISC;
 using Splat;
-using WanaKanaNet;
-using Windows.Globalization;
 
-namespace ErogeHelper.Platform;
+namespace ErogeHelper.Platform.WinRTHelper;
 
-internal static class JapaneseAnalyzerWinRT
-{
-    private static IEnumerable<string> Split(string str, int chunkSize) =>
-        Enumerable.Range(0, str.Length / chunkSize)
-            .Select(i => str.Substring(i * chunkSize, chunkSize));
-
-    /// <param name="sentence">The maximum length of the sentence is 100 characters</param>
-    public static IEnumerable<MeCabWord> JapaneseAnalyzer(string sentence)
-    {
-        // TODO: Fix Japanese words when length bigger than 100
-        if (sentence.Length > 100)
-        {
-            sentence = sentence[..100];
-        }
-        // Seems like must be called in main thread
-        var (phonemes, count) = Application.Current.Dispatcher.Invoke(() =>
-        {
-            var japanesePhonemes = JapanesePhoneticAnalyzer.GetWords(sentence);
-            return (japanesePhonemes, japanesePhonemes.Count);
-        });
-
-        for (var i = 0; i < count; i++)
-        {
-            var stripedWord = WanaKana.StripOkurigana(phonemes[i].DisplayText);
-            var isKanji = ContainKanji(stripedWord);
-
-            yield return new MeCabWord()
-            {
-                Word = phonemes[i].DisplayText,
-                Kana = phonemes[i].YomiText,
-                PartOfSpeech = isKanji ? JapanesePartOfSpeech.Kanji : JapanesePartOfSpeech.Undefined,
-                WordIsKanji = isKanji
-            };
-        }
-    }
-
-    private static bool ContainKanji(string input) => input.Any(c => '一' <= c && c <= '龯');
-}
-
-internal class ToastManagementWinRT : IToastManagement
+internal class ToastManagementWinRT : IToastManagement, IEnableLogger
 {
     public ToastManagementWinRT() =>
         ToastNotificationManagerCompat.OnActivated += toastArgs =>
         {
             if (toastArgs.Argument.Length == 0)
             {
-                LogHost.Default.Debug("Toast Clicked");
+                this.Log().Debug("Toast Clicked");
                 return;
             }
             var toastArguments = ToastArguments.Parse(toastArgs.Argument);
-            LogHost.Default.Debug(toastArguments.ToString());
+            this.Log().Debug(toastArguments.ToString());
         };
 
     public void Show(string mainText)
@@ -112,5 +70,18 @@ internal class ToastManagementWinRT : IToastManagement
             return;
 
         Show("ErogeHelper is running in Admin");
+    }
+
+    public void ClearToast()
+    {
+        try
+        {
+            ToastNotificationManagerCompat.History.Clear();
+        }
+        catch (COMException ex)
+        {
+            // When run on early system like 1507 1511 for the first time would throw error #16
+            this.Log().Debug(ex.Message);
+        }
     }
 }

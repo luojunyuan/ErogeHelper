@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
-using ErogeHelper.Platform;
+using ErogeHelper.Platform.MISC;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.ViewModel;
 using ReactiveUI;

@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 using ErogeHelper.ViewModel;
 
-namespace ErogeHelper.Platform;
+namespace ErogeHelper.Platform.MISC;
 
 public class DisablePointerMessage : Window
 {
     /// <summary>
-    /// WPF automatically upgraded the point message for some reason, 
+    /// WPF automatically upgraded to the point message for some reason, 
     /// Creating a new window in advance can prevent this behavior.
     /// </summary>
     public static void Apply()

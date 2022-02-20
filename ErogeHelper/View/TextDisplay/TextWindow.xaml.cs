@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using ErogeHelper.Platform;
+using ErogeHelper.Platform.MISC;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.TextDisplay;

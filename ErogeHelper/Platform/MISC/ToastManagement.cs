@@ -6,20 +6,9 @@ using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
-namespace ErogeHelper.Platform;
+namespace ErogeHelper.Platform.MISC;
 
-public interface IToastManagement
-{
-    const int ToastDurationTime = 5000;
-
-    void Show(string mainText);
-
-    Task ShowAsync(string mainText, Stopwatch toastLifetimeTimer);
-
-    void InAdminModeToastTip();
-}
-
-public class ToastManagement : IToastManagement
+internal class ToastManagement : IToastManagement
 {
     // Tip: CustomNotification
     // https://github.com/rafallopatka/ToastNotifications/blob/master-v2/Docs/CustomNotificatios.md
@@ -61,4 +50,6 @@ public class ToastManagement : IToastManagement
 
         Show("ErogeHelper is running in Admin");
     }
+
+    public void ClearToast() { }
 }

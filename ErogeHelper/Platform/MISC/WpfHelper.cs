@@ -4,7 +4,7 @@ using ErogeHelper.Shared.Contracts;
 using Microsoft.Win32;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.Platform;
+namespace ErogeHelper.Platform.MISC;
 
 internal static class WpfHelper
 {
