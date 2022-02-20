@@ -26,6 +26,10 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     [Option(DefaultValue = false)]
     public bool HideTextWindow { get; set; }
 
+    [Option(DefaultValue = false)]
+    public bool TextAlignmentCenter { get; set; }
+    
+
     // Text 関する
     [Option(DefaultValue = 120)]
     public int MaxAcceptTextLength { get; set; }

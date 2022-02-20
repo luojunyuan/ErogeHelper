@@ -44,6 +44,9 @@ public partial class TextViewModel
     [ObservableAsProperty]
     public bool ShowFunctionNotEnableTip { get; }
 
+    [Reactive]
+    public bool TextAlignmentCenter { get; private set; }
+
     public ReactiveCommand<Unit, double> WindowWidthChanged { get; }
 
     public ReactiveCommand<Unit, double> WindowOpacityChanged { get; }

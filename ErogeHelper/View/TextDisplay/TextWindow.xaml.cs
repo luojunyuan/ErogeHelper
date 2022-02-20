@@ -6,9 +6,11 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ErogeHelper.Platform.MISC;
+using ErogeHelper.Platform.XamlTool.Components;
 using ErogeHelper.Shared;
 using ErogeHelper.ViewModel;
 using ErogeHelper.ViewModel.TextDisplay;
+using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
@@ -87,6 +89,7 @@ public partial class TextWindow : IEnableLogger
                 v => v.Width).DisposeWith(d);
 
 
+
             this.Bind(ViewModel,
                 vm => vm.WindowWidth,
                 v => v.Panel.WidthSlider.Value).DisposeWith(d);
@@ -124,6 +127,25 @@ public partial class TextWindow : IEnableLogger
                 v => v.FunctionNotEnableTip.Visibility,
                 value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(d);
 
+            this.Bind(ViewModel,
+                vm => vm.TextAlignmentCenter,
+                v => v.Panel.CurrentTextAlignSymbol.Symbol,
+                center => center ? Symbol.AlignCenter : Symbol.AlignLeft,
+                symbol => symbol == Symbol.AlignCenter).DisposeWith(d);
+            this.WhenAnyValue(x => x.Panel.CurrentTextAlignSymbol.Symbol)
+                .Subscribe(symbol =>
+                {
+                    var align = symbol == Symbol.AlignLeft ? HorizontalAlignment.Left : HorizontalAlignment.Center;
+                    if (_textitemsPanel is not null)
+                    {
+                        _textitemsPanel.HorizontalContentAlignment = align;
+                    }
+                    if (_appendTextsPanel is not null)
+                    {
+                        _appendTextsPanel.HorizontalAlignment = align;
+                    }
+                }).DisposeWith(d);
+
 
             this.OneWayBind(ViewModel,
                 vm => vm.TextControlViewModel,
@@ -140,5 +162,21 @@ public partial class TextWindow : IEnableLogger
     {
         ControlCenterFlyout.SetCurrentValue(FlyoutBase.PlacementProperty, FlyoutPlacementMode.TopEdgeAlignedLeft);
         ControlCenterFlyout.ShowAt(sender as FrameworkElement);
+    }
+
+    private AlignableWrapPanel? _textitemsPanel;
+    private void TextItemsPanelOnLoaded(object sender, RoutedEventArgs e)
+    {
+        _textitemsPanel = sender as AlignableWrapPanel;
+        _textitemsPanel!.HorizontalContentAlignment = ViewModel!.TextAlignmentCenter ? 
+            HorizontalAlignment.Center : HorizontalAlignment.Left;
+    }
+
+    private StackPanel? _appendTextsPanel;
+    private void AppendTextsPanelOnLoaded(object sender, RoutedEventArgs e)
+    {
+        _appendTextsPanel = sender as StackPanel;
+        _appendTextsPanel!.HorizontalAlignment = ViewModel!.TextAlignmentCenter ?
+            HorizontalAlignment.Center : HorizontalAlignment.Left;
     }
 }

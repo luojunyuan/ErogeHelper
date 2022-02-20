@@ -220,6 +220,11 @@ public partial class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
                 _ehConfigRepository.TextWindowBlur = x;
             });
 
+        TextAlignmentCenter = _ehConfigRepository.TextAlignmentCenter;
+        this.WhenAnyValue(x => x.TextAlignmentCenter)
+            .Skip(1)
+            .Subscribe(x => _ehConfigRepository.TextAlignmentCenter = x);
+
         return (windowWidthChanged, windowOpacityChanged, pronounce, fontDecrease, fontIncrease);
     }
 

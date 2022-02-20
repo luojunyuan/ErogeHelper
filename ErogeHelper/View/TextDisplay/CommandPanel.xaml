@@ -20,6 +20,21 @@
         IsMoveToPointEnabled="True" Maximum="1450" Minimum="350" />
     <ui:CommandBarPanel>
         <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
+            <ui:ToggleSplitButton x:Name="TextAlignSplitButton" Click="ToggleSplitButtonOnClick" IsChecked="True">
+                <ui:SymbolIcon x:Name="CurrentTextAlignSymbol" Symbol="AlignLeft" />
+                <ui:ToggleSplitButton.Flyout>
+                    <ui:Flyout Placement="Bottom">
+                        <ui:SimpleStackPanel Orientation="Horizontal" Spacing="12">
+                            <Button Click="ButtonOnClick">
+                                <ui:SymbolIcon Symbol="AlignLeft" />
+                            </Button>
+                            <Button Click="ButtonOnClick">
+                                <ui:SymbolIcon Symbol="AlignCenter" />
+                            </Button>
+                        </ui:SimpleStackPanel>
+                    </ui:Flyout>
+                </ui:ToggleSplitButton.Flyout>
+            </ui:ToggleSplitButton>
             <Button x:Name="PronounceButton" IsEnabled="False">
                 <ui:SymbolIcon Symbol="Volume" />
             </Button>

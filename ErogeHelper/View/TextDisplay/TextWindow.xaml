@@ -57,7 +57,7 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <component:AlignableWrapPanel HorizontalContentAlignment="Left" />
+                        <component:AlignableWrapPanel Loaded="TextItemsPanelOnLoaded" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
@@ -65,17 +65,20 @@
             <ItemsControl x:Name="AppendTextsControl">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type vm:AppendTextItemViewModel}">
-                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
-                            <component:OutlinedTextBlock
-                                Margin="0 0 0 -5"
-                                ClipToBounds="False"
-                                FontSize="{Binding FontSize}"
-                                Text="{Binding Text}"
-                                TextWrapping="Wrap"
-                                ToolTip="{Binding ExtraInfo}" />
-                        </StackPanel>
+                        <component:OutlinedTextBlock
+                            Margin="0 0 0 -5"
+                            ClipToBounds="False"
+                            FontSize="{Binding FontSize}"
+                            Text="{Binding Text}"
+                            TextWrapping="Wrap"
+                            ToolTip="{Binding ExtraInfo}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Loaded="AppendTextsPanelOnLoaded" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
             </ItemsControl>
 
             <component:OutlinedTextBlock x:Name="FunctionNotEnableTip" FontSize="28" Text="{x:Static resx:Strings.TextWindow_EnableFunctionTip}" />
