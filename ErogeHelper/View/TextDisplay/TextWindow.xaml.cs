@@ -42,20 +42,20 @@ public partial class TextWindow : IEnableLogger
             .Subscribe(_ => DragBar.Visibility = ControlButton.Visibility = Visibility.Hidden)
             .DisposeWith(disposables);
         // TODO: Refactor? (After test on win7
-        BlurSwitch.Toggled += (_, args) =>
+        Panel.BlurSwitch.Toggled += (_, args) =>
         {
-            if (BlurSwitch.IsOn)
+            if (Panel.BlurSwitch.IsOn)
             {
-                OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.02);
-                if (OpacitySlider.Value < OpacitySlider.Minimum)
+                Panel.OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.02);
+                if (Panel.OpacitySlider.Value < Panel.OpacitySlider.Minimum)
                 {
                     ViewModel.WindowOpacityChanged.Execute(Unit.Default).Subscribe();
                 }
             }
             else
             {
-                OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.0);
-                if (OpacitySlider.Value == 0.02)
+                Panel.OpacitySlider.SetCurrentValue(RangeBase.MinimumProperty, 0.0);
+                if (Panel.OpacitySlider.Value == 0.02)
                 {
                     ViewModel.WindowOpacityChanged.Execute(Unit.Default).Subscribe();
                 }
@@ -89,35 +89,35 @@ public partial class TextWindow : IEnableLogger
 
             this.Bind(ViewModel,
                 vm => vm.WindowWidth,
-                v => v.WidthSlider.Value).DisposeWith(d);
+                v => v.Panel.WidthSlider.Value).DisposeWith(d);
             this.BindCommand(ViewModel,
                 vm => vm.WindowWidthChanged,
-                v => v.WidthSlider).DisposeWith(d);
+                v => v.Panel.WidthSlider).DisposeWith(d);
 
             this.Bind(ViewModel,
                 vm => vm.WindowOpacity,
-                v => v.OpacitySlider.Value).DisposeWith(d);
+                v => v.Panel.OpacitySlider.Value).DisposeWith(d);
             this.OneWayBind(ViewModel,
                 vm => vm.WindowOpacity,
                 v => v.BackgroundOpacity.Opacity).DisposeWith(d);
             this.BindCommand(ViewModel,
                 vm => vm.WindowOpacityChanged,
-                v => v.OpacitySlider).DisposeWith(d);
+                v => v.Panel.OpacitySlider).DisposeWith(d);
 
             this.BindCommand(ViewModel,
                 vm => vm.Pronounce,
-                v => v.PronounceButton).DisposeWith(d);
+                v => v.Panel.PronounceButton).DisposeWith(d);
 
             this.BindCommand(ViewModel,
                 vm => vm.FontDecrease,
-                v => v.FontDecrease).DisposeWith(d);
+                v => v.Panel.FontDecrease).DisposeWith(d);
             this.BindCommand(ViewModel,
                 vm => vm.FontIncrease,
-                v => v.FontIncrease).DisposeWith(d);
+                v => v.Panel.FontIncrease).DisposeWith(d);
 
             this.Bind(ViewModel,
                 vm => vm.EnableBlurBackground,
-                v => v.BlurSwitch.IsOn).DisposeWith(d);
+                v => v.Panel.BlurSwitch.IsOn).DisposeWith(d);
 
             this.OneWayBind(ViewModel,
                 vm => vm.ShowFunctionNotEnableTip,

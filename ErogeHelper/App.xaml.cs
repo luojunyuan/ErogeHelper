@@ -70,7 +70,7 @@ public partial class App : IEnableLogger
         }
         catch (AppExistedException)
         {
-            Terminate(1);
+            Terminate();
         }
         catch (Exception ex)
         {
@@ -83,7 +83,7 @@ public partial class App : IEnableLogger
     public static string EHVersion { get; }
         = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "9.9.9.9";
 
-    /// <param name="exitCode">-1 abnormal, 0 normal, 1 by another eh instance</param>
+    /// <param name="exitCode">-1 abnormal, 0 normal</param>
     public static void Terminate(int exitCode = 0)
     {
         if (Current is not null)
@@ -95,10 +95,7 @@ public partial class App : IEnableLogger
             Current.Shutdown(exitCode);
         }
 
-        if (exitCode != 1)
-        {
-            ToastManagement?.ClearToast();
-        }
+        ToastManagement?.ClearToast();
 
         if (exitCode == -1)
         {

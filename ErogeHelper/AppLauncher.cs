@@ -3,7 +3,6 @@ using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json;
-using Config.Net;
 using ErogeHelper.Model.DataModel.Tables;
 using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
@@ -186,9 +185,9 @@ public static class AppLauncher
     {
         var gameAlreadyStart = Utils.GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
 
-        if (gameAlreadyStart) 
+        if (gameAlreadyStart)
             return null;
-        
+
         Process? leProc = null;
         if (leEnable)
         {

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
     xmlns:component="clr-namespace:ErogeHelper.Platform.XamlTool.Components"
-    xmlns:contract="clr-namespace:ErogeHelper.Shared.Contracts;assembly=ErogeHelper.Shared"
+    xmlns:local="clr-namespace:ErogeHelper.View.TextDisplay"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.TextDisplay;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
@@ -91,45 +91,7 @@
                 <ui:SymbolIcon Symbol="More" />
                 <ui:FlyoutService.Flyout>
                     <ui:Flyout x:Name="ControlCenterFlyout" Placement="TopEdgeAlignedRight">
-                        <ui:SimpleStackPanel Margin="12 0" Spacing="10">
-                            <Label Content="Window width" />
-                            <Slider
-                                Name="WidthSlider"
-                                Width="145"
-                                HorizontalAlignment="Left"
-                                IsMoveToPointEnabled="True" Maximum="1450" Minimum="350" />
-                            <ui:CommandBarPanel>
-                                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
-                                    <Button x:Name="PronounceButton" IsEnabled="False">
-                                        <ui:SymbolIcon Symbol="Volume" />
-                                    </Button>
-                                    <Button x:Name="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">
-                                        <ui:SymbolIcon Symbol="FontDecrease" />
-                                    </Button>
-                                    <Button x:Name="FontIncrease" ToolTip="{x:Static resx:Strings.GameView_FontIncreaseTip}">
-                                        <ui:SymbolIcon Symbol="FontIncrease" />
-                                    </Button>
-                                </ui:SimpleStackPanel>
-                                <ui:ToggleSwitch x:Name="BlurSwitch"
-                                    Margin="0 10 0 0"
-                                    Header="Bulr background" IsEnabled="False" />
-                                <ui:AppBarButton Icon="Preview" Label="Opacity">
-                                    <ui:FlyoutService.Flyout>
-                                        <ui:Flyout Placement="Top">
-                                            <Slider x:Name="OpacitySlider"
-                                                Width="100"
-                                                IsMoveToPointEnabled="True" Maximum="0.8" Minimum="0" />
-                                        </ui:Flyout>
-                                    </ui:FlyoutService.Flyout>
-                                </ui:AppBarButton>
-                                <ui:AppBarButton Icon="Up" IsEnabled="False" Label="Last Sentence" />
-                                <ui:AppBarButton IsEnabled="False" Label="Color">
-                                    <ui:AppBarButton.Icon>
-                                        <ui:FontIcon Glyph="{x:Static contract:CommonGlyphs.Color}" />
-                                    </ui:AppBarButton.Icon>
-                                </ui:AppBarButton>
-                            </ui:CommandBarPanel>
-                        </ui:SimpleStackPanel>
+                        <local:CommandPanel x:Name="Panel" />
                     </ui:Flyout>
                 </ui:FlyoutService.Flyout>
             </Button>

@@ -487,7 +487,7 @@
     <value>安装器</value>
   </data>
   <data name="SelectProcess.AdminTip" xml:space="preserve">
-    <value>找不到正确的游戏？尝试使用管理员身份运行ErogeHelper.ProcessSelector.exe</value>
+    <value>找不到正确的游戏？尝试使用管理员身份运行ProcessSelector</value>
   </data>
   <data name="SelectProcess.EHNotExist" xml:space="preserve">
     <value>没有找到 ErogeHelper.exe 主程序</value>

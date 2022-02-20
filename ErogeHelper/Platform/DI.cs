@@ -55,17 +55,17 @@ internal static class DI
 
         var ehConfigRepository =
             new ConfigurationBuilder<IEHConfigRepository>().UseJsonFile(EHContext.ConfigFilePath).Build();
+        // The view Locator
         Locator.CurrentMutable.RegisterConstant<IViewLocator>(new ItemViewLocator(ehConfigRepository));
 
         RegisterViews();
         RegisterViewModelsForViews();
         RegisterInteractions();
 
-        RegisterDataServices(ehConfigRepository); // DataService (Include repositories)
+        RegisterDataServices(ehConfigRepository);
         var (gameWindowHookerService, sharpClipboard) =
-            RegisterModelServices(ehConfigRepository);  // Service (Model layer, various tools and functions)
+            RegisterModelServices(ehConfigRepository);
 
-        // MISC
         // https://stackoverflow.com/questions/30352447/using-reactiveuis-bindto-to-update-a-xaml-property-generates-a-warning/#31464255
         Locator.CurrentMutable.RegisterLazySingleton<ICreatesObservableForProperty>(() => new CustomPropertyResolver());
 
@@ -79,6 +79,9 @@ internal static class DI
             .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
     }
 
+    /// <summary>
+    /// Register data service such as repositories
+    /// </summary>
     private static void RegisterDataServices(IEHConfigRepository ehConfigRepository)
     {
         Locator.CurrentMutable.RegisterConstant(ehConfigRepository);
@@ -96,6 +99,9 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
     }
 
+    /// <summary>
+    /// Register model layer, various tools and functions
+    /// </summary>
     private static (GameWindowHooker, SharpClipboard) RegisterModelServices(IEHConfigRepository ehConfigRepository)
     {
         if (Utils.HasWinRT)
@@ -200,6 +206,9 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
     }
 
+    /// <summary>
+    /// Interactions between view and viewmodel
+    /// </summary>
     private static void RegisterInteractions()
     {
         Interactions.MessageBoxConfirm
@@ -231,7 +240,7 @@ internal static class DI
                     ContentDialogResult.None => false,
                     ContentDialogResult.Primary => true,
                     ContentDialogResult.Secondary => true,
-                    _ => throw new InvalidOperationException(),
+                    _ => false,
                 };
                 context.SetOutput(yesOrNo);
             });
