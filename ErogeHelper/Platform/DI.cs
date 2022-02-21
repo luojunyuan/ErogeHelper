@@ -138,7 +138,8 @@ internal static class DI
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
 #endif
         // TODO: Can change it to compile macro
-        if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+        // FIXME: Texehost.dll x86 can not use currently!
+        if (RuntimeInformation.ProcessArchitecture != Architecture.X64) // Arm64
         {
             Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
         }

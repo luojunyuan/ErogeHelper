@@ -247,7 +247,7 @@ public class TextractorHost : ITextractorService, IEnableLogger
             {
                 Handle = -1,
                 Pid = 0,
-                Address = -1,
+                Address = 0,
                 Ctx = -1,
                 Ctx2 = -1,
                 Name = "Clipboard",

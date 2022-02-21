@@ -29,6 +29,7 @@ public partial class App : IEnableLogger
             SetupExceptionHandling();
             SingleInstanceWatcher();
 
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

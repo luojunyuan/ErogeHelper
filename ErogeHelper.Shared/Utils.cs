@@ -17,7 +17,7 @@ public static class Utils
     public static bool IsWin8 { get; } = !IsWin7 && OsVersion <= new Version(6, 3);
 
     /// <summary>
-    /// System begin with win10 1507
+    /// System begin with the first win10 1507 build 10240
     /// </summary>
     public static bool HasWinRT { get; } = OsVersion > new Version(10, 0);
 
