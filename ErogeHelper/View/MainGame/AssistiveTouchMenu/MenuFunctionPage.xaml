@@ -22,6 +22,14 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <menu:MenuItemControl x:Name="TTS"
+            Grid.Row="0" Grid.Column="1"
+            ClickEvent="TTSOnClickEvent" SymbolExtend="Speech" Text="TTS" />
+
+        <menu:MenuItemControl x:Name="CloudSave"
+            Grid.Row="1" Grid.Column="0"
+            ClickEvent="CloudSaveOnClickEvent" SymbolExtend="Cloud" Text="Cloud Save" />
+
         <menu:MenuItemControl x:Name="Back"
             Grid.Row="1" Grid.Column="1"
             ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />

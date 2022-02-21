@@ -191,7 +191,7 @@
     <value>跳过过长文本</value>
   </data>
   <data name="MeCabPage.JapaneseText" xml:space="preserve">
-    <value>显示日文文本</value>
+    <value>在文本窗口中显示日文文本</value>
   </data>
   <data name="GeneralPage.AppendText" xml:space="preserve">
     <value>显示其他文本</value>
@@ -693,5 +693,29 @@
   </data>
   <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
     <value>提示：没有打开日文文本或者任意一个翻译功能</value>
+  </data>
+  <data name="Developing" xml:space="preserve">
+    <value>开发中。。。</value>
+  </data>
+  <data name="TTSPage.Title" xml:space="preserve">
+    <value>语音合成</value>
+  </data>
+  <data name="TransPage.LearnJapaneseTip" xml:space="preserve">
+    <value>了解一点日语拼音可以帮助更好理解！</value>
+  </data>
+  <data name="TransPage.AiueoLink" xml:space="preserve">
+    <value>https://www.bilibili.com/video/BV1Y5411x7mM</value>
+  </data>
+  <data name="TransPage.TaeKimGrammerLink" xml:space="preserve">
+    <value>https://res.wokanxing.info/jpgramma/</value>
+  </data>
+  <data name="TransPage.Aiueo" xml:space="preserve">
+    <value>五十音之歌</value>
+  </data>
+  <data name="TransPage.TaeKimGrammer" xml:space="preserve">
+    <value>日语语法指南</value>
+  </data>
+  <data name="Common.Confirm" xml:space="preserve">
+    <value>确认</value>
   </data>
 </root>

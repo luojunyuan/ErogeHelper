@@ -57,6 +57,17 @@
     <Resource Include="assets\app.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="View\Preference\TTSPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\TextToSpeech\" />
+  </ItemGroup>
+
   <Target Name="TextHostX64" Condition="'$(Platform)' == 'AnyCPU'" AfterTargets="Build">
     <Move SourceFiles="$(OutDir)libs\x64\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
   </Target>

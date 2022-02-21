@@ -478,6 +478,15 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 Confirm 的本地化字符串。
+        /// </summary>
+        public static string Common_Confirm {
+            get {
+                return ResourceManager.GetString("Common.Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Get help 的本地化字符串。
         /// </summary>
         public static string Common_GetHelp {
@@ -555,6 +564,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string Common_Warning {
             get {
                 return ResourceManager.GetString("Common.Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Developing... 的本地化字符串。
+        /// </summary>
+        public static string Developing {
+            get {
+                return ResourceManager.GetString("Developing", resourceCulture);
             }
         }
         
@@ -1353,7 +1371,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 Show japanese text 的本地化字符串。
+        ///   查找类似 Show Japanese in text window 的本地化字符串。
         /// </summary>
         public static string MeCabPage_JapaneseText {
             get {
@@ -1731,6 +1749,51 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
+        ///   查找类似 AIUEO song 的本地化字符串。
+        /// </summary>
+        public static string TransPage_Aiueo {
+            get {
+                return ResourceManager.GetString("TransPage.Aiueo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 https://www.youtube.com/watch?v=LrXHizFaol0 的本地化字符串。
+        /// </summary>
+        public static string TransPage_AiueoLink {
+            get {
+                return ResourceManager.GetString("TransPage.AiueoLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Know some Japanese alphabet can help better understanding! 的本地化字符串。
+        /// </summary>
+        public static string TransPage_LearnJapaneseTip {
+            get {
+                return ResourceManager.GetString("TransPage.LearnJapaneseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Tae Kim&apos;s Guide to Learning Japanese 的本地化字符串。
+        /// </summary>
+        public static string TransPage_TaeKimGrammer {
+            get {
+                return ResourceManager.GetString("TransPage.TaeKimGrammer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 http://guidetojapanese.org/learn/grammar/ 的本地化字符串。
+        /// </summary>
+        public static string TransPage_TaeKimGrammerLink {
+            get {
+                return ResourceManager.GetString("TransPage.TaeKimGrammerLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Machine Translation 的本地化字符串。
         /// </summary>
         public static string TransPage_Title {
@@ -1763,6 +1826,15 @@ namespace ErogeHelper.Shared.Languages {
         public static string TransPage_TranslatorDetail {
             get {
                 return ResourceManager.GetString("TransPage.TranslatorDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Text to Speech 的本地化字符串。
+        /// </summary>
+        public static string TTSPage_Title {
+            get {
+                return ResourceManager.GetString("TTSPage.Title", resourceCulture);
             }
         }
     }

@@ -59,7 +59,10 @@ public enum SymbolExtend
     Game = 0xE7FC,
     ChromeClose = 0xE8BB,
     Volume1 = 0xE993,
+    Cloud = 0xE753,
+    DictionaryCloud = 0xEBC3,
     LowerBrightness = 0xEC8A,
+    Speech = 0xEFA9,
     SettingSolid = 0xF8B0,
     TBD = 0xFFFF
 }

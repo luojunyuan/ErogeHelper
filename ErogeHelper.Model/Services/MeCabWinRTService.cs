@@ -11,7 +11,7 @@ public class MeCabWinRTService : IMeCabService
 {
     public static Func<string, IEnumerable<MeCabWord>> JapaneseAnalyzerCallback { private get; set; } = null!;
 
-    public bool CanLoaded => true;
+    public bool CanLoadMeCab => true;
 
     public void LoadMeCabTagger() { }
 

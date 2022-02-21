@@ -35,7 +35,7 @@
                     </ui:Flyout>
                 </ui:ToggleSplitButton.Flyout>
             </ui:ToggleSplitButton>
-            <Button x:Name="PronounceButton" IsEnabled="False">
+            <Button x:Name="PronounceButton">
                 <ui:SymbolIcon Symbol="Volume" />
             </Button>
             <Button x:Name="FontDecrease" ToolTip="{x:Static resx:Strings.GameView_FontDecreaseTip}">

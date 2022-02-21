@@ -41,6 +41,8 @@ public static class AppLauncher
             gameDataService, textractorService, gameWindowHooker, ehConfigRepository, gameInfoRepository,
             gamePath, gameDir, leEnable);
 
+        // TODO: game savedata check, If 占用 提示用户可以排除该文件或者尝试从上下文菜单启动新游戏
+
         var leProc = RunGame(gamePath, gameDir, leEnable);
 
         try

@@ -75,7 +75,7 @@ public class GameInfoRepository : IGameInfoRepository
         _gameInfo = info;
     }
 
-    public void UpdateSaveDataPath(string path)
+    public void UpdateSavedataPath(string path)
     {
         using var connection = GetOpenConnection();
         var info = _gameInfo! with { SaveDataPath = path };

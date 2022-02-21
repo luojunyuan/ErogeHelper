@@ -37,6 +37,9 @@ public interface IEHConfigRepository : INotifyPropertyChanged
     [Option(DefaultValue = 36.0)]
     public double FontSize { get; set; }
 
+    /// <summary>
+    /// Also means enable Japanese text
+    /// </summary>
     [Option(DefaultValue = false)]
     public bool EnableMeCab { get; set; }
 
@@ -80,6 +83,9 @@ public interface IEHConfigRepository : INotifyPropertyChanged
 
     [Option(DefaultValue = false)]
     public bool UpdatePreviewVersion { get; set; }
+
+    [Option(DefaultValue = "")]
+    public string TTSVoiceName { get; set; }
 
     // Text 模様
     [Option(DefaultValue = TextTemplate.OutLineKanaTop)]

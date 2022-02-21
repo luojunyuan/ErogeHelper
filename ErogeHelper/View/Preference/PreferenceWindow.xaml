@@ -39,6 +39,11 @@
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
             <!--<ui:NavigationViewItem Content="Danmaku" Tag="danmaku" ToolTip="Danmaku" />-->
+            <ui:NavigationViewItem
+                Content="{x:Static resx:Strings.TTSPage_Title}"
+                Icon="Volume" Tag="tts"
+                ToolTip="{x:Static resx:Strings.TTSPage_Title}" />
+            <ui:NavigationViewItem Content="{x:Static resx:Strings.TransPage_Title}" Icon="Character" Tag="trans" />
 
         </ui:NavigationView.MenuItems>
 

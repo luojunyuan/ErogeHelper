@@ -4,7 +4,7 @@ namespace ErogeHelper.Model.Services.Interface;
 
 public interface IMeCabService : IDisposable
 {
-    bool CanLoaded { get; }
+    bool CanLoadMeCab { get; }
 
     void LoadMeCabTagger();
 

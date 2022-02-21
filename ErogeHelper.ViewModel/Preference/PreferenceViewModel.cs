@@ -33,6 +33,8 @@ public class PreferenceViewModel : ReactiveObject, IScreen, IDisposable
             {
                 PageTag.General => Strings.GeneralPage_Title,
                 PageTag.MeCab => Strings.MeCabPage_Title,
+                PageTag.TTS => Strings.TTSPage_Title,
+                PageTag.Trans => Strings.TransPage_Title,
                 PageTag.About => Strings.About_Title,
                 _ => string.Empty
             }).DisposeWith(_disposables);

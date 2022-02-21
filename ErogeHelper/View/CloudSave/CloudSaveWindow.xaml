@@ -13,8 +13,11 @@
     mc:Ignorable="d"
     Width="400" Height="550"
     MinWidth="400"
-    Title="CloudSaveWindow">
+    Title="CloudSaveWindow"
+    Icon="pack://application:,,,/assets/app.ico" Topmost="True"
+    WindowStartupLocation="CenterScreen">
     <ui:SimpleStackPanel Margin="20 10" Spacing="10">
+        <TextBlock Text="A savedata sync for multi-devices based on your local network storage like NAS" TextWrapping="Wrap" />
         <Label Content="Game saves database folder (UNC path)" />
         <StackPanel Orientation="Horizontal">
             <Button x:Name="UNC" Content="Set" />
@@ -23,9 +26,6 @@
                 Margin="10 0 0 0"
                 IsReadOnly="True" />
         </StackPanel>
-
-        <ui:ToggleSwitch x:Name="CloudSaveSwitch" Header="Cloud save" />
-
         <Label Content="Savedata path" />
         <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
             <Button x:Name="SavedataRoming" Content="Roaming" />
@@ -36,5 +36,17 @@
             MinWidth="250" MaxWidth="315"
             HorizontalAlignment="Left"
             IsReadOnly="True" />
+
+        <ui:ToggleSwitch x:Name="CloudSaveSwitch" Header="Cloud save" />
+
+        <Label Content="Last sync time: " />
+
+        <TextBlock Text="Except folder or file which don't need to sync" />
+        <Button Content="Disable" />
+        <ui:ListView x:Name="TopLevelFiles"
+            MinWidth="250" MinHeight="35" MaxWidth="315"
+            HorizontalAlignment="Left"
+            BorderBrush="Black" BorderThickness="1" />
+
     </ui:SimpleStackPanel>
 </rxui:ReactiveWindow>

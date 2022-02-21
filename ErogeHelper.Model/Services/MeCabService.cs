@@ -20,10 +20,26 @@ public class MeCabService : IMeCabService
     {
         _configRepository = ehConfigRepository ?? DependencyResolver.GetService<IEHConfigRepository>();
 
-        CanLoaded = Directory.Exists(EHContext.MeCabDicFolder);
+        CanLoadMeCab = Directory.Exists(EHContext.MeCabDicFolder);
+
+        if (_configRepository.EnableMeCab)
+        {
+            if (CanLoadMeCab)
+            {
+                LoadMeCabTagger();
+            }
+            else
+            {
+                // Shold not happen only if the MeCab directory been deleted
+                _configRepository.EnableMeCab = false;
+            }    
+        }
     }
 
-    public bool CanLoaded { get; private set; }
+    /// <summary>
+    /// Which means can switch on Japanese text
+    /// </summary>
+    public bool CanLoadMeCab { get; private set; }
 
     public void LoadMeCabTagger()
     {
@@ -32,7 +48,7 @@ public class MeCabService : IMeCabService
             DicDir = EHContext.MeCabDicFolder
         });
 
-        CanLoaded = true;
+        CanLoadMeCab = true;
     }
 
     public List<MeCabWord> GenerateMeCabWords(string sentence) => MeCabWordUniDicEnumerable(sentence).ToList();

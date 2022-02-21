@@ -81,7 +81,7 @@ public class ReiPatcherTipViewModel : ReactiveObject
             config.Endpoint = "Passthrough";
             config.CopyToClipboard = true;
             config.ClipboardDebounceTime = 0.1;
-            config.FallbackFontTextMeshPro = "arialuni_sdf_u2018";
+            //config.FallbackFontTextMeshPro = "arialuni_sdf_u2018";
 
             StepTwoInfo = Strings.ReiPatcherDialog_Tip;
             StepTwoColor = Color.Orange;

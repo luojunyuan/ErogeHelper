@@ -25,7 +25,7 @@ public class MeCabViewModel : ReactiveObject, IRoutableViewModel
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         mecabService ??= DependencyResolver.GetService<IMeCabService>();
 
-        CanEnableMeCab = mecabService.CanLoaded;
+        CanEnableMeCab = mecabService.CanLoadMeCab;
         ShowJapanese = ehConfigRepository.EnableMeCab;
         KanaPosition = ehConfigRepository.KanaPosition;
         KanaRuby = ehConfigRepository.KanaRuby;

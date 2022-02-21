@@ -133,18 +133,11 @@ public partial class TextWindow : IEnableLogger
                 center => center ? Symbol.AlignCenter : Symbol.AlignLeft,
                 symbol => symbol == Symbol.AlignCenter).DisposeWith(d);
             this.WhenAnyValue(x => x.Panel.CurrentTextAlignSymbol.Symbol)
-                .Subscribe(symbol =>
-                {
-                    var align = symbol == Symbol.AlignLeft ? HorizontalAlignment.Left : HorizontalAlignment.Center;
-                    if (_textitemsPanel is not null)
-                    {
-                        _textitemsPanel.HorizontalContentAlignment = align;
-                    }
-                    if (_appendTextsPanel is not null)
-                    {
-                        _appendTextsPanel.HorizontalAlignment = align;
-                    }
-                }).DisposeWith(d);
+                .Skip(1)
+                .Select(symbol => symbol == Symbol.AlignLeft ? HorizontalAlignment.Left : HorizontalAlignment.Center)
+                .Subscribe(align => 
+                    _textitemsPanel!.HorizontalContentAlignment = _appendTextsPanel!.HorizontalAlignment = align)
+                .DisposeWith(d);
 
 
             this.OneWayBind(ViewModel,

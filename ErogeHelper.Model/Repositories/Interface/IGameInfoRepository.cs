@@ -18,7 +18,7 @@ public interface IGameInfoRepository
 
     public void UpdateCloudStatus(bool useCloudSaveData);
 
-    public void UpdateSaveDataPath(string path);
+    public void UpdateSavedataPath(string path);
 
     public void UpdateLostFocusStatus(bool status);
 

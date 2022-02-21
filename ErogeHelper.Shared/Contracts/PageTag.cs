@@ -6,6 +6,8 @@ public static class PageTag
     public const string About = "about";
     public const string MeCab = "mecab";
     public const string Danmaku = "danmaku";
+    public const string Trans = "trans";
+    public const string TTS = "tts";
 }
 
 public enum MenuPageTag

@@ -21,7 +21,7 @@ namespace ErogeHelper.UnitTests.Model.Services
             IMeCabService mecabService = new MeCabService(repo);
 
             // no mecab dic files in appdata
-            if (!mecabService.CanLoaded)
+            if (!mecabService.CanLoadMeCab)
             {
                 return;
             }

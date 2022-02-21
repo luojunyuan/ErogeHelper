@@ -32,6 +32,7 @@ using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using ModernWpf;
 using ModernWpf.Controls;
+using Ookii.Dialogs.Wpf;
 using ReactiveUI;
 using Refit;
 using Splat;
@@ -107,11 +108,23 @@ internal static class DI
         if (Utils.HasWinRT)
         {
             Locator.CurrentMutable.RegisterLazySingleton<IToastManagement>(() => new ToastManagementWinRT());
+            Locator.CurrentMutable.RegisterLazySingleton<ITTSService>(() => new TTSWinRT());
         }
         else
         {
             Locator.CurrentMutable.RegisterLazySingleton<IToastManagement>(() => new ToastManagement());
+            Locator.CurrentMutable.RegisterLazySingleton<ITTSService>(() => new TTSService());
         }
+        if (Utils.HasWinRT && !Directory.Exists(EHContext.MeCabDicFolder))
+        {
+            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
+            MeCabWinRTService.JapaneseAnalyzerCallback = JapaneseAnalyzerWinRT.JapaneseAnalyzer;
+        }
+        else
+        {
+            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabService());
+        }
+
         Locator.CurrentMutable.Register<IUpdateService>(() => new UpdateService());
         Locator.CurrentMutable.Register(() => new ScenarioContext());
         var gameWindowHookerService = new GameWindowHooker();
@@ -124,21 +137,6 @@ internal static class DI
 #else
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
 #endif
-        if (Utils.HasWinRT && !Directory.Exists(EHContext.MeCabDicFolder))
-        {
-            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => new MeCabWinRTService());
-            MeCabWinRTService.JapaneseAnalyzerCallback = JapaneseAnalyzerWinRT.JapaneseAnalyzer;
-        }
-        else
-        {
-            MeCabService? mecabService = null;
-            if (ehConfigRepository.EnableMeCab)
-            {
-                mecabService = new MeCabService();
-                mecabService.LoadMeCabTagger();
-            }
-            Locator.CurrentMutable.RegisterLazySingleton<IMeCabService>(() => mecabService ?? new MeCabService());
-        }
         // TODO: Can change it to compile macro
         if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
         {
@@ -175,7 +173,9 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new PreferenceViewModel());
         Locator.CurrentMutable.Register(() => new GeneralViewModel());
         Locator.CurrentMutable.Register(() => new MeCabViewModel());
+        Locator.CurrentMutable.Register(() => new TTSViewModel());
         Locator.CurrentMutable.Register(() => new DanmakuViewModel());
+        Locator.CurrentMutable.Register(() => new TransViewModel());
         Locator.CurrentMutable.Register(() => new AboutViewModel());
     }
 
@@ -203,6 +203,8 @@ internal static class DI
         Locator.CurrentMutable.Register<IViewFor<GeneralViewModel>>(() => new GeneralPage());
         Locator.CurrentMutable.Register<IViewFor<MeCabViewModel>>(() => new MeCabPage());
         Locator.CurrentMutable.Register<IViewFor<DanmakuViewModel>>(() => new DanmakuPage());
+        Locator.CurrentMutable.Register<IViewFor<TTSViewModel>>(() => new TTSPage());
+        Locator.CurrentMutable.Register<IViewFor<TransViewModel>>(() => new TransPage());
         Locator.CurrentMutable.Register<IViewFor<AboutViewModel>>(() => new AboutPage());
     }
 
@@ -243,6 +245,24 @@ internal static class DI
                     _ => false,
                 };
                 context.SetOutput(yesOrNo);
+            });
+
+        Interactions.FolderBrowserDialog
+            .RegisterHandler(context =>
+            {
+                var dialog = new VistaFolderBrowserDialog()
+                {
+                    Description = context.Input.Description,
+                    UseDescriptionForTitle = true,
+                    SelectedPath = context.Input.RootFolder + "\\",
+                };
+
+                var output = dialog.ShowDialog() switch
+                {
+                    true => dialog.SelectedPath,
+                    _ => string.Empty,
+                };
+                context.SetOutput(output);
             });
     }
 

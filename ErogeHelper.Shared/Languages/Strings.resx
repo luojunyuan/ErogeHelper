@@ -190,7 +190,7 @@
     <value>Skip too long text</value>
   </data>
   <data name="MeCabPage.JapaneseText" xml:space="preserve">
-    <value>Show japanese text</value>
+    <value>Show Japanese in text window</value>
   </data>
   <data name="GeneralPage.AppendText" xml:space="preserve">
     <value>Show other texts</value>
@@ -688,5 +688,29 @@ NOTE: You are about updating to dev version. This version may not stable only su
   </data>
   <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
     <value>Tip: Has not enable Japanese text or any translator</value>
+  </data>
+  <data name="Developing" xml:space="preserve">
+    <value>Developing...</value>
+  </data>
+  <data name="TTSPage.Title" xml:space="preserve">
+    <value>Text to Speech</value>
+  </data>
+  <data name="TransPage.LearnJapaneseTip" xml:space="preserve">
+    <value>Know some Japanese alphabet can help better understanding!</value>
+  </data>
+  <data name="TransPage.AiueoLink" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=LrXHizFaol0</value>
+  </data>
+  <data name="TransPage.TaeKimGrammerLink" xml:space="preserve">
+    <value>http://guidetojapanese.org/learn/grammar/</value>
+  </data>
+  <data name="TransPage.Aiueo" xml:space="preserve">
+    <value>AIUEO song</value>
+  </data>
+  <data name="TransPage.TaeKimGrammer" xml:space="preserve">
+    <value>Tae Kim's Guide to Learning Japanese</value>
+  </data>
+  <data name="Common.Confirm" xml:space="preserve">
+    <value>Confirm</value>
   </data>
 </root>
