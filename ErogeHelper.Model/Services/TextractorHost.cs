@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Function;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared.Contracts;

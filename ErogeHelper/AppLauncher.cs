@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json;
 using ErogeHelper.Model.DataModel.Tables;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Platform;
@@ -35,13 +34,10 @@ public static class AppLauncher
         var gameWindowHooker = DependencyResolver.GetService<IGameWindowHooker>();
         var textractorService = DependencyResolver.GetService<ITextractorService>();
         var ehConfigRepository = DependencyResolver.GetService<IEHConfigRepository>();
-        var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
         InitializeGameData(
-            gameDataService, textractorService, gameWindowHooker, ehConfigRepository, gameInfoRepository,
+            gameDataService, textractorService, gameWindowHooker, ehConfigRepository,
             gamePath, gameDir, leEnable);
-
-        // TODO: game savedata check, If 占用 提示用户可以排除该文件或者尝试从上下文菜单启动新游戏
 
         var leProc = RunGame(gamePath, gameDir, leEnable);
 
@@ -72,6 +68,7 @@ public static class AppLauncher
         // Optional functions
         Observable.Start(() =>
         {
+            var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
             if (!gameInfoRepository.GameInfo.UseClipboard)
             {
                 sharpClipboard.MonitorClipboard = false;
@@ -97,7 +94,6 @@ public static class AppLauncher
         ITextractorService textractorService,
         IGameWindowHooker gameWindowHooker,
         IEHConfigRepository ehConfigRepository,
-        IGameInfoRepository gameInfoRepository,
         string gamePath, string gameDir, bool leEnable)
     {
         if (!File.Exists(gamePath))
@@ -120,10 +116,10 @@ public static class AppLauncher
                 Path.Combine(gameDir, Path.GetFileNameWithoutExtension(gamePath) + ".exe")));
         }
 
+        // Note: There is temporal coupling of md5
         gameDataService.InitGameMd5AndPath(md5, gamePath);
+        var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
 
-        // Creating or reading the GameInfo table
-        gameInfoRepository.InitGameMd5(md5);
         // NOTE: There is a >5mb large object heap allocate
         var gameInfo = gameInfoRepository.TryGetGameInfo();
         if (gameInfo is null)
@@ -174,12 +170,18 @@ public static class AppLauncher
                 .Select(_ => WpfHelper.IsGameForegroundFullscreen(gameDataService.GameRealWindowHandle))
                 .DistinctUntilChanged());
 
+        var savedataSyncSerivce = DependencyResolver.GetService<ISavedataSyncService>();
         gameWindowHooker.WhenViewOperated
             .Where(op => op == ViewOperation.TerminateApp)
+            .Do(_ => CheckSyncCloud(gameInfoRepository))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => App.Terminate());
-    }
 
+        if (gameInfoRepository.GameInfo.UseCloudSave)
+        {
+
+        }
+    }
     private const int WaitNWjsGameStartDelayTime = 7000;
 
     /// <returns>Return LE if enabled</returns>
@@ -220,5 +222,13 @@ public static class AppLauncher
         }
 
         return leProc;
+    }
+
+    private static void CheckSyncCloud(IGameInfoRepository gameInfoRepository)
+    {
+        if (gameInfoRepository.GameInfo.UseCloudSave)
+        {
+
+        }
     }
 }

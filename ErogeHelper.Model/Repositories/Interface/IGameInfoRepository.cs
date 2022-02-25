@@ -4,8 +4,6 @@ namespace ErogeHelper.Model.Repositories.Interface;
 
 public interface IGameInfoRepository
 {
-    public void InitGameMd5(string md5);
-
     public GameInfoTable GameInfo { get; }
 
     public GameInfoTable? TryGetGameInfo();

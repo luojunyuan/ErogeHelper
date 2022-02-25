@@ -12,6 +12,15 @@
     d:DesignHeight="450" d:DesignWidth="800">
 
     <ui:SimpleStackPanel Margin="20 10" Spacing="10">
-        <TextBlock FontSize="32" Text="{x:Static resx:Strings.Developing}" />
+        <Label Content="Default Voice:" />
+        <ComboBox x:Name="SupportVoices" MinWidth="100" DisplayMemberPath="." />
+        <TextBlock Text="すもももももももものうち" />
+        <Button x:Name="Play" Content="Play" />
+        <ui:ToggleSwitch x:Name="AllLanguage" Header="Use other language voice" />
+        <GroupBox Header="Microsoft (SAPI/OneCore)">
+            <TextBlock Text="Windows 11: Setting - Time and languages - voice" />
+        </GroupBox>
+        <GroupBox Header="Voiceroid" />
+        <GroupBox Header="Online TTS" />
     </ui:SimpleStackPanel>
 </rxui:ReactiveUserControl>

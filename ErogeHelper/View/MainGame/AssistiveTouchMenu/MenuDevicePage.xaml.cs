@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Media.Animation;
-using ErogeHelper.Platform.MISC;
+using ErogeHelper.Platform.Windows;
 using ErogeHelper.Shared.Contracts;
 using WindowsInput.Events;
 

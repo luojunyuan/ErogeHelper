@@ -2,7 +2,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
@@ -18,6 +17,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
 {
     private const int GameFullscreenStatusRefreshTime = 200;
 
+    public static HWND MainGameWindowHandle { get; set; } = IntPtr.Zero;
+
     [Reactive]
     public DanmakuCanvasViewModel? DanmakuCanvasViewModel { get; private set; }
 
@@ -25,14 +26,12 @@ public class MainGameViewModel : ReactiveObject, IDisposable
         IEHConfigRepository? ehConfigRepository = null,
         IGameWindowHooker? gameWindowHooker = null,
         IGameInfoRepository? ehGameInfoRepository = null,
-        IGameDataService? gameDataService = null,
-        IWindowDataService? windowDataService = null)
+        IGameDataService? gameDataService = null)
     {
         gameWindowHooker ??= DependencyResolver.GetService<IGameWindowHooker>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
         ehGameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
         if (ehConfigRepository.UseDanmaku)
         {
             DanmakuCanvasViewModel = DependencyResolver.GetService<DanmakuCanvasViewModel>();
@@ -84,8 +83,8 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             .DistinctUntilChanged()
             .Where(on => on)
             .SelectMany(interval)
-            .Where(_ => !windowDataService.MainWindowHandle.IsNull)
-            .Subscribe(_ => User32.BringWindowToTop(windowDataService.MainWindowHandle));
+            .Where(_ => !MainGameWindowHandle.IsNull)
+            .Subscribe(_ => User32.BringWindowToTop(MainGameWindowHandle));
 
         #endregion
 
@@ -100,7 +99,6 @@ public class MainGameViewModel : ReactiveObject, IDisposable
             // The first time position get invoked
             gameWindowHooker.InvokeUpdatePosition();
 
-            windowDataService.InitMainWindowHandle(handle);
             HwndTools.WindowLostFocus(handle, ehGameInfoRepository.GameInfo.IsLoseFocus);
             return Unit.Default;
         });

@@ -57,14 +57,20 @@
     <Resource Include="assets\app.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="View\Preference\TTSPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\TextToSpeech\" />
+  </ItemGroup>
+
   <Target Name="TextHostX64" Condition="'$(Platform)' == 'AnyCPU'" AfterTargets="Build">
     <Move SourceFiles="$(OutDir)libs\x64\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
   </Target>
-
-  <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
-    <Move SourceFiles="$(OutDir)libs\x86\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
-  </Target>
-
   <Target Name="TextHostX64-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x64'" AfterTargets="Publish">
     <Move SourceFiles="$(PublishDir)libs\x64\texthost.dll" DestinationFiles="$(PublishDir)libs\texthost.dll" />
     <Move SourceFiles="$(PublishDir)libs\x64\concrt140.dll" DestinationFiles="$(PublishDir)libs\concrt140.dll" />
@@ -89,6 +95,10 @@
     <Delete Files="$(PublishDir)libs\x86\vcruntime140.dll" />
     <Move SourceFiles="$(PublishDir)libs\Installer.exe" DestinationFiles="$(PublishDir)..\Installer.exe" />
     <Move SourceFiles="$(PublishDir)libs\ProcessSelector.exe" DestinationFiles="$(PublishDir)..\ProcessSelector.exe" />
+  </Target>
+
+  <Target Name="TextHostX86" Condition="'$(Platform)' == 'x86'" AfterTargets="Build">
+    <Move SourceFiles="$(OutDir)libs\x86\texthost.dll" DestinationFiles="$(OutDir)libs\texthost.dll" />
   </Target>
 
   <Target Name="TextractorCLI-Publish" Condition="'$(RuntimeIdentifier)' == 'win-x86' Or '$(RuntimeIdentifier)' == 'win-arm64'" AfterTargets="Publish">

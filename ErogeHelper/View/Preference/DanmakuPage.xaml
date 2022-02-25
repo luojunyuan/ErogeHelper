@@ -34,7 +34,7 @@
                     </ListView.View>
                 </ListView>
 
-                <StackPanel
+                <!--<StackPanel
                     Margin="8 8 4 0" VerticalAlignment="Center"
                     DataContext="{Binding PageParameters}"
                     Orientation="Horizontal">
@@ -59,7 +59,7 @@
                     <TextBlock
                         Margin="8 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Center"
                         Text="{Binding PageSize, StringFormat='(\{0} items per page)'}" />
-                </StackPanel>
+                </StackPanel>-->
 
             </ui:SimpleStackPanel>
         </ui:SimpleStackPanel>

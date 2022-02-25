@@ -2,6 +2,7 @@
 using Dapper.Contrib.Extensions;
 using ErogeHelper.Model.DataModel.Tables;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using Microsoft.Data.Sqlite;
 
 namespace ErogeHelper.Model.Repositories;
@@ -9,15 +10,16 @@ namespace ErogeHelper.Model.Repositories;
 public class GameInfoRepository : IGameInfoRepository
 {
     private readonly string _connectString;
-    private string GameMd5 = string.Empty;
     private GameInfoTable? _gameInfo;
+    private string GameMd5 => _gameDataService.Md5;
 
-    public GameInfoRepository(string connectString)
+    private readonly IGameDataService _gameDataService;
+
+    public GameInfoRepository(string connectString, IGameDataService? gameDataService = null)
     {
         _connectString = connectString;
+        _gameDataService = gameDataService ?? Shared.DependencyResolver.GetService<IGameDataService>();
     }
-
-    public void InitGameMd5(string md5) => GameMd5 = md5;
 
     private IDbConnection GetOpenConnection()
     {

@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:rxui="http://reactiveui.net"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
     xmlns:resx="clr-namespace:ErogeHelper.Shared.Languages;assembly=ErogeHelper.Shared"
     xmlns:vm="clr-namespace:ErogeHelper.ViewModel.MainGame;assembly=ErogeHelper.ViewModel"
     mc:Ignorable="d"
@@ -15,9 +15,11 @@
         <Canvas x:Name="DanmakuContainer" />
         <StackPanel
             Margin="24" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-            Background="White" Orientation="Horizontal">
-            <TextBox x:Name="DanmakuContent" MinWidth="240" />
-            <Button x:Name="SendDanmaku" Content="Send" />
+            Background="Transparent" Orientation="Horizontal">
+            <TextBox x:Name="DanmakuContent" MinWidth="240" ui:ControlHelper.PlaceholderText="发一条友善的弹幕" />
+            <Button x:Name="SendDanmaku"
+                Margin="4 0 0 0"
+                Background="#C2C2C2" Click="SendDanmaku_Click" Content="Send" />
         </StackPanel>
     </Grid>
 </rxui:ReactiveUserControl>

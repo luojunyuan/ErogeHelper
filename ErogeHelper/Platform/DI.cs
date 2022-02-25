@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using Config.Net;
 using ErogeHelper.Model.DataServices;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Repositories.Migration;
@@ -12,6 +11,7 @@ using ErogeHelper.Model.Services.Function;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Platform.MISC;
 using ErogeHelper.Platform.RxUI;
+using ErogeHelper.Platform.Windows;
 using ErogeHelper.Platform.WinRTHelper;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
@@ -38,7 +38,6 @@ using Refit;
 using Splat;
 using UpdateChecker;
 using Vanara.PInvoke;
-using Vanara.PInvoke.NetListMgr;
 using WK.Libraries.SharpClipboardNS;
 
 namespace ErogeHelper.Platform;
@@ -97,7 +96,6 @@ internal static class DI
 
         // In memory state
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
-        Locator.CurrentMutable.RegisterLazySingleton<IWindowDataService>(() => new WindowDataService());
     }
 
     /// <summary>
@@ -129,23 +127,23 @@ internal static class DI
         Locator.CurrentMutable.Register(() => new ScenarioContext());
         var gameWindowHookerService = new GameWindowHooker();
         Locator.CurrentMutable.RegisterConstant<IGameWindowHooker>(gameWindowHookerService);
-        Locator.CurrentMutable.RegisterLazySingleton(() => new NetworkListManager(), typeof(INetworkListManager));
         var sharpClipboard = new SharpClipboard();
         Locator.CurrentMutable.RegisterConstant(sharpClipboard);
+        Locator.CurrentMutable.Register<ISavedataSyncService>(() => new SavedataSyncService());
 #if !DEBUG // https://stackoverflow.com/questions/63723996/mouse-freezing-lagging-when-hit-breakpoint
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHooker());
 #else
         Locator.CurrentMutable.RegisterLazySingleton<ITouchConversionHooker>(() => new TouchConversionHookerFake());
 #endif
-        // TODO: Can change it to compile macro
-        // FIXME: Texehost.dll x86 can not use currently!
-        if (RuntimeInformation.ProcessArchitecture != Architecture.X64) // Arm64
+        // UNDONE: Texehost.dll x86 can not use currently
+        //if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
+        if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
         {
-            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
+            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
         }
         else
         {
-            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorHost());
+            Locator.CurrentMutable.RegisterLazySingleton<ITextractorService>(() => new TextractorCli());
         }
 
         return (gameWindowHookerService, sharpClipboard);

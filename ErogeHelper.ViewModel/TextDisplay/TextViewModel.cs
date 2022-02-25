@@ -3,7 +3,6 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
@@ -181,6 +180,7 @@ public partial class TextViewModel : ReactiveObject, IEnableLogger, IDisposable
 
         sharedData.Connect().DisposeWith(_disposables);
         sharedData
+            // TODO: How about if mecab dic been delete
             .Where(_ => _ehConfigRepository.EnableMeCab)
             .Select(text => GenerateFuriganaViewModels(text))
             .Do(_ => User32.BringWindowToTop(TextWindowHandle))

@@ -35,7 +35,7 @@ namespace ErogeHelper.ProcessSelector
 
             InjectButton.IsEnabled = false;
 
-            Task.Run(RefreshProcesses);
+            Loaded += (_, _) => Task.Run(RefreshProcesses);
         }
 
         // UPSTREAM: ToolTip bugged with.Net 6

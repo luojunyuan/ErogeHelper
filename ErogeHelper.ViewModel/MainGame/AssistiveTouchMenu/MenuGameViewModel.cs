@@ -2,7 +2,6 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
@@ -20,11 +19,9 @@ public class MenuGameViewModel : ReactiveObject
     public MenuGameViewModel(
         ITouchConversionHooker? touchConversionHooker = null,
         IGameInfoRepository? gameInfoRepository = null,
-        IWindowDataService? windowDataService = null,
         IGameDataService? gameDataService = null)
     {
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
-        windowDataService ??= DependencyResolver.GetService<IWindowDataService>();
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         touchConversionHooker ??= DependencyResolver.GetService<ITouchConversionHooker>();
         var disposables = new CompositeDisposable();
@@ -68,7 +65,7 @@ public class MenuGameViewModel : ReactiveObject
                 {
                     Interactions.MessageBoxConfirm.Handle(Strings.AssistiveTouch_LoseFocusWarn).Subscribe();
                 }
-                HwndTools.WindowLostFocus(windowDataService.MainWindowHandle, v);
+                HwndTools.WindowLostFocus(MainGameViewModel.MainGameWindowHandle, v);
                 HwndTools.WindowLostFocus(TextViewModel.TextWindowHandle, v);
                 gameInfoRepository.UpdateLostFocusStatus(v);
             });

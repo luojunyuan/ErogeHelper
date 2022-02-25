@@ -30,13 +30,13 @@
             Grid.Row="1" Grid.Column="0"
             ClickEvent="CloudSaveOnClickEvent" SymbolExtend="Cloud" Text="Cloud Save" />
 
-        <menu:MenuItemControl x:Name="Back"
-            Grid.Row="1" Grid.Column="1"
-            ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />
-
         <menu:MenuItemControl x:Name="HookConfig"
             Grid.Row="1" Grid.Column="2"
             ClickEvent="HookConfigOnClickEvent" Symbol="Attach"
             Text="{x:Static resx:Strings.HookPage_Title}" />
+
+        <menu:MenuItemControl x:Name="Back"
+            Grid.Row="1" Grid.Column="1"
+            ClickEvent="BackOnClickEvent" Symbol="Back" Text=" " />
     </Grid>
 </Page>

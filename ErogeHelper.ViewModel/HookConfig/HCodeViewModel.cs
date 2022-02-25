@@ -1,8 +1,8 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using ErogeHelper.Shared.Languages;

@@ -1,5 +1,4 @@
-﻿using ErogeHelper.Model.DataServices.Interface;
-using ErogeHelper.Shared.Entities;
+﻿using ErogeHelper.Shared.Entities;
 using ErogeHelper.Shared.Structs;
 
 namespace ErogeHelper.Model.Services.Interface;

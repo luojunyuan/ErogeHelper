@@ -3,7 +3,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
@@ -67,8 +66,6 @@ public class GameWindowHooker : IGameWindowHooker, IEnableLogger
 
         _gameProc.Exited += (_, _) =>
         {
-            // Do cloud save check
-
             mainScheduler.Schedule(() => _gamePositionSubj.OnNext(HiddenPos));
             if (ModeDetector.InUnitTestRunner())
             {

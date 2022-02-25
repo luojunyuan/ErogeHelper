@@ -1,12 +1,12 @@
 ﻿using System.Reactive;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Model.Repositories.Interface;
 using ErogeHelper.Shared;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Vanara.PInvoke.NetListMgr;
 using System.Reactive.Linq;
 using ErogeHelper.Shared.Contracts;
+using Vanara.PInvoke;
+using ErogeHelper.Model.Services.Interface;
 
 namespace ErogeHelper.ViewModel.CloudSave;
 
@@ -21,18 +21,16 @@ public class CloudSaveViewModel : ReactiveObject
     public CloudSaveViewModel(
         IGameInfoRepository? gameInfoRepository = null,
         IEHConfigRepository? ehConfigRepository = null,
-        INetworkListManager? networkListManager = null,
         IGameDataService? gameDataService = null)
     {
         gameInfoRepository ??= DependencyResolver.GetService<IGameInfoRepository>();
         ehConfigRepository ??= DependencyResolver.GetService<IEHConfigRepository>();
-        networkListManager ??= DependencyResolver.GetService<INetworkListManager>();
         gameDataService ??= DependencyResolver.GetService<IGameDataService>();
 
         UNCDatabasePath = ehConfigRepository.ExternalSharedDrivePath;
         GameSavedataPath = gameInfoRepository.GameInfo.SaveDataPath;
         // TODO: How about folder not exist
-        ShowNoInternet = networkListManager.IsConnectedToInternet;
+        ShowNoInternet = WinINet.InternetGetConnectedState(out _);
         CanEnable = ShowNoInternet && UNCDatabasePath != string.Empty && GameSavedataPath != string.Empty;
         IsSwitchOn = gameInfoRepository.GameInfo.UseCloudSave;
 

@@ -1,11 +1,10 @@
 ﻿using System.Management;
 using Splat;
 
-namespace ErogeHelper.Platform.MISC;
+namespace ErogeHelper.Platform.Windows;
 
 internal static class BrightnessAdjust
 {
-    // ManagementScope can only use in `window` project
     private static readonly ManagementScope Scope = new("root\\WMI");
     private static readonly SelectQuery Query = new("WmiMonitorBrightness");
     private static readonly SelectQuery QueryMethods = new("WmiMonitorBrightnessMethods");
@@ -116,7 +115,7 @@ internal static class BrightnessAdjust
         }
         catch (Exception ex)
         {
-            LogHost.Default.Debug("System.Management.ManagementException " + ex.Message);
+            LogHost.Default.Debug("Fine Exception " + ex.Message);
         }
 
         return bLevels;

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reactive.Concurrency;
-using ErogeHelper.Model.DataServices.Interface;
 using ErogeHelper.Shared.Enums;
 using ErogeHelper.Shared.Structs;
 

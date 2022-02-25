@@ -24,7 +24,7 @@ public partial class MainGameWindow : IEnableLogger
     {
         InitializeComponent();
         InitializeDpi();
-        var handle = WpfHelper.GetWpfWindowHandle(this);
+        var handle = MainGameViewModel.MainGameWindowHandle = WpfHelper.GetWpfWindowHandle(this);
         HwndTools.HideWindowInAltTab(handle);
         var keyboardDisposal = DisableWinArrowResizeShotcut(handle);
         var touchDisposal = RegisterAssistiveTouchEvents();

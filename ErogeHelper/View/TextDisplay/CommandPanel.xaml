@@ -15,9 +15,9 @@
     <Label Content="Window width" />
     <Slider
         Name="WidthSlider"
-        Width="145"
+        Width="200"
         HorizontalAlignment="Left"
-        IsMoveToPointEnabled="True" Maximum="1450" Minimum="350" />
+        IsMoveToPointEnabled="True" Maximum="2400" Minimum="400" />
     <ui:CommandBarPanel>
         <ui:SimpleStackPanel Orientation="Horizontal" Spacing="8">
             <ui:ToggleSplitButton x:Name="TextAlignSplitButton" Click="ToggleSplitButtonOnClick" IsChecked="True">

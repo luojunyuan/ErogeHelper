@@ -18,11 +18,11 @@ public partial class PreferenceWindow
 
         ViewModel ??= DependencyResolver.GetService<PreferenceViewModel>(); // 28ms
         var generalViewModel = DependencyResolver.GetService<GeneralViewModel>(); // 6ms
-        var mecabViewModel = DependencyResolver.GetService<MeCabViewModel>(); // 25ms
-        var ttsViewModel = DependencyResolver.GetService<TTSViewModel>(); // 25ms
-        //var danmakuViewModel = DependencyResolver.GetService<DanmakuViewModel>();
-        var transViewModel = DependencyResolver.GetService<TransViewModel>(); // 40ms
-        var aboutViewModel = DependencyResolver.GetService<AboutViewModel>(); // 40ms
+        var mecabViewModel = new Lazy<MeCabViewModel>(() => DependencyResolver.GetService<MeCabViewModel>()); // 25ms
+        var ttsViewModel = new Lazy<TTSViewModel>(() => DependencyResolver.GetService<TTSViewModel>()); // 25ms
+        var danmakuViewModel = new Lazy<DanmakuViewModel>(() => DependencyResolver.GetService<DanmakuViewModel>());
+        var transViewModel = new Lazy<TransViewModel>(() => DependencyResolver.GetService<TransViewModel>()); // 40ms
+        var aboutViewModel = new Lazy<AboutViewModel>(() => DependencyResolver.GetService<AboutViewModel>()); // 40ms
 
         Height = ViewModel.Height;
         Width = ViewModel.Width;
@@ -63,19 +63,19 @@ public partial class PreferenceWindow
                             ViewModel!.Router.NavigateAndReset.Execute(generalViewModel); // 9ms
                             break;
                         case PageTag.MeCab:
-                            ViewModel!.Router.NavigateAndReset.Execute(mecabViewModel);
+                            ViewModel!.Router.NavigateAndReset.Execute(mecabViewModel.Value);
                             break;
                         case PageTag.TTS:
-                            ViewModel!.Router.NavigateAndReset.Execute(ttsViewModel);
+                            ViewModel!.Router.NavigateAndReset.Execute(ttsViewModel.Value);
                             break;
-                        //case PageTag.Danmaku:
-                        //    ViewModel!.Router.NavigateAndReset.Execute(danmakuViewModel);
-                        //    break;
+                        case PageTag.Danmaku:
+                            ViewModel!.Router.NavigateAndReset.Execute(danmakuViewModel.Value);
+                            break;
                         case PageTag.Trans:
-                            ViewModel!.Router.NavigateAndReset.Execute(transViewModel);
+                            ViewModel!.Router.NavigateAndReset.Execute(transViewModel.Value);
                             break;
                         case PageTag.About:
-                            ViewModel!.Router.NavigateAndReset.Execute(aboutViewModel);
+                            ViewModel!.Router.NavigateAndReset.Execute(aboutViewModel.Value);
                             break;
                     }
                 }).DisposeWith(d);

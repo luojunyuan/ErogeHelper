@@ -21,7 +21,6 @@ public class MeCabService : IMeCabService
         _configRepository = ehConfigRepository ?? DependencyResolver.GetService<IEHConfigRepository>();
 
         CanLoadMeCab = Directory.Exists(EHContext.MeCabDicFolder);
-
         if (_configRepository.EnableMeCab)
         {
             if (CanLoadMeCab)

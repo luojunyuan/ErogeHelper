@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reactive.Subjects;
-using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using ErogeHelper.Shared.Contracts;
 using Splat;

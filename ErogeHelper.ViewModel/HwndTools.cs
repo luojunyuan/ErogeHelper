@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using ErogeHelper.Model.DataServices.Interface;
+using ErogeHelper.Model.Services.Interface;
 using ErogeHelper.Shared;
 using Vanara.PInvoke;
 

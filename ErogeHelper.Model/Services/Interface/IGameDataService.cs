@@ -2,8 +2,11 @@
 using System.Reactive.Subjects;
 using Vanara.PInvoke;
 
-namespace ErogeHelper.Model.DataServices.Interface;
+namespace ErogeHelper.Model.Services.Interface;
 
+/// <summary>
+/// In memory data store
+/// </summary>
 public interface IGameDataService : IDisposable
 {
     void InitGameMd5AndPath(string md5, string gamePath);

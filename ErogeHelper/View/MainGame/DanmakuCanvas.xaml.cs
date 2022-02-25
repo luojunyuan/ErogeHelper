@@ -40,5 +40,10 @@ public partial class DanmakuCanvas
         _danmakuEngine?.DrawDanmaku(text, _danmakuStyle);
     }
 
+    private void SendDanmaku_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        ToastDanmaku("加大长度加大长度加大长度加大长度");
+    }
+
     // Max danmaku length 100, tip when over it and disable button
 }

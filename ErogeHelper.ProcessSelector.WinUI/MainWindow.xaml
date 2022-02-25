@@ -9,8 +9,8 @@
     mc:Ignorable="d">
 
     <StackPanel Margin="20 10">
-        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="resx:Strings.SelectProcess_Tips" />
-        <!--<GroupItem Margin="0,20,0,0" Header="{x:Static resx:Strings.SelectProcess_Label}">-->
+        <TextBlock x:Name="Tips" FontSize="18" TextWrapping="Wrap" />
+        <TextBlock x:Name="Label" Margin="0 20 0 0" FontSize="22" />
 
         <StackPanel Margin="0 20 0 0" Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="10">
@@ -35,8 +35,7 @@
 
             <Button x:Name="InjectButton"
                 Width="240"
-                Click="InjectButtonOnClick" Content="resx:Strings.SelectProcess_InjectButton"
-                IsEnabled="False"
+                Click="InjectButtonOnClick" IsEnabled="False"
                 Style="{StaticResource AccentButtonStyle}" />
         </StackPanel>
     </StackPanel>

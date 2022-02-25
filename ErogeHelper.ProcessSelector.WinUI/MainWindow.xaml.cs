@@ -15,8 +15,8 @@ namespace ErogeHelper.ProcessSelector.WinUI;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private const double DefaultWidth = 400;
-    private const double DefaultHeight = 250;
+    private const double DefaultWidth = 415;
+    private const double DefaultHeight = 295;
 
     private readonly FilterProcessService _filterProcessService;
     private readonly ObservableCollection<ProcessDataModel> _processes = new();
@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         InitializeProperties();
+        //this.SetIsAlwaysOnTop(true);
 
         _filterProcessService = new FilterProcessService();
         ProcessComboBox.ItemsSource = _processes;
@@ -32,7 +33,11 @@ public sealed partial class MainWindow : Window
 
     private void InitializeProperties()
     {
-        Title = "Process Selector";
+        Title = Shared.Languages.Strings.SelectProcess_Title;
+        Tips.Text = Shared.Languages.Strings.SelectProcess_Tips;
+        Label.Text = Shared.Languages.Strings.SelectProcess_Label;
+        InjectButton.Content = Shared.Languages.Strings.SelectProcess_InjectButton;
+
         this.CenterOnScreen(DefaultWidth, DefaultHeight);
         HwndExtensions.SetWindowStyle(
             this.GetWindowHandle(),

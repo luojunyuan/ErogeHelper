@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ErogeHelper.Model.Repositories.Interface;
+using ErogeHelper.Model.Services.Interface;
 
 namespace ErogeHelper.Model.Services;
 
-internal class SavedataSyncService
+public class SavedataSyncService : ISavedataSyncService
 {
-    //private readonly IGameDataService _gameDataService;
-    //private readonly IEhDbRepository _ehDbRepository;
     //private readonly IEhConfigRepository _ehConfigDataService;
     //private readonly INetworkListManager _networkListManager;
     //private bool IsNetConnected => _networkListManager.IsConnectedToInternet;
@@ -21,20 +21,13 @@ internal class SavedataSyncService
     //    _ehConfigDataService.ExternalSharedDrivePath, ConstantValues.EhCloudDbFilename);
 
     //public string[] ExcludeFiles { get; }
+    private readonly IGameInfoRepository _gameInfoRepository;
 
-    //public SavedataSyncService(
-    //    IGameDataService? gameDataService = null,
-    //    IEhDbRepository? ehDbRepository = null,
-    //    IEhConfigRepository? ehConfigDataService = null,
-    //    INetworkListManager? networkListManager = null)
-    //{
-    //    _gameDataService = gameDataService ?? DependencyInject.GetService<IGameDataService>();
-    //    _ehDbRepository = ehDbRepository ?? DependencyInject.GetService<IEhDbRepository>();
-    //    _ehConfigDataService = ehConfigDataService ?? DependencyInject.GetService<IEhConfigRepository>();
-    //    _networkListManager = networkListManager ?? DependencyInject.GetService<INetworkListManager>();
-
-    //    ExcludeFiles = GetCurrentGameData()?.ExcludeFiles ?? Array.Empty<string>();
-    //}
+    public SavedataSyncService(
+        IGameInfoRepository? gameInfoRepository = null)
+    {
+        _gameInfoRepository = gameInfoRepository ?? Shared.DependencyResolver.GetService<IGameInfoRepository>();
+    }
 
     //public void InitGameData()
     //{

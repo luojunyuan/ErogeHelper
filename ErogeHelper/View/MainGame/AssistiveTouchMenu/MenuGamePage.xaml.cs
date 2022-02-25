@@ -128,7 +128,7 @@ public partial class MenuGamePage : IViewFor<MenuGameViewModel>
     {
         var pageOpacityAnimation = AnimationTool.FadeInAnimation;
         Storyboard.SetTarget(pageOpacityAnimation, this);
-        Storyboard.SetTargetProperty(pageOpacityAnimation, new PropertyPath(OpacityProperty));
+        Storyboard.SetTargetProperty(pageOpacityAnimation, new PropertyPath(OpacityProperty)); // TODO: OpacityProperty.Name ?
         _transitionInStoryboard.Children.Add(pageOpacityAnimation);
 
 
@@ -173,6 +173,9 @@ public partial class MenuGamePage : IViewFor<MenuGameViewModel>
                 SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
         };
+
+        // TODO: Freeze animations burshes?
+        //_fullscreenMoveXAnimation
     }
 
     private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e)

@@ -132,11 +132,15 @@ public partial class TextWindow : IEnableLogger
                 v => v.Panel.CurrentTextAlignSymbol.Symbol,
                 center => center ? Symbol.AlignCenter : Symbol.AlignLeft,
                 symbol => symbol == Symbol.AlignCenter).DisposeWith(d);
+            FunctionNotEnableTip.HorizontalAlignment = ViewModel.TextAlignmentCenter ? 
+                HorizontalAlignment.Center : HorizontalAlignment.Left;
             this.WhenAnyValue(x => x.Panel.CurrentTextAlignSymbol.Symbol)
                 .Skip(1)
                 .Select(symbol => symbol == Symbol.AlignLeft ? HorizontalAlignment.Left : HorizontalAlignment.Center)
                 .Subscribe(align => 
-                    _textitemsPanel!.HorizontalContentAlignment = _appendTextsPanel!.HorizontalAlignment = align)
+                    _textitemsPanel!.HorizontalContentAlignment = 
+                    _appendTextsPanel!.HorizontalAlignment = 
+                    FunctionNotEnableTip.HorizontalAlignment = align)
                 .DisposeWith(d);
 
 
