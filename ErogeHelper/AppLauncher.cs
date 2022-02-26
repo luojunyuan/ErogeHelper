@@ -116,9 +116,10 @@ public static class AppLauncher
                 Path.Combine(gameDir, Path.GetFileNameWithoutExtension(gamePath) + ".exe")));
         }
 
-        // Note: There is temporal coupling of md5
+        // Note: There is temporal coupling of md5 and GameInfo.SaveDataPath
         gameDataService.InitGameMd5AndPath(md5, gamePath);
         var gameInfoRepository = DependencyResolver.GetService<IGameInfoRepository>();
+        var savedataSyncSerivce = DependencyResolver.GetService<ISavedataSyncService>();
 
         // NOTE: There is a >5mb large object heap allocate
         var gameInfo = gameInfoRepository.TryGetGameInfo();
@@ -170,10 +171,17 @@ public static class AppLauncher
                 .Select(_ => WpfHelper.IsGameForegroundFullscreen(gameDataService.GameRealWindowHandle))
                 .DistinctUntilChanged());
 
-        var savedataSyncSerivce = DependencyResolver.GetService<ISavedataSyncService>();
+        void CheckSyncCloud()
+        {
+            if (gameInfoRepository.GameInfo.UseCloudSave)
+            {
+
+            }
+        }
+
         gameWindowHooker.WhenViewOperated
             .Where(op => op == ViewOperation.TerminateApp)
-            .Do(_ => CheckSyncCloud(gameInfoRepository))
+            .Do(_ => CheckSyncCloud())
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => App.Terminate());
 
@@ -222,13 +230,5 @@ public static class AppLauncher
         }
 
         return leProc;
-    }
-
-    private static void CheckSyncCloud(IGameInfoRepository gameInfoRepository)
-    {
-        if (gameInfoRepository.GameInfo.UseCloudSave)
-        {
-
-        }
     }
 }

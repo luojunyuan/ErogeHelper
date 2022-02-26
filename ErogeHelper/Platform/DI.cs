@@ -77,6 +77,10 @@ internal static class DI
         // Model->ViewModel data flow
         gameWindowHookerService.BringKeyboardWindowTopDataFlow
             .Subscribe(_ => User32.BringWindowToTop(State.VirtualKeyboardWindowHandle));
+
+        // Model->View ask for interactions
+        SavedataSyncService.MessageBox = () => 
+            ShowMessageBox("Upload savedata to cloud?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
     }
 
     /// <summary>
@@ -93,6 +97,7 @@ internal static class DI
             new RefitSettings { ContentSerializer = new XmlContentSerializer() }));
         Locator.CurrentMutable.Register(
             () => RestService.For<IEHServerApiRepository>(ehConfigRepository.ServerBaseUrl));
+        Locator.CurrentMutable.RegisterLazySingleton<IWindowsGuid>(() => new WindowsGuid());
 
         // In memory state
         Locator.CurrentMutable.RegisterLazySingleton<IGameDataService>(() => new GameDataService());
@@ -265,12 +270,15 @@ internal static class DI
             });
     }
 
-    public static MessageBoxResult? ShowMessageBox(string messageBoxText, string caption = "Eroge Helper")
+    public static MessageBoxResult? ShowMessageBox(
+        string messageBoxText, 
+        string caption = "Eroge Helper", 
+        MessageBoxButton buttons = MessageBoxButton.OK)
     {
         var owner = Application.Current.Windows.Cast<Window>().FirstOrDefault((Window window) =>
             window.IsActive && window.ShowActivated);
 
-        var messageBoxWindow = new MessageBoxWindow(messageBoxText, caption, MessageBoxButton.OK, null)
+        var messageBoxWindow = new MessageBoxWindow(messageBoxText, caption, buttons, null)
         {
             Owner = owner,
             WindowStartupLocation = (owner == null)

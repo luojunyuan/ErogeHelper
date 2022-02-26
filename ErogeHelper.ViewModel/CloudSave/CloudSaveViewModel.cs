@@ -70,8 +70,8 @@ public class CloudSaveViewModel : ReactiveObject
             .Subscribe(hasPath => CanEnable = hasPath);
 
         this.WhenAnyValue(x => x.IsSwitchOn)
+            .ObserveOn(RxApp.TaskpoolScheduler)
             .Subscribe(useCloudsave => gameInfoRepository.UpdateCloudStatus(useCloudsave));
-        //_ehDbRepository.UpdateCloudStatus(value);
         //if (value)
         //{
         //    var savedataInfo = _savedataSyncService.GetCurrentGameData();
