@@ -169,6 +169,7 @@ public partial class TextWindow : IEnableLogger
             HorizontalAlignment.Center : HorizontalAlignment.Left;
     }
 
+    // TODO: _appendTextsPanel no use? Foreach AppendTextsControl.ItemsSource cast to FrameworkElement and set HorizontalAlignment
     private StackPanel? _appendTextsPanel;
     private void AppendTextsPanelOnLoaded(object sender, RoutedEventArgs e)
     {
