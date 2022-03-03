@@ -78,6 +78,7 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
                 .DisposeWith(disposables);
 
             #region Opacity Adjust
+            FadeOpacityAnimation.Freeze();
             var mainGameWindow = (MainGameWindow)Application.Current.MainWindow;
             Point lastPos;
             BehaviorSubject<bool> tryTransparentizeSubj = new(true);
@@ -277,15 +278,16 @@ public partial class AssistiveTouch : IViewFor<AssistiveTouchViewModel>
         father.RaiseEvent(mouseUpEvent);
     }
 
+    private readonly static ThicknessAnimation MoveAnimation = new() 
+    { 
+        Duration = TimeSpan.FromMilliseconds(TouchReleaseToEdgeDuration)
+    };
+
     private static void SmoothMoveAnimation(Button touch, double left, double top)
     {
-        var moveAnimation = new ThicknessAnimation
-        {
-            From = touch.Margin,
-            To = new Thickness(left, top, 0, 0),
-            Duration = TimeSpan.FromMilliseconds(TouchReleaseToEdgeDuration)
-        };
-        touch.BeginAnimation(MarginProperty, moveAnimation);
+        MoveAnimation.SetCurrentValue(ThicknessAnimation.FromProperty, touch.Margin);
+        MoveAnimation.SetCurrentValue(ThicknessAnimation.ToProperty, new Thickness(left, top, 0, 0));
+        touch.BeginAnimation(MarginProperty, MoveAnimation);
     }
 
     private static Thickness GetTouchMargin(

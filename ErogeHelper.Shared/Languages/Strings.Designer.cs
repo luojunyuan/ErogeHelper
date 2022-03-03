@@ -61,7 +61,7 @@ namespace ErogeHelper.Shared.Languages {
         }
         
         /// <summary>
-        ///   查找类似 No Internet or proxy failed 的本地化字符串。
+        ///   查找类似 Connect to Github failed 的本地化字符串。
         /// </summary>
         public static string About_CheckingFailed {
             get {

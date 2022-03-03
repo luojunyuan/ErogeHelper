@@ -85,6 +85,7 @@ public partial class MenuDevicePage
         var pageOpacityAnimation = AnimationTool.FadeInAnimation;
         Storyboard.SetTarget(pageOpacityAnimation, this);
         Storyboard.SetTargetProperty(pageOpacityAnimation, new PropertyPath(OpacityProperty));
+        pageOpacityAnimation.Freeze();
         _transitionInStoryboard.Children.Add(pageOpacityAnimation);
 
 

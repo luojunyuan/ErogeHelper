@@ -25,6 +25,8 @@ public partial class MenuMainPage
             SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             GridPanel.Children.Cast<IMenuItemBackground>().Fill(true);
         };
+        _fadeOutAnimation.Freeze();
+        _fadeInAnimation.Freeze();
     }
 
     public void FadeOut()

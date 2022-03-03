@@ -541,7 +541,7 @@
     <value>发现新版本 {0}。是否立即更新？（如果提示 LocateEnumator 正在使用，请先关闭游戏后点击 try again）</value>
   </data>
   <data name="About.CheckingFailed" xml:space="preserve">
-    <value>没有网络或代理失败</value>
+    <value>无法连接到 Github</value>
   </data>
   <data name="About.CheckingVersion" xml:space="preserve">
     <value>正在检查更新 ...</value>

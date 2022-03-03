@@ -181,10 +181,12 @@ public partial class MenuBase : IEnableLogger
         var menuXMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
         Storyboard.SetTarget(menuXMoveAnimation, this);
         Storyboard.SetTargetProperty(menuXMoveAnimation, new PropertyPath(AnimationTool.XProperty));
+        menuXMoveAnimation.Freeze();
         _touchToMenuStoryboard.Children.Add(menuXMoveAnimation);
         var menuYMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
         Storyboard.SetTarget(menuYMoveAnimation, this);
         Storyboard.SetTargetProperty(menuYMoveAnimation, new PropertyPath(AnimationTool.YProperty));
+        menuYMoveAnimation.Freeze();
         _touchToMenuStoryboard.Children.Add(menuYMoveAnimation);
 
         var paddingAnimation = new ThicknessAnimation()
@@ -195,16 +197,19 @@ public partial class MenuBase : IEnableLogger
         };
         Storyboard.SetTarget(paddingAnimation, this);
         Storyboard.SetTargetProperty(paddingAnimation, new PropertyPath(PaddingProperty));
+        paddingAnimation.Freeze();
         _touchToMenuStoryboard.Children.Add(paddingAnimation);
 
         var frameBaseOpacityAnimation = AnimationTool.FadeInAnimation;
         Storyboard.SetTarget(frameBaseOpacityAnimation, FrameBase);
         Storyboard.SetTargetProperty(frameBaseOpacityAnimation, new PropertyPath(OpacityProperty));
+        frameBaseOpacityAnimation.Freeze();
         _touchToMenuStoryboard.Children.Add(frameBaseOpacityAnimation);
 
         var fakeWhitePointOpacityAnimation = AnimationTool.FadeOutAnimation;
         Storyboard.SetTarget(fakeWhitePointOpacityAnimation, FakeWhitePoint);
         Storyboard.SetTargetProperty(fakeWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        fakeWhitePointOpacityAnimation.Freeze();
         _touchToMenuStoryboard.Children.Add(fakeWhitePointOpacityAnimation);
 
         _touchToMenuStoryboard.Completed += (_, _) =>
@@ -235,6 +240,7 @@ public partial class MenuBase : IEnableLogger
         var frameBaseOpacityAnimation = AnimationTool.FadeOutAnimation;
         Storyboard.SetTarget(frameBaseOpacityAnimation, FrameBase);
         Storyboard.SetTargetProperty(frameBaseOpacityAnimation, new PropertyPath(OpacityProperty));
+        frameBaseOpacityAnimation.Freeze();
         _menuToTouchStoryboard.Children.Add(frameBaseOpacityAnimation);
 
         var paddingAnimation = new ThicknessAnimation()
@@ -245,11 +251,13 @@ public partial class MenuBase : IEnableLogger
         };
         Storyboard.SetTarget(paddingAnimation, this);
         Storyboard.SetTargetProperty(paddingAnimation, new PropertyPath(PaddingProperty));
+        paddingAnimation.Freeze();
         _menuToTouchStoryboard.Children.Add(paddingAnimation);
 
         var fakeWhitePointOpacityAnimation = AnimationTool.FadeInAnimation;
         Storyboard.SetTarget(fakeWhitePointOpacityAnimation, FakeWhitePoint);
         Storyboard.SetTargetProperty(fakeWhitePointOpacityAnimation, new PropertyPath(OpacityProperty));
+        fakeWhitePointOpacityAnimation.Freeze();
         _menuToTouchStoryboard.Children.Add(fakeWhitePointOpacityAnimation);
 
         _menuToTouchStoryboard.Completed += (_, _) =>

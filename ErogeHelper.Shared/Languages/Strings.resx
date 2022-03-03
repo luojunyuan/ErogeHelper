@@ -552,7 +552,7 @@ NOTE: You are about updating to dev version. This version may not stable only su
     <value>Latest preview version</value>
   </data>
   <data name="About.CheckingFailed" xml:space="preserve">
-    <value>No Internet or proxy failed</value>
+    <value>Connect to Github failed</value>
   </data>
   <data name="About.PreviewVersion" xml:space="preserve">
     <value>Preview version</value>
