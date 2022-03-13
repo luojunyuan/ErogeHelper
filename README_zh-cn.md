@@ -50,16 +50,6 @@ EH支持 windows 7 sp1 至最新版本的 windows 10 系统
 
 stable 版本的EH项目在分支 [Caliburn.Micro-Archive](https://github.com/ErogeHelper/ErogeHelper/tree/Caliburn.Micro-Archive) 中
 
-当前仓库main分支即 Preview 版本去掉了核心功能，使用 ReactiveUI 完全重构。
+当前仓库main分支即 Preview 版本去掉了核心功能，使用 ReactiveUI 完全重构。以及最新 Commit 在 dev 分支中。
 
-想法很多，还需要还原vnr的大部分功能，前路漫漫。。
-
-等 WinUI3 1.1 了，XamlIslands .Net6 能用了，~~提取模块 texthost 能在arm系统上工作后，~~ 再将主要功能从stable移植到main分支。
-
-> 作者是萌新开发，代码尽量不做奇怪表达，有机会尝试写点架构文档
-
-**EH的开发离不开许多三方开源项目**
-
-### 证书
-
-Eroge Helper 使用 GPLv3 开源许可证。
+**EH的开发离不开许多三方开源项目，希望将来能够有余力去支援EH依赖的项目**
