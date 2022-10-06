@@ -1,5 +1,7 @@
 [简体中文](https://github.com/ErogeHelper/ErogeHelper/blob/main/README_zh-cn.md)
 
+# TEMPORAEY READ ONLY
+
 ### Download
 
 See [release page](https://github.com/ErogeHelper/ErogeHelper/releases)
