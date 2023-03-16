@@ -1,0 +1,722 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SelectProcess.Title" xml:space="preserve">
+    <value>Select Process</value>
+  </data>
+  <data name="SelectProcess.Tips" xml:space="preserve">
+    <value>You can also use ErogeHelper.Installer.exe to install me~</value>
+  </data>
+  <data name="SelectProcess.Label" xml:space="preserve">
+    <value>Select Application</value>
+  </data>
+  <data name="SelectProcess.InjectButton" xml:space="preserve">
+    <value>Inject</value>
+  </data>
+  <data name="MessageBox.TimeoutInfo" xml:space="preserve">
+    <value>Timeout! Game window not found</value>
+  </data>
+  <data name="About.FileABug" xml:space="preserve">
+    <value>If you find any bugs, please open a new issue in the github repository.</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>Version : </value>
+  </data>
+  <data name="About.GitHub" xml:space="preserve">
+    <value>GitHub repository</value>
+  </data>
+  <data name="About.Contributors" xml:space="preserve">
+    <value>Contributors</value>
+  </data>
+  <data name="About.Dependencies" xml:space="preserve">
+    <value>Dependencies</value>
+  </data>
+  <data name="About.OpenNewIssue" xml:space="preserve">
+    <value>Open a new issue</value>
+  </data>
+  <data name="Installer.Info" xml:space="preserve">
+    <value>This will register Eroge Helper to the window context menu for ".exe" suffix programs. Please uninstall me before move or delete.</value>
+  </data>
+  <data name="Installer.Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Installer.Unload" xml:space="preserve">
+    <value>Unload</value>
+  </data>
+  <data name="HookConfig.Title" xml:space="preserve">
+    <value>Eroge Helper - Hook Config</value>
+  </data>
+  <data name="HookPage.HookCode" xml:space="preserve">
+    <value>Hook Code</value>
+  </data>
+  <data name="HookPage.Insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="HookPage.SelectedText" xml:space="preserve">
+    <value>Selected Text</value>
+  </data>
+  <data name="HookPage.RegExp" xml:space="preserve">
+    <value>Regular Expressions (Optional)</value>
+  </data>
+  <data name="HookPage.Text" xml:space="preserve">
+    <value>Current text</value>
+  </data>
+  <data name="HookPage.Console" xml:space="preserve">
+    <value>Console Output</value>
+  </data>
+  <data name="HookPage.SelectText" xml:space="preserve">
+    <value>Select Text</value>
+  </data>
+  <data name="HookPage.Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="GameView.MaxLenthTip" xml:space="preserve">
+    <value>Skip too long text</value>
+  </data>
+  <data name="MeCabPage.JapaneseText" xml:space="preserve">
+    <value>Show Japanese in text window</value>
+  </data>
+  <data name="GeneralPage.AppendText" xml:space="preserve">
+    <value>Show other texts</value>
+  </data>
+  <data name="GeneralPage.Title" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="MeCabPage.Title" xml:space="preserve">
+    <value>MeCab</value>
+  </data>
+  <data name="MeCabPage.PositionFormat" xml:space="preserve">
+    <value>Text dispaly position</value>
+  </data>
+  <data name="MeCabPage.FuriganaTop" xml:space="preserve">
+    <value>MaCabPage.FuriganaTop</value>
+  </data>
+  <data name="MeCabPage.FuriganaBottom" xml:space="preserve">
+    <value>FuriganaBottom</value>
+  </data>
+  <data name="MeCabPage.TextVertical" xml:space="preserve">
+    <value>MeCabPage.TextVertical</value>
+  </data>
+  <data name="MeCabPage.FuriganaType" xml:space="preserve">
+    <value>Furigana display type</value>
+  </data>
+  <data name="MeCabPage.Romaji" xml:space="preserve">
+    <value>Romaji</value>
+  </data>
+  <data name="MeCabPage.Hiragana" xml:space="preserve">
+    <value>Hiragana</value>
+  </data>
+  <data name="MeCabPage.Katakana" xml:space="preserve">
+    <value>Katakana</value>
+  </data>
+  <data name="GameView.SwitchFullScreen" xml:space="preserve">
+    <value>Full Screen (Alt+Enter)</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocusTip" xml:space="preserve">
+    <value>Make eh not occupied focus when full-screen</value>
+  </data>
+  <data name="AssistiveTouch.ActionCenter" xml:space="preserve">
+    <value>Action Center</value>
+  </data>
+  <data name="AssistiveTouch.TaskView" xml:space="preserve">
+    <value>Task View</value>
+  </data>
+  <data name="AssistiveTouch.ScreenShot" xml:space="preserve">
+    <value>ScreenShot</value>
+  </data>
+  <data name="AssistiveTouch.Preference" xml:space="preserve">
+    <value>Preference</value>
+  </data>
+  <data name="SelectProcess.ProcessExit" xml:space="preserve">
+    <value>Process has gone</value>
+  </data>
+  <data name="HookPage.SelectedTextInitTip" xml:space="preserve">
+    <value>Slide down to select a text thread</value>
+  </data>
+  <data name="HookPage.Title" xml:space="preserve">
+    <value>Hook Config</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MeCabPage.FuriganaDefault" xml:space="preserve">
+    <value>MeCabPage.FuriganaDefault</value>
+  </data>
+  <data name="GameView.SwitchWindow" xml:space="preserve">
+    <value>Window (Alt + Enter)</value>
+  </data>
+  <data name="HookPage.RegExpTag1" xml:space="preserve">
+    <value>Characters before '「' or '『'</value>
+  </data>
+  <data name="HookPage.RegExpTag2" xml:space="preserve">
+    <value>Characters after '」' or '』'</value>
+  </data>
+  <data name="HookPage.RegExpTag3" xml:space="preserve">
+    <value>Ruby like &lt;.*?&gt;</value>
+  </data>
+  <data name="HookPage.RegExpTag4" xml:space="preserve">
+    <value>Linebreaks</value>
+  </data>
+  <data name="HookPage.RegExpTag5" xml:space="preserve">
+    <value>Any Ascii charactors</value>
+  </data>
+  <data name="HookPage.RegExpTip" xml:space="preserve">
+    <value>Pick up a RegExp</value>
+  </data>
+  <data name="HookPage.TextThreadRefreshTip" xml:space="preserve">
+    <value>Refresh current text thread</value>
+  </data>
+  <data name="HookPage.CodeInsertDialogTip" xml:space="preserve">
+    <value>Input HCode or RCode</value>
+  </data>
+  <data name="HookPage.CodeInsertLabel" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="HookPage.TextThreadRefreshLabel" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="HookPage.CodeSearchTip" xml:space="preserve">
+    <value>Search code on Aniclan</value>
+  </data>
+  <data name="HookPage.CodeSearchNoResult" xml:space="preserve">
+    <value>No Result</value>
+  </data>
+  <data name="HookPage.CodeSearchCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="GameView.FontDecreaseTip" xml:space="preserve">
+    <value>Decrease size</value>
+  </data>
+  <data name="GameView.FontIncreaseTip" xml:space="preserve">
+    <value>Increase size</value>
+  </data>
+  <data name="AssistiveTouch.VolumeIncrease" xml:space="preserve">
+    <value>Volume Up</value>
+  </data>
+  <data name="AssistiveTouch.VolumeDecrease" xml:space="preserve">
+    <value>Volume Down</value>
+  </data>
+  <data name="GameView.PinnedTip" xml:space="preserve">
+    <value>Unpin Japanese text</value>
+  </data>
+  <data name="GameView.UnpinTip" xml:space="preserve">
+    <value>Pin Japanese text</value>
+  </data>
+  <data name="GeneralPage.Misc" xml:space="preserve">
+    <value>MISC</value>
+  </data>
+  <data name="GeneralPage.DeepL" xml:space="preserve">
+    <value>DeepL client extension</value>
+  </data>
+  <data name="GeneralPage.DeepLDownload" xml:space="preserve">
+    <value>Download DeepL</value>
+  </data>
+  <data name="GeneralPage.Brightness" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="GeneralPage.BrightnessTip" xml:space="preserve">
+    <value>Would change the gamma value</value>
+  </data>
+  <data name="MeCabPage.TextFlyout" xml:space="preserve">
+    <value>Text Flyout</value>
+  </data>
+  <data name="MeCabPage.Dict" xml:space="preserve">
+    <value>Dict</value>
+  </data>
+  <data name="CardControl.CloseTip" xml:space="preserve">
+    <value>Close Card</value>
+  </data>
+  <data name="CardControl.SelectTextTip" xml:space="preserve">
+    <value>Select text</value>
+  </data>
+  <data name="Textractor.AlreadyInject" xml:space="preserve">
+    <value>Textractor: already injected</value>
+  </data>
+  <data name="Textractor.InvalidCode" xml:space="preserve">
+    <value>Textractor: invalid code</value>
+  </data>
+  <data name="Textractor.Init" xml:space="preserve">
+    <value>Textractor: initialization completed</value>
+  </data>
+  <data name="Textractor.InjectFailed" xml:space="preserve">
+    <value>Textractor: couldn't inject</value>
+  </data>
+  <data name="Textractor.InvalidProcess" xml:space="preserve">
+    <value>Textractor: invalid process</value>
+  </data>
+  <data name="Textractor.Clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="HookPage.RCodeLabel" xml:space="preserve">
+    <value>Read Code</value>
+  </data>
+  <data name="HookPage.RCodeTip" xml:space="preserve">
+    <value>Search text help find out read code</value>
+  </data>
+  <data name="GameViewModel.TextWaitingMessage" xml:space="preserve">
+    <value>Waiting for text...</value>
+  </data>
+  <data name="GameView.ResetTouchPos" xml:space="preserve">
+    <value>Try reset button position</value>
+  </data>
+  <data name="GameView.TouchToMouse" xml:space="preserve">
+    <value>Touch to mouse</value>
+  </data>
+  <data name="GeneralPage.OutsideWindow" xml:space="preserve">
+    <value>Use outside text window</value>
+  </data>
+  <data name="Common.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="HookPage.RCodeSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="HookPage.RCodeInputLabel" xml:space="preserve">
+    <value>Please enter the current text displayed by the game and type from the beginning of the text.
+(Including the '「'　symbol, if exist)
+(Read-Code only work this turn during the game run)</value>
+  </data>
+  <data name="HookPage.RCodeClipTip" xml:space="preserve">
+    <value>Select text area</value>
+  </data>
+  <data name="HookPage.RCodeTextValidationTip" xml:space="preserve">
+    <value>The text should more than 5 characters</value>
+  </data>
+  <data name="HookPage.SubmitDialogMessage" xml:space="preserve">
+    <value>Update succeed</value>
+  </data>
+  <data name="MeCabPage.SelectDict" xml:space="preserve">
+    <value>Choose file UniDic.eh</value>
+  </data>
+  <data name="MeCabPage.SelectDictTip" xml:space="preserve">
+    <value>Unpack UniDic.eh to enable this function</value>
+  </data>
+  <data name="SelectProcess_ProcessItself" xml:space="preserve">
+    <value>Cannot choose EH itself~</value>
+  </data>
+  <data name="Translator.BaiduWeb" xml:space="preserve">
+    <value>BaiduWeb</value>
+  </data>
+  <data name="Translator.BaiduApi" xml:space="preserve">
+    <value>BaiduApi</value>
+  </data>
+  <data name="Translator.Caiyun" xml:space="preserve">
+    <value>Caiyun</value>
+  </data>
+  <data name="Translator.NiuTrans" xml:space="preserve">
+    <value>NiuTrans</value>
+  </data>
+  <data name="Translator.TencentMt" xml:space="preserve">
+    <value>TencentMt</value>
+  </data>
+  <data name="Translator.Yeekit" xml:space="preserve">
+    <value>Yeekit</value>
+  </data>
+  <data name="Translator.Youdao" xml:space="preserve">
+    <value>Youdao</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Translator.GoogleCn" xml:space="preserve">
+    <value>Google Translate (CN)</value>
+  </data>
+  <data name="Common.Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="Common.RestoreDefault" xml:space="preserve">
+    <value>Restore default</value>
+  </data>
+  <data name="TransPage.Title" xml:space="preserve">
+    <value>Machine Translation</value>
+  </data>
+  <data name="TransPage.TransLabel" xml:space="preserve">
+    <value>Translate</value>
+  </data>
+  <data name="TransPage.To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="TransPage.TranslatorDetail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="Common.Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Installer.DeleteTip" xml:space="preserve">
+    <value>This will delete all cache files such like config, subtitles, Mecab dictionary, game info database</value>
+  </data>
+  <data name="Installer.DeleteCheckBox" xml:space="preserve">
+    <value>Also delete EH cache files.</value>
+  </data>
+  <data name="GeneralPage.CacheSpaceLabel" xml:space="preserve">
+    <value>Cache files space</value>
+  </data>
+  <data name="SelectProcess.NoIconProc" xml:space="preserve">
+    <value>Include no icon program</value>
+  </data>
+  <data name="OokiiDialog.ClipboardLabel" xml:space="preserve">
+    <value>Confirm and copy error to clipboard</value>
+  </data>
+  <data name="ErrorDialog.Content" xml:space="preserve">
+    <value>ErogeHelper run into some trouble. See error stack by click Detail information below. You can copy the message use Ctrl + C.</value>
+  </data>
+  <data name="Installer.Title" xml:space="preserve">
+    <value>Installer</value>
+  </data>
+  <data name="SelectProcess.AdminTip" xml:space="preserve">
+    <value>Can not find the right game? Try restart ErogeHelper.ProcessSelector.exe in Administrator</value>
+  </data>
+  <data name="SelectProcess.EHNotExist" xml:space="preserve">
+    <value>Not found the ErogeHelper.exe main executable</value>
+  </data>
+  <data name="SelectProcess.CheckPath" xml:space="preserve">
+    <value>Please Check path </value>
+  </data>
+  <data name="App.ErrorDialog" xml:space="preserve">
+    <value>ErogeHelper v{0} - {1} Error</value>
+  </data>
+  <data name="App.ErrorDialogExInfo" xml:space="preserve">
+    <value>OS Version: {0}
+Caused by source `{1}`
+</value>
+  </data>
+  <data name="App.StartNoParameter" xml:space="preserve">
+    <value>Can't open ErogeHelper directly</value>
+  </data>
+  <data name="App.StartItself" xml:space="preserve">
+    <value>Can't open ErogeHelper itself</value>
+  </data>
+  <data name="GeneralPage.ButtonBiggerSize" xml:space="preserve">
+    <value>White point size</value>
+  </data>
+  <data name="GeneralPage.AssistiveTouch" xml:space="preserve">
+    <value>Assistive Touch</value>
+  </data>
+  <data name="GeneralPage.DpiCompatibility" xml:space="preserve">
+    <value>Set DPI compatibility to 'Application' automatically when starting game</value>
+  </data>
+  <data name="GeneralPage.FalseTouchMask" xml:space="preserve">
+    <value>Prevent edge touches at the edge of the game when fullscreen</value>
+  </data>
+  <data name="GameView.TouchKeyboard" xml:space="preserve">
+    <value>Touch keyboard keys</value>
+  </data>
+  <data name="AssistiveTouch.Function" xml:space="preserve">
+    <value>Function</value>
+  </data>
+  <data name="AssistiveTouch.VirtualKeyboard" xml:space="preserve">
+    <value>Keyboard</value>
+  </data>
+  <data name="About.Update.CloseGameTip" xml:space="preserve">
+    <value>Please save and close your game in purpose to finish the update</value>
+  </data>
+  <data name="About.Update.Tip" xml:space="preserve">
+    <value>There is new version {0} available. Do you want to update the application now? (if it said Locate Emulator is in using, Please close the game, then click try again)</value>
+  </data>
+  <data name="About.Update.PreviewWarning" xml:space="preserve">
+    <value>
+NOTE: You are about updating to dev version. This version may not stable only suit for advance users</value>
+  </data>
+  <data name="About.CheckingVersion" xml:space="preserve">
+    <value>Checking update ...</value>
+  </data>
+  <data name="About.NewVersion" xml:space="preserve">
+    <value>Found new version {0}</value>
+  </data>
+  <data name="About.LatestVersion" xml:space="preserve">
+    <value>Latest version</value>
+  </data>
+  <data name="About.PreviewLatestVersion" xml:space="preserve">
+    <value>Latest preview version</value>
+  </data>
+  <data name="About.CheckingFailed" xml:space="preserve">
+    <value>Connect to Github failed</value>
+  </data>
+  <data name="About.PreviewVersion" xml:space="preserve">
+    <value>Preview version</value>
+  </data>
+  <data name="About.NightlyBuild" xml:space="preserve">
+    <value>Check Pre-Release version</value>
+  </data>
+  <data name="Common.Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="HookPage.ReInject" xml:space="preserve">
+    <value>Inject the game again</value>
+  </data>
+  <data name="HookPage.RemoveHook" xml:space="preserve">
+    <value>Remove hook</value>
+  </data>
+  <data name="HookPage.TextCleaning" xml:space="preserve">
+    <value>Text Cleaning</value>
+  </data>
+  <data name="GeneralPage.HideTextWindow" xml:space="preserve">
+    <value>Don't display text window</value>
+  </data>
+  <data name="HookPage.HookNameLabel" xml:space="preserve">
+    <value>Current in use hook: </value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="AssistiveTouch.Device" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="AssistiveTouch.FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="AssistiveTouch.Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="GeneralPage.CurrentGame" xml:space="preserve">
+    <value>Current Game</value>
+  </data>
+  <data name="HookPage.Clipboard" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="HookPage.ClipboardTip" xml:space="preserve">
+    <value>Toggle this to add clipboard monitor</value>
+  </data>
+  <data name="GeneralPage.NotInjectStartup" xml:space="preserve">
+    <value>Do not inject process when startup</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessDown" xml:space="preserve">
+    <value>Brightness Down</value>
+  </data>
+  <data name="AssistiveTouch.BrightnessUp" xml:space="preserve">
+    <value>Brightness Up</value>
+  </data>
+  <data name="Common.GetHelp" xml:space="preserve">
+    <value>Get help</value>
+  </data>
+  <data name="HookPage.SetHook" xml:space="preserve">
+    <value>How to set hook?</value>
+  </data>
+  <data name="HookPage.WhatIsHook" xml:space="preserve">
+    <value>What is Hook Code?</value>
+  </data>
+  <data name="HookPage.LinkSetHook" xml:space="preserve">
+    <value>https://www.google.com</value>
+  </data>
+  <data name="HookPage.LinkWhatIsHook" xml:space="preserve">
+    <value>https://www.google.com</value>
+  </data>
+  <data name="AssistiveTouch.Game" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouseTip" xml:space="preserve">
+    <value>Add a touch to mouse simulate layer</value>
+  </data>
+  <data name="AssistiveTouch.TouchToMouse" xml:space="preserve">
+    <value>To Mouse</value>
+  </data>
+  <data name="AssistiveTouch.LoseFocus" xml:space="preserve">
+    <value>Lose Focus</value>
+  </data>
+  <data name="AssistiveTouch.CloseGame" xml:space="preserve">
+    <value>CloseGame</value>
+  </data>
+  <data name="MessageBox.LoseFocusWarn" xml:space="preserve">
+    <value>Note lose focus only recommend when you can not interact with eh when full-screen.</value>
+  </data>
+  <data name="HookPage.HCodeInvalidFormat" xml:space="preserve">
+    <value>Invalid h-code format</value>
+  </data>
+  <data name="HookThreadItem.Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="HookThreadItem.Character" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="Common.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="HookPage.TextClean" xml:space="preserve">
+    <value>Text Clean</value>
+  </data>
+  <data name="HookPage.InvalidRegExp" xml:space="preserve">
+    <value>Invalid regular expressions.</value>
+  </data>
+  <data name="HookPage.ReiPatcher" xml:space="preserve">
+    <value>ReiPatcher</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="ReiPatcherDialog.OK" xml:space="preserve">
+    <value>√ Finish</value>
+  </data>
+  <data name="ReiPatcherDialog.Error" xml:space="preserve">
+    <value>X Undone</value>
+  </data>
+  <data name="ReiPatcherDialog.Tip" xml:space="preserve">
+    <value>⭕ May need restart game</value>
+  </data>
+  <data name="HookPage.UnityGameTip" xml:space="preserve">
+    <value>Unity game can't inject automatically</value>
+  </data>
+  <data name="TextWindow.WaitingForText" xml:space="preserve">
+    <value>Waiting for text...</value>
+  </data>
+  <data name="TextWindow.DragAreaTip" xml:space="preserve">
+    <value>👈Drag the square</value>
+  </data>
+  <data name="TextWindow.SetHookTip" xml:space="preserve">
+    <value>Important: Seems like hasn't set hook yet</value>
+  </data>
+  <data name="TextWindow.EnableFunctionTip" xml:space="preserve">
+    <value>Tip: Has not enable Japanese text or any translator</value>
+  </data>
+  <data name="Developing" xml:space="preserve">
+    <value>Developing...</value>
+  </data>
+  <data name="TTSPage.Title" xml:space="preserve">
+    <value>Text to Speech</value>
+  </data>
+  <data name="TransPage.LearnJapaneseTip" xml:space="preserve">
+    <value>Know some Japanese alphabet can help better understanding!</value>
+  </data>
+  <data name="TransPage.AiueoLink" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=LrXHizFaol0</value>
+  </data>
+  <data name="TransPage.TaeKimGrammerLink" xml:space="preserve">
+    <value>http://guidetojapanese.org/learn/grammar/</value>
+  </data>
+  <data name="TransPage.Aiueo" xml:space="preserve">
+    <value>AIUEO song</value>
+  </data>
+  <data name="TransPage.TaeKimGrammer" xml:space="preserve">
+    <value>Tae Kim's Guide to Learning Japanese</value>
+  </data>
+  <data name="Common.Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Common.Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="App.StartInvalidPath" xml:space="preserve">
+    <value>Invalid game path</value>
+  </data>
+</root>

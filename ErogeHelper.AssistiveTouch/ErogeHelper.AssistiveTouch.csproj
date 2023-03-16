@@ -6,6 +6,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,17 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="securifybv.ShellLink" Version="0.1.0" />
-    <PackageReference Include="SplashScreenGdip" Version="1.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!--  Splash screen  -->
-    <EmbeddedResource Include="assets\klee.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ErogeHelper.Share\ErogeHelper.Share.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WindowsInput" Version="6.4.0" />
   </ItemGroup>
 
 </Project>
