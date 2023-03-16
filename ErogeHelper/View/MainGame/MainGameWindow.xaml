@@ -1,0 +1,22 @@
+﻿<rxui:ReactiveWindow
+    x:Class="ErogeHelper.View.MainGame.MainGameWindow"
+    x:TypeArguments="vm:MainGameViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rxui="http://reactiveui.net"
+    xmlns:maingame="clr-namespace:ErogeHelper.View.MainGame"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.MainGame"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:MainGameViewModel}"
+    Left="-32000" Top="-32000" Width="0" Height="0"
+    AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False"
+    Topmost="True" WindowStyle="None" DpiChanged="MainGameWindowOnDpiChanged">
+
+    <!--  Layout of the whole game window or client area  -->
+    <Grid>
+        <maingame:AssistiveTouch x:Name="Touch" />
+        <maingame:AssistiveMenu x:Name="TouchMenu" />
+    </Grid>
+</rxui:ReactiveWindow>

@@ -1,0 +1,44 @@
+﻿<rxui:ReactiveUserControl
+    x:Class="ErogeHelper.View.Modern.Preference.GeneralPage"
+    x:TypeArguments="vm:GeneralViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Common.Languages"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Preference"
+    xmlns:component="clr-namespace:ErogeHelper.Function.WpfComponent"
+    mc:Ignorable="d"
+    d:DesignHeight="850" d:DesignWidth="800">
+
+    <component:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
+        <ui:SimpleStackPanel Margin="20 10" Spacing="10">
+            <GroupBox Header="{x:Static resx:Strings.GeneralPage_Misc}">
+                <ui:SimpleStackPanel Spacing="10">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Button Size" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="SelectedTouchSize" Margin="0 8 0 0" DisplayMemberPath="." />
+                    </StackPanel>
+                    <ui:ToggleSwitch x:Name="ShowTextWindow" Header="Display text window" IsEnabled="False" />
+                    <CheckBox x:Name="InjectAtStartup" Content="Inject process automatically when startup" IsEnabled="False" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Magnifier">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="MagSmoothing" Header="Smoothing" />
+                    <TextBlock Text="Left Top Width Height" />
+                    <TextBox x:Name="MagData" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+            
+            <GroupBox Header="Advanced Options">
+                <ui:SimpleStackPanel Spacing="10">
+                    <ui:ToggleSwitch x:Name="EdgeTouchMask" Header="{x:Static resx:Strings.GeneralPage_FalseTouchMask}" />
+                    <CheckBox x:Name="DpiCompatibility" Content="{x:Static resx:Strings.GeneralPage_DpiCompatibility}" />
+                </ui:SimpleStackPanel>
+            </GroupBox>
+        </ui:SimpleStackPanel>
+    </component:ScrollViewerSmooth>
+</rxui:ReactiveUserControl>

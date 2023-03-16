@@ -1,0 +1,172 @@
+﻿<rxui:ReactiveWindow
+    x:Class="ErogeHelper.View.Modern.HookConfig.HookWindow"
+    x:TypeArguments="vm:HookViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Common.Languages"
+    xmlns:def="clr-namespace:ErogeHelper.Common.Definitions"
+    xmlns:comp="clr-namespace:ErogeHelper.Function.WpfComponent"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig"
+    mc:Ignorable="d"
+    Width="600" Height="550"
+    MinWidth="400"
+    Title="{x:Static resx:Strings.HookConfig_Title}"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    Icon="pack://application:,,,/assets/app.ico" ResizeMode="CanResizeWithGrip"
+    Topmost="True" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--  Main Panel  -->
+            <RowDefinition Height="*" />
+            <!--  Submit Button  -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Main Panel  -->
+        <ScrollViewer Grid.Row="0" PanningMode="Both">
+
+            <Grid x:Name="MainContentGrid">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--  Main  -->
+                <StackPanel Margin="20 10" HorizontalAlignment="Left">
+
+                    <!--  Current Hook In Using  -->
+                    <StackPanel Margin="0 0 0 10" Orientation="Horizontal">
+                        <Label Content="{x:Static resx:Strings.HookPage_HookNameLabel}" />
+                        <Label x:Name="CurrentInUseHook" />
+                    </StackPanel>
+
+                    <!--  Console  -->
+                    <GroupBox Header="{x:Static resx:Strings.HookPage_Console}">
+                        <StackPanel>
+                            <TextBox x:Name="ConsoleInfo"
+                                MinWidth="240" MaxWidth="520" MaxHeight="120" 
+                                HorizontalAlignment="Left" VerticalAlignment="Top"
+                                comp:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True" FontSize="16"
+                                IsReadOnly="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Hidden" />
+
+                            <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                                <Button x:Name="ReInject" Content="{x:Static resx:Strings.HookPage_ReInject}" />
+                                <TextBlock x:Name="UnityGameTip"
+                                    Margin="4 0 0 0" VerticalAlignment="Center"
+                                    Text="{x:Static resx:Strings.HookPage_UnityGameTip}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!--  Hook List  -->
+                    <GroupBox Header="{x:Static resx:Strings.HookPage_SelectText}">
+                        <ui:SimpleStackPanel Spacing="10">
+                            <!--  Commanders  -->
+                            <StackPanel Orientation="Horizontal">
+                                <!--  Refresh  -->
+                                <ui:AppBarButton x:Name="RefreshButton"
+                                    Icon="Refresh"
+                                    Label="{x:Static resx:Strings.HookPage_TextThreadRefreshLabel}"
+                                    ToolTip="{x:Static resx:Strings.HookPage_TextThreadRefreshTip}" />
+                                <!--  Hook Code  -->
+                                <ui:AppBarButton x:Name="HCodeButton" Label="{x:Static resx:Strings.HookPage_CodeInsertLabel}" ToolTip="{x:Static resx:Strings.HookPage_CodeInsertDialogTip}">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static def:CommonGlyphs.Component}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
+                                <!--  Read Code  -->
+                                <ui:AppBarButton x:Name="RCodeButton" Label="{x:Static resx:Strings.HookPage_RCodeLabel}" ToolTip="{x:Static resx:Strings.HookPage_RCodeTip}">
+                                    <ui:AppBarButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static def:CommonGlyphs.ReadingMode}" />
+                                    </ui:AppBarButton.Icon>
+                                </ui:AppBarButton>
+                                <!--  Clipboard  -->
+                                <ui:AppBarToggleButton x:Name="ClipboardButton" Label="{x:Static resx:Strings.HookPage_Clipboard}" ToolTip="{x:Static resx:Strings.HookPage_ClipboardTip}">
+                                    <ui:AppBarToggleButton.Icon>
+                                        <ui:FontIcon Glyph="{x:Static def:CommonGlyphs.ClipboardList}" />
+                                    </ui:AppBarToggleButton.Icon>
+                                </ui:AppBarToggleButton>
+                                <rxui:ViewModelViewHost x:Name="HCodeDialogHost" />
+                                <rxui:ViewModelViewHost x:Name="RCodeDialogHost" />
+                            </StackPanel>
+
+                            <!--  Thread Select  -->
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox x:Name="HookThreadsComboBox"
+                                    Width="{StaticResource ControllerWidth}"
+                                    HorizontalAlignment="Left"
+                                    DisplayMemberPath="EngineName" />
+                                <Button x:Name="RemoveHookButton"
+                                    Width="30"
+                                    Margin="10 0 0 0"
+                                    ToolTip="{x:Static resx:Strings.HookPage_RemoveHook}">
+                                    <ui:SymbolIcon Margin="-9 -2 -8 -2.5" Symbol="Clear" />
+                                </Button>
+                            </StackPanel>
+                            <ItemsControl x:Name="HookThreadItems" HorizontalAlignment="Left">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <rxui:ViewModelViewHost ViewModel="{Binding}" Duration="0" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ui:SimpleStackPanel>
+                    </GroupBox>
+                </StackPanel>
+
+                <!--  Infomation Column  -->
+                <ui:SimpleStackPanel
+                    Width="210"
+                    Margin="20 10" HorizontalAlignment="Left"
+                    Spacing="10">
+                    <ui:SimpleStackPanel.Style>
+                        <Style TargetType="ui:SimpleStackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActualWidth, ElementName=MainContentGrid, Converter={StaticResource IsLessThanConverter}, ConverterParameter={StaticResource ColumnInfoThresholdWidth}}" Value="True">
+                                    <Setter Property="Grid.Row" Value="1" />
+                                    <Setter Property="Grid.Column" Value="0" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ActualWidth, ElementName=MainContentGrid, Converter={StaticResource IsLessThanConverter}, ConverterParameter={StaticResource ColumnInfoThresholdWidth}}" Value="False">
+                                    <Setter Property="Grid.Row" Value="0" />
+                                    <Setter Property="Grid.Column" Value="1" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:SimpleStackPanel.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="5" Symbol="Help" />
+                        <ui:HyperlinkButton x:Name="SetHookTipLink" Margin="5 0 0 0" Content="{x:Static resx:Strings.HookPage_SetHook}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="5" Symbol="Globe" />
+                        <ui:HyperlinkButton x:Name="WhatIsHookTipLink" Margin="5 0 0 0" Content="{x:Static resx:Strings.HookPage_WhatIsHook}" />
+                    </StackPanel>
+                </ui:SimpleStackPanel>
+            </Grid>
+
+        </ScrollViewer>
+
+        <!--  Next Button  -->
+        <rxui:ViewModelViewHost x:Name="TextCleanDialogHost" />
+        <Button x:Name="NextButton"
+            Grid.Row="1"
+            Width="240"
+            Margin="20 10"
+            Content="{x:Static resx:Strings.Common_Next}" />
+    </Grid>
+</rxui:ReactiveWindow>

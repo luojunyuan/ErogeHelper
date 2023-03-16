@@ -2,19 +2,41 @@
     x:Class="ErogeHelper.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:ui="http://schemas.modernwpf.com/2019"
-    xmlns:converter="clr-namespace:ErogeHelper.XamlTool.Converters">
+    xmlns:comp="clr-namespace:ErogeHelper.Function.WpfComponent">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemeResources />
-                <ui:XamlControlsResources />
-                <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
-                <ResourceDictionary Source="Properties/UIValueDictionary.xaml" />
+                <ResourceDictionary Source="Function/Properties/AssistiveTouchResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converter:IsLessThanConverter x:Key="IsLessThanConverter" />
-            <converter:TextEvaluateConverter x:Key="TextEvaluateConverter" />
-            <converter:FontSizeHalfConverter x:Key="FontSizeHalfConverter" />
+
+            <comp:IsLessThanConverter x:Key="IsLessThanConverter" />
+            <comp:FontSizeHalfConverter x:Key="FontSizeHalfConverter" />
+
+            <!--  Icon Font  -->
+            <FontFamily x:Key="SymbolThemeFontFamily">Segoe MDL2 Assets</FontFamily>
+
+            <!--  Panel and Controller Common Size  -->
+            <Thickness x:Key="ContentMargin">20 10</Thickness>
+            <system:Double x:Key="MinWindowWidth">400</system:Double>
+            <system:Double x:Key="ControllerWidth">240</system:Double>
+            <system:Double x:Key="MinButtonWidth">90</system:Double>
+            <system:Double x:Key="MinButtonHeight">36</system:Double>
+
+            <!--  Text Size  -->
+            <system:Double x:Key="TextBodySize">16</system:Double>
+            <system:Double x:Key="TextLabelSize">18</system:Double>
+
+            <!--  Could be more small but 0.002 is enough  -->
+            <system:Double x:Key="MinimalOpacity">0.002</system:Double>
+
+            <!--  ModernWpf.NavigationView  -->
+            <system:Double x:Key="ExpandedModeThresholdWidth">500</system:Double>
+            <system:Double x:Key="SidePaneLength">160</system:Double>
+
+            <!--  Side Info Panel Width Contract  -->
+            <system:Double x:Key="ColumnInfoThresholdWidth">850</system:Double>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

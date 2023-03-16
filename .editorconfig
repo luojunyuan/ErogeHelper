@@ -1,4 +1,4 @@
-﻿[*.cs]
+[*.cs]
 
 # IDE0022: 使用方法的程序块主体
 csharp_style_expression_bodied_methods = true
@@ -41,3 +41,6 @@ dotnet_sort_system_directives_first = true
 # Editor Guidelines extension
 [*.cs]
 guidelines = 120
+
+# WPF0041: Set mutable dependency properties using SetCurrentValue
+dotnet_diagnostic.WPF0041.severity = silent

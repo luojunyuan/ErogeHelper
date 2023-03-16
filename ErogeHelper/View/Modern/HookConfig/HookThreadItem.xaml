@@ -1,0 +1,31 @@
+﻿<StackPanel x:Name="WholeBox"
+    x:Class="ErogeHelper.View.Modern.HookConfig.HookThreadItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:resx="clr-namespace:ErogeHelper.Common.Languages"
+    xmlns:comp="clr-namespace:ErogeHelper.Function.WpfComponent"
+    mc:Ignorable="d"
+    Width="250" Height="auto"
+    Margin="0 0 20 0">
+    <StackPanel Orientation="Horizontal">
+        <TextBlock x:Name="ThreadIndex"
+            d:Text="1"
+            Margin="2 2 20 0" VerticalAlignment="Center"
+            FontWeight="Bold" />
+        <ui:RadioButtons MaxColumns="2">
+            <RadioButton x:Name="TextRadioButton" Click="OptionalRadioButtonCheck" Content="{x:Static resx:Strings.HookThreadItem_Text}" />
+            <RadioButton x:Name="CharacterRadioButton"
+                Margin="-25 0 0 0" HorizontalAlignment="Left"
+                Click="OptionalRadioButtonCheck"
+                Content="{x:Static resx:Strings.HookThreadItem_Character}" />
+        </ui:RadioButtons>
+    </StackPanel>
+    <TextBox x:Name="TotalText"
+        d:Text="れいあ「へぇぇ……そうなんだ。待ち合わせして、ご飯食べて、　おしゃべりしてって……それってつまり……　デートするってこと……？」"
+        MaxHeight="150"
+        comp:ScrollToEndBehavior.TextChanged="True" AcceptsReturn="True"
+        IsReadOnly="True" TextWrapping="Wrap" />
+</StackPanel>

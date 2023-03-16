@@ -1,0 +1,52 @@
+﻿<rxui:ReactiveUserControl
+    x:Class="ErogeHelper.View.Modern.HookConfig.TextRegExpDialog"
+    x:TypeArguments="vm:TextRegExpViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Common.Languages"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.HookConfig"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=vm:TextRegExpViewModel}">
+
+    <ui:ContentDialog x:Name="ContentDialog"
+        Title="{x:Static resx:Strings.HookPage_TextClean}"
+        CloseButtonText="{x:Static resx:Strings.Common_Cancel}"
+        DefaultButton="Primary"
+        PrimaryButtonText="{x:Static resx:Strings.HookPage_Submit}">
+        <ui:SimpleStackPanel Width="320" Margin="0 10" Spacing="2">
+
+            <!--  Current Text  -->
+            <Label Content="{x:Static resx:Strings.HookPage_Text}" />
+            <Border BorderBrush="LightSkyBlue" BorderThickness="1" Padding="2">
+                <ContentControl x:Name="SelectedText"
+                    Height="80"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    FontSize="16" />
+            </Border>
+
+            <WrapPanel ItemHeight="35">
+                <TextBlock Text="Delete" VerticalAlignment="Center" Margin="0 0 4 0" />
+                <Button x:Name="RegExp1" Content="{x:Static resx:Strings.HookPage_RegExpTag1}" />
+                <Button x:Name="RegExp2" Content="{x:Static resx:Strings.HookPage_RegExpTag2}" />
+                <Button x:Name="RegExp3" Content="{x:Static resx:Strings.HookPage_RegExpTag3}" />
+                <Button x:Name="RegExp4" Margin="4 0 0 0" Content="{x:Static resx:Strings.HookPage_RegExpTag4}" />
+                <Button x:Name="RegExp5" Content="{x:Static resx:Strings.HookPage_RegExpTag5}" />
+            </WrapPanel>
+            <Label Margin="0 10" Content="{x:Static resx:Strings.HookPage_RegExp}" />
+            <StackPanel Orientation="Horizontal">
+                <TextBox
+                    Width="240" ui:TextBoxHelper.IsDeleteButtonVisible="False"
+                    HorizontalAlignment="Left"
+                    Text="{Binding RegExp, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+                <Button x:Name="RegExpClear"
+                    Margin="4 0 0 0" Content="Clear" ToolTip="If you don't need regexp, please leave it with blank" />
+            </StackPanel>
+            <TextBlock x:Name="RegExpValidationTip" Foreground="Red" />
+
+        </ui:SimpleStackPanel>
+    </ui:ContentDialog>
+
+</rxui:ReactiveUserControl>

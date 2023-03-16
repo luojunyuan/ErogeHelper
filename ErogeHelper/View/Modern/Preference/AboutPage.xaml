@@ -1,0 +1,41 @@
+﻿<rxui:ReactiveUserControl
+    x:Class="ErogeHelper.View.Modern.Preference.AboutPage"
+    x:TypeArguments="vm:AboutViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:rxui="http://reactiveui.net"
+    xmlns:resx="clr-namespace:ErogeHelper.Common.Languages"
+    xmlns:comp="clr-namespace:ErogeHelper.Function.WpfComponent"
+    xmlns:func="clr-namespace:ErogeHelper.Function"
+    xmlns:vm="clr-namespace:ErogeHelper.ViewModel.Preference"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="400">
+
+    <comp:ScrollViewerSmooth PanningMode="Both" VerticalScrollBarVisibility="Auto">
+        <ui:SimpleStackPanel Margin="20 10" Spacing="10">
+            <TextBlock FontWeight="SemiBold" Style="{DynamicResource TitleTextBlockStyle}" Text="Eroge Helper" />
+            <Image Height="128" HorizontalAlignment="Left" Source="pack://application:,,,/assets/app.png" />
+            <TextBlock Text="it's eroge helper!" TextWrapping="Wrap" />
+            <TextBlock
+                FontStyle="Italic" FontWeight="Bold"
+                Text="{x:Static resx:Strings.About_FileABug}"
+                TextWrapping="Wrap" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>
+                    <Run Text="{x:Static resx:Strings.About_Version}" />
+                    <Bold>
+                        <Run x:Name="AppVersion" Text="{x:Static func:EHContext.EHVersion}" />
+                    </Bold>
+                </TextBlock>
+            </StackPanel>
+
+            <ui:HyperlinkButton Content="{x:Static resx:Strings.About_GitHub}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper" />
+            <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Contributors}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/graphs/contributors" />
+            <ui:HyperlinkButton Content="{x:Static resx:Strings.About_Dependencies}" Cursor="Hand" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/network/dependencies" />
+            <ui:HyperlinkButton Content="{x:Static resx:Strings.About_OpenNewIssue}" NavigateUri="https://github.com/luojunyuan/Eroge-Helper/issues/new/choose" />
+        </ui:SimpleStackPanel>
+    </comp:ScrollViewerSmooth>
+</rxui:ReactiveUserControl>
