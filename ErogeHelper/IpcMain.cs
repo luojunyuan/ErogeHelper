@@ -1,44 +1,43 @@
-﻿using ErogeHelper.Share;
+﻿using ErogeHelper.IpcChannel;
 using System.IO.Pipes;
 
-namespace ErogeHelper
+namespace ErogeHelper;
+
+internal class IpcMain
 {
-    internal class IpcMain
+    private readonly AnonymousPipeServerStream _serverIn;
+
+    public IpcMain(AnonymousPipeServerStream serverIn)
     {
-        private readonly AnonymousPipeServerStream _serverIn;
+        _serverIn = serverIn;
+        Start();
+    }
 
-        public IpcMain(AnonymousPipeServerStream serverIn)
+    private void Start()
+    {
+        new TaskFactory().StartNew(() =>
         {
-            _serverIn = serverIn;
-            Start();
-        }
-
-        private void Start()
-        {
-            new TaskFactory().StartNew(() =>
+            Thread.CurrentThread.Name = "IpcMain listening loop";
+            var sr = new StreamReader(_serverIn);
+            string? temp;
+            while (true)
             {
-                Thread.CurrentThread.Name = "IpcMain listening loop";
-                var sr = new StreamReader(_serverIn);
-                string? temp;
-                while (true)
+                temp = sr.ReadLine();
+                Enum.TryParse(temp, out IpcTypes channel);
+                if (channel == IpcTypes.Loaded && DictionaryOfEvents.ContainsKey(IpcTypes.Loaded))
                 {
-                    temp = sr.ReadLine();
-                    Enum.TryParse(temp, out IpcTypes channel);
-                    if (channel == IpcTypes.Loaded && DictionaryOfEvents.ContainsKey(IpcTypes.Loaded))
-                    {
-                        DictionaryOfEvents[IpcTypes.Loaded].Invoke();
-                        DictionaryOfEvents.Remove(IpcTypes.Loaded);
-                    }
+                    DictionaryOfEvents[IpcTypes.Loaded].Invoke();
+                    DictionaryOfEvents.Remove(IpcTypes.Loaded);
                 }
-            }, TaskCreationOptions.LongRunning);
-        }
+            }
+        }, TaskCreationOptions.LongRunning);
+    }
 
 
-        private static readonly Dictionary<IpcTypes, Action> DictionaryOfEvents = new();
+    private static readonly Dictionary<IpcTypes, Action> DictionaryOfEvents = new();
 
-        public static void Once(IpcTypes channel, Action callback)
-        {
-            DictionaryOfEvents.Add(channel, callback);
-        }
+    public static void Once(IpcTypes channel, Action callback)
+    {
+        DictionaryOfEvents.Add(channel, callback);
     }
 }

@@ -31,6 +31,8 @@ namespace ErogeHelper.AssistiveTouch
 
                 GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
                 //GameWindowHandle = GameProcess.MainWindowHandle;
+
+                I18n.LoadLanguage();
             }
         }
     }

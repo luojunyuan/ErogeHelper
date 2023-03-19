@@ -1,6 +1,6 @@
-﻿using ErogeHelper.Share;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 
-namespace ErogeHelper.AssistiveTouch.Helper
+namespace ErogeHelper.AssistiveTouch.Core
 {
     internal class Fullscreen
     {

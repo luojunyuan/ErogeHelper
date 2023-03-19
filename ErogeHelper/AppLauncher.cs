@@ -6,7 +6,7 @@ internal static class AppLauncher
 {
     public static void RunGame(string gamePath, bool leEnable)
     {
-        var gameAlreadyStart = Utils.GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
+        var gameAlreadyStart = GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
         if (gameAlreadyStart)
             return;
 
@@ -51,14 +51,14 @@ internal static class AppLauncher
     {
         var spendTime = new Stopwatch();
         spendTime.Start();
-        var procList = Utils.GetProcessesByFriendlyName(friendlyName);
+        var procList = GetProcessesByFriendlyName(friendlyName);
         var mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
         const int WaitGameStartTimeout = 20000;
 
         while (mainProcess is null && spendTime.Elapsed.TotalMilliseconds < WaitGameStartTimeout)
         {
             Thread.Sleep(UIMinimumResponseTime);
-            procList = Utils.GetProcessesByFriendlyName(friendlyName);
+            procList = GetProcessesByFriendlyName(friendlyName);
             mainProcess = procList.FirstOrDefault(p => p.MainWindowHandle != IntPtr.Zero);
         }
         spendTime.Stop();
@@ -66,11 +66,20 @@ internal static class AppLauncher
         if (mainProcess is null)
             return Array.Empty<int>();
 
-        // SHIT
         var idx = procList.FindIndex(x => x.Id == mainProcess.Id);
         procList.RemoveAt(idx);
         procList.Insert(0, mainProcess);
 
         return procList.Select(p => p.Id).ToArray();
+    }
+
+    private static List<Process> GetProcessesByFriendlyName(string friendlyName)
+    {
+        var processes = new List<Process>();
+        processes.AddRange(Process.GetProcessesByName(friendlyName));
+        processes.AddRange(Process.GetProcessesByName(friendlyName + ".log"));
+        if (!friendlyName.Equals("main.bin", StringComparison.Ordinal))
+            processes.AddRange(Process.GetProcessesByName("main.bin"));
+        return processes;
     }
 }

@@ -2,14 +2,12 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net8.0-windows;net472</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <!---->
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <BaseOutputPath>..\bin</BaseOutputPath>
     <DebugType>None</DebugType>
@@ -17,15 +15,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Remove="System.Net.Http" />
     <None Remove="bin\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ErogeHelper.Share\ErogeHelper.Share.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="WindowsInput" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.IpcChannel\ErogeHelper.IpcChannel.csproj" />
+  </ItemGroup>
+
+  <Target Name="DeleteUselessFiles" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
+    <Exec Command="del $(TargetDir)$(AssemblyName).exe.config" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;$(TargetDir)Lang\&quot;&#xD;&#xA;copy /Y &quot;$(ProjectDir)Lang\*.xaml&quot; &quot;$(TargetDir)Lang\&quot;" />
+  </Target>
 </Project>

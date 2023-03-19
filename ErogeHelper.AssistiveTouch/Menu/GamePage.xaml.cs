@@ -1,6 +1,6 @@
-﻿using ErogeHelper.AssistiveTouch.Helper;
-using ErogeHelper.Share;
-using ErogeHelper.Share.Languages;
+﻿using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.Helper;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,8 +20,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
             var inFullscreen = Fullscreen.IsWindowFullscreen(App.GameWindowHandle);
             (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
-                (Symbol.BackToWindow, Strings.AssistiveTouch_Window) :
-                (Symbol.FullScreen, Strings.AssistiveTouch_FullScreen);
+                (Symbol.BackToWindow, I18n.GetString("AssistiveTouch_Window")) :
+                (Symbol.Fullscreen, I18n.GetString("AssistiveTouch_Fullscreen"));
 
             TouchToMouse.Toggled += (_, _) =>
             {

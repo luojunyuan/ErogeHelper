@@ -73,7 +73,6 @@ namespace ErogeHelper.AssistiveTouch
                     MovementStoryboard.Seek(MenuTransistDuration);
                 }
             }
-            // TODO Nonuse change
             mainWindow.Deactivated += (_, _) => { if (isOpen == true) CloseMenuInternel(); };
             PreviewMouseLeftButtonUp += (_, e) => { if (e.OriginalSource is TouchMenu && !TouchMenuItem.ClickLocked) CloseMenuInternel(); };
 
@@ -101,6 +100,7 @@ namespace ErogeHelper.AssistiveTouch
                     Visibility = Visibility.Hidden;
                 }
             };
+            #endregion
 
             // Initialize animations
             var fakePointAnimation = AnimationTool.FadeOutAnimation;
@@ -110,7 +110,6 @@ namespace ErogeHelper.AssistiveTouch
             AnimationTool.BindingAnimation(MovementStoryboard, AnimationTool.FadeInAnimation, MenuArea, new(OpacityProperty), true);
             AnimationTool.BindingAnimation(MovementStoryboard, TransformXAnimation, this, AnimationTool.XProperty);
             AnimationTool.BindingAnimation(MovementStoryboard, TransformYAnimation, this, AnimationTool.YProperty);
-            #endregion
         }
 
         public void ManualClose()

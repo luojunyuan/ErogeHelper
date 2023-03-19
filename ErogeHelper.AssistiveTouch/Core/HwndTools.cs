@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using ErogeHelper.IpcChannel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using ErogeHelper.Share;
 
 namespace ErogeHelper.AssistiveTouch.Helper;
 

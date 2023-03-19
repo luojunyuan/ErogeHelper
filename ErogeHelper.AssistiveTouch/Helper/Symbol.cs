@@ -13,7 +13,7 @@
         Attach = 0xE723,
         Back = 0xE72B,
         BackToWindow = 0xE73F,
-        FullScreen = 0xE740,
+        Fullscreen = 0xE740,
         KeyboardClassic = 0xE765,
         Volume = 0xE767,
         Trim = 0xE78A,

@@ -3,8 +3,8 @@ namespace ErogeHelper.AssistiveTouch.Helper
 {
     public sealed class Throttle<T> : IDisposable
     {
-        private readonly AutoResetEvent producer = new AutoResetEvent(true);
-        private readonly AutoResetEvent consumer = new AutoResetEvent(false);
+        private readonly AutoResetEvent producer = new(true);
+        private readonly AutoResetEvent consumer = new(false);
         private Tuple<T, SynchronizationContext?>? value;
 
         private readonly int millisec;

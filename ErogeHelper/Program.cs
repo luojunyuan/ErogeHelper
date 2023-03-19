@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ErogeHelper;
-using ErogeHelper.Share;
-using ErogeHelper.Share.Languages;
+using ErogeHelper.IpcChannel;
 using SplashScreenGdip;
 using System.Diagnostics;
 using System.IO.Pipes;
@@ -10,13 +9,13 @@ using System.Reflection;
 #region Arguments Check
 if (args.Length == 0)
 {
-    MessageBox.Show(Strings.App_StartNoParameter, (DateTime.Now - Process.GetCurrentProcess().StartTime).Milliseconds.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+    MessageBox.Show($"{Strings.App_StartNoParameter}({(DateTime.Now - Process.GetCurrentProcess().StartTime).Milliseconds})");
     return;
 }
 var gamePath = args[0];
 if (File.Exists(gamePath) && Path.GetExtension(gamePath).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
 {
-    gamePath = ShellLink.Shortcut.ReadFromFile(gamePath).LinkTargetIDList.Path;
+    gamePath = WindowsShortcutFactory.WindowsShortcut.Load(gamePath).Path ?? "Resolve lnk file failed";
 }
 if (!File.Exists(gamePath))
 {
@@ -25,10 +24,11 @@ if (!File.Exists(gamePath))
 }
 #endregion
 
-var splash = new SplashScreen(96, Assembly.GetExecutingAssembly().GetManifestResourceStream("ErogeHelper.assets.klee.png"));
+var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ErogeHelper.assets.klee.png") ?? throw new ArgumentException("stream");
+var splash = new SplashScreen(96, stream);
 _ = Task.Run(() => splash.Run());
 
-AppLauncher.RunGame(gamePath, args.Contains("-le"));
+AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
 var pids = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
 if (pids.Length == 0)
 {
@@ -38,7 +38,7 @@ if (pids.Length == 0)
 }
 
 var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
-new IpcMain(pipeServer);
+_ = new IpcMain(pipeServer);
 
 Environment.CurrentDirectory = AppContext.BaseDirectory;
 var touch = new Process()

@@ -1,4 +1,5 @@
-﻿using ErogeHelper.Share;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace ErogeHelper.AssistiveTouch.Helper;
@@ -26,13 +27,13 @@ internal class GameWindowHooker : IDisposable
         _throttle = new(300, rectClient =>
         {
             _rev = !_rev;
-            User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, rectClient.Width + (_rev ? 1 : -1), rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
+            User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, (int)rectClient.Width + (_rev ? 1 : -1), (int)rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
         });
     }
 
     // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
     private const User32.WINEVENT WinEventHookInternalFlags = User32.WINEVENT.WINEVENT_INCONTEXT |
-                                                              User32.WINEVENT.WINEVENT_SKIPOWNPROCESS; //TODO test
+                                                              User32.WINEVENT.WINEVENT_SKIPOWNPROCESS; // Test SystemFocusObject
     private const uint EventObjectLocationChange = 0x800B;
     private const long SWEH_CHILDID_SELF = 0;
     private const int OBJID_WINDOW = 0;
@@ -68,7 +69,7 @@ internal class GameWindowHooker : IDisposable
                 _throttle.Signal(rectClient);
             }
 
-            var p = new POINT();
+            var p = new Point();
             User32.MapWindowPoints(MainWindow.Handle, hWnd, ref p);
             if (p.X != 0 || p.Y != 0)
             {
@@ -77,9 +78,9 @@ internal class GameWindowHooker : IDisposable
         }
     }
 
-    private readonly Throttle<RECT> _throttle;
+    private readonly Throttle<User32.RECT> _throttle;
     private bool _rev;
-    private System.Drawing.Size _lastGameWindowSize;
+    private Size _lastGameWindowSize;
 
     public void Dispose()
     {

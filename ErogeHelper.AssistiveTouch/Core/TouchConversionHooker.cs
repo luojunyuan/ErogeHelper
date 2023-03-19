@@ -1,8 +1,8 @@
-﻿using ErogeHelper.Share;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace ErogeHelper.AssistiveTouch.Helper
+namespace ErogeHelper.AssistiveTouch.Core
 {
     public static class TouchConversionHooker
     {
@@ -10,6 +10,7 @@ namespace ErogeHelper.AssistiveTouch.Helper
         private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
 
         private static User32.SafeHHOOK? _hookId;
+
         public static void Install()
         {
             var moduleHandle = Kernel32.GetModuleHandle();
@@ -24,18 +25,18 @@ namespace ErogeHelper.AssistiveTouch.Helper
         private static IntPtr Hook(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode < 0)
-                return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+                return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 
             var obj = Marshal.PtrToStructure(lParam, typeof(User32.MSLLHOOKSTRUCT));
             if (obj is not User32.MSLLHOOKSTRUCT info)
-                return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+                return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 
             var extraInfo = (uint)info.dwExtraInfo;
             if ((extraInfo & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH)
             {
                 var isGameWindow = User32.GetForegroundWindow() == App.GameWindowHandle;
                 if (!isGameWindow)
-                    return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+                    return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 
                 switch ((int)wParam)
                 {
@@ -60,16 +61,16 @@ namespace ErogeHelper.AssistiveTouch.Helper
                 }
             }
 
-            return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
+            return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
         }
-        
- 	    private const int UserTimerMinimum = 0x0000000A;
+
+        private const int UserTimerMinimum = 0x0000000A;
 
         private static (int X, int Y) GetCursorPosition()
         {
             var gotPoint = User32.GetCursorPos(out var currentMousePoint);
             if (!gotPoint)
-                currentMousePoint = new POINT(0, 0);
+                currentMousePoint = new System.Drawing.Point(0, 0);
             return (currentMousePoint.X, currentMousePoint.Y);
         }
     }

@@ -1,4 +1,4 @@
-﻿using ErogeHelper.Share;
+﻿using ErogeHelper.IpcChannel;
 using System.IO;
 using System.IO.Pipes;
 

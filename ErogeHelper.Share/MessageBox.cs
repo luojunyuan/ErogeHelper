@@ -6,8 +6,11 @@ public class MessageBox
 {
     public static void Show(string text, string title = "ErogeHelper", MessageBoxButton btn = 0, MessageBoxImage img = 0)
     {
-        MessageBox_.MessageBox(IntPtr.Zero, text, title, 0);
+        MessageBox_(IntPtr.Zero, text, title, 0);
     }
+
+    [DllImport("user32.dll", EntryPoint = "MessageBox", ExactSpelling = true, CharSet = CharSet.Unicode)]
+    public static extern MB_RESULT MessageBox_(IntPtr hWnd, string lpText, string lpCaption, int uType);
 }
 
 public enum MessageBoxButton
@@ -22,11 +25,8 @@ public enum MessageBoxImage
 
 internal class MessageBox_
 {
-    [DllImport(Lib.User32, SetLastError = true, CharSet = CharSet.Auto)]
-    public static extern MB_RESULT MessageBox(HWND hWnd, string lpText, string lpCaption, MB_FLAGS uType);
 }
 
-[Flags]
 public enum MB_FLAGS
 {
     MB_ABORTRETRYIGNORE = 0x00000002,
@@ -60,7 +60,6 @@ public enum MB_FLAGS
     MB_SERVICE_NOTIFICATION = 0x00200000,
 }
 
-[Flags]
 public enum MB_RESULT
 {
     IDABORT = 3,

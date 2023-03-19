@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:comp="clr-namespace:ErogeHelper.AssistiveTouch.Helper"
-    xmlns:resx="clr-namespace:ErogeHelper.Share.Languages;assembly=ErogeHelper.Share"
+    xmlns:help="clr-namespace:ErogeHelper.AssistiveTouch.Helper"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="450">
 
@@ -21,13 +20,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <comp:TouchMenuItem x:Name="Device"
+        <help:TouchMenuItem x:Name="Device"
             Grid.Row="0" Grid.Column="1"
-            Click="DeviceOnClick" Symbol="Tablet" Text="{x:Static resx:Strings.AssistiveTouch_Device}" />
+            Click="DeviceOnClick" Symbol="Tablet" Text="{DynamicResource AssistiveTouch_Device}" />
 
-        <comp:TouchMenuItem x:Name="Game"
+        <help:TouchMenuItem x:Name="Game"
             Grid.Row="1" Grid.Column="0"
-            Click="GameOnClick" Symbol="Game" Text="{x:Static resx:Strings.AssistiveTouch_Game}" />
+            Click="GameOnClick" Symbol="Game" Text="{DynamicResource AssistiveTouch_Game}" />
 
     </Grid>
 </Page>

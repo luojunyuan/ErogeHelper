@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0-windows;net472</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
@@ -10,11 +10,13 @@
   <PropertyGroup>
     <DebugType>None</DebugType>
     <DebugSymbols>False</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 	
   <ItemGroup>
     <Using Remove="System.Net.Http" />
   </ItemGroup>
+	
 
   <ItemGroup>
     <Compile Update="Languages\Strings.Designer.cs">
