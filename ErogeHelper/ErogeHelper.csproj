@@ -9,8 +9,6 @@
     <!---->
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <BaseOutputPath>..\bin</BaseOutputPath>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

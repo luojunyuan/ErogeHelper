@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace ErogeHelper.AssistiveTouch.NativeMethods
 {
@@ -62,7 +57,7 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
             public int right;
             public int bottom;
 
-            public System.Drawing.Size Size;
+            public Size Size;
 
             public int Width
             {
