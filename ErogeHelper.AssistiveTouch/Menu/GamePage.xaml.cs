@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -104,6 +105,12 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 .Release(KeyCode.Enter)
                 .Release(KeyCode.Alt)
                 .Invoke().ConfigureAwait(false);
+
+        private void XxxOnClickEvent(object sender, EventArgs e)
+        {
+            User32.GetWindowRect(App.GameWindowHandle, out var rect);
+            Win32.MoveWindow(App.GameWindowHandle, rect.left += 1, rect.top);
+        }
 
         private void BackOnClick(object sender, EventArgs e) => PageChanged?.Invoke(this, new(TouchMenuPageTag.GameBack));
 

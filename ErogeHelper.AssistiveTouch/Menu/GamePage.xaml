@@ -27,6 +27,11 @@
             Grid.Row="0" Grid.Column="1"
             Click="FullScreenSwitcherOnClickEvent" ToolTip="Alt + Enter" />
 
+        <help:TouchMenuItem x:Name="Xxx"
+            Grid.Row="0" Grid.Column="2"
+            Text="Move Window"
+            Click="XxxOnClickEvent" />
+
         <help:TouchMenuItem x:Name="Back"
             Grid.Row="1" Grid.Column="1"
             Click="BackOnClick" Symbol="Back" Text=" " />

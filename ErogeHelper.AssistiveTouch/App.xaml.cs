@@ -1,7 +1,9 @@
 ﻿using ErogeHelper.AssistiveTouch.Helper;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Diagnostics;
 using System.IO.Pipes;
 using System.Windows;
+using WindowsInput.Events;
 
 namespace ErogeHelper.AssistiveTouch
 {
@@ -33,6 +35,27 @@ namespace ErogeHelper.AssistiveTouch
                 //GameWindowHandle = GameProcess.MainWindowHandle;
 
                 I18n.LoadLanguage();
+
+                Config.Load();
+
+                if (Config.MappingEnter)
+                {
+                    var throttle = new Throttle<int>(40, _ =>
+                        WindowsInput.Simulate.Events()
+                            .Click(KeyCode.Enter)
+                            .Invoke());
+                    // Thread name MessagePumpingObject
+                    var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
+                    keyboard.KeyDown += (_, e) =>
+                    {
+                        if (e.Data.Key == KeyCode.Z && User32.GetForegroundWindow() == GameWindowHandle)
+                        {
+                            e.Next_Hook_Enabled = false;
+                            throttle.Signal(default);
+                        }
+                    };
+                    Current.Exit += (_, _) => keyboard.Dispose();
+                }
             }
         }
     }

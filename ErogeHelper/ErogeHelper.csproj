@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Using Remove="System.Net.Http" />
-    <None Remove="bin\**" />
     <!---->
     <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
     <PackageReference Include="SplashScreenGdip" Version="1.0.5" />

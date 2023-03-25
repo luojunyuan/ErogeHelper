@@ -65,10 +65,10 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         // Below for touch to mouse hook
 
         [DllImport(User32Dll, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern SafeHHOOK SetWindowsHookEx(HookType idHook, HookProc lpfn, [In, Optional] IntPtr hmod, [Optional] int dwThreadId);
+        public static extern IntPtr SetWindowsHookEx(HookType idHook, HookProc lpfn, IntPtr hmod, int dwThreadId);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        public static extern IntPtr CallNextHookEx(HHOOK hhk, int nCode, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport(User32Dll)]
         public static extern IntPtr GetForegroundWindow();

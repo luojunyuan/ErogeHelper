@@ -9,7 +9,7 @@ namespace ErogeHelper.AssistiveTouch.Core
         // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
         private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
 
-        private static User32.SafeHHOOK? _hookId;
+        private static IntPtr _hookId;
 
         public static void Install()
         {
@@ -20,7 +20,7 @@ namespace ErogeHelper.AssistiveTouch.Core
                 throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
-        public static void UnInstall() => _hookId?.Close();
+        public static void UnInstall() => User32.UnhookWindowsHookEx(_hookId);
 
         private static IntPtr Hook(int nCode, IntPtr wParam, IntPtr lParam)
         {

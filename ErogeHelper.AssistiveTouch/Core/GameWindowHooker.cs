@@ -1,5 +1,4 @@
-﻿using ErogeHelper.AssistiveTouch.Core;
-using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -28,7 +27,7 @@ internal class GameWindowHooker : IDisposable
         _throttle = new(300, rectClient =>
         {
             _rev = !_rev;
-            User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, rectClient.Width + (_rev ? 1 : -1), rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
+            Win32.SetWindowSize(MainWindow.Handle, rectClient.Width + (_rev ? 1 : -1), rectClient.Height);
         });
     }
 
@@ -59,7 +58,7 @@ internal class GameWindowHooker : IDisposable
 
             if (rectClient.Size != _lastGameWindowSize)
             {
-                User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, rectClient.Width, rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
+                Win32.SetWindowSize(MainWindow.Handle, rectClient.Width, rectClient.Height);
                 _lastGameWindowSize = rectClient.Size;
                 SizeChanged?.Invoke(this, rectClient.Size);
             }
@@ -74,7 +73,7 @@ internal class GameWindowHooker : IDisposable
             User32.MapWindowPoints(MainWindow.Handle, hWnd, ref p);
             if (p.X != 0 || p.Y != 0)
             {
-                User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, 0, 0, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOSIZE);
+                Win32.MoveWindowToOrigin(MainWindow.Handle);
             }
         }
     }

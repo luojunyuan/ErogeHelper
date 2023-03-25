@@ -13,6 +13,7 @@ namespace ErogeHelper.AssistiveTouch
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Thread RootHwndWatche, Stylus Input are from Wpf 
         public static IntPtr Handle { get; private set; }
 
         public MainWindow()
