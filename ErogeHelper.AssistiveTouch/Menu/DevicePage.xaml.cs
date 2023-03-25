@@ -117,9 +117,9 @@ namespace ErogeHelper.AssistiveTouch.Menu
         private async void ScreenShotOnClickEvent(object sender, EventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).Menu.ManualClose();
-            await Task.Delay(500);
             await WindowsInput.Simulate.Events()
-                .Click(KeyCode.PrintScreen)
+                .Wait(500)
+                .ClickChord(KeyCode.Alt, KeyCode.PrintScreen)
                 .Invoke().ConfigureAwait(false);
             //await WindowsInput.Simulate.Events()
             //    .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)

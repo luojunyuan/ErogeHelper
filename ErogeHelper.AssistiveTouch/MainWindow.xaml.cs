@@ -1,4 +1,5 @@
-﻿using ErogeHelper.AssistiveTouch.Helper;
+﻿using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.Helper;
 using ErogeHelper.AssistiveTouch.NativeMethods;
 using ErogeHelper.IpcChannel;
 using System.Windows;
@@ -27,6 +28,7 @@ namespace ErogeHelper.AssistiveTouch
             User32.SetWindowPos(Handle, IntPtr.Zero, 0, 0, (int)rectClient.Width, (int)rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER);
 
             var hooker = new GameWindowHooker();
+            hooker.SizeChanged += (_, _) => Fullscreen.UpdateFullscreenStatus();
         }
 
 

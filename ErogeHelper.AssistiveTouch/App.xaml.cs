@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using ErogeHelper.AssistiveTouch.Helper;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Windows;
-using ErogeHelper.AssistiveTouch.Helper;
 
 namespace ErogeHelper.AssistiveTouch
 {

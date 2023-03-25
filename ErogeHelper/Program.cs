@@ -29,8 +29,8 @@ var splash = new SplashScreen(96, stream);
 _ = Task.Run(() => splash.Run());
 
 AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
-var pids = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-if (pids.Length == 0)
+var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
+if (game is null)
 {
     splash.Close();
     MessageBox.Show(Strings.App_StartNoParameter);
@@ -40,19 +40,20 @@ if (pids.Length == 0)
 var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
 _ = new IpcMain(pipeServer);
 
-Environment.CurrentDirectory = AppContext.BaseDirectory;
-var touch = new Process()
-{
-    StartInfo = new ProcessStartInfo
-    {
-        FileName = "ErogeHelper.AssistiveTouch.exe", 
-        Arguments = pipeServer.GetClientHandleAsString() + ' ' + string.Join(" ", pids),
-        UseShellExecute = false,
-    }
-};
-
 IpcMain.Once(IpcTypes.Loaded, splash.Close);
 
-touch.Start();
-
-touch.WaitForExit(); // Game.WaitForExit();
+Environment.CurrentDirectory = AppContext.BaseDirectory;
+while (!game.HasExited)
+{
+    var touch = new Process()
+    {
+        StartInfo = new ProcessStartInfo
+        {
+            FileName = "ErogeHelper.AssistiveTouch.exe",
+            Arguments = pipeServer.GetClientHandleAsString() + ' ' + string.Join(" ", pids),
+            UseShellExecute = false,
+        }
+    };
+    touch.Start();
+    touch.WaitForExit();
+}

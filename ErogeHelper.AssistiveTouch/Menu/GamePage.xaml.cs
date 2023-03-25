@@ -1,6 +1,5 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
-using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -18,10 +17,12 @@ namespace ErogeHelper.AssistiveTouch.Menu
             InitializeComponent();
             InitializeAnimation();
 
-            var inFullscreen = Fullscreen.IsWindowFullscreen(App.GameWindowHandle);
-            (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
-                (Symbol.BackToWindow, I18n.GetString("AssistiveTouch_Window")) :
-                (Symbol.Fullscreen, I18n.GetString("AssistiveTouch_Fullscreen"));
+            void SetFullscreenSwitcher(bool inFullscreen) =>
+                (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
+                    (Symbol.BackToWindow, I18n.GetString("AssistiveTouch_Window")) :
+                    (Symbol.Fullscreen, I18n.GetString("AssistiveTouch_Fullscreen"));
+            SetFullscreenSwitcher(Fullscreen.IsWindowFullscreen(App.GameWindowHandle));
+            Fullscreen.FullscreenChanged += (_, isFullscreen) => SetFullscreenSwitcher(isFullscreen);
 
             TouchToMouse.Toggled += (_, _) =>
             {
@@ -95,8 +96,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
         }
 
         private const int UIMinimumResponseTime = 50;
-        private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e)
-        {
+        private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e) =>
             await WindowsInput.Simulate.Events()
                 .Hold(KeyCode.Alt)
                 .Hold(KeyCode.Enter)
@@ -104,17 +104,17 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 .Release(KeyCode.Enter)
                 .Release(KeyCode.Alt)
                 .Invoke().ConfigureAwait(false);
-        }
 
         private void BackOnClick(object sender, EventArgs e) => PageChanged?.Invoke(this, new(TouchMenuPageTag.GameBack));
 
-        private void CloseGameOnClick(object sender, EventArgs e)
+        private const int MenuTransistDuration = 200;
+        private async void CloseGameOnClick(object sender, EventArgs e)
         {
-            User32.PostMessage(
-                App.GameProcess.MainWindowHandle,
-                (uint)User32.WindowMessage.WM_SYSCOMMAND,
-                (IntPtr)User32.SysCommand.SC_CLOSE);
             ((MainWindow)Application.Current.MainWindow).Menu.ManualClose();
+            await WindowsInput.Simulate.Events()
+                .Wait(MenuTransistDuration)
+                .ClickChord(KeyCode.Alt, KeyCode.F4)
+                .Invoke().ConfigureAwait(false);
         }
     }
 }

@@ -57,8 +57,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
             public int right;
             public int bottom;
 
-            public Size Size;
-
             public int Width
             {
                 get { return right - left; }
@@ -69,6 +67,12 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
             {
                 get { return bottom - top; }
                 set { bottom = value + top; }
+            }
+
+            public Size Size
+            {
+                get { return new Size(Width, Height); }
+                set { Width = value.Width; Height = value.Height; }
             }
         }
     }

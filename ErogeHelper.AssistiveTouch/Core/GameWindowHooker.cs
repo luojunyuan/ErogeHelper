@@ -1,4 +1,5 @@
-﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -6,7 +7,7 @@ namespace ErogeHelper.AssistiveTouch.Helper;
 
 internal class GameWindowHooker : IDisposable
 {
-    public event EventHandler? SizeChanged;
+    public event EventHandler<Size>? SizeChanged;
 
     private readonly User32.HWINEVENTHOOK _windowsEventHook;
 
@@ -27,7 +28,7 @@ internal class GameWindowHooker : IDisposable
         _throttle = new(300, rectClient =>
         {
             _rev = !_rev;
-            User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, (int)rectClient.Width + (_rev ? 1 : -1), (int)rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
+            User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, rectClient.Width + (_rev ? 1 : -1), rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
         });
     }
 
@@ -60,7 +61,7 @@ internal class GameWindowHooker : IDisposable
             {
                 User32.SetWindowPos(MainWindow.Handle, IntPtr.Zero, 0, 0, rectClient.Width, rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOMOVE);
                 _lastGameWindowSize = rectClient.Size;
-                SizeChanged?.Invoke(this, new());
+                SizeChanged?.Invoke(this, rectClient.Size);
             }
             else
             {

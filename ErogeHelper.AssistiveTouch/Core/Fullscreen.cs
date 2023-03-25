@@ -4,6 +4,18 @@ namespace ErogeHelper.AssistiveTouch.Core
 {
     internal class Fullscreen
     {
+        public static bool GameInFullscreen { get; private set; }
+
+        public static event EventHandler<bool>? FullscreenChanged;
+
+        public static void UpdateFullscreenStatus()
+        {
+            var isFullscreen = IsWindowFullscreen(App.GameWindowHandle);
+            if (GameInFullscreen != isFullscreen)
+                FullscreenChanged?.Invoke(null, isFullscreen);
+            GameInFullscreen = isFullscreen;
+        }
+
         // See: http://www.msghelp.net/showthread.php?tid=67047&pid=740345
         public static bool IsWindowFullscreen(IntPtr hwnd)
         {

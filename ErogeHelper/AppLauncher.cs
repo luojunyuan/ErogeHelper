@@ -47,7 +47,7 @@ internal static class AppLauncher
     /// Get all pids of the game (timeout 20s).
     /// </summary>
     /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
-    public static int[] ProcessCollect(string friendlyName)
+    public static (Process?, int[]) ProcessCollect(string friendlyName)
     {
         var spendTime = new Stopwatch();
         spendTime.Start();
@@ -64,13 +64,13 @@ internal static class AppLauncher
         spendTime.Stop();
 
         if (mainProcess is null)
-            return Array.Empty<int>();
+            return (null, Array.Empty<int>());
 
         var idx = procList.FindIndex(x => x.Id == mainProcess.Id);
         procList.RemoveAt(idx);
         procList.Insert(0, mainProcess);
 
-        return procList.Select(p => p.Id).ToArray();
+        return (mainProcess, procList.Select(p => p.Id).ToArray());
     }
 
     private static List<Process> GetProcessesByFriendlyName(string friendlyName)
