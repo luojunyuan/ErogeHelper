@@ -31,6 +31,10 @@
         LowerBrightness = 0xEC8A,
         Speech = 0xEFA9,
 
+        ArrowUp8 = 0xF0AD,
+        ArrowDown8 = 0xF0AE,
+        ArrowRight8 = 0xF0AF,
+        ArrowLeft8 = 0xF0B0,
         SettingSolid = 0xF8B0,
         TBD = 0xFFFF
     }

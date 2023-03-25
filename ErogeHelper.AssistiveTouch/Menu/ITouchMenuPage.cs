@@ -36,7 +36,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
         Device,
         DeviceBack,
         Function,
-        FunctionBack
+        FunctionBack,
+        WinMove
     }
 
     public class PageEventArgs : EventArgs

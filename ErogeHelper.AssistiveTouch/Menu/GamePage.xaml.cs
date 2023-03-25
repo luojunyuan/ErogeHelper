@@ -30,6 +30,14 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 if (TouchToMouse.IsOn) TouchConversionHooker.Install();
                 else TouchConversionHooker.UnInstall();
             };
+
+            // For second inside menu
+            _fadeOutAnimation.Completed += (_, _) =>
+            {
+                Visibility = Visibility.Hidden;
+                TouchMenuItem.ClickLocked = false;
+            };
+            _fadeOutAnimation.Freeze();
         }
 
         public void Show(double moveDistance)
@@ -39,15 +47,19 @@ namespace ErogeHelper.AssistiveTouch.Menu
             XamlResource.SetAssistiveTouchItemBackground(Brushes.Transparent);
 
             var fullscreenTransform = AnimationTool.RightOneTopOneTransform(moveDistance);
+            var moveGameTransform = AnimationTool.RightTwoTopOneTransform(moveDistance);
             var backTransform = AnimationTool.RightOneTransform(moveDistance);
             var closeGameTransform = AnimationTool.RightTwoTransform(moveDistance);
 
             FullScreenSwitcher.SetCurrentValue(RenderTransformProperty, fullscreenTransform);
+            MoveGame.SetCurrentValue(RenderTransformProperty, moveGameTransform);
             Back.SetCurrentValue(RenderTransformProperty, backTransform);
             CloseGame.SetCurrentValue(RenderTransformProperty, closeGameTransform);
 
             _fullscreenMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, fullscreenTransform.X);
             _fullscreenMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, fullscreenTransform.Y);
+            _moveGameMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, moveGameTransform.X);
+            _moveGameMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, moveGameTransform.Y);
             _backMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, backTransform.X);
             _closeGameMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, closeGameTransform.X);
 
@@ -65,6 +77,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
         private readonly Storyboard _transitionInStoryboard = new();
         private readonly DoubleAnimation _fullscreenMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _fullscreenMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        private readonly DoubleAnimation _moveGameMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        private readonly DoubleAnimation _moveGameMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _backMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _closeGameMoveAnimation = AnimationTool.TransformMoveToZeroAnimation;
 
@@ -74,6 +88,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
             AnimationTool.BindingAnimation(_transitionInStoryboard, _fullscreenMoveXAnimation, FullScreenSwitcher, AnimationTool.XProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _fullscreenMoveYAnimation, FullScreenSwitcher, AnimationTool.YProperty);
+            AnimationTool.BindingAnimation(_transitionInStoryboard, _moveGameMoveXAnimation, MoveGame, AnimationTool.XProperty);
+            AnimationTool.BindingAnimation(_transitionInStoryboard, _moveGameMoveYAnimation, MoveGame, AnimationTool.YProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _backMoveAnimation, Back, AnimationTool.XProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _closeGameMoveAnimation, CloseGame, AnimationTool.XProperty);
 
@@ -84,6 +100,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 if (!_transitionInStoryboard.AutoReverse)
                 {
                     FullScreenSwitcher.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+                    MoveGame.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     CloseGame.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                 }
@@ -106,10 +123,13 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 .Release(KeyCode.Alt)
                 .Invoke().ConfigureAwait(false);
 
-        private void XxxOnClickEvent(object sender, EventArgs e)
+        private readonly DoubleAnimation _fadeOutAnimation = AnimationTool.FadeOutAnimation;
+        private void CloseInside() => BeginAnimation(OpacityProperty, _fadeOutAnimation);
+
+        private void MoveGameOnClick(object sender, EventArgs e)
         {
-            User32.GetWindowRect(App.GameWindowHandle, out var rect);
-            Win32.MoveWindow(App.GameWindowHandle, rect.left += 1, rect.top);
+            CloseInside();
+            PageChanged?.Invoke(this, new(TouchMenuPageTag.WinMove));
         }
 
         private void BackOnClick(object sender, EventArgs e) => PageChanged?.Invoke(this, new(TouchMenuPageTag.GameBack));
