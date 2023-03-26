@@ -1,9 +1,12 @@
-﻿using System.Windows;
+﻿using ErogeHelper.AssistiveTouch.Helper;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using ErogeHelper.AssistiveTouch.Helper;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ErogeHelper.AssistiveTouch;
 
@@ -37,6 +40,9 @@ public partial class TouchButton
     {
         InitializeComponent();
 
+        TouchPosition = LoadTouchPosition();
+        Application.Current.Exit += (_, _) => SaveTouchPosition();
+
         SetAssistiveTouchProperties();
 
         var mainWindow = Application.Current.MainWindow;
@@ -65,7 +71,7 @@ public partial class TouchButton
 
         PreviewMouseMove += (_, evt) =>
         {
-            if (!isDraging) 
+            if (!isDraging)
                 return;
 
             isMoving = true;
@@ -127,7 +133,7 @@ public partial class TouchButton
         TouchMenuClosed += (_, _) => throttle.Signal(default);
         #endregion
 
-        FadeInOpacityAnimation.Completed += (_, _) => 
+        FadeInOpacityAnimation.Completed += (_, _) =>
         {
             if (pointWhenMouseUp == pointWhenMouseDown)
             {
@@ -137,7 +143,7 @@ public partial class TouchButton
 
         PreviewMouseUp += (s, e) =>
         {
-            if (pointWhenMouseUp == pointWhenMouseDown && 
+            if (pointWhenMouseUp == pointWhenMouseDown &&
                 Opacity != OpacityHalf)
             {
                 Clicked?.Invoke(s, e);
@@ -153,7 +159,31 @@ public partial class TouchButton
         TranslateTouchStoryboard.Stop();
     }
 
-    private AssistiveTouchPosition TouchPosition { get; set; } = new AssistiveTouchPosition(TouchButtonCorner.Left, 0.5);
+    private AssistiveTouchPosition TouchPosition { get; set; }
+
+    private static AssistiveTouchPosition LoadTouchPosition()
+    {
+        if (Config.AssistiveTouchPosition == string.Empty)
+            return new AssistiveTouchPosition(TouchButtonCorner.Left, 0.5);
+
+        var serializer = new XmlSerializer(typeof(AssistiveTouchPosition));
+        using var reader = new StringReader(Config.AssistiveTouchPosition);
+        return (AssistiveTouchPosition?)serializer.Deserialize(reader) ?? new AssistiveTouchPosition(TouchButtonCorner.Left, 0.5);
+    }
+
+    private void SaveTouchPosition()
+    {
+        var serializer = new XmlSerializer(typeof(AssistiveTouchPosition));
+        var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
+        var ns = new XmlSerializerNamespaces();
+        ns.Add(string.Empty, string.Empty);
+
+        using var writer = new StringWriter();
+        using var xmlWriter = XmlWriter.Create(writer, settings);
+        serializer.Serialize(xmlWriter, TouchPosition, ns);
+
+        Config.SaveAssistiveTouchPosition(writer.ToString() ?? string.Empty);
+    }
 
     private void SetAssistiveTouchProperties()
     {

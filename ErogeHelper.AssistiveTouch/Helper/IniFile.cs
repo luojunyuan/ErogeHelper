@@ -22,11 +22,11 @@ namespace ErogeHelper.AssistiveTouch.Helper
             Path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
         }
 
-        public string Read(string Key, string? Section = null)
+        public string? Read(string Key, string? Section = null)
         {
             var RetVal = new StringBuilder(255);
             GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, Path);
-            return RetVal.ToString();
+            return RetVal.ToString() == string.Empty ? null : RetVal.ToString();
         }
 
         public void Write(string? Key, string? Value, string? Section = null)
@@ -46,7 +46,7 @@ namespace ErogeHelper.AssistiveTouch.Helper
 
         public bool KeyExists(string Key, string? Section = null)
         {
-            return Read(Key, Section).Length > 0;
+            return (Read(Key, Section) ?? string.Empty).Length > 0;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using WindowsInput.Events;
 
 namespace ErogeHelper.AssistiveTouch.Menu
@@ -95,6 +96,14 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     TouchMenuItem.ClickLocked = false;
                 }
             };
+
+            if (Config.ScreenShotTradition)
+            {
+                _screenMask = new Rectangle() { Fill = Brushes.White };
+                _fadeout = AnimationTool.FadeOutAnimation;
+                _fadeout.Completed += (_, _) => ((Grid)(Application.Current.MainWindow.Content)).Children.Remove(_screenMask);
+                _fadeout.Freeze();
+            }
         }
         private async void VolumeDownOnClickEvent(object sender, EventArgs e) =>
              await WindowsInput.Simulate.Events()
@@ -114,16 +123,28 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 .ClickChord(KeyCode.LWin, KeyCode.Tab)
                 .Invoke().ConfigureAwait(false);
 
+        private Rectangle? _screenMask;
+        private DoubleAnimation? _fadeout;
+        private const int WaitForScreenShot = 500;
         private async void ScreenShotOnClickEvent(object sender, EventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).Menu.ManualClose();
-            await WindowsInput.Simulate.Events()
-                .Wait(500)
-                .ClickChord(KeyCode.Alt, KeyCode.PrintScreen)
-                .Invoke().ConfigureAwait(false);
-            //await WindowsInput.Simulate.Events()
-            //    .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
-            //    .Invoke().ConfigureAwait(false);
+            if (Config.ScreenShotTradition)
+            {
+                await WindowsInput.Simulate.Events()
+                    .Wait(WaitForScreenShot)
+                    .ClickChord(KeyCode.Alt, KeyCode.PrintScreen)
+                    .Invoke();
+                ((Grid)(Application.Current.MainWindow.Content)).Children.Add(_screenMask);
+                _screenMask!.BeginAnimation(OpacityProperty, _fadeout);
+            }
+            else
+            {
+                await WindowsInput.Simulate.Events()
+                    .Wait(WaitForScreenShot)
+                    .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
+                    .Invoke().ConfigureAwait(false);
+            }
         }
     }
 }

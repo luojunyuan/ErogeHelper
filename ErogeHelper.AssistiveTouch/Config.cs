@@ -1,14 +1,20 @@
 ﻿using ErogeHelper.AssistiveTouch.Helper;
 using System.IO;
+using System.Windows;
 
 namespace ErogeHelper.AssistiveTouch
 {
     internal static class Config
     {
         private static readonly string RoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static readonly string ConfigFolder = Path.Combine(RoamingPath, "ErogeHelper");
         private static readonly string ConfigFilePath = Path.Combine(RoamingPath, "ErogeHelper", "EHConfig.ini");
 
-        public static bool MappingEnter { get; private set; }
+        public static bool EnterKeyMapping { get; private set; }
+
+        public static bool ScreenShotTradition { get; private set; }
+
+        public static string AssistiveTouchPosition { get; private set; } = string.Empty;
 
         public static void Load()
         {
@@ -17,17 +23,19 @@ namespace ErogeHelper.AssistiveTouch
                 return;
 
             var myIni = new IniFile(ConfigFilePath);
-            MappingEnter = bool.Parse(myIni.Read(nameof(MappingEnter)) ?? "false");
+            EnterKeyMapping = bool.Parse(myIni.Read(nameof(EnterKeyMapping)) ?? "false");
+            ScreenShotTradition = bool.Parse(myIni.Read(nameof(ScreenShotTradition)) ?? "false");
+            AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
         }
 
-        public static void Save()
+        public static void SaveAssistiveTouchPosition(string pos)
         {
+            if (!Directory.Exists(ConfigFolder))
+                Directory.CreateDirectory(ConfigFolder);
 
+            var myIni = new IniFile(ConfigFilePath);
+            myIni.Write(nameof(AssistiveTouchPosition), pos);
         }
     }
-    // ScreenShot way
-
     // MappingKey
-
-    // TouchPosition
 }

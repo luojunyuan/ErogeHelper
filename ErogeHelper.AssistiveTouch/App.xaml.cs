@@ -38,7 +38,7 @@ namespace ErogeHelper.AssistiveTouch
 
                 Config.Load();
 
-                if (Config.MappingEnter)
+                if (Config.EnterKeyMapping)
                 {
                     var throttle = new Throttle<int>(40, _ =>
                         WindowsInput.Simulate.Events()
