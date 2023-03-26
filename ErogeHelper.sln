@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.AssistiveTouch"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.IpcChannel", "ErogeHelper.IpcChannel\ErogeHelper.IpcChannel.csproj", "{4FCB1E2E-0DCA-495B-A931-33712D129DAB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Preference", "ErogeHelper.Preference\ErogeHelper.Preference.csproj", "{045DAD74-EC48-4961-8006-471E906F24F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4FCB1E2E-0DCA-495B-A931-33712D129DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FCB1E2E-0DCA-495B-A931-33712D129DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FCB1E2E-0DCA-495B-A931-33712D129DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{045DAD74-EC48-4961-8006-471E906F24F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{045DAD74-EC48-4961-8006-471E906F24F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{045DAD74-EC48-4961-8006-471E906F24F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{045DAD74-EC48-4961-8006-471E906F24F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

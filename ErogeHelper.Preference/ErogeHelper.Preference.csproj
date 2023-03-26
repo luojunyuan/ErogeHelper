@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net7.0-windows;net472</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>..\app.manifest</ApplicationManifest>
+    <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+
+  <Target Name="DeleteFile" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
+    <Exec Command="del $(TargetDir)$(AssemblyName).exe.config" />
+  </Target>
+</Project>

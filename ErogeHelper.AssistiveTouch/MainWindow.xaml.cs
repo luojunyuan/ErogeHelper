@@ -32,7 +32,7 @@ namespace ErogeHelper.AssistiveTouch
             hooker.SizeChanged += (_, _) => Fullscreen.UpdateFullscreenStatus();
         }
 
-
+        // TODO: Try https://www.top-password.com/blog/enable-or-disable-touch-feedback-in-windows-10/
         // Use EnableTouchPointer instead but wait until DisableTouchFeedback get fixed
         #region Disable Touch White Point 
 
