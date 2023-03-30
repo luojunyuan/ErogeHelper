@@ -26,7 +26,7 @@ namespace ErogeHelper.AssistiveTouch
             HwndTools.RemovePopupAddChildStyle(Handle);
             User32.SetParent(Handle, App.GameWindowHandle);
             User32.GetClientRect(App.GameWindowHandle, out var rectClient);
-            User32.SetWindowPos(Handle, IntPtr.Zero, 0, 0, (int)rectClient.Width, (int)rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER);
+            User32.SetWindowPos(Handle, IntPtr.Zero, 0, 0, rectClient.Width, rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER);
 
             var hooker = new GameWindowHooker();
             hooker.SizeChanged += (_, _) => Fullscreen.UpdateFullscreenStatus();

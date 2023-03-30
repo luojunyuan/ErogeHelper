@@ -24,12 +24,6 @@
     <ProjectReference Include="..\ErogeHelper.IpcChannel\ErogeHelper.IpcChannel.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Menu\WinMovePage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-
   <Target Name="DeleteUselessFiles" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
     <Exec Command="del $(TargetDir)$(AssemblyName).exe.config" />
   </Target>

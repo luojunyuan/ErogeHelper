@@ -47,6 +47,14 @@ namespace ErogeHelper.AssistiveTouch
             var isOpen = false;
             var isAnimating = false;
 
+            void RepositionTransformAnimationStartPoint()
+            {
+                var relativeBeginX = mainWindow.Width / 2 - mainWindow.Touch.ActualWidth / 2;
+                var relativeBeginY = mainWindow.Height / 2 - mainWindow.Touch.ActualWidth / 2;
+                TransformXAnimation.From = mainWindow.Touch.TouchPosTransform.X - relativeBeginX;
+                TransformYAnimation.From = mainWindow.Touch.TouchPosTransform.Y - relativeBeginY;
+            }
+
             mainWindow.Touch.Clicked += (_, _) =>
             {
                 TouchMenuItem.ClickLocked = true;
@@ -59,27 +67,26 @@ namespace ErogeHelper.AssistiveTouch
                 _menuDevicePage.Visibility = Visibility.Collapsed;
                 _menuWinMovePage.Visibility = Visibility.Collapsed;
 
-                var relativeBeginX = mainWindow.Width / 2 - mainWindow.Touch.ActualWidth / 2;
-                var relativeBeginY = mainWindow.Height / 2 - mainWindow.Touch.ActualWidth / 2;
-
-                TransformXAnimation.From = mainWindow.Touch.TouchPosTransform.X - relativeBeginX;
-                TransformYAnimation.From = mainWindow.Touch.TouchPosTransform.Y - relativeBeginY;
+                RepositionTransformAnimationStartPoint();
                 MovementStoryboard.Begin();
             };
 
-            void CloseMenuInternel()
+            _closeMenuInternal = () =>
             {
                 if (!isAnimating)
                 {
                     isAnimating = true;
+                    // Always focus, re-position touch before menu closed is needed
+                    RepositionTransformAnimationStartPoint();
                     FakeWhitePoint.Visibility = Visibility.Visible;
                     MovementStoryboard.AutoReverse = true;
                     MovementStoryboard.Begin();
                     MovementStoryboard.Seek(MenuTransistDuration);
                 }
-            }
-            mainWindow.Deactivated += (_, _) => { if (isOpen == true) CloseMenuInternel(); };
-            PreviewMouseLeftButtonUp += (_, e) => { if (e.OriginalSource is TouchMenu && !TouchMenuItem.ClickLocked) CloseMenuInternel(); };
+            };
+
+            //mainWindow.Deactivated += (_, _) => { if (isOpen == true) _closeMenuInternal(); };
+            PreviewMouseLeftButtonUp += (_, e) => { if (e.OriginalSource is TouchMenu && !TouchMenuItem.ClickLocked) _closeMenuInternal(); };
 
             // Mene opend
             MovementStoryboard.Completed += (_, _) =>
@@ -117,13 +124,8 @@ namespace ErogeHelper.AssistiveTouch
             AnimationTool.BindingAnimation(MovementStoryboard, TransformYAnimation, this, AnimationTool.YProperty);
         }
 
-        public void ManualClose()
-        {
-            FakeWhitePoint.Visibility = Visibility.Visible;
-            MovementStoryboard.AutoReverse = true;
-            MovementStoryboard.Begin();
-            MovementStoryboard.Seek(MenuTransistDuration);
-        }
+        private readonly Action _closeMenuInternal;
+        public void ManualClose() => _closeMenuInternal();
 
         /// <summary>
         /// Must initialize first after MainWindow loaded

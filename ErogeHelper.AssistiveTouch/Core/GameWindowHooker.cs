@@ -33,7 +33,8 @@ internal class GameWindowHooker : IDisposable
 
     // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
     private const User32.WINEVENT WinEventHookInternalFlags = User32.WINEVENT.WINEVENT_INCONTEXT |
-                                                              User32.WINEVENT.WINEVENT_SKIPOWNPROCESS; // Test SystemFocusObject
+                                                              User32.WINEVENT.WINEVENT_SKIPOWNPROCESS;
+    //private const uint EventObjectFocus = 0x8005;
     private const uint EventObjectLocationChange = 0x800B;
     private const long SWEH_CHILDID_SELF = 0;
     private const int OBJID_WINDOW = 0;

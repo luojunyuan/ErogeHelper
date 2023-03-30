@@ -1,12 +1,9 @@
 ﻿using ErogeHelper.AssistiveTouch.Helper;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace ErogeHelper.AssistiveTouch;
 
@@ -40,7 +37,8 @@ public partial class TouchButton
     {
         InitializeComponent();
 
-        TouchPosition = LoadTouchPosition();
+        TouchPosition = string.IsNullOrWhiteSpace(Config.AssistiveTouchPosition) ? AssistiveTouchPosition.Default :
+            Config.XmlDeserializer<AssistiveTouchPosition>(Config.AssistiveTouchPosition);
         Application.Current.Exit += (_, _) => SaveTouchPosition();
 
         SetAssistiveTouchProperties();
@@ -161,29 +159,7 @@ public partial class TouchButton
 
     private AssistiveTouchPosition TouchPosition { get; set; }
 
-    private static AssistiveTouchPosition LoadTouchPosition()
-    {
-        if (Config.AssistiveTouchPosition == string.Empty)
-            return new AssistiveTouchPosition(TouchButtonCorner.Left, 0.5);
-
-        var serializer = new XmlSerializer(typeof(AssistiveTouchPosition));
-        using var reader = new StringReader(Config.AssistiveTouchPosition);
-        return (AssistiveTouchPosition?)serializer.Deserialize(reader) ?? new AssistiveTouchPosition(TouchButtonCorner.Left, 0.5);
-    }
-
-    private void SaveTouchPosition()
-    {
-        var serializer = new XmlSerializer(typeof(AssistiveTouchPosition));
-        var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
-        var ns = new XmlSerializerNamespaces();
-        ns.Add(string.Empty, string.Empty);
-
-        using var writer = new StringWriter();
-        using var xmlWriter = XmlWriter.Create(writer, settings);
-        serializer.Serialize(xmlWriter, TouchPosition, ns);
-
-        Config.SaveAssistiveTouchPosition(writer.ToString() ?? string.Empty);
-    }
+    private void SaveTouchPosition() => Config.SaveAssistiveTouchPosition(Config.XmlSerializer(TouchPosition));
 
     private void SetAssistiveTouchProperties()
     {

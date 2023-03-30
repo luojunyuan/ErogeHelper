@@ -40,23 +40,29 @@ namespace ErogeHelper.AssistiveTouch
 
                 if (Config.EnterKeyMapping)
                 {
-                    var throttle = new Throttle<int>(40, _ =>
-                        WindowsInput.Simulate.Events()
-                            .Click(KeyCode.Enter)
-                            .Invoke());
-                    // Thread name MessagePumpingObject
-                    var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
-                    keyboard.KeyDown += (_, e) =>
-                    {
-                        if (e.Data.Key == KeyCode.Z && User32.GetForegroundWindow() == GameWindowHandle)
-                        {
-                            e.Next_Hook_Enabled = false;
-                            throttle.Signal(default);
-                        }
-                    };
-                    Current.Exit += (_, _) => keyboard.Dispose();
+                    GlobalKeyHook();
                 }
             }
+        }
+
+        private static void GlobalKeyHook()
+        {
+            const int debounce = 40;
+            var throttle = new Throttle<int>(debounce, _ =>
+                WindowsInput.Simulate.Events()
+                    .Click(KeyCode.Enter)
+                    .Invoke());
+            // Thread name MessagePumpingObject
+            var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
+            keyboard.KeyDown += (_, e) =>
+            {
+                if (e.Data.Key == KeyCode.Z && User32.GetForegroundWindow() == GameWindowHandle)
+                {
+                    e.Next_Hook_Enabled = false;
+                    throttle.Signal(default);
+                }
+            };
+            Current.Exit += (_, _) => keyboard.Dispose();
         }
     }
 }

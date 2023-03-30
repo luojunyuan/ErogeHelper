@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <BaseOutputPath>..\bin</BaseOutputPath>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <Target Name="DeleteFile" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">

@@ -1,6 +1,7 @@
 ﻿using ErogeHelper.AssistiveTouch.Helper;
 using System.IO;
-using System.Windows;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ErogeHelper.AssistiveTouch
 {
@@ -30,11 +31,37 @@ namespace ErogeHelper.AssistiveTouch
 
         public static void SaveAssistiveTouchPosition(string pos)
         {
+            // First time create folder and ini file
             if (!Directory.Exists(ConfigFolder))
                 Directory.CreateDirectory(ConfigFolder);
 
             var myIni = new IniFile(ConfigFilePath);
             myIni.Write(nameof(AssistiveTouchPosition), pos);
+        }
+
+
+        public static T? XmlDeserializer<T>(string text)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            using var reader = new StringReader(text);
+
+            var result = (T?)serializer.Deserialize(reader);
+
+            return result;
+        }
+
+        public static string XmlSerializer<T>(T inst)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
+            var ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+
+            using var writer = new StringWriter();
+            using var xmlWriter = XmlWriter.Create(writer, settings);
+            serializer.Serialize(xmlWriter, inst, ns);
+
+            return writer.ToString();
         }
     }
     // MappingKey
