@@ -14,14 +14,14 @@
     Visibility="Hidden">
 
         <Grid>
-            <Grid x:Name="MenuArea">
+            <Grid x:Name="MenuArea" TextElement.FontFamily="{DynamicResource UIFont}">
                 <Frame x:Name="MainMenu" NavigationUIVisibility="Hidden" Padding="12" />
 
                 <Frame x:Name="GameMenu" NavigationUIVisibility="Hidden" Padding="12" />
                 <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" Padding="12" />
 
                 <Frame x:Name="WinMoveMenu" NavigationUIVisibility="Hidden" Padding="12" />
-        </Grid>
+            </Grid>
 
             <ContentControl x:Name="FakeWhitePoint"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom"

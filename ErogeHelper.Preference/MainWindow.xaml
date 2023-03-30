@@ -7,7 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <StackPanel Margin="20, 10">
-        <CheckBox Name="OldScreenShot" Content="Alt+Enter instead of Win+Shift+S" Click="OldScreenShot_Click"  />
-        <CheckBox Name="ZtwoEnter" Content="Z instead of Enter key" Margin="0 10 0 0" Click="ZtwoEnter_Click"  />
+        <CheckBox Name="OldScreenShot" Content="Alt+ScreenPrint instead of Win+Shift+S" Click="OldScreenShot_Click"  />
+        <CheckBox Name="ZtwoEnter" Margin="0 10 0 0" Click="ZtwoEnter_Click">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem Content="Z" />
+                </ComboBox>
+                <TextBlock Margin="2 0 0 0" Text="key instead of Enter key" />
+            </StackPanel>
+        </CheckBox>
     </StackPanel>
 </Window>

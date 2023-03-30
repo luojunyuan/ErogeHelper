@@ -29,7 +29,7 @@
 
         <help:TouchMenuItem x:Name="MoveGame"
             Grid.Row="0" Grid.Column="2"
-            Symbol="Trim" Text="Move Game"
+            Symbol="Trim" Text="{DynamicResource AssistiveTouch_MoveGame}"
             Click="MoveGameOnClick" />
 
         <help:TouchMenuItem x:Name="Back"

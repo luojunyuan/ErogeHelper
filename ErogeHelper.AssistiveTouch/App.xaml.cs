@@ -34,8 +34,6 @@ namespace ErogeHelper.AssistiveTouch
                 GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
                 //GameWindowHandle = GameProcess.MainWindowHandle;
 
-                I18n.LoadLanguage();
-
                 Config.Load();
 
                 if (Config.EnterKeyMapping)

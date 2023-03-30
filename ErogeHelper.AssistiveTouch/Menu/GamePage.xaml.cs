@@ -1,6 +1,5 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
-using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,8 +19,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
             void SetFullscreenSwitcher(bool inFullscreen) =>
                 (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
-                    (Symbol.BackToWindow, I18n.GetString("AssistiveTouch_Window")) :
-                    (Symbol.Fullscreen, I18n.GetString("AssistiveTouch_Fullscreen"));
+                    (Symbol.BackToWindow, XamlResource.GetString("AssistiveTouch_Window")) :
+                    (Symbol.Fullscreen, XamlResource.GetString("AssistiveTouch_Fullscreen"));
             SetFullscreenSwitcher(Fullscreen.IsWindowFullscreen(App.GameWindowHandle));
             Fullscreen.FullscreenChanged += (_, isFullscreen) => SetFullscreenSwitcher(isFullscreen);
 

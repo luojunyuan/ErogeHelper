@@ -6,9 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--  First resource must be default language  -->
-                <ResourceDictionary Source="Lang\Default.xaml" />
-                
+                <ResourceDictionary Source="Properties/Language.xaml" />
                 <ResourceDictionary Source="Properties/AssistiveTouchResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
 

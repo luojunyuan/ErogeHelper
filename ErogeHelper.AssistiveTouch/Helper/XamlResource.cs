@@ -6,6 +6,8 @@ namespace ErogeHelper.AssistiveTouch.Helper;
 
 internal class XamlResource
 {
+    public static string GetString(string text) => (string)Application.Current.Resources[text];
+
     public static double AssistiveTouchSize
     {
         get => (double)Application.Current.Resources["AssistiveTouchSize"];

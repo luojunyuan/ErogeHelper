@@ -1,11 +1,12 @@
 ﻿// CODE FROM https://github.com/xupefei/Locale-Emulator/blob/master/LEGUI/I18n.cs
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 
-namespace ErogeHelper.AssistiveTouch
+namespace ErogeHelper.Preference
 {
     internal class I18n
     {
