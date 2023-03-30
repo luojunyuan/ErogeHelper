@@ -51,7 +51,7 @@ namespace ErogeHelper.Preference
         private void ZtwoEnter_Click(object sender, RoutedEventArgs e)
         {
             var config = new IniFile(ConfigFilePath);
-            config.Write("EnterKeyMapping", OldScreenShot.IsChecked.ToString());
+            config.Write("EnterKeyMapping", ZtwoEnter.IsChecked.ToString());
         }
     }
 }

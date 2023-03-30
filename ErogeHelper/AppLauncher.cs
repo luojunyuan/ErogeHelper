@@ -4,11 +4,11 @@ namespace ErogeHelper;
 
 internal static class AppLauncher
 {
-    public static void RunGame(string gamePath, bool leEnable)
+    public static Process? RunGame(string gamePath, bool leEnable)
     {
         var gameAlreadyStart = GetProcessesByFriendlyName(Path.GetFileNameWithoutExtension(gamePath)).Any();
         if (gameAlreadyStart)
-            return;
+            return null;
 
         var gameFolder = Path.GetDirectoryName(gamePath);
 
@@ -19,16 +19,24 @@ internal static class AppLauncher
 
         if (leEnable)
         {
-            // NOTE: LE may throw AccessViolationException which can not be caught
-            var leProc = Process.Start(new ProcessStartInfo
+            var lePath = RegistryModifier.LEPath();
+            if (lePath == string.Empty)
             {
-                FileName = Path.Combine(Directory.GetCurrentDirectory(), "libs", "x86", "LEProc.exe"),
+                throw new InvalidOperationException();
+            }
+            if (!File.Exists(lePath))
+            {
+                throw new ArgumentException(lePath);
+            }
+            // NOTE: LE may throw AccessViolationException which can not be caught
+            return Process.Start(new ProcessStartInfo
+            {
+                FileName = lePath,
                 UseShellExecute = false,
                 Arguments = File.Exists(gamePath + ".le.config")
                     ? $"-run \"{gamePath}\""
                     : $"\"{gamePath}\""
             });
-            leProc?.Kill();
         }
         else
         {
@@ -38,6 +46,7 @@ internal static class AppLauncher
                 UseShellExecute = false,
                 WorkingDirectory = gameFolder
             });
+            return null;
         }
     }
 

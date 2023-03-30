@@ -28,14 +28,33 @@ var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ErogeHel
 var splash = new SplashScreen(96, stream);
 _ = Task.Run(() => splash.Run());
 
-AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
+#region Start Game
+Process? leProc;
+try
+{
+    leProc = AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
+}
+catch(InvalidOperationException)
+{
+    splash.Close();
+    MessageBox.Show(Strings.App_LENotInstall);
+    return;
+}
+catch(ArgumentException ex)
+{
+    splash.Close();
+    MessageBox.Show(Strings.App_LENotFound + ex.Message);
+    return;
+}
 var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
 if (game is null)
 {
     splash.Close();
-    MessageBox.Show(Strings.App_StartNoParameter);
+    MessageBox.Show(Strings.App_Timeout);
     return;
 }
+leProc?.Kill();
+#endregion
 
 var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
 _ = new IpcMain(pipeServer);
@@ -50,7 +69,7 @@ while (!game.HasExited)
         StartInfo = new ProcessStartInfo
         {
             FileName = "ErogeHelper.AssistiveTouch.exe",
-            Arguments = pipeServer.GetClientHandleAsString() + ' ' + string.Join(" ", pids),
+            Arguments = pipeServer.GetClientHandleAsString() + ' ' + pids[0],
             UseShellExecute = false,
         }
     };

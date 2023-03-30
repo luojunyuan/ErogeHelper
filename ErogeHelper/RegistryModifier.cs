@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.IO;
 
 namespace ErogeHelper;
 
@@ -29,8 +30,26 @@ internal class RegistryModifier
         if (string.IsNullOrEmpty(currentValue))
             key.SetValue(exeFilePath, "~ HIGHDPIAWARE");
         else
-        {
             key.SetValue(exeFilePath, currentValue + " HIGHDPIAWARE");
-        }
+    }
+
+    private const string LERegistryPath = @"Software\Classes\CLSID\{C52B9871-E5E9-41FD-B84D-C5ACADBEC7AE}\InprocServer32";
+    public static string LEPath()
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(LERegistryPath) ??
+            Registry.LocalMachine.OpenSubKey(LERegistryPath);
+        if (key is null)
+            return string.Empty;
+
+        var rawPath = key.GetValue("CodeBase") as string;
+        if (rawPath is null)
+            return string.Empty;
+
+        var handleDllPath = rawPath.Substring(8);
+        var dir = Path.GetDirectoryName(handleDllPath);
+        if (dir is null)
+            return string.Empty;
+
+        return Path.Combine(dir, "LEProc.exe");
     }
 }
