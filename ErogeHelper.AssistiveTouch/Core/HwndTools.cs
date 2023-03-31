@@ -1,5 +1,4 @@
 ﻿using ErogeHelper.AssistiveTouch.NativeMethods;
-using ErogeHelper.IpcChannel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -7,39 +6,6 @@ namespace ErogeHelper.AssistiveTouch.Helper;
 
 public static class HwndTools
 {
-    public static void HideWindowInAltTab(nint windowHandle)
-    {
-        if (windowHandle == IntPtr.Zero)
-            return;
-
-        const int wsExToolWindow = 0x00000080;
-
-        var exStyle = User32.GetWindowLong(windowHandle,
-            User32.WindowLongFlags.GWL_EXSTYLE);
-        exStyle |= wsExToolWindow;
-        _ = User32.SetWindowLong(windowHandle, User32.WindowLongFlags.GWL_EXSTYLE, exStyle);
-    }
-
-    public static void WindowLostFocus(nint windowHandle, bool loseFocus)
-    {
-        if (windowHandle == IntPtr.Zero)
-            return;
-
-        var exStyle = User32.GetWindowLong(windowHandle, User32.WindowLongFlags.GWL_EXSTYLE);
-        if (loseFocus)
-        {
-            User32.SetWindowLong(windowHandle,
-                User32.WindowLongFlags.GWL_EXSTYLE,
-                exStyle | (int)User32.WindowStylesEx.WS_EX_NOACTIVATE);
-        }
-        else
-        {
-            User32.SetWindowLong(windowHandle,
-                User32.WindowLongFlags.GWL_EXSTYLE,
-                exStyle & ~(int)User32.WindowStylesEx.WS_EX_NOACTIVATE);
-        }
-    }
-
     public static void RemovePopupAddChildStyle(IntPtr handle)
     {
         var style = (uint)User32.GetWindowLong(handle, User32.WindowLongFlags.GWL_STYLE);
@@ -87,7 +53,7 @@ public static class HwndTools
                     if (clientRect.bottom > GoodWindowHeight &&
                         clientRect.right > GoodWindowWidth)
                     {
-                        return handle.DangerousGetHandle();
+                        return handle;
                     }
                 }
                 Thread.Sleep(UIMinimumResponseTime);
@@ -102,10 +68,10 @@ public static class HwndTools
     private const int GoodWindowWidth = 500;
     private const int GoodWindowHeight = 320;
 
-    private static IEnumerable<HWND> GetRootWindowsOfProcess(int pid)
+    private static IEnumerable<IntPtr> GetRootWindowsOfProcess(int pid)
     {
         var rootWindows = GetChildWindows(IntPtr.Zero);
-        var dsProcRootWindows = new List<HWND>();
+        var dsProcRootWindows = new List<IntPtr>();
         foreach (var hWnd in rootWindows)
         {
             _ = User32.GetWindowThreadProcessId(hWnd, out var lpdwProcessId);
@@ -115,16 +81,16 @@ public static class HwndTools
         return dsProcRootWindows;
     }
 
-    private static IEnumerable<HWND> GetChildWindows(HWND parent)
+    private static IEnumerable<IntPtr> GetChildWindows(IntPtr parent)
     {
-        List<HWND> result = new();
+        List<IntPtr> result = new();
         var listHandle = GCHandle.Alloc(result);
         try
         {
-            static bool ChildProc(HWND handle, IntPtr pointer)
+            static bool ChildProc(IntPtr handle, IntPtr pointer)
             {
                 var gch = GCHandle.FromIntPtr(pointer);
-                if (gch.Target is not List<HWND> list)
+                if (gch.Target is not List<IntPtr> list)
                 {
                     throw new InvalidCastException("GCHandle Target could not be cast as List<HWND>");
                 }

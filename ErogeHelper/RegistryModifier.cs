@@ -1,16 +1,15 @@
 ﻿using Microsoft.Win32;
-using System.IO;
 
 namespace ErogeHelper;
 
-// .net need target to <TargetFramework>netX.0-windows</TargetFramework>
+// need target to <TargetFramework>netX.0-windows</TargetFramework>
 internal class RegistryModifier
 {
     private const string ApplicationCompatibilityRegistryPath =
         @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
     public static bool IsDpiCompatibilitySetted(string exeFilePath)
     {
-        using var key = Registry.CurrentUser.OpenSubKey(ApplicationCompatibilityRegistryPath, true)
+        using var key = Registry.CurrentUser.OpenSubKey(ApplicationCompatibilityRegistryPath)
             ?? Registry.CurrentUser.CreateSubKey(ApplicationCompatibilityRegistryPath);
 
         var currentValue = key.GetValue(exeFilePath) as string;

@@ -1,5 +1,8 @@
 ﻿namespace ErogeHelper.AssistiveTouch.NativeMethods
 {
+    /// <summary>
+    /// Just Warpper
+    /// </summary>
     internal static class Win32
     {
         public static void MoveWindowToOrigin(IntPtr handle) => User32.SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, User32.SetWindowPosFlags.SWP_NOZORDER | User32.SetWindowPosFlags.SWP_NOSIZE);

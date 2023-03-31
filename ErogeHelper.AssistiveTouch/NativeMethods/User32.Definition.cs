@@ -9,18 +9,18 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public delegate bool EnumWindowsProc([In] HWND hwnd, [In] IntPtr lParam);
+        public delegate bool EnumWindowsProc([In] IntPtr hwnd, [In] IntPtr lParam);
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        public delegate void WinEventProc(HWINEVENTHOOK hWinEventHook, uint winEvent, HWND hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime);
+        public delegate void WinEventProc(HWINEVENTHOOK hWinEventHook, uint winEvent, IntPtr hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime);
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct HWINEVENTHOOK : IHandle
+        public readonly struct HWINEVENTHOOK 
         {
             private readonly IntPtr handle;
             public HWINEVENTHOOK(IntPtr preexistingHandle) => handle = preexistingHandle;
 
-            public static HWINEVENTHOOK NULL => new HWINEVENTHOOK(IntPtr.Zero);
+            public static HWINEVENTHOOK NULL => new(IntPtr.Zero);
 
             public bool IsNull => handle == IntPtr.Zero;
 

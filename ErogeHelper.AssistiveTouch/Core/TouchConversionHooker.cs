@@ -13,9 +13,9 @@ namespace ErogeHelper.AssistiveTouch.Core
 
         public static void Install()
         {
-            var moduleHandle = Kernel32.GetModuleHandle();
+            var moduleHandle = Kernel32.GetModuleHandle(); // get current exe instant handle
 
-            _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, Hook, moduleHandle, 0);
+            _hookId = User32.SetWindowsHookEx(User32.HookType.WH_MOUSE_LL, Hook, moduleHandle, 0); // tid 0 set global hook
             if (_hookId == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
         }

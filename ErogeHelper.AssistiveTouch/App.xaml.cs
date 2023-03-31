@@ -24,7 +24,7 @@ namespace ErogeHelper.AssistiveTouch
                 new IpcRenderer(_pipeClient);
 
                 GameProcess = Process.GetProcessById(int.Parse(e.Args[1]));
-
+             
                 if (GameProcess is null)
                 {
                     Environment.Exit(-1);
@@ -32,7 +32,12 @@ namespace ErogeHelper.AssistiveTouch
                 }
 
                 GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
-                //GameWindowHandle = GameProcess.MainWindowHandle;
+
+                if (GameWindowHandle == IntPtr.Zero)
+                {
+                    Environment.Exit(-1);
+                    return;
+                }
 
                 Config.Load();
 

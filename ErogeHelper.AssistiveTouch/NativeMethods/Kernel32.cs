@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
 namespace ErogeHelper.AssistiveTouch.NativeMethods
 {
@@ -12,6 +7,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         private const string Kernel32Dll = "kernel32.dll";
 
         [DllImport(Kernel32Dll, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle([Optional] string lpModuleName);
+        public static extern IntPtr GetModuleHandle();
     }
 }

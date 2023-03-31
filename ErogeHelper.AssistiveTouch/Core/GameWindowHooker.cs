@@ -45,7 +45,7 @@ internal class GameWindowHooker : IDisposable
     private void WinEventCallback(
         User32.HWINEVENTHOOK hWinEventHook,
         uint eventType,
-        HWND hWnd,
+        IntPtr hWnd,
         int idObject,
         int idChild,
         uint dwEventThread,

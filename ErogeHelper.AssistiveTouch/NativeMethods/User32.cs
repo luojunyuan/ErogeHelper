@@ -7,20 +7,20 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         private const string User32Dll = "user32.dll";
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        public static extern uint GetWindowThreadProcessId(HWND hWnd, out uint lpdwProcessId);
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         public static extern HWINEVENTHOOK SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventProc pfnWinEventProc, uint idProcess, uint idThread, WINEVENT dwFlags);
 
         [DllImport(User32Dll, SetLastError = true)]
-        public static extern bool SetWindowPos(IntPtr hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
 
         [DllImport(User32Dll, CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetClientRect(HWND hWnd, out RECT lpRect);
+        public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport(User32Dll, ExactSpelling = true, SetLastError = true)]
-        public static extern int MapWindowPoints(HWND hWndFrom, HWND hWndTo, ref System.Drawing.Point lpPoints, uint cPoints = 1);
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref System.Drawing.Point lpPoints, uint cPoints = 1);
 
         [DllImport(User32Dll)]
         public static extern bool UnhookWinEvent(HWINEVENTHOOK hWinEventHook);
@@ -28,9 +28,9 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         // Above GameWindowHooker
 
         [DllImport(User32Dll, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int GetWindowLong(HWND hWnd, WindowLongFlags nIndex);
+        public static extern int GetWindowLong(IntPtr hWnd, WindowLongFlags nIndex);
 
-        public static int SetWindowLong(HWND hWnd, WindowLongFlags nIndex, int dwNewLong)
+        public static int SetWindowLong(IntPtr hWnd, WindowLongFlags nIndex, int dwNewLong)
         {
             IntPtr ret;
             if (IntPtr.Size == 4)
@@ -43,26 +43,29 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         }
 
         [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLong")]
-        private static extern int SetWindowLongPtr32(HWND hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
+        private static extern int SetWindowLongPtr32(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
 
         [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLongPtr")]
-        private static extern IntPtr SetWindowLongPtr64(HWND hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
+        private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsIconic(HWND hWnd);
+        public static extern bool IsIconic(IntPtr hWnd);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ShowWindow(HWND hWnd, ShowWindowCommand nCmdShow);
+        public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommand nCmdShow);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnumChildWindows(HWND hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        public static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
 
         // Above for HwndTools
 
         // Below for touch to mouse hook
+
+        [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
+        public static extern bool UnhookWindowsHookEx(IntPtr hhk);
 
         [DllImport(User32Dll, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern IntPtr SetWindowsHookEx(HookType idHook, HookProc lpfn, IntPtr hmod, int dwThreadId);
@@ -84,7 +87,7 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         [DllImport(User32Dll, ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowRect(HWND hWnd, out RECT lpRect);
+        public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport(User32Dll)]
         public static extern int GetSystemMetrics(SystemMetric smIndex);
@@ -92,10 +95,10 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         // MainWindow initialize
 
         [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
-        public static extern HWND SetParent(HWND hWndChild, HWND hWndNewParent);
+        public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         // Menu function
-        [DllImport(User32Dll)]
+        [DllImport(User32Dll, SetLastError = true)]
         public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, [Optional] int lParam);
 
     }
