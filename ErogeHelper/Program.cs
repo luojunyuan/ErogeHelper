@@ -24,7 +24,7 @@ if (!File.Exists(gamePath))
 }
 #endregion
 
-var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ErogeHelper.assets.klee.png") ?? throw new ArgumentException("stream");
+var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png") ?? throw new ArgumentException("stream");
 var splash = new SplashScreen(96, stream);
 _ = Task.Run(() => splash.Run());
 
