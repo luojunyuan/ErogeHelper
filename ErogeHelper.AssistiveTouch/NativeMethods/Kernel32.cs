@@ -7,6 +7,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         private const string Kernel32Dll = "kernel32.dll";
 
         [DllImport(Kernel32Dll, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle();
+        public static extern IntPtr GetModuleHandle([Optional] string lpModuleName);
     }
 }
