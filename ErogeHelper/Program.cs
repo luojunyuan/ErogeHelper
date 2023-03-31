@@ -1,10 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ErogeHelper;
-using ErogeHelper.IpcChannel;
 using SplashScreenGdip;
 using System.Diagnostics;
 using System.IO.Pipes;
-using System.Reflection;
 
 #region Arguments Check
 if (args.Length == 0)

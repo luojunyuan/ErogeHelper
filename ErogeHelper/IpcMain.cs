@@ -1,5 +1,4 @@
-﻿using ErogeHelper.IpcChannel;
-using System.IO.Pipes;
+﻿using System.IO.Pipes;
 
 namespace ErogeHelper;
 
@@ -40,4 +39,9 @@ internal class IpcMain
     {
         DictionaryOfEvents.Add(channel, callback);
     }
+}
+
+public enum IpcTypes
+{
+    Loaded,
 }

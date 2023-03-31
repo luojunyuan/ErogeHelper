@@ -1,7 +1,6 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
 using ErogeHelper.AssistiveTouch.NativeMethods;
-using ErogeHelper.IpcChannel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;

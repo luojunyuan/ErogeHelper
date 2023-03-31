@@ -1,5 +1,4 @@
-﻿using ErogeHelper.IpcChannel;
-using System.IO;
+﻿using System.IO;
 using System.IO.Pipes;
 
 namespace ErogeHelper.AssistiveTouch
@@ -19,5 +18,10 @@ namespace ErogeHelper.AssistiveTouch
             sw.AutoFlush = true;
             sw.WriteLine(channel);
         }
+    }
+
+    public enum IpcTypes
+    {
+        Loaded,
     }
 }
