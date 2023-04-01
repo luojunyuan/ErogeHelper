@@ -11,9 +11,9 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <Target Name="DeleteFile" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
+  <!--<Target Name="DeleteFile" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
     <Exec Command="del $(TargetDir)$(AssemblyName).exe.config" />
-  </Target>
+  </Target>-->
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="mkdir &quot;$(TargetDir)Lang\&quot;&#xD;&#xA;copy /Y &quot;$(ProjectDir)Lang\*.xaml&quot; &quot;$(TargetDir)Lang\&quot;" />
