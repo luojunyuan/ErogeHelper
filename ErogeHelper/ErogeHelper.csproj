@@ -13,7 +13,7 @@
   <ItemGroup>
     <Using Remove="System.Net.Http" />
     <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
-    <PackageReference Include="SplashScreenGdip" Version="1.0.*" />
+    <PackageReference Include="SplashScreenGdip" Version="1.0.7" />
     <!--  Splash screen  -->
     <EmbeddedResource Include="assets\klee.png" />
   </ItemGroup>
@@ -21,5 +21,15 @@
   <Target Name="DeleteFile" Condition=" '$(TargetFramework)' == 'net472' " AfterTargets="PostBuildEvent">
     <Exec Command="del $(TargetDir)$(AssemblyName).exe.config" />
   </Target>
+
+<PropertyGroup>
+  <!--<TargetFramework>net8.0-windows</TargetFramework>-->
+  <PublishAot>false</PublishAot>
+  <InvariantGlobalization>true</InvariantGlobalization>
+  <UseSystemResourceKeys>true</UseSystemResourceKeys>
+  <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+  <IlcOptimizationPreference>Speed</IlcOptimizationPreference>  
+  <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+</PropertyGroup>
 
 </Project>

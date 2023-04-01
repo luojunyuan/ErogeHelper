@@ -31,7 +31,15 @@ namespace ErogeHelper.AssistiveTouch
                     return;
                 }
 
-                GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
+                try
+                {
+                    GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
+                }
+                catch (ArgumentException) // FindHandleFailed
+                {
+                    Environment.Exit(-2);
+                    return;
+                }
 
                 if (GameWindowHandle == IntPtr.Zero)
                 {

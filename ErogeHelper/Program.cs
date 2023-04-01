@@ -73,4 +73,11 @@ while (!game.HasExited)
     };
     touch.Start();
     touch.WaitForExit();
+    if(touch.ExitCode == -2)
+    {
+        User32.ShowWindow(splash.WindowHandle, 0);
+        MessageBox.Show(Strings.App_Timeout, parent: splash.WindowHandle);
+        splash.Close();
+        break;
+    }
 }
