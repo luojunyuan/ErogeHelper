@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace ErogeHelper.Preference
 {
@@ -35,8 +26,8 @@ namespace ErogeHelper.Preference
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             var config = new IniFile(ConfigFilePath);
-            OldScreenShot.IsChecked = bool.Parse( config.Read("ScreenShotTradition") ?? "false");
-            ZtwoEnter.IsChecked     = bool.Parse( config.Read("EnterKeyMapping") ?? "false");
+            OldScreenShot.IsChecked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
+            ZtwoEnter.IsChecked = bool.Parse(config.Read("EnterKeyMapping") ?? "false");
 
             if (!Directory.Exists(ConfigFolder))
                 Directory.CreateDirectory(ConfigFolder);
