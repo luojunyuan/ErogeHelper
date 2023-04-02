@@ -6,6 +6,31 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
     {
         private const string User32Dll = "user32.dll";
 
+        #region HwndTools.cs
+
+        [DllImport(User32Dll, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowLong(IntPtr hWnd, WindowLongFlags nIndex);
+
+        public static int SetWindowLong(IntPtr hWnd, WindowLongFlags nIndex, int dwNewLong)
+        {
+            IntPtr ret;
+            if (IntPtr.Size == 4)
+                ret = SetWindowLongPtr32(hWnd, nIndex, (IntPtr)dwNewLong);
+            else
+                ret = SetWindowLongPtr64(hWnd, nIndex, (IntPtr)dwNewLong);
+            if (ret == IntPtr.Zero)
+                throw new System.ComponentModel.Win32Exception();
+            return ret.ToInt32();
+        }
+
+        [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLong")]
+        private static extern IntPtr SetWindowLongPtr32(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
+
+        [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLongPtr")]
+        private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
+
+        #endregion
+
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
@@ -27,40 +52,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         // Above GameWindowHooker
 
-        [DllImport(User32Dll, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int GetWindowLong(IntPtr hWnd, WindowLongFlags nIndex);
-
-        public static int SetWindowLong(IntPtr hWnd, WindowLongFlags nIndex, int dwNewLong)
-        {
-            IntPtr ret;
-            if (IntPtr.Size == 4)
-                ret = (IntPtr)SetWindowLongPtr32(hWnd, nIndex, (IntPtr)dwNewLong);
-            else
-                ret = SetWindowLongPtr64(hWnd, nIndex, (IntPtr)dwNewLong);
-            if (ret == IntPtr.Zero)
-                throw new System.ComponentModel.Win32Exception();
-            return ret.ToInt32();
-        }
-
-        [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLong")]
-        private static extern int SetWindowLongPtr32(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
-
-        [DllImport(User32Dll, SetLastError = true, EntryPoint = "SetWindowLongPtr")]
-        private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
-
-        [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsIconic(IntPtr hWnd);
-
-        [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommand nCmdShow);
-
-        [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
-
-        // Above for HwndTools
 
         // Below for touch to mouse hook
 

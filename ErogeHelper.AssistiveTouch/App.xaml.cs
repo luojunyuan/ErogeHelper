@@ -1,6 +1,5 @@
 ﻿using ErogeHelper.AssistiveTouch.Helper;
 using ErogeHelper.AssistiveTouch.NativeMethods;
-using System.Diagnostics;
 using System.IO.Pipes;
 using System.Windows;
 using WindowsInput.Events;
@@ -12,9 +11,7 @@ namespace ErogeHelper.AssistiveTouch
     /// </summary>
     public partial class App : Application
     {
-        public static Process GameProcess { get; private set; } = null!;
-
-        public static IntPtr GameWindowHandle { get; private set; } = IntPtr.Zero;
+        public static IntPtr GameWindowHandle { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -23,29 +20,7 @@ namespace ErogeHelper.AssistiveTouch
                 var _pipeClient = new AnonymousPipeClientStream(PipeDirection.Out, e.Args[0]);
                 new IpcRenderer(_pipeClient);
 
-                GameProcess = Process.GetProcessById(int.Parse(e.Args[1]));
-             
-                if (GameProcess is null)
-                {
-                    Environment.Exit(-1);
-                    return;
-                }
-
-                try
-                {
-                    GameWindowHandle = HwndTools.FindMainWindowHandle(GameProcess);
-                }
-                catch (ArgumentException) // FindHandleFailed
-                {
-                    Environment.Exit(-2);
-                    return;
-                }
-
-                if (GameWindowHandle == IntPtr.Zero)
-                {
-                    Environment.Exit(-1);
-                    return;
-                }
+                GameWindowHandle = (IntPtr)int.Parse(e.Args[1]);
 
                 Config.Load();
 

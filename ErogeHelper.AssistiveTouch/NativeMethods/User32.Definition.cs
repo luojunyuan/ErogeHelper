@@ -8,10 +8,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public delegate bool EnumWindowsProc([In] IntPtr hwnd, [In] IntPtr lParam);
-
-        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         public delegate void WinEventProc(HWINEVENTHOOK hWinEventHook, uint winEvent, IntPtr hwnd, int idObject, int idChild, uint idEventThread, uint dwmsEventTime);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -96,7 +92,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
             WINEVENT_SKIPOWNPROCESS = 2,
             WINEVENT_SKIPOWNTHREAD = 4,
         }
-
 
         public enum WindowLongFlags
         {
@@ -206,23 +201,5 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         {
             SC_CLOSE = 0xF060
         }
-    }
-
-    public enum ShowWindowCommand
-    {
-        SW_HIDE = 0,
-        SW_SHOWNORMAL = 1,
-        SW_NORMAL = 1,
-        SW_SHOWMINIMIZED = 2,
-        SW_SHOWMAXIMIZED = 3,
-        SW_MAXIMIZE = 3,
-        SW_SHOWNOACTIVATE = 4,
-        SW_SHOW = 5,
-        SW_MINIMIZE = 6,
-        SW_SHOWMINNOACTIVE = 7,
-        SW_SHOWNA = 8,
-        SW_RESTORE = 9,
-        SW_SHOWDEFAULT = 10,
-        SW_FORCEMINIMIZE = 11,
     }
 }

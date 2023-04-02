@@ -62,22 +62,28 @@ IpcMain.Once(IpcTypes.Loaded, splash.Close);
 Environment.CurrentDirectory = AppContext.BaseDirectory;
 while (!game.HasExited)
 {
-    var touch = new Process()
+    var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
+    if (gameWindowHandle == IntPtr.Zero) // process exit
     {
-        StartInfo = new ProcessStartInfo
-        {
-            FileName = "ErogeHelper.AssistiveTouch.exe",
-            Arguments = pipeServer.GetClientHandleAsString() + ' ' + pids[0],
-            UseShellExecute = false,
-        }
-    };
-    touch.Start();
-    touch.WaitForExit();
-    if(touch.ExitCode == -2)
+        break;
+    }
+    else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
     {
         User32.ShowWindow(splash.WindowHandle, 0);
         MessageBox.Show(Strings.App_Timeout, parent: splash.WindowHandle);
         splash.Close();
         break;
     }
+
+    var touch = new Process()
+    {
+        StartInfo = new ProcessStartInfo
+        {
+            FileName = "ErogeHelper.AssistiveTouch.exe",
+            Arguments = pipeServer.GetClientHandleAsString() + ' ' + gameWindowHandle,
+            UseShellExecute = false,
+        }
+    };
+    touch.Start();
+    touch.WaitForExit();
 }
