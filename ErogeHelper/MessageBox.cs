@@ -7,8 +7,9 @@ internal class MessageBox
 {
     public static void Show(string text, string title = "ErogeHelper", IntPtr parent = default) => _ = User32.MessageBox(parent, text, title, MB_TOPMOST | MB_SETFOREGROUND);
 
-    const int MB_SETFOREGROUND = 0x00010000;
+    // Not work if the process had win handle
     const int MB_TOPMOST = 0x00040000;
+    const int MB_SETFOREGROUND = 0x00010000;
     // https://stackoverflow.com/a/48003123
 }
 

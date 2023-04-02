@@ -69,9 +69,7 @@ while (!game.HasExited)
     }
     else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
     {
-        User32.ShowWindow(splash.WindowHandle, 0);
-        MessageBox.Show(Strings.App_Timeout, parent: splash.WindowHandle);
-        splash.Close();
+        MessageBox.Show(Strings.App_Timeout);
         break;
     }
 
