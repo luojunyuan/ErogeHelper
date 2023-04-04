@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\E.bmp" />
+    <EmbeddedResource Include="Resources\E@200.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration.Install" />
+  </ItemGroup>
+
+</Project>
