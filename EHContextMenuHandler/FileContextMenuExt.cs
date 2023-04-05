@@ -39,25 +39,23 @@ namespace EHContextMenuHandler
     [Guid("C6D31501-E884-457E-904D-762ACC4C7E34"), ComVisible(true)]
     public class FileContextMenuExt : IShellExtInit, IContextMenu
     {
-        private static ResourceManager ResourceManager = new("EHContextMenuHandler.Resource", typeof(FileContextMenuExt).Assembly);
-        private static Bitmap E = ((Bitmap)ResourceManager.GetObject("E"));
-        private static Bitmap E_200  = ((Bitmap)ResourceManager.GetObject("E_200"));
-        
-        private readonly List<EHMenuItem> menuItems = new();
-        private IntPtr _menuIcon = IntPtr.Zero;
+        private readonly List<EHMenuItem> _menuItems = new();
+        private IntPtr _menuGray = IntPtr.Zero;
+        private IntPtr _menuPurple = IntPtr.Zero;
+        private IntPtr _menuBlue = IntPtr.Zero;
         // The name of the selected file.
         private string _selectedFile = string.Empty;
 
         public FileContextMenuExt()
         {
             //Load the bitmap for the menu item.
-            _menuIcon = SystemHelper.Is4KDisplay() ? E_200.GetHbitmap() : E.GetHbitmap();
+            _menuGray = SystemHelper.Is4KDisplay() ? Resource.gray_200.GetHbitmap() : Resource.gray.GetHbitmap();
 
             //Load default items.
-            menuItems.Add(new EHMenuItem("Eroge Helper", true, null, _menuIcon, ""));
-            menuItems.Add(new EHMenuItem("Run", true, null, IntPtr.Zero, "\"%APP%\""));
-            menuItems.Add(new EHMenuItem("Run with Locate Emulator", true, null, IntPtr.Zero, "\"%APP%\" -le"));
-            menuItems.Add(new EHMenuItem("Preference", true, null, IntPtr.Zero, ""));
+            _menuItems.Add(new EHMenuItem("Eroge Helper", true, null, _menuGray, ""));
+            _menuItems.Add(new EHMenuItem("Run", true, null, _menuPurple, "\"%APP%\""));
+            _menuItems.Add(new EHMenuItem("Run with Locate Emulator", true, null, _menuPurple, "\"%APP%\" -le"));
+            _menuItems.Add(new EHMenuItem("Preference", true, null, _menuBlue, ""));
         }
 
         #region IShellExtInit Members
@@ -140,10 +138,20 @@ namespace EHContextMenuHandler
 
         ~FileContextMenuExt()
         {
-            if (_menuIcon != IntPtr.Zero)
+            if (_menuGray != IntPtr.Zero)
             {
-                NativeMethods.DeleteObject(_menuIcon);
-                _menuIcon = IntPtr.Zero;
+                NativeMethods.DeleteObject(_menuGray);
+                _menuGray = IntPtr.Zero;
+            }
+            if (_menuPurple != IntPtr.Zero)
+            {
+                NativeMethods.DeleteObject(_menuPurple);
+                _menuPurple = IntPtr.Zero;
+            }
+            if (_menuBlue != IntPtr.Zero)
+            {
+                NativeMethods.DeleteObject(_menuBlue);
+                _menuBlue = IntPtr.Zero;
             }
         }
 
@@ -237,15 +245,15 @@ namespace EHContextMenuHandler
 
             // Register item 0: Eroge Helper
             var hSubMenu = NativeMethods.CreatePopupMenu();
-            var item = menuItems[0];
+            var item = _menuItems[0];
             RegisterMenuItem(0, idCmdFirst, item.Text, true, item.Bitmap, hSubMenu, 1, hMenu);
 
             // Register item 1: Run
-            item = menuItems[1];
+            item = _menuItems[1];
             RegisterMenuItem(1, idCmdFirst, item.Text, true, item.Bitmap, IntPtr.Zero, 0, hSubMenu);
 
             // Register item 2: Run with Locate Emulator 
-            item = menuItems[2];
+            item = _menuItems[2];
             RegisterMenuItem(2, idCmdFirst, item.Text, IsX86_32(), item.Bitmap, IntPtr.Zero, 2, hSubMenu);
 
             // Add a separator.
@@ -256,12 +264,12 @@ namespace EHContextMenuHandler
             NativeMethods.InsertMenuItem(hSubMenu, 2, true, ref sep);
 
             // Register item 3: Preference
-            item = menuItems[3];
+            item = _menuItems[3];
             RegisterMenuItem(3, idCmdFirst, item.Text, true, item.Bitmap, IntPtr.Zero, 3, hSubMenu);
 
             // Return an HRESULT value with the severity set to SEVERITY_SUCCESS. 
             // Set the code value to the total number of items added.
-            return WinError.MAKE_HRESULT(WinError.SEVERITY_SUCCESS, 0, 3 + (uint)menuItems.Count);
+            return WinError.MAKE_HRESULT(WinError.SEVERITY_SUCCESS, 0, 3 + (uint)_menuItems.Count);
         }
 
         public bool IsX86_32()
@@ -299,7 +307,7 @@ namespace EHContextMenuHandler
             var ici = (CMINVOKECOMMANDINFO)Marshal.PtrToStructure(pici, typeof(CMINVOKECOMMANDINFO));
 
             var index = NativeMethods.LowWord(ici.verb.ToInt32());
-            var item = menuItems[index];
+            var item = _menuItems[index];
 
             OnVerbDisplayFileName(index, item.Commands);
         }

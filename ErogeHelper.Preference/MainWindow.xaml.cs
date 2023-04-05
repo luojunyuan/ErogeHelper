@@ -77,5 +77,12 @@ namespace ErogeHelper.Preference
 
             ButtonUninstall.IsEnabled = false;
         }
+
+        private void ReExplorerBututonOnClick(object sender, RoutedEventArgs e)
+        {
+            var directories = ExplorerHelper.GetOpenedDirectories();
+            ExplorerHelper.KillExplorer();
+            ExplorerHelper.OpenDirectories(directories);
+        }
     }
 }
