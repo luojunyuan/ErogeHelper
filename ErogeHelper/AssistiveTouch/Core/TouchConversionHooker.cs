@@ -1,6 +1,10 @@
 ﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ErogeHelper.AssistiveTouch.Core;
 
@@ -36,6 +40,14 @@ public static class TouchConversionHooker
         {
             var isGameWindow = User32.GetForegroundWindow() == AppInside.GameWindowHandle;
             if (!isGameWindow)
+                return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
+
+            var win = (MainWindow)Application.Current.MainWindow;
+            var winOrigin = new System.Drawing.Point();
+            User32.MapWindowPoints(win.Handle, IntPtr.Zero, ref winOrigin);
+            var relativePoint = new Point((info.pt.X - winOrigin.X)/ win.Dpi, (info.pt.Y - winOrigin.Y) / win.Dpi);
+            if (VisualTreeHelper.HitTest((Grid)win.Content, relativePoint) != null ||
+                relativePoint.Y < 0)
                 return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 
             switch ((int)wParam)

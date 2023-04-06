@@ -12,8 +12,12 @@ internal class GameWindowHooker : IDisposable
 
     private readonly GCHandle _gcSafetyHandle;
 
-    public GameWindowHooker()
+    private readonly IntPtr _windowHandle;
+
+    public GameWindowHooker(IntPtr windowHandle)
     {
+        _windowHandle = windowHandle;
+
         var targetThreadId = User32.GetWindowThreadProcessId(AppInside.GameWindowHandle, out var pid);
 
         User32.WinEventProc winEventDelegate = WinEventCallback;
@@ -27,7 +31,7 @@ internal class GameWindowHooker : IDisposable
         _throttle = new(300, rectClient =>
         {
             _rev = !_rev;
-            Win32.SetWindowSize(MainWindow.Handle, rectClient.Width + (_rev ? 1 : -1), rectClient.Height);
+            Win32.SetWindowSize(_windowHandle, rectClient.Width + (_rev ? 1 : -1), rectClient.Height);
         });
     }
 
@@ -59,7 +63,7 @@ internal class GameWindowHooker : IDisposable
 
             if (rectClient.Size != _lastGameWindowSize)
             {
-                Win32.SetWindowSize(MainWindow.Handle, rectClient.Width, rectClient.Height);
+                Win32.SetWindowSize(_windowHandle, rectClient.Width, rectClient.Height);
                 _lastGameWindowSize = rectClient.Size;
                 SizeChanged?.Invoke(this, rectClient.Size);
             }
@@ -71,10 +75,10 @@ internal class GameWindowHooker : IDisposable
             }
 
             var p = new Point();
-            User32.MapWindowPoints(MainWindow.Handle, hWnd, ref p);
+            User32.MapWindowPoints(_windowHandle, hWnd, ref p);
             if (p.X != 0 || p.Y != 0)
             {
-                Win32.MoveWindowToOrigin(MainWindow.Handle);
+                Win32.MoveWindowToOrigin(_windowHandle);
             }
         }
     }
