@@ -192,9 +192,6 @@ internal static class AppLauncher
 
     internal class User32
     {
-        [DllImport("user32.dll", EntryPoint = "MessageBoxA", ExactSpelling = true, CharSet = CharSet.Ansi)]
-        public static extern int MessageBox(IntPtr hWnd, string lpText, string lpCaption, int uType);
-
         private const string User32Dll = "user32.dll";
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]

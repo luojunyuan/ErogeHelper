@@ -15,14 +15,10 @@ namespace ErogeHelper.AssistiveTouch
         // Thread RootHwndWatche, Stylus Input are from Wpf 
         public static IntPtr Handle { get; private set; }
 
-        public static Action? CloseSplash;
-
         public MainWindow()
         {
             InitializeComponent();
             Handle = new WindowInteropHelper(this).EnsureHandle();
-
-            ContentRendered += (_, _) => CloseSplash?.Invoke();
 
             HwndTools.RemovePopupAddChildStyle(Handle);
             User32.SetParent(Handle, AppInside.GameWindowHandle);

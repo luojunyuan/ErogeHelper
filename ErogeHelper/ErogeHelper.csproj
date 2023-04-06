@@ -15,7 +15,7 @@
     <Using Include="System.IO" />
     <Using Remove="System.Net.Http" />
     <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
-    <PackageReference Include="SplashScreenGdip" Version="1.0.7" />
+    <PackageReference Include="SplashScreenGdip" Version="1.0.8" />
     <PackageReference Include="WindowsInput" Version="6.4.0" />
     <!--  Splash screen  -->
     <EmbeddedResource Include="assets\klee.png" />

@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ErogeHelper;
 using SplashScreenGdip;
 
@@ -21,57 +20,65 @@ if (!File.Exists(gamePath))
 }
 #endregion
 
-var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png") ?? throw new ArgumentException("stream");
+var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png")!;
 var splash = new SplashScreen(96, stream);
-_ = Task.Run(() => splash.Run());
+_ = Task.Run(() => PreProcessing(args.Contains("-le"), gamePath, splash));
 
-#region Start Game
-Process? leProc;
-try
-{
-    leProc = AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
-}
-catch (InvalidOperationException)
-{
-    splash.Close();
-    MessageBox.Show(Strings.App_LENotInstall);
-    return;
-}
-catch (ArgumentException ex)
-{
-    splash.Close();
-    MessageBox.Show(Strings.App_LENotFound + ex.Message);
-    return;
-}
-var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
-if (game is null)
-{
-    splash.Close();
-    MessageBox.Show(Strings.App_Timeout);
-    return;
-}
-leProc?.Kill();
-#endregion
+splash.Run();
 
-ErogeHelper.AssistiveTouch.MainWindow.CloseSplash = splash.Close;
-
-Environment.CurrentDirectory = AppContext.BaseDirectory;
-Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
-Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-while (!game.HasExited)
+static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 {
-    var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
-    if (gameWindowHandle == IntPtr.Zero) // process exit
+    #region Start Game
+    Process? leProc;
+    try
     {
-        break;
+        leProc = AppLauncher.RunGame(gamePath, leEnable);
     }
-    else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
+    catch (InvalidOperationException)
     {
-        MessageBox.Show(Strings.App_Timeout);
-        break;
+        MessageBox.ShowX(Strings.App_LENotInstall, splash);
+        return;
     }
+    catch (ArgumentException ex)
+    {
+        MessageBox.ShowX(Strings.App_LENotFound + ex.Message, splash);
+        return;
+    }
+    var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
+    if (game is null)
+    {
+        MessageBox.ShowX(Strings.App_Timeout, splash);
+        return;
+    }
+    leProc?.Kill();
+    #endregion
 
-    var touch = new ErogeHelper.AssistiveTouch.AppInside(gameWindowHandle);
-
-    touch.Run();
+    var wpfThread = new Thread(() => Main(splash, game))
+    {
+        Name = "メイン スレッド"
+    };
+    wpfThread.SetApartmentState(ApartmentState.STA);
+    wpfThread.Start();
 }
+
+static void Main(SplashScreen splash, Process game)
+{
+    while (!game.HasExited)
+    {
+        var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
+        if (gameWindowHandle == IntPtr.Zero) // process exit
+        {
+            break;
+        }
+        else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
+        {
+            MessageBox.ShowX(Strings.App_Timeout, splash);
+            break;
+        }
+        var touch = new ErogeHelper.AssistiveTouch.AppInside(gameWindowHandle);
+        var mainWindow = new ErogeHelper.AssistiveTouch.MainWindow();
+        mainWindow.ContentRendered += (_, _) => splash.Close();
+        
+        touch.Run(mainWindow);
+    }
+};

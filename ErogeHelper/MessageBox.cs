@@ -1,13 +1,22 @@
-﻿using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
+using SplashScreenGdip;
 
 namespace ErogeHelper;
 
 internal class MessageBox
 {
-    public static void Show(string text, string title = "ErogeHelper", IntPtr parent = default) => _ = AppLauncher.User32.MessageBox(parent, text, title, MB_TOPMOST | MB_SETFOREGROUND);
+    public static void Show(string text, string title = "ErogeHelper", IntPtr parent = default) => _ = _MessageBox(parent, text, title, MB_TOPMOST | MB_SETFOREGROUND);
+
+    public static void ShowX(string text, SplashScreen splash)
+    {
+        splash.Hide();
+        _MessageBox(splash.WindowHandle, text, "ErogeHelper", MB_TOPMOST | MB_SETFOREGROUND);
+        splash.Close();
+    }
+
+    [DllImport("user32.dll", EntryPoint = "MessageBoxA", ExactSpelling = true, CharSet = CharSet.Ansi)]
+    public static extern int _MessageBox(IntPtr hWnd, string lpText, string lpCaption, int uType);
 
     // Not work if the process had win handle
     const int MB_TOPMOST = 0x00040000;
