@@ -21,7 +21,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
                     (Symbol.BackToWindow, XamlResource.GetString("AssistiveTouch_Window")) :
                     (Symbol.Fullscreen, XamlResource.GetString("AssistiveTouch_Fullscreen"));
-            SetFullscreenSwitcher(Fullscreen.IsWindowFullscreen(App.GameWindowHandle));
+            SetFullscreenSwitcher(Fullscreen.IsWindowFullscreen(AppInside.GameWindowHandle));
             Fullscreen.FullscreenChanged += (_, isFullscreen) => SetFullscreenSwitcher(isFullscreen);
 
             TouchToMouse.Toggled += (_, _) =>

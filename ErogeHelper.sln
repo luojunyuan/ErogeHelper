@@ -5,11 +5,7 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper", "ErogeHelper\ErogeHelper.csproj", "{A759AE34-E043-496B-B126-C1BFA3C70BC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.AssistiveTouch", "ErogeHelper.AssistiveTouch\ErogeHelper.AssistiveTouch.csproj", "{F484B45B-5E9C-4FD0-82EF-8054AA10C56D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.Preference", "ErogeHelper.Preference\ErogeHelper.Preference.csproj", "{045DAD74-EC48-4961-8006-471E906F24F6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHContextMenuHandler", "EHContextMenuHandler\EHContextMenuHandler.csproj", "{34427A27-4051-41F4-AE49-635C0812B8E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +17,10 @@ Global
 		{A759AE34-E043-496B-B126-C1BFA3C70BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A759AE34-E043-496B-B126-C1BFA3C70BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A759AE34-E043-496B-B126-C1BFA3C70BC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F484B45B-5E9C-4FD0-82EF-8054AA10C56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F484B45B-5E9C-4FD0-82EF-8054AA10C56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F484B45B-5E9C-4FD0-82EF-8054AA10C56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F484B45B-5E9C-4FD0-82EF-8054AA10C56D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{045DAD74-EC48-4961-8006-471E906F24F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{045DAD74-EC48-4961-8006-471E906F24F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{045DAD74-EC48-4961-8006-471E906F24F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{045DAD74-EC48-4961-8006-471E906F24F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34427A27-4051-41F4-AE49-635C0812B8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34427A27-4051-41F4-AE49-635C0812B8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34427A27-4051-41F4-AE49-635C0812B8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34427A27-4051-41F4-AE49-635C0812B8E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

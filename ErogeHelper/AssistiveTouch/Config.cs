@@ -64,5 +64,4 @@ namespace ErogeHelper.AssistiveTouch
             return writer.ToString();
         }
     }
-    // MappingKey
 }

@@ -6,26 +6,19 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="System.IO" />
     <Using Remove="System.Net.Http" />
     <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
     <PackageReference Include="SplashScreenGdip" Version="1.0.7" />
+    <PackageReference Include="WindowsInput" Version="6.4.0" />
     <!--  Splash screen  -->
     <EmbeddedResource Include="assets\klee.png" />
   </ItemGroup>
-
-<PropertyGroup>
-  <!--<TargetFramework>net8.0-windows</TargetFramework>-->
-  <PublishAot>false</PublishAot>
-  <InvariantGlobalization>true</InvariantGlobalization>
-  <UseSystemResourceKeys>true</UseSystemResourceKeys>
-  <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
-  <IlcOptimizationPreference>Speed</IlcOptimizationPreference>  
-  <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
-</PropertyGroup>
 
 </Project>

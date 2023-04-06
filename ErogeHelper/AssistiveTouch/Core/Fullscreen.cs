@@ -10,7 +10,7 @@ namespace ErogeHelper.AssistiveTouch.Core
 
         public static void UpdateFullscreenStatus()
         {
-            var isFullscreen = IsWindowFullscreen(App.GameWindowHandle);
+            var isFullscreen = IsWindowFullscreen(AppInside.GameWindowHandle);
             if (GameInFullscreen != isFullscreen)
                 FullscreenChanged?.Invoke(null, isFullscreen);
             GameInFullscreen = isFullscreen;

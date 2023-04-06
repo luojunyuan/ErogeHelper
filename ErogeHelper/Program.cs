@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Diagnostics;
 using ErogeHelper;
 using SplashScreenGdip;
-using System.Diagnostics;
-using System.IO.Pipes;
 
 #region Arguments Check
 if (args.Length == 0)
@@ -32,13 +31,13 @@ try
 {
     leProc = AppLauncher.RunGame(gamePath, args.Contains("-le"));// || or contain le.config file
 }
-catch(InvalidOperationException)
+catch (InvalidOperationException)
 {
     splash.Close();
     MessageBox.Show(Strings.App_LENotInstall);
     return;
 }
-catch(ArgumentException ex)
+catch (ArgumentException ex)
 {
     splash.Close();
     MessageBox.Show(Strings.App_LENotFound + ex.Message);
@@ -54,12 +53,11 @@ if (game is null)
 leProc?.Kill();
 #endregion
 
-var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
-_ = new IpcMain(pipeServer);
-
-IpcMain.Once(IpcTypes.Loaded, splash.Close);
+ErogeHelper.AssistiveTouch.MainWindow.CloseSplash = splash.Close;
 
 Environment.CurrentDirectory = AppContext.BaseDirectory;
+Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
+Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 while (!game.HasExited)
 {
     var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
@@ -73,15 +71,7 @@ while (!game.HasExited)
         break;
     }
 
-    var touch = new Process()
-    {
-        StartInfo = new ProcessStartInfo
-        {
-            FileName = "ErogeHelper.AssistiveTouch.exe",
-            Arguments = pipeServer.GetClientHandleAsString() + ' ' + gameWindowHandle,
-            UseShellExecute = false,
-        }
-    };
-    touch.Start();
-    touch.WaitForExit();
+    var touch = new ErogeHelper.AssistiveTouch.AppInside(gameWindowHandle);
+
+    touch.Run();
 }
