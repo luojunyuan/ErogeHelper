@@ -28,7 +28,7 @@ public partial class AppInside : Application
     private static void GlobalKeyHook()
     {
         const int debounce = 40;
-        var throttle = new Throttle<int>(debounce, _ =>
+        var throttle = new Throttle(debounce, () =>
             WindowsInput.Simulate.Events()
                 .Click(KeyCode.Enter)
                 .Invoke());
@@ -39,7 +39,7 @@ public partial class AppInside : Application
             if (e.Data.Key == KeyCode.Z && User32.GetForegroundWindow() == GameWindowHandle)
             {
                 e.Next_Hook_Enabled = false;
-                throttle.Signal(default);
+                throttle.Signal();
             }
         };
         Current.Exit += (_, _) => keyboard.Dispose();

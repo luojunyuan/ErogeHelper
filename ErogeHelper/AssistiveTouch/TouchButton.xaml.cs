@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace ErogeHelper.AssistiveTouch;
 
@@ -118,17 +119,17 @@ public partial class TouchButton
         };
 
         // Fade out
-        var throttle = new Throttle<int>(OpacityChangeDuration, (_) =>
+        var throttle = new Throttle(OpacityChangeDuration, () =>
         {
             if (isMoving == false && IsTouchMenuOpend == false)
             {
-                BeginAnimation(OpacityProperty, FadeOpacityAnimation);
+                Dispatcher.Invoke(() => BeginAnimation(OpacityProperty, FadeOpacityAnimation));
             }
         });
-        mainWindow.Loaded += (_, _) => throttle.Signal(default);
-        TranslateTouchStoryboard.Completed += (_, _) => throttle.Signal(default);
-        PreviewMouseUp += (_, _) => { if (pointWhenMouseUp == pointWhenMouseDown) throttle.Signal(default); };
-        TouchMenuClosed += (_, _) => throttle.Signal(default);
+        mainWindow.Loaded += (_, _) => throttle.Signal();
+        TranslateTouchStoryboard.Completed += (_, _) => throttle.Signal();
+        PreviewMouseUp += (_, _) => { if (pointWhenMouseUp == pointWhenMouseDown) throttle.Signal(); };
+        TouchMenuClosed += (_, _) => throttle.Signal();
         #endregion
 
         FadeInOpacityAnimation.Completed += (_, _) =>

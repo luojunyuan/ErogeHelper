@@ -1,101 +1,55 @@
-﻿// CODE FROM https://qiita.com/matarillo/items/9958b90ab04de5c2234e
-namespace ErogeHelper.AssistiveTouch.Helper
+﻿namespace ErogeHelper.AssistiveTouch.Helper;
+
+public sealed class Throttle<T>
 {
-    public sealed class Throttle<T> : IDisposable
+    private bool _flag;
+    private System.Timers.Timer _timer;
+    private T? _value;
+
+    public Throttle(int millisec, Action<T?> action)
     {
-        private readonly AutoResetEvent producer = new(true);
-        private readonly AutoResetEvent consumer = new(false);
-        private Tuple<T, SynchronizationContext?>? value;
-
-        private readonly int millisec;
-        private readonly Action<T> action;
-        private volatile bool disposed = false;
-        private int producers = 0;
-
-        public Throttle(int millisec, Action<T> action)
+        _timer = new System.Timers.Timer(millisec);
+        _timer.Elapsed += (s, e) =>
         {
-            this.millisec = millisec;
-            this.action = action;
-            Task.Run(() => WaitAndFire());
+            _flag = false;
+            _timer.Stop();
+            action(_value);
+        };
+    }
+
+    public void Signal(T input)
+    {
+        if (!_flag)
+        {
+            _flag = true;
+            _value = input;
+            _timer.Start();
         }
+    }
+}
 
-        private void WaitAndFire()
+public sealed class Throttle
+{
+    private bool _flag;
+    private System.Timers.Timer _timer;
+
+    public Throttle(int millisec, Action action)
+    {
+        _timer = new System.Timers.Timer(millisec);
+        _timer.Elapsed += (s, e) =>
         {
-            Thread.CurrentThread.Name = "Throttle.cs";
-            try
-            {
-                while (true)
-                {
-                    producer.Set();
-                    consumer.WaitOne();
-                    if (disposed) return;
+            _flag = false;
+            _timer.Stop();
+            action();
+        };
+    }
 
-                    while (true)
-                    {
-                        producer.Set();
-                        var timedOut = !consumer.WaitOne(millisec);
-                        if (disposed) return;
-                        if (timedOut) break;
-                    }
-                    // !!Enforce not null to avoid warning
-                    Fire(action, value!.Item1, value.Item2);
-                    value = null;
-                }
-            }
-            catch (ObjectDisposedException)
-            {
-                // ignore and exit
-            }
-        }
-
-        private static void Fire(Action<T> action, T input, SynchronizationContext? context)
+    public void Signal()
+    {
+        if (!_flag)
         {
-            if (context != null)
-            {
-                // !!Enforce not null to avoid warning
-                context.Post(state => action((T)state!), input);
-            }
-            else
-            {
-                Task.Run(() => action(input));
-            }
-        }
-
-        public void Signal(T input)
-        {
-            if (disposed) return;
-            try
-            {
-                Interlocked.Increment(ref producers);
-                producer.WaitOne();
-                if (disposed) return;
-                // !!Enforce not null to avoid warning
-                value = Tuple.Create(input, SynchronizationContext.Current)!;
-                consumer.Set();
-            }
-            catch (ObjectDisposedException)
-            {
-                // ignore and exit
-            }
-            finally
-            {
-                Interlocked.Decrement(ref producers);
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!disposed)
-            {
-                disposed = true;
-                while (Interlocked.CompareExchange(ref producers, 0, 0) > 0)
-                {
-                    producer.Set();
-                }
-                consumer.Set();
-                producer.Dispose();
-                consumer.Dispose();
-            }
+            _flag = true;
+            _timer.Start();
         }
     }
 }
