@@ -34,14 +34,19 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     {
         leProc = AppLauncher.RunGame(gamePath, leEnable);
     }
-    catch (InvalidOperationException)
+    catch (ArgumentException ex) when (ex.Message == string.Empty)
     {
-        MessageBox.ShowX(Strings.App_LENotInstall, splash);
+        MessageBox.ShowX(Strings.App_LENotSetup, splash);
         return;
     }
-    catch (ArgumentException ex)
+    catch (ArgumentException ex) when (ex.Message != string.Empty)
     {
         MessageBox.ShowX(Strings.App_LENotFound + ex.Message, splash);
+        return;
+    }
+    catch (InvalidOperationException)
+    {
+        MessageBox.ShowX(Strings.App_LENotSupport, splash);
         return;
     }
     var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));

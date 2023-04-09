@@ -27,6 +27,7 @@ namespace ErogeHelper.AssistiveTouch
             EnterKeyMapping = bool.Parse(myIni.Read(nameof(EnterKeyMapping)) ?? "false");
             ScreenShotTradition = bool.Parse(myIni.Read(nameof(ScreenShotTradition)) ?? "false");
             AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
+            // Touch size
         }
 
         public static void SaveAssistiveTouchPosition(string pos)

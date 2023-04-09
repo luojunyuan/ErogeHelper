@@ -22,15 +22,15 @@ internal static class AppLauncher
 
         if (leEnable)
         {
-            var lePath = RegistryModifier.LEPath();
+            var lePath = AppdataRoming.GetLEPath();
             if (lePath == string.Empty)
-            {
-                throw new InvalidOperationException();
-            }
-            if (!File.Exists(lePath))
-            {
                 throw new ArgumentException(lePath);
-            }
+            if (!File.Exists(lePath))
+                throw new ArgumentException(lePath);
+            if (Path.GetFileNameWithoutExtension(lePath).ToLower() == "leproc" 
+                && PEFileReader.GetPEType(gamePath) != PEType.X32) 
+                throw new InvalidOperationException();
+
             // NOTE: LE may throw AccessViolationException which can not be caught
             return Process.Start(new ProcessStartInfo
             {
