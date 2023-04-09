@@ -17,6 +17,8 @@ namespace ErogeHelper.AssistiveTouch
 
         public static string AssistiveTouchPosition { get; private set; } = string.Empty;
 
+        public static bool UseEdgeTouchMask { get; private set; }
+
         public static void Load()
         {
             // First time start
@@ -28,6 +30,7 @@ namespace ErogeHelper.AssistiveTouch
             ScreenShotTradition = bool.Parse(myIni.Read(nameof(ScreenShotTradition)) ?? "false");
             AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
             // Touch size
+            UseEdgeTouchMask = bool.Parse(myIni.Read(nameof(UseEdgeTouchMask)) ?? "false");
         }
 
         public static void SaveAssistiveTouchPosition(string pos)

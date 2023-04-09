@@ -1,28 +1,60 @@
-﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using System.Windows.Controls;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
+using System.Windows;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 
-namespace ErogeHelper.AssistiveTouch.Core
+namespace ErogeHelper.AssistiveTouch.Core;
+
+internal class Fullscreen
 {
-    internal class Fullscreen
+    public static bool GameInFullscreen { get; private set; }
+
+    public static event EventHandler<bool>? FullscreenChanged;
+
+    public static void UpdateFullscreenStatus()
     {
-        public static bool GameInFullscreen { get; private set; }
+        var isFullscreen = IsWindowFullscreen(AppInside.GameWindowHandle);
+        if (GameInFullscreen != isFullscreen)
+            FullscreenChanged?.Invoke(null, isFullscreen);
+        GameInFullscreen = isFullscreen;
+    }
 
-        public static event EventHandler<bool>? FullscreenChanged;
+    // See: http://www.msghelp.net/showthread.php?tid=67047&pid=740345
+    public static bool IsWindowFullscreen(IntPtr hwnd)
+    {
+        User32.GetWindowRect(hwnd, out var rect);
+        return rect.left < 50 && rect.top < 50 &&
+            rect.Width >= User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN) &&
+            rect.Height >= User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
+    }
 
-        public static void UpdateFullscreenStatus()
+    public static void MaskForScreen(Window window)
+    {
+        DoubleAnimation FadeInAnimation = new()
         {
-            var isFullscreen = IsWindowFullscreen(AppInside.GameWindowHandle);
-            if (GameInFullscreen != isFullscreen)
-                FullscreenChanged?.Invoke(null, isFullscreen);
-            GameInFullscreen = isFullscreen;
-        }
-
-        // See: http://www.msghelp.net/showthread.php?tid=67047&pid=740345
-        public static bool IsWindowFullscreen(IntPtr hwnd)
+            To = 1.0,
+            Duration = TimeSpan.FromSeconds(1.5),
+            FillBehavior = FillBehavior.Stop,
+            AutoReverse = true
+        };
+        Border EdgeMask = new()
         {
-            User32.GetWindowRect(hwnd, out var rect);
-            return rect.left < 50 && rect.top < 50 &&
-                rect.Width >= User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN) &&
-                rect.Height >= User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-        }
+            BorderBrush = Brushes.DarkGray,
+            BorderThickness = new(5),
+            Opacity = 0.002
+        };
+        ((Grid)window.Content).Children.Add(EdgeMask);
+        void AddMask(object? _, bool fullscreen)
+        {
+            if (fullscreen)
+            {
+                EdgeMask.Visibility = Visibility.Visible;
+                EdgeMask.BeginAnimation(UIElement.OpacityProperty, FadeInAnimation);
+            }
+            else EdgeMask.Visibility = Visibility.Collapsed;
+        };
+        AddMask(null, GameInFullscreen);
+        FullscreenChanged += AddMask;
     }
 }

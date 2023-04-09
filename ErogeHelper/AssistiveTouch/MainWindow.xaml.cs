@@ -1,11 +1,10 @@
-﻿using ErogeHelper.AssistiveTouch.Core;
-using ErogeHelper.AssistiveTouch.Helper;
-using ErogeHelper.AssistiveTouch.NativeMethods;
-using Microsoft.Win32;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.Helper;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 
 namespace ErogeHelper.AssistiveTouch
 {
@@ -14,7 +13,7 @@ namespace ErogeHelper.AssistiveTouch
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Thread RootHwndWatche, Stylus Input are from Wpf 
+        // Thread RootHwndWatcher, Stylus Input are from Wpf 
 
         public IntPtr Handle { get; }
 
@@ -33,7 +32,13 @@ namespace ErogeHelper.AssistiveTouch
 
             var hooker = new GameWindowHooker(Handle);
             hooker.SizeChanged += (_, _) => Fullscreen.UpdateFullscreenStatus();
+
+            if (Config.UseEdgeTouchMask)
+            {
+                Fullscreen.MaskForScreen(this);
+            }
         }
+
 
         // TODO: Try https://www.top-password.com/blog/enable-or-disable-touch-feedback-in-windows-10/
         // Use EnableTouchPointer instead but wait until DisableTouchFeedback get fixed
