@@ -3,7 +3,7 @@
 public sealed class Throttle<T>
 {
     private bool _flag;
-    private System.Timers.Timer _timer;
+    private readonly System.Timers.Timer _timer;
     private T? _value;
 
     public Throttle(int millisec, Action<T?> action)
@@ -31,7 +31,7 @@ public sealed class Throttle<T>
 public sealed class Throttle
 {
     private bool _flag;
-    private System.Timers.Timer _timer;
+    private readonly System.Timers.Timer _timer;
 
     public Throttle(int millisec, Action action)
     {

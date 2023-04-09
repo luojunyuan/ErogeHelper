@@ -113,7 +113,9 @@ namespace ErogeHelper.AssistiveTouch.Menu
         }
 
         private const int UIMinimumResponseTime = 50;
-        private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e) =>
+        private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e)
+        {
+            HwndTools.WindowLostFocus(MainWindow.Handle, true);
             await WindowsInput.Simulate.Events()
                 .Hold(KeyCode.Alt)
                 .Hold(KeyCode.Enter)
@@ -121,6 +123,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 .Release(KeyCode.Enter)
                 .Release(KeyCode.Alt)
                 .Invoke().ConfigureAwait(false);
+            HwndTools.WindowLostFocus(MainWindow.Handle, false);
+        }
 
         private readonly DoubleAnimation _fadeOutAnimation = AnimationTool.FadeOutAnimation;
         private void CloseInside() => BeginAnimation(OpacityProperty, _fadeOutAnimation);

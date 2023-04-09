@@ -15,7 +15,7 @@ namespace ErogeHelper.AssistiveTouch
     {
         // Thread RootHwndWatcher, Stylus Input are from Wpf 
 
-        public IntPtr Handle { get; }
+        public static IntPtr Handle { get; private set; }
 
         public double Dpi { get; }
 
