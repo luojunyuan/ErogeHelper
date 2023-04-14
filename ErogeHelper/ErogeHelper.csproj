@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Using Remove="System.Net.Http" />
-    <Using Include="System.IO" />
     <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
     <PackageReference Include="SplashScreenGdip" Version="1.0.8" />
     <!--  Splash screen  -->

@@ -23,10 +23,9 @@ if (!File.Exists(gamePath))
 
 var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png")!;
 var splash = new SplashScreen(96, stream);
-var task = Task.Run(() => PreProcessing(args.Contains("-le"), gamePath, splash));
+new Thread(() => PreProcessing(args.Contains("-le"), gamePath, splash)).Start();
 
 splash.Run();
-task.Wait();
 
 static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 {

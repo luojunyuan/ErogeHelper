@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace ErogeHelper;
@@ -27,8 +26,8 @@ internal static class AppLauncher
                 throw new ArgumentException(lePath);
             if (!File.Exists(lePath))
                 throw new ArgumentException(lePath);
-            if (Path.GetFileNameWithoutExtension(lePath).ToLower() == "leproc" 
-                && PEFileReader.GetPEType(gamePath) != PEType.X32) 
+            if (Path.GetFileNameWithoutExtension(lePath).ToLower() == "leproc"
+                && PEFileReader.GetPEType(gamePath) != PEType.X32)
                 throw new InvalidOperationException();
 
             // NOTE: LE may throw AccessViolationException which can not be caught
@@ -43,10 +42,11 @@ internal static class AppLauncher
         }
         else
         {
+            var isUrlFile = Path.GetExtension(gamePath).Equals(".url", StringComparison.OrdinalIgnoreCase);
             Process.Start(new ProcessStartInfo
             {
                 FileName = gamePath,
-                UseShellExecute = false,
+                UseShellExecute = isUrlFile,
                 WorkingDirectory = gameFolder
             });
             return null;

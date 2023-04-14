@@ -25,6 +25,7 @@ internal class IpcMain
                 {
                     DictionaryOfEvents["Loaded"].Invoke();
                     DictionaryOfEvents.Remove("Loaded");
+                    break; // Im not use any other signals
                 }
             }
         }, TaskCreationOptions.LongRunning);
