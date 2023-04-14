@@ -58,6 +58,7 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     leProc?.Kill();
     #endregion
 
+    // TODO split
     var wpfThread = new Thread(() => Main(splash, game))
     {
         Name = "メイン スレッド"
@@ -68,22 +69,40 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 
 static void Main(SplashScreen splash, Process game)
 {
-    while (!game.HasExited)
+    var touch = new ErogeHelper.AssistiveTouch.AppInside();
+
+    NewMethod(splash, game);
+    
+    touch.Run();
+
+    static void NewMethod(SplashScreen splash, Process game)
     {
+         if (game.HasExited)
+        {
+            System.Windows.Application.Current.Shutdown();
+            return;
+        }
+
         var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
         if (gameWindowHandle == IntPtr.Zero) // process exit
         {
-            break;
+            System.Windows.Application.Current.Shutdown();
+            return;
         }
         else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
         {
             MessageBox.ShowX(Strings.App_Timeout, splash);
-            break;
+            System.Windows.Application.Current.Shutdown();
+            return;
         }
-        var touch = new ErogeHelper.AssistiveTouch.AppInside(gameWindowHandle);
+
+
         var mainWindow = new ErogeHelper.AssistiveTouch.MainWindow();
         mainWindow.ContentRendered += (_, _) => splash.Close();
-        
-        touch.Run(mainWindow);
+
+        mainWindow.Closed += (_, _) => 
+            System.Windows.Application.Current.Shutdown();
+        //mainWindow.Closed += (_, _) => NewMethod(splash, game);
+        mainWindow.Show();
     }
 };
