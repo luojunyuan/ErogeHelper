@@ -18,7 +18,7 @@ internal class GameWindowHooker : IDisposable
     {
         _windowHandle = windowHandle;
 
-        var targetThreadId = User32.GetWindowThreadProcessId(AppInside.GameWindowHandle, out var pid);
+        var targetThreadId = User32.GetWindowThreadProcessId(App.GameWindowHandle, out var pid);
 
         User32.WinEventProc winEventDelegate = WinEventCallback;
         _gcSafetyHandle = GCHandle.Alloc(winEventDelegate);
@@ -56,7 +56,7 @@ internal class GameWindowHooker : IDisposable
         uint dwmsEventTime)
     {
         if (eventType == EventObjectLocationChange &&
-            hWnd == AppInside.GameWindowHandle &&
+            hWnd == App.GameWindowHandle &&
             idObject == OBJID_WINDOW && idChild == SWEH_CHILDID_SELF)
         {
             User32.GetClientRect(hWnd, out var rectClient);

@@ -37,7 +37,7 @@ public static class TouchConversionHooker
         var extraInfo = (uint)info.dwExtraInfo;
         if ((extraInfo & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH)
         {
-            var isGameWindow = User32.GetForegroundWindow() == AppInside.GameWindowHandle;
+            var isGameWindow = User32.GetForegroundWindow() == App.GameWindowHandle;
             if (!isGameWindow)
                 return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 

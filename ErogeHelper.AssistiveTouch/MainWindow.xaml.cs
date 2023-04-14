@@ -25,9 +25,11 @@ public partial class MainWindow : Window
         Handle = new WindowInteropHelper(this).EnsureHandle();
         Dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
 
+        ContentRendered += (_, _) => IpcRenderer.Send("Loaded");
+
         HwndTools.RemovePopupAddChildStyle(Handle);
-        User32.SetParent(Handle, AppInside.GameWindowHandle);
-        User32.GetClientRect(AppInside.GameWindowHandle, out var rectClient);
+        User32.SetParent(Handle, App.GameWindowHandle);
+        User32.GetClientRect(App.GameWindowHandle, out var rectClient);
         User32.SetWindowPos(Handle, IntPtr.Zero, 0, 0, rectClient.Width, rectClient.Height, User32.SetWindowPosFlags.SWP_NOZORDER);
 
         var hooker = new GameWindowHooker(Handle);

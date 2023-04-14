@@ -85,8 +85,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
         private static void Add(int x, int y)
         {
-            User32.GetWindowRect(AppInside.GameWindowHandle, out var rect);
-            Win32.MoveWindow(AppInside.GameWindowHandle, rect.left += x, rect.top += y);
+            User32.GetWindowRect(App.GameWindowHandle, out var rect);
+            Win32.MoveWindow(App.GameWindowHandle, rect.left += x, rect.top += y);
         }
         private void AAAOnClick(object sender, EventArgs e) => Add(0, -1);
         private void BBBOnClick(object sender, EventArgs e) => Add(-1, 0);

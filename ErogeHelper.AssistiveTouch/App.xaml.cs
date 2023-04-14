@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO.Pipes;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using ErogeHelper.AssistiveTouch.Helper;
@@ -10,16 +11,17 @@ namespace ErogeHelper.AssistiveTouch;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class AppInside : Application
+public partial class App : Application
 {
     public static IntPtr GameWindowHandle { get; private set; }
 
-    /// <summary>
-    /// Constructor only execute once
-    /// </summary>
-    public AppInside()
+    protected override void OnStartup(StartupEventArgs e)
     {
-        InitializeComponent();
+        var _pipeClient = new AnonymousPipeClientStream(PipeDirection.Out, e.Args[0]);
+        _ = new IpcRenderer(_pipeClient);
+
+        GameWindowHandle = (IntPtr)int.Parse(e.Args[1]);
+    
         DisableWPFTabletSupport();
 
         Config.Load();
@@ -41,7 +43,7 @@ public partial class AppInside : Application
         var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
         keyboard.KeyDown += (_, e) =>
         {
-            if (e.Data.Key == KeyCode.Z && 
+            if (e.Data.Key == KeyCode.Z &&
                 User32.GetForegroundWindow() == GameWindowHandle)
             {
                 e.Next_Hook_Enabled = false;

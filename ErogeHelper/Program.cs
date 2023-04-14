@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO.Pipes;
 using ErogeHelper;
 using SplashScreenGdip;
 
@@ -22,9 +23,10 @@ if (!File.Exists(gamePath))
 
 var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png")!;
 var splash = new SplashScreen(96, stream);
-_ = Task.Run(() => PreProcessing(args.Contains("-le"), gamePath, splash));
+var task = Task.Run(() => PreProcessing(args.Contains("-le"), gamePath, splash));
 
 splash.Run();
+task.Wait();
 
 static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 {
@@ -49,6 +51,7 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
         MessageBox.ShowX(Strings.App_LENotSupport, splash);
         return;
     }
+
     var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
     if (game is null)
     {
@@ -58,51 +61,36 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     leProc?.Kill();
     #endregion
 
-    // TODO split
-    var wpfThread = new Thread(() => Main(splash, game))
+    var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
+    _ = new IpcMain(pipeServer);
+
+    IpcMain.Once("Loaded", splash.Close);
+
+    Environment.CurrentDirectory = AppContext.BaseDirectory;
+    while (!game.HasExited)
     {
-        Name = "メイン スレッド"
-    };
-    wpfThread.SetApartmentState(ApartmentState.STA);
-    wpfThread.Start();
-}
-
-static void Main(SplashScreen splash, Process game)
-{
-    var touch = new ErogeHelper.AssistiveTouch.AppInside();
-
-    NewMethod(splash, game);
-    
-    touch.Run();
-
-    static void NewMethod(SplashScreen splash, Process game)
-    {
-         if (game.HasExited)
-        {
-            System.Windows.Application.Current.Shutdown();
-            return;
-        }
-
         var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
         if (gameWindowHandle == IntPtr.Zero) // process exit
         {
-            System.Windows.Application.Current.Shutdown();
-            return;
+            splash.Close();
+            break;
         }
         else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
         {
             MessageBox.ShowX(Strings.App_Timeout, splash);
-            System.Windows.Application.Current.Shutdown();
-            return;
+            break;
         }
 
-
-        var mainWindow = new ErogeHelper.AssistiveTouch.MainWindow();
-        mainWindow.ContentRendered += (_, _) => splash.Close();
-
-        mainWindow.Closed += (_, _) => 
-            System.Windows.Application.Current.Shutdown();
-        //mainWindow.Closed += (_, _) => NewMethod(splash, game);
-        mainWindow.Show();
+        var touch = new Process()
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "ErogeHelper.AssistiveTouch.exe",
+                Arguments = pipeServer.GetClientHandleAsString() + ' ' + gameWindowHandle,
+                UseShellExecute = false,
+            }
+        };
+        touch.Start();
+        touch.WaitForExit();
     }
-};
+}

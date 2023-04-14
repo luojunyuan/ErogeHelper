@@ -1,22 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+<PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net7.0-windows;net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <Using Remove="System.Net.Http" />
-    <Using Include="System.IO" />
-    <PackageReference Include="WindowsShortcutFactory" Version="1.1.0" />
-    <PackageReference Include="SplashScreenGdip" Version="1.0.8" />
-    <!--  Splash screen  -->
-    <EmbeddedResource Include="assets\klee.png" />
+    <PackageReference Include="WindowsInput" Version="6.4.0" />
   </ItemGroup>
 
 </Project>

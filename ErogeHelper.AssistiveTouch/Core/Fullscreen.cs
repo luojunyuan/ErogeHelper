@@ -14,7 +14,7 @@ internal class Fullscreen
 
     public static void UpdateFullscreenStatus()
     {
-        var isFullscreen = IsWindowFullscreen(AppInside.GameWindowHandle);
+        var isFullscreen = IsWindowFullscreen(App.GameWindowHandle);
         if (GameInFullscreen != isFullscreen)
             FullscreenChanged?.Invoke(null, isFullscreen);
         GameInFullscreen = isFullscreen;
