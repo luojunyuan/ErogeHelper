@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using WindowsInput.Events;
 
 namespace ErogeHelper.AssistiveTouch
 {
@@ -11,7 +12,9 @@ namespace ErogeHelper.AssistiveTouch
         private static readonly string ConfigFolder = Path.Combine(RoamingPath, "ErogeHelper");
         private static readonly string ConfigFilePath = Path.Combine(RoamingPath, "ErogeHelper", "EHConfig.ini");
 
-        public static bool EnterKeyMapping { get; private set; }
+        public static bool UseEnterKeyMapping { get; private set; }
+
+        public static KeyCode MappingKey { get; private set; }
 
         public static bool ScreenShotTradition { get; private set; }
 
@@ -26,7 +29,8 @@ namespace ErogeHelper.AssistiveTouch
                 return;
 
             var myIni = new IniFile(ConfigFilePath);
-            EnterKeyMapping = bool.Parse(myIni.Read(nameof(EnterKeyMapping)) ?? "false");
+            UseEnterKeyMapping = bool.Parse(myIni.Read(nameof(UseEnterKeyMapping)) ?? "false");
+            MappingKey = (KeyCode)Enum.Parse(typeof(KeyCode), myIni.Read(nameof(MappingKey)) ?? "Z"); 
             ScreenShotTradition = bool.Parse(myIni.Read(nameof(ScreenShotTradition)) ?? "false");
             AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
             // Touch size

@@ -1,10 +1,8 @@
-﻿using System.IO.Pipes;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.IO.Pipes;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using ErogeHelper.AssistiveTouch.Helper;
-using ErogeHelper.AssistiveTouch.NativeMethods;
-using WindowsInput.Events;
 
 namespace ErogeHelper.AssistiveTouch;
 
@@ -21,12 +19,12 @@ public partial class App : Application
         _ = new IpcRenderer(_pipeClient);
 
         GameWindowHandle = (IntPtr)int.Parse(e.Args[1]);
-    
+
         DisableWPFTabletSupport();
 
         Config.Load();
 
-        if (Config.EnterKeyMapping)
+        if (Config.UseEnterKeyMapping)
         {
             GlobalKeyHook();
         }
@@ -34,20 +32,18 @@ public partial class App : Application
 
     private static void GlobalKeyHook()
     {
-        const int debounce = 40;
-        var throttle = new Throttle(debounce, () =>
-            WindowsInput.Simulate.Events()
-                .Click(KeyCode.Enter)
-                .Invoke());
+        const byte VK_RETURN = 0x0D;
+        const uint KEYEVENTF_KEYUP = 0x0002;
         // Thread name MessagePumpingObject
         var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
         keyboard.KeyDown += (_, e) =>
         {
-            if (e.Data.Key == KeyCode.Z &&
-                User32.GetForegroundWindow() == GameWindowHandle)
+            if (e.Data.Key == Config.MappingKey && User32.GetForegroundWindow() == GameWindowHandle)
             {
                 e.Next_Hook_Enabled = false;
-                throttle.Signal();
+
+                User32.keybd_event(VK_RETURN, 0, 0, 0);
+                User32.keybd_event(VK_RETURN, 0, KEYEVENTF_KEYUP, 0);
             }
         };
         Current.Exit += (_, _) => keyboard.Dispose();

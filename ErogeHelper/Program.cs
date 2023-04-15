@@ -103,4 +103,5 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
         touch.Start();
         touch.WaitForExit();
     }
+    splash.Close();
 }
