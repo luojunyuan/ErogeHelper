@@ -109,11 +109,6 @@ internal static class AppLauncher
         {
             User32.ShowWindow(proc.MainWindowHandle, User32.ShowWindowCommand.SW_RESTORE);
         }
-        else
-        {
-            User32.BringWindowToTop(proc.MainWindowHandle);
-            User32.SetForegroundWindow(proc.MainWindowHandle);
-        }
 
         User32.GetClientRect(gameHwnd, out var clientRect);
 
@@ -205,12 +200,6 @@ internal static class AppLauncher
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommand nCmdShow);
-
-        [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
-        public static extern bool BringWindowToTop(IntPtr hWnd);
-
-        [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]

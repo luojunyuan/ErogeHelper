@@ -1,5 +1,6 @@
-﻿using ErogeHelper.AssistiveTouch.Helper;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using WindowsInput.Events;
@@ -30,7 +31,7 @@ namespace ErogeHelper.AssistiveTouch
 
             var myIni = new IniFile(ConfigFilePath);
             UseEnterKeyMapping = bool.Parse(myIni.Read(nameof(UseEnterKeyMapping)) ?? "false");
-            MappingKey = (KeyCode)Enum.Parse(typeof(KeyCode), myIni.Read(nameof(MappingKey)) ?? "Z"); 
+            MappingKey = (KeyCode)Enum.Parse(typeof(KeyCode), myIni.Read(nameof(MappingKey)) ?? "Z");
             ScreenShotTradition = bool.Parse(myIni.Read(nameof(ScreenShotTradition)) ?? "false");
             AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
             // Touch size
@@ -70,6 +71,26 @@ namespace ErogeHelper.AssistiveTouch
             serializer.Serialize(xmlWriter, inst, ns);
 
             return writer.ToString();
+        }
+
+        private class IniFile
+        {
+            private const string Section = "ErogeHelper";
+            private readonly string _path;
+
+            public IniFile(string IniPath)
+            {
+                _path = new FileInfo(IniPath + ".ini").FullName;
+            }
+
+            public string? Read(string key)
+            {
+                var RetVal = new StringBuilder(255);
+                Kernel32.GetPrivateProfileString(Section, key, string.Empty, RetVal, 255, _path);
+                return RetVal.ToString() == string.Empty ? null : RetVal.ToString();
+            }
+
+            public void Write(string key, string value) => Kernel32.WritePrivateProfileString(Section, key, value, _path);
         }
     }
 }
