@@ -30,8 +30,8 @@ namespace ErogeHelper.Preference
             return Path.Combine(dir, "LEProc.exe");
         }
 
-        string Path;
-        string EXE = "ErogeHelper.AssistiveTouch"; // Assembly.GetExecutingAssembly().GetName().Name!;
+        string path;
+        string EXE = "ErogeHelper"; // Assembly.GetExecutingAssembly().GetName().Name!;
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern long WritePrivateProfileString(string Section, string? Key, string? Value, string FilePath);
@@ -41,19 +41,19 @@ namespace ErogeHelper.Preference
 
         public IniFile(string? IniPath = null)
         {
-            Path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
+            path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
         }
 
         public string? Read(string Key, string? Section = null)
         {
             var RetVal = new StringBuilder(255);
-            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, Path);
+            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255,path);
             return RetVal.ToString() == string.Empty ? null : RetVal.ToString();
         }
 
         public void Write(string? Key, string? Value, string? Section = null)
         {
-            WritePrivateProfileString(Section ?? EXE, Key, Value, Path);
+            WritePrivateProfileString(Section ?? EXE, Key, Value, path);
         }
 
         public void DeleteKey(string Key, string? Section = null)

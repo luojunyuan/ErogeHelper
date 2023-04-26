@@ -31,6 +31,6 @@ public class AppdataRoming
     internal class Kernel32
     {
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+        public static extern int GetPrivateProfileString(string section, string key, string @default, StringBuilder retVal, int size, string filePath);
     }
 }

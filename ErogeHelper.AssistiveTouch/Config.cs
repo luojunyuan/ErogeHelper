@@ -76,21 +76,21 @@ namespace ErogeHelper.AssistiveTouch
         private class IniFile
         {
             private const string Section = "ErogeHelper";
-            private readonly string _path;
+            private readonly string IniPath;
 
-            public IniFile(string IniPath)
+            public IniFile(string iniPath)
             {
-                _path = new FileInfo(IniPath + ".ini").FullName;
+                IniPath = iniPath;
             }
 
             public string? Read(string key)
             {
                 var RetVal = new StringBuilder(255);
-                Kernel32.GetPrivateProfileString(Section, key, string.Empty, RetVal, 255, _path);
+                Kernel32.GetPrivateProfileString(Section, key, string.Empty, RetVal, 255, IniPath);
                 return RetVal.ToString() == string.Empty ? null : RetVal.ToString();
             }
 
-            public void Write(string key, string value) => Kernel32.WritePrivateProfileString(Section, key, value, _path);
+            public void Write(string key, string value) => Kernel32.WritePrivateProfileString(Section, key, value, IniPath);
         }
     }
 }
