@@ -48,6 +48,7 @@ public partial class Form1 : Form
         var config = new IniFile(ConfigFilePath);
         ScreenShot.Checked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
+        FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
 
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
@@ -161,5 +162,11 @@ public partial class Form1 : Form
     {
         var config = new IniFile(ConfigFilePath);
         config.Write("UseEnterKeyMapping", KeytwoEnter.Checked.ToString());
+    }
+
+    private void FullscreenMask_CheckedChanged(object sender, EventArgs e)
+    {
+        var config = new IniFile(ConfigFilePath);
+        config.Write("UseEdgeTouchMask", KeytwoEnter.Checked.ToString());
     }
 }

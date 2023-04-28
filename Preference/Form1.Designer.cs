@@ -33,6 +33,7 @@ partial class Form1
             this.KeytwoEnter = new System.Windows.Forms.CheckBox();
             this.Register = new System.Windows.Forms.Button();
             this.Unregister = new System.Windows.Forms.Button();
+            this.FullscreenMask = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ScreenShot
@@ -59,7 +60,7 @@ partial class Form1
             // 
             // Register
             // 
-            this.Register.Location = new System.Drawing.Point(70, 181);
+            this.Register.Location = new System.Drawing.Point(70, 252);
             this.Register.Name = "Register";
             this.Register.Size = new System.Drawing.Size(154, 61);
             this.Register.TabIndex = 2;
@@ -69,7 +70,7 @@ partial class Form1
             // 
             // Unregister
             // 
-            this.Unregister.Location = new System.Drawing.Point(255, 181);
+            this.Unregister.Location = new System.Drawing.Point(255, 252);
             this.Unregister.Name = "Unregister";
             this.Unregister.Size = new System.Drawing.Size(173, 61);
             this.Unregister.TabIndex = 3;
@@ -77,11 +78,23 @@ partial class Form1
             this.Unregister.UseVisualStyleBackColor = true;
             this.Unregister.Click += new System.EventHandler(this.Unregister_Click);
             // 
+            // FullscreenMask
+            // 
+            this.FullscreenMask.AutoSize = true;
+            this.FullscreenMask.Location = new System.Drawing.Point(70, 162);
+            this.FullscreenMask.Name = "FullscreenMask";
+            this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
+            this.FullscreenMask.TabIndex = 4;
+            this.FullscreenMask.Text = "Fullscreen Mask";
+            this.FullscreenMask.UseVisualStyleBackColor = true;
+            this.FullscreenMask.CheckedChanged += new System.EventHandler(this.FullscreenMask_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.FullscreenMask);
             this.Controls.Add(this.Unregister);
             this.Controls.Add(this.Register);
             this.Controls.Add(this.KeytwoEnter);
@@ -102,4 +115,5 @@ partial class Form1
     private CheckBox KeytwoEnter;
     private Button Register;
     private Button Unregister;
+    private CheckBox FullscreenMask;
 }
