@@ -167,6 +167,6 @@ public partial class Form1 : Form
     private void FullscreenMask_CheckedChanged(object sender, EventArgs e)
     {
         var config = new IniFile(ConfigFilePath);
-        config.Write("UseEdgeTouchMask", KeytwoEnter.Checked.ToString());
+        config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
     }
 }
