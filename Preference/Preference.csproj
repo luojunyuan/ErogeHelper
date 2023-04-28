@@ -9,6 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
 
-namespace ErogeHelper.Preference
+namespace Preference
 {
     class IniFile   // revision 11
     {
@@ -39,9 +39,9 @@ namespace ErogeHelper.Preference
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
 
-        public IniFile(string? IniPath = null)
+        public IniFile(string IniPath)
         {
-            path = new FileInfo(IniPath ?? EXE + ".ini").FullName;
+            path = IniPath;
         }
 
         public string? Read(string Key, string? Section = null)
