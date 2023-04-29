@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Preference", "Preference\Pr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.AssistiveTouch", "ErogeHelper.AssistiveTouch\ErogeHelper.AssistiveTouch.csproj", "{0F436112-0634-4F3E-AC8E-0835E778024C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.VirtualKeyboard", "ErogeHelper.VirtualKeyboard\ErogeHelper.VirtualKeyboard.csproj", "{B0076306-5D21-45D3-868A-6A2FC70D3B9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0F436112-0634-4F3E-AC8E-0835E778024C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F436112-0634-4F3E-AC8E-0835E778024C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F436112-0634-4F3E-AC8E-0835E778024C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

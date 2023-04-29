@@ -1,8 +1,9 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WindowsInput.Events;
@@ -18,15 +19,18 @@ namespace ErogeHelper.AssistiveTouch.Menu
             InitializeComponent();
             InitializeAnimation();
 
-            VirtualKeyboard.Toggled += (_, _) =>
+            var keyboardPath = Path.Combine(Directory.GetCurrentDirectory(), "ErogeHelper.VirtualKeyboard.exe");
+            if (File.Exists(keyboardPath))
             {
-                if (VirtualKeyboard.IsOn)
+                VirtualKeyboard.Visibility = Visibility.Visible;
+                Process? keyboard = null;
+                Application.Current.Exit += (_, _) => keyboard?.Kill();
+                VirtualKeyboard.Toggled += (_, _) =>
                 {
-                }
-                else
-                {
-                }
-            };
+                    if (VirtualKeyboard.IsOn) keyboard = Process.Start(keyboardPath, App.GameWindowHandle.ToString());
+                    else keyboard?.Kill();
+                };
+            }
 
             void SetFullscreenSwitcher(bool inFullscreen) =>
                 (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?

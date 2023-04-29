@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>..\app.manifest</ApplicationManifest>
+    <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+  
+	<ItemGroup>
+    <PackageReference Include="WindowsInput" Version="6.4.0" />
+  </ItemGroup>
+</Project>
