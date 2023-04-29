@@ -84,6 +84,20 @@ public partial class Form1 : Form
         command3.SetValue("MUIVerb", "Preference");
         command3.CreateSubKey("command").SetValue(string.Empty, Path.Combine(AppContext.BaseDirectory, "Preference.exe"));
 
+        if (Directory.Exists("c:\\Program Files (Arm)"))
+        {
+            const string PreferArm64Key = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\";
+            const string exe1 = PreferArm64Key + "ErogeHelper.exe";
+            const string exe2 = PreferArm64Key + "ErogeHelper.AssistiveTouch.exe";
+            const string exe3 = PreferArm64Key + "ErogeHelper.VirtualKeyboard.exe";
+            using var key1 = Registry.LocalMachine.CreateSubKey(exe1, true);
+            key1.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+            using var key2 = Registry.LocalMachine.CreateSubKey(exe2, true);
+            key2.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+            using var key3 = Registry.LocalMachine.CreateSubKey(exe3, true);
+            key3.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+        }
+
         MessageBox.Show("Register done", "ErogeHelper");
 
         Unregister.Enabled = true;
