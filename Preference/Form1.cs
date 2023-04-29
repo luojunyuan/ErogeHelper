@@ -71,6 +71,7 @@ public partial class Form1 : Form
         using var exeKey = Registry.ClassesRoot.OpenSubKey(ExeName, true) ?? Registry.ClassesRoot.CreateSubKey(ExeName, true);
         exeKey.SetValue("MUIVerb", "ErogeHelper");
         exeKey.SetValue("SubCommands", "ErogeHelper.Run;ErogeHelper.RunWith;ErogeHelper.Preference");
+        exeKey.SetValue("Icon", $"\"{Path.Combine(AppContext.BaseDirectory, "Preference.exe")}\", 0");
 
         using var command1 = Registry.LocalMachine.OpenSubKey(RunCommand, true) ?? Registry.LocalMachine.CreateSubKey(RunCommand, true);
         command1.SetValue("MUIVerb", "Run");
