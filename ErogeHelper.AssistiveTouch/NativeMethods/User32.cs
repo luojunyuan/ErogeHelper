@@ -79,6 +79,11 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         [DllImport(User32Dll)]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 
+        // For finding magpie host window hook
+
+        [DllImport(User32Dll, SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string? lpWindowName);
+
         // For fullscreen
 
         [DllImport(User32Dll, ExactSpelling = true, SetLastError = true)]

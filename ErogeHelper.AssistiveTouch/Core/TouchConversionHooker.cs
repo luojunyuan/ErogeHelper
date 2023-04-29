@@ -9,7 +9,6 @@ namespace ErogeHelper.AssistiveTouch.Core;
 
 public static class TouchConversionHooker
 {
-    // User32.MOUSEEVENTF.MOUSEEVENTF_FROMTOUCH
     private const uint MOUSEEVENTF_FROMTOUCH = 0xFF515700;
 
     private static IntPtr _hookId;

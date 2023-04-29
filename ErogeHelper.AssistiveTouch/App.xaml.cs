@@ -1,4 +1,5 @@
-﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Windows;
@@ -27,6 +28,11 @@ public partial class App : Application
         if (Config.UseEnterKeyMapping)
         {
             GlobalKeyHook();
+        }
+
+        if (Config.EnableMagpieTouchMapping)
+        {
+            new MagpieTouchHooker();
         }
     }
 
