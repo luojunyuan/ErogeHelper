@@ -2,6 +2,7 @@
 using ErogeHelper.AssistiveTouch.Helper;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WindowsInput.Events;
@@ -16,6 +17,16 @@ namespace ErogeHelper.AssistiveTouch.Menu
         {
             InitializeComponent();
             InitializeAnimation();
+
+            VirtualKeyboard.Toggled += (_, _) =>
+            {
+                if (VirtualKeyboard.IsOn)
+                {
+                }
+                else
+                {
+                }
+            };
 
             void SetFullscreenSwitcher(bool inFullscreen) =>
                 (FullScreenSwitcher.Symbol, FullScreenSwitcher.Text) = inFullscreen ?
@@ -45,16 +56,19 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
             XamlResource.SetAssistiveTouchItemBackground(Brushes.Transparent);
 
+            var keyboardTransform = AnimationTool.TopOneTransform(moveDistance);
             var fullscreenTransform = AnimationTool.RightOneTopOneTransform(moveDistance);
             var moveGameTransform = AnimationTool.RightTwoTopOneTransform(moveDistance);
             var backTransform = AnimationTool.RightOneTransform(moveDistance);
             var closeGameTransform = AnimationTool.RightTwoTransform(moveDistance);
 
+            VirtualKeyboard.SetCurrentValue(RenderTransformProperty, keyboardTransform);
             FullScreenSwitcher.SetCurrentValue(RenderTransformProperty, fullscreenTransform);
             MoveGame.SetCurrentValue(RenderTransformProperty, moveGameTransform);
             Back.SetCurrentValue(RenderTransformProperty, backTransform);
             CloseGame.SetCurrentValue(RenderTransformProperty, closeGameTransform);
 
+            _keyboardAnimation.SetCurrentValue(DoubleAnimation.FromProperty, keyboardTransform.Y);
             _fullscreenMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, fullscreenTransform.X);
             _fullscreenMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, fullscreenTransform.Y);
             _moveGameMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, moveGameTransform.X);
@@ -74,6 +88,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
         }
 
         private readonly Storyboard _transitionInStoryboard = new();
+        private readonly DoubleAnimation _keyboardAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _fullscreenMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _fullscreenMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _moveGameMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
@@ -85,6 +100,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
         {
             AnimationTool.BindingAnimation(_transitionInStoryboard, AnimationTool.FadeInAnimation, this, new(OpacityProperty), true);
 
+            AnimationTool.BindingAnimation(_transitionInStoryboard, _keyboardAnimation, VirtualKeyboard, AnimationTool.YProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _fullscreenMoveXAnimation, FullScreenSwitcher, AnimationTool.XProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _fullscreenMoveYAnimation, FullScreenSwitcher, AnimationTool.YProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _moveGameMoveXAnimation, MoveGame, AnimationTool.XProperty);
@@ -98,6 +114,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
 
                 if (!_transitionInStoryboard.AutoReverse)
                 {
+                    VirtualKeyboard.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     FullScreenSwitcher.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     MoveGame.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);

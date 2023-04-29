@@ -10,6 +10,7 @@ internal class MessageBox
 
     public static void ShowX(string text, SplashScreen splash)
     {
+        // this is not work for model splash
         splash.Hide();
         _MessageBox(splash.WindowHandle, text, "ErogeHelper", MB_TOPMOST | MB_SETFOREGROUND);
         splash.Close();

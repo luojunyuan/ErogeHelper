@@ -6,6 +6,7 @@
     <system:String x:Key="AssistiveTouch_Device">デバイス</system:String>
     <system:String x:Key="AssistiveTouch_Game">ゲーム</system:String>
 
+    <system:String x:Key="AssistiveTouch_Keyboard">キーボード</system:String>
     <system:String x:Key="AssistiveTouch_Window">ウィンドウズ</system:String>
     <system:String x:Key="AssistiveTouch_Fullscreen">フルスクリーン</system:String>
     <system:String x:Key="AssistiveTouch_MoveGame">ウィンドウズ移動</system:String>

@@ -31,6 +31,7 @@ internal static class AnimationTool
     public static TranslateTransform ZeroTransform => new(0, 0);
     public static TranslateTransform LeftOneTransform(double distance) => new(distance, 0);
     public static TranslateTransform LeftTwoTransform(double distance) => new(distance * 2, 0);
+    public static TranslateTransform TopOneTransform(double distance) => new(0, distance);
     public static TranslateTransform RightOneTransform(double distance) => new(-distance, 0);
     public static TranslateTransform RightTwoTransform(double distance) => new(-distance * 2, 0);
     public static TranslateTransform BottomOneTransform(double distance) => new(0, -distance);

@@ -21,6 +21,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <help:ToggleTouchMenuItem x:Name="VirtualKeyboard"
+            Text="{DynamicResource AssistiveTouch_Keyboard}"
+            Symbol="KeyboardClassic"
+            Grid.Row="0" Grid.Column="0" />
+
         <help:TouchMenuItem x:Name="FullScreenSwitcher"
             d:Text="{DynamicResource AssistiveTouch_Fullscreen}"
             d:Symbol="Fullscreen"
