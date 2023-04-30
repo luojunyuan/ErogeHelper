@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace ErogeHelper.AssistiveTouch.Core;
 
