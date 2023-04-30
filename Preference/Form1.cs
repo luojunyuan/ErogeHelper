@@ -49,6 +49,7 @@ public partial class Form1 : Form
         ScreenShot.Checked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
+        MagpieTouch.Checked = bool.Parse(config.Read("EnableMagpieTouchMapping") ?? "false");
 
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
@@ -183,5 +184,11 @@ public partial class Form1 : Form
     {
         var config = new IniFile(ConfigFilePath);
         config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
+    }
+
+    private void MagpieTouch_CheckedChanged(object sender, EventArgs e)
+    {
+        var config = new IniFile(ConfigFilePath);
+        config.Write("EnableMagpieTouchMapping", MagpieTouch.Checked.ToString());
     }
 }

@@ -34,6 +34,7 @@ partial class Form1
             this.Register = new System.Windows.Forms.Button();
             this.Unregister = new System.Windows.Forms.Button();
             this.FullscreenMask = new System.Windows.Forms.CheckBox();
+            this.MagpieTouch = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ScreenShot
@@ -60,7 +61,7 @@ partial class Form1
             // 
             // Register
             // 
-            this.Register.Location = new System.Drawing.Point(70, 252);
+            this.Register.Location = new System.Drawing.Point(70, 302);
             this.Register.Name = "Register";
             this.Register.Size = new System.Drawing.Size(154, 61);
             this.Register.TabIndex = 2;
@@ -70,7 +71,7 @@ partial class Form1
             // 
             // Unregister
             // 
-            this.Unregister.Location = new System.Drawing.Point(255, 252);
+            this.Unregister.Location = new System.Drawing.Point(255, 302);
             this.Unregister.Name = "Unregister";
             this.Unregister.Size = new System.Drawing.Size(173, 61);
             this.Unregister.TabIndex = 3;
@@ -89,11 +90,23 @@ partial class Form1
             this.FullscreenMask.UseVisualStyleBackColor = true;
             this.FullscreenMask.CheckedChanged += new System.EventHandler(this.FullscreenMask_CheckedChanged);
             // 
+            // MagpieTouch
+            // 
+            this.MagpieTouch.AutoSize = true;
+            this.MagpieTouch.Location = new System.Drawing.Point(70, 218);
+            this.MagpieTouch.Name = "MagpieTouch";
+            this.MagpieTouch.Size = new System.Drawing.Size(214, 28);
+            this.MagpieTouch.TabIndex = 5;
+            this.MagpieTouch.Text = "Touch for magpie";
+            this.MagpieTouch.UseVisualStyleBackColor = true;
+            this.MagpieTouch.CheckedChanged += new System.EventHandler(this.MagpieTouch_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.MagpieTouch);
             this.Controls.Add(this.FullscreenMask);
             this.Controls.Add(this.Unregister);
             this.Controls.Add(this.Register);
@@ -116,4 +129,5 @@ partial class Form1
     private Button Register;
     private Button Unregister;
     private CheckBox FullscreenMask;
+    private CheckBox MagpieTouch;
 }
