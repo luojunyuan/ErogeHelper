@@ -115,7 +115,7 @@ internal class MagpieTouchHooker : IDisposable
     private const string TouchFeedback = "Control Panel\\Cursors";
     public void SetTouchFeedback(bool show)
     {
-        using var key = Registry.CurrentUser.OpenSubKey(TouchFeedback);
+        using var key = Registry.CurrentUser.OpenSubKey(TouchFeedback, true);
         const string CntactVisualization = "CntactVisualization";
         key?.SetValue(CntactVisualization, show ? 1 : 0);
     }
