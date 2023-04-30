@@ -28,31 +28,31 @@ internal class MagpieTouchHooker : IDisposable
              User32.WINEVENT.WINEVENT_OUTOFCONTEXT);
 
         // There is no parent child relationship between MagpieTouch, so named pipe is must.
-        //MagpieTouchPipe = new NamedPipeServerStream("f5fa0cb5-7d11-4569-a2f1-883ee52e92d8", PipeDirection.Out);
-        //_writer = new StreamWriter(MagpieTouchPipe);
+        MagpieTouchPipe = new NamedPipeServerStream("f5fa0cb5-7d11-4569-a2f1-883ee52e92d8", PipeDirection.Out);
+        _writer = new StreamWriter(MagpieTouchPipe);
 
-        //try
-        //{
-        //    Process.Start(new ProcessStartInfo()
-        //    {
-        //        FileName = @"C:\Windows\ErogeHelper.MagpieTouch.exe",
-        //        Verb = "runas"
-        //    });
-        //    MagpieTouchPipe.WaitForConnection();
-        //    _writer.AutoFlush = true;
-        //}
-        //catch (SystemException ex)
-        //{
-        //    MessageBox.Show("Error with Launching ErogeHelper.MagpieTouch.exe\r\n" +
-        //        "\r\n" +
-        //        "Please check it installed properlly. ErogeHelper would continue run.\r\n" +
-        //        "\r\n" +
-        //        ex.Message,
-        //        "ErogeHelper",
-        //        MessageBoxButton.OK,
-        //        MessageBoxImage.Error);
-        //    return;
-        //}
+        try
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = @"C:\Windows\ErogeHelper.MagpieTouch.exe",
+                Verb = "runas"
+            });
+            MagpieTouchPipe.WaitForConnection();
+            _writer.AutoFlush = true;
+        }
+        catch (SystemException ex)
+        {
+            MessageBox.Show("Error with Launching ErogeHelper.MagpieTouch.exe\r\n" +
+                "\r\n" +
+                "Please check it installed properlly. ErogeHelper would continue run.\r\n" +
+                "\r\n" +
+                ex.Message,
+                "ErogeHelper",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
+        }
     }
 
     public void Close() => PipeSend(false, -1, -1, -1, -1, -1, -1, -1, -1);
