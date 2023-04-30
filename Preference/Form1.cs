@@ -92,12 +92,15 @@ public partial class Form1 : Form
             const string exe1 = PreferArm64Key + "ErogeHelper.exe";
             const string exe2 = PreferArm64Key + "ErogeHelper.AssistiveTouch.exe";
             const string exe3 = PreferArm64Key + "ErogeHelper.VirtualKeyboard.exe";
+            const string exe4 = PreferArm64Key + "Preference.exe";
             using var key1 = Registry.LocalMachine.CreateSubKey(exe1, true);
             key1.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key2 = Registry.LocalMachine.CreateSubKey(exe2, true);
             key2.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key3 = Registry.LocalMachine.CreateSubKey(exe3, true);
             key3.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+            using var key4 = Registry.LocalMachine.CreateSubKey(exe4, true);
+            key4.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
         }
 
         MessageBox.Show("Register done", "ErogeHelper");

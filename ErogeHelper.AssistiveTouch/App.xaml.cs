@@ -32,7 +32,8 @@ public partial class App : Application
 
         if (Config.EnableMagpieTouchMapping)
         {
-            new MagpieTouchHooker();
+            var magHooker = new MagpieTouchHooker();
+            Current.Exit += (_, _) => magHooker.Close();
         }
     }
 
