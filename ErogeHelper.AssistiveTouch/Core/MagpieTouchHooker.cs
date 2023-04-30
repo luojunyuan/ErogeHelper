@@ -116,8 +116,8 @@ internal class MagpieTouchHooker : IDisposable
     public void SetTouchFeedback(bool show)
     {
         using var key = Registry.CurrentUser.OpenSubKey(TouchFeedback, true);
-        const string CntactVisualization = "CntactVisualization";
-        key?.SetValue(CntactVisualization, show ? 1 : 0);
+        const string ContactVisualization = "ContactVisualization";
+        key?.SetValue(ContactVisualization, show ? 1 : 0);
     }
 
     [DllImport("user32.dll", SetLastError = true)]

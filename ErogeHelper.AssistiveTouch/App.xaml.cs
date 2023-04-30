@@ -38,7 +38,7 @@ public partial class App : Application
                 MessageBox.Show("Please install MagTouch first.", "ErogeHelper");
                 return;
             }
-            var proces = System.Diagnostics.Process.GetProcessesByName("ErogeHelper.MagpieTouch.exe");
+            var proces = System.Diagnostics.Process.GetProcessesByName("ErogeHelper.MagpieTouch");
             if (proces.Length > 0) { foreach (var p in proces) p.Kill(); }
             var magHooker = new MagpieTouchHooker();
             Current.Exit += (_, _) =>
