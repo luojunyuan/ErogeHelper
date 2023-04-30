@@ -9,7 +9,7 @@
         AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False"
         Topmost="True" WindowStyle="None">
 
-    <Grid x:Name="TouchToolBoxView" Margin="10 20">
+    <Grid x:Name="TouchToolBoxView" Margin="10 20" Opacity="0.5">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -20,9 +20,6 @@
             <Button x:Name="PanelControlButton"
                 Width="75" Height="75"
                 Click="PanelControlButtonOnClick" Content="&lt;" FontSize="30" />
-            <Button x:Name="CloseKeyboardButton"
-                Width="75" Height="75"
-                Click="CloseKeyboardButtonOnClick" Content="x" FontSize="30" />
         </StackPanel>
 
         <WrapPanel x:Name="TheButtonBox"
