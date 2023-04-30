@@ -19,7 +19,7 @@ static class Program
                 form1 = new Form1(1);
             else if (args[0] == "--uninstall")
                 form1 = new Form1(2);
-            else if (args[1] == "--magtouch")
+            else if (args[0] == "--magtouch")
                 form1 = new Form1(3);
             else
                 form1 = new Form1();
