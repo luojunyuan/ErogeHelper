@@ -10,6 +10,8 @@ namespace ErogeHelper.AssistiveTouch.Core;
 
 internal class MagpieTouchHooker : IDisposable
 {
+    public const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagpieTouch.exe";
+
     private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
 
     private readonly User32.HWINEVENTHOOK _windowsEventHook;
@@ -34,7 +36,7 @@ internal class MagpieTouchHooker : IDisposable
         {
             Process.Start(new ProcessStartInfo()
             {
-                FileName = @"C:\Windows\ErogeHelper.MagpieTouch.exe",
+                FileName = MagTouchSystemPath,
                 Verb = "runas"
             });
             MagpieTouchPipe.WaitForConnection();

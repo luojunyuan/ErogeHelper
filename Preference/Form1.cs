@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 
 namespace Preference;
@@ -23,6 +24,7 @@ public partial class Form1 : Form
     {
         AddShieldToButton(Register);
         AddShieldToButton(Unregister);
+        AddShieldToButton(MagTouchInstall);
 
         using var exeKey = Registry.ClassesRoot.OpenSubKey(ExeName, false);
         if (exeKey == null)
@@ -41,6 +43,9 @@ public partial class Form1 : Form
             case 2:
                 Unregister.PerformClick();
                 break;
+            case 3:
+                MagTouchInstall.PerformClick();
+                break;
             default:
                 break;
         }
@@ -53,7 +58,15 @@ public partial class Form1 : Form
 
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
+
+        if (!File.Exists(MagpieTouchPath))
+        {
+            MagpieTouchBox.Visible = false;
+        }
     }
+
+    static readonly string MagpieTouchPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.MagpieTouch.exe");
+    const string MagpieTouchSystemPath = @"C:\Windows\ErogeHelper.MagpieTouch.exe";
 
     const string ExeName = "SystemFileAssociations\\.exe\\shell\\ErogeHelper";
     const string CommandPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\";
@@ -193,5 +206,42 @@ public partial class Form1 : Form
     {
         var config = new IniFile(ConfigFilePath);
         config.Write("EnableMagpieTouchMapping", MagpieTouch.Checked.ToString());
+    }
+
+    private static void InstallCertificate(string certificatePath)
+    {
+        var certificate = new X509Certificate2(certificatePath);
+        var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+
+        try
+        {
+            store.Open(OpenFlags.ReadWrite);
+            store.Add(certificate);
+        }
+        finally
+        {
+            store.Close();
+        }
+    }
+
+
+    private void MagTouchInstall_Click(object sender, EventArgs e)
+    {
+        if (!IsAdministrator)
+        {
+            RunAsAdmin("--magtouch");
+            return;
+        }
+
+        var certidicatePath = Path.Combine(AppContext.BaseDirectory, "testcert.cer");
+        if (!File.Exists(certidicatePath)) 
+        {
+            MessageBox.Show("no testcert.cer in current directory", "ErogeHelper");
+            return;
+        }
+        File.Copy(MagpieTouchPath, MagpieTouchSystemPath, true);
+        InstallCertificate(certidicatePath);
+
+        MessageBox.Show("MagpieTouch install done", "ErogeHelper");
     }
 }

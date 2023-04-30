@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Windows;
@@ -32,6 +33,11 @@ public partial class App : Application
 
         if (Config.EnableMagpieTouchMapping)
         {
+            if (!File.Exists(MagpieTouchHooker.MagTouchSystemPath))
+            {
+                MessageBox.Show("Please install MagTouch first.", "ErogeHelper");
+                return;
+            }
             var magHooker = new MagpieTouchHooker();
             Current.Exit += (_, _) => magHooker.Close();
         }
