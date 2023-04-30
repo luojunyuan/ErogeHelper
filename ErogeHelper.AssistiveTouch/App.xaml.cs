@@ -39,7 +39,11 @@ public partial class App : Application
                 return;
             }
             var magHooker = new MagpieTouchHooker();
-            Current.Exit += (_, _) => magHooker.Close();
+            Current.Exit += (_, _) =>
+            {
+                magHooker.SetTouchFeedback(true);
+                magHooker.Close();
+            };
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -91,13 +92,23 @@ internal class MagpieTouchHooker : IDisposable
                 User32.GetWindowRect(handle, out var dest);
                 PipeSend(true, source.Left, source.Top, source.Width, source.Height, dest.left, dest.top, dest.Width, dest.Height);
                 _inputTransformActivited = true;
+                SetTouchFeedback(false);
             }
             else if (!hostExist && _inputTransformActivited)
             {
                 PipeSend(false, 0, 0, 0, 0, 0, 0, 0, 0);
                 _inputTransformActivited = false;
+                SetTouchFeedback(true);
             }
         }
+    }
+
+    private const string TouchFeedback = "Control Panel\\Cursors";
+    public void SetTouchFeedback(bool show)
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(TouchFeedback);
+        const string CntactVisualization = "CntactVisualization";
+        key?.SetValue(CntactVisualization, show ? 1 : 0);
     }
 
     [DllImport("user32.dll", SetLastError = true)]
