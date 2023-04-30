@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ErogeHelper.AssistiveTouch.Core;
 
@@ -27,31 +28,31 @@ internal class MagpieTouchHooker : IDisposable
              User32.WINEVENT.WINEVENT_OUTOFCONTEXT);
 
         // There is no parent child relationship between MagpieTouch, so named pipe is must.
-        MagpieTouchPipe = new NamedPipeServerStream("f5fa0cb5-7d11-4569-a2f1-883ee52e92d8", PipeDirection.Out);
-        _writer = new StreamWriter(MagpieTouchPipe);
+        //MagpieTouchPipe = new NamedPipeServerStream("f5fa0cb5-7d11-4569-a2f1-883ee52e92d8", PipeDirection.Out);
+        //_writer = new StreamWriter(MagpieTouchPipe);
 
-        try
-        {
-            Process.Start(new ProcessStartInfo()
-            {
-                FileName = @"C:\Windows\ErogeHelper.MagpieTouch.exe",
-                Verb = "runas"
-            });
-            MagpieTouchPipe.WaitForConnection();
-            _writer.AutoFlush = true;
-        }
-        catch (SystemException ex)
-        {
-            MessageBox.Show("Error with Launching ErogeHelper.MagpieTouch.exe\r\n" +
-                "\r\n" +
-                "Please check it installed properlly. ErogeHelper would continue run.\r\n" +
-                "\r\n" +
-                ex.Message,
-                "ErogeHelper",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-            return;
-        }
+        //try
+        //{
+        //    Process.Start(new ProcessStartInfo()
+        //    {
+        //        FileName = @"C:\Windows\ErogeHelper.MagpieTouch.exe",
+        //        Verb = "runas"
+        //    });
+        //    MagpieTouchPipe.WaitForConnection();
+        //    _writer.AutoFlush = true;
+        //}
+        //catch (SystemException ex)
+        //{
+        //    MessageBox.Show("Error with Launching ErogeHelper.MagpieTouch.exe\r\n" +
+        //        "\r\n" +
+        //        "Please check it installed properlly. ErogeHelper would continue run.\r\n" +
+        //        "\r\n" +
+        //        ex.Message,
+        //        "ErogeHelper",
+        //        MessageBoxButton.OK,
+        //        MessageBoxImage.Error);
+        //    return;
+        //}
     }
 
     public void Close() => PipeSend(false, -1, -1, -1, -1, -1, -1, -1, -1);
@@ -98,19 +99,25 @@ internal class MagpieTouchHooker : IDisposable
         }
     }
 
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool GetClientRect(IntPtr hwnd, out Rectangle lpRect);
+
     private Rectangle SourceWindowRectangle()
     {
-        User32.GetWindowRect(App.GameWindowHandle, out var rect);
-        User32.GetClientRect(App.GameWindowHandle, out var rectClient);
+        GetWindowRect(App.GameWindowHandle, out var rect);
+        GetClientRect(App.GameWindowHandle, out var rectClient);
         // rect.Right - rect.Left == rect.Width == (0, 0) to client right-bottom point 
-        var rectWidth = rect.Width - rect.left;
-        var rectHeight = rect.Height - rect.top;
+        var rectWidth = rect.Width - rect.Left;
+        var rectHeight = rect.Height - rect.Top;
 
         var winShadow = (rectWidth - rectClient.Width) / 2;
-        var left = rect.left + winShadow;
+        var left = rect.Left + winShadow;
 
         var winTitleHeight = rectHeight - rectClient.Height - winShadow;
-        var top = rect.top + winTitleHeight;
+        var top = rect.Top + winTitleHeight;
 
         var win = (MainWindow)Application.Current.MainWindow;
         return new Rectangle(

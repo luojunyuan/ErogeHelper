@@ -47,6 +47,7 @@ namespace ErogeHelper.VirtualKeyboard
 
         private void SetWindow()
         {
+            // ATTENTION: User32.RECT is different with System.Drawing.Rectangle
             User32.GetWindowRect(App.GameWindowHandle, out var rect);
             User32.GetClientRect(App.GameWindowHandle, out var rectClient);
             // rect.Right - rect.Left == rect.Width == (0, 0) to client right-bottom point 
