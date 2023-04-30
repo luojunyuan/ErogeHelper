@@ -87,7 +87,16 @@ internal class MagpieTouchHooker : IDisposable
             {
                 var source = SourceWindowRectangle();
                 User32.GetWindowRect(handle, out var dest);
-                PipeSend(true, source.Left, source.Top, source.Width, source.Height, dest.left, dest.top, dest.Width, dest.Height);
+
+                var s1 = (double)source.Width / source.Height;
+                var s2 = (double)dest.Width / dest.Height;
+                var scale = s1 > s2 ? (double)dest.Width / source.Width : (double)dest.Height / source.Height;
+
+                var widthAfterScaled = source.Width * scale;
+                var heightAfterScaled = source.Height * scale;
+                var destLeft = (dest.Width - widthAfterScaled) / 2;
+                var destTop = (dest.Height- heightAfterScaled) / 2;
+                PipeSend(true, source.Left, source.Top, source.Width, source.Height, (int)destLeft, (int)destTop, (int)widthAfterScaled, (int)heightAfterScaled);
                 _inputTransformActivited = true;
             }
             else if (!hostExist && _inputTransformActivited)
@@ -120,7 +129,7 @@ internal class MagpieTouchHooker : IDisposable
 
         var win = (MainWindow)Application.Current.MainWindow;
         return new Rectangle(
-            (int)(left / win.Dpi), (int)(top / win.Dpi), (int)(rectClient.Width / win.Dpi), (int)(rectClient.Height / win.Dpi));
+            left, top, (int)(rectClient.Width + left), (int)(rectClient.Height + top ));
     }
 
     public void Dispose()
