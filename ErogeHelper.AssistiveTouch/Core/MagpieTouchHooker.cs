@@ -1,5 +1,6 @@
 ﻿using ErogeHelper.AssistiveTouch.NativeMethods;
 using Microsoft.Win32;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -113,6 +114,8 @@ internal class MagpieTouchHooker : IDisposable
     }
 
     private const string TouchFeedback = "Control Panel\\Cursors";
+    private const int SPI_SETCONTACTVISUALIZATION = 0x2019;
+    private const int SPI_SETGESTUREVISUALIZATION = 0x201B;
     public void SetTouchFeedback(bool show)
     {
         using var key = Registry.CurrentUser.OpenSubKey(TouchFeedback, true);
@@ -120,7 +123,12 @@ internal class MagpieTouchHooker : IDisposable
         const string GestureVisualization = "GestureVisualization";
         key?.SetValue(ContactVisualization, show ? 1 : 0);
         key?.SetValue(GestureVisualization, show ? 31 : 24);
+        SystemParametersInfo(SPI_SETCONTACTVISUALIZATION, 0, new UIntPtr(show ? 1u : 0), 2);
+        SystemParametersInfo(SPI_SETGESTUREVISUALIZATION, 0, new UIntPtr(show ? 0x001Fu : 0x0018), 2);
     }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, UIntPtr pvParam, uint fWinIni);
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
