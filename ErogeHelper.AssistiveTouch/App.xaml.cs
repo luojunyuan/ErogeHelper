@@ -1,5 +1,5 @@
-﻿using ErogeHelper.AssistiveTouch.Core;
-using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
@@ -31,21 +31,43 @@ public partial class App : Application
             GlobalKeyHook();
         }
 
-        if (Config.EnableMagpieTouchMapping)
+        if (Config.EnableMagTouchMapping)
         {
-            if (!File.Exists(MagpieTouchHooker.MagTouchSystemPath))
+            StartMagTouch();
+        }
+    }
+
+    private static void StartMagTouch()
+    {
+        const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagTouch.exe";
+
+        if (!File.Exists(MagTouchSystemPath))
+        {
+            MessageBox.Show("Please install MagTouch first.", "ErogeHelper");
+            return;
+        }
+
+        try
+        {
+            // Send current pid and App.GameWindowHandle
+            Process.Start(new ProcessStartInfo()
             {
-                MessageBox.Show("Please install MagTouch first.", "ErogeHelper");
-                return;
-            }
-            var proces = System.Diagnostics.Process.GetProcessesByName("ErogeHelper.MagpieTouch");
-            if (proces.Length > 0) { foreach (var p in proces) p.Kill(); }
-            var magHooker = new MagpieTouchHooker();
-            Current.Exit += (_, _) =>
-            {
-                magHooker.SetTouchFeedback(true);
-                magHooker.Close();
-            };
+                FileName = MagTouchSystemPath,
+                Arguments = Process.GetCurrentProcess().Id + " " + GameWindowHandle.ToString(),
+                Verb = "runas",
+            });
+        }
+        catch (SystemException ex)
+        {
+            MessageBox.Show("Error with Launching ErogeHelper.MagTouch.exe\r\n" +
+                "\r\n" +
+                "Please check it installed properly. ErogeHelper would continue run.\r\n" +
+                "\r\n" +
+                ex.Message,
+                "ErogeHelper",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
         }
     }
 

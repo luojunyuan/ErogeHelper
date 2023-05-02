@@ -54,19 +54,19 @@ public partial class Form1 : Form
         ScreenShot.Checked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
-        MagpieTouch.Checked = bool.Parse(config.Read("EnableMagpieTouchMapping") ?? "false");
+        MagTouch.Checked = bool.Parse(config.Read("EnableMagTouchMapping") ?? "false");
 
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
 
-        if (!File.Exists(MagpieTouchPath))
+        if (!File.Exists(MagTouchPath))
         {
-            MagpieTouchBox.Visible = false;
+            MagTouchBox.Visible = false;
         }
     }
 
-    static readonly string MagpieTouchPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.MagpieTouch.exe");
-    const string MagpieTouchSystemPath = @"C:\Windows\ErogeHelper.MagpieTouch.exe";
+    static readonly string MagTouchPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.MagTouch.exe");
+    const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagTouch.exe";
 
     const string ExeName = "SystemFileAssociations\\.exe\\shell\\ErogeHelper";
     const string CommandPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\";
@@ -202,10 +202,10 @@ public partial class Form1 : Form
         config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
     }
 
-    private void MagpieTouch_CheckedChanged(object sender, EventArgs e)
+    private void MagTouch_CheckedChanged(object sender, EventArgs e)
     {
         var config = new IniFile(ConfigFilePath);
-        config.Write("EnableMagpieTouchMapping", MagpieTouch.Checked.ToString());
+        config.Write("EnableMagTouchMapping", MagTouch.Checked.ToString());
     }
 
     private static void InstallCertificate(string certificatePath)
@@ -233,15 +233,15 @@ public partial class Form1 : Form
             return;
         }
 
-        var certidicatePath = Path.Combine(AppContext.BaseDirectory, "testcert.cer");
+        var certidicatePath = Path.Combine(AppContext.BaseDirectory, "k1mlka-MagTouch.cer");
         if (!File.Exists(certidicatePath)) 
         {
-            MessageBox.Show("no testcert.cer in current directory", "ErogeHelper");
+            MessageBox.Show("no k1mlka-MagTouch.cer in current directory", "ErogeHelper");
             return;
         }
-        File.Copy(MagpieTouchPath, MagpieTouchSystemPath, true);
+        File.Copy(MagTouchPath, MagTouchSystemPath, true);
         InstallCertificate(certidicatePath);
 
-        MessageBox.Show("MagpieTouch install done", "ErogeHelper");
+        MessageBox.Show("MagTouch install done", "ErogeHelper");
     }
 }

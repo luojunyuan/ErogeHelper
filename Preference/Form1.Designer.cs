@@ -34,10 +34,10 @@ partial class Form1
             this.Register = new System.Windows.Forms.Button();
             this.Unregister = new System.Windows.Forms.Button();
             this.FullscreenMask = new System.Windows.Forms.CheckBox();
-            this.MagpieTouch = new System.Windows.Forms.CheckBox();
+            this.MagTouch = new System.Windows.Forms.CheckBox();
             this.MagTouchInstall = new System.Windows.Forms.Button();
-            this.MagpieTouchBox = new System.Windows.Forms.GroupBox();
-            this.MagpieTouchBox.SuspendLayout();
+            this.MagTouchBox = new System.Windows.Forms.GroupBox();
+            this.MagTouchBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // ScreenShot
@@ -95,14 +95,14 @@ partial class Form1
             // 
             // MagpieTouch
             // 
-            this.MagpieTouch.AutoSize = true;
-            this.MagpieTouch.Location = new System.Drawing.Point(30, 42);
-            this.MagpieTouch.Name = "MagpieTouch";
-            this.MagpieTouch.Size = new System.Drawing.Size(214, 28);
-            this.MagpieTouch.TabIndex = 5;
-            this.MagpieTouch.Text = "Touch for magpie";
-            this.MagpieTouch.UseVisualStyleBackColor = true;
-            this.MagpieTouch.CheckedChanged += new System.EventHandler(this.MagpieTouch_CheckedChanged);
+            this.MagTouch.AutoSize = true;
+            this.MagTouch.Location = new System.Drawing.Point(30, 42);
+            this.MagTouch.Name = "MagpieTouch";
+            this.MagTouch.Size = new System.Drawing.Size(214, 28);
+            this.MagTouch.TabIndex = 5;
+            this.MagTouch.Text = "Touch for magpie";
+            this.MagTouch.UseVisualStyleBackColor = true;
+            this.MagTouch.CheckedChanged += new System.EventHandler(this.MagTouch_CheckedChanged);
             // 
             // MagTouchInstall
             // 
@@ -116,21 +116,21 @@ partial class Form1
             // 
             // MagpieTouchBox
             // 
-            this.MagpieTouchBox.Controls.Add(this.MagTouchInstall);
-            this.MagpieTouchBox.Controls.Add(this.MagpieTouch);
-            this.MagpieTouchBox.Location = new System.Drawing.Point(70, 314);
-            this.MagpieTouchBox.Name = "MagpieTouchBox";
-            this.MagpieTouchBox.Size = new System.Drawing.Size(352, 182);
-            this.MagpieTouchBox.TabIndex = 7;
-            this.MagpieTouchBox.TabStop = false;
-            this.MagpieTouchBox.Text = "Magpie Touch";
+            this.MagTouchBox.Controls.Add(this.MagTouchInstall);
+            this.MagTouchBox.Controls.Add(this.MagTouch);
+            this.MagTouchBox.Location = new System.Drawing.Point(70, 314);
+            this.MagTouchBox.Name = "MagpieTouchBox";
+            this.MagTouchBox.Size = new System.Drawing.Size(352, 182);
+            this.MagTouchBox.TabIndex = 7;
+            this.MagTouchBox.TabStop = false;
+            this.MagTouchBox.Text = "Magpie Touch";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(799, 524);
-            this.Controls.Add(this.MagpieTouchBox);
+            this.Controls.Add(this.MagTouchBox);
             this.Controls.Add(this.FullscreenMask);
             this.Controls.Add(this.Unregister);
             this.Controls.Add(this.Register);
@@ -141,8 +141,8 @@ partial class Form1
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preference";
             this.Load += new System.EventHandler(this.OnLoaded);
-            this.MagpieTouchBox.ResumeLayout(false);
-            this.MagpieTouchBox.PerformLayout();
+            this.MagTouchBox.ResumeLayout(false);
+            this.MagTouchBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,7 +155,7 @@ partial class Form1
     private Button Register;
     private Button Unregister;
     private CheckBox FullscreenMask;
-    private CheckBox MagpieTouch;
+    private CheckBox MagTouch;
     private Button MagTouchInstall;
-    private GroupBox MagpieTouchBox;
+    private GroupBox MagTouchBox;
 }

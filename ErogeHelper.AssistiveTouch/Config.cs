@@ -23,7 +23,7 @@ namespace ErogeHelper.AssistiveTouch
 
         public static bool UseEdgeTouchMask { get; private set; }
 
-        public static bool EnableMagpieTouchMapping { get; private set; }
+        public static bool EnableMagTouchMapping { get; private set; }
 
         public static void Load()
         {
@@ -38,7 +38,7 @@ namespace ErogeHelper.AssistiveTouch
             AssistiveTouchPosition = myIni.Read(nameof(AssistiveTouchPosition)) ?? string.Empty;
             // Touch size
             UseEdgeTouchMask = bool.Parse(myIni.Read(nameof(UseEdgeTouchMask)) ?? "false");
-            EnableMagpieTouchMapping = bool.Parse(myIni.Read(nameof(EnableMagpieTouchMapping)) ?? "false");
+            EnableMagTouchMapping = bool.Parse(myIni.Read(nameof(EnableMagTouchMapping)) ?? "false");
         }
 
         public static void SaveAssistiveTouchPosition(string pos)
