@@ -100,7 +100,19 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
                 UseShellExecute = false,
             }
         };
+
         touch.Start();
+
+        if (AppdataRoming.UseEnterKeyMapping())
+        {
+            ProcessStart.GlobalKeyHook(touch.Id, gameWindowHandle);
+        }
+
+        if (AppdataRoming.EnableMagTouchMapping())
+        {
+            ProcessStart.StartMagTouch(touch.Id, gameWindowHandle);
+        }
+
         touch.WaitForExit();
     }
     splash.Close();

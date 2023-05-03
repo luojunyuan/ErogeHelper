@@ -59,6 +59,16 @@ public partial class Form1 : Form
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
 
+        if (!File.Exists(KeyMappingPath))
+        {
+            KeytwoEnter.Visible = false;
+            if (KeytwoEnter.Checked)
+            {
+                KeytwoEnter.Checked = false;
+                KeytwoEnter_CheckedChanged(KeytwoEnter, new());
+            }
+        }
+
         if (!File.Exists(MagTouchPath))
         {
             MagTouchBox.Visible = false;
@@ -70,6 +80,7 @@ public partial class Form1 : Form
         }
     }
 
+    static readonly string KeyMappingPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.KeyMapping.exe");
     static readonly string MagTouchPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.MagTouch.exe");
     const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagTouch.exe";
 
@@ -110,7 +121,8 @@ public partial class Form1 : Form
             const string exe1 = PreferArm64Key + "ErogeHelper.exe";
             const string exe2 = PreferArm64Key + "ErogeHelper.AssistiveTouch.exe";
             const string exe3 = PreferArm64Key + "ErogeHelper.VirtualKeyboard.exe";
-            const string exe4 = PreferArm64Key + "Preference.exe";
+            const string exe4 = PreferArm64Key + "ErogeHelper.KeyMapping.exe";
+            const string exe5 = PreferArm64Key + "Preference.exe";
             using var key1 = Registry.LocalMachine.CreateSubKey(exe1, true);
             key1.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key2 = Registry.LocalMachine.CreateSubKey(exe2, true);
@@ -119,6 +131,8 @@ public partial class Form1 : Form
             key3.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key4 = Registry.LocalMachine.CreateSubKey(exe4, true);
             key4.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+            using var key5 = Registry.LocalMachine.CreateSubKey(exe5, true);
+            key5.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
         }
 
         MessageBox.Show("Register done", "ErogeHelper");

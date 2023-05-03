@@ -21,14 +21,32 @@ public class AppdataRoming
         return bool.Parse(valueBuilder.ToString());
     }
 
-    internal static string GetLEPath()
+    public static string GetLEPath()
     {
         var valueBuilder = new StringBuilder(255);
         Kernel32.GetPrivateProfileString("ErogeHelper", "LEPath", string.Empty, valueBuilder, 255, ConfigFilePath);
         return valueBuilder.ToString();
     }
 
-    internal class Kernel32
+    public static bool UseEnterKeyMapping()
+    {
+        var valueBuilder = new StringBuilder(255);
+        Kernel32.GetPrivateProfileString("ErogeHelper", nameof(UseEnterKeyMapping), string.Empty, valueBuilder, 255, ConfigFilePath);
+        if (valueBuilder.ToString() == string.Empty)
+            return false;
+        return bool.Parse(valueBuilder.ToString());
+    }
+
+    public static bool EnableMagTouchMapping()
+    {
+        var valueBuilder = new StringBuilder(255);
+        Kernel32.GetPrivateProfileString("ErogeHelper", nameof(EnableMagTouchMapping), string.Empty, valueBuilder, 255, ConfigFilePath);
+        if (valueBuilder.ToString() == string.Empty)
+            return false;
+        return bool.Parse(valueBuilder.ToString());
+    }
+
+    public class Kernel32
     {
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int GetPrivateProfileString(string section, string key, string @default, StringBuilder retVal, int size, string filePath);

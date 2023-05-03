@@ -43,7 +43,7 @@ partial class Form1
             // ScreenShot
             // 
             this.ScreenShot.AutoSize = true;
-            this.ScreenShot.Location = new System.Drawing.Point(70, 53);
+            this.ScreenShot.Location = new System.Drawing.Point(70, 152);
             this.ScreenShot.Name = "ScreenShot";
             this.ScreenShot.Size = new System.Drawing.Size(430, 28);
             this.ScreenShot.TabIndex = 0;
@@ -54,7 +54,7 @@ partial class Form1
             // KeytwoEnter
             // 
             this.KeytwoEnter.AutoSize = true;
-            this.KeytwoEnter.Location = new System.Drawing.Point(70, 106);
+            this.KeytwoEnter.Location = new System.Drawing.Point(70, 254);
             this.KeytwoEnter.Name = "KeytwoEnter";
             this.KeytwoEnter.Size = new System.Drawing.Size(300, 28);
             this.KeytwoEnter.TabIndex = 1;
@@ -64,7 +64,7 @@ partial class Form1
             // 
             // Register
             // 
-            this.Register.Location = new System.Drawing.Point(64, 221);
+            this.Register.Location = new System.Drawing.Point(70, 53);
             this.Register.Name = "Register";
             this.Register.Size = new System.Drawing.Size(154, 61);
             this.Register.TabIndex = 2;
@@ -74,7 +74,7 @@ partial class Form1
             // 
             // Unregister
             // 
-            this.Unregister.Location = new System.Drawing.Point(249, 221);
+            this.Unregister.Location = new System.Drawing.Point(255, 53);
             this.Unregister.Name = "Unregister";
             this.Unregister.Size = new System.Drawing.Size(173, 61);
             this.Unregister.TabIndex = 3;
@@ -85,7 +85,7 @@ partial class Form1
             // FullscreenMask
             // 
             this.FullscreenMask.AutoSize = true;
-            this.FullscreenMask.Location = new System.Drawing.Point(70, 162);
+            this.FullscreenMask.Location = new System.Drawing.Point(70, 205);
             this.FullscreenMask.Name = "FullscreenMask";
             this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
             this.FullscreenMask.TabIndex = 4;
@@ -93,11 +93,11 @@ partial class Form1
             this.FullscreenMask.UseVisualStyleBackColor = true;
             this.FullscreenMask.CheckedChanged += new System.EventHandler(this.FullscreenMask_CheckedChanged);
             // 
-            // MagpieTouch
+            // MagTouch
             // 
             this.MagTouch.AutoSize = true;
             this.MagTouch.Location = new System.Drawing.Point(30, 42);
-            this.MagTouch.Name = "MagpieTouch";
+            this.MagTouch.Name = "MagTouch";
             this.MagTouch.Size = new System.Drawing.Size(214, 28);
             this.MagTouch.TabIndex = 5;
             this.MagTouch.Text = "Touch for magpie";
@@ -114,12 +114,12 @@ partial class Form1
             this.MagTouchInstall.UseVisualStyleBackColor = true;
             this.MagTouchInstall.Click += new System.EventHandler(this.MagTouchInstall_Click);
             // 
-            // MagpieTouchBox
+            // MagTouchBox
             // 
             this.MagTouchBox.Controls.Add(this.MagTouchInstall);
             this.MagTouchBox.Controls.Add(this.MagTouch);
             this.MagTouchBox.Location = new System.Drawing.Point(70, 314);
-            this.MagTouchBox.Name = "MagpieTouchBox";
+            this.MagTouchBox.Name = "MagTouchBox";
             this.MagTouchBox.Size = new System.Drawing.Size(352, 182);
             this.MagTouchBox.TabIndex = 7;
             this.MagTouchBox.TabStop = false;
