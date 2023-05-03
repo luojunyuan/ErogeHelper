@@ -174,6 +174,7 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         public enum HookType
         {
             WH_CBT = 5,
+            WH_KEYBOARD_LL = 13,
             WH_MOUSE_LL = 14
         }
 

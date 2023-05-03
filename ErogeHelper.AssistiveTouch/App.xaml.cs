@@ -1,4 +1,5 @@
-﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+﻿using ErogeHelper.AssistiveTouch.Core;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -73,21 +74,8 @@ public partial class App : Application
 
     private static void GlobalKeyHook()
     {
-        const byte VK_RETURN = 0x0D;
-        const uint KEYEVENTF_KEYUP = 0x0002;
-        // Thread name MessagePumpingObject
-        var keyboard = WindowsInput.Capture.Global.KeyboardAsync();
-        keyboard.KeyDown += (_, e) =>
-        {
-            if (e.Data.Key == Config.MappingKey && User32.GetForegroundWindow() == GameWindowHandle)
-            {
-                e.Next_Hook_Enabled = false;
-
-                User32.keybd_event(VK_RETURN, 0, 0, 0);
-                User32.keybd_event(VK_RETURN, 0, KEYEVENTF_KEYUP, 0);
-            }
-        };
-        Current.Exit += (_, _) => keyboard.Dispose();
+        KeyboardHooker.Install(GameWindowHandle);
+        Current.Exit += (_, _) => KeyboardHooker.UnInstall();
     }
 
     private static void DisableWPFTabletSupport()
