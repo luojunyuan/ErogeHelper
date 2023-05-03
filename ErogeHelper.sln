@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.AssistiveTouch"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.VirtualKeyboard", "ErogeHelper.VirtualKeyboard\ErogeHelper.VirtualKeyboard.csproj", "{B0076306-5D21-45D3-868A-6A2FC70D3B9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErogeHelper.KeyMapping", "ErogeHelper.KeyMappingHooker\ErogeHelper.KeyMapping.csproj", "{3B1A42F6-956A-4332-AA1D-ADD848B0D480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErogeHelper.KeyMapping", "ErogeHelper.KeyMapping\ErogeHelper.KeyMapping.csproj", "{BDD6E0EE-0E6C-4F0C-8E1C-9196F84C4A01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0076306-5D21-45D3-868A-6A2FC70D3B9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B1A42F6-956A-4332-AA1D-ADD848B0D480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B1A42F6-956A-4332-AA1D-ADD848B0D480}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B1A42F6-956A-4332-AA1D-ADD848B0D480}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B1A42F6-956A-4332-AA1D-ADD848B0D480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDD6E0EE-0E6C-4F0C-8E1C-9196F84C4A01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDD6E0EE-0E6C-4F0C-8E1C-9196F84C4A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDD6E0EE-0E6C-4F0C-8E1C-9196F84C4A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDD6E0EE-0E6C-4F0C-8E1C-9196F84C4A01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
