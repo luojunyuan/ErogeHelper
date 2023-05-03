@@ -10,7 +10,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
     public partial class WinMovePage : Page, ITouchMenuPage
     {
         public event EventHandler<PageEventArgs>? PageChanged;
-        public void Close() => PageChanged?.Invoke(this, new (TouchMenuPageTag.None));
+        public void Close() => PageChanged?.Invoke(this, new(TouchMenuPageTag.None));
 
         public WinMovePage()
         {

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
-using WindowsInput.Events;
 
 namespace ErogeHelper.VirtualKeyboard
 {
@@ -123,7 +117,7 @@ namespace ErogeHelper.VirtualKeyboard
             public IntPtr DangerousGetHandle() => handle;
         }
 
-        [DllImport(user32, SetLastError= true)]
+        [DllImport(user32, SetLastError = true)]
         public static extern bool GetWindowRect(IntPtr hwnd, out System.Drawing.Rectangle lpRect);
 
         [DllImport(user32, SetLastError = true)]

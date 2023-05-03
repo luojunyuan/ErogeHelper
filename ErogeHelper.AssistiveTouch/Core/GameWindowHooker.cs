@@ -8,7 +8,7 @@ internal class GameWindowHooker : IDisposable
 {
     public event EventHandler<Size>? SizeChanged;
 
-    private readonly User32.HWINEVENTHOOK _windowsEventHook;
+    private readonly IntPtr _windowsEventHook;
 
     private readonly GCHandle _gcSafetyHandle;
 
@@ -47,7 +47,7 @@ internal class GameWindowHooker : IDisposable
     /// Running in UI thread
     /// </summary>
     private void WinEventCallback(
-        User32.HWINEVENTHOOK hWinEventHook,
+        IntPtr hWinEventHook,
         uint eventType,
         IntPtr hWnd,
         int idObject,

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ErogeHelper.AssistiveTouch.NativeMethods;
 
 namespace ErogeHelper.AssistiveTouch.Core;
 

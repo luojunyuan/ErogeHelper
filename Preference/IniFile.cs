@@ -1,9 +1,7 @@
 ﻿// CODE FROM https://stackoverflow.com/questions/217902/reading-writing-an-ini-file
-using System.IO;
-using System.Reflection;
+using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Win32;
 
 namespace Preference
 {
@@ -47,7 +45,7 @@ namespace Preference
         public string? Read(string Key, string? Section = null)
         {
             var RetVal = new StringBuilder(255);
-            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255,path);
+            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, path);
             return RetVal.ToString() == string.Empty ? null : RetVal.ToString();
         }
 

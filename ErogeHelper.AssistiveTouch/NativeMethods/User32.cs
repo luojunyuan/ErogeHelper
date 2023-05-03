@@ -35,7 +35,7 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        public static extern HWINEVENTHOOK SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventProc pfnWinEventProc, uint idProcess, uint idThread, WINEVENT dwFlags);
+        public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventProc pfnWinEventProc, uint idProcess, uint idThread, WINEVENT dwFlags);
 
         [DllImport(User32Dll, SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
@@ -48,7 +48,7 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref System.Drawing.Point lpPoints, uint cPoints = 1);
 
         [DllImport(User32Dll)]
-        public static extern bool UnhookWinEvent(HWINEVENTHOOK hWinEventHook);
+        public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
         // Above GameWindowHooker
 
@@ -73,11 +73,6 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCursorPos(out System.Drawing.Point lpPoint);
-
-        // Global keyboard hook
-        
-        [DllImport(User32Dll)]
-        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 
         // For Fullscreen
 

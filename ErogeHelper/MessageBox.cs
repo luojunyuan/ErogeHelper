@@ -1,6 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
-using SplashScreenGdip;
+﻿using SplashScreenGdip;
+using System.Runtime.InteropServices;
 
 namespace ErogeHelper;
 

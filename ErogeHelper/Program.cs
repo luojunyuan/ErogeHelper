@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using System.IO.Pipes;
-using ErogeHelper;
+﻿using ErogeHelper;
 using SplashScreenGdip;
+using System.Diagnostics;
+using System.IO.Pipes;
 
 #region Arguments Check
 if (args.Length == 0)
@@ -28,7 +28,7 @@ if (!File.Exists(gamePath))
 RunSplashScreenWrapper(args, gamePath);
 
 // Wrapper for lazy load dlls (50ms startup speed)
-static string WinShortcutWrapper(string gamePath) => 
+static string WinShortcutWrapper(string gamePath) =>
     WindowsShortcutFactory.WindowsShortcut.Load(gamePath).Path ?? "Resolve lnk file failed";
 static void RunSplashScreenWrapper(string[] args, string gamePath)
 {

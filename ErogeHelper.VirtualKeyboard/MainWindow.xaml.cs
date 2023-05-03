@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -61,7 +60,7 @@ namespace ErogeHelper.VirtualKeyboard
             var top = rect.Top + winTitleHeight;
 
             var rectDpi = new Rectangle((int)(left / Dpi), (int)(top / Dpi), (int)(rectClient.Width / Dpi), (int)(rectClient.Height / Dpi));
-            Left = rectDpi.Left; Top = rectDpi.Top ;
+            Left = rectDpi.Left; Top = rectDpi.Top;
             Width = rectDpi.Width; Height = rectDpi.Height;
         }
 

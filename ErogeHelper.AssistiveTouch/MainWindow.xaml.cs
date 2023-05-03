@@ -1,11 +1,9 @@
-﻿using System.Reflection;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using ErogeHelper.AssistiveTouch.Core;
+﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
 using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace ErogeHelper.AssistiveTouch;
 

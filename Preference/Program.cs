@@ -30,7 +30,7 @@ static class Program
         }
 
         Application.Run(form1);
-    }    
+    }
 }
 
 #if NET472
