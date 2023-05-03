@@ -62,6 +62,11 @@ public partial class Form1 : Form
         if (!File.Exists(MagTouchPath))
         {
             MagTouchBox.Visible = false;
+            if (MagTouch.Checked)
+            {
+                MagTouch.Checked = false;
+                MagTouch_CheckedChanged(MagTouch, new());
+            }
         }
     }
 
