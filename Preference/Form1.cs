@@ -1,8 +1,10 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
+using System.Windows.Forms;
 
 namespace Preference;
 
@@ -55,6 +57,8 @@ public partial class Form1 : Form
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
         MagTouch.Checked = bool.Parse(config.Read("EnableMagTouchMapping") ?? "false");
+
+        LEPathTextbox.Text = config.Read("LEPath") ?? IniFile.LEPathInRegistry();
 
         if (!Directory.Exists(ConfigFolder))
             Directory.CreateDirectory(ConfigFolder);
@@ -262,5 +266,29 @@ public partial class Form1 : Form
         InstallCertificate(certidicatePath);
 
         MessageBox.Show("MagTouch install done", "ErogeHelper");
+    }
+
+    private void LEPathDialogButton_Click(object sender, EventArgs e)
+    {
+        var openFileDialog1 = new OpenFileDialog
+        {
+            Filter = "Exe file |*.exe",
+            Title = "Please select the LEProc.exe file."
+        };
+        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+        {
+            try
+            {
+                var sr = new StreamReader(openFileDialog1.FileName);
+                LEPathTextbox.Text = sr.ReadToEnd();
+                var config = new IniFile(ConfigFilePath);
+                config.Write("LEPath", LEPathTextbox.Text);
+            }
+            catch (SecurityException ex)
+            {
+                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                $"Details:\n\n{ex.StackTrace}");
+            }
+        }
     }
 }

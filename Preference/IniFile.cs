@@ -9,7 +9,7 @@ namespace Preference
     {
 
         private const string LERegistryPath = @"Software\Classes\CLSID\{C52B9871-E5E9-41FD-B84D-C5ACADBEC7AE}\InprocServer32";
-        public static string LEPath()
+        public static string LEPathInRegistry()
         {
             using var key = Registry.CurrentUser.OpenSubKey(LERegistryPath) ??
                 Registry.LocalMachine.OpenSubKey(LERegistryPath);

@@ -37,13 +37,16 @@ partial class Form1
             this.MagTouch = new System.Windows.Forms.CheckBox();
             this.MagTouchInstall = new System.Windows.Forms.Button();
             this.MagTouchBox = new System.Windows.Forms.GroupBox();
+            this.LEPathTextbox = new System.Windows.Forms.TextBox();
+            this.LEPathDiaboxButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.MagTouchBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // ScreenShot
             // 
             this.ScreenShot.AutoSize = true;
-            this.ScreenShot.Location = new System.Drawing.Point(70, 152);
+            this.ScreenShot.Location = new System.Drawing.Point(64, 212);
             this.ScreenShot.Name = "ScreenShot";
             this.ScreenShot.Size = new System.Drawing.Size(430, 28);
             this.ScreenShot.TabIndex = 0;
@@ -54,7 +57,7 @@ partial class Form1
             // KeytwoEnter
             // 
             this.KeytwoEnter.AutoSize = true;
-            this.KeytwoEnter.Location = new System.Drawing.Point(70, 254);
+            this.KeytwoEnter.Location = new System.Drawing.Point(64, 314);
             this.KeytwoEnter.Name = "KeytwoEnter";
             this.KeytwoEnter.Size = new System.Drawing.Size(300, 28);
             this.KeytwoEnter.TabIndex = 1;
@@ -64,7 +67,7 @@ partial class Form1
             // 
             // Register
             // 
-            this.Register.Location = new System.Drawing.Point(70, 53);
+            this.Register.Location = new System.Drawing.Point(64, 34);
             this.Register.Name = "Register";
             this.Register.Size = new System.Drawing.Size(154, 61);
             this.Register.TabIndex = 2;
@@ -74,7 +77,7 @@ partial class Form1
             // 
             // Unregister
             // 
-            this.Unregister.Location = new System.Drawing.Point(255, 53);
+            this.Unregister.Location = new System.Drawing.Point(249, 34);
             this.Unregister.Name = "Unregister";
             this.Unregister.Size = new System.Drawing.Size(173, 61);
             this.Unregister.TabIndex = 3;
@@ -85,7 +88,7 @@ partial class Form1
             // FullscreenMask
             // 
             this.FullscreenMask.AutoSize = true;
-            this.FullscreenMask.Location = new System.Drawing.Point(70, 205);
+            this.FullscreenMask.Location = new System.Drawing.Point(64, 265);
             this.FullscreenMask.Name = "FullscreenMask";
             this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
             this.FullscreenMask.TabIndex = 4;
@@ -118,18 +121,47 @@ partial class Form1
             // 
             this.MagTouchBox.Controls.Add(this.MagTouchInstall);
             this.MagTouchBox.Controls.Add(this.MagTouch);
-            this.MagTouchBox.Location = new System.Drawing.Point(70, 314);
+            this.MagTouchBox.Location = new System.Drawing.Point(64, 374);
             this.MagTouchBox.Name = "MagTouchBox";
             this.MagTouchBox.Size = new System.Drawing.Size(352, 182);
             this.MagTouchBox.TabIndex = 7;
             this.MagTouchBox.TabStop = false;
             this.MagTouchBox.Text = "Magpie Touch";
             // 
+            // LEPathTextbox
+            // 
+            this.LEPathTextbox.Location = new System.Drawing.Point(64, 155);
+            this.LEPathTextbox.Name = "LEPathTextbox";
+            this.LEPathTextbox.Size = new System.Drawing.Size(263, 31);
+            this.LEPathTextbox.TabIndex = 8;
+            // 
+            // LEPathDiaboxButton
+            // 
+            this.LEPathDiaboxButton.Location = new System.Drawing.Point(353, 134);
+            this.LEPathDiaboxButton.Name = "LEPathDiaboxButton";
+            this.LEPathDiaboxButton.Size = new System.Drawing.Size(130, 52);
+            this.LEPathDiaboxButton.TabIndex = 9;
+            this.LEPathDiaboxButton.Text = "Select";
+            this.LEPathDiaboxButton.UseVisualStyleBackColor = true;
+            this.LEPathDiaboxButton.Click += new System.EventHandler(this.LEPathDialogButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(60, 115);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(226, 24);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Locate Emulator Path";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(799, 524);
+            this.ClientSize = new System.Drawing.Size(797, 585);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.LEPathDiaboxButton);
+            this.Controls.Add(this.LEPathTextbox);
             this.Controls.Add(this.MagTouchBox);
             this.Controls.Add(this.FullscreenMask);
             this.Controls.Add(this.Unregister);
@@ -158,4 +190,7 @@ partial class Form1
     private CheckBox MagTouch;
     private Button MagTouchInstall;
     private GroupBox MagTouchBox;
+    private TextBox LEPathTextbox;
+    private Button LEPathDiaboxButton;
+    private Label label1;
 }
