@@ -16,8 +16,4 @@
     <PackageReference Include="WindowsInput" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ErogeHelper.KeyMappingHooker\ErogeHelper.KeyMapping.csproj" />
-  </ItemGroup>
-
 </Project>
