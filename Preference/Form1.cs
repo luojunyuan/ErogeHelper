@@ -26,7 +26,6 @@ public partial class Form1 : Form
     {
         AddShieldToButton(Register);
         AddShieldToButton(Unregister);
-        AddShieldToButton(MagTouchInstall);
 
         using var exeKey = Registry.ClassesRoot.OpenSubKey(ExeName, false);
         if (exeKey == null)
@@ -45,9 +44,6 @@ public partial class Form1 : Form
             case 2:
                 Unregister.PerformClick();
                 break;
-            case 3:
-                MagTouchInstall.PerformClick();
-                break;
             default:
                 break;
         }
@@ -56,7 +52,6 @@ public partial class Form1 : Form
         ScreenShot.Checked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
-        MagTouch.Checked = bool.Parse(config.Read("EnableMagTouchMapping") ?? "false");
 
         LEPathTextbox.Text = config.Read("LEPath") ?? IniFile.LEPathInRegistry();
 
@@ -72,20 +67,9 @@ public partial class Form1 : Form
                 KeytwoEnter_CheckedChanged(KeytwoEnter, new());
             }
         }
-
-        if (!File.Exists(MagTouchPath))
-        {
-            MagTouchBox.Visible = false;
-            if (MagTouch.Checked)
-            {
-                MagTouch.Checked = false;
-                MagTouch_CheckedChanged(MagTouch, new());
-            }
-        }
     }
 
     static readonly string KeyMappingPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.KeyMapping.exe");
-    static readonly string MagTouchPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.MagTouch.exe");
     const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagTouch.exe";
 
     const string ExeName = "SystemFileAssociations\\.exe\\shell\\ErogeHelper";
@@ -223,49 +207,6 @@ public partial class Form1 : Form
     {
         var config = new IniFile(ConfigFilePath);
         config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
-    }
-
-    private void MagTouch_CheckedChanged(object sender, EventArgs e)
-    {
-        var config = new IniFile(ConfigFilePath);
-        config.Write("EnableMagTouchMapping", MagTouch.Checked.ToString());
-    }
-
-    private static void InstallCertificate(string certificatePath)
-    {
-        var certificate = new X509Certificate2(certificatePath);
-        var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-
-        try
-        {
-            store.Open(OpenFlags.ReadWrite);
-            store.Add(certificate);
-        }
-        finally
-        {
-            store.Close();
-        }
-    }
-
-
-    private void MagTouchInstall_Click(object sender, EventArgs e)
-    {
-        if (!IsAdministrator)
-        {
-            RunAsAdmin("--magtouch");
-            return;
-        }
-
-        var certidicatePath = Path.Combine(AppContext.BaseDirectory, "k1mlka-MagTouch.cer");
-        if (!File.Exists(certidicatePath)) 
-        {
-            MessageBox.Show("no k1mlka-MagTouch.cer in current directory", "ErogeHelper");
-            return;
-        }
-        File.Copy(MagTouchPath, MagTouchSystemPath, true);
-        InstallCertificate(certidicatePath);
-
-        MessageBox.Show("MagTouch install done", "ErogeHelper");
     }
 
     private void LEPathDialogButton_Click(object sender, EventArgs e)

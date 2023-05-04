@@ -34,13 +34,9 @@ partial class Form1
             this.Register = new System.Windows.Forms.Button();
             this.Unregister = new System.Windows.Forms.Button();
             this.FullscreenMask = new System.Windows.Forms.CheckBox();
-            this.MagTouch = new System.Windows.Forms.CheckBox();
-            this.MagTouchInstall = new System.Windows.Forms.Button();
-            this.MagTouchBox = new System.Windows.Forms.GroupBox();
             this.LEPathTextbox = new System.Windows.Forms.TextBox();
             this.LEPathDiaboxButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.MagTouchBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // ScreenShot
@@ -96,38 +92,6 @@ partial class Form1
             this.FullscreenMask.UseVisualStyleBackColor = true;
             this.FullscreenMask.CheckedChanged += new System.EventHandler(this.FullscreenMask_CheckedChanged);
             // 
-            // MagTouch
-            // 
-            this.MagTouch.AutoSize = true;
-            this.MagTouch.Location = new System.Drawing.Point(30, 42);
-            this.MagTouch.Name = "MagTouch";
-            this.MagTouch.Size = new System.Drawing.Size(214, 28);
-            this.MagTouch.TabIndex = 5;
-            this.MagTouch.Text = "Touch for magpie";
-            this.MagTouch.UseVisualStyleBackColor = true;
-            this.MagTouch.CheckedChanged += new System.EventHandler(this.MagTouch_CheckedChanged);
-            // 
-            // MagTouchInstall
-            // 
-            this.MagTouchInstall.Location = new System.Drawing.Point(30, 86);
-            this.MagTouchInstall.Name = "MagTouchInstall";
-            this.MagTouchInstall.Size = new System.Drawing.Size(270, 56);
-            this.MagTouchInstall.TabIndex = 6;
-            this.MagTouchInstall.Text = "Install MagpieTouch";
-            this.MagTouchInstall.UseVisualStyleBackColor = true;
-            this.MagTouchInstall.Click += new System.EventHandler(this.MagTouchInstall_Click);
-            // 
-            // MagTouchBox
-            // 
-            this.MagTouchBox.Controls.Add(this.MagTouchInstall);
-            this.MagTouchBox.Controls.Add(this.MagTouch);
-            this.MagTouchBox.Location = new System.Drawing.Point(64, 374);
-            this.MagTouchBox.Name = "MagTouchBox";
-            this.MagTouchBox.Size = new System.Drawing.Size(352, 182);
-            this.MagTouchBox.TabIndex = 7;
-            this.MagTouchBox.TabStop = false;
-            this.MagTouchBox.Text = "Magpie Touch";
-            // 
             // LEPathTextbox
             // 
             this.LEPathTextbox.Location = new System.Drawing.Point(64, 155);
@@ -162,7 +126,6 @@ partial class Form1
             this.Controls.Add(this.label1);
             this.Controls.Add(this.LEPathDiaboxButton);
             this.Controls.Add(this.LEPathTextbox);
-            this.Controls.Add(this.MagTouchBox);
             this.Controls.Add(this.FullscreenMask);
             this.Controls.Add(this.Unregister);
             this.Controls.Add(this.Register);
@@ -173,8 +136,6 @@ partial class Form1
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preference";
             this.Load += new System.EventHandler(this.OnLoaded);
-            this.MagTouchBox.ResumeLayout(false);
-            this.MagTouchBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,9 +148,6 @@ partial class Form1
     private Button Register;
     private Button Unregister;
     private CheckBox FullscreenMask;
-    private CheckBox MagTouch;
-    private Button MagTouchInstall;
-    private GroupBox MagTouchBox;
     private TextBox LEPathTextbox;
     private Button LEPathDiaboxButton;
     private Label label1;

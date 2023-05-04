@@ -33,15 +33,6 @@ public class AppdataRoming
         return bool.Parse(valueBuilder.ToString());
     }
 
-    public static bool EnableMagTouchMapping()
-    {
-        var valueBuilder = new StringBuilder(255);
-        Kernel32.GetPrivateProfileString("ErogeHelper", nameof(EnableMagTouchMapping), string.Empty, valueBuilder, 255, ConfigFilePath);
-        if (valueBuilder.ToString() == string.Empty)
-            return false;
-        return bool.Parse(valueBuilder.ToString());
-    }
-
     public class Kernel32
     {
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
