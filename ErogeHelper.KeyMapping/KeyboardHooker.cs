@@ -26,7 +26,7 @@ namespace ErogeHelper.KeyMapping
             if (nCode < 0)
                 return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
 
-            var obj = Marshal.PtrToStructure(lParam, typeof(KBDLLHOOKSTRUCT));
+            var obj = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
             if (!(obj is KBDLLHOOKSTRUCT info))
                 return User32.CallNextHookEx(_hookId, nCode, wParam, lParam);
 
@@ -45,7 +45,7 @@ namespace ErogeHelper.KeyMapping
                     SetKeyEvent(keyEventList, KeyCode.RETURN, 0, (UIntPtr)KEYBOARDMANAGER_SINGLEKEY_FLAG);
                 }
 
-                SendInput(1, keyEventList, Marshal.SizeOf(keyEventList[0]));
+                SendInput(1, keyEventList, INPUT.Size);
                 return new IntPtr(1);
             }
 
@@ -94,10 +94,7 @@ namespace ErogeHelper.KeyMapping
         {
             internal InputType Type;
             internal InputUnion Data;
-            internal static int Size
-            {
-                get { return Marshal.SizeOf(typeof(INPUT)); }
-            }
+            internal static int Size => Marshal.SizeOf<INPUT>();
         }
 
         public enum InputType : uint

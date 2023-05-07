@@ -29,9 +29,7 @@ public static class TouchConversionHooker
         if (nCode < 0)
             return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
 
-        var obj = Marshal.PtrToStructure(lParam, typeof(User32.MSLLHOOKSTRUCT));
-        if (obj is not User32.MSLLHOOKSTRUCT info)
-            return User32.CallNextHookEx(_hookId!, nCode, wParam, lParam);
+        var info = Marshal.PtrToStructure<User32.MSLLHOOKSTRUCT>(lParam);
 
         var extraInfo = (uint)info.dwExtraInfo;
         if ((extraInfo & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH)

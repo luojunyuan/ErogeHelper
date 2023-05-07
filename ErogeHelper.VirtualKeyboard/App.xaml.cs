@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ErogeHelper.VirtualKeyboard
 {
@@ -10,6 +12,31 @@ namespace ErogeHelper.VirtualKeyboard
     public partial class App : Application
     {
         public static IntPtr GameWindowHandle { get; set; } = (IntPtr)int.Parse(Environment.GetCommandLineArgs()[1]);
+
+        private void Application_Startup(object sender, StartupEventArgs e) => DisableWPFTabletSupport();
+
+        private static void DisableWPFTabletSupport()
+        {
+            TabletDeviceCollection devices = Tablet.TabletDevices;
+
+            if (devices.Count > 0)
+            {
+                object stylusLogic = typeof(InputManager).InvokeMember("StylusLogic",
+                            BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
+                            null, InputManager.Current, null);
+                if (stylusLogic != null)
+                {
+                    Type stylusLogicType = stylusLogic.GetType();
+                    while (devices.Count > 0)
+                    {
+                        stylusLogicType.InvokeMember("OnTabletRemoved",
+                                BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.NonPublic,
+                                null, stylusLogic, new object[] { (uint)0 });
+                    }
+                }
+
+            }
+        }
     }
 
     public static class User32

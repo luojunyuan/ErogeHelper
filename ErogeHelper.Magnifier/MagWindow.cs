@@ -29,7 +29,7 @@ namespace ErogeHelper.Magnifier
             StaticWndProcDelegate = HostWndProc;
             var wndClass = new WNDCLASSEX
             {
-                cbSize = (uint)Marshal.SizeOf(typeof(WNDCLASSEX)),
+                cbSize = (uint)Marshal.SizeOf<WNDCLASSEX>(),
                 lpfnWndProc = StaticWndProcDelegate,
                 hInstance = hInstance,
                 lpszClassName = WindowClass,
