@@ -29,7 +29,9 @@ namespace ErogeHelper.Magnifier
                  WinEventHookInternalFlags);
 
             GetWindowRect(windowHandle, out var rect);
-            _windowLocation = new Point(rect.Left, rect.Top);
+            GetClientRect(windowHandle, out var rectClient);
+            var newRect = RemappingWindowRect(rect, rectClient);
+            _windowLocation = new Point(newRect.Left, newRect.Top);
         }
 
         private const WINEVENT WinEventHookInternalFlags = WINEVENT.WINEVENT_INCONTEXT | WINEVENT.WINEVENT_SKIPOWNPROCESS;
@@ -56,13 +58,14 @@ namespace ErogeHelper.Magnifier
                 idObject == OBJID_WINDOW && idChild == SWEH_CHILDID_SELF)
             {
                 GetWindowRect(hWnd, out var rect);
-                var newPos = new Point(rect.Left, rect.Top);
+                GetClientRect(hWnd, out var rectClient);
+                var newRect = RemappingWindowRect(rect, rectClient);
+                var newPos = new Point(newRect.Left, newRect.Top);
                 if (newPos != _windowLocation)
                 {
                     WindowPositionDeltaChanged.Invoke(this, new Point(newPos.X - _windowLocation.X, newPos.Y - _windowLocation.Y));
                     _windowLocation = newPos;
                 }
-
             }
         }
 
@@ -70,6 +73,18 @@ namespace ErogeHelper.Magnifier
         {
             _gcSafetyHandle.Free();
             UnhookWinEvent(_windowsEventHook);
+        }
+
+        private RECT RemappingWindowRect(RECT rect, RECT rectClient)
+        {
+            var winShadow = (rect.Width - rectClient.Right) / 2;
+            var left = rect.Left + winShadow;
+
+            var wholeHeight = rect.Bottom - rect.Top;
+            var winTitleHeight = wholeHeight - rectClient.Height - winShadow;
+            var top = rect.Top + winTitleHeight;
+
+            return new RECT(left, top, left + rectClient.Width, top + rectClient.Height);
         }
 
         [DllImport("user32.dll", SetLastError = false, ExactSpelling = true)]
@@ -92,6 +107,9 @@ namespace ErogeHelper.Magnifier
         [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport("user32.dll")]
         public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
