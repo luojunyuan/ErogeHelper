@@ -2,6 +2,7 @@
 .vscode/
 bin/
 obj/
+Publish/
 
 *.user
 LEConfig.xml

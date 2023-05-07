@@ -110,7 +110,8 @@ public partial class Form1 : Form
             const string exe2 = PreferArm64Key + "ErogeHelper.AssistiveTouch.exe";
             const string exe3 = PreferArm64Key + "ErogeHelper.VirtualKeyboard.exe";
             const string exe4 = PreferArm64Key + "ErogeHelper.KeyMapping.exe";
-            const string exe5 = PreferArm64Key + "Preference.exe";
+            const string exe5 = PreferArm64Key + "ErogeHelper.Magnifier.exe";
+            const string exe6 = PreferArm64Key + "Preference.exe";
             using var key1 = Registry.LocalMachine.CreateSubKey(exe1, true);
             key1.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key2 = Registry.LocalMachine.CreateSubKey(exe2, true);
@@ -121,6 +122,8 @@ public partial class Form1 : Form
             key4.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
             using var key5 = Registry.LocalMachine.CreateSubKey(exe5, true);
             key5.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
+            using var key6 = Registry.LocalMachine.CreateSubKey(exe6, true);
+            key6.SetValue("PreferredMachine", 0xAA64, RegistryValueKind.DWord);
         }
 
         MessageBox.Show("Register done", "ErogeHelper");

@@ -20,13 +20,10 @@ namespace ErogeHelper.KeyMapping
 
             KeyboardHooker.Install(gameWindowHandle);
 
-            while (true)
+            while (GetMessage(out var msg, IntPtr.Zero, 0, 0))
             {
-                if (GetMessage(out var msg, IntPtr.Zero, 0, 0))
-                {
-                    TranslateMessage(msg);
-                    DispatchMessage(msg);
-                }
+                TranslateMessage(msg);
+                DispatchMessage(msg);
             }
         }
 
