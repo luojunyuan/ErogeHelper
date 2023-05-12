@@ -48,17 +48,20 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     }
     catch (ArgumentException ex) when (ex.Message == string.Empty)
     {
-        MessageBox.ShowX(Strings.App_LENotSetup, splash);
+        splash.Close();
+        MessageBox.Show(Strings.App_LENotSetup);
         return;
     }
     catch (ArgumentException ex) when (ex.Message != string.Empty)
     {
-        MessageBox.ShowX(Strings.App_LENotFound + ex.Message, splash);
+        splash.Close();
+        MessageBox.Show(Strings.App_LENotFound + ex.Message);
         return;
     }
     catch (InvalidOperationException)
     {
-        MessageBox.ShowX(Strings.App_LENotSupport, splash);
+        splash.Close();
+        MessageBox.Show(Strings.App_LENotSupport);
         return;
     }
 
