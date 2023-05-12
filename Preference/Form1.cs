@@ -1,10 +1,10 @@
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
-using System.Windows.Forms;
 
 namespace Preference;
 
@@ -60,17 +60,20 @@ public partial class Form1 : Form
 
         if (!File.Exists(KeyMappingPath))
         {
-            KeytwoEnter.Visible = false;
+            KeytwoEnter.Enabled = false;
             if (KeytwoEnter.Checked)
             {
                 KeytwoEnter.Checked = false;
                 KeytwoEnter_CheckedChanged(KeytwoEnter, new());
             }
         }
+
+        StartProcess.Enabled = false;
+        ProcessComboBox.DisplayMember = "Title";
+        ProcessComboBox.DataSource = Processes;
     }
 
     static readonly string KeyMappingPath = Path.Combine(AppContext.BaseDirectory, "ErogeHelper.KeyMapping.exe");
-    const string MagTouchSystemPath = @"C:\Windows\ErogeHelper.MagTouch.exe";
 
     const string ExeName = "SystemFileAssociations\\.exe\\shell\\ErogeHelper";
     const string CommandPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\";
@@ -188,10 +191,10 @@ public partial class Form1 : Form
 
         b.FlatStyle = FlatStyle.System;
         SendMessage(b.Handle, BCM_SETSHIELD, 0, 0xFFFFFFFF);
-    }
 
-    [DllImport("user32.dll")]
-    private static extern int SendMessage(IntPtr hWnd, uint msg, uint wParam, uint lParam);
+        [DllImport("user32.dll")]
+        static extern int SendMessage(IntPtr hWnd, uint msg, uint wParam, uint lParam);
+    }
 
     private void ScreenShot_CheckedChanged(object sender, EventArgs e)
     {
@@ -233,6 +236,54 @@ public partial class Form1 : Form
                 MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
                 $"Details:\n\n{ex.StackTrace}");
             }
+        }
+    }
+
+    public BindingList<ProcessDataModel> Processes { get; } = new();
+
+    private FilterProcessService _filterProcessService = new();
+
+    private async void ProcessComboBox_DropDown(object sender, EventArgs e)
+    {
+        List<ProcessDataModel>? newProcessesList = null;
+        await Task.Run(() =>
+        {
+            newProcessesList = _filterProcessService
+                .Filter()
+                .ToList();
+        });
+
+        Processes
+            .Where(p => !newProcessesList!.Contains(p))
+            .ToList()
+            .ForEach(p => Processes.Remove(p));
+
+        newProcessesList
+            .Where(p => !Processes.Contains(p))
+            .ToList()
+            .ForEach(p => Processes.Add(p));
+    }
+
+    private void ProcessComboBox_SelectedIndexChanged(object sender, EventArgs e) =>
+        StartProcess.Enabled = ProcessComboBox.SelectedItem is not null;
+
+    private void StartProcess_Click(object sender, EventArgs e)
+    {
+        var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
+       
+        if (selectedProcess.Proc.HasExited)
+        {
+            Processes.Remove(selectedProcess);
+        }
+        else
+        {
+            var selectedGamePath = selectedProcess.Proc.MainModule?.FileName;
+            if (selectedGamePath is null)
+                throw new ArgumentNullException(nameof(selectedGamePath), @"Can not find the process's path");
+            selectedGamePath = '"' + selectedGamePath + '"';
+
+            Process.Start("ErogeHelper.exe", selectedGamePath);
+            Close();
         }
     }
 }

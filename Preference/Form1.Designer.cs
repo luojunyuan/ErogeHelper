@@ -28,6 +28,7 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ScreenShot = new System.Windows.Forms.CheckBox();
             this.KeytwoEnter = new System.Windows.Forms.CheckBox();
@@ -37,12 +38,20 @@ partial class Form1
             this.LEPathTextbox = new System.Windows.Forms.TextBox();
             this.LEPathDiaboxButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.ProcessComboBox = new System.Windows.Forms.ComboBox();
+            this.StartProcess = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.form1BindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // ScreenShot
             // 
             this.ScreenShot.AutoSize = true;
-            this.ScreenShot.Location = new System.Drawing.Point(64, 212);
+            this.ScreenShot.Location = new System.Drawing.Point(38, 227);
             this.ScreenShot.Name = "ScreenShot";
             this.ScreenShot.Size = new System.Drawing.Size(430, 28);
             this.ScreenShot.TabIndex = 0;
@@ -53,7 +62,7 @@ partial class Form1
             // KeytwoEnter
             // 
             this.KeytwoEnter.AutoSize = true;
-            this.KeytwoEnter.Location = new System.Drawing.Point(64, 314);
+            this.KeytwoEnter.Location = new System.Drawing.Point(38, 329);
             this.KeytwoEnter.Name = "KeytwoEnter";
             this.KeytwoEnter.Size = new System.Drawing.Size(300, 28);
             this.KeytwoEnter.TabIndex = 1;
@@ -84,7 +93,7 @@ partial class Form1
             // FullscreenMask
             // 
             this.FullscreenMask.AutoSize = true;
-            this.FullscreenMask.Location = new System.Drawing.Point(64, 265);
+            this.FullscreenMask.Location = new System.Drawing.Point(38, 280);
             this.FullscreenMask.Name = "FullscreenMask";
             this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
             this.FullscreenMask.TabIndex = 4;
@@ -94,14 +103,14 @@ partial class Form1
             // 
             // LEPathTextbox
             // 
-            this.LEPathTextbox.Location = new System.Drawing.Point(64, 155);
+            this.LEPathTextbox.Location = new System.Drawing.Point(38, 170);
             this.LEPathTextbox.Name = "LEPathTextbox";
             this.LEPathTextbox.Size = new System.Drawing.Size(263, 31);
             this.LEPathTextbox.TabIndex = 8;
             // 
             // LEPathDiaboxButton
             // 
-            this.LEPathDiaboxButton.Location = new System.Drawing.Point(353, 134);
+            this.LEPathDiaboxButton.Location = new System.Drawing.Point(327, 149);
             this.LEPathDiaboxButton.Name = "LEPathDiaboxButton";
             this.LEPathDiaboxButton.Size = new System.Drawing.Size(130, 52);
             this.LEPathDiaboxButton.TabIndex = 9;
@@ -112,32 +121,76 @@ partial class Form1
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(60, 115);
+            this.label1.Location = new System.Drawing.Point(34, 130);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(226, 24);
             this.label1.TabIndex = 10;
             this.label1.Text = "Locate Emulator Path";
+            // 
+            // ProcessComboBox
+            // 
+            this.ProcessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ProcessComboBox.FormattingEnabled = true;
+            this.ProcessComboBox.Location = new System.Drawing.Point(38, 65);
+            this.ProcessComboBox.Name = "ProcessComboBox";
+            this.ProcessComboBox.Size = new System.Drawing.Size(263, 32);
+            this.ProcessComboBox.TabIndex = 11;
+            this.ProcessComboBox.DropDown += new System.EventHandler(this.ProcessComboBox_DropDown);
+            this.ProcessComboBox.SelectedIndexChanged += new System.EventHandler(this.ProcessComboBox_SelectedIndexChanged);
+            // 
+            // StartProcess
+            // 
+            this.StartProcess.Location = new System.Drawing.Point(327, 55);
+            this.StartProcess.Name = "StartProcess";
+            this.StartProcess.Size = new System.Drawing.Size(130, 51);
+            this.StartProcess.TabIndex = 12;
+            this.StartProcess.Text = "Start";
+            this.StartProcess.UseVisualStyleBackColor = true;
+            this.StartProcess.Click += new System.EventHandler(this.StartProcess_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.ProcessComboBox);
+            this.groupBox1.Controls.Add(this.StartProcess);
+            this.groupBox1.Controls.Add(this.ScreenShot);
+            this.groupBox1.Controls.Add(this.KeytwoEnter);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.FullscreenMask);
+            this.groupBox1.Controls.Add(this.LEPathDiaboxButton);
+            this.groupBox1.Controls.Add(this.LEPathTextbox);
+            this.groupBox1.Location = new System.Drawing.Point(64, 124);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(518, 449);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Advanced";
+            // 
+            // form1BindingSource
+            // 
+            this.form1BindingSource.DataSource = typeof(Preference.Form1);
+            // 
+            // form1BindingSource1
+            // 
+            this.form1BindingSource1.DataSource = typeof(Preference.Form1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(797, 585);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.LEPathDiaboxButton);
-            this.Controls.Add(this.LEPathTextbox);
-            this.Controls.Add(this.FullscreenMask);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Unregister);
             this.Controls.Add(this.Register);
-            this.Controls.Add(this.KeytwoEnter);
-            this.Controls.Add(this.ScreenShot);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preference";
             this.Load += new System.EventHandler(this.OnLoaded);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
     }
 
@@ -151,4 +204,9 @@ partial class Form1
     private TextBox LEPathTextbox;
     private Button LEPathDiaboxButton;
     private Label label1;
+    private ComboBox ProcessComboBox;
+    private Button StartProcess;
+    private GroupBox groupBox1;
+    private BindingSource form1BindingSource1;
+    private BindingSource form1BindingSource;
 }
