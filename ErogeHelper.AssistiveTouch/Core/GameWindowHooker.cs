@@ -12,11 +12,11 @@ internal class GameWindowHooker : IDisposable
 
     private readonly GCHandle _gcSafetyHandle;
 
-    private readonly IntPtr _windowHandle;
+    private readonly IntPtr _touchWindow;
 
-    public GameWindowHooker(IntPtr windowHandle)
+    public GameWindowHooker(IntPtr touchWindow)
     {
-        _windowHandle = windowHandle;
+        _touchWindow = touchWindow;
 
         var targetThreadId = User32.GetWindowThreadProcessId(App.GameWindowHandle, out var pid);
 
@@ -31,9 +31,32 @@ internal class GameWindowHooker : IDisposable
         _throttle = new(300, rectClient =>
         {
             _rev = !_rev;
-            Win32.SetWindowSize(_windowHandle, rectClient.Width + (_rev ? 1 : -1), rectClient.Height);
+            Win32.SetWindowSize(_touchWindow, rectClient.Width + (_rev ? 1 : -1), rectClient.Height);
         });
+
+        // Lose focus
+        const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        var focusStatus = User32.GetForegroundWindow() == App.GameWindowHandle;
+        User32.WinEventProc winProc = (_, _, h, _, _, _, _) =>
+        {
+            if (focusStatus && h != App.GameWindowHandle)
+            {
+                FocusLost?.Invoke(this, new());
+                focusStatus = false;
+            }
+            else if (h == App.GameWindowHandle)
+            {
+                focusStatus = true;
+            }
+        };
+        var gcSafetyHandle = GCHandle.Alloc(winProc);
+        var focusEventHook = User32.SetWinEventHook(
+             EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
+             IntPtr.Zero, winProc, 0, 0,
+             User32.WINEVENT.WINEVENT_OUTOFCONTEXT);
     }
+
+    public EventHandler? FocusLost { get; set; }
 
     // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
     private const User32.WINEVENT WinEventHookInternalFlags = User32.WINEVENT.WINEVENT_INCONTEXT |
@@ -63,7 +86,7 @@ internal class GameWindowHooker : IDisposable
 
             if (rectClient.Size != _lastGameWindowSize)
             {
-                Win32.SetWindowSize(_windowHandle, rectClient.Width, rectClient.Height);
+                Win32.SetWindowSize(_touchWindow, rectClient.Width, rectClient.Height);
                 _lastGameWindowSize = rectClient.Size;
                 SizeChanged?.Invoke(this, rectClient.Size);
             }
@@ -75,10 +98,10 @@ internal class GameWindowHooker : IDisposable
             }
 
             var p = new Point();
-            User32.MapWindowPoints(_windowHandle, hWnd, ref p);
+            User32.MapWindowPoints(_touchWindow, hWnd, ref p);
             if (p.X != 0 || p.Y != 0)
             {
-                Win32.MoveWindowToOrigin(_windowHandle);
+                Win32.MoveWindowToOrigin(_touchWindow);
             }
         }
     }

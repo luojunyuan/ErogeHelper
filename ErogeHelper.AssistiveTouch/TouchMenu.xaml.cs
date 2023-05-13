@@ -44,7 +44,7 @@ namespace ErogeHelper.AssistiveTouch
             };
 
             #region Move Logic
-            var isOpen = false;
+            _isOpened = false;
             var isAnimating = false;
 
             void RepositionTransformAnimationStartPoint()
@@ -60,7 +60,7 @@ namespace ErogeHelper.AssistiveTouch
                 TouchMenuItem.ClickLocked = true;
                 Visibility = Visibility.Visible;
                 mainWindow.Touch.Visibility = Visibility.Hidden;
-                mainWindow.Touch.IsTouchMenuOpend = isOpen = isAnimating = true;
+                mainWindow.Touch.IsTouchMenuOpend = _isOpened = isAnimating = true;
 
                 _menuMainPage.Visibility = Visibility.Visible;
                 _menuGamePage.Visibility = Visibility.Collapsed;
@@ -105,7 +105,7 @@ namespace ErogeHelper.AssistiveTouch
                 // FIXEME: after window size change the touch position 
                 if (MovementStoryboard.AutoReverse == true)
                 {
-                    mainWindow.Touch.IsTouchMenuOpend = isOpen = isAnimating = false;
+                    mainWindow.Touch.IsTouchMenuOpend = _isOpened = isAnimating = false;
                     MovementStoryboard.AutoReverse = false;
                     mainWindow.Touch.Visibility = Visibility.Visible;
                     mainWindow.Touch.RaiseMenuClosedEvent(this);
@@ -124,8 +124,10 @@ namespace ErogeHelper.AssistiveTouch
             AnimationTool.BindingAnimation(MovementStoryboard, TransformYAnimation, this, AnimationTool.YProperty);
         }
 
+        private bool _isOpened;
         private readonly Action _closeMenuInternal;
         public void ManualClose() => _closeMenuInternal();
+        public bool IsOpened => _isOpened;
 
         /// <summary>
         /// Must initialize first after MainWindow loaded

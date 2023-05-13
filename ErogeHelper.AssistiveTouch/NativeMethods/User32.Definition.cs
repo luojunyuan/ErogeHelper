@@ -62,10 +62,10 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         [Flags]
         public enum WINEVENT
         {
-            WINEVENT_INCONTEXT = 0,
-            WINEVENT_OUTOFCONTEXT = 1,
+            WINEVENT_OUTOFCONTEXT = 0,
+            WINEVENT_SKIPOWNTHREAD = 1,
             WINEVENT_SKIPOWNPROCESS = 2,
-            WINEVENT_SKIPOWNTHREAD = 4,
+            WINEVENT_INCONTEXT = 4,
         }
 
         public enum WindowLongFlags
