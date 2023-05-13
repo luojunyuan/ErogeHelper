@@ -21,6 +21,7 @@
             <TextBlock  x:Name="ItemIcon" Text="&#xE11D;" FontFamily="Segoe MDL2 Assets" Foreground="White" />
         </Viewbox>
         <TextBlock x:Name="ItemText"
+            Visibility="{DynamicResource MenuItemTextVisible}"
             Padding="0 4 0 0" HorizontalAlignment="Center"
             Foreground="White" Text="Emoji" />
     </StackPanel>

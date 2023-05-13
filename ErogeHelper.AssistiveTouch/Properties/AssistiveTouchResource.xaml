@@ -13,6 +13,7 @@
     <Thickness x:Key="AssistiveTouchLayerThreeMargin" />
     <sys:Double x:Key="AssistiveTouchItemSize" />
     <SolidColorBrush x:Key="AssistiveTouchItemBackground" />
+    <Visibility x:Key="MenuItemTextVisible">Visible</Visibility>
 
     <!--  Static Resources  -->
 

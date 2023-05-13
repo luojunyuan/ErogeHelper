@@ -59,7 +59,7 @@ internal class GameWindowHooker : IDisposable
     public EventHandler? FocusLost { get; set; }
 
     // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwineventhook
-    private const User32.WINEVENT WinEventHookInternalFlags = User32.WINEVENT.WINEVENT_INCONTEXT |
+    private const User32.WINEVENT WinEventHookInternalFlags = User32.WINEVENT.WINEVENT_OUTOFCONTEXT |
                                                               User32.WINEVENT.WINEVENT_SKIPOWNPROCESS;
     //private const uint EventObjectFocus = 0x8005;
     private const uint EventObjectLocationChange = 0x800B;

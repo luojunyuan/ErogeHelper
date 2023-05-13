@@ -8,6 +8,12 @@ internal class XamlResource
 {
     public static string GetString(string text) => (string)Application.Current.Resources[text];
 
+    public static Visibility MenuItemTextVisible
+    {
+        get => (Visibility)Application.Current.Resources["MenuItemTextVisible"];
+        set => Application.Current.Resources["MenuItemTextVisible"] = value;
+    }
+
     public static double AssistiveTouchSize
     {
         get => (double)Application.Current.Resources["AssistiveTouchSize"];

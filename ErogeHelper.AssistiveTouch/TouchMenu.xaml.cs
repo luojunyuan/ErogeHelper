@@ -207,6 +207,16 @@ namespace ErogeHelper.AssistiveTouch
                 var newSize = newGameWindowHeight - EndureEdgeHeight;
                 Height = Width = newSize > 0 ? newSize : 0;
             }
+
+            var cur = XamlResource.MenuItemTextVisible;
+            if (cur == Visibility.Visible && newGameWindowHeight < 300) 
+            {
+                XamlResource.MenuItemTextVisible = Visibility.Collapsed;
+            }
+            else if (cur == Visibility.Collapsed && newGameWindowHeight >= 300)
+            {
+                XamlResource.MenuItemTextVisible = Visibility.Visible;
+            }
         }
 
         private void PageNavigation(TouchMenuPageTag nav)
