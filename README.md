@@ -10,7 +10,7 @@ feature:
 
  * Automatic set game dpi compatible to "Application".
  * Help you tap in game without tap it twice.
- * Mapping the z key of the keyboard to the enter key. (if you need it)
+ * Mapping the z key of the keyboard to the enter key. (if you need)
  * Prevent accidental touches on screen edges
 
 todo:
