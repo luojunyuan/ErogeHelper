@@ -6,4 +6,8 @@
     <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ErogeHelper.AssistiveTouch\ErogeHelper.AssistiveTouch.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -37,9 +37,15 @@ namespace Preference
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
 
-        public IniFile(string IniPath)
+        
+        private static readonly string RoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static readonly string ConfigFilePath = Path.Combine(RoamingPath, "ErogeHelper", "EHConfig.ini");
+        
+        public static readonly string ConfigFolder = Path.Combine(RoamingPath, "ErogeHelper");
+
+        public IniFile()
         {
-            path = IniPath;
+            path = ConfigFilePath;
         }
 
         public string? Read(string Key, string? Section = null)
@@ -51,6 +57,9 @@ namespace Preference
 
         public void Write(string? Key, string? Value, string? Section = null)
         {
+            if (!Directory.Exists(ConfigFolder))
+                Directory.CreateDirectory(ConfigFolder);
+
             WritePrivateProfileString(Section ?? EXE, Key, Value, path);
         }
 

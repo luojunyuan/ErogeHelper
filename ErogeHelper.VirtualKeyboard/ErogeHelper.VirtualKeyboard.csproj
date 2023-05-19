@@ -9,7 +9,13 @@
     <BaseOutputPath>..\bin</BaseOutputPath>
   </PropertyGroup>
   
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="WindowsInput" Version="6.4.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="RepeatVirtualButton.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

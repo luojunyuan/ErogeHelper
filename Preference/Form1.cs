@@ -12,10 +12,6 @@ public partial class Form1 : Form
 {
     private readonly int CmdMode;
 
-    private static readonly string RoamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    private static readonly string ConfigFolder = Path.Combine(RoamingPath, "ErogeHelper");
-    private static readonly string ConfigFilePath = Path.Combine(RoamingPath, "ErogeHelper", "EHConfig.ini");
-
     public Form1(int cmdMode = 0)
     {
         CmdMode = cmdMode;
@@ -48,15 +44,15 @@ public partial class Form1 : Form
                 break;
         }
 
-        var config = new IniFile(ConfigFilePath);
+        var config = new IniFile();
         ScreenShot.Checked = bool.Parse(config.Read("ScreenShotTradition") ?? "false");
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
 
         LEPathTextbox.Text = config.Read("LEPath") ?? IniFile.LEPathInRegistry();
 
-        if (!Directory.Exists(ConfigFolder))
-            Directory.CreateDirectory(ConfigFolder);
+        if (!Directory.Exists(IniFile.ConfigFolder))
+            DeleteConfigButton.Visible = false;
 
         if (!File.Exists(KeyMappingPath))
         {
@@ -198,20 +194,20 @@ public partial class Form1 : Form
 
     private void ScreenShot_CheckedChanged(object sender, EventArgs e)
     {
-        var config = new IniFile(ConfigFilePath);
+        var config = new IniFile();
         config.Write("ScreenShotTradition", ScreenShot.Checked.ToString());
 
     }
 
     private void KeytwoEnter_CheckedChanged(object sender, EventArgs e)
     {
-        var config = new IniFile(ConfigFilePath);
+        var config = new IniFile();
         config.Write("UseEnterKeyMapping", KeytwoEnter.Checked.ToString());
     }
 
     private void FullscreenMask_CheckedChanged(object sender, EventArgs e)
     {
-        var config = new IniFile(ConfigFilePath);
+        var config = new IniFile();
         config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
     }
 
@@ -226,9 +222,8 @@ public partial class Form1 : Form
         {
             try
             {
-                var sr = new StreamReader(openFileDialog1.FileName);
-                LEPathTextbox.Text = sr.ReadToEnd();
-                var config = new IniFile(ConfigFilePath);
+                LEPathTextbox.Text = openFileDialog1.FileName;
+                var config = new IniFile();
                 config.Write("LEPath", LEPathTextbox.Text);
             }
             catch (SecurityException ex)
@@ -285,5 +280,17 @@ public partial class Form1 : Form
             Process.Start("ErogeHelper.exe", selectedGamePath);
             Close();
         }
+    }
+
+    private void DeleteConfigButton_Click(object sender, EventArgs e)
+    {
+        LEPathTextbox.Text = IniFile.LEPathInRegistry();
+        ScreenShot.Checked = false;
+        FullscreenMask.Checked = false;
+        KeytwoEnter.Checked = false;
+
+        Directory.Delete(IniFile.ConfigFolder, true);
+        MessageBox.Show("Delete configuration file succeed.", "ErogeHelper");
+        DeleteConfigButton.Enabled = false;
     }
 }

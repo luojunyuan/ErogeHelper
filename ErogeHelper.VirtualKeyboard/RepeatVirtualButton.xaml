@@ -1,0 +1,26 @@
+﻿<RepeatButton x:Class="ErogeHelper.VirtualKeyboard.RepeatVirtualButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ErogeHelper.VirtualKeyboard"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="75" d:Content="R" 
+        Foreground="White" BorderBrush="White" BorderThickness="3" VerticalContentAlignment="Center"
+        FontSize="40" Width="75" Height="75" 
+        HorizontalAlignment="Left" VerticalAlignment="Top">
+    <RepeatButton.Background>
+        <SolidColorBrush Opacity="0.002" Color="Black"/>
+    </RepeatButton.Background>
+
+    <RepeatButton.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="0" ShadowDepth="3" Direction="315" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </RepeatButton.Resources>
+</RepeatButton>

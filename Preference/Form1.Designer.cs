@@ -41,6 +41,7 @@ partial class Form1
             this.ProcessComboBox = new System.Windows.Forms.ComboBox();
             this.StartProcess = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.DeleteConfigButton = new System.Windows.Forms.Button();
             this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.form1BindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
@@ -51,7 +52,7 @@ partial class Form1
             // ScreenShot
             // 
             this.ScreenShot.AutoSize = true;
-            this.ScreenShot.Location = new System.Drawing.Point(38, 227);
+            this.ScreenShot.Location = new System.Drawing.Point(38, 217);
             this.ScreenShot.Name = "ScreenShot";
             this.ScreenShot.Size = new System.Drawing.Size(430, 28);
             this.ScreenShot.TabIndex = 0;
@@ -62,7 +63,7 @@ partial class Form1
             // KeytwoEnter
             // 
             this.KeytwoEnter.AutoSize = true;
-            this.KeytwoEnter.Location = new System.Drawing.Point(38, 329);
+            this.KeytwoEnter.Location = new System.Drawing.Point(38, 319);
             this.KeytwoEnter.Name = "KeytwoEnter";
             this.KeytwoEnter.Size = new System.Drawing.Size(300, 28);
             this.KeytwoEnter.TabIndex = 1;
@@ -74,7 +75,7 @@ partial class Form1
             // 
             this.Register.Location = new System.Drawing.Point(64, 34);
             this.Register.Name = "Register";
-            this.Register.Size = new System.Drawing.Size(154, 61);
+            this.Register.Size = new System.Drawing.Size(160, 64);
             this.Register.TabIndex = 2;
             this.Register.Text = "Register";
             this.Register.UseVisualStyleBackColor = true;
@@ -84,7 +85,7 @@ partial class Form1
             // 
             this.Unregister.Location = new System.Drawing.Point(249, 34);
             this.Unregister.Name = "Unregister";
-            this.Unregister.Size = new System.Drawing.Size(173, 61);
+            this.Unregister.Size = new System.Drawing.Size(160, 64);
             this.Unregister.TabIndex = 3;
             this.Unregister.Text = "Unregister";
             this.Unregister.UseVisualStyleBackColor = true;
@@ -93,7 +94,7 @@ partial class Form1
             // FullscreenMask
             // 
             this.FullscreenMask.AutoSize = true;
-            this.FullscreenMask.Location = new System.Drawing.Point(38, 280);
+            this.FullscreenMask.Location = new System.Drawing.Point(38, 270);
             this.FullscreenMask.Name = "FullscreenMask";
             this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
             this.FullscreenMask.TabIndex = 4;
@@ -103,16 +104,17 @@ partial class Form1
             // 
             // LEPathTextbox
             // 
-            this.LEPathTextbox.Location = new System.Drawing.Point(38, 170);
+            this.LEPathTextbox.Location = new System.Drawing.Point(38, 160);
             this.LEPathTextbox.Name = "LEPathTextbox";
+            this.LEPathTextbox.ReadOnly = true;
             this.LEPathTextbox.Size = new System.Drawing.Size(263, 31);
             this.LEPathTextbox.TabIndex = 8;
             // 
             // LEPathDiaboxButton
             // 
-            this.LEPathDiaboxButton.Location = new System.Drawing.Point(327, 149);
+            this.LEPathDiaboxButton.Location = new System.Drawing.Point(327, 139);
             this.LEPathDiaboxButton.Name = "LEPathDiaboxButton";
-            this.LEPathDiaboxButton.Size = new System.Drawing.Size(130, 52);
+            this.LEPathDiaboxButton.Size = new System.Drawing.Size(128, 64);
             this.LEPathDiaboxButton.TabIndex = 9;
             this.LEPathDiaboxButton.Text = "Select";
             this.LEPathDiaboxButton.UseVisualStyleBackColor = true;
@@ -121,7 +123,7 @@ partial class Form1
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 130);
+            this.label1.Location = new System.Drawing.Point(34, 120);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(226, 24);
             this.label1.TabIndex = 10;
@@ -131,7 +133,7 @@ partial class Form1
             // 
             this.ProcessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ProcessComboBox.FormattingEnabled = true;
-            this.ProcessComboBox.Location = new System.Drawing.Point(38, 65);
+            this.ProcessComboBox.Location = new System.Drawing.Point(38, 55);
             this.ProcessComboBox.Name = "ProcessComboBox";
             this.ProcessComboBox.Size = new System.Drawing.Size(263, 32);
             this.ProcessComboBox.TabIndex = 11;
@@ -140,9 +142,9 @@ partial class Form1
             // 
             // StartProcess
             // 
-            this.StartProcess.Location = new System.Drawing.Point(327, 55);
+            this.StartProcess.Location = new System.Drawing.Point(327, 45);
             this.StartProcess.Name = "StartProcess";
-            this.StartProcess.Size = new System.Drawing.Size(130, 51);
+            this.StartProcess.Size = new System.Drawing.Size(128, 64);
             this.StartProcess.TabIndex = 12;
             this.StartProcess.Text = "Start";
             this.StartProcess.UseVisualStyleBackColor = true;
@@ -150,6 +152,7 @@ partial class Form1
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.DeleteConfigButton);
             this.groupBox1.Controls.Add(this.ProcessComboBox);
             this.groupBox1.Controls.Add(this.StartProcess);
             this.groupBox1.Controls.Add(this.ScreenShot);
@@ -164,6 +167,16 @@ partial class Form1
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Advanced";
+            // 
+            // DeleteConfigButton
+            // 
+            this.DeleteConfigButton.Location = new System.Drawing.Point(38, 369);
+            this.DeleteConfigButton.Name = "DeleteConfigButton";
+            this.DeleteConfigButton.Size = new System.Drawing.Size(160, 64);
+            this.DeleteConfigButton.TabIndex = 13;
+            this.DeleteConfigButton.Text = "Clear Config";
+            this.DeleteConfigButton.UseVisualStyleBackColor = true;
+            this.DeleteConfigButton.Click += new System.EventHandler(this.DeleteConfigButton_Click);
             // 
             // form1BindingSource
             // 
@@ -184,7 +197,7 @@ partial class Form1
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Preference";
+            this.Text = "Preference - V1.0.0.0";
             this.Load += new System.EventHandler(this.OnLoaded);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -209,4 +222,5 @@ partial class Form1
     private GroupBox groupBox1;
     private BindingSource form1BindingSource1;
     private BindingSource form1BindingSource;
+    private Button DeleteConfigButton;
 }
