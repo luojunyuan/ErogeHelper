@@ -1,5 +1,4 @@
 using Microsoft.Win32;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -49,7 +48,17 @@ public partial class Form1 : Form
         KeytwoEnter.Checked = bool.Parse(config.Read("UseEnterKeyMapping") ?? "false");
         FullscreenMask.Checked = bool.Parse(config.Read("UseEdgeTouchMask") ?? "false");
 
-        LEPathTextbox.Text = config.Read("LEPath") ?? IniFile.LEPathInRegistry();
+        var lePath = config.Read("LEPath");
+        if (lePath != null) LEPathTextbox.Text = lePath;
+        else
+        {
+            var leInReg = IniFile.LEPathInRegistry();
+            if (leInReg != string.Empty)
+            {
+                LEPathTextbox.Text = leInReg;
+                config.Write("LEPath", leInReg);
+            }
+        }
 
         if (!Directory.Exists(IniFile.ConfigFolder))
             DeleteConfigButton.Visible = false;
@@ -253,7 +262,7 @@ public partial class Form1 : Form
             .ToList()
             .ForEach(p => Processes.Remove(p));
 
-        newProcessesList
+        newProcessesList!
             .Where(p => !Processes.Contains(p))
             .ToList()
             .ForEach(p => Processes.Add(p));
@@ -265,7 +274,7 @@ public partial class Form1 : Form
     private void StartProcess_Click(object sender, EventArgs e)
     {
         var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
-       
+
         if (selectedProcess.Proc.HasExited)
         {
             Processes.Remove(selectedProcess);

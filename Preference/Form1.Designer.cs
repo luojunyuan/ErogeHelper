@@ -28,183 +28,186 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.ScreenShot = new System.Windows.Forms.CheckBox();
-            this.KeytwoEnter = new System.Windows.Forms.CheckBox();
-            this.Register = new System.Windows.Forms.Button();
-            this.Unregister = new System.Windows.Forms.Button();
-            this.FullscreenMask = new System.Windows.Forms.CheckBox();
-            this.LEPathTextbox = new System.Windows.Forms.TextBox();
-            this.LEPathDiaboxButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ProcessComboBox = new System.Windows.Forms.ComboBox();
-            this.StartProcess = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.DeleteConfigButton = new System.Windows.Forms.Button();
-            this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.form1BindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource1)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // ScreenShot
-            // 
-            this.ScreenShot.AutoSize = true;
-            this.ScreenShot.Location = new System.Drawing.Point(38, 217);
-            this.ScreenShot.Name = "ScreenShot";
-            this.ScreenShot.Size = new System.Drawing.Size(430, 28);
-            this.ScreenShot.TabIndex = 0;
-            this.ScreenShot.Text = "Alt+ScreenPrint instead of Win+Shift+S";
-            this.ScreenShot.UseVisualStyleBackColor = true;
-            this.ScreenShot.CheckedChanged += new System.EventHandler(this.ScreenShot_CheckedChanged);
-            // 
-            // KeytwoEnter
-            // 
-            this.KeytwoEnter.AutoSize = true;
-            this.KeytwoEnter.Location = new System.Drawing.Point(38, 319);
-            this.KeytwoEnter.Name = "KeytwoEnter";
-            this.KeytwoEnter.Size = new System.Drawing.Size(300, 28);
-            this.KeytwoEnter.TabIndex = 1;
-            this.KeytwoEnter.Text = "z key instead of Enter key";
-            this.KeytwoEnter.UseVisualStyleBackColor = true;
-            this.KeytwoEnter.CheckedChanged += new System.EventHandler(this.KeytwoEnter_CheckedChanged);
-            // 
-            // Register
-            // 
-            this.Register.Location = new System.Drawing.Point(64, 34);
-            this.Register.Name = "Register";
-            this.Register.Size = new System.Drawing.Size(160, 64);
-            this.Register.TabIndex = 2;
-            this.Register.Text = "Register";
-            this.Register.UseVisualStyleBackColor = true;
-            this.Register.Click += new System.EventHandler(this.Register_Click);
-            // 
-            // Unregister
-            // 
-            this.Unregister.Location = new System.Drawing.Point(249, 34);
-            this.Unregister.Name = "Unregister";
-            this.Unregister.Size = new System.Drawing.Size(160, 64);
-            this.Unregister.TabIndex = 3;
-            this.Unregister.Text = "Unregister";
-            this.Unregister.UseVisualStyleBackColor = true;
-            this.Unregister.Click += new System.EventHandler(this.Unregister_Click);
-            // 
-            // FullscreenMask
-            // 
-            this.FullscreenMask.AutoSize = true;
-            this.FullscreenMask.Location = new System.Drawing.Point(38, 270);
-            this.FullscreenMask.Name = "FullscreenMask";
-            this.FullscreenMask.Size = new System.Drawing.Size(202, 28);
-            this.FullscreenMask.TabIndex = 4;
-            this.FullscreenMask.Text = "Fullscreen Mask";
-            this.FullscreenMask.UseVisualStyleBackColor = true;
-            this.FullscreenMask.CheckedChanged += new System.EventHandler(this.FullscreenMask_CheckedChanged);
-            // 
-            // LEPathTextbox
-            // 
-            this.LEPathTextbox.Location = new System.Drawing.Point(38, 160);
-            this.LEPathTextbox.Name = "LEPathTextbox";
-            this.LEPathTextbox.ReadOnly = true;
-            this.LEPathTextbox.Size = new System.Drawing.Size(263, 31);
-            this.LEPathTextbox.TabIndex = 8;
-            // 
-            // LEPathDiaboxButton
-            // 
-            this.LEPathDiaboxButton.Location = new System.Drawing.Point(327, 139);
-            this.LEPathDiaboxButton.Name = "LEPathDiaboxButton";
-            this.LEPathDiaboxButton.Size = new System.Drawing.Size(128, 64);
-            this.LEPathDiaboxButton.TabIndex = 9;
-            this.LEPathDiaboxButton.Text = "Select";
-            this.LEPathDiaboxButton.UseVisualStyleBackColor = true;
-            this.LEPathDiaboxButton.Click += new System.EventHandler(this.LEPathDialogButton_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 120);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(226, 24);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Locate Emulator Path";
-            // 
-            // ProcessComboBox
-            // 
-            this.ProcessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ProcessComboBox.FormattingEnabled = true;
-            this.ProcessComboBox.Location = new System.Drawing.Point(38, 55);
-            this.ProcessComboBox.Name = "ProcessComboBox";
-            this.ProcessComboBox.Size = new System.Drawing.Size(263, 32);
-            this.ProcessComboBox.TabIndex = 11;
-            this.ProcessComboBox.DropDown += new System.EventHandler(this.ProcessComboBox_DropDown);
-            this.ProcessComboBox.SelectedIndexChanged += new System.EventHandler(this.ProcessComboBox_SelectedIndexChanged);
-            // 
-            // StartProcess
-            // 
-            this.StartProcess.Location = new System.Drawing.Point(327, 45);
-            this.StartProcess.Name = "StartProcess";
-            this.StartProcess.Size = new System.Drawing.Size(128, 64);
-            this.StartProcess.TabIndex = 12;
-            this.StartProcess.Text = "Start";
-            this.StartProcess.UseVisualStyleBackColor = true;
-            this.StartProcess.Click += new System.EventHandler(this.StartProcess_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.DeleteConfigButton);
-            this.groupBox1.Controls.Add(this.ProcessComboBox);
-            this.groupBox1.Controls.Add(this.StartProcess);
-            this.groupBox1.Controls.Add(this.ScreenShot);
-            this.groupBox1.Controls.Add(this.KeytwoEnter);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.FullscreenMask);
-            this.groupBox1.Controls.Add(this.LEPathDiaboxButton);
-            this.groupBox1.Controls.Add(this.LEPathTextbox);
-            this.groupBox1.Location = new System.Drawing.Point(64, 124);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(518, 449);
-            this.groupBox1.TabIndex = 13;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Advanced";
-            // 
-            // DeleteConfigButton
-            // 
-            this.DeleteConfigButton.Location = new System.Drawing.Point(38, 369);
-            this.DeleteConfigButton.Name = "DeleteConfigButton";
-            this.DeleteConfigButton.Size = new System.Drawing.Size(160, 64);
-            this.DeleteConfigButton.TabIndex = 13;
-            this.DeleteConfigButton.Text = "Clear Config";
-            this.DeleteConfigButton.UseVisualStyleBackColor = true;
-            this.DeleteConfigButton.Click += new System.EventHandler(this.DeleteConfigButton_Click);
-            // 
-            // form1BindingSource
-            // 
-            this.form1BindingSource.DataSource = typeof(Preference.Form1);
-            // 
-            // form1BindingSource1
-            // 
-            this.form1BindingSource1.DataSource = typeof(Preference.Form1);
-            // 
-            // Form1
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(797, 585);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.Unregister);
-            this.Controls.Add(this.Register);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Preference - V1.0.0.0";
-            this.Load += new System.EventHandler(this.OnLoaded);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.form1BindingSource1)).EndInit();
-            this.ResumeLayout(false);
-
+        components = new System.ComponentModel.Container();
+        ScreenShot = new CheckBox();
+        KeytwoEnter = new CheckBox();
+        Register = new Button();
+        Unregister = new Button();
+        FullscreenMask = new CheckBox();
+        LEPathTextbox = new TextBox();
+        LEPathDiaboxButton = new Button();
+        label1 = new Label();
+        ProcessComboBox = new ComboBox();
+        StartProcess = new Button();
+        groupBox1 = new GroupBox();
+        DeleteConfigButton = new Button();
+        form1BindingSource = new BindingSource(components);
+        form1BindingSource1 = new BindingSource(components);
+        groupBox1.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)form1BindingSource).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)form1BindingSource1).BeginInit();
+        SuspendLayout();
+        // 
+        // ScreenShot
+        // 
+        ScreenShot.AutoSize = true;
+        ScreenShot.Location = new Point(38, 289);
+        ScreenShot.Margin = new Padding(3, 4, 3, 4);
+        ScreenShot.Name = "ScreenShot";
+        ScreenShot.Size = new Size(468, 36);
+        ScreenShot.TabIndex = 0;
+        ScreenShot.Text = "Alt+ScreenPrint instead of Win+Shift+S";
+        ScreenShot.UseVisualStyleBackColor = true;
+        ScreenShot.CheckedChanged += ScreenShot_CheckedChanged;
+        // 
+        // KeytwoEnter
+        // 
+        KeytwoEnter.AutoSize = true;
+        KeytwoEnter.Location = new Point(38, 425);
+        KeytwoEnter.Margin = new Padding(3, 4, 3, 4);
+        KeytwoEnter.Name = "KeytwoEnter";
+        KeytwoEnter.Size = new Size(320, 36);
+        KeytwoEnter.TabIndex = 1;
+        KeytwoEnter.Text = "z key instead of Enter key";
+        KeytwoEnter.UseVisualStyleBackColor = true;
+        KeytwoEnter.CheckedChanged += KeytwoEnter_CheckedChanged;
+        // 
+        // Register
+        // 
+        Register.Location = new Point(64, 45);
+        Register.Margin = new Padding(3, 4, 3, 4);
+        Register.Name = "Register";
+        Register.Size = new Size(160, 85);
+        Register.TabIndex = 2;
+        Register.Text = "Register";
+        Register.UseVisualStyleBackColor = true;
+        Register.Click += Register_Click;
+        // 
+        // Unregister
+        // 
+        Unregister.Location = new Point(249, 45);
+        Unregister.Margin = new Padding(3, 4, 3, 4);
+        Unregister.Name = "Unregister";
+        Unregister.Size = new Size(160, 85);
+        Unregister.TabIndex = 3;
+        Unregister.Text = "Unregister";
+        Unregister.UseVisualStyleBackColor = true;
+        Unregister.Click += Unregister_Click;
+        // 
+        // FullscreenMask
+        // 
+        FullscreenMask.AutoSize = true;
+        FullscreenMask.Location = new Point(38, 360);
+        FullscreenMask.Margin = new Padding(3, 4, 3, 4);
+        FullscreenMask.Name = "FullscreenMask";
+        FullscreenMask.Size = new Size(215, 36);
+        FullscreenMask.TabIndex = 4;
+        FullscreenMask.Text = "Fullscreen Mask";
+        FullscreenMask.UseVisualStyleBackColor = true;
+        FullscreenMask.CheckedChanged += FullscreenMask_CheckedChanged;
+        // 
+        // LEPathTextbox
+        // 
+        LEPathTextbox.Location = new Point(38, 213);
+        LEPathTextbox.Margin = new Padding(3, 4, 3, 4);
+        LEPathTextbox.Name = "LEPathTextbox";
+        LEPathTextbox.ReadOnly = true;
+        LEPathTextbox.Size = new Size(263, 39);
+        LEPathTextbox.TabIndex = 8;
+        // 
+        // LEPathDiaboxButton
+        // 
+        LEPathDiaboxButton.Location = new Point(327, 185);
+        LEPathDiaboxButton.Margin = new Padding(3, 4, 3, 4);
+        LEPathDiaboxButton.Name = "LEPathDiaboxButton";
+        LEPathDiaboxButton.Size = new Size(128, 85);
+        LEPathDiaboxButton.TabIndex = 9;
+        LEPathDiaboxButton.Text = "Select";
+        LEPathDiaboxButton.UseVisualStyleBackColor = true;
+        LEPathDiaboxButton.Click += LEPathDialogButton_Click;
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Location = new Point(34, 160);
+        label1.Name = "label1";
+        label1.Size = new Size(239, 32);
+        label1.TabIndex = 10;
+        label1.Text = "Locate Emulator Path";
+        // 
+        // ProcessComboBox
+        // 
+        ProcessComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        ProcessComboBox.FormattingEnabled = true;
+        ProcessComboBox.Location = new Point(38, 73);
+        ProcessComboBox.Margin = new Padding(3, 4, 3, 4);
+        ProcessComboBox.Name = "ProcessComboBox";
+        ProcessComboBox.Size = new Size(263, 40);
+        ProcessComboBox.TabIndex = 11;
+        ProcessComboBox.DropDown += ProcessComboBox_DropDown;
+        ProcessComboBox.SelectedIndexChanged += ProcessComboBox_SelectedIndexChanged;
+        // 
+        // StartProcess
+        // 
+        StartProcess.Location = new Point(327, 60);
+        StartProcess.Margin = new Padding(3, 4, 3, 4);
+        StartProcess.Name = "StartProcess";
+        StartProcess.Size = new Size(128, 85);
+        StartProcess.TabIndex = 12;
+        StartProcess.Text = "Start";
+        StartProcess.UseVisualStyleBackColor = true;
+        StartProcess.Click += StartProcess_Click;
+        // 
+        // groupBox1
+        // 
+        groupBox1.Controls.Add(DeleteConfigButton);
+        groupBox1.Controls.Add(ProcessComboBox);
+        groupBox1.Controls.Add(StartProcess);
+        groupBox1.Controls.Add(ScreenShot);
+        groupBox1.Controls.Add(KeytwoEnter);
+        groupBox1.Controls.Add(label1);
+        groupBox1.Controls.Add(FullscreenMask);
+        groupBox1.Controls.Add(LEPathDiaboxButton);
+        groupBox1.Controls.Add(LEPathTextbox);
+        groupBox1.Location = new Point(64, 165);
+        groupBox1.Margin = new Padding(3, 4, 3, 4);
+        groupBox1.Name = "groupBox1";
+        groupBox1.Padding = new Padding(3, 4, 3, 4);
+        groupBox1.Size = new Size(518, 599);
+        groupBox1.TabIndex = 13;
+        groupBox1.TabStop = false;
+        groupBox1.Text = "Advanced";
+        // 
+        // DeleteConfigButton
+        // 
+        DeleteConfigButton.Location = new Point(38, 492);
+        DeleteConfigButton.Margin = new Padding(3, 4, 3, 4);
+        DeleteConfigButton.Name = "DeleteConfigButton";
+        DeleteConfigButton.Size = new Size(160, 85);
+        DeleteConfigButton.TabIndex = 13;
+        DeleteConfigButton.Text = "Clear Config";
+        DeleteConfigButton.UseVisualStyleBackColor = true;
+        DeleteConfigButton.Click += DeleteConfigButton_Click;
+        // 
+        // Form1
+        // 
+        AutoScaleDimensions = new SizeF(13F, 32F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(797, 780);
+        Controls.Add(groupBox1);
+        Controls.Add(Unregister);
+        Controls.Add(Register);
+        Margin = new Padding(3, 4, 3, 4);
+        Name = "Form1";
+        ShowIcon = false;
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "Preference - V1.0.1.0";
+        Load += OnLoaded;
+        groupBox1.ResumeLayout(false);
+        groupBox1.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)form1BindingSource).EndInit();
+        ((System.ComponentModel.ISupportInitialize)form1BindingSource1).EndInit();
+        ResumeLayout(false);
     }
 
     #endregion
