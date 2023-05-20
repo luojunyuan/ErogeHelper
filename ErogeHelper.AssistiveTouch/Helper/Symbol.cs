@@ -29,6 +29,7 @@
         Cloud = 0xE753,
         DictionaryCloud = 0xEBC3,
         LowerBrightness = 0xEC8A,
+        Touchpad = 0xEFA5,
         Speech = 0xEFA9,
 
         ArrowUp8 = 0xF0AD,

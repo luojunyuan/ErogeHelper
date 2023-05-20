@@ -49,5 +49,10 @@
             Grid.Row="1" Grid.Column="2"
             Click="ActionCenterOnClickEvent" Symbol="DockRight"
             Text="{DynamicResource AssistiveTouch_ActionCenter}" />
+
+        <help:TouchMenuItem x:Name="VirtualTouchpad"
+            Grid.Row="2" Grid.Column="0"
+            Click="VirtualTouchpadOnClickEvent" Symbol="Touchpad"
+            Text="{DynamicResource AssistiveTouch_VirtualTouchpad}" />
     </Grid>
 </Page>

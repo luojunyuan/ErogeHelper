@@ -29,11 +29,13 @@ namespace ErogeHelper.AssistiveTouch.Menu
             var backTransform = AnimationTool.BottomOneTransform(moveDistance);
             var taskviewTransform = AnimationTool.LeftOneBottomOneTransform(moveDistance);
             var dockrightTransform = AnimationTool.RightOneBottomOneTransform(moveDistance);
+            var touchpadTransform = AnimationTool.LeftOneBottomTwoTransform(moveDistance);
             VolumeDown.SetCurrentValue(RenderTransformProperty, volumeDownTransform);
             ScreenShot.SetCurrentValue(RenderTransformProperty, screenshotTransform);
             Back.SetCurrentValue(RenderTransformProperty, backTransform);
             TaskView.SetCurrentValue(RenderTransformProperty, taskviewTransform);
             DockRight.SetCurrentValue(RenderTransformProperty, dockrightTransform);
+            VirtualTouchpad.SetCurrentValue(RenderTransformProperty, touchpadTransform);
 
             _volumeDownMoveAnimation.SetCurrentValue(DoubleAnimation.FromProperty, volumeDownTransform.X);
             _screenshotMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, screenshotTransform.X);
@@ -42,6 +44,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
             _taskviewMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, taskviewTransform.Y);
             _dockrightMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, dockrightTransform.X);
             _dockrightMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, dockrightTransform.Y);
+            _touchpadMoveXAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchpadTransform.X);
+            _touchpadMoveYAnimation.SetCurrentValue(DoubleAnimation.FromProperty, touchpadTransform.Y);
 
             _transitionInStoryboard.Begin();
         }
@@ -64,6 +68,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
         private readonly DoubleAnimation _taskviewMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _dockrightMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
         private readonly DoubleAnimation _dockrightMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        private readonly DoubleAnimation _touchpadMoveXAnimation = AnimationTool.TransformMoveToZeroAnimation;
+        private readonly DoubleAnimation _touchpadMoveYAnimation = AnimationTool.TransformMoveToZeroAnimation;
 
         private void InitializeAnimation()
         {
@@ -76,6 +82,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
             AnimationTool.BindingAnimation(_transitionInStoryboard, _dockrightMoveXAnimation, DockRight, AnimationTool.XProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _dockrightMoveYAnimation, DockRight, AnimationTool.YProperty);
             AnimationTool.BindingAnimation(_transitionInStoryboard, _screenshotMoveXAnimation, ScreenShot, AnimationTool.XProperty);
+            AnimationTool.BindingAnimation(_transitionInStoryboard, _touchpadMoveXAnimation, VirtualTouchpad, AnimationTool.XProperty);
+            AnimationTool.BindingAnimation(_transitionInStoryboard, _touchpadMoveYAnimation, VirtualTouchpad, AnimationTool.YProperty);
 
             _transitionInStoryboard.Completed += (_, _) =>
             {
@@ -88,6 +96,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     TaskView.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     Back.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                     DockRight.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
+                    VirtualTouchpad.SetCurrentValue(RenderTransformProperty, AnimationTool.ZeroTransform);
                 }
                 else
                 {
@@ -145,6 +154,12 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     .ClickChord(KeyCode.LWin, KeyCode.Shift, KeyCode.S)
                     .Invoke().ConfigureAwait(false);
             }
+        }
+
+        private void VirtualTouchpadOnClickEvent(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("launchwinapp", "ms-virtualtouchpad:");
+            ((MainWindow)Application.Current.MainWindow).Menu.ManualClose();
         }
     }
 }
