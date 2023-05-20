@@ -52,12 +52,7 @@ public partial class Form1 : Form
         if (lePath != null) LEPathTextbox.Text = lePath;
         else
         {
-            var leInReg = IniFile.LEPathInRegistry();
-            if (leInReg != string.Empty)
-            {
-                LEPathTextbox.Text = leInReg;
-                config.Write("LEPath", leInReg);
-            }
+            DefaultLEPath = IniFile.LEPathInRegistry();
         }
 
         if (!Directory.Exists(IniFile.ConfigFolder))
@@ -220,13 +215,18 @@ public partial class Form1 : Form
         config.Write("UseEdgeTouchMask", FullscreenMask.Checked.ToString());
     }
 
+    private string DefaultLEPath = string.Empty;
+
     private void LEPathDialogButton_Click(object sender, EventArgs e)
     {
         var openFileDialog1 = new OpenFileDialog
         {
             Filter = "Exe file |*.exe",
-            Title = "Please select the LEProc.exe file."
+            Title = "Please select the LEProc.exe file.",
         };
+        if (DefaultLEPath != string.Empty)
+            openFileDialog1.InitialDirectory = Path.GetDirectoryName(DefaultLEPath);
+
         if (openFileDialog1.ShowDialog() == DialogResult.OK)
         {
             try
@@ -293,7 +293,7 @@ public partial class Form1 : Form
 
     private void DeleteConfigButton_Click(object sender, EventArgs e)
     {
-        LEPathTextbox.Text = IniFile.LEPathInRegistry();
+        LEPathTextbox.Text = string.Empty;
         ScreenShot.Checked = false;
         FullscreenMask.Checked = false;
         KeytwoEnter.Checked = false;
