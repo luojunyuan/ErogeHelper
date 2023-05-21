@@ -25,19 +25,17 @@ if (!File.Exists(gamePath))
 }
 #endregion
 
-RunSplashScreenWrapper(args, gamePath);
+var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png")!;
+var splash = new SplashScreen(96, stream);
+new Thread(() => PreProcessing(args.Contains("-le"), gamePath, splash)).Start();
+
+splash.Run();
+
 
 // Wrapper for lazy load dlls (50ms startup speed)
 static string WinShortcutWrapper(string gamePath) =>
     WindowsShortcutFactory.WindowsShortcut.Load(gamePath).Path ?? "Resolve lnk file failed";
-static void RunSplashScreenWrapper(string[] args, string gamePath)
-{
-    var stream = typeof(Program).Assembly.GetManifestResourceStream("ErogeHelper.assets.klee.png")!;
-    var splash = new SplashScreen(96, stream);
-    new Thread(() => PreProcessing(args.Contains("-le"), gamePath, splash)).Start();
 
-    splash.Run();
-}
 static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 {
     #region Start Game
