@@ -4,11 +4,12 @@
   |
   | game path
   v
-+-------------+                           +--------------+
-| AppLauncher | .......................>  | ProcessStart |
-+-------------+    optional funciton      +--------------+
-  |
-  |
++-------------+ 
+| AppLauncher |
++-------------+
+  |                          +--------------+
+  | .......................> | ProcessStart |
+  |    optional funciton     +--------------+
   v
 Start ErogeHelper.AssistiveTouch.exe
 
