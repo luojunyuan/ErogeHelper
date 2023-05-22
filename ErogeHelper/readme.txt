@@ -4,18 +4,18 @@
   |
   | game path
   v
-+-------------+ 
-| AppLauncher |
-+-------------+
-  |                          +--------------+
++-------------+              +---------+
+| AppLauncher |     .......> | IpcMain | --> wait for touch first show
++-------------+     :        +---------+
+  |                 :        +--------------+
   | .......................> | ProcessStart |
   |    optional funciton     +--------------+
   v
 Start ErogeHelper.AssistiveTouch.exe
 
-+---------+
-| IpcMain | --> wait for touch first show
-+---------+
+
+
+
 
           +------------------+
    ---->  |   AppLauncher    | <---
