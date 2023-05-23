@@ -3,6 +3,12 @@ using SplashScreenGdip;
 using System.Diagnostics;
 using System.IO.Pipes;
 
+if (args.Length == 1 && int.TryParse(args[0], out var pid)) 
+{
+    Run(Process.GetProcessById(pid)); 
+    return;
+} 
+
 #region Arguments Check
 if (args.Length == 0)
 {
@@ -72,10 +78,18 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     leProc?.Kill();
     #endregion
 
+    Run(game, splash);
+    
+    // prevent exception when startup
+    splash.Close();
+}
+
+static void Run(Process game, SplashScreen? splash = null)
+{
     var pipeServer = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
     _ = new IpcMain(pipeServer);
 
-    IpcMain.Once("Loaded", splash.Close);
+    if (splash != null) IpcMain.Once("Loaded", splash!.Close);
 
     Environment.CurrentDirectory = AppContext.BaseDirectory;
     while (!game.HasExited)
@@ -83,12 +97,13 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
         var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
         if (gameWindowHandle == IntPtr.Zero) // process exit
         {
-            splash.Close();
+            splash?.Close();
             break;
         }
         else if (gameWindowHandle.ToInt32() == -1) // FindHandleFailed
         {
-            MessageBox.ShowX(Strings.App_Timeout, splash);
+            splash?.Close();
+            MessageBox.Show(Strings.App_Timeout);
             break;
         }
 
@@ -111,5 +126,4 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
 
         touch.WaitForExit();
     }
-    splash.Close();
 }
