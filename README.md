@@ -20,4 +20,5 @@ todo:
  - [ ] (1.1) Force the computer into sleep mode if the standby time exceeds the system-specified sleep time
  - [ ] (1.1) Alternative game fullscreen (by changing the system resolution with the game window style)
  - [ ] (1.1) Full customizable virtual keyboard
+ - [ ] (1.1) Take care of your controller for games
  - [ ] (1.2) Magnifier for text area
