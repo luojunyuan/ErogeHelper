@@ -2,9 +2,14 @@ it’s eroge helper!
 
 I care about anything that playing visual novel on a touch screen device.
 
+<details>
+<summary>ep. (NSFW)</summary>
+
 ![スクリーンショット 2023-05-20 2.44.30.png](https://p.inari.site/usr/497/6467b5fe4463d.png)
 
 ![スクリーンショット 2023-05-20 2.44.50.png](https://p.inari.site/usr/497/6467b5fc0dce1.png)
+
+</details>
 
 feature:
 
