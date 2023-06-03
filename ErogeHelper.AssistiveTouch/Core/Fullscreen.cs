@@ -12,16 +12,16 @@ internal class Fullscreen
 
     public static event EventHandler<bool>? FullscreenChanged;
 
-    public static void UpdateFullscreenStatus()
+    public static bool UpdateFullscreenStatus()
     {
         var isFullscreen = IsWindowFullscreen(App.GameWindowHandle);
         if (GameInFullscreen != isFullscreen)
             FullscreenChanged?.Invoke(null, isFullscreen);
-        GameInFullscreen = isFullscreen;
+        return GameInFullscreen = isFullscreen;
     }
 
     // See: http://www.msghelp.net/showthread.php?tid=67047&pid=740345
-    public static bool IsWindowFullscreen(IntPtr hwnd)
+    private static bool IsWindowFullscreen(IntPtr hwnd)
     {
         User32.GetWindowRect(hwnd, out var rect);
         return rect.left < 50 && rect.top < 50 &&
