@@ -37,9 +37,10 @@ namespace ErogeHelper.AssistiveTouch
 
             Loaded += (_, _) => mainWindow.SizeChanged += (_, e) =>
             {
-                if (e.HeightChanged && e.NewSize.Height > EndureEdgeHeight)
+                if ((e.HeightChanged && e.NewSize.Height > EndureEdgeHeight) ||
+                    e.WidthChanged && e.NewSize.Width > EndureEdgeHeight)
                 {
-                    UpdateMenuSize(e.NewSize.Height);
+                    UpdateMenuSize(e.NewSize.Height, e.NewSize.Width);
                 }
             };
 
@@ -129,15 +130,27 @@ namespace ErogeHelper.AssistiveTouch
         public void ManualClose() => _closeMenuInternal();
         public bool IsOpened => _isOpened;
 
+        public double Size
+        {
+            get => Width;
+            set => Height = Width = value;
+        }
+
+        public double MaxSize
+        {
+            get => MaxWidth;
+            set => MaxHeight = MaxWidth = value;
+        }
+
         /// <summary>
         /// Must initialize first after MainWindow loaded
         /// </summary>
         private void UpdateProperties(double touchSize)
         {
-            MaxHeight = MaxWidth = touchSize * 5;
-            EndureEdgeHeight = MaxHeight / 10;
+            MaxSize = touchSize * 5;
+            EndureEdgeHeight = MaxSize / 10;
             XamlResource.SetAssistiveTouchItemSize(touchSize / 2);
-            UpdateMenuSize(Application.Current.MainWindow.Height);
+            UpdateMenuSize(Application.Current.MainWindow.Height, Application.Current.MainWindow.Width);
 
             // Update width height animation
             UpdateMenuSizeAnimation(touchSize);
@@ -194,26 +207,26 @@ namespace ErogeHelper.AssistiveTouch
         /// <summary>
         /// When game window height changed, update this menu size.
         /// </summary>
-        private void UpdateMenuSize(double newGameWindowHeight)
+        private void UpdateMenuSize(double newGameWindowHeight, double newGameWindowWidth)
         {
             // The normal size of menu
-            if (newGameWindowHeight > EndureEdgeHeight + MaxHeight)
+            if (newGameWindowHeight > EndureEdgeHeight + MaxSize && newGameWindowWidth > EndureEdgeHeight + MaxSize)
             {
-                Height = Width = MaxHeight;
+                Size = MaxSize;
             }
             // Small scaled size of menu
             else
             {
-                var newSize = newGameWindowHeight - EndureEdgeHeight;
-                Height = Width = newSize > 0 ? newSize : 0;
+                var newSize = Math.Min(newGameWindowWidth, newGameWindowHeight) - EndureEdgeHeight;
+                Size = newSize > 0 ? newSize : 0;
             }
 
             var cur = XamlResource.MenuItemTextVisible;
-            if (cur == Visibility.Visible && newGameWindowHeight < 300) 
+            if (cur == Visibility.Visible && (newGameWindowHeight < 300 || newGameWindowWidth < 300)) 
             {
                 XamlResource.MenuItemTextVisible = Visibility.Collapsed;
             }
-            else if (cur == Visibility.Collapsed && newGameWindowHeight >= 300)
+            else if (cur == Visibility.Collapsed && (newGameWindowHeight >= 300 && newGameWindowWidth >= 300))
             {
                 XamlResource.MenuItemTextVisible = Visibility.Visible;
             }
