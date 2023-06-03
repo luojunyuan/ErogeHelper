@@ -1,6 +1,8 @@
 using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
@@ -15,6 +17,7 @@ public partial class Form1 : Form
     {
         CmdMode = cmdMode;
         InitializeComponent();
+        Text = $"Preference - V{typeof(Form1).Assembly.GetName().Version}";
     }
 
     private void OnLoaded(object sender, EventArgs e)
@@ -222,7 +225,7 @@ public partial class Form1 : Form
         var openFileDialog1 = new OpenFileDialog
         {
             Filter = "Exe file |*.exe",
-            Title = "Please select the LEProc.exe file.",
+            Title = "Please select the executable file"
         };
         if (DefaultLEPath != string.Empty)
             openFileDialog1.InitialDirectory = Path.GetDirectoryName(DefaultLEPath);
@@ -274,7 +277,7 @@ public partial class Form1 : Form
     private void StartProcess_Click(object sender, EventArgs e)
     {
         var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
-
+       
         if (selectedProcess.Proc.HasExited)
         {
             Processes.Remove(selectedProcess);
