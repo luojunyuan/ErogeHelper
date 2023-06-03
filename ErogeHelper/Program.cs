@@ -72,7 +72,8 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
     var (game, pids) = AppLauncher.ProcessCollect(Path.GetFileNameWithoutExtension(gamePath));
     if (game is null)
     {
-        MessageBox.ShowX(Strings.App_Timeout, splash);
+        splash.Close();
+        MessageBox.Show(Strings.App_Timeout);
         return;
     }
     leProc?.Kill();

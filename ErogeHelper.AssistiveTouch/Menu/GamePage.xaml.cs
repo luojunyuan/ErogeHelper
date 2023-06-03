@@ -1,7 +1,9 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
+using ErogeHelper.AssistiveTouch.NativeMethods;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -133,18 +135,48 @@ namespace ErogeHelper.AssistiveTouch.Menu
             };
         }
 
+        private static readonly bool IsAtelierKaguya = InitIsAtelierKaguya();
+
+        private static bool InitIsAtelierKaguya()
+        {
+            User32.GetWindowThreadProcessId(App.GameWindowHandle, out var pid);
+            var dir = Path.GetDirectoryName(Process.GetProcessById((int)pid).MainModule.FileName);
+            return File.Exists(Path.Combine(dir, "message.dat"));
+        }
+
         private const int UIMinimumResponseTime = 50;
         private async void FullScreenSwitcherOnClickEvent(object sender, EventArgs e)
         {
-            HwndTools.WindowLostFocus(MainWindow.Handle, true);
-            await WindowsInput.Simulate.Events()
-                .Hold(KeyCode.Alt)
-                .Hold(KeyCode.Enter)
-                .Wait(UIMinimumResponseTime)
-                .Release(KeyCode.Enter)
-                .Release(KeyCode.Alt)
-                .Invoke().ConfigureAwait(false);
-            HwndTools.WindowLostFocus(MainWindow.Handle, false);
+            if (IsAtelierKaguya)
+            {
+                if (Fullscreen.GameInFullscreen)
+                {
+                    await WindowsInput.Simulate.Events()
+                        .MoveTo(User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN), User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN))
+                        .Click(ButtonCode.Right)
+                        .Click(KeyCode.Up)
+                        .Wait(UIMinimumResponseTime)
+                        .Click(KeyCode.E)
+                        .Click(KeyCode.W)
+                        .Invoke().ConfigureAwait(false);
+                }
+                else
+                {
+                    User32.PostMessage(App.GameWindowHandle, User32.WindowMessage.WM_SYSCOMMAND, (IntPtr)User32.SysCommand.SC_MAXIMIZE);
+                }
+            }
+            else
+            {
+                HwndTools.WindowLostFocus(MainWindow.Handle, true);
+                await WindowsInput.Simulate.Events()
+                    .Hold(KeyCode.Alt)
+                    .Hold(KeyCode.Enter)
+                    .Wait(UIMinimumResponseTime)
+                    .Release(KeyCode.Enter)
+                    .Release(KeyCode.Alt)
+                    .Invoke().ConfigureAwait(false);
+                HwndTools.WindowLostFocus(MainWindow.Handle, false);
+            }
         }
 
         private readonly DoubleAnimation _fadeOutAnimation = AnimationTool.FadeOutAnimation;

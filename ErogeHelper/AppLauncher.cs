@@ -194,26 +194,21 @@ internal static class AppLauncher
         private const string User32Dll = "user32.dll";
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsIconic(IntPtr hWnd);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommand nCmdShow);
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public delegate bool EnumWindowsProc([In] IntPtr hwnd, [In] IntPtr lParam);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
 
         [DllImport(User32Dll, SetLastError = false, ExactSpelling = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport(User32Dll, CharSet = CharSet.Auto, ExactSpelling = true, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
         [StructLayout(LayoutKind.Sequential)]

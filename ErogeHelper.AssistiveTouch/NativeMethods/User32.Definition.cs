@@ -124,7 +124,9 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         public enum SysCommand
         {
-            SC_CLOSE = 0xF060
+            SC_CLOSE = 0xF060,
+            SC_RESTORE = 0xF120,
+            SC_MAXIMIZE = 0xF030,
         }
     }
 }

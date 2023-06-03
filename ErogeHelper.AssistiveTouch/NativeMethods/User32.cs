@@ -83,6 +83,9 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
         [DllImport(User32Dll)]
         public static extern int GetSystemMetrics(SystemMetric smIndex);
 
+        [DllImport(User32Dll, SetLastError = true)]
+        public static extern bool PostMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, [Optional] int lParam);
+
         // MainWindow initialize
 
         [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
