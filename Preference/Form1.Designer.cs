@@ -183,6 +183,7 @@ partial class Form1
             this.Controls.Add(this.Register);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preference - V0.0.0.0";
             this.Load += new System.EventHandler(this.OnLoaded);
