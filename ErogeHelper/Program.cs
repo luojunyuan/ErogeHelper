@@ -7,7 +7,7 @@ if (args.Length == 1 && int.TryParse(args[0], out var pid))
 {
     Run(Process.GetProcessById(pid)); 
     return;
-} 
+}
 
 #region Arguments Check
 if (args.Length == 0)
@@ -108,6 +108,7 @@ static void Run(Process game, SplashScreen? splash = null)
             break;
         }
 
+        if (Toast.IsAdmin) _ = Task.Run( () => Toast.Send("ErogeHelper is running as admin", 5));
         var touch = new Process()
         {
             StartInfo = new ProcessStartInfo

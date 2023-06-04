@@ -1,8 +1,6 @@
 using Microsoft.Win32;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
@@ -248,7 +246,7 @@ public partial class Form1 : Form
 
     public BindingList<ProcessDataModel> Processes { get; } = new();
 
-    private FilterProcessService _filterProcessService = new();
+    private readonly FilterProcessService _filterProcessService = new();
 
     private async void ProcessComboBox_DropDown(object sender, EventArgs e)
     {
@@ -277,13 +275,18 @@ public partial class Form1 : Form
     private void StartProcess_Click(object sender, EventArgs e)
     {
         var selectedProcess = (ProcessDataModel)ProcessComboBox.SelectedItem;
-       
+
         if (selectedProcess.Proc.HasExited)
         {
             Processes.Remove(selectedProcess);
         }
         else
         {
+            if (IsAdministrator)
+            {
+                var ret = MessageBox.Show("Are you sure to start as admin mode. Some function may not work.", "ErogeHelper", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (ret != DialogResult.OK) return;
+            }
             Process.Start("ErogeHelper.exe", $"{selectedProcess.Proc.Id}");
             Close();
         }
