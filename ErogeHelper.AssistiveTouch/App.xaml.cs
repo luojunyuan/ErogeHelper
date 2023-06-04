@@ -1,4 +1,7 @@
-﻿using System.IO.Pipes;
+﻿using ErogeHelper.AssistiveTouch.NativeMethods;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
@@ -19,9 +22,14 @@ public partial class App : Application
 
         GameWindowHandle = (IntPtr)int.Parse(e.Args[1]);
 
-        DisableWPFTabletSupport();
-
         Config.Load();
+        
+        User32.GetWindowThreadProcessId(GameWindowHandle, out var pid);
+        var dir = Path.GetDirectoryName(Process.GetProcessById((int)pid).MainModule.FileName);
+        if (File.Exists(Path.Combine(dir, "RIO.INI"))) // Shinario
+            return;
+        
+        DisableWPFTabletSupport();
     }
 
     private static void DisableWPFTabletSupport()
