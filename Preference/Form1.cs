@@ -284,12 +284,7 @@ public partial class Form1 : Form
         }
         else
         {
-            var selectedGamePath = selectedProcess.Proc.MainModule?.FileName;
-            if (selectedGamePath is null)
-                throw new ArgumentNullException(nameof(selectedGamePath), @"Can not find the process's path");
-            selectedGamePath = '"' + selectedGamePath + '"';
-
-            Process.Start("ErogeHelper.exe", selectedGamePath);
+            Process.Start("ErogeHelper.exe", $"{selectedProcess.Proc.Id}");
             Close();
         }
     }
