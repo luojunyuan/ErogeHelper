@@ -25,9 +25,9 @@
             Grid.Row="1" Grid.Column="1"
             Click="BackOnClickEvent" Symbol="Back" Text=" " />
 
-        <help:TouchMenuItem x:Name="Battery"
+        <help:ToggleTouchMenuItem x:Name="Battery"
             Grid.Row="1" Grid.Column="2"
-            Click="BatteryOnClickEvent" Symbol="VerticalBattery3"
+            Toggled="BatteryOnToggledEvent" Symbol="VerticalBattery3"
             Text="{DynamicResource AssistiveTouch_Battery}" />
 
     </Grid>
