@@ -68,6 +68,7 @@ namespace ErogeHelper.AssistiveTouch
                 _menuMainPage.Visibility = Visibility.Visible;
                 _menuGamePage.Visibility = Visibility.Collapsed;
                 _menuDevicePage.Visibility = Visibility.Collapsed;
+                _menuFunctionPage.Visibility = Visibility.Collapsed;
                 _menuWinMovePage.Visibility = Visibility.Collapsed;
 
                 RepositionTransformAnimationStartPoint();
