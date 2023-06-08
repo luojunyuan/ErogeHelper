@@ -19,6 +19,7 @@
 
                 <Frame x:Name="GameMenu" NavigationUIVisibility="Hidden" Padding="12" />
                 <Frame x:Name="DeviceMenu" NavigationUIVisibility="Hidden" Padding="12" />
+                <Frame x:Name="FunctionMenu" NavigationUIVisibility="Hidden" Padding="12" />
 
                 <Frame x:Name="WinMoveMenu" NavigationUIVisibility="Hidden" Padding="12" />
             </Grid>

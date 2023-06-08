@@ -13,6 +13,7 @@ namespace ErogeHelper.AssistiveTouch
         private readonly ITouchMenuPage _menuMainPage = new MainPage();
         private readonly ITouchMenuPage _menuDevicePage = new DevicePage();
         private readonly ITouchMenuPage _menuGamePage = new GamePage();
+        private readonly ITouchMenuPage _menuFunctionPage = new FunctionPage();
         private readonly ITouchMenuPage _menuWinMovePage = new WinMovePage();
         // also add visibility status in Move Logic
 
@@ -24,11 +25,13 @@ namespace ErogeHelper.AssistiveTouch
             MainMenu.Navigate(_menuMainPage);
             GameMenu.Navigate(_menuGamePage);
             DeviceMenu.Navigate(_menuDevicePage);
+            FunctionMenu.Navigate(_menuFunctionPage);
             WinMoveMenu.Navigate(_menuWinMovePage);
 
             _menuMainPage.PageChanged += (s, e) => PageNavigation(e.Tag);
             _menuGamePage.PageChanged += (s, e) => PageNavigation(e.Tag);
             _menuDevicePage.PageChanged += (s, e) => PageNavigation(e.Tag);
+            _menuFunctionPage.PageChanged += (s, e) => PageNavigation(e.Tag);
             _menuWinMovePage.PageChanged += (s, e) => PageNavigation(e.Tag);
 
             var mainWindow = (MainWindow)Application.Current.MainWindow;
@@ -251,6 +254,14 @@ namespace ErogeHelper.AssistiveTouch
                 case TouchMenuPageTag.DeviceBack:
                     _menuMainPage.Show(0);
                     _menuDevicePage.Close();
+                    break;
+                case TouchMenuPageTag.Function:
+                    _menuMainPage.Close();
+                    _menuFunctionPage.Show(Height / 3);
+                    break;
+                case TouchMenuPageTag.FunctionBack:
+                    _menuMainPage.Show(0);
+                    _menuFunctionPage.Close();
                     break;
 
                 case TouchMenuPageTag.WinMove:

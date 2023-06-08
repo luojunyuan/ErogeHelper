@@ -1,12 +1,13 @@
 ﻿<Page
-    x:Class="ErogeHelper.AssistiveTouch.Menu.MainPage"
+    x:Class="ErogeHelper.AssistiveTouch.Menu.FunctionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:help="clr-namespace:ErogeHelper.AssistiveTouch.Helper"
     mc:Ignorable="d"
-    d:DesignHeight="450" d:DesignWidth="450">
+    d:DesignHeight="300" d:DesignWidth="300" d:Visibility="Visible"
+    Visibility="Collapsed">
 
     <Grid x:Name="GridPanel">
         <Grid.ColumnDefinitions>
@@ -20,17 +21,14 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <help:TouchMenuItem x:Name="Device"
-            Grid.Row="0" Grid.Column="1"
-            Click="DeviceOnClick" Symbol="Tablet" Text="{DynamicResource AssistiveTouch_Device}" />
+        <help:TouchMenuItem x:Name="Back"
+            Grid.Row="1" Grid.Column="1"
+            Click="BackOnClickEvent" Symbol="Back" Text=" " />
 
-        <help:TouchMenuItem x:Name="Game"
-            Grid.Row="1" Grid.Column="0"
-            Click="GameOnClick" Symbol="Game" Text="{DynamicResource AssistiveTouch_Game}" />
-
-        <help:TouchMenuItem x:Name="Function"
+        <help:TouchMenuItem x:Name="Battery"
             Grid.Row="1" Grid.Column="2"
-            Click="FunctionOnClick" Symbol="Repair" Text="{DynamicResource AssistiveTouch_Function}" />
+            Click="BatteryOnClickEvent" Symbol="VerticalBattery3"
+            Text="{DynamicResource AssistiveTouch_Battery}" />
 
     </Grid>
 </Page>
