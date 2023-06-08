@@ -21,9 +21,10 @@ feature:
 todo:
 
  - [ ] (1.1) Win + D return to desktop shortcut (?)
- - [ ] (1.1) Lock screen desktop musk
- - [ ] (1.1) Force the computer into sleep mode if the standby time exceeds the system-specified sleep time
+ - [ ] (1.1) Battery discharge rate (assume display 1.avarage, 2.battery time remain, 3.real time passed)
+ - [ ] ~(1.1) Lock screen desktop mask (also adjust brightness)~
+ - [ ] ~(1.1) Force the computer into sleep mode if the standby time exceeds the system-specified sleep time~
  - [ ] (1.1) Alternative game fullscreen (by changing the system resolution with the game window style)
- - [ ] (1.1) Full customizable virtual keyboard
- - [ ] (1.1) Take care of your controller for games
- - [ ] (1.2) Magnifier for text area
+ - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
+ - [ ] (1.2) Take care of your controller for games **[pending investigation]**
+ - [ ] (1.3) Magnifier for text area **[massive work]**
