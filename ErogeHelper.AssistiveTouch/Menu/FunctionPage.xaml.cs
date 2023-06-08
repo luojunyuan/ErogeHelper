@@ -214,7 +214,7 @@ namespace ErogeHelper.AssistiveTouch.Menu
                 Background = new SolidColorBrush() { Color = Colors.Black, Opacity = 0.6 },
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Width = 224,
+                Width = double.NaN,
                 Height = 160,
                 Child = stackPanel
             };

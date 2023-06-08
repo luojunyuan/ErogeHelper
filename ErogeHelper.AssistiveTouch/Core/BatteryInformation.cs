@@ -40,7 +40,7 @@ namespace ErogeHelper.AssistiveTouch.Core
                 Win32.SP_DEVICE_INTERFACE_DETAIL_DATA deviceDetailData = new Win32.SP_DEVICE_INTERFACE_DETAIL_DATA();
                 deviceDetailData.CbSize = (IntPtr.Size == 8) ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
-                SetupDiGetDeviceInterfaceDetail(deviceHandle, ref deviceInterfaceData, ref deviceDetailData, Win32.DEVICE_INTERFACE_BUFFER_SIZE);
+                SetupDiGetDeviceInterfaceDetail(deviceHandle, ref deviceInterfaceData, ref deviceDetailData);
 
                 IntPtr batteryHandle = CreateFile(deviceDetailData.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, FileMode.Open, Win32.FILE_ATTRIBUTES.Normal);
 
@@ -203,12 +203,20 @@ namespace ErogeHelper.AssistiveTouch.Core
         }
 
         private static bool SetupDiGetDeviceInterfaceDetail(
-            IntPtr deviceInfoSet, ref Win32.SP_DEVICE_INTERFACE_DATA deviceInterfaceData, ref Win32.SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData, int deviceInterfaceDetailSize)
+            IntPtr deviceInfoSet, ref Win32.SP_DEVICE_INTERFACE_DATA deviceInterfaceData, ref Win32.SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData)
         {
-            //int tmpSize = Marshal.SizeOf(deviceInterfaceDetailData);
-            uint reqSize;
+            Win32.SetupDiGetDeviceInterfaceDetail(
+              deviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0,
+              out var reqSize, IntPtr.Zero);
+
             bool retval = Win32.SetupDiGetDeviceInterfaceDetail(
-                deviceInfoSet, ref deviceInterfaceData, ref deviceInterfaceDetailData, (uint)deviceInterfaceDetailSize, out reqSize, IntPtr.Zero);
+                deviceInfoSet, ref deviceInterfaceData, ref deviceInterfaceDetailData, reqSize,
+                out _, IntPtr.Zero);
+
+            //int tmpSize = Marshal.SizeOf(deviceInterfaceDetailData);
+            //bool retval = Win32.SetupDiGetDeviceInterfaceDetail(
+            //    deviceInfoSet, ref deviceInterfaceData, ref deviceInterfaceDetailData, (uint)deviceInterfaceDetailSize, 
+            //    out var reqSize, IntPtr.Zero);
 
             if (!retval)
             {
