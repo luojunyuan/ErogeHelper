@@ -1,5 +1,8 @@
 ﻿using ErogeHelper.AssistiveTouch.Core;
 using ErogeHelper.AssistiveTouch.Helper;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,6 +18,9 @@ namespace ErogeHelper.AssistiveTouch.Menu
         {
             InitializeComponent();
             InitializeAnimation();
+
+            if (SystemParameters.PowerLineStatus == PowerLineStatus.Unknown)
+                Battery.Visibility = Visibility.Collapsed;
         }
 
         public void Show(double moveDistance)
@@ -90,14 +96,17 @@ namespace ErogeHelper.AssistiveTouch.Menu
             {
                 Interval = 1000
             };
-            var totalSeconds = 0;
-            var countRateAlteration = 0;
+
+            // mWh capacity
             var lastCapacity = 0;
-            var currentCapacity = 0;
-            var displayCapacity = 0;
-            var currentRate = 0;
+            // negative mW (int) -> / 1000.0 -> W
+            // negative mW (int) -> / 3600.0 -> W per-second
+            var lastDischargeRate = 0;
+            var countRateAlteration = 0;
+            var displayCapacity = 0.0;
             var averageRate = 0;
-            var totalEnerge = 0;
+            var totalEnergy = 0;
+            var totalSeconds = 0;
             int percent7 = BatteryInfo.GetBatteryInformation().FullChargeCapacity * 6 / 100;
             var fromCharging = false;
             timer.Elapsed += (s, evt) =>
@@ -111,11 +120,9 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     });
                     countRateAlteration = 0;
                     lastCapacity = 0;
-                    currentCapacity = 0;
                     displayCapacity = 0;
-                    currentRate = 0;
                     averageRate = 0;
-                    totalEnerge = 0;
+                    totalEnergy = 0;
                     totalSeconds = 0;
                     fromCharging = true;
                     return;
@@ -135,47 +142,47 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     return;
                 }
 
+                totalSeconds++;
                 var info = BatteryInfo.GetBatteryInformation();
 
-                currentCapacity = (int)info.CurrentCapacity;
                 var newRate = info.DischargeRate;
-                countRateAlteration = (newRate == currentRate) switch
+                
+                // countRateAlteration
+                countRateAlteration = (info.DischargeRate == lastDischargeRate) switch
                 {
                     true => countRateAlteration + 1,
-                    false => ((Func<int>)(() =>
+                    false => 0, // reset
+                };
+
+                // displayCapacity
+                displayCapacity = (info.CurrentCapacity == lastCapacity) switch
+                {
+                    true => displayCapacity += info.DischargeRate / 3600.0,
+                    false => info.CurrentCapacity // reset|calibrate
+                };
+
+                // duration
+                var duration = (int)(displayCapacity / -info.DischargeRate * 3600); // hours to seconds
+
+                // averageRate 
+                (averageRate, totalEnergy) = (totalEnergy == 0) switch
+                {
+                    true => (info.DischargeRate, -info.DischargeRate), // init
+                    false => ((Func<(int, int)>)(() =>
                     {
-                        currentRate = newRate;
-                        return 0;
+                        totalEnergy -= info.DischargeRate;
+                        return (-totalEnergy / totalSeconds, totalEnergy);
                     }))()
                 };
 
-                var perSecondDecrease = currentRate / 3600.0;
-                displayCapacity = (currentCapacity == lastCapacity) switch
-                {
-                    true => displayCapacity += (int)perSecondDecrease,
-                    false => ((Func<int>)(() =>
-                    {
-                        lastCapacity = currentCapacity;
-                        return currentCapacity;
-                    }))()
-                };
-                var remainSecond = (int)(displayCapacity / -perSecondDecrease);
-
-                (averageRate, totalEnerge) = (averageRate == 0) switch
-                {
-                    true => (currentRate, -currentRate), // init
-                    false => (-totalEnerge / totalSeconds, totalEnerge - currentRate)
-                };
-
-                var predict = (displayCapacity - percent7) / -(averageRate/3600.0);
-
-                var aa = $"{Math.Round((double)-currentRate / 1000, 2)}Wh ({countRateAlteration}s)";
+                // duration2
+                var durationPredict = (displayCapacity - percent7) / -averageRate * 3600.0;
+                
+                var aa = $"{Math.Round(-info.DischargeRate / 1000.0, 2)} W ({countRateAlteration}s)";
                 var bb = (info.CurrentCapacity / (double)info.FullChargeCapacity).ToString("P0");
-                var cc = $"{displayCapacity}mWh, {remainSecond / 60}m{remainSecond % 60}s";
-                var dd = $"{Math.Round((double)-averageRate / 1000, 2)}Wh (average)";
-                var ee = $"{totalSeconds / 60}:{totalSeconds % 60}-{(int)predict / 60}:{(int)predict % 60} (predict)";
-
-                totalSeconds++;
+                var cc = $"{displayCapacity:f1}mWh, {duration / 60}m{duration % 60}s";
+                var dd = $"{Math.Round(-averageRate / 1000.0, 2)} W (average)";
+                var ee = $"{totalSeconds / 60}:{totalSeconds % 60}-{(int)durationPredict / 60}:{(int)durationPredict % 60} (predict)";
                 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -185,6 +192,8 @@ namespace ErogeHelper.AssistiveTouch.Menu
                     d.Text = dd;
                     e.Text = ee;
                 });
+                lastDischargeRate = info.DischargeRate;
+                lastCapacity = (int)info.CurrentCapacity;
             };
 
             return timer;
