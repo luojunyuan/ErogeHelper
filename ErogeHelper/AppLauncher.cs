@@ -56,9 +56,9 @@ internal static class AppLauncher
     public const int UIMinimumResponseTime = 50;
 
     /// <summary>
-    /// Get all pids of the game (timeout 20s).
+    /// Get all processes ids of the game (till found valid window handle, timeout 20s).
     /// </summary>
-    /// <param name="friendlyName">aka <see cref="Process.ProcessName"/></param>
+    /// <param name="friendlyName">aka <see cref="Process.ProcessName"/>, the process name equal filename</param>
     public static (Process?, int[]) ProcessCollect(string friendlyName)
     {
         var spendTime = new Stopwatch();

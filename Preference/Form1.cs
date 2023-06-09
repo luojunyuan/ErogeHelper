@@ -27,9 +27,14 @@ public partial class Form1 : Form
         if (exeKey == null)
             Unregister.Enabled = false;
 
+        if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+        {
+            Text += " (Arm64)";
+        }
+
         if (IsAdministrator)
         {
-            Text += " (Administrator)";
+            Text += " [Administrator]";
         }
 
         switch (CmdMode)
