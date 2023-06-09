@@ -90,5 +90,13 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         [DllImport(User32Dll, SetLastError = true, ExactSpelling = true)]
         public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+
+        // Set game window to top
+        
+        [DllImport(User32Dll)]
+        public static extern bool BringWindowToTop(IntPtr hWnd);
+
+        [DllImport(User32Dll)]
+        public static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
     }
 }

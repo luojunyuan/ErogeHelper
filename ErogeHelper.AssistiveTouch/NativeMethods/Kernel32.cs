@@ -15,5 +15,8 @@ namespace ErogeHelper.AssistiveTouch.NativeMethods
 
         [DllImport(Kernel32Dll, CharSet = CharSet.Unicode)]
         public static extern int GetPrivateProfileString(string section, string key, string @default, StringBuilder retVal, int size, string filePath);
+
+        [DllImport(Kernel32Dll)]
+        public static extern uint GetCurrentThreadId();
     }
 }

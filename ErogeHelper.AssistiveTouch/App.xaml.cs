@@ -23,12 +23,12 @@ public partial class App : Application
         GameWindowHandle = (IntPtr)int.Parse(e.Args[1]);
 
         Config.Load();
-        
+
         User32.GetWindowThreadProcessId(GameWindowHandle, out var pid);
         var dir = Path.GetDirectoryName(Process.GetProcessById((int)pid).MainModule.FileName);
         if (File.Exists(Path.Combine(dir, "RIO.INI"))) // Shinario
             return;
-        
+
         DisableWPFTabletSupport();
     }
 

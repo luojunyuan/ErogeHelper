@@ -23,6 +23,7 @@ public partial class MainWindow : Window
         Handle = new WindowInteropHelper(this).EnsureHandle();
         Dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
 
+        Loaded += (_, _) => ForceSetForegroundWindow(App.GameWindowHandle);
         ContentRendered += (_, _) => IpcRenderer.Send("Loaded");
 
         HwndTools.RemovePopupAddChildStyle(Handle);
@@ -38,5 +39,16 @@ public partial class MainWindow : Window
         {
             Fullscreen.MaskForScreen(this);
         }
+    }
+
+    private static void ForceSetForegroundWindow(IntPtr hWnd)
+    {
+        // Must use foreground window thread, whatever who is it.(expect task manager, almost explorer predictable:)
+        uint foreThread = User32.GetWindowThreadProcessId(User32.GetForegroundWindow(), out _);
+        uint appThread = Kernel32.GetCurrentThreadId();
+
+        User32.AttachThreadInput(foreThread, appThread, true);
+        User32.BringWindowToTop(hWnd);
+        User32.AttachThreadInput(foreThread, appThread, false);
     }
 }
