@@ -13,8 +13,9 @@ I care about anything that playing visual novel on a touch screen device.
 
 feature:
 
- * Automatic set game dpi compatible to "Application".
  * Help you tap in game without tap it twice.
+ * Battery and power consumption monitor.
+ * Automatic set game dpi compatible to "Application".
  * Mapping the z key of the keyboard to the enter key. (if you need)
  * Prevent accidental touches on screen edges
 
@@ -27,4 +28,4 @@ todo:
  - [ ] (1.2) Alternative game fullscreen (by changing the system resolution with the game window style)
  - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
  - [ ] (1.2) Take care of your controller for games **[pending investigation]**
- - [ ] (1.3) Magnifier for text area **[massive work]**
+ - [ ] (1.3) Magnifier for mouse point when use touch pad
