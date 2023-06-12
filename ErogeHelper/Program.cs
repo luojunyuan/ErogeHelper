@@ -77,6 +77,17 @@ static void PreProcessing(bool leEnable, string gamePath, SplashScreen splash)
         return;
     }
     leProc?.Kill();
+
+    try
+    {
+        _ = game.HasExited;
+    }
+    catch (System.ComponentModel.Win32Exception)
+    {
+        splash.Close();
+        MessageBox.Show(Strings.App_ElevatedError);
+        return;
+    }
     #endregion
 
     Run(game, splash);
