@@ -289,7 +289,7 @@ public partial class Form1 : Form
         {
             if (IsAdministrator)
             {
-                var ret = MessageBox.Show("Are you sure to start as admin mode. Some function may not work.", "ErogeHelper", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                var ret = MessageBox.Show("Waring: you are about running ErogeHelper in admin mode. OK to confirm", "ErogeHelper", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (ret != DialogResult.OK) return;
             }
             Process.Start("ErogeHelper.exe", $"{selectedProcess.Proc.Id}");
