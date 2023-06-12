@@ -21,11 +21,15 @@ feature:
 
 todo:
 
+ - [ ] (1.n) New window to display text for zooming in on game text (only few games are supported)
+ - [ ] (1.2) Old style AssistanceTouch support (no focus by default)
  - [ ] (1.2) Win + D return to desktop shortcut (?)
  - [x] (1.1) Battery discharge rate (assume display 1.avarage, 2.battery time remain, 3.real time passed)
- - [ ] ~(1.1) Lock screen desktop mask (also adjust brightness)~
- - [ ] ~(1.1) Force the computer into sleep mode if the standby time exceeds the system-specified sleep time~
  - [ ] (1.2) Alternative game fullscreen (by changing the system resolution with the game window style)
  - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
  - [ ] (1.2) Take care of your controller for games **[pending investigation]**
  - [ ] (1.3) Magnifier for mouse point when use touch pad
+
+ideas abandoned
+ - [ ] ~(1.1) Lock screen desktop mask (also adjust brightness)~
+ - [ ] ~(1.1) Force the computer into sleep mode if the standby time exceeds the system-specified sleep time~
