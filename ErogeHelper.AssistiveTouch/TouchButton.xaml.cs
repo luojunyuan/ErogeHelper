@@ -126,6 +126,7 @@ public partial class TouchButton
                 BeginAnimation(OpacityProperty, FadeInOpacityAnimation);
             }
         };
+        FadeInOpacityAnimation.Completed += (_, _) => fadeLock.Set();
 
         // Fade out
         var throttle = new Throttle(OpacityChangeDuration, () =>
@@ -140,16 +141,28 @@ public partial class TouchButton
         PreviewMouseUp += (_, _) => { if (pointWhenMouseUp == pointWhenMouseDown) throttle.Signal(); };
         TouchMenuClosed += (_, _) => throttle.Signal();
         #endregion
-        
-        FadeInOpacityAnimation.Completed += (_, _) => fadeLock.Set();
 
-        PreviewMouseUp += async (s, e) =>
+        var singleClickTimer = new DispatcherTimer
         {
+            Interval = TimeSpan.FromMilliseconds(200)
+        };
+        Click += (s, e) => singleClickTimer.Start();
+
+        singleClickTimer.Tick += async (s, e) =>
+        {
+            singleClickTimer.Stop();
             if (pointWhenMouseUp == pointWhenMouseDown)
             {
                 await fadeAnimationCompleted.ConfigureAwait(true);
                 Clicked?.Invoke(s, e);
             }
+        };
+
+        MouseDoubleClick += (s, e) =>
+        {
+            singleClickTimer.Stop();
+            e.Handled = true;
+            System.Diagnostics.Process.Start("launchwinapp", "ms-virtualtouchpad:");
         };
 
 
