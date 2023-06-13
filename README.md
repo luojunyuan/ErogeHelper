@@ -21,6 +21,7 @@ feature:
 
 todo:
 
+ - [ ] (1.n) Double click on touch
  - [ ] (1.n) New window to display text for zooming in on game text (only few games are supported)
  - [ ] (1.2) Old style AssistanceTouch support (no focus by default)
  - [ ] (1.2) Win + D return to desktop shortcut (?)
