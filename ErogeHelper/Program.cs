@@ -104,11 +104,6 @@ static void Run(Process game, SplashScreen? splash = null)
     if (splash != null) IpcMain.Once("Loaded", splash!.Close);
 
     Environment.CurrentDirectory = AppContext.BaseDirectory;
-    if (AppdataRoming.UseEnterKeyMapping())
-    {
-        ProcessStart.GlobalKeyHook(touch.Id, gameWindowHandle);
-    }
-    
     while (!game.HasExited)
     {
         var gameWindowHandle = AppLauncher.FindMainWindowHandle(game);
@@ -137,6 +132,12 @@ static void Run(Process game, SplashScreen? splash = null)
 
         touch.Start();
 
+        if (AppdataRoming.UseEnterKeyMapping())
+        {
+            // Exited with touch
+            ProcessStart.GlobalKeyHook(touch.Id, gameWindowHandle);
+        }
+    
         touch.WaitForExit();
     }
 }
