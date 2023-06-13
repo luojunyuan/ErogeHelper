@@ -110,10 +110,19 @@ public partial class TouchButton
 
         #region Opacity Adjust
         // Fade in
+        var fadeLock = new AutoResetEvent(true);
+        Task ResetAndStartCompleteTask()
+        {
+            var task = new Task(() => { while (fadeLock.WaitOne()) break; });
+            task.Start();
+            return task;
+        }
+        Task fadeAnimationCompleted = ResetAndStartCompleteTask();
         PreviewMouseLeftButtonDown += (_, _) =>
         {
             if (!isMoving && Opacity != OpacityFull)
             {
+                fadeAnimationCompleted = ResetAndStartCompleteTask();
                 BeginAnimation(OpacityProperty, FadeInOpacityAnimation);
             }
         };
@@ -131,21 +140,24 @@ public partial class TouchButton
         PreviewMouseUp += (_, _) => { if (pointWhenMouseUp == pointWhenMouseDown) throttle.Signal(); };
         TouchMenuClosed += (_, _) => throttle.Signal();
         #endregion
+        
+        FadeInOpacityAnimation.Completed += (_, _) => fadeLock.Set();
 
-        FadeInOpacityAnimation.Completed += (_, _) =>
+        PreviewMouseUp += async (s, e) =>
         {
             if (pointWhenMouseUp == pointWhenMouseDown)
             {
-                Clicked?.Invoke(this, EventArgs.Empty);
-            }
-        };
-
-        PreviewMouseUp += (s, e) =>
-        {
-            if (pointWhenMouseUp == pointWhenMouseDown &&
-                Opacity != OpacityHalf)
-            {
-                Clicked?.Invoke(s, e);
+                await fadeAnimationCompleted.ConfigureAwait(true);
+                e.Handled = true;
+                if (e.ClickCount == 1)
+                {
+                    Clicked?.Invoke(s, e);
+                }
+                else if (e.ClickCount == 2)
+                {
+                    MessageBox.Show("sss");
+                    RaiseMouseReleasedEventInCode(this);
+                }
             }
         };
 
