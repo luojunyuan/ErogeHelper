@@ -148,16 +148,7 @@ public partial class TouchButton
             if (pointWhenMouseUp == pointWhenMouseDown)
             {
                 await fadeAnimationCompleted.ConfigureAwait(true);
-                e.Handled = true;
-                if (e.ClickCount == 1)
-                {
-                    Clicked?.Invoke(s, e);
-                }
-                else if (e.ClickCount == 2)
-                {
-                    MessageBox.Show("sss");
-                    RaiseMouseReleasedEventInCode(this);
-                }
+                Clicked?.Invoke(s, e);
             }
         };
 
