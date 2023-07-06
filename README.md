@@ -15,7 +15,7 @@ main feature:
 
  * Help you tap in game without tap it twice.
  * Battery and power consumption monitor.
- * Automatic set game dpi compatible to "Application".
+ * Automatic set game dpi compatible to "Application". (useful in most cases)
  
 advance:
  
