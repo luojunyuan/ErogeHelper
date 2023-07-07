@@ -34,6 +34,7 @@ todo:
  - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
  - [ ] (1.2) Take care of your controller for games **[pending investigation]**
  - [ ] (1.3) Magnifier for mouse point when use touch pad
+ - [ ] (2.1) Touch gesture for +right click+, +mouse scroll+
 
 ideas abandoned
  -  ~(1.1) Lock screen desktop mask (also adjust brightness)~
