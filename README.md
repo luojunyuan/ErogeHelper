@@ -30,15 +30,15 @@ advance:
 todo:
 
  - [x] (2.0) Double click on touch
- - [ ] (1.n) New window to display text for zooming in on game text (only few games are supported)
  - [x] (2.0) Win + D return to desktop shortcut (?)
  - [x] (1.1) Battery discharge rate (assume display 1.avarage, 2.battery time remain, 3.real time passed)
  - [ ] (1.x) Alternative game fullscreen (by changing the system resolution with the game window style)
  - [ ] (1.x) Old style AssistanceTouch support (silent apply, no focus by default)
- - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
- - [ ] (1.2) Take care of your controller for games **[pending investigation]**
- - [ ] (1.3) Magnifier for mouse point when use touch pad
  - [x] (2.1) Touch gesture for +right click+, +mouse scroll+
+ - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
+ - [ ] (1.n) New window to display text for zooming in on game text (only few games are supported)
+ - [ ] (1.3) Magnifier for mouse point when use touch pad
+ - [ ] (1.2) Take care of your controller for games **[pending investigation]**
 
 ideas abandoned
  -  ~(1.1) Lock screen desktop mask (also adjust brightness)~
