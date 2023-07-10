@@ -2,6 +2,10 @@ it’s eroge helper!
 
 I care about anything that playing visual novel on a touch screen device.
 
+<a href="https://apps.microsoft.com/store/detail/9MVLHQW6KD73?launch=true&mode=mini">
+	<img src="https://get.microsoft.com/images/ja-JP%20dark.svg"/>
+</a>
+
 <details>
 <summary>ep. (NSFW)</summary>
 
@@ -34,7 +38,7 @@ todo:
  - [ ] (1.2) Full customizable virtual keyboard **[massive work]**
  - [ ] (1.2) Take care of your controller for games **[pending investigation]**
  - [ ] (1.3) Magnifier for mouse point when use touch pad
- - [ ] (2.1) Touch gesture for +right click+, +mouse scroll+
+ - [x] (2.1) Touch gesture for +right click+, +mouse scroll+
 
 ideas abandoned
  -  ~(1.1) Lock screen desktop mask (also adjust brightness)~
