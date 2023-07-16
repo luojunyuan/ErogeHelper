@@ -1,3 +1,11 @@
+THIS REPOSITORY IS NO LONGER MAINTAINED
+
+[vnrplus](https://github.com/luojunyuan/vnrplus)
+
+[TachiChan](https://github.com/luojunyuan/tachichan)
+
+---
+
 it’s eroge helper!
 
 I care about anything that playing visual novel on a touch screen device.
@@ -5,15 +13,6 @@ I care about anything that playing visual novel on a touch screen device.
 <a href="https://apps.microsoft.com/store/detail/9MVLHQW6KD73?launch=true&mode=mini">
 	<img src="https://get.microsoft.com/images/ja-JP%20dark.svg"/>
 </a>
-
-<details>
-<summary>ep. (NSFW)</summary>
-
-![スクリーンショット 2023-05-20 2.44.30.png](https://p.inari.site/usr/497/6467b5fe4463d.png)
-
-![スクリーンショット 2023-05-20 2.44.50.png](https://p.inari.site/usr/497/6467b5fc0dce1.png)
-
-</details>
 
 main feature:
 
